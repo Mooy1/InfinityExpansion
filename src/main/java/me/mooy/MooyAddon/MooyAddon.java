@@ -1,10 +1,10 @@
 package me.mooy.mooyaddon;
 
+import me.mooy.mooyaddon.Items.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
-import me.mooy.mooyaddon.Items.*;
 
 public class MooyAddon extends JavaPlugin implements SlimefunAddon {
 
