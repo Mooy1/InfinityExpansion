@@ -1,5 +1,6 @@
-package me.mooy.mooyaddon.Items;
+package me.mooy1.mooyaddon.Items;
 
+import me.mooy1.mooyaddon.MooyItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -8,8 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import me.mooy.mooyaddon.MooyItems;
 
 public class MagnoniumTools extends SlimefunItem{
 

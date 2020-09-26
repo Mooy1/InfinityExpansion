@@ -1,12 +1,12 @@
-package me.mooy.mooyaddon.Items;
+package me.mooy1.mooyaddon.Items;
 
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
-import me.mooy.mooyaddon.MooyAddon;
+import me.mooy1.mooyaddon.MooyAddon;
+import me.mooy1.mooyaddon.MooyItems;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
-import me.mooy.mooyaddon.MooyItems;
 
 public class VoidDust implements GEOResource {
 

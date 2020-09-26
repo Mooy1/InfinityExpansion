@@ -1,4 +1,4 @@
-package me.mooy.mooyaddon;
+package me.mooy1.mooyaddon;
 
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;

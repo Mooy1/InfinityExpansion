@@ -1,4 +1,4 @@
-package me.mooy.mooyaddon.Items;
+package me.mooy1.mooyaddon.Items;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import me.mooy.mooyaddon.MooyItems;
+import me.mooy1.mooyaddon.MooyItems;
 
 public class MagnoniumResource extends SlimefunItem{
 
