@@ -17,10 +17,7 @@ public class CompressedCobblestone extends SlimefunItem {
     private final Compression compression;
 
     public CompressedCobblestone(Compression compression) {
-        super(MooyItems.main,
-                compression.getItem(),
-                RecipeType.ENHANCED_CRAFTING_TABLE,
-                compression.getRecipe());
+        super(MooyItems.MAIN, compression.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, compression.getRecipe());
         this.compression = compression;
     }
 

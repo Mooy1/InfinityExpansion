@@ -26,7 +26,7 @@ public final class MooyItems {
 
     //Categories
 
-    public static final Category main = new Category(
+    public static final Category MAIN = new Category(
             new NamespacedKey(MooyAddon.getInstance(), "mooyaddon_main"),
             new CustomItem(Material.EMERALD_BLOCK, "&4Mooy Addon", "", "&a> Click to open")
     );

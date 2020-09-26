@@ -1,28 +1,9 @@
 package me.mooy.mooyaddon;
 
-import java.io.File;
-
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.UnplaceableBlock;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-
-import me.mooy.mooyaddon.MooyItems;
+import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mooy.mooyaddon.Items.*;
 
 public class MooyAddon extends JavaPlugin implements SlimefunAddon {
@@ -35,7 +16,7 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
         Config cfg = new Config(this);
 
         if (cfg.getBoolean("options.auto-update")) {
-            // You could start an Auto-Updater for example
+            new GitHubBuildsUpdater(this, getFile(), "Mooy1/MooyAddon/master").start();
         }
 
         RegisterItems();
@@ -59,6 +40,7 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
 
     public void RegisterItems() {
 
+        MooyItems.MAIN.register();
         new CompressedCobblestone(CompressedCobblestone.Compression.ONE).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.TWO).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.THREE).register(this);
@@ -68,7 +50,6 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
         new CompressedCobblestone(CompressedCobblestone.Compression.SEVEN).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.EIGHT).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.NINE).register(this);
-
     }
 
     public static MooyAddon getInstance() {
