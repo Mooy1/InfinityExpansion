@@ -42,6 +42,15 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
 
         MooyItems.MAIN.register();
         new VoidDust().register();
+        new MagnoniumResource(MagnoniumResource.Type.BLOCK).register(this);
+        new MagnoniumResource(MagnoniumResource.Type.CORE).register(this);
+        new MagnoniumResource(MagnoniumResource.Type.ALLOY).register(this);
+        new MagnoniumTools(MagnoniumTools.Tool.CROWN).register(this);
+        new MagnoniumTools(MagnoniumTools.Tool.CHESTPLATE).register(this);
+        new MagnoniumTools(MagnoniumTools.Tool.LEGGINGS).register(this);
+        new MagnoniumTools(MagnoniumTools.Tool.BOOTS).register(this);
+        new MagnoniumTools(MagnoniumTools.Tool.BLADE).register(this);
+        new MagnoniumTools(MagnoniumTools.Tool.PICKAXE).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.ONE).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.TWO).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.THREE).register(this);

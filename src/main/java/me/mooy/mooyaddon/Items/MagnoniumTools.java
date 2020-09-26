@@ -17,7 +17,7 @@ public class MagnoniumTools extends SlimefunItem{
     private final Tool tool;
     private static final ItemStack alloy = MooyItems.MAGNONIUM_ALLOY;
 
-    MagnoniumTools(Tool tool) {
+    public MagnoniumTools(Tool tool) {
         super(MooyItems.MAIN, tool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, tool.getRecipe());
         this.tool = tool;
     }

@@ -15,13 +15,13 @@ import me.mooy.mooyaddon.MooyItems;
 
 public class MagnoniumResource extends SlimefunItem{
 
-    private final MagnoniumResource.Type type;
+    private final Type type;
     private static final ItemStack ingot = SlimefunItems.MAGNESIUM_INGOT;
     private static final ItemStack dust = MooyItems.VOID_DUST;
     private static final ItemStack block = MooyItems.MAGNESIUM_BLOCK;
     private static final ItemStack core = MooyItems.MAGNESIUM_CORE;
 
-    MagnoniumResource(Type type) {
+    public MagnoniumResource(MagnoniumResource.Type type) {
         super(MooyItems.MAIN, type.getItem(), type.getRecipetype(), type.getRecipe());
         this.type = type;
     }
