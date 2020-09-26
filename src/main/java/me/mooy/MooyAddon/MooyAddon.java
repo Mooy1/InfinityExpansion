@@ -1,6 +1,9 @@
 package me.mooy.mooyaddon;
 
+import java.io.File;
+
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.UnplaceableBlock;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -14,7 +17,11 @@ import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
+import me.mooy.mooyaddon.MooyItems;
+
 public class MooyAddon extends JavaPlugin implements SlimefunAddon {
+
+    public static MooyAddon instance;
 
     @Override
     public void onEnable() {
@@ -239,6 +246,9 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
         COMPRESSED_COBBLESTONE_7.register(this);
         COMPRESSED_COBBLESTONE_8.register(this);
         COMPRESSED_COBBLESTONE_9.register(this);
+    }
 
+    public static MooyAddon getInstance() {
+        return instance;
     }
 }
