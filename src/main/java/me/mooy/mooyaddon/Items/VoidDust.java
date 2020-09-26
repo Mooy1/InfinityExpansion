@@ -45,4 +45,5 @@ public class VoidDust implements GEOResource {
     public boolean isObtainableFromGEOMiner() {
         return true;
     }
-}
+
+    }

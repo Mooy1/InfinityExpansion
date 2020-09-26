@@ -15,8 +15,8 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
 
         Config cfg = new Config(this);
 
-        if (cfg.getBoolean("options.auto-update")) {
-
+        if (getConfig().getBoolean("options.auto-update") && getDescription().getVersion().startsWith("DEV - ")) {
+            new GitHubBuildsUpdater(this, getFile(), "Mooy1/MooyAddon/master").start();
         }
 
         RegisterItems();
