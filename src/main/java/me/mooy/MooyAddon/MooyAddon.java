@@ -1,4 +1,4 @@
-package me.mooy.MooyAddon;
+package me.mooy.mooyaddon;
 
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
