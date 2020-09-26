@@ -74,7 +74,7 @@
         <dependency>
             <groupId>com.github.TheBusyBiscuit</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>master-SNAPSHOT</version>
+            <version>RC-16</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -87,6 +87,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
