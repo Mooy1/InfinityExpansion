@@ -1,25 +1,16 @@
 package me.mooy.mooyaddon.Items;
 
-import java.io.File;
-
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.UnplaceableBlock;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import me.mooy.mooyaddon.MooyItems;
-
-import javax.print.attribute.standard.Compression;
 
 public class CompressedCobblestone extends SlimefunItem {
 
@@ -27,9 +18,9 @@ public class CompressedCobblestone extends SlimefunItem {
 
     public CompressedCobblestone(Compression compression) {
         super(MooyItems.main,
-                MooyItems.COMPRESSED_COBBLESTONE_1,
+                compression.getItem(),
                 RecipeType.ENHANCED_CRAFTING_TABLE,
-                compression.recipe);
+                compression.getRecipe());
         this.compression = compression;
     }
 
@@ -43,21 +34,58 @@ public class CompressedCobblestone extends SlimefunItem {
     public static ItemStack cobble7 = MooyItems.COMPRESSED_COBBLESTONE_7;
     public static ItemStack cobble8 = MooyItems.COMPRESSED_COBBLESTONE_8;
 
-    public enum Compression {
-        ONE(new ItemStack[] {
-                SlimefunItems.GILDED_IRON, SlimefunItems.MAGNESIUM_INGOT, SlimefunItems.GILDED_IRON,
-                SlimefunItems.ELECTRIC_MOTOR, SlimefunItems.COMPOSTER, SlimefunItems.ELECTRIC_MOTOR,
-                new ItemStack(Material.IRON_HOE), SlimefunItems.MEDIUM_CAPACITOR, new ItemStack(Material.IRON_HOE)}
-        ),
-        TWO(new ItemStack[] {SlimefunItems.HARDENED_METAL_INGOT, SlimefunItems.BLISTERING_INGOT_3, SlimefunItems.HARDENED_METAL_INGOT,
-                SlimefunItems.ELECTRIC_MOTOR, cobble, SlimefunItems.ELECTRIC_MOTOR, cobble,
-                new ItemStack(Material.DIAMOND_HOE), SlimefunItems.LARGE_CAPACITOR, new ItemStack(Material.DIAMOND_HOE)}
-        );
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
+    public enum Compression {
+        ONE(MooyItems.COMPRESSED_COBBLESTONE_1, new ItemStack[]{
+                cobble, cobble, cobble,
+                cobble, cobble, cobble,
+                cobble, cobble, cobble
+        }),
+        TWO(MooyItems.COMPRESSED_COBBLESTONE_2, new ItemStack[]{
+                cobble1, cobble1, cobble1,
+                cobble1, cobble1, cobble1,
+                cobble1, cobble1, cobble1
+        }),
+        THREE(MooyItems.COMPRESSED_COBBLESTONE_3, new ItemStack[]{
+                cobble2, cobble2, cobble2,
+                cobble2, cobble2, cobble2,
+                cobble2, cobble2, cobble2
+        }),
+        FOUR(MooyItems.COMPRESSED_COBBLESTONE_4, new ItemStack[]{
+                cobble3, cobble3, cobble3,
+                cobble3, cobble3, cobble3,
+                cobble3, cobble3, cobble3
+        }),
+        FIVE(MooyItems.COMPRESSED_COBBLESTONE_5, new ItemStack[]{
+                cobble4, cobble4, cobble4,
+                cobble4, cobble4, cobble4,
+                cobble4, cobble4, cobble4
+        }),
+        SIX(MooyItems.COMPRESSED_COBBLESTONE_6, new ItemStack[]{
+                cobble5, cobble5, cobble5,
+                cobble5, cobble5, cobble5,
+                cobble5, cobble5, cobble5
+        }),
+        SEVEN(MooyItems.COMPRESSED_COBBLESTONE_7, new ItemStack[]{
+                cobble6, cobble6, cobble6,
+                cobble6, cobble6, cobble6,
+                cobble6, cobble6, cobble6
+        }),
+        EIGHT(MooyItems.COMPRESSED_COBBLESTONE_8, new ItemStack[]{
+                cobble7, cobble7, cobble7,
+                cobble7, cobble7, cobble7,
+                cobble7, cobble7, cobble7
+        }),
+        NINE(MooyItems.COMPRESSED_COBBLESTONE_9, new ItemStack[]{
+                cobble8, cobble8, cobble8,
+                cobble8, cobble8, cobble8,
+                cobble8, cobble8, cobble8
+        });
+
+        private final SlimefunItemStack item;
         private final ItemStack[] recipe;
 
-        Compression(ItemStack[] recipe) {
-            this.recipe = recipe;
         }
     }
-}
