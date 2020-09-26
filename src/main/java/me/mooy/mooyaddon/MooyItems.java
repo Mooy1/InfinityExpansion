@@ -41,9 +41,9 @@ public final class MooyItems {
             "COMPRESSED_COBBLESTONE_2",
             Material.COBBLESTONE,
             "&72x Compressed Cobblestone",
-                    "",
-                    "&881 cobblestone combined",
-                    ""
+            "",
+            "&881 cobblestone combined",
+            ""
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_3 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_3",
