@@ -105,4 +105,77 @@ public final class MooyItems {
             "&8387,420,489 cobblestone combined",
             ""
     );
+
+    //Magnonium
+
+    public static final SlimefunItemStack MAGNESIUM_BLOCK = new SlimefunItemStack(
+            "MAGNESIUM_BLOCK",
+            Material.NETHER_BRICKS,
+            "&dMagnesium Block",
+            ""
+    );
+    public static final SlimefunItemStack MAGNESIUM_CORE = new SlimefunItemStack(
+            "MAGNESIUM_CORE",
+            Material.NETHER_BRICKS,
+            "&dMagnesium Core",
+            "",
+            "&7Lots and Lots of Magnesium",
+            ""
+    );
+    public static final SlimefunItemStack MAGNONIUM_ALLOY = new SlimefunItemStack(
+            "MAGNONIUM_ALLOY",
+            Material.NETHER_BRICK,
+            "&dMagnonium Alloy",
+            ""
+    );
+
+    //Void
+
+    public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
+            "VOID_DUST",
+            Material.GUNPOWDER,
+            "&5Void Dust",
+            "",
+            "&8From the depths of the end...",
+            ""
+    );
+
+    //Magnonium Gear
+
+    public static final SlimefunItemStack MAGNONIUM_CROWN = new SlimefunItemStack(
+            "MAGNONIUM_CROWN",
+            Material.NETHERITE_HELMET,
+            "&dMagnonium Crown",
+            ""
+    );
+    public static final SlimefunItemStack MAGNONIUM_CHESTPLATE = new SlimefunItemStack(
+            "MAGNONIUM_CHESTPLATE",
+            Material.NETHERITE_CHESTPLATE,
+            "&dMagnonium Chestplate",
+            ""
+    );
+    public static final SlimefunItemStack MAGNONIUM_LEGGINGS = new SlimefunItemStack(
+            "MAGNONIUM_LEGGINGS",
+            Material.NETHERITE_LEGGINGS,
+            "&dMagnonium Leggings",
+            ""
+    );
+    public static final SlimefunItemStack MAGNONIUM_BOOTS = new SlimefunItemStack(
+            "MAGNONIUM_BOOTS",
+            Material.NETHERITE_BOOTS,
+            "&dMagnonium Boots",
+            ""
+    );
+    public static final SlimefunItemStack MAGNONIUM_BLADE = new SlimefunItemStack(
+            "MAGNONIUM_BLADE",
+            Material.NETHERITE_SWORD,
+            "&dMagnonium Blade",
+            ""
+    );
+    public static final SlimefunItemStack MAGNONIUM_PICKAXE = new SlimefunItemStack(
+            "MAGNONIUM_PICKAXE",
+            Material.NETHERITE_PICKAXE,
+            "&dMagnonium Pickaxe",
+            ""
+    );
 }

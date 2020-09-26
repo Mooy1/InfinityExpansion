@@ -25,7 +25,7 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
 
     @Override
     public void onDisable() {
-        // Logic for disabling the plugin...
+        instance = null;
     }
 
     @Override
@@ -41,6 +41,7 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
     public void RegisterItems() {
 
         MooyItems.MAIN.register();
+        new VoidDust().register();
         new CompressedCobblestone(CompressedCobblestone.Compression.ONE).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.TWO).register(this);
         new CompressedCobblestone(CompressedCobblestone.Compression.THREE).register(this);
