@@ -12,20 +12,20 @@ import lombok.Getter;
 
 import javax.annotation.Nonnull;
 
-public class MagnoniumTools extends SlimefunItem{
+public class MagnoniumGear extends SlimefunItem{
 
-    private final Tool tool;
+    private final MagnoniumTool magnoniumTool;
 
-    public MagnoniumTools(Tool tool) {
-        super(MooyItems.MOOYMAIN, tool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, tool.getRecipe());
-        this.tool = tool;
+    public MagnoniumGear(MagnoniumTool magnoniumtool) {
+        super(MooyItems.MOOYGEAR, magnoniumtool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, magnoniumtool.getRecipe());
+        this.magnoniumTool = magnoniumtool;
     }
 
-    private static final ItemStack alloy = MooyItems.MAGNONIUM_ALLOY;
+    private static final ItemStack alloy = MooyItems.MAGNONIUM_INGOT;
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum Tool {
+    public enum MagnoniumTool {
 
         CROWN(MooyItems.MAGNONIUM_CROWN, new ItemStack[] {
                 alloy, alloy, alloy,

@@ -19,8 +19,8 @@ import java.util.Map;
 public class FastAutoEnchanter extends AutoEnchanter {
 
     public FastAutoEnchanter() {
-        super(MooyItems.MOOYMAIN,
-                MooyItems.FAST_AUTO_ENCHANTER,
+        super(MooyItems.MOOYMACHINES,
+                MooyItems.INFINITY_AUTO_ENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
                         new ItemStack(Material.NETHER_STAR), SlimefunItems.SYNTHETIC_DIAMOND, new ItemStack(Material.NETHER_STAR),
@@ -115,7 +115,7 @@ public class FastAutoEnchanter extends AutoEnchanter {
 
     @Override
     public String getMachineIdentifier() {
-        return "FAST_AUTO_ENCHANTER";
+        return "INFINITY_AUTO_ENCHANTER";
     }
 
 }

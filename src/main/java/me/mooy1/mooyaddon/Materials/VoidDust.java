@@ -11,12 +11,13 @@ public class VoidDust extends SlimefunItem {
 
     private static final ItemStack voiddust = new CustomItem(
             Material.PAPER,
-            "&fHint!",
-            "&a&oMake sure to first GEO-Scan the chunk in which you are",
-            "&a&omining to discover harvest Void Dust");
+            "&fGEO-Miner Material",
+            "&aFound in the End and Void biomes",
+            "&aMake sure to GEO-Scan the chunk first"
+    );
 
     public VoidDust() {
-        super(MooyItems.MOOYMAIN, MooyItems.VOID_DUST, RecipeType.GEO_MINER, new ItemStack[] {
+        super(MooyItems.MOOYMATERIALS, MooyItems.VOID_DUST, RecipeType.GEO_MINER, new ItemStack[] {
                         null, null, null,
                         null, voiddust, null,
                         null, null, null

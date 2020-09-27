@@ -1,6 +1,7 @@
 package me.mooy1.mooyaddon;
 
-import me.mooy1.mooyaddon.Gear.MagnoniumTools;
+import me.mooy1.mooyaddon.Gear.InfinityGear;
+import me.mooy1.mooyaddon.Gear.MagnoniumGear;
 import me.mooy1.mooyaddon.Gear.VoidFlame;
 import me.mooy1.mooyaddon.Machines.FastAutoDisenchanter;
 import me.mooy1.mooyaddon.Machines.FastAutoEnchanter;
@@ -25,21 +26,24 @@ public final class MooyItemSetup {
         new FastAutoEnchanter().register(plugin);
         new FastAutoDisenchanter().register(plugin);
 
-        //add Magnonium resources
+        //add materials
 
-        for (MagnoniumMaterials.Type type : MagnoniumMaterials.Type.values()) {
-            new MagnoniumMaterials(type).register(plugin);
+        for (Cores.Core core : Cores.Core.values()) {
+            new Cores(core).register(plugin);
         }
 
-        //add Magnonium tools
-
-        for (MagnoniumTools.Tool tool : MagnoniumTools.Tool.values()) {
-            new MagnoniumTools(tool).register(plugin);
+        for (Ingots.Type type : Ingots.Type.values()) {
+            new Ingots(type).register(plugin);
         }
 
-        //add other
+        //add gear
 
         new VoidFlame().register(plugin);
+
+        for (MagnoniumGear.MagnoniumTool magnoniumTool : MagnoniumGear.MagnoniumTool.values()) {
+            new MagnoniumGear(magnoniumTool).register(plugin);
+        }
+
 
         //add geominer recipe
 

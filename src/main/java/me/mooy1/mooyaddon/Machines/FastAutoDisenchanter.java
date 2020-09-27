@@ -24,8 +24,8 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 public class FastAutoDisenchanter extends AutoDisenchanter {
 
     public FastAutoDisenchanter() {
-        super(MooyItems.MOOYMAIN,
-                MooyItems.FAST_AUTO_DISENCHANTER,
+        super(MooyItems.MOOYMACHINES,
+                MooyItems.INFINITY_AUTO_DISENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
                         new ItemStack(Material.NETHER_STAR), SlimefunItems.SYNTHETIC_DIAMOND, new ItemStack(Material.NETHER_STAR),
@@ -85,7 +85,7 @@ public class FastAutoDisenchanter extends AutoDisenchanter {
                     ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
                     transferEnchantments(disenchantedItem, book, enchantments);
 
-                    MachineRecipe recipe = new MachineRecipe(4 * amount, new ItemStack[] { target, item }, new ItemStack[] { disenchantedItem, book });
+                    MachineRecipe recipe = new MachineRecipe(1 * amount, new ItemStack[] { target, item }, new ItemStack[] { disenchantedItem, book });
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;
@@ -144,7 +144,7 @@ public class FastAutoDisenchanter extends AutoDisenchanter {
 
     @Override
     public String getMachineIdentifier() {
-        return "FAST_AUTO_DISENCHANTER";
+        return "INFINITY_AUTO_DISENCHANTER";
     }
 
 }

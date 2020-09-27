@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class VoidFlame extends SlimefunItem {
     public VoidFlame() {
-        super(MooyItems.MOOYMAIN,
+        super(MooyItems.MOOYGEAR,
                 MooyItems.VOID_FLAME,
                 RecipeType.MAGIC_WORKBENCH,
                 new ItemStack[] {
