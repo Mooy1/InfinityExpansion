@@ -1,8 +1,6 @@
 package me.mooy1.mooyaddon;
 
-import lombok.SneakyThrows;
-import me.mooy1.mooyaddon.Items.VoidDustResource;
-import me.mooy1.mooyaddon.MooyItemSetup;
+import me.mooy1.mooyaddon.Materials.VoidDustResource;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;

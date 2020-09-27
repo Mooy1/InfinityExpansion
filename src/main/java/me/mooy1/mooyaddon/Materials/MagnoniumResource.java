@@ -1,4 +1,4 @@
-package me.mooy1.mooyaddon.Items;
+package me.mooy1.mooyaddon.Materials;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mooy1.mooyaddon.MooyItems;

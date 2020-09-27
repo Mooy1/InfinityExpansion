@@ -1,5 +1,8 @@
 package me.mooy1.mooyaddon;
 
+import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
+import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
+import me.mooy1.mooyaddon.Machines.FastAutoEnchanter;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
@@ -14,6 +17,16 @@ public final class MooyItems {
     public static final Category MOOYMAIN = new Category(new NamespacedKey(MooyAddon.getInstance(),
             "MOOYMAIN"),
             new CustomItem(Material.EMERALD_BLOCK, "&aMooy Addon")
+    );
+
+    //Machines
+
+    public static final SlimefunItemStack FAST_AUTO_ENCHANTER = new SlimefunItemStack(
+            "FAST_AUTO_ENCHANTER",
+            Material.ENCHANTING_TABLE,
+            "&cUltimate Auto Enchanter",
+            ""
+
     );
 
     //Compressed Cobblestones
@@ -114,7 +127,7 @@ public final class MooyItems {
             ""
     );
 
-    //Void
+    //Void items
 
     public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
             "VOID_DUST",
@@ -122,6 +135,12 @@ public final class MooyItems {
             "&5Void Dust",
             "",
             "&8From the depths of the end...",
+            ""
+    );
+    public static final SlimefunItemStack VOID_FLAME = new SlimefunItemStack(
+            "VOID_FLAME",
+            Material.ENCHANTED_BOOK,
+            "&5Void Flame",
             ""
     );
 
@@ -168,6 +187,7 @@ public final class MooyItems {
     private static final Enchantment sharp = Enchantment.DAMAGE_ALL;
     private static final Enchantment eff = Enchantment.DIG_SPEED;
     private static final Enchantment unb = Enchantment.DURABILITY;
+    private static final Enchantment flame = Enchantment.FIRE_ASPECT;
 
     //add enchants
 
@@ -184,6 +204,7 @@ public final class MooyItems {
         MAGNONIUM_BLADE.addUnsafeEnchantment(unb, 10);
         MAGNONIUM_PICKAXE.addUnsafeEnchantment(eff, 10);
         MAGNONIUM_PICKAXE.addUnsafeEnchantment(unb, 10);
+        VOID_FLAME.addUnsafeEnchantment(flame, 10);
     }
 
     private MooyItems() { }

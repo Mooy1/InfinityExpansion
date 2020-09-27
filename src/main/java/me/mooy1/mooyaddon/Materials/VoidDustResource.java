@@ -1,4 +1,4 @@
-package me.mooy1.mooyaddon.Items;
+package me.mooy1.mooyaddon.Materials;
 
 import me.mooy1.mooyaddon.MooyAddon;
 import me.mooy1.mooyaddon.MooyItems;
@@ -15,7 +15,9 @@ public class VoidDustResource implements GEOResource {
     @Override
     public int getDefaultSupply(World.Environment environment, Biome biome) {
         if (environment == World.Environment.THE_END) {
-            return 20;
+            return 2;
+        } if (biome == Biome.THE_VOID) {
+            return 1;
         } else {
             return 0;
         }
@@ -28,7 +30,7 @@ public class VoidDustResource implements GEOResource {
 
     @Override
     public int getMaxDeviation() {
-        return 1;
+        return 0;
     }
 
     @Override

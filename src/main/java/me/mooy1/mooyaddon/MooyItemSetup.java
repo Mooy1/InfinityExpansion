@@ -1,6 +1,8 @@
 package me.mooy1.mooyaddon;
 
-import me.mooy1.mooyaddon.Items.*;
+import me.mooy1.mooyaddon.Gear.MagnoniumTools;
+import me.mooy1.mooyaddon.Machines.FastAutoEnchanter;
+import me.mooy1.mooyaddon.Materials.*;
 
 import javax.annotation.Nonnull;
 
@@ -9,6 +11,11 @@ public final class MooyItemSetup {
     private MooyItemSetup() { }
 
     public static void setup(@Nonnull MooyAddon plugin) {
+
+        //add machines
+
+        new FastAutoEnchanter().register(plugin);
+
         //add compressed cobblestones
 
         for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
@@ -27,7 +34,11 @@ public final class MooyItemSetup {
             new MagnoniumTools(tool).register(plugin);
         }
 
-        //add geominer resource
+        //add other
+
+        new VoidFlame().register(plugin);
+
+        //add geominer recipe
 
         new VoidDust().register(plugin);
     }
