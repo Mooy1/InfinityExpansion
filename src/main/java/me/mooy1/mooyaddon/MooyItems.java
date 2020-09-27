@@ -12,7 +12,7 @@ public final class MooyItems {
     //Categories
 
     public static final Category MOOYMAIN = new Category(new NamespacedKey(MooyAddon.getInstance(),
-            "mooyaddon_main"),
+            "MOOYMAIN"),
             new CustomItem(Material.EMERALD_BLOCK, "&aMooy Addon")
     );
 
@@ -125,7 +125,7 @@ public final class MooyItems {
             ""
     );
 
-    //Magnonium Gear
+    //Magnonium me.mooy1.mooyaddon.Items.Gear
 
     public static final SlimefunItemStack MAGNONIUM_CROWN = new SlimefunItemStack(
             "MAGNONIUM_CROWN",
@@ -172,18 +172,18 @@ public final class MooyItems {
     //add enchants
 
     static {
-        MAGNONIUM_CROWN.addEnchantment(prot, 10);
-        MAGNONIUM_CROWN.addEnchantment(unb, 10);
-        MAGNONIUM_CHESTPLATE.addEnchantment(prot, 10);
-        MAGNONIUM_CHESTPLATE.addEnchantment(unb, 10);
-        MAGNONIUM_LEGGINGS.addEnchantment(prot, 10);
-        MAGNONIUM_LEGGINGS.addEnchantment(unb, 10);
-        MAGNONIUM_BOOTS.addEnchantment(prot, 10);
-        MAGNONIUM_BOOTS.addEnchantment(unb, 10);
-        MAGNONIUM_BLADE.addEnchantment(sharp, 10);
-        MAGNONIUM_BLADE.addEnchantment(unb, 10);
-        MAGNONIUM_PICKAXE.addEnchantment(eff, 10);
-        MAGNONIUM_PICKAXE.addEnchantment(unb, 10);
+        MAGNONIUM_CROWN.addUnsafeEnchantment(prot, 10);
+        MAGNONIUM_CROWN.addUnsafeEnchantment(unb, 10);
+        MAGNONIUM_CHESTPLATE.addUnsafeEnchantment(prot, 10);
+        MAGNONIUM_CHESTPLATE.addUnsafeEnchantment(unb, 10);
+        MAGNONIUM_LEGGINGS.addUnsafeEnchantment(prot, 10);
+        MAGNONIUM_LEGGINGS.addUnsafeEnchantment(unb, 10);
+        MAGNONIUM_BOOTS.addUnsafeEnchantment(prot, 10);
+        MAGNONIUM_BOOTS.addUnsafeEnchantment(unb, 10);
+        MAGNONIUM_BLADE.addUnsafeEnchantment(sharp, 10);
+        MAGNONIUM_BLADE.addUnsafeEnchantment(unb, 10);
+        MAGNONIUM_PICKAXE.addUnsafeEnchantment(eff, 10);
+        MAGNONIUM_PICKAXE.addUnsafeEnchantment(unb, 10);
     }
 
     private MooyItems() { }

@@ -1,5 +1,6 @@
 package me.mooy1.mooyaddon;
 
+import lombok.SneakyThrows;
 import me.mooy1.mooyaddon.Items.VoidDustResource;
 import me.mooy1.mooyaddon.MooyItemSetup;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -24,13 +25,9 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
             new GitHubBuildsUpdater(this, getFile(), "Mooy1/MooyAddon/master").start();
         }
 
-        //Categories
+        //Register items
 
-        MooyItems.MOOYMAIN.register();
-
-        //items
-
-        MooyItemSetup.INSTANCE.init();
+        MooyItemSetup.setup(this);
 
         //Geo miner resources
 
