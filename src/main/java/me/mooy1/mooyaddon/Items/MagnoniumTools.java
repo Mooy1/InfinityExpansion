@@ -10,15 +10,18 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.annotation.Nonnull;
+
 public class MagnoniumTools extends SlimefunItem{
 
     private final Tool tool;
-    private static final ItemStack alloy = MooyItems.MAGNONIUM_ALLOY;
 
     public MagnoniumTools(Tool tool) {
-        super(MooyItems.MAIN, tool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, tool.getRecipe());
+        super(MooyItems.MOOYMAIN, tool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, tool.getRecipe());
         this.tool = tool;
     }
+
+    private static final ItemStack alloy = MooyItems.MAGNONIUM_ALLOY;
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -60,6 +63,7 @@ public class MagnoniumTools extends SlimefunItem{
             null, alloy, null
         });
 
+        @Nonnull
         private final SlimefunItemStack item;
         private final ItemStack[] recipe;
     }

@@ -1,5 +1,6 @@
 package me.mooy1.mooyaddon;
 
+import me.mooy1.mooyaddon.Items.VoidDustResource;
 import me.mooy1.mooyaddon.MooyItemSetup;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
@@ -10,10 +11,12 @@ import javax.annotation.Nonnull;
 
 public class MooyAddon extends JavaPlugin implements SlimefunAddon {
 
-    public static MooyAddon instance;
+    private static MooyAddon instance;
 
     @Override
     public void onEnable() {
+
+        instance = this;
 
         Config cfg = new Config(this);
 
@@ -21,8 +24,17 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
             new GitHubBuildsUpdater(this, getFile(), "Mooy1/MooyAddon/master").start();
         }
 
-        MooyItemSetup.setup(this);
+        //Categories
 
+        MooyItems.MOOYMAIN.register();
+
+        //items
+
+        MooyItemSetup.INSTANCE.init();
+
+        //Geo miner resources
+
+        new VoidDustResource().register();
     }
 
     @Override

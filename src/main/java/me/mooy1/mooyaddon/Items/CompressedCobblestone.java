@@ -11,12 +11,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.annotation.Nonnull;
+
 public class CompressedCobblestone extends SlimefunItem {
 
     private final Compression compression;
 
     public CompressedCobblestone(Compression compression) {
-        super(MooyItems.MAIN, compression.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, compression.getRecipe());
+        super(MooyItems.MOOYMAIN, compression.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, compression.getRecipe());
         this.compression = compression;
     }
 
@@ -80,6 +82,7 @@ public class CompressedCobblestone extends SlimefunItem {
                 cobble8, cobble8, cobble8
         });
 
+        @Nonnull
         private final SlimefunItemStack item;
         private final ItemStack[] recipe;
 

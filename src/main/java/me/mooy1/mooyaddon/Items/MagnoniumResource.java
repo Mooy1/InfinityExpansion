@@ -1,6 +1,7 @@
 package me.mooy1.mooyaddon.Items;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.mooy1.mooyaddon.MooyItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -10,20 +11,21 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import me.mooy1.mooyaddon.MooyItems;
+import javax.annotation.Nonnull;
 
 public class MagnoniumResource extends SlimefunItem{
 
     private final Type type;
+
+    public MagnoniumResource(MagnoniumResource.Type type) {
+        super(MooyItems.MOOYMAIN, type.getItem(), type.getRecipetype(), type.getRecipe());
+        this.type = type;
+    }
+
     private static final ItemStack ingot = SlimefunItems.MAGNESIUM_INGOT;
     private static final ItemStack dust = MooyItems.VOID_DUST;
     private static final ItemStack block = MooyItems.MAGNESIUM_BLOCK;
     private static final ItemStack core = MooyItems.MAGNESIUM_CORE;
-
-    public MagnoniumResource(MagnoniumResource.Type type) {
-        super(MooyItems.MAIN, type.getItem(), type.getRecipetype(), type.getRecipe());
-        this.type = type;
-    }
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,6 +47,7 @@ public class MagnoniumResource extends SlimefunItem{
                 null, null, null,
         });
 
+        @Nonnull
         private final SlimefunItemStack item;
         private final RecipeType recipetype;
         private final ItemStack[] recipe;

@@ -5,12 +5,13 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 
 public final class MooyItems {
 
     //Categories
 
-    public static final Category MAIN = new Category(new NamespacedKey(MooyAddon.getInstance(),
+    public static final Category MOOYMAIN = new Category(new NamespacedKey(MooyAddon.getInstance(),
             "mooyaddon_main"),
             new CustomItem(Material.EMERALD_BLOCK, "&aMooy Addon")
     );
@@ -162,6 +163,28 @@ public final class MooyItems {
             "&dMagnonium Pickaxe",
             ""
     );
+
+    private static final Enchantment prot = Enchantment.PROTECTION_ENVIRONMENTAL;
+    private static final Enchantment sharp = Enchantment.DAMAGE_ALL;
+    private static final Enchantment eff = Enchantment.DIG_SPEED;
+    private static final Enchantment unb = Enchantment.DURABILITY;
+
+    //add enchants
+
+    static {
+        MAGNONIUM_CROWN.addEnchantment(prot, 10);
+        MAGNONIUM_CROWN.addEnchantment(unb, 10);
+        MAGNONIUM_CHESTPLATE.addEnchantment(prot, 10);
+        MAGNONIUM_CHESTPLATE.addEnchantment(unb, 10);
+        MAGNONIUM_LEGGINGS.addEnchantment(prot, 10);
+        MAGNONIUM_LEGGINGS.addEnchantment(unb, 10);
+        MAGNONIUM_BOOTS.addEnchantment(prot, 10);
+        MAGNONIUM_BOOTS.addEnchantment(unb, 10);
+        MAGNONIUM_BLADE.addEnchantment(sharp, 10);
+        MAGNONIUM_BLADE.addEnchantment(unb, 10);
+        MAGNONIUM_PICKAXE.addEnchantment(eff, 10);
+        MAGNONIUM_PICKAXE.addEnchantment(unb, 10);
+    }
 
     private MooyItems() { }
 }

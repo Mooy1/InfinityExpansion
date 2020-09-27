@@ -1,56 +1,26 @@
 package me.mooy1.mooyaddon.Items;
 
-import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
-import me.mooy1.mooyaddon.MooyAddon;
 import me.mooy1.mooyaddon.MooyItems;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
-public class VoidDust implements GEOResource {
+public class VoidDust extends SlimefunItem {
 
-    private final NamespacedKey key;
-    private final ItemStack item;
+    private static final ItemStack voiddust = new CustomItem(
+            Material.PAPER,
+            "&fHint!",
+            "&a&oMake sure to first GEO-Scan the chunk in which you are",
+            "&a&omining to discover harvest Void Dust");
 
-    public VoidDust(Plugin plugin, ItemStack item) {
-        this.key = new NamespacedKey(plugin, "VoidDust");
-        this.item = item;
+    public VoidDust() {
+        super(MooyItems.MOOYMAIN, MooyItems.VOID_DUST, RecipeType.GEO_MINER, new ItemStack[] {
+                        null, null, null,
+                        null, voiddust, null,
+                        null, null, null
+                }
+        );
     }
-
-    @Override
-    public int getDefaultSupply(World.Environment environment, Biome biome) {
-        if (environment == World.Environment.THE_END) {
-            return 20;
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public NamespacedKey getKey() {
-        return key;
-    }
-
-    @Override
-    public int getMaxDeviation() {
-        return 1;
-    }
-
-    @Override
-    public String getName() {
-        return "Void Dust";
-    }
-
-    @Override
-    public ItemStack getItem() {
-        return MooyItems.VOID_DUST.clone();
-    }
-
-    @Override
-    public boolean isObtainableFromGEOMiner() {
-        return true;
-    }
-
 }
