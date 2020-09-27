@@ -11,7 +11,13 @@ import org.bukkit.plugin.Plugin;
 
 public class VoidDust implements GEOResource {
 
-    private final NamespacedKey key = new NamespacedKey(MooyAddon.getInstance(), "Void Dust");
+    private final NamespacedKey key;
+    private final ItemStack item;
+
+    public VoidDust(Plugin plugin, ItemStack item) {
+        this.key = new NamespacedKey(plugin, "VoidDust");
+        this.item = item;
+    }
 
     @Override
     public int getDefaultSupply(World.Environment environment, Biome biome) {

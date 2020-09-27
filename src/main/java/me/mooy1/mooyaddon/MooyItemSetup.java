@@ -12,7 +12,7 @@ public class MooyItemSetup {
 
         //add geominer stuff
 
-        new VoidDust().register();
+        new VoidDust(plugin, MooyItems.VOID_DUST).register();
 
         //add compressed cobblestones
 

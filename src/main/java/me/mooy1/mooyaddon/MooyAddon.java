@@ -21,8 +21,6 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
             new GitHubBuildsUpdater(this, getFile(), "Mooy1/MooyAddon/master").start();
         }
 
-        MooyItems.MAIN.register();
-
         MooyItemSetup.setup(this);
 
     }
