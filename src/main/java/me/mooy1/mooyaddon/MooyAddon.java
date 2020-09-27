@@ -6,6 +6,8 @@ import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nonnull;
+
 public class MooyAddon extends JavaPlugin implements SlimefunAddon {
 
     public static MooyAddon instance;
@@ -23,6 +25,35 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
 
     }
 
+    public void RegisterItems() {
+
+        //add category
+
+        MooyItems.MAIN.register();
+
+        //add geominer resources
+
+        new VoidDust().register();
+
+        //add compressed cobblestones
+
+        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
+            new CompressedCobblestone(compression).register(this);
+        }
+
+        //add Magnonium resources
+
+        for (MagnoniumResource.Type type : MagnoniumResource.Type.values()) {
+            new MagnoniumResource(type).register(this);
+        }
+
+        //add Magnonium tools
+
+        for (MagnoniumTools.Tool tool : MagnoniumTools.Tool.values()) {
+            new MagnoniumTools(tool).register(this);
+        }
+    }
+
     @Override
     public void onDisable() {
         instance = null;
@@ -33,33 +64,10 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
         return "https://github.com/Mooy1/MooyAddon/issues";
     }
 
+    @Nonnull
     @Override
     public JavaPlugin getJavaPlugin() {
         return this;
-    }
-
-    public void RegisterItems() {
-
-        MooyItems.MAIN.register();
-        new VoidDust().register();
-        new MagnoniumResource(MagnoniumResource.Type.BLOCK).register(this);
-        new MagnoniumResource(MagnoniumResource.Type.CORE).register(this);
-        new MagnoniumResource(MagnoniumResource.Type.ALLOY).register(this);
-        new MagnoniumTools(MagnoniumTools.Tool.CROWN).register(this);
-        new MagnoniumTools(MagnoniumTools.Tool.CHESTPLATE).register(this);
-        new MagnoniumTools(MagnoniumTools.Tool.LEGGINGS).register(this);
-        new MagnoniumTools(MagnoniumTools.Tool.BOOTS).register(this);
-        new MagnoniumTools(MagnoniumTools.Tool.BLADE).register(this);
-        new MagnoniumTools(MagnoniumTools.Tool.PICKAXE).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.ONE).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.TWO).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.THREE).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.FOUR).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.FIVE).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.SIX).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.SEVEN).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.EIGHT).register(this);
-        new CompressedCobblestone(CompressedCobblestone.Compression.NINE).register(this);
     }
 
     public static MooyAddon getInstance() {

@@ -1,18 +1,18 @@
 package me.mooy1.mooyaddon;
 
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 public final class MooyItems {
 
     //Categories
 
-    public static final Category MAIN = new Category(
-            new NamespacedKey(MooyAddon.getInstance(), "mooyaddon_main"),
-            new CustomItem(Material.EMERALD_BLOCK, "&4Mooy Addon", "", "&a> Click to open")
+    public static final Category MAIN = new Category(new NamespacedKey(MooyAddon.getInstance(),
+            "mooyaddon_main"),
+            new CustomItem(Material.EMERALD_BLOCK, "&aMooy Addon")
     );
 
     //Compressed Cobblestones
