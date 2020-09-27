@@ -1,6 +1,6 @@
 package me.mooy1.mooyaddon;
 
-import me.mooy1.mooyaddon.Items.*;
+import me.mooy1.mooyaddon.MooyItemSetup;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
@@ -21,37 +21,10 @@ public class MooyAddon extends JavaPlugin implements SlimefunAddon {
             new GitHubBuildsUpdater(this, getFile(), "Mooy1/MooyAddon/master").start();
         }
 
-        RegisterItems();
-
-    }
-
-    public void RegisterItems() {
-
-        //add category
-
         MooyItems.MAIN.register();
 
-        //add geominer resources
+        MooyItemSetup.setup(this);
 
-        new VoidDust().register();
-
-        //add compressed cobblestones
-
-        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
-            new CompressedCobblestone(compression).register(this);
-        }
-
-        //add Magnonium resources
-
-        for (MagnoniumResource.Type type : MagnoniumResource.Type.values()) {
-            new MagnoniumResource(type).register(this);
-        }
-
-        //add Magnonium tools
-
-        for (MagnoniumTools.Tool tool : MagnoniumTools.Tool.values()) {
-            new MagnoniumTools(tool).register(this);
-        }
     }
 
     @Override

@@ -162,4 +162,6 @@ public final class MooyItems {
             "&dMagnonium Pickaxe",
             ""
     );
+
+    private MooyItems() { }
 }

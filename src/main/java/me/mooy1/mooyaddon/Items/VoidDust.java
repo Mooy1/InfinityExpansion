@@ -7,6 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 public class VoidDust implements GEOResource {
 
@@ -46,4 +47,4 @@ public class VoidDust implements GEOResource {
         return true;
     }
 
-    }
+}
