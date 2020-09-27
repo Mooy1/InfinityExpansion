@@ -24,20 +24,6 @@ public class Cores extends SlimefunItem{
         this.core = core;
     }
 
-    private static final ItemStack s = new SlimefunItemStack(SlimefunItems.SILVER_INGOT, 63);
-    private static final ItemStack a = new SlimefunItemStack(SlimefunItems.ALUMINUM_INGOT, 63);
-    private static final ItemStack l = new SlimefunItemStack(SlimefunItems.LEAD_INGOT, 63);
-    private static final ItemStack z = new SlimefunItemStack(SlimefunItems.ZINC_INGOT, 63);
-    private static final ItemStack t = new SlimefunItemStack(SlimefunItems.TIN_INGOT, 63);
-    private static final ItemStack co = new ItemStack(Material.COAL, 63);
-    private static final ItemStack i = new ItemStack(Material.IRON_INGOT, 63);
-    private static final ItemStack g = new ItemStack(Material.GOLD_INGOT, 63);
-    private static final ItemStack d = new ItemStack(Material.EMERALD, 63);
-    private static final ItemStack e = new ItemStack(Material.DIAMOND, 63);
-    private static final ItemStack r = new ItemStack(Material.REDSTONE_BLOCK, 63);
-    private static final ItemStack lp = new ItemStack(Material.LAPIS_BLOCK, 63);
-
-
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Core {

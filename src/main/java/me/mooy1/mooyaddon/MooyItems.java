@@ -13,15 +13,15 @@ public final class MooyItems {
 
     public static final Category MOOYMACHINES = new Category(new NamespacedKey(MooyAddon.getInstance(),
             "MOOYMACHINES"),
-            new CustomItem(Material.BLAST_FURNACE, "&aMooy Addon")
+            new CustomItem(Material.BLAST_FURNACE, "&aMooy Machines")
     );
     public static final Category MOOYMATERIALS = new Category(new NamespacedKey(MooyAddon.getInstance(),
             "MOOYMATERIALS"),
-            new CustomItem(Material.EMERALD_BLOCK, "&aMooy Addon")
+            new CustomItem(Material.EMERALD_BLOCK, "&aMooy Materials")
     );
     public static final Category MOOYGEAR = new Category(new NamespacedKey(MooyAddon.getInstance(),
             "MOOYGEAR"),
-            new CustomItem(Material.NETHERITE_CHESTPLATE, "&aMooy Addon")
+            new CustomItem(Material.NETHERITE_CHESTPLATE, "&aMooy Gear")
     );
 
     //Machines
@@ -45,7 +45,7 @@ public final class MooyItems {
 
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_1 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_1",
-            Material.ANDESITE,
+            Material.COBBLESTONE,
             "&71x Compressed Cobblestone",
             "",
             "&89 cobblestone combined",
@@ -61,7 +61,7 @@ public final class MooyItems {
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_3 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_3",
-            Material.STONE,
+            Material.ANDESITE,
             "&73x Compressed Cobblestone",
             "",
             "&8243 cobblestone combined",
@@ -77,7 +77,7 @@ public final class MooyItems {
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_5 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_5",
-            Material.POLISHED_ANDESITE,
+            Material.STONE,
             "&75x Compressed Cobblestone",
             "",
             "&859,049 cobblestone combined",
@@ -85,7 +85,7 @@ public final class MooyItems {
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_6 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_6",
-            Material.COBBLESTONE,
+            Material.POLISHED_ANDESITE,
             "&76x Compressed Cobblestone",
             "",
             "&8531,441 cobblestone combined",
@@ -93,7 +93,7 @@ public final class MooyItems {
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_7 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_7",
-            Material.COBBLESTONE,
+            Material.POLISHED_ANDESITE,
             "&77x Compressed Cobblestone",
             "",
             "&84,782,969 cobblestone combined",
@@ -203,7 +203,7 @@ public final class MooyItems {
             ""
     );
     public static final SlimefunItemStack LAPIS_CORE = new SlimefunItemStack(
-            "IRON_CORE",
+            "LAPIS_CORE",
             Material.LAPIS_BLOCK,
             "&dLapis Core",
             ""
