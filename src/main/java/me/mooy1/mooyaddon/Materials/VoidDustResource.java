@@ -1,21 +1,23 @@
-package me.mooy.mooyaddon.Items;
+package me.mooy1.mooyaddon.Materials;
 
+import me.mooy1.mooyaddon.MooyAddon;
+import me.mooy1.mooyaddon.MooyItems;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
-import me.mooy.mooyaddon.MooyAddon;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
-import me.mooy.mooyaddon.MooyItems;
 
-public class VoidDust implements GEOResource {
+public class VoidDustResource implements GEOResource {
 
-    private final NamespacedKey key = new NamespacedKey(MooyAddon.getInstance(), "Void Dust");
+    private final NamespacedKey key = new NamespacedKey(MooyAddon.getInstance(), "VoidDust");
 
     @Override
     public int getDefaultSupply(World.Environment environment, Biome biome) {
         if (environment == World.Environment.THE_END) {
-            return 20;
+            return 1;
+        } if (biome == Biome.THE_VOID) {
+            return 1;
         } else {
             return 0;
         }

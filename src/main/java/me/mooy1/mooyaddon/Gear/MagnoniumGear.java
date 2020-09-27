@@ -1,30 +1,31 @@
-package me.mooy.mooyaddon.Items;
+package me.mooy1.mooyaddon.Gear;
 
+import me.mooy1.mooyaddon.MooyItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import me.mooy.mooyaddon.MooyItems;
+import javax.annotation.Nonnull;
 
-public class MagnoniumTools extends SlimefunItem{
+public class MagnoniumGear extends SlimefunItem{
 
-    private final Tool tool;
-    private static final ItemStack alloy = MooyItems.MAGNONIUM_ALLOY;
+    private final MagnoniumTool magnoniumTool;
 
-    MagnoniumTools(Tool tool) {
-        super(MooyItems.MAIN, tool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, tool.getRecipe());
-        this.tool = tool;
+    public MagnoniumGear(MagnoniumTool magnoniumtool) {
+        super(MooyItems.MOOYGEAR, magnoniumtool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, magnoniumtool.getRecipe());
+        this.magnoniumTool = magnoniumtool;
     }
+
+    private static final ItemStack alloy = MooyItems.MAGNONIUM_INGOT;
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum Tool {
+    public enum MagnoniumTool {
 
         CROWN(MooyItems.MAGNONIUM_CROWN, new ItemStack[] {
                 alloy, alloy, alloy,
@@ -62,6 +63,7 @@ public class MagnoniumTools extends SlimefunItem{
             null, alloy, null
         });
 
+        @Nonnull
         private final SlimefunItemStack item;
         private final ItemStack[] recipe;
     }
