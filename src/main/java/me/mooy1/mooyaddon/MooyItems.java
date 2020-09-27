@@ -1,8 +1,5 @@
 package me.mooy1.mooyaddon;
 
-import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
-import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
-import me.mooy1.mooyaddon.Machines.FastAutoEnchanter;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
@@ -25,6 +22,13 @@ public final class MooyItems {
             "FAST_AUTO_ENCHANTER",
             Material.ENCHANTING_TABLE,
             "&cUltimate Auto Enchanter",
+            ""
+
+    );
+    public static final SlimefunItemStack FAST_AUTO_DISENCHANTER = new SlimefunItemStack(
+            "FAST_AUTO_DISENCHANTER",
+            Material.ENCHANTING_TABLE,
+            "&cUltimate Auto Disenchanter",
             ""
 
     );

@@ -13,11 +13,11 @@ import lombok.Getter;
 
 import javax.annotation.Nonnull;
 
-public class MagnoniumResource extends SlimefunItem{
+public class MagnoniumMaterials extends SlimefunItem{
 
     private final Type type;
 
-    public MagnoniumResource(MagnoniumResource.Type type) {
+    public MagnoniumMaterials(MagnoniumMaterials.Type type) {
         super(MooyItems.MOOYMAIN, type.getItem(), type.getRecipetype(), type.getRecipe());
         this.type = type;
     }

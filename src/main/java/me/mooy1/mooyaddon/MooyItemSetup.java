@@ -2,6 +2,7 @@ package me.mooy1.mooyaddon;
 
 import me.mooy1.mooyaddon.Gear.MagnoniumTools;
 import me.mooy1.mooyaddon.Gear.VoidFlame;
+import me.mooy1.mooyaddon.Machines.FastAutoDisenchanter;
 import me.mooy1.mooyaddon.Machines.FastAutoEnchanter;
 import me.mooy1.mooyaddon.Materials.*;
 
@@ -13,20 +14,21 @@ public final class MooyItemSetup {
 
     public static void setup(@Nonnull MooyAddon plugin) {
 
-        //add machines
-
-        new FastAutoEnchanter().register(plugin);
-
         //add compressed cobblestones
 
         for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
             new CompressedCobblestone(compression).register(plugin);
         }
 
+        //add machines
+
+        new FastAutoEnchanter().register(plugin);
+        new FastAutoDisenchanter().register(plugin);
+
         //add Magnonium resources
 
-        for (MagnoniumResource.Type type : MagnoniumResource.Type.values()) {
-            new MagnoniumResource(type).register(plugin);
+        for (MagnoniumMaterials.Type type : MagnoniumMaterials.Type.values()) {
+            new MagnoniumMaterials(type).register(plugin);
         }
 
         //add Magnonium tools
