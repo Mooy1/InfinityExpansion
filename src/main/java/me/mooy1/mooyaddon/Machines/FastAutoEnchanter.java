@@ -77,7 +77,7 @@ public class FastAutoEnchanter extends AutoEnchanter {
                         enchantedItem.addUnsafeEnchantment(entry.getKey(), entry.getValue());
                     }
 
-                    MachineRecipe recipe = new MachineRecipe(7 * amount, new ItemStack[] { target, item }, new ItemStack[] { enchantedItem, new ItemStack(Material.BOOK) });
+                    MachineRecipe recipe = new MachineRecipe(4 * amount, new ItemStack[] { target, item }, new ItemStack[] { enchantedItem, new ItemStack(Material.BOOK) });
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;

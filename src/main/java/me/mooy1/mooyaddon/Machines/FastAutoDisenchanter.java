@@ -85,7 +85,7 @@ public class FastAutoDisenchanter extends AutoDisenchanter {
                     ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
                     transferEnchantments(disenchantedItem, book, enchantments);
 
-                    MachineRecipe recipe = new MachineRecipe(9 * amount, new ItemStack[] { target, item }, new ItemStack[] { disenchantedItem, book });
+                    MachineRecipe recipe = new MachineRecipe(4 * amount, new ItemStack[] { target, item }, new ItemStack[] { disenchantedItem, book });
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;

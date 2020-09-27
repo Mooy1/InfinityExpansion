@@ -15,7 +15,7 @@ public class VoidDustResource implements GEOResource {
     @Override
     public int getDefaultSupply(World.Environment environment, Biome biome) {
         if (environment == World.Environment.THE_END) {
-            return 2;
+            return 1;
         } if (biome == Biome.THE_VOID) {
             return 1;
         } else {
@@ -30,7 +30,7 @@ public class VoidDustResource implements GEOResource {
 
     @Override
     public int getMaxDeviation() {
-        return 0;
+        return 1;
     }
 
     @Override
