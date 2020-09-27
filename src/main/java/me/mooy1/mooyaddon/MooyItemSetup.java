@@ -1,6 +1,7 @@
 package me.mooy1.mooyaddon;
 
 import me.mooy1.mooyaddon.Gear.MagnoniumTools;
+import me.mooy1.mooyaddon.Gear.VoidFlame;
 import me.mooy1.mooyaddon.Machines.FastAutoEnchanter;
 import me.mooy1.mooyaddon.Materials.*;
 

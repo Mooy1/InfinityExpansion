@@ -1,5 +1,6 @@
-package me.mooy1.mooyaddon;
+package me.mooy1.mooyaddon.Gear;
 
+import me.mooy1.mooyaddon.MooyItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
