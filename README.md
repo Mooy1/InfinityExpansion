@@ -5,7 +5,7 @@ This addon aims to add a larger endgame to slimefun by adding 'Infinity ingots' 
 https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
 
 # Support
-Make a new issue or contact me on discord Riley#5911
+Make a new issue or contact me on discord Riley#5911 
 Im also in the slimefun discord @Riley
 
 # Machines
