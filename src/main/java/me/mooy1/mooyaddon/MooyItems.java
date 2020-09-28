@@ -6,6 +6,10 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
+import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
+import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public final class MooyItems {
 
@@ -13,11 +17,11 @@ public final class MooyItems {
 
     public static final Category MOOYMACHINES = new Category(new NamespacedKey(MooyAddon.getInstance(),
             "MOOYMACHINES"),
-            new CustomItem(Material.BLAST_FURNACE, "&aMooy Machines")
+            new CustomItem(Material.SMITHING_TABLE, "&aMooy Machines")
     );
     public static final Category MOOYMATERIALS = new Category(new NamespacedKey(MooyAddon.getInstance(),
             "MOOYMATERIALS"),
-            new CustomItem(Material.EMERALD_BLOCK, "&aMooy Materials")
+            new CustomItem(Material.NETHERITE_BLOCK, "&aMooy Materials")
     );
     public static final Category MOOYGEAR = new Category(new NamespacedKey(MooyAddon.getInstance(),
             "MOOYGEAR"),
@@ -26,19 +30,49 @@ public final class MooyItems {
 
     //Machines
 
-    public static final SlimefunItemStack INFINITY_AUTO_ENCHANTER = new SlimefunItemStack(
-            "INFINITY_AUTO_ENCHANTER",
+    public static final SlimefunItemStack ADVANCED_ENCHANTER = new SlimefunItemStack(
+            "ADVANCED_ENCHANTER",
             Material.ENCHANTING_TABLE,
-            "&cInfinity Auto Enchanter",
+            "&cAdvanced Enchanter",
+            "",
+            LoreBuilder.speed(10),
+            LoreBuilder.powerPerSecond(999),
             ""
 
     );
-    public static final SlimefunItemStack INFINITY_AUTO_DISENCHANTER = new SlimefunItemStack(
-            "INFINITY_AUTO_DISENCHANTER",
+    public static final SlimefunItemStack ADVANCED_DISENCHANTER = new SlimefunItemStack(
+            "ADVANCED_DISENCHANTER",
             Material.ENCHANTING_TABLE,
-            "&cInfinity Auto Disenchanter",
+            "&cAdvanced Disenchanter",
+            "",
+            LoreBuilder.speed(10),
+            LoreBuilder.powerPerSecond(999),
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_ENCHANTER = new SlimefunItemStack(
+            "INFINITY_ENCHANTER",
+            Material.ENCHANTING_TABLE,
+            "&cInfinity Enchanter",
+            "",
+            LoreBuilder.speed(100),
+            LoreBuilder.powerPerSecond(99999),
             ""
 
+    );
+    public static final SlimefunItemStack INFINITY_DISENCHANTER = new SlimefunItemStack(
+            "INFINITY_DISENCHANTER",
+            Material.ENCHANTING_TABLE,
+            "&cInfinity Disenchanter",
+            "",
+            LoreBuilder.speed(100),
+            LoreBuilder.powerPerSecond(99999),
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_FORGE = new SlimefunItemStack(
+            "INFINITY_FORGE",
+            Material.NETHERITE_BLOCK,
+            "&cInfinity Forge",
+            ""
     );
 
     //Compressed Cobblestones
@@ -219,10 +253,12 @@ public final class MooyItems {
     );
     public static final SlimefunItemStack INFINITY_INGOT = new SlimefunItemStack(
             "INFINITY_INGOT",
-            Material.IRON_INGOT,
+            Material.NETHERITE_INGOT,
             "&dInfinity Ingot",
             ""
     );
+
+    //Materials
 
     public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
             "VOID_DUST",
@@ -230,6 +266,30 @@ public final class MooyItems {
             "&5Void Dust",
             "",
             "&8From the depths of the end...",
+            ""
+    );
+    public static final SlimefunItemStack MACHINE_CIRCUIT = new SlimefunItemStack(
+            "MACHINE_CIRCUIT",
+            Material.GOLD_BLOCK,
+            "&5Machine Circuit",
+            ""
+    );
+    public static final SlimefunItemStack INFINITE_MACHINE_CIRCUIT = new SlimefunItemStack(
+            "INFINITE_MACHINE_CIRCUIT",
+            Material.DIAMOND_BLOCK,
+            "&5Infinite Machine Circuit",
+            ""
+    );
+    public static final SlimefunItemStack MACHINE_CORE = new SlimefunItemStack(
+            "MACHINE_CORE",
+            Material.IRON_BLOCK,
+            "&5Machine Core",
+            ""
+    );
+    public static final SlimefunItemStack INFINITE_MACHINE_CORE = new SlimefunItemStack(
+            "INFINITE_MACHINE_CORE",
+            Material.NETHERITE_BLOCK,
+            "&5Infinite Machine Core",
             ""
     );
 
@@ -279,17 +339,57 @@ public final class MooyItems {
             ""
     );
 
+    public static final SlimefunItemStack INFINITY_CROWN = new SlimefunItemStack(
+            "INFINITY_CROWN",
+            Material.NETHERITE_HELMET,
+            "&cInfinity Crown",
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_CHESTPLATE = new SlimefunItemStack(
+            "INFINITY_CHESTPLATE",
+            Material.NETHERITE_CHESTPLATE,
+            "&cInfinity Chestplate",
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_LEGGINGS = new SlimefunItemStack(
+            "INFINITY_LEGGINGS",
+            Material.NETHERITE_LEGGINGS,
+            "&cInfinity Leggings",
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_BOOTS = new SlimefunItemStack(
+            "INFINITY_BOOTS",
+            Material.NETHERITE_BOOTS,
+            "&cInfinity Boots",
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_BLADE = new SlimefunItemStack(
+            "INFINITY_BLADE",
+            Material.NETHERITE_SWORD,
+            "&cInfinity Blade",
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_PICKAXE = new SlimefunItemStack(
+            "INFINITY_PICKAXE",
+            Material.NETHERITE_PICKAXE,
+            "&cInfinity Pickaxe",
+            ""
+    );
+
     //enchant list
 
     private static final Enchantment prot = Enchantment.PROTECTION_ENVIRONMENTAL;
     private static final Enchantment sharp = Enchantment.DAMAGE_ALL;
     private static final Enchantment eff = Enchantment.DIG_SPEED;
     private static final Enchantment unb = Enchantment.DURABILITY;
-    private static final Enchantment flame = Enchantment.FIRE_ASPECT;
-
-    //add enchants
+    private static final Enchantment fire = Enchantment.FIRE_ASPECT;
+    private static final Enchantment fort = Enchantment.LOOT_BONUS_BLOCKS;
+    private static final Enchantment loot = Enchantment.LOOT_BONUS_MOBS;
 
     static {
+
+        //add enchants
+
         MAGNONIUM_CROWN.addUnsafeEnchantment(prot, 10);
         MAGNONIUM_CROWN.addUnsafeEnchantment(unb, 10);
         MAGNONIUM_CHESTPLATE.addUnsafeEnchantment(prot, 10);
@@ -302,7 +402,41 @@ public final class MooyItems {
         MAGNONIUM_BLADE.addUnsafeEnchantment(unb, 10);
         MAGNONIUM_PICKAXE.addUnsafeEnchantment(eff, 10);
         MAGNONIUM_PICKAXE.addUnsafeEnchantment(unb, 10);
-        VOID_FLAME.addUnsafeEnchantment(flame, 10);
+        VOID_FLAME.addUnsafeEnchantment(fire, 10);
+        INFINITY_CROWN.addUnsafeEnchantment(prot, 40);
+        INFINITY_CHESTPLATE.addUnsafeEnchantment(prot, 40);
+        INFINITY_LEGGINGS.addUnsafeEnchantment(prot, 40);
+        INFINITY_BOOTS.addUnsafeEnchantment(prot, 40);
+        INFINITY_PICKAXE.addUnsafeEnchantment(eff, 40);
+        INFINITY_PICKAXE.addUnsafeEnchantment(fort, 20);
+        INFINITY_BLADE.addUnsafeEnchantment(sharp, 20);
+        INFINITY_BLADE.addUnsafeEnchantment(loot, 20);
+
+        //add unbreakables
+
+        ItemMeta hat = INFINITY_CROWN.getItemMeta();
+        hat.setUnbreakable(true);
+        INFINITY_CROWN.setItemMeta(hat);
+
+        ItemMeta shirt = INFINITY_CHESTPLATE.getItemMeta();
+        shirt.setUnbreakable(true);
+        INFINITY_CHESTPLATE.setItemMeta(shirt);
+
+        ItemMeta pants = INFINITY_LEGGINGS.getItemMeta();
+        pants.setUnbreakable(true);
+        INFINITY_LEGGINGS.setItemMeta(pants);
+
+        ItemMeta shoes = INFINITY_BOOTS.getItemMeta();
+        shoes.setUnbreakable(true);
+        INFINITY_BOOTS.setItemMeta(shoes);
+
+        ItemMeta pick = INFINITY_PICKAXE.getItemMeta();
+        pick.setUnbreakable(true);
+        INFINITY_PICKAXE.setItemMeta(pick);
+
+        ItemMeta blade = INFINITY_BLADE.getItemMeta();
+        blade.setUnbreakable(true);
+        INFINITY_BLADE.setItemMeta(blade);
     }
 
     private MooyItems() { }

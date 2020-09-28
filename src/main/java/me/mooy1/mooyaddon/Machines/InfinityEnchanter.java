@@ -16,16 +16,16 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FastAutoEnchanter extends AutoEnchanter {
+public class InfinityEnchanter extends AutoEnchanter {
 
-    public FastAutoEnchanter() {
+    public InfinityEnchanter() {
         super(MooyItems.MOOYMACHINES,
-                MooyItems.INFINITY_AUTO_ENCHANTER,
+                MooyItems.INFINITY_ENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
-                        new ItemStack(Material.NETHER_STAR), SlimefunItems.SYNTHETIC_DIAMOND, new ItemStack(Material.NETHER_STAR),
-                        SlimefunItems.SYNTHETIC_DIAMOND, SlimefunItems.AUTO_ENCHANTER, SlimefunItems.SYNTHETIC_DIAMOND,
-                        new ItemStack(Material.NETHER_STAR), SlimefunItems.SYNTHETIC_DIAMOND, new ItemStack(Material.NETHER_STAR)
+                        SlimefunItems.REINFORCED_PLATE, MooyItems.ADVANCED_ENCHANTER, SlimefunItems.REINFORCED_PLATE,
+                        MooyItems.INFINITE_MACHINE_CIRCUIT, MooyItems.INFINITE_MACHINE_CORE, MooyItems.INFINITE_MACHINE_CIRCUIT,
+                        SlimefunItems.REINFORCED_PLATE, MooyItems.INFINITY_INGOT, SlimefunItems.REINFORCED_PLATE
         });
     }
 
@@ -36,12 +36,12 @@ public class FastAutoEnchanter extends AutoEnchanter {
 
     @Override
     public int getEnergyConsumption() {
-        return 999;
+        return 99999;
     }
 
     @Override
     public int getCapacity() {
-        return 999;
+        return 99999;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class FastAutoEnchanter extends AutoEnchanter {
                         enchantedItem.addUnsafeEnchantment(entry.getKey(), entry.getValue());
                     }
 
-                    MachineRecipe recipe = new MachineRecipe(4 * amount, new ItemStack[] { target, item }, new ItemStack[] { enchantedItem, new ItemStack(Material.BOOK) });
+                    MachineRecipe recipe = new MachineRecipe(1 * amount, new ItemStack[] { target, item }, new ItemStack[] { enchantedItem, new ItemStack(Material.BOOK) });
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;
@@ -110,12 +110,12 @@ public class FastAutoEnchanter extends AutoEnchanter {
 
     @Override
     public int getSpeed() {
-        return 10;
+        return 100;
     }
 
     @Override
     public String getMachineIdentifier() {
-        return "INFINITY_AUTO_ENCHANTER";
+        return "INFINITY_ENCHANTER";
     }
 
 }
