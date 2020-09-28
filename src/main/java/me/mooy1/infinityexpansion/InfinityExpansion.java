@@ -41,7 +41,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     @Override
     public String getBugTrackerURL() {
-        return "https://github.com/Mooy1/MooyAddon/issues";
+        return "https://github.com/Mooy1/InfinityExpansion/issues";
     }
 
     @Nonnull
