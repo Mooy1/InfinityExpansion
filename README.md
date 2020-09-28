@@ -26,4 +26,4 @@ Void Dust - geo miner resource from the end or void biome
 
 Magnonium Gear - Strong gear crafted with lots of Magnesium
 
-Infinity gear - extremly strong endgame gear crafter wiht infinity ingots
+Infinity gear - extremly strong endgame gear crafted with infinity ingots
