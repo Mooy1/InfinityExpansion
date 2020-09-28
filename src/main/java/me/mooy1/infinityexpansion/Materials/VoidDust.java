@@ -1,6 +1,6 @@
-package me.mooy1.mooyaddon.Materials;
+package me.mooy1.infinityexpansion.Materials;
 
-import me.mooy1.mooyaddon.MooyItems;
+import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
@@ -17,7 +17,7 @@ public class VoidDust extends SlimefunItem {
     );
 
     public VoidDust() {
-        super(MooyItems.MOOYMATERIALS, MooyItems.VOID_DUST, RecipeType.GEO_MINER, new ItemStack[] {
+        super(Items.MOOYMATERIALS, Items.VOID_DUST, RecipeType.GEO_MINER, new ItemStack[] {
                         null, null, null,
                         null, voiddust, null,
                         null, null, null

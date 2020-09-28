@@ -1,2 +1,2 @@
-# Mooy Addon
+# Infinity Expansion
 will change later

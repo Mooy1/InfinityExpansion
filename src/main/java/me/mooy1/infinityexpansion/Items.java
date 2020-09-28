@@ -1,4 +1,4 @@
-package me.mooy1.mooyaddon;
+package me.mooy1.infinityexpansion;
 
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -6,24 +6,22 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
-import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
-import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public final class MooyItems {
+public final class Items {
 
     //Categories
 
-    public static final Category MOOYMACHINES = new Category(new NamespacedKey(MooyAddon.getInstance(),
+    public static final Category MOOYMACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "MOOYMACHINES"),
             new CustomItem(Material.SMITHING_TABLE, "&aMooy Machines")
     );
-    public static final Category MOOYMATERIALS = new Category(new NamespacedKey(MooyAddon.getInstance(),
+    public static final Category MOOYMATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "MOOYMATERIALS"),
             new CustomItem(Material.NETHERITE_BLOCK, "&aMooy Materials")
     );
-    public static final Category MOOYGEAR = new Category(new NamespacedKey(MooyAddon.getInstance(),
+    public static final Category MOOYGEAR = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "MOOYGEAR"),
             new CustomItem(Material.NETHERITE_CHESTPLATE, "&aMooy Gear")
     );
@@ -439,5 +437,5 @@ public final class MooyItems {
         INFINITY_BLADE.setItemMeta(blade);
     }
 
-    private MooyItems() { }
+    private Items() { }
 }

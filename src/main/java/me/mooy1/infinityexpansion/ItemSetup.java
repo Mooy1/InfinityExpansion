@@ -1,18 +1,18 @@
-package me.mooy1.mooyaddon;
+package me.mooy1.infinityexpansion;
 
-import me.mooy1.mooyaddon.Gear.InfinityGear;
-import me.mooy1.mooyaddon.Gear.MagnoniumGear;
-import me.mooy1.mooyaddon.Gear.VoidFlame;
-import me.mooy1.mooyaddon.Machines.*;
-import me.mooy1.mooyaddon.Materials.*;
+import me.mooy1.infinityexpansion.Gear.InfinityGear;
+import me.mooy1.infinityexpansion.Gear.MagnoniumGear;
+import me.mooy1.infinityexpansion.Gear.VoidFlame;
+import me.mooy1.infinityexpansion.Machines.*;
+import me.mooy1.infinityexpansion.Materials.*;
 
 import javax.annotation.Nonnull;
 
-public final class MooyItemSetup {
+public final class ItemSetup {
 
-    private MooyItemSetup() { }
+    private ItemSetup() { }
 
-    public static void setup(@Nonnull MooyAddon plugin) {
+    public static void setup(@Nonnull InfinityExpansion plugin) {
 
         //add machines
 
@@ -23,6 +23,10 @@ public final class MooyItemSetup {
         new InfinityForge().register(plugin);
 
         //add materials
+
+        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
+            new CompressedCobblestone(compression).register(plugin);
+        }
 
         for (Cores.Core core : Cores.Core.values()) {
             new Cores(core).register(plugin);
@@ -35,11 +39,6 @@ public final class MooyItemSetup {
         for (MachineMaterials.Material material : MachineMaterials.Material.values()) {
             new MachineMaterials(material).register(plugin);
         }
-
-        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
-            new CompressedCobblestone(compression).register(plugin);
-        }
-
 
         //add gear
 
