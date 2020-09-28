@@ -29,8 +29,8 @@ public class Cores extends SlimefunItem{
 
         MAGNESIUM(Items.MAGNESIUM_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.MAGNESIUM_INGOT, 64))),
         COPPER(Items.COPPER_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.COPPER_INGOT, 64))),
-        SILVER(Items.SILVER_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.LEAD_INGOT, 64))),
-        ALUMINUM(Items.ALUMINUM_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.COPPER_INGOT, 64))),
+        SILVER(Items.SILVER_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.SILVER_INGOT, 64))),
+        ALUMINUM(Items.ALUMINUM_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.ALUMINUM_INGOT, 64))),
         LEAD(Items.LEAD_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.LEAD_INGOT, 64))),
         ZINC(Items.ZINC_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.ZINC_INGOT, 64))),
         TIN(Items.TIN_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(new SlimefunItemStack(SlimefunItems.TIN_INGOT, 64))),
