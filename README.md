@@ -4,6 +4,9 @@ This addon aims to add a larger endgame to slimefun by adding 'Infinity ingots' 
 # Download
 https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
 
+# Support
+Make a new issue or contact me on discord Riley#5911, Im also in the slimefun discord @Riley
+
 # Machines
 Advanced Enchanter - a faster auto enchanter
 Advanced Disenchanter - a faster auto disenchanter
@@ -26,4 +29,4 @@ Void Dust - geo miner resource from the end or void biome
 
 Magnonium Gear - Strong gear crafted with lots of Magnesium
 
-Infinity gear - extremly strong endgame gear crafted with infinity ingots
+Infinity gear - extremly strong endgame gear crafter wihtb infinity ingots
