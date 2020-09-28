@@ -92,7 +92,7 @@ public final class Items {
     );
     public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
             "VOID_PANEL",
-            Material.ORANGE_GLAZED_TERRACOTTA,
+            Material.LIGHT_GRAY_GLAZED_TERRACOTTA,
             "&cVoid Panel",
             "&7Doesn't work during the day",
             "",
@@ -242,7 +242,7 @@ public final class Items {
     );
     public static final SlimefunItemStack NETHERITE_CORE = new SlimefunItemStack(
             "NETHERITE_CORE",
-            Material.IRON_BLOCK,
+            Material.NETHERITE_BLOCK,
             "&dNetherite Core",
             ""
     );
