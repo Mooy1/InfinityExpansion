@@ -3,8 +3,7 @@ package me.mooy1.mooyaddon;
 import me.mooy1.mooyaddon.Gear.InfinityGear;
 import me.mooy1.mooyaddon.Gear.MagnoniumGear;
 import me.mooy1.mooyaddon.Gear.VoidFlame;
-import me.mooy1.mooyaddon.Machines.FastAutoDisenchanter;
-import me.mooy1.mooyaddon.Machines.FastAutoEnchanter;
+import me.mooy1.mooyaddon.Machines.*;
 import me.mooy1.mooyaddon.Materials.*;
 
 import javax.annotation.Nonnull;
@@ -15,16 +14,13 @@ public final class MooyItemSetup {
 
     public static void setup(@Nonnull MooyAddon plugin) {
 
-        //add compressed cobblestones
-
-        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
-            new CompressedCobblestone(compression).register(plugin);
-        }
-
         //add machines
 
-        new FastAutoEnchanter().register(plugin);
-        new FastAutoDisenchanter().register(plugin);
+        new AdvancedEnchanter().register(plugin);
+        new AdvancedDisenchanter().register(plugin);
+        new InfinityEnchanter().register(plugin);
+        new InfinityDisenchanter().register(plugin);
+        new InfinityForge().register(plugin);
 
         //add materials
 
@@ -36,12 +32,25 @@ public final class MooyItemSetup {
             new Ingots(type).register(plugin);
         }
 
+        for (MachineMaterials.Material material : MachineMaterials.Material.values()) {
+            new MachineMaterials(material).register(plugin);
+        }
+
+        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
+            new CompressedCobblestone(compression).register(plugin);
+        }
+
+
         //add gear
 
         new VoidFlame().register(plugin);
 
         for (MagnoniumGear.MagnoniumTool magnoniumTool : MagnoniumGear.MagnoniumTool.values()) {
             new MagnoniumGear(magnoniumTool).register(plugin);
+        }
+
+        for (InfinityGear.InfinityTool infinityTool : InfinityGear.InfinityTool.values()) {
+            new InfinityGear(infinityTool).register(plugin);
         }
 
 
