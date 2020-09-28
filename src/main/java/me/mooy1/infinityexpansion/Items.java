@@ -15,15 +15,15 @@ public final class Items {
 
     public static final Category MOOYMACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "MOOYMACHINES"),
-            new CustomItem(Material.SMITHING_TABLE, "&aMooy Machines")
+            new CustomItem(Material.SMITHING_TABLE, "&aInfinity Machines")
     );
     public static final Category MOOYMATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "MOOYMATERIALS"),
-            new CustomItem(Material.NETHERITE_BLOCK, "&aMooy Materials")
+            new CustomItem(Material.NETHERITE_BLOCK, "&aInfinity Materials")
     );
     public static final Category MOOYGEAR = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "MOOYGEAR"),
-            new CustomItem(Material.NETHERITE_CHESTPLATE, "&aMooy Gear")
+            new CustomItem(Material.NETHERITE_CHESTPLATE, "&aInfinity Gear")
     );
 
     //Machines
@@ -266,6 +266,12 @@ public final class Items {
             "&8From the depths of the end...",
             ""
     );
+    public static final SlimefunItemStack MACHINE_PLATE = new SlimefunItemStack(
+            "MACHINE_PLATE",
+            Material.NETHERITE_BLOCK,
+            "&5Machine Plate",
+            ""
+    );
     public static final SlimefunItemStack MACHINE_CIRCUIT = new SlimefunItemStack(
             "MACHINE_CIRCUIT",
             Material.GOLD_BLOCK,
@@ -286,7 +292,7 @@ public final class Items {
     );
     public static final SlimefunItemStack INFINITE_MACHINE_CORE = new SlimefunItemStack(
             "INFINITE_MACHINE_CORE",
-            Material.NETHERITE_BLOCK,
+            Material.EMERALD_BLOCK,
             "&5Infinite Machine Core",
             ""
     );

@@ -18,7 +18,7 @@ public class MachineMaterials extends SlimefunItem{
     private final Material material;
 
     public MachineMaterials(Material material) {
-        super(Items.MOOYGEAR, material.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, material.getRecipe());
+        super(Items.MOOYMACHINES, material.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, material.getRecipe());
         this.material = material;
     }
 
@@ -26,10 +26,15 @@ public class MachineMaterials extends SlimefunItem{
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Material {
 
+        PLATE(Items.MACHINE_PLATE, new ItemStack[] {
+                SlimefunItems.STEEL_PLATE, SlimefunItems.REINFORCED_PLATE, SlimefunItems.STEEL_PLATE,
+                SlimefunItems.REINFORCED_PLATE, Items.MAGNONIUM_INGOT, SlimefunItems.REINFORCED_PLATE,
+                SlimefunItems.STEEL_PLATE, SlimefunItems.REINFORCED_PLATE, SlimefunItems.STEEL_PLATE
+        }),
         CIRCUIT(Items.MACHINE_CIRCUIT, new ItemStack[] {
-                SlimefunItems.COPPER_INGOT, new ItemStack(org.bukkit.Material.GOLD_INGOT), SlimefunItems.COPPER_INGOT,
+                SlimefunItems.COPPER_INGOT, SlimefunItems.GOLD_24K, SlimefunItems.COPPER_INGOT,
                 SlimefunItems.COPPER_INGOT, SlimefunItems.BASIC_CIRCUIT_BOARD, SlimefunItems.COPPER_INGOT,
-                SlimefunItems.COPPER_INGOT, new ItemStack(org.bukkit.Material.GOLD_INGOT), SlimefunItems.COPPER_INGOT
+                SlimefunItems.COPPER_INGOT, SlimefunItems.GOLD_24K, SlimefunItems.COPPER_INGOT
         }),
         CORE(Items.MACHINE_CORE, new ItemStack[] {
                 SlimefunItems.STEEL_PLATE, SlimefunItems.STEEL_PLATE, SlimefunItems.STEEL_PLATE,
@@ -37,14 +42,14 @@ public class MachineMaterials extends SlimefunItem{
                 SlimefunItems.STEEL_PLATE, SlimefunItems.STEEL_PLATE, SlimefunItems.STEEL_PLATE
         }),
         ICIRCUIT(Items.INFINITE_MACHINE_CIRCUIT, new ItemStack[] {
-                Items.INFINITY_INGOT, SlimefunItems.GOLD_24K, Items.INFINITY_INGOT,
+                Items.INFINITY_INGOT, Items.MAGNONIUM_INGOT, Items.INFINITY_INGOT,
                 Items.INFINITY_INGOT, Items.MACHINE_CIRCUIT, Items.INFINITY_INGOT,
-                Items.INFINITY_INGOT, SlimefunItems.GOLD_24K, Items.INFINITY_INGOT
+                Items.INFINITY_INGOT, Items.MAGNONIUM_INGOT, Items.INFINITY_INGOT
         }),
         ICORE(Items.INFINITE_MACHINE_CORE, new ItemStack[] {
-                SlimefunItems.REINFORCED_PLATE, new ItemStack(org.bukkit.Material.NETHER_STAR), SlimefunItems.REINFORCED_PLATE,
+                Items.MACHINE_PLATE, new ItemStack(org.bukkit.Material.NETHER_STAR), Items.MACHINE_PLATE,
                 Items.INFINITE_MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT,
-                SlimefunItems.REINFORCED_PLATE, new ItemStack(org.bukkit.Material.NETHER_STAR), SlimefunItems.REINFORCED_PLATE
+                Items.MACHINE_PLATE, new ItemStack(org.bukkit.Material.NETHER_STAR), Items.MACHINE_PLATE
         });
 
         @Nonnull
