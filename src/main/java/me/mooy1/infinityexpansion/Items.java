@@ -72,6 +72,12 @@ public final class Items {
             "&cInfinity Forge",
             ""
     );
+    public static final SlimefunItemStack INFINITY_CAPACITOR = new SlimefunItemStack(
+            "INFINITY_CAPACITOR",
+            Material.EMERALD_BLOCK,
+            "&cInfinite Capacitor",
+            ""
+    );
 
     //Compressed Cobblestones
 
@@ -266,21 +272,22 @@ public final class Items {
             "&8From the depths of the end...",
             ""
     );
+
     public static final SlimefunItemStack MACHINE_PLATE = new SlimefunItemStack(
             "MACHINE_PLATE",
-            Material.NETHERITE_BLOCK,
+            Material.IRON_INGOT,
             "&5Machine Plate",
             ""
     );
     public static final SlimefunItemStack MACHINE_CIRCUIT = new SlimefunItemStack(
             "MACHINE_CIRCUIT",
-            Material.GOLD_BLOCK,
+            Material.GOLD_INGOT,
             "&5Machine Circuit",
             ""
     );
     public static final SlimefunItemStack INFINITE_MACHINE_CIRCUIT = new SlimefunItemStack(
             "INFINITE_MACHINE_CIRCUIT",
-            Material.DIAMOND_BLOCK,
+            Material.DIAMOND,
             "&5Infinite Machine Circuit",
             ""
     );
@@ -292,7 +299,7 @@ public final class Items {
     );
     public static final SlimefunItemStack INFINITE_MACHINE_CORE = new SlimefunItemStack(
             "INFINITE_MACHINE_CORE",
-            Material.EMERALD_BLOCK,
+            Material.DIAMOND_BLOCK,
             "&5Infinite Machine Core",
             ""
     );

@@ -40,8 +40,8 @@ public class Ingots extends SlimefunItem{
                 new SlimefunItemStack(Items.GOLD_CORE, 64),
                 new SlimefunItemStack(Items.IRON_CORE, 64),
                 new SlimefunItemStack(Items.ALUMINUM_CORE, 64),
-                new SlimefunItemStack(Items.ZINC_CORE, 64),
-                new SlimefunItemStack(Items.TIN_CORE, 64),
+                new SlimefunItemStack(Items.DIAMOND_CORE, 64),
+                new SlimefunItemStack(Items.NETHERITE_CORE, 64),
                 new SlimefunItemStack(Items.LEAD_CORE, 64),
         });
 
