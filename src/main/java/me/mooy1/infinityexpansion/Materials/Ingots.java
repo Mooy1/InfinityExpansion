@@ -27,18 +27,22 @@ public class Ingots extends SlimefunItem{
     public enum Type {
 
         MAGNONIUM(Items.MAGNONIUM_INGOT, RecipeType.SMELTERY, new ItemStack[] {
-                Items.MAGNESIUM_CORE, Items.VOID_DUST, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REDSTONE_ALLOY, null, null, null, null, null
+                Items.MAGNESIUM_CORE,
+                Items.VOID_DUST,
+                SlimefunItems.REINFORCED_ALLOY_INGOT,
+                SlimefunItems.REDSTONE_ALLOY,
+                null, null, null, null, null
         }),
         INFINITY(Items.INFINITY_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MAGNESIUM_CORE,
-                Items.COPPER_CORE,
-                Items.SILVER_CORE,
-                Items.GOLD_CORE,
-                Items.IRON_CORE,
-                Items.ALUMINUM_CORE,
-                Items.ZINC_CORE,
-                Items.TIN_CORE,
-                Items.LEAD_CORE,
+                new SlimefunItemStack(Items.MAGNESIUM_CORE, 64),
+                new SlimefunItemStack(Items.COPPER_CORE, 64),
+                new SlimefunItemStack(Items.SILVER_CORE, 64),
+                new SlimefunItemStack(Items.GOLD_CORE, 64),
+                new SlimefunItemStack(Items.IRON_CORE, 64),
+                new SlimefunItemStack(Items.ALUMINUM_CORE, 64),
+                new SlimefunItemStack(Items.ZINC_CORE, 64),
+                new SlimefunItemStack(Items.TIN_CORE, 64),
+                new SlimefunItemStack(Items.LEAD_CORE, 64),
         });
 
 
