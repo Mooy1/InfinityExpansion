@@ -1,5 +1,6 @@
 package me.mooy1.infinityexpansion;
 
+import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
@@ -72,10 +73,39 @@ public final class Items {
             "&cInfinity Forge",
             ""
     );
-    public static final SlimefunItemStack INFINITY_CAPACITOR = new SlimefunItemStack(
-            "INFINITY_CAPACITOR",
-            Material.EMERALD_BLOCK,
+    public static final SlimefunItemStack INFINITE_CAPACITOR = new SlimefunItemStack(
+            "INFINITE_CAPACITOR",
+            HeadTexture.CAPACITOR_25,
             "&cInfinite Capacitor",
+            "",
+            "&8\u21E8 &e\u26A1 &bInfinite &7J Capacity",
+            ""
+    );
+    public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
+            "CELESTIAL_PANEL",
+            Material.WHITE_GLAZED_TERRACOTTA,
+            "&cCelestial Panel",
+            "&7Only works during the day",
+            "",
+            LoreBuilder.powerPerSecond(6000) + " (Day)",
+            ""
+    );
+    public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
+            "VOID_PANEL",
+            Material.ORANGE_GLAZED_TERRACOTTA,
+            "&cVoid Panel",
+            "&7Doesn't work during the day",
+            "",
+            LoreBuilder.powerPerSecond(12000) + " (Night)",
+            ""
+    );
+    public static final SlimefunItemStack INFINITE_PANEL = new SlimefunItemStack(
+            "INFINITE_PANEL",
+            Material.LIGHT_BLUE_GLAZED_TERRACOTTA,
+            "&cInfinite Panel",
+            "",
+            LoreBuilder.powerPerSecond(1000000) + " (Day)",
+            LoreBuilder.powerPerSecond(1000000) + " (Night)",
             ""
     );
 
