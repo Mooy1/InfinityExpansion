@@ -36,12 +36,12 @@ public class AdvancedEnchanter extends AutoEnchanter {
 
     @Override
     public int getEnergyConsumption() {
-        return 999;
+        return 600;
     }
 
     @Override
     public int getCapacity() {
-        return 999;
+        return 600;
     }
 
     @Override

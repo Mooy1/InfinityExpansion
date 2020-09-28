@@ -41,12 +41,12 @@ public class AdvancedDisenchanter extends AutoDisenchanter {
 
     @Override
     public int getEnergyConsumption() {
-        return 999;
+        return 600;
     }
 
     @Override
     public int getCapacity() {
-        return 999;
+        return 600;
     }
 
     @Override
