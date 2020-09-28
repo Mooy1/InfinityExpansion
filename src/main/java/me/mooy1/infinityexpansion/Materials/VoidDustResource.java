@@ -1,7 +1,7 @@
-package me.mooy1.mooyaddon.Materials;
+package me.mooy1.infinityexpansion.Materials;
 
-import me.mooy1.mooyaddon.MooyAddon;
-import me.mooy1.mooyaddon.MooyItems;
+import me.mooy1.infinityexpansion.InfinityExpansion;
+import me.mooy1.infinityexpansion.Items;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class VoidDustResource implements GEOResource {
 
-    private final NamespacedKey key = new NamespacedKey(MooyAddon.getInstance(), "VoidDust");
+    private final NamespacedKey key = new NamespacedKey(InfinityExpansion.getInstance(), "VoidDust");
 
     @Override
     public int getDefaultSupply(World.Environment environment, Biome biome) {
@@ -40,7 +40,7 @@ public class VoidDustResource implements GEOResource {
 
     @Override
     public ItemStack getItem() {
-        return MooyItems.VOID_DUST.clone();
+        return Items.VOID_DUST.clone();
     }
 
     @Override

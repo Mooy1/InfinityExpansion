@@ -1,8 +1,7 @@
-package me.mooy1.mooyaddon.Machines;
+package me.mooy1.infinityexpansion.Machines;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
-import me.mooy1.mooyaddon.MooyItems;
+import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
@@ -19,13 +18,13 @@ import java.util.Map;
 public class InfinityEnchanter extends AutoEnchanter {
 
     public InfinityEnchanter() {
-        super(MooyItems.MOOYMACHINES,
-                MooyItems.INFINITY_ENCHANTER,
+        super(Items.MOOYMACHINES,
+                Items.INFINITY_ENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
-                        SlimefunItems.REINFORCED_PLATE, MooyItems.ADVANCED_ENCHANTER, SlimefunItems.REINFORCED_PLATE,
-                        MooyItems.INFINITE_MACHINE_CIRCUIT, MooyItems.INFINITE_MACHINE_CORE, MooyItems.INFINITE_MACHINE_CIRCUIT,
-                        SlimefunItems.REINFORCED_PLATE, MooyItems.INFINITY_INGOT, SlimefunItems.REINFORCED_PLATE
+                        Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
+                        Items.INFINITY_INGOT, Items.ADVANCED_ENCHANTER, Items.INFINITY_INGOT,
+                        Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
         });
     }
 

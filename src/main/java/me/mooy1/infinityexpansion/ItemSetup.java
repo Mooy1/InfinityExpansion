@@ -1,18 +1,18 @@
-package me.mooy1.mooyaddon;
+package me.mooy1.infinityexpansion;
 
-import me.mooy1.mooyaddon.Gear.InfinityGear;
-import me.mooy1.mooyaddon.Gear.MagnoniumGear;
-import me.mooy1.mooyaddon.Gear.VoidFlame;
-import me.mooy1.mooyaddon.Machines.*;
-import me.mooy1.mooyaddon.Materials.*;
+import me.mooy1.infinityexpansion.Gear.InfinityGear;
+import me.mooy1.infinityexpansion.Gear.MagnoniumGear;
+import me.mooy1.infinityexpansion.Gear.VoidFlame;
+import me.mooy1.infinityexpansion.Machines.*;
+import me.mooy1.infinityexpansion.Materials.*;
 
 import javax.annotation.Nonnull;
 
-public final class MooyItemSetup {
+public final class ItemSetup {
 
-    private MooyItemSetup() { }
+    private ItemSetup() { }
 
-    public static void setup(@Nonnull MooyAddon plugin) {
+    public static void setup(@Nonnull InfinityExpansion plugin) {
 
         //add machines
 

@@ -1,8 +1,8 @@
-package me.mooy1.mooyaddon.Machines;
+package me.mooy1.infinityexpansion.Machines;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
-import me.mooy1.mooyaddon.MooyItems;
+import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
@@ -19,13 +19,13 @@ import java.util.Map;
 public class AdvancedEnchanter extends AutoEnchanter {
 
     public AdvancedEnchanter() {
-        super(MooyItems.MOOYMACHINES,
-                MooyItems.ADVANCED_ENCHANTER,
+        super(Items.MOOYMACHINES,
+                Items.ADVANCED_ENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
-                        SlimefunItems.STEEL_PLATE, SlimefunItems.AUTO_ENCHANTER, SlimefunItems.STEEL_PLATE,
-                        MooyItems.MACHINE_CIRCUIT, MooyItems.MACHINE_CORE, MooyItems.MACHINE_CIRCUIT,
-                        SlimefunItems.STEEL_PLATE, MooyItems.MAGNONIUM_INGOT, SlimefunItems.STEEL_PLATE
+                        Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
+                        Items.MAGNONIUM_INGOT, SlimefunItems.AUTO_ENCHANTER, Items.MAGNONIUM_INGOT,
+                        Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         });
     }
 

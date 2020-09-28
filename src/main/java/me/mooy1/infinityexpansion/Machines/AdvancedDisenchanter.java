@@ -1,13 +1,9 @@
-package me.mooy1.mooyaddon.Machines;
+package me.mooy1.infinityexpansion.Machines;
 
-import io.github.thebusybiscuit.slimefun4.api.events.AutoDisenchantEvent;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import java.util.HashMap;
+import java.util.Map;
+
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoDisenchanter;
-import me.mooy1.mooyaddon.MooyItems;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.InvUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,35 +13,40 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import java.util.HashMap;
-import java.util.Map;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.mooy1.infinityexpansion.Items;
+import io.github.thebusybiscuit.slimefun4.api.events.AutoDisenchantEvent;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
-public class InfinityDisenchanter extends AutoDisenchanter {
+public class AdvancedDisenchanter extends AutoDisenchanter {
 
-    public InfinityDisenchanter() {
-        super(MooyItems.MOOYMACHINES,
-                MooyItems.INFINITY_DISENCHANTER,
+    public AdvancedDisenchanter() {
+        super(Items.MOOYMACHINES,
+                Items.ADVANCED_DISENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
-                        SlimefunItems.REINFORCED_PLATE, MooyItems.ADVANCED_DISENCHANTER, SlimefunItems.REINFORCED_PLATE,
-                        MooyItems.INFINITE_MACHINE_CIRCUIT, MooyItems.INFINITE_MACHINE_CORE, MooyItems.INFINITE_MACHINE_CIRCUIT,
-                        SlimefunItems.REINFORCED_PLATE, MooyItems.INFINITY_INGOT, SlimefunItems.REINFORCED_PLATE
+                        Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
+                        Items.MAGNONIUM_INGOT, SlimefunItems.AUTO_DISENCHANTER, Items.MAGNONIUM_INGOT,
+                        Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         });
     }
 
     @Override
     public ItemStack getProgressBar() {
-        return new ItemStack(Material.NETHERITE_CHESTPLATE);
+        return new ItemStack(Material.CHAINMAIL_CHESTPLATE);
     }
 
     @Override
     public int getEnergyConsumption() {
-        return 99999;
+        return 999;
     }
 
     @Override
     public int getCapacity() {
-        return 99999;
+        return 999;
     }
 
     @Override
@@ -84,7 +85,7 @@ public class InfinityDisenchanter extends AutoDisenchanter {
                     ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
                     transferEnchantments(disenchantedItem, book, enchantments);
 
-                    MachineRecipe recipe = new MachineRecipe(1 * amount, new ItemStack[] { target, item }, new ItemStack[] { disenchantedItem, book });
+                    MachineRecipe recipe = new MachineRecipe(10 * amount, new ItemStack[] { target, item }, new ItemStack[] { disenchantedItem, book });
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;
@@ -138,12 +139,12 @@ public class InfinityDisenchanter extends AutoDisenchanter {
 
     @Override
     public int getSpeed() {
-        return 100;
+        return 10;
     }
 
     @Override
     public String getMachineIdentifier() {
-        return "INFINITY_DISENCHANTER";
+        return "ADVANCED_DISENCHANTER";
     }
 
 }
