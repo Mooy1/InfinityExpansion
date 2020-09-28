@@ -68,22 +68,22 @@ public final class ItemSetup {
                 Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
                 Items.INFINITY_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITY_INGOT,
                 Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT
-        });
+        }).register(plugin);
 
         new SolarGenerator(Items.MOOYMACHINES, 3600, 0, Items.CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
                 Items.MACHINE_PLATE, SlimefunItems.SOLAR_GENERATOR_4, Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        });
+        }).register(plugin);
         new SolarGenerator(Items.MOOYMACHINES, 0, 7200, Items.VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
                 Items.MACHINE_PLATE, Items.CELESTIAL_PANEL, Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        });
+        }).register(plugin);
         new SolarGenerator(Items.MOOYMACHINES, 600000, 600000, Items.INFINITE_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.CELESTIAL_PANEL, Items.VOID_PANEL, Items.CELESTIAL_PANEL,
                 Items.INFINITY_INGOT, Items.INFINITE_CAPACITOR, Items.INFINITY_INGOT,
                 Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT,
-        });
+        }).register(plugin);
     }
 }
