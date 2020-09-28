@@ -24,6 +24,10 @@ public final class MooyItemSetup {
 
         //add materials
 
+        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
+            new CompressedCobblestone(compression).register(plugin);
+        }
+
         for (Cores.Core core : Cores.Core.values()) {
             new Cores(core).register(plugin);
         }
@@ -35,11 +39,6 @@ public final class MooyItemSetup {
         for (MachineMaterials.Material material : MachineMaterials.Material.values()) {
             new MachineMaterials(material).register(plugin);
         }
-
-        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
-            new CompressedCobblestone(compression).register(plugin);
-        }
-
 
         //add gear
 
