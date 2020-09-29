@@ -33,7 +33,7 @@ public class Ingots extends SlimefunItem{
                 SlimefunItems.REDSTONE_ALLOY,
                 null, null, null, null, null
         }),
-        INFINITY(Items.INFINITY_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        INFINITY(Items.INFINITY_INGOT, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
                 new SlimefunItemStack(Items.MAGNESIUM_CORE, 64),
                 new SlimefunItemStack(Items.COPPER_CORE, 64),
                 new SlimefunItemStack(Items.SILVER_CORE, 64),
