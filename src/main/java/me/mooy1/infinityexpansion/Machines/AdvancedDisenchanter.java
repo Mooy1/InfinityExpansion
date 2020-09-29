@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoDisenchanter;
+import me.mooy1.infinityexpansion.Categories;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.InvUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 public class AdvancedDisenchanter extends AutoDisenchanter {
 
     public AdvancedDisenchanter() {
-        super(Items.MOOYMACHINES,
+        super(Categories.INFINITY_MACHINES,
                 Items.ADVANCED_DISENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {

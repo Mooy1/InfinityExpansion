@@ -1,6 +1,7 @@
 package me.mooy1.infinityexpansion.Materials;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -19,7 +20,7 @@ public class Cores extends SlimefunItem{
     private final Core core;
 
     public Cores(Cores.Core core) {
-        super(Items.MOOYMATERIALS, core.getItem(), core.getRecipetype(), core.getRecipe());
+        super(Categories.INFINITY_MATERIALS, core.getItem(), core.getRecipetype(), core.getRecipe());
         this.core = core;
     }
 

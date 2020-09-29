@@ -2,6 +2,7 @@ package me.mooy1.infinityexpansion.Machines;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class AdvancedEnchanter extends AutoEnchanter {
 
     public AdvancedEnchanter() {
-        super(Items.MOOYMACHINES,
+        super(Categories.INFINITY_MACHINES,
                 Items.ADVANCED_ENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {

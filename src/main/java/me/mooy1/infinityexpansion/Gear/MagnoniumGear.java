@@ -1,5 +1,6 @@
 package me.mooy1.infinityexpansion.Gear;
 
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -17,7 +18,7 @@ public class MagnoniumGear extends SlimefunItem{
     private final MagnoniumTool magnoniumTool;
 
     public MagnoniumGear(MagnoniumTool magnoniumtool) {
-        super(Items.MOOYGEAR, magnoniumtool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, magnoniumtool.getRecipe());
+        super(Categories.INFINITY_GEAR, magnoniumtool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, magnoniumtool.getRecipe());
         this.magnoniumTool = magnoniumtool;
     }
 

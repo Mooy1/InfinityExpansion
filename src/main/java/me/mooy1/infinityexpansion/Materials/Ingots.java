@@ -1,6 +1,7 @@
 package me.mooy1.infinityexpansion.Materials;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -18,7 +19,7 @@ public class Ingots extends SlimefunItem{
     private final Type type;
 
     public Ingots(Ingots.Type type) {
-        super(Items.MOOYMATERIALS, type.getItem(), type.getRecipetype(), type.getRecipe());
+        super(Categories.INFINITY_MATERIALS, type.getItem(), type.getRecipetype(), type.getRecipe());
         this.type = type;
     }
 
