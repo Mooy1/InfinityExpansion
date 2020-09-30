@@ -96,19 +96,23 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return;
 
-        ItemStack output = new ItemStack(Material.COBBLESTONE);
+        int speed = tier.getSpeed();
+
+        ItemStack output = new ItemStack(Material.COBBLESTONE, speed);
 
         if (getCharge(b.getLocation()) >= tier.getEnergyConsumption()) {
             BlockMenu menu = BlockStorage.getInventory(b);
 
             if (!menu.fits(output, getOutputSlots())) {
                 if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                    inv.replaceExistingItem(13, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&aNot enough room"));
+                    inv.replaceExistingItem(13, new CustomItem(Material.ORANGE_STAINED_GLASS_PANE,
+                        "&6Not enough room!"));
                 }
                 return;
             } else {
                 if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                    inv.replaceExistingItem(13, new CustomItem(Material.GREEN_STAINED_GLASS_PANE, "&aMining"));
+                    inv.replaceExistingItem(13, new CustomItem(Material.GREEN_STAINED_GLASS_PANE,
+                        "&aMining..."));
                 }
             }
 
@@ -116,7 +120,8 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
             menu.pushItem(output, getOutputSlots());
         } else {
             if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(13, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&aNot enough energy"));
+                inv.replaceExistingItem(13, new CustomItem(Material.RED_STAINED_GLASS_PANE,
+                    "&cNot enough energy!"));
             }
         }
     }
