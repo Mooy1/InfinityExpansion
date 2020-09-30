@@ -1,6 +1,7 @@
 package me.mooy1.infinityexpansion.Materials;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -18,7 +19,7 @@ public class Ingots extends SlimefunItem{
     private final Type type;
 
     public Ingots(Ingots.Type type) {
-        super(Items.MOOYMATERIALS, type.getItem(), type.getRecipetype(), type.getRecipe());
+        super(Categories.INFINITY_MATERIALS, type.getItem(), type.getRecipetype(), type.getRecipe());
         this.type = type;
     }
 
@@ -26,12 +27,19 @@ public class Ingots extends SlimefunItem{
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
+        MAGSTEEL(Items.MAGSTEEL, RecipeType.SMELTERY, new ItemStack[] {
+                SlimefunItems.MAGNESIUM_INGOT,
+                SlimefunItems.STEEL_INGOT,
+                null, null, null, null, null, null, null
+        }),
         MAGNONIUM(Items.MAGNONIUM_INGOT, RecipeType.SMELTERY, new ItemStack[] {
+                Items.MAGSTEEL,
                 Items.MAGNESIUM_CORE,
                 Items.VOID_DUST,
                 SlimefunItems.REINFORCED_ALLOY_INGOT,
                 SlimefunItems.REDSTONE_ALLOY,
-                null, null, null, null, null
+                SlimefunItems.COMPRESSED_CARBON,
+                null, null, null
         }),
         INFINITY(Items.INFINITY_INGOT, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
                 new SlimefunItemStack(Items.MAGNESIUM_CORE, 64),

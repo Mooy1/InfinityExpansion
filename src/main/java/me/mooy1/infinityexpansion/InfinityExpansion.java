@@ -1,10 +1,9 @@
 package me.mooy1.infinityexpansion;
 
-import me.mooy1.infinityexpansion.Materials.VoidDustResource;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import me.mooy1.infinityexpansion.Materials.VoidDustResource;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
-import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -17,6 +16,12 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     public void onEnable() {
 
         instance = this;
+
+        //bstats
+
+        //Metrics metrics = new Metrics(this, 8991);
+
+        //config
 
         Config cfg = new Config(this);
 

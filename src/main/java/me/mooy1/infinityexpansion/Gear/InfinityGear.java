@@ -1,5 +1,6 @@
 package me.mooy1.infinityexpansion.Gear;
 
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -17,7 +18,7 @@ public class InfinityGear extends SlimefunItem{
     private final InfinityTool infinityTool;
 
     public InfinityGear(InfinityTool infinitytool) {
-        super(Items.MOOYGEAR, infinitytool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, infinitytool.getRecipe());
+        super(Categories.INFINITY_GEAR, infinitytool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, infinitytool.getRecipe());
         this.infinityTool = infinitytool;
     }
 

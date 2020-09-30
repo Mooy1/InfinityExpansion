@@ -1,5 +1,6 @@
 package me.mooy1.infinityexpansion.Machines;
 
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -8,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class InfinityForge extends SlimefunItem {
     public InfinityForge() {
-        super(Items.MOOYMACHINES,
+        super(Categories.INFINITY_MACHINES,
                 Items.INFINITY_FORGE,
                 RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                         Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,

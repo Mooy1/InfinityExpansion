@@ -2,6 +2,7 @@ package me.mooy1.infinityexpansion.Machines;
 
 import io.github.thebusybiscuit.slimefun4.api.events.AutoDisenchantEvent;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoDisenchanter;
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class InfinityDisenchanter extends AutoDisenchanter {
 
     public InfinityDisenchanter() {
-        super(Items.MOOYMACHINES,
+        super(Categories.INFINITY_MACHINES,
                 Items.INFINITY_DISENCHANTER,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
