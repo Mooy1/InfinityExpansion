@@ -15,6 +15,7 @@ public final class Items {
             "QUARRY",
             Material.STONE_BRICKS,
             "&7&lQuarry",
+            "&7Automatically mines vanilla overworld ores",
             LoreBuilder.speed(1),
             LoreBuilder.powerPerSecond(4_000),
             ""
@@ -23,6 +24,7 @@ public final class Items {
             "ADVANCED_QUARRY",
             Material.STONE_BRICKS,
             "&c&lAdvanced &7&lQuarry",
+            "&7Smelts vanilla ores and can mine nether ores",
             LoreBuilder.speed(2),
             LoreBuilder.powerPerSecond(12_000),
             ""
@@ -31,6 +33,7 @@ public final class Items {
             "VOID_QUARRY",
             Material.STONE_BRICKS,
             "&d&lVoid &7&lQuarry",
+            "&7Can mine carbon and sifted ores occasionally",
             LoreBuilder.speed(5),
             LoreBuilder.powerPerSecond(45_000),
             ""
@@ -39,6 +42,7 @@ public final class Items {
             "INFINITY_QUARRY",
             Material.STONE_BRICKS,
             "&b&lInfinity &7&lQuarry",
+            "&7Can mine and smelt Slimefun ingots",
             LoreBuilder.speed(25),
             LoreBuilder.powerPerSecond(400_000),
             ""

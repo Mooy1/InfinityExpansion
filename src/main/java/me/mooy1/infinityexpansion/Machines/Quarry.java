@@ -1,5 +1,6 @@
 package me.mooy1.infinityexpansion.Machines;
 
+import com.google.common.collect.ImmutableList;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -17,19 +18,21 @@ import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
+
+    RandomizedSet<ItemStack> randomizer = new RandomizedSet<>();
+
+    randomizer.add()
 
     private final Quarry.Tier tier;
     private final int[] OUTPUTSLOTS = new int[] {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
@@ -93,24 +96,26 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
 
     public void tick(Block b) {
 
+        int speed = tier.getSpeed();
+
         Location l = b.getLocation();
 
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return;
 
-        ItemStack output = new ItemStack(Material.COBBLESTONE);
+        ItemStack output = new ItemStack(Material.COBBLESTONE, speed);
 
         if (getCharge(b.getLocation()) >= tier.getEnergyConsumption()) {
             BlockMenu menu = BlockStorage.getInventory(b);
 
             if (!menu.fits(output, getOutputSlots())) {
                 if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                    inv.replaceExistingItem(13, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&aNot enough room"));
+                    inv.replaceExistingItem(13, new CustomItem(Material.ORANGE_STAINED_GLASS_PANE, "&6Not enough room!"));
                 }
                 return;
             } else {
                 if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                    inv.replaceExistingItem(13, new CustomItem(Material.GREEN_STAINED_GLASS_PANE, "&aMining"));
+                    inv.replaceExistingItem(13, new CustomItem(Material.GREEN_STAINED_GLASS_PANE, "&aMining..."));
                 }
             }
 
@@ -118,7 +123,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
             menu.pushItem(output, getOutputSlots());
         } else {
             if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(13, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&aNot enough energy"));
+                inv.replaceExistingItem(13, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cNot enough energy!"));
             }
         }
     }
