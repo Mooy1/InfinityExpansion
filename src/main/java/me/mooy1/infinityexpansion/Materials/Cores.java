@@ -20,7 +20,7 @@ public class Cores extends SlimefunItem{
     private final Core core;
 
     public Cores(Cores.Core core) {
-        super(Items.MOOYMATERIALS, core.getItem(), RecipeType.MAGIC_WORKBENCH, core.getRecipe());
+        super(Categories.INFINITY_MATERIALS, core.getItem(), RecipeType.MAGIC_WORKBENCH, core.getRecipe());
         this.core = core;
     }
 
