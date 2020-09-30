@@ -27,14 +27,21 @@ public class Ingots extends SlimefunItem{
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
+        MAGSTEEL(Items.MAGSTEEL, RecipeType.SMELTERY, new ItemStack[] {
+                SlimefunItems.MAGNESIUM_INGOT,
+                SlimefunItems.STEEL_INGOT,
+                null, null, null, null, null, null, null
+        }),
         MAGNONIUM(Items.MAGNONIUM_INGOT, RecipeType.SMELTERY, new ItemStack[] {
+                Items.MAGSTEEL,
                 Items.MAGNESIUM_CORE,
                 Items.VOID_DUST,
                 SlimefunItems.REINFORCED_ALLOY_INGOT,
                 SlimefunItems.REDSTONE_ALLOY,
-                null, null, null, null, null
+                SlimefunItems.COMPRESSED_CARBON,
+                null, null, null
         }),
-        INFINITY(Items.INFINITY_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        INFINITY(Items.INFINITY_INGOT, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
                 new SlimefunItemStack(Items.MAGNESIUM_CORE, 64),
                 new SlimefunItemStack(Items.COPPER_CORE, 64),
                 new SlimefunItemStack(Items.SILVER_CORE, 64),

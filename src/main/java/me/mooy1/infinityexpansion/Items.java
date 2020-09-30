@@ -1,8 +1,6 @@
 package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
-import me.mooy1.infinityexpansion.Machines.InfinityPanel;
-import me.mooy1.infinityexpansion.Machines.Quarry;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -17,43 +15,38 @@ public final class Items {
             "QUARRY",
             Material.STONE_BRICKS,
             "&7&lQuarry",
-            "",
-            LoreBuilder.speed(Quarry.Tier.BASIC.getSpeed()),
-            LoreBuilder.powerPerSecond(Quarry.Tier.BASIC.getEnergyConsumption()),
+            LoreBuilder.speed(1),
+            LoreBuilder.powerPerSecond(4_000),
             ""
     );
     public static final SlimefunItemStack ADVANCED_QUARRY = new SlimefunItemStack(
             "ADVANCED_QUARRY",
             Material.STONE_BRICKS,
             "&c&lAdvanced &7&lQuarry",
-            "",
-            LoreBuilder.speed(Quarry.Tier.ADVANCED.getSpeed()),
-            LoreBuilder.powerPerSecond(Quarry.Tier.ADVANCED.getEnergyConsumption()),
+            LoreBuilder.speed(2),
+            LoreBuilder.powerPerSecond(12_000),
             ""
     );
     public static final SlimefunItemStack VOID_QUARRY = new SlimefunItemStack(
             "VOID_QUARRY",
             Material.STONE_BRICKS,
             "&d&lVoid &7&lQuarry",
-            "",
-            LoreBuilder.speed(Quarry.Tier.VOID.getSpeed()),
-            LoreBuilder.powerPerSecond(Quarry.Tier.VOID.getEnergyConsumption()),
+            LoreBuilder.speed(5),
+            LoreBuilder.powerPerSecond(45_000),
             ""
     );
     public static final SlimefunItemStack INFINITY_QUARRY = new SlimefunItemStack(
             "INFINITY_QUARRY",
             Material.STONE_BRICKS,
             "&b&lInfinity &7&lQuarry",
-            "",
-            LoreBuilder.speed(Quarry.Tier.INFINITY.getSpeed()),
-            LoreBuilder.powerPerSecond(Quarry.Tier.INFINITY.getEnergyConsumption()),
+            LoreBuilder.speed(25),
+            LoreBuilder.powerPerSecond(400_000),
             ""
     );
     public static final SlimefunItemStack ADVANCED_ENCHANTER = new SlimefunItemStack(
             "ADVANCED_ENCHANTER",
             Material.ENCHANTING_TABLE,
-            "&c&lAdvanced Enchanter",
-            "",
+            "&c&lAdvanced &7&lEnchanter",
             LoreBuilder.speed(10),
             LoreBuilder.powerPerSecond(999),
             ""
@@ -61,8 +54,7 @@ public final class Items {
     public static final SlimefunItemStack ADVANCED_DISENCHANTER = new SlimefunItemStack(
             "ADVANCED_DISENCHANTER",
             Material.ENCHANTING_TABLE,
-            "&c&lAdvanced Disenchanter",
-            "",
+            "&c&lAdvanced &7&lDisenchanter",
             LoreBuilder.speed(10),
             LoreBuilder.powerPerSecond(999),
             ""
@@ -70,8 +62,7 @@ public final class Items {
     public static final SlimefunItemStack INFINITY_ENCHANTER = new SlimefunItemStack(
             "INFINITY_ENCHANTER",
             Material.ENCHANTING_TABLE,
-            "&c&lInfinity Enchanter",
-            "",
+            "&b&lInfinity &7&lEnchanter",
             LoreBuilder.speed(100),
             LoreBuilder.powerPerSecond(99999),
             ""
@@ -80,8 +71,7 @@ public final class Items {
     public static final SlimefunItemStack INFINITY_DISENCHANTER = new SlimefunItemStack(
             "INFINITY_DISENCHANTER",
             Material.ENCHANTING_TABLE,
-            "&c&lInfinity Disenchanter",
-            "",
+            "&b&lInfinity &7&lDisenchanter",
             LoreBuilder.speed(100),
             LoreBuilder.powerPerSecond(99999),
             ""
@@ -95,8 +85,7 @@ public final class Items {
     public static final SlimefunItemStack INFINITE_CAPACITOR = new SlimefunItemStack(
             "INFINITE_CAPACITOR",
             HeadTexture.CAPACITOR_25,
-            "&c&lInfinite Capacitor",
-            "",
+            "&b&lInfinite &7&lCapacitor",
             "&8\u21E8 &e\u26A1 &bInfinite &7J Capacity",
             ""
     );
@@ -105,9 +94,8 @@ public final class Items {
             Material.WHITE_GLAZED_TERRACOTTA,
             "&c&lCelestial Panel",
             "&7Generates during the day",
-            "",
-            LoreBuilder.powerBuffer(InfinityPanel.Panel.CELESTIAL.getCapacity()),
-            LoreBuilder.powerPerSecond(InfinityPanel.Panel.CELESTIAL.getDayGenerationRate()*5/3),
+            LoreBuilder.powerBuffer(300_000),
+            LoreBuilder.powerPerSecond(3_000),
             ""
     );
     public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
@@ -115,19 +103,17 @@ public final class Items {
             Material.LIGHT_GRAY_GLAZED_TERRACOTTA,
             "&c&lVoid Panel",
             "&7Generates during the night",
-            "",
-            LoreBuilder.powerBuffer(InfinityPanel.Panel.VOID.getCapacity()),
-            LoreBuilder.powerPerSecond(InfinityPanel.Panel.VOID.getNightGenerationRate()*5/3),
+            LoreBuilder.powerBuffer(900_000),
+            LoreBuilder.powerPerSecond(9_000),
             ""
     );
     public static final SlimefunItemStack INFINITY_PANEL = new SlimefunItemStack(
             "INFINITY_PANEL",
             Material.LIGHT_BLUE_GLAZED_TERRACOTTA,
-            "&c&lInfinity Panel",
-            "Always generates",
-            "",
-            LoreBuilder.powerBuffer(InfinityPanel.Panel.INFINITY.getCapacity()),
-            LoreBuilder.powerPerSecond(InfinityPanel.Panel.INFINITY.getDayGenerationRate()*5/3),
+            "&b&lInfinity Panel",
+            "&7Always generates",
+            LoreBuilder.powerBuffer(20_000_000),
+            LoreBuilder.powerPerSecond(200_000),
             ""
     );
 
@@ -137,7 +123,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_1",
             Material.COBBLESTONE,
             "&7&l1x Compressed Cobblestone",
-            "",
             "&89 cobblestone combined",
             ""
     );
@@ -145,7 +130,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_2",
             Material.ANDESITE,
             "&7&l2x Compressed Cobblestone",
-            "",
             "&881 cobblestone combined",
             ""
     );
@@ -153,7 +137,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_3",
             Material.ANDESITE,
             "&7&l3x Compressed Cobblestone",
-            "",
             "&8243 cobblestone combined",
             ""
     );
@@ -161,7 +144,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_4",
             Material.STONE,
             "&7&l4x Compressed Cobblestone",
-            "",
             "&86,561 cobblestone combined",
             ""
     );
@@ -169,7 +151,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_5",
             Material.STONE,
             "&7&l5x Compressed Cobblestone",
-            "",
             "&859,049 cobblestone combined",
             ""
     );
@@ -177,7 +158,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_6",
             Material.POLISHED_ANDESITE,
             "&7&l6x Compressed Cobblestone",
-            "",
             "&8531,441 cobblestone combined",
             ""
     );
@@ -185,7 +165,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_7",
             Material.POLISHED_ANDESITE,
             "&7&l7x Compressed Cobblestone",
-            "",
             "&84,782,969 cobblestone combined",
             ""
     );
@@ -193,7 +172,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_8",
             Material.OBSIDIAN,
             "&7&l8x Compressed Cobblestone",
-            "",
             "&843,046,721 cobblestone combined",
             ""
     );
@@ -201,7 +179,6 @@ public final class Items {
             "COMPRESSED_COBBLESTONE_9",
             Material.CRYING_OBSIDIAN,
             "&7&l9x Compressed Cobblestone",
-            "",
             "&8387,420,489 cobblestone combined",
             ""
     );
@@ -301,6 +278,12 @@ public final class Items {
 
     //Ingots
 
+    public static final SlimefunItemStack MAGSTEEL = new SlimefunItemStack(
+            "MAGSTEEL",
+            Material.BRICK,
+            "&4&lMagSteel Ingot",
+            ""
+    );
     public static final SlimefunItemStack MAGNONIUM_INGOT = new SlimefunItemStack(
             "MAGNONIUM_INGOT",
             Material.NETHER_BRICK,
@@ -320,39 +303,43 @@ public final class Items {
             "VOID_DUST",
             Material.GUNPOWDER,
             "&5&lVoid Dust",
-            "",
             "&8From the depths of the end...",
             ""
     );
 
     public static final SlimefunItemStack MACHINE_PLATE = new SlimefunItemStack(
             "MACHINE_PLATE",
-            Material.IRON_INGOT,
+            Material.PAPER,
             "&7&lMachine Plate",
+            "&7Machine Component",
             ""
     );
     public static final SlimefunItemStack MACHINE_CIRCUIT = new SlimefunItemStack(
             "MACHINE_CIRCUIT",
             Material.GOLD_INGOT,
             "&6&lMachine Circuit",
+            "&7Machine Component",
             ""
     );
     public static final SlimefunItemStack INFINITE_MACHINE_CIRCUIT = new SlimefunItemStack(
             "INFINITE_MACHINE_CIRCUIT",
             Material.DIAMOND,
             "&b&lInfinite &6&lMachine Circuit",
+            "&7Machine Component",
             ""
     );
     public static final SlimefunItemStack MACHINE_CORE = new SlimefunItemStack(
             "MACHINE_CORE",
             Material.IRON_BLOCK,
             "&7&lMachine Core",
+            "&7Machine Component",
             ""
     );
     public static final SlimefunItemStack INFINITE_MACHINE_CORE = new SlimefunItemStack(
             "INFINITE_MACHINE_CORE",
             Material.DIAMOND_BLOCK,
             "&b&lInfinite &7&lMachine Core",
+            "&7Machine Component",
             ""
     );
 
@@ -360,7 +347,7 @@ public final class Items {
 
     public static final SlimefunItemStack VOID_FLAME = new SlimefunItemStack(
             "VOID_FLAME",
-            Material.BOOK,
+            Material.ENCHANTED_BOOK,
             "&d&lVoid &c&lFire",
             ""
     );
@@ -478,26 +465,32 @@ public final class Items {
         //add unbreakables
 
         ItemMeta hat = INFINITY_CROWN.getItemMeta();
+        assert hat != null;
         hat.setUnbreakable(true);
         INFINITY_CROWN.setItemMeta(hat);
 
         ItemMeta shirt = INFINITY_CHESTPLATE.getItemMeta();
+        assert shirt != null;
         shirt.setUnbreakable(true);
         INFINITY_CHESTPLATE.setItemMeta(shirt);
 
         ItemMeta pants = INFINITY_LEGGINGS.getItemMeta();
+        assert pants != null;
         pants.setUnbreakable(true);
         INFINITY_LEGGINGS.setItemMeta(pants);
 
         ItemMeta shoes = INFINITY_BOOTS.getItemMeta();
+        assert shoes != null;
         shoes.setUnbreakable(true);
         INFINITY_BOOTS.setItemMeta(shoes);
 
         ItemMeta pick = INFINITY_PICKAXE.getItemMeta();
+        assert pick != null;
         pick.setUnbreakable(true);
         INFINITY_PICKAXE.setItemMeta(pick);
 
         ItemMeta blade = INFINITY_BLADE.getItemMeta();
+        assert blade != null;
         blade.setUnbreakable(true);
         INFINITY_BLADE.setItemMeta(blade);
     }

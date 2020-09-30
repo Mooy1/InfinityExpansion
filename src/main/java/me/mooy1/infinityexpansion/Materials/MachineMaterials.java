@@ -29,7 +29,7 @@ public class MachineMaterials extends SlimefunItem{
 
         PLATE(Items.MACHINE_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.STEEL_PLATE, SlimefunItems.REINFORCED_PLATE, SlimefunItems.STEEL_PLATE,
-                SlimefunItems.REINFORCED_PLATE, Items.MAGNONIUM_INGOT, SlimefunItems.REINFORCED_PLATE,
+                SlimefunItems.REINFORCED_PLATE, Items.MAGSTEEL, SlimefunItems.REINFORCED_PLATE,
                 SlimefunItems.STEEL_PLATE, SlimefunItems.REINFORCED_PLATE, SlimefunItems.STEEL_PLATE
         }),
         CIRCUIT(Items.MACHINE_CIRCUIT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -38,9 +38,9 @@ public class MachineMaterials extends SlimefunItem{
                 SlimefunItems.COPPER_INGOT, SlimefunItems.GOLD_24K, SlimefunItems.COPPER_INGOT
         }),
         CORE(Items.MACHINE_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                SlimefunItems.STEEL_PLATE, SlimefunItems.STEEL_PLATE, SlimefunItems.STEEL_PLATE,
+                SlimefunItems.STEEL_PLATE, Items.MACHINE_PLATE, SlimefunItems.STEEL_PLATE,
                 Items.MACHINE_CIRCUIT, new ItemStack(org.bukkit.Material.IRON_BLOCK), Items.MACHINE_CIRCUIT,
-                SlimefunItems.STEEL_PLATE, SlimefunItems.STEEL_PLATE, SlimefunItems.STEEL_PLATE
+                SlimefunItems.STEEL_PLATE, Items.MACHINE_PLATE, SlimefunItems.STEEL_PLATE
         }),
         ICIRCUIT(Items.INFINITE_MACHINE_CIRCUIT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.INFINITY_INGOT, Items.MAGNONIUM_INGOT, Items.INFINITY_INGOT,
