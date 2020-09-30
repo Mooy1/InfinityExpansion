@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.Machines;
+package me.mooy1.infinityexpansion.machines;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
@@ -12,7 +12,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.inventory.InvUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +19,12 @@ import java.util.Map;
 public class AdvancedEnchanter extends AutoEnchanter {
 
     public AdvancedEnchanter() {
-        super(Categories.INFINITY_MACHINES,
-                Items.ADVANCED_ENCHANTER,
-                RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                        Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
-                        Items.MAGNONIUM_INGOT, SlimefunItems.AUTO_ENCHANTER, Items.MAGNONIUM_INGOT,
-                        Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        });
+        super(Categories.INFINITY_MACHINES, Items.ADVANCED_ENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE,
+            new ItemStack[] {
+                Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
+                Items.MAGNONIUM_INGOT, SlimefunItems.AUTO_ENCHANTER, Items.MAGNONIUM_INGOT,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
+            });
     }
 
     @Override
@@ -61,14 +58,7 @@ public class AdvancedEnchanter extends AutoEnchanter {
                 Map<Enchantment, Integer> enchantments = new HashMap<>();
                 int amount = 0;
                 int specialAmount = 0;
-                EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-
-                for (Map.Entry<Enchantment, Integer> e : meta.getStoredEnchants().entrySet()) {
-                    if (e.getKey().canEnchantItem(target)) {
-                        amount++;
-                        enchantments.put(e.getKey(), e.getValue());
-                    }
-                }
+                amount = InfinityEnchanter.getAmount(target, item, enchantments, amount);
 
                 if (amount > 0) {
                     ItemStack enchantedItem = target.clone();
@@ -78,7 +68,8 @@ public class AdvancedEnchanter extends AutoEnchanter {
                         enchantedItem.addUnsafeEnchantment(entry.getKey(), entry.getValue());
                     }
 
-                    MachineRecipe recipe = new MachineRecipe(10 * amount, new ItemStack[] { target, item }, new ItemStack[] { enchantedItem, new ItemStack(Material.BOOK) });
+                    MachineRecipe recipe = new MachineRecipe(10 * amount, new ItemStack[] {target, item},
+                        new ItemStack[] {enchantedItem, new ItemStack(Material.BOOK)});
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;

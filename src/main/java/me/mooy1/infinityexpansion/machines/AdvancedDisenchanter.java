@@ -1,10 +1,14 @@
-package me.mooy1.infinityexpansion.Machines;
+package me.mooy1.infinityexpansion.machines;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import io.github.thebusybiscuit.slimefun4.api.events.AutoDisenchantEvent;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoDisenchanter;
 import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.Items;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.InvUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,25 +18,18 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mooy1.infinityexpansion.Items;
-import io.github.thebusybiscuit.slimefun4.api.events.AutoDisenchantEvent;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdvancedDisenchanter extends AutoDisenchanter {
 
     public AdvancedDisenchanter() {
-        super(Categories.INFINITY_MACHINES,
-                Items.ADVANCED_DISENCHANTER,
-                RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                        Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
-                        Items.MAGNONIUM_INGOT, SlimefunItems.AUTO_DISENCHANTER, Items.MAGNONIUM_INGOT,
-                        Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        });
+        super(Categories.INFINITY_MACHINES, Items.ADVANCED_DISENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE,
+            new ItemStack[] {
+                Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
+                Items.MAGNONIUM_INGOT, SlimefunItems.AUTO_DISENCHANTER, Items.MAGNONIUM_INGOT,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
+            });
     }
 
     @Override
@@ -86,7 +83,8 @@ public class AdvancedDisenchanter extends AutoDisenchanter {
                     ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
                     transferEnchantments(disenchantedItem, book, enchantments);
 
-                    MachineRecipe recipe = new MachineRecipe(10 * amount, new ItemStack[] { target, item }, new ItemStack[] { disenchantedItem, book });
+                    MachineRecipe recipe = new MachineRecipe(10 * amount, new ItemStack[] {target, item},
+                        new ItemStack[] {disenchantedItem, book});
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;
@@ -105,6 +103,10 @@ public class AdvancedDisenchanter extends AutoDisenchanter {
     }
 
     private void transferEnchantments(ItemStack item, ItemStack book, Map<Enchantment, Integer> enchantments) {
+        enchants(item, book, enchantments);
+    }
+
+    static void enchants(ItemStack item, ItemStack book, Map<Enchantment, Integer> enchantments) {
         ItemMeta itemMeta = item.getItemMeta();
         ItemMeta bookMeta = book.getItemMeta();
         ((Repairable) bookMeta).setRepairCost(((Repairable) itemMeta).getRepairCost());
@@ -130,8 +132,7 @@ public class AdvancedDisenchanter extends AutoDisenchanter {
         else if (item.getType() != Material.BOOK) {
             SlimefunItem sfItem = SlimefunItem.getByItem(item);
             return sfItem == null || sfItem.isDisenchantable();
-        }
-        else {
+        } else {
             return true;
         }
 

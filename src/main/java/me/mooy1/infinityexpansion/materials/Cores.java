@@ -1,6 +1,9 @@
-package me.mooy1.infinityexpansion.Materials;
+package me.mooy1.infinityexpansion.materials;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -9,19 +12,21 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import javax.annotation.Nonnull;
 
-public class Cores extends SlimefunItem{
+public class Cores extends SlimefunItem {
 
     private final Core core;
 
     public Cores(Cores.Core core) {
         super(Categories.INFINITY_MATERIALS, core.getItem(), RecipeType.MAGIC_WORKBENCH, core.getRecipe());
         this.core = core;
+    }
+
+    public static ItemStack[] Compress(ItemStack item) {
+        return new ItemStack[] {
+            item, item, item, item, item, item, item, item, item,
+        };
     }
 
     @Getter
@@ -37,17 +42,17 @@ public class Cores extends SlimefunItem{
         TIN(Items.TIN_CORE, Compress(new SlimefunItemStack(SlimefunItems.TIN_INGOT, 64))),
         IRON(Items.IRON_CORE, Compress(new ItemStack(Material.IRON_INGOT, 64))),
         GOLD(Items.GOLD_CORE,
-                new ItemStack[] {
-                        new ItemStack(Material.GOLD_INGOT, 64),
-                        new SlimefunItemStack(SlimefunItems.GOLD_4K, 64),
-                        new ItemStack(Material.GOLD_INGOT, 64),
-                        new SlimefunItemStack(SlimefunItems.GOLD_4K, 64),
-                        new SlimefunItemStack(SlimefunItems.GOLD_24K, 64),
-                        new SlimefunItemStack(SlimefunItems.GOLD_4K, 64),
-                        new ItemStack(Material.GOLD_INGOT, 64),
-                        new SlimefunItemStack(SlimefunItems.GOLD_4K, 64),
-                        new ItemStack(Material.GOLD_INGOT, 64),
-                }),
+            new ItemStack[] {
+                new ItemStack(Material.GOLD_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.GOLD_4K, 64),
+                new ItemStack(Material.GOLD_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.GOLD_4K, 64),
+                new SlimefunItemStack(SlimefunItems.GOLD_24K, 64),
+                new SlimefunItemStack(SlimefunItems.GOLD_4K, 64),
+                new ItemStack(Material.GOLD_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.GOLD_4K, 64),
+                new ItemStack(Material.GOLD_INGOT, 64),
+            }),
         NETHERITE(Items.NETHERITE_CORE, Compress(new ItemStack(Material.NETHERITE_INGOT, 16))),
         DIAMOND(Items.DIAMOND_CORE, Compress(new ItemStack(Material.DIAMOND, 32))),
         EMERALD(Items.EMERALD_CORE, Compress(new ItemStack(Material.EMERALD, 32))),
@@ -59,11 +64,5 @@ public class Cores extends SlimefunItem{
         private final SlimefunItemStack item;
         private final ItemStack[] recipe;
 
-    }
-
-    public static ItemStack[] Compress(ItemStack item) {
-        return new ItemStack [] {
-                item, item, item, item, item, item, item, item, item,
-        };
     }
 }

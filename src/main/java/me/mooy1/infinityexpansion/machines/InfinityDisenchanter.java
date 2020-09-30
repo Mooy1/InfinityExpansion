@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.Machines;
+package me.mooy1.infinityexpansion.machines;
 
 import io.github.thebusybiscuit.slimefun4.api.events.AutoDisenchantEvent;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoDisenchanter;
@@ -13,9 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.Repairable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +20,12 @@ import java.util.Map;
 public class InfinityDisenchanter extends AutoDisenchanter {
 
     public InfinityDisenchanter() {
-        super(Categories.INFINITY_MACHINES,
-                Items.INFINITY_DISENCHANTER,
-                RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                        Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
-                        Items.INFINITY_INGOT, Items.ADVANCED_DISENCHANTER, Items.INFINITY_INGOT,
-                        Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
-        });
+        super(Categories.INFINITY_MACHINES, Items.INFINITY_DISENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE,
+            new ItemStack[] {
+                Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
+                Items.INFINITY_INGOT, Items.ADVANCED_DISENCHANTER, Items.INFINITY_INGOT,
+                Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
+            });
     }
 
     @Override
@@ -84,7 +79,8 @@ public class InfinityDisenchanter extends AutoDisenchanter {
                     ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
                     transferEnchantments(disenchantedItem, book, enchantments);
 
-                    MachineRecipe recipe = new MachineRecipe(1 * amount, new ItemStack[] { target, item }, new ItemStack[] { disenchantedItem, book });
+                    MachineRecipe recipe = new MachineRecipe(1 * amount, new ItemStack[] {target, item},
+                        new ItemStack[] {disenchantedItem, book});
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;
@@ -103,21 +99,7 @@ public class InfinityDisenchanter extends AutoDisenchanter {
     }
 
     private void transferEnchantments(ItemStack item, ItemStack book, Map<Enchantment, Integer> enchantments) {
-        ItemMeta itemMeta = item.getItemMeta();
-        ItemMeta bookMeta = book.getItemMeta();
-        ((Repairable) bookMeta).setRepairCost(((Repairable) itemMeta).getRepairCost());
-        ((Repairable) itemMeta).setRepairCost(0);
-        item.setItemMeta(itemMeta);
-        book.setItemMeta(bookMeta);
-
-        EnchantmentStorageMeta meta = (EnchantmentStorageMeta) book.getItemMeta();
-
-        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-            item.removeEnchantment(entry.getKey());
-            meta.addStoredEnchant(entry.getKey(), entry.getValue(), true);
-        }
-
-        book.setItemMeta(meta);
+        AdvancedDisenchanter.enchants(item, book, enchantments);
     }
 
     private boolean isDisenchantable(ItemStack item) {
@@ -128,8 +110,7 @@ public class InfinityDisenchanter extends AutoDisenchanter {
         else if (item.getType() != Material.BOOK) {
             SlimefunItem sfItem = SlimefunItem.getByItem(item);
             return sfItem == null || sfItem.isDisenchantable();
-        }
-        else {
+        } else {
             return true;
         }
 

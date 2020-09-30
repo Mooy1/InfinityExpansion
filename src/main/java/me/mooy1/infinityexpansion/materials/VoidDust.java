@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.Materials;
+package me.mooy1.infinityexpansion.materials;
 
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
@@ -11,18 +11,18 @@ import org.bukkit.inventory.ItemStack;
 public class VoidDust extends SlimefunItem {
 
     private static final ItemStack voiddust = new CustomItem(
-            Material.PAPER,
-            "&fGEO-Miner Material",
-            "&aFound in the End and Void biomes",
-            "&aMake sure to GEO-Scan the chunk first"
+        Material.PAPER,
+        "&fGEO-Miner Material",
+        "&aFound in the End and Void biomes",
+        "&aMake sure to GEO-Scan the chunk first"
     );
 
     public VoidDust() {
         super(Categories.INFINITY_MATERIALS, Items.VOID_DUST, RecipeType.GEO_MINER, new ItemStack[] {
-                        null, null, null,
-                        null, voiddust, null,
-                        null, null, null
-                }
+                null, null, null,
+                null, voiddust, null,
+                null, null, null
+            }
         );
     }
 }
