@@ -7,11 +7,16 @@ https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
 [![Build Status](https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/badge.svg)](https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master)
 
 # Support
-Make a new issue or contact me on discord Riley#5911, Im also in the slimefun discord @Riley
+Make a new issue or contact me on discord Riley#5911 
+
+Im also in the slimefun discord @Riley
 
 # Machines
 Advanced Enchanter - a faster auto enchanter
+
 Advanced Disenchanter - a faster auto disenchanter
+
+Quarry - Mines resources for you at the cost of lots of power.
 
 Infinity Forge - WIP used to craft Infinity Items
 
