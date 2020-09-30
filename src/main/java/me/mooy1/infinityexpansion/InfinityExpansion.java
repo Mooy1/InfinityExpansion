@@ -1,7 +1,7 @@
 package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import me.mooy1.infinityexpansion.Materials.VoidDustResource;
+import me.mooy1.infinityexpansion.materials.VoidDustResource;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.bukkit.plugin.java.JavaPlugin;

@@ -1,5 +1,8 @@
-package me.mooy1.infinityexpansion.Materials;
+package me.mooy1.infinityexpansion.materials;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -8,21 +11,15 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import javax.annotation.Nonnull;
 
-import static me.mooy1.infinityexpansion.Materials.Cores.Compress;
+import static me.mooy1.infinityexpansion.materials.Cores.Compress;
 
 public class CompressedCobblestone extends SlimefunItem {
 
-    private final Compression compression;
-
     public CompressedCobblestone(Compression compression) {
-        super(Categories.INFINITY_MATERIALS, compression.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, compression.getRecipe());
-        this.compression = compression;
+        super(Categories.INFINITY_MATERIALS, compression.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
+            compression.getRecipe());
     }
 
     @Getter

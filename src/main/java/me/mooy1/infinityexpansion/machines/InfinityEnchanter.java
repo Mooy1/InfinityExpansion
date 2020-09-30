@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.Machines;
+package me.mooy1.infinityexpansion.machines;
 
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
 import me.mooy1.infinityexpansion.Categories;
@@ -19,14 +19,12 @@ import java.util.Map;
 public class InfinityEnchanter extends AutoEnchanter {
 
     public InfinityEnchanter() {
-        super(Categories.INFINITY_MACHINES,
-                Items.INFINITY_ENCHANTER,
-                RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                        Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
-                        Items.INFINITY_INGOT, Items.ADVANCED_ENCHANTER, Items.INFINITY_INGOT,
-                        Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
-        });
+        super(Categories.INFINITY_MACHINES, Items.INFINITY_ENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE,
+            new ItemStack[] {
+                Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
+                Items.INFINITY_INGOT, Items.ADVANCED_ENCHANTER, Items.INFINITY_INGOT,
+                Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
+            });
     }
 
     @Override
@@ -59,15 +57,7 @@ public class InfinityEnchanter extends AutoEnchanter {
             if (item != null && item.getType() == Material.ENCHANTED_BOOK && target != null) {
                 Map<Enchantment, Integer> enchantments = new HashMap<>();
                 int amount = 0;
-                int specialAmount = 0;
-                EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-
-                for (Map.Entry<Enchantment, Integer> e : meta.getStoredEnchants().entrySet()) {
-                    if (e.getKey().canEnchantItem(target)) {
-                        amount++;
-                        enchantments.put(e.getKey(), e.getValue());
-                    }
-                }
+                amount = getAmount(target, item, enchantments, amount);
 
                 if (amount > 0) {
                     ItemStack enchantedItem = target.clone();
@@ -77,7 +67,8 @@ public class InfinityEnchanter extends AutoEnchanter {
                         enchantedItem.addUnsafeEnchantment(entry.getKey(), entry.getValue());
                     }
 
-                    MachineRecipe recipe = new MachineRecipe(1 * amount, new ItemStack[] { target, item }, new ItemStack[] { enchantedItem, new ItemStack(Material.BOOK) });
+                    MachineRecipe recipe = new MachineRecipe(amount, new ItemStack[] {target, item},
+                        new ItemStack[] {enchantedItem, new ItemStack(Material.BOOK)});
 
                     if (!InvUtils.fitAll(menu.toInventory(), recipe.getOutput(), getOutputSlots())) {
                         return null;
@@ -95,6 +86,18 @@ public class InfinityEnchanter extends AutoEnchanter {
         }
 
         return null;
+    }
+
+    static int getAmount(ItemStack target, ItemStack item, Map<Enchantment, Integer> enchantments, int amount) {
+        EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
+
+        for (Map.Entry<Enchantment, Integer> e : meta.getStoredEnchants().entrySet()) {
+            if (e.getKey().canEnchantItem(target)) {
+                amount++;
+                enchantments.put(e.getKey(), e.getValue());
+            }
+        }
+        return amount;
     }
 
     private boolean isEnchantable(ItemStack item) {

@@ -2,11 +2,21 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
-import me.mooy1.infinityexpansion.Gear.InfinityGear;
-import me.mooy1.infinityexpansion.Gear.MagnoniumGear;
-import me.mooy1.infinityexpansion.Gear.VoidFlame;
-import me.mooy1.infinityexpansion.Machines.*;
-import me.mooy1.infinityexpansion.Materials.*;
+import me.mooy1.infinityexpansion.gear.InfinityGear;
+import me.mooy1.infinityexpansion.gear.MagnoniumGear;
+import me.mooy1.infinityexpansion.gear.VoidFlame;
+import me.mooy1.infinityexpansion.machines.AdvancedDisenchanter;
+import me.mooy1.infinityexpansion.machines.AdvancedEnchanter;
+import me.mooy1.infinityexpansion.machines.InfinityDisenchanter;
+import me.mooy1.infinityexpansion.machines.InfinityEnchanter;
+import me.mooy1.infinityexpansion.machines.InfinityForge;
+import me.mooy1.infinityexpansion.machines.InfinityPanel;
+import me.mooy1.infinityexpansion.machines.Quarry;
+import me.mooy1.infinityexpansion.materials.CompressedCobblestone;
+import me.mooy1.infinityexpansion.materials.Cores;
+import me.mooy1.infinityexpansion.materials.Ingots;
+import me.mooy1.infinityexpansion.materials.MachineMaterials;
+import me.mooy1.infinityexpansion.materials.VoidDust;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import org.bukkit.inventory.ItemStack;
 
@@ -69,10 +79,11 @@ public final class ItemSetup {
 
         //Slimefun constructors
 
-        new Capacitor(Categories.INFINITY_MACHINES, 2147483647, Items.INFINITE_CAPACITOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
-                Items.INFINITY_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITY_INGOT,
-                Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT
+        new Capacitor(Categories.INFINITY_MACHINES, 2147483647, Items.INFINITE_CAPACITOR,
+            RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+            Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
+            Items.INFINITY_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITY_INGOT,
+            Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT
         }).register(plugin);
 
     }
