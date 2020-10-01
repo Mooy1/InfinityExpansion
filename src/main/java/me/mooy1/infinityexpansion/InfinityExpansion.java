@@ -4,6 +4,8 @@ import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mooy1.infinityexpansion.materials.VoidDustResource;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
+
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -19,7 +21,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         //bstats
 
-        //Metrics metrics = new Metrics(this, 8991);
+        final Metrics metrics = new Metrics(this, 8991);
 
         //config
 

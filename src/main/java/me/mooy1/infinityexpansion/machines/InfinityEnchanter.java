@@ -21,8 +21,8 @@ public class InfinityEnchanter extends AutoEnchanter {
     public InfinityEnchanter() {
         super(Categories.INFINITY_MACHINES, Items.INFINITY_ENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE,
             new ItemStack[] {
-                Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
-                Items.INFINITY_INGOT, Items.ADVANCED_ENCHANTER, Items.INFINITY_INGOT,
+                Items.INFINITE_INGOT, Items.INFINITE_INGOT, Items.INFINITE_INGOT,
+                Items.INFINITE_INGOT, Items.ADVANCED_ENCHANTER, Items.INFINITE_INGOT,
                 Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
             });
     }

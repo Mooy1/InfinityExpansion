@@ -27,6 +27,17 @@ public class MagnoniumGear extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum MagnoniumTool {
 
+        BLADE(Items.MAGNONIUM_BLADE, new ItemStack[] {
+                null, alloy, null,
+                null, alloy, null,
+                null, alloy, null
+        }),
+
+        PICKAXE(Items.MAGNONIUM_PICKAXE, new ItemStack[] {
+                alloy, alloy, alloy,
+                null, alloy, null,
+                null, alloy, null
+        }),
         CROWN(Items.MAGNONIUM_CROWN, new ItemStack[] {
             alloy, alloy, alloy,
             alloy, null, alloy,
@@ -49,18 +60,6 @@ public class MagnoniumGear extends SlimefunItem {
             null, null, null,
             alloy, null, alloy,
             alloy, null, alloy
-        }),
-
-        BLADE(Items.MAGNONIUM_BLADE, new ItemStack[] {
-            null, alloy, null,
-            null, alloy, null,
-            null, alloy, null
-        }),
-
-        PICKAXE(Items.MAGNONIUM_PICKAXE, new ItemStack[] {
-            alloy, alloy, alloy,
-            null, alloy, null,
-            null, alloy, null
         });
 
         @Nonnull

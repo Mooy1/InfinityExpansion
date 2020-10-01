@@ -21,7 +21,7 @@ public class AdvancedEnchanter extends AutoEnchanter {
     public AdvancedEnchanter() {
         super(Categories.INFINITY_MACHINES, Items.ADVANCED_ENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE,
             new ItemStack[] {
-                Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
+                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGNONIUM_INGOT, SlimefunItems.AUTO_ENCHANTER, Items.MAGNONIUM_INGOT,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
             });

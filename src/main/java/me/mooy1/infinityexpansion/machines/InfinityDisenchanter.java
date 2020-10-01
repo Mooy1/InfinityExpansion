@@ -22,8 +22,8 @@ public class InfinityDisenchanter extends AutoDisenchanter {
     public InfinityDisenchanter() {
         super(Categories.INFINITY_MACHINES, Items.INFINITY_DISENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE,
             new ItemStack[] {
-                Items.INFINITY_INGOT, Items.INFINITY_INGOT, Items.INFINITY_INGOT,
-                Items.INFINITY_INGOT, Items.ADVANCED_DISENCHANTER, Items.INFINITY_INGOT,
+                Items.INFINITE_INGOT, Items.INFINITE_INGOT, Items.INFINITE_INGOT,
+                Items.INFINITE_INGOT, Items.ADVANCED_DISENCHANTER, Items.INFINITE_INGOT,
                 Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
             });
     }

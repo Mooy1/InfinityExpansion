@@ -134,10 +134,10 @@ public class InfinityPanel extends SlimefunItem implements EnergyNetProvider, In
             Items.MACHINE_PLATE, Items.CELESTIAL_PANEL, Items.MACHINE_PLATE,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Items.INFINITY_PANEL, 120_000, 120_000, 20_000_000, RecipeType.ENHANCED_CRAFTING_TABLE,
+        INFINITY(Items.INFINITE_PANEL, 120_000, 120_000, 20_000_000, RecipeType.ENHANCED_CRAFTING_TABLE,
             new ItemStack[] {
             Items.CELESTIAL_PANEL, Items.VOID_PANEL, Items.CELESTIAL_PANEL,
-            Items.INFINITY_INGOT, Items.INFINITE_CAPACITOR, Items.INFINITY_INGOT,
+            Items.INFINITE_INGOT, Items.INFINITY_CAPACITOR, Items.INFINITE_INGOT,
             Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT,
         });
 

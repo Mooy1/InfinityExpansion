@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 public class InfinityGear extends SlimefunItem {
 
-    private static final ItemStack ingot = Items.INFINITY_INGOT;
+    private static final ItemStack ingot = Items.INFINITE_INGOT;
     private final InfinityTool infinityTool;
 
     public InfinityGear(InfinityTool infinitytool) {
@@ -27,6 +27,16 @@ public class InfinityGear extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum InfinityTool {
 
+        PICKAXE(Items.INFINITY_PICKAXE, new ItemStack[] {
+                ingot, ingot, ingot,
+                null, ingot, null,
+                null, ingot, null
+        }),
+        BLADE(Items.INFINITY_BLADE, new ItemStack[] {
+                null, ingot, null,
+                null, ingot, null,
+                null, ingot, null
+        }),
         CROWN(Items.INFINITY_CROWN, new ItemStack[] {
             ingot, ingot, ingot,
             ingot, null, ingot,
@@ -46,16 +56,6 @@ public class InfinityGear extends SlimefunItem {
             null, null, null,
             ingot, null, ingot,
             ingot, null, ingot
-        }),
-        PICKAXE(Items.INFINITY_PICKAXE, new ItemStack[] {
-            ingot, ingot, ingot,
-            null, ingot, null,
-            null, ingot, null
-        }),
-        BLADE(Items.INFINITY_BLADE, new ItemStack[] {
-            null, ingot, null,
-            null, ingot, null,
-            null, ingot, null
         });
 
         @Nonnull

@@ -33,23 +33,23 @@ public class Ingots extends SlimefunItem {
         }),
         MAGNONIUM(Items.MAGNONIUM_INGOT, RecipeType.SMELTERY, new ItemStack[] {
             Items.MAGSTEEL,
-            Items.MAGNESIUM_CORE,
+            Items.MAGNESIUM_COMPRESSED_CORE,
             Items.VOID_DUST,
             SlimefunItems.REINFORCED_ALLOY_INGOT,
             SlimefunItems.REDSTONE_ALLOY,
             SlimefunItems.COMPRESSED_CARBON,
             null, null, null
         }),
-        INFINITY(Items.INFINITY_INGOT, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
-            new SlimefunItemStack(Items.MAGNESIUM_CORE, 64),
-            new SlimefunItemStack(Items.COPPER_CORE, 64),
-            new SlimefunItemStack(Items.SILVER_CORE, 64),
-            new SlimefunItemStack(Items.GOLD_CORE, 64),
-            new SlimefunItemStack(Items.IRON_CORE, 64),
-            new SlimefunItemStack(Items.ALUMINUM_CORE, 64),
-            new SlimefunItemStack(Items.DIAMOND_CORE, 64),
-            new SlimefunItemStack(Items.NETHERITE_CORE, 64),
-            new SlimefunItemStack(Items.LEAD_CORE, 64),
+        INFINITY(Items.INFINITE_INGOT, RecipeType.SMELTERY, new ItemStack[] {
+            Items.FORTUNE_SINGULARITY,
+            Items.METAL_SINGULARITY,
+            Items.MAGIC_SINGULARITY,
+            Items.EARTH_SINGULARITY,
+            Items.COMPRESSED_COBBLESTONE_7,
+            Items.MAGNONIUM_INGOT,
+            null,
+            null,
+            null
         });
 
 
