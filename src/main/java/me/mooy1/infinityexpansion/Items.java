@@ -12,6 +12,50 @@ public final class Items {
 
     //Machines
 
+    public static final SlimefunItemStack CORE_COMBINER = new SlimefunItemStack(
+            "CORE_COMBINER",
+            Material.QUARTZ_BRICKS,
+            "&7&lCore Combiner",
+            LoreBuilder.speed(1),
+            LoreBuilder.powerPerSecond(1_000),
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_CORE_COMBINER = new SlimefunItemStack(
+            "INFINITY_CORE_COMBINER",
+            Material.CHISELED_QUARTZ_BLOCK,
+            "&b&lInfinity &7&lCore Combiner",
+            LoreBuilder.speed(10),
+            LoreBuilder.powerPerSecond(10_000),
+            ""
+    );
+
+    public static final SlimefunItemStack INGOT_SYNTHESIZER = new SlimefunItemStack(
+            "INGOT_SYNTHESIZER",
+            Material.STONE_BRICKS,
+            "&7&lIngot Synthesizer",
+            LoreBuilder.speed(1),
+            LoreBuilder.powerPerSecond(1_000),
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_INGOT_SYNTHESIZER = new SlimefunItemStack(
+            "INFINITY_INGOT_SYNTHESIZER",
+            Material.CHISELED_STONE_BRICKS,
+            "&b&lInfinity &7&lIngot Synthesizer",
+            "&7Creates advanced Slimefun alloys using cores",
+            LoreBuilder.speed(10),
+            LoreBuilder.powerPerSecond(10_000),
+            ""
+    );
+
+    public static final SlimefunItemStack INFINITY_REACTOR = new SlimefunItemStack(
+            "INFINITY_REACTOR",
+            Material.CRYING_OBSIDIAN,
+            "&b&lInfinity Reactor",
+            "&7Generates power through the melting of Infinity Ingots",
+            LoreBuilder.powerPerSecond(1_000_000),
+            ""
+    );
+
     public static final SlimefunItemStack BASIC_QUARRY = new SlimefunItemStack(
         "BASIC_QUARRY",
         Material.CHISELED_SANDSTONE,
