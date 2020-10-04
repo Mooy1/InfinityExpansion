@@ -178,7 +178,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                 String id = slotItem.getType().toString();
 
                 //Check if empty
-                if (storeditem == null || storeditemtype == null) { //store new item
+                if (storeditem == null && storeditemtype == null && stored == 0) { //store new item
 
                     if (SlimefunItem.getByItem(slotItem) != null) { //store slimefun item
                         setItem(b, SlimefunItem.getByItem(slotItem).getID());
@@ -188,7 +188,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                         setType(b, "material");
                     }
 
-                    setAmount(b, stored + slotAmount);
+                    setAmount(b, slotAmount);
                     inv.consumeItem(INPUTSLOT, slotAmount);
 
                 } else {
@@ -221,7 +221,6 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                 }
             }
         }
-        updateStatus(b);
 
         //output
 
@@ -263,31 +262,25 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             } else if (stored == 1 && inv.getItemInSlot(OUTPUTSLOT) == null) {
                 if (storeditemtype.equals("slimefun")) {
                     inv.pushItem(convert(storeditemtype, storeditem, 1), OUTPUTSLOTS);
+                    setItem(b, null);
+                    setType(b, null);
                     setAmount(b, 0);
                 } else if (storeditemtype.equals("material")) {
                     inv.pushItem(convert(storeditemtype, storeditem, 1), OUTPUTSLOTS);
+                    setItem(b, null);
+                    setType(b, null);
                     setAmount(b, 0);
                 }
             }
         }
-
-        if (getBlockData(b.getLocation(), "stored") != null) {
-            if (Integer.parseInt(getBlockData(b.getLocation(), "stored")) == 0) {
-                setItem(b, null);
-                setType(b, null);
-            }
-        }
-        updateStatus(b);
     }
 
     private void setItem(Block b, String storeditem) {
         setBlockData(b, "storeditem", storeditem);
-        updateStatus(b);
     }
 
     private void setType(Block b, String type) {
         setBlockData(b, "storeditemtype", type);
-        updateStatus(b);
     }
 
     private void setAmount(Block b, int stored) {
@@ -298,7 +291,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     private void updateStatus(Block b) {
         BlockMenu inv = BlockStorage.getInventory(b);
 
-        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) return;
+        if (inv.toInventory() == null || inv.toInventory().getViewers().isEmpty()) return;
 
         String storeditem = getBlockData(b.getLocation(), "storeditem");
         String storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
@@ -318,19 +311,21 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                 converteditemname = converteditem.getItemMeta().getDisplayName();
             }
 
+            String stacks = "&7Stacks: " + Math.round((float)stored / convert(storeditemtype, storeditem, 1).getMaxStackSize());
+
             if (this.tier == Tier.INFINITY) {
                 inv.replaceExistingItem(STATUSSLOT, new CustomItem(
                         converteditem,
                         converteditemname,
                         "&6Stored: &e" + stored,
-                        "&7Stacks: " + Math.round((float)stored / convert(storeditemtype, storeditem, 1).getMaxStackSize())
+                        stacks
                 ));
             } else {
                 inv.replaceExistingItem(STATUSSLOT, new CustomItem(
                         converteditem,
                         converteditemname,
                         "&6Stored: &e" + stored + "/" + maxstorage + " &7(" + Math.round((float) 100 * stored / maxstorage )  + "%)",
-                        "&7Stacks: " + Math.round((float)stored / convert(storeditemtype, storeditem, 1).getMaxStackSize())
+                        stacks
                 ));
             }
         }
@@ -371,27 +366,27 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     public enum Tier {
         BASIC(Items.BASIC_STORAGE, 2560, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
-                new ItemStack(Material.OAK_LOG), new ItemStack(Material.CHEST), new ItemStack(Material.OAK_LOG),
+                new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
         }),
         ADVANCED(Items.ADVANCED_STORAGE, 10240, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.ALUMINUM_BLOCK, Items.MACHINE_CIRCUIT, Items.ALUMINUM_BLOCK,
-                Items.ALUMINUM_BLOCK, Items.BASIC_STORAGE, Items.ALUMINUM_BLOCK,
-                Items.ALUMINUM_BLOCK, Items.MACHINE_CIRCUIT, Items.ALUMINUM_BLOCK
+                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
+                Items.MAGSTEEL, Items.BASIC_STORAGE, Items.MAGSTEEL,
+                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
         }),
         REINFORCED(Items.REINFORCED_STORAGE, 40960, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.ALUMINUM_CORE, Items.MACHINE_PLATE, Items.ALUMINUM_CORE,
-                Items.ALUMINUM_CORE, Items.ADVANCED_STORAGE, Items.ALUMINUM_CORE,
-                Items.ALUMINUM_CORE, Items.MACHINE_CORE, Items.ALUMINUM_CORE
+                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.ADVANCED_STORAGE, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE
         }),
         VOID(Items.VOID_STORAGE, 163840, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
-                Items.ALUMINUM_COMPRESSED_CORE, Items.REINFORCED_STORAGE, Items.ALUMINUM_COMPRESSED_CORE,
-                Items.ALUMINUM_COMPRESSED_CORE, Items.MACHINE_CORE, Items.ALUMINUM_COMPRESSED_CORE
+                Items.MAGNONIUM_INGOT, Items.REINFORCED_STORAGE, Items.MAGNONIUM_INGOT,
+                Items.MAGNONIUM_INGOT, Items.MACHINE_CORE, Items.MAGNONIUM_INGOT
         }),
         INFINITY(Items.INFINITY_STORAGE, 10000000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.INFINITE_INGOT, Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_INGOT,
-                Items.ALUMINUM_SINGULARITY, Items.VOID_STORAGE, Items.ALUMINUM_SINGULARITY,
+                Items.MACHINE_PLATE, Items.VOID_STORAGE, Items.MACHINE_PLATE,
                 Items.INFINITE_INGOT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_INGOT
         });
 

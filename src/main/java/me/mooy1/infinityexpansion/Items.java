@@ -719,6 +719,13 @@ public final class Items {
         ""
     );
 
+    public static final SlimefunItemStack MAGSTEEL_PLATE = new SlimefunItemStack(
+            "MAGSTEEL_PLATE",
+            Material.PAPER,
+            "&4&lMagSteel &7&lPlate",
+            "&7Machine Component",
+            ""
+    );
     public static final SlimefunItemStack MACHINE_PLATE = new SlimefunItemStack(
         "MACHINE_PLATE",
         Material.PAPER,

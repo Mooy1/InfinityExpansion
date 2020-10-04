@@ -23,9 +23,14 @@ public class MachineMaterials extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
+        MAGPLATE(Items.MAGSTEEL_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
+                Items.MAGSTEEL, SlimefunItems.STEEL_PLATE, Items.MAGSTEEL,
+                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL
+        }),
         PLATE(Items.MACHINE_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             SlimefunItems.STEEL_PLATE, SlimefunItems.REINFORCED_PLATE, SlimefunItems.STEEL_PLATE,
-            SlimefunItems.REINFORCED_PLATE, Items.MAGSTEEL, SlimefunItems.REINFORCED_PLATE,
+            SlimefunItems.REINFORCED_PLATE, Items.MAGSTEEL_PLATE, SlimefunItems.REINFORCED_PLATE,
             SlimefunItems.STEEL_PLATE, SlimefunItems.REINFORCED_PLATE, SlimefunItems.STEEL_PLATE
         }),
         CIRCUIT(Items.MACHINE_CIRCUIT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

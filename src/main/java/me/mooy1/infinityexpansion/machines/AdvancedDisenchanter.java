@@ -159,13 +159,13 @@ public class AdvancedDisenchanter extends AutoDisenchanter {
         BASIC(Items.ADVANCED_DISENCHANTER, 10, 600, RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
                         Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-                        Items.MAGNONIUM_INGOT, SlimefunItems.AUTO_DISENCHANTER, Items.MAGNONIUM_INGOT,
+                        Items.MAGSTEEL_PLATE, SlimefunItems.AUTO_DISENCHANTER, Items.MAGSTEEL_PLATE,
                         Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
                 }),
         INFINITY(Items.INFINITY_DISENCHANTER, 100, 60000, RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[] {
-                        Items.INFINITE_INGOT, Items.INFINITE_INGOT, Items.INFINITE_INGOT,
-                        Items.INFINITE_INGOT, Items.ADVANCED_DISENCHANTER, Items.INFINITE_INGOT,
+                        Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT,
+                        Items.MAGNONIUM_INGOT, Items.ADVANCED_DISENCHANTER, Items.MAGNONIUM_INGOT,
                         Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
                 });
 

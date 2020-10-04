@@ -18,6 +18,7 @@ import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -130,7 +131,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             64000,
             64000,
     };
-
+    
     private final ItemStack loadingItem = new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&aLoading...");
@@ -237,7 +238,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         if (inputitem != null) {
             if (getCharge(b.getLocation()) >= type.getEnergyConsumption()) {
                 if (progress == 0) { //start new singularity
-                    if (getOutput(b, inputitem) != null) {
+                    if (getOutput(inputitem) != null) {
                         setItem(b, inputToOutput(inputitem));
                         setProgress(b, 1);
                         removeCharge(b.getLocation(), type.getEnergyConsumption());
@@ -251,8 +252,8 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     } else {
                         //not started
                         if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                            inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE,
-                                    "&9Input an item to start construction!"
+                            inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.BARRIER,
+                                    "&cInput a valid resource!"
                             ));
                         }
                     }
@@ -288,13 +289,20 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                         }
                     }
                 }
+            } else {
+                if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
+                    inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE,
+                            "&cNot enough energy!",
+                            lore,
+                            loree
+                    ));
+                }
             }
             //when not enough power
+        } else {
             if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE,
-                        "&cNot enough energy!",
-                        lore,
-                        loree
+                inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE,
+                        "&9Input a resource to start construction!"
                 ));
             }
         }
@@ -308,7 +316,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         return outputToInput(getBlockData(b.getLocation(), "item"));
     }
 
-    private ItemStack getOutput(Block b, ItemStack input) {
+    private ItemStack getOutput(ItemStack input) {
         if (SlimefunItem.getByID(inputToOutput(input)) != null) {
             return SlimefunItem.getByID(inputToOutput(input)).getItem();
         }
@@ -317,7 +325,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
     private int outputToTime(String output) {
         if (output != null) {
-            for (int i = 0;i < outputItems.length; i++) {
+            for (int i = 0 ; i < outputItems.length; i++) {
                 if (outputItems[i].equals(output)) return outputTimes[i];
             }
         }
@@ -326,7 +334,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
     private ItemStack outputToInput(String output) {
         if (output != null) {
-            for (int i = 0;i < outputItems.length; i++) {
+            for (int i = 0 ; i < outputItems.length ; i++) {
                 if (outputItems[i].equals(output)) return inputItems[i];
             }
         }
@@ -335,7 +343,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
     private String inputToOutput(ItemStack input) {
         if (input != null) {
-            for (int i = 0;i < inputItems.length; i++) {
+            for (int i = 0 ; i < inputItems.length ; i++) {
                 if (inputItems[i] == input) return outputItems[i];
             }
         }
