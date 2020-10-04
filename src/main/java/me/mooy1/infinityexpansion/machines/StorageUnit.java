@@ -215,17 +215,16 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                 int slotAmount = slotItem.getAmount();
                 int stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
-                String materialid = slotItem.getType().toString();
-                String sfitemid = SlimefunItem.getByItem(slotItem).getID();
+                String id = slotItem.getType().toString();
 
                 //Check if empty
                 if (storeditem == null || storeditemtype == null) { //store new item
 
                     if (SlimefunItem.getByItem(slotItem) != null) { //store slimefun item
-                        setItem(b, sfitemid);
+                        setItem(b, SlimefunItem.getByItem(slotItem).getID());
                         setType(b, "slimefun");
                     } else { //store vanilla item
-                        setItem(b, materialid);
+                        setItem(b, id);
                         setType(b, "material");
                     }
 
@@ -237,24 +236,19 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                     storeditem = getBlockData(b.getLocation(), "storeditem");
                     storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
 
-                    String itemid;
-
                     if (SlimefunItem.getByItem(slotItem) != null) {
-                        itemid = sfitemid;
-                    } else {
-                        itemid = materialid;
-                    }
+                        id = SlimefunItem.getByItem(slotItem).getID();
+                        if (storeditemtype.equals("slimefun") && storeditem.equals(id)) { //deposit slimefun item
 
-                    if (storeditemtype.equals("material") && storeditem.equals(itemid)) { //deposit vanilla item
-
-                        if (slotAmount <= maxinput) {
-                            setAmount(b, stored + slotAmount);
-                            inv.consumeItem(INPUTSLOT, slotAmount);
-                        } else {
-                            setAmount(b, stored + maxinput);
-                            inv.consumeItem(INPUTSLOT, maxinput);
+                            if (slotAmount <= maxinput) {
+                                setAmount(b, stored + slotAmount);
+                                inv.consumeItem(INPUTSLOT, slotAmount);
+                            } else {
+                                setAmount(b, stored + maxinput);
+                                inv.consumeItem(INPUTSLOT, maxinput);
+                            }
                         }
-                    } else if (storeditemtype.equals("slimefun") && storeditem.equals(itemid)) { //deposit slimefun item
+                    } else if (storeditemtype.equals("material") && storeditem.equals(id)) { //deposit vanilla item
 
                         if (slotAmount <= maxinput) {
                             setAmount(b, stored + slotAmount);
