@@ -1,6 +1,5 @@
 package me.mooy1.infinityexpansion.machines;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,16 +14,11 @@ import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -53,9 +47,13 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             10
     };
 
+    final int INPUTSLOT = INPUTSLOTS[0];
+
     private final int[] OUTPUTSLOTS = {
             16
     };
+
+    final int OUTPUTSLOT = OUTPUTSLOTS[0];
 
     private final int[] INPUTBORDER = {
             0, 1, 2, 9, 11, 18, 19, 20
@@ -71,7 +69,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
     private final ItemStack loadingItem = new CustomItem(
             Material.BARRIER,
-            "&cLoading...");
+            "&aLoading...");
 
     private final ItemStack inputBorderItem = new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
@@ -85,47 +83,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         super(Categories.INFINITY_MACHINES, tier.getItem(), tier.getRecipeType(), tier.getRecipe());
         this.tier = tier;
 
-        String displayname = "";
-
-        if (tier.getItem().getDisplayName() != null) {
-            displayname = tier.getItem().getDisplayName();
-        }
-
-        new BlockMenuPreset(getID(), displayname) {
-
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                BlockStorage.addBlockInfo(b, "stored", "0");
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
-                return (p.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        p, b.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUTSLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUTSLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-        };
+        setupInv();
 
         registerBlockHandler(getID(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -162,18 +120,21 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         });
     }
 
-    private void setupInv(BlockMenuPreset preset) {
-        for (int i : STATUSBORDER) {
-            preset.addItem(i, ChestMenuUtils.getBackground(), (p, slot, item, action) -> false);
-        }
-        for (int i : INPUTBORDER) {
-            preset.addItem(i, inputBorderItem, (p, slot, item, action) -> false);
-        }
-        for (int i : OUTPUTBORDER) {
-            preset.addItem(i, outputBorderItem, (p, slot, item, action) -> false);
-        }
+    private void setupInv() {
+        createPreset(this, tier.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
+            blockMenuPreset -> {
+                for (int i : STATUSBORDER) {
+                    blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+                }
+                for (int i : INPUTBORDER) {
+                    blockMenuPreset.addItem(i, inputBorderItem, ChestMenuUtils.getEmptyClickHandler());
+                }
+                for (int i : OUTPUTBORDER) {
+                    blockMenuPreset.addItem(i, outputBorderItem, ChestMenuUtils.getEmptyClickHandler());
+                }
 
-        preset.addItem(STATUSSLOT, loadingItem, (p, slot, item, action) -> false);
+                blockMenuPreset.addItem(STATUSSLOT, loadingItem, ChestMenuUtils.getEmptyClickHandler());
+            });
     }
 
     @Override
@@ -191,20 +152,19 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         if (inv == null) return;
 
         int maxstorage = tier.getStorage();
+        String storedtest = getBlockData(b.getLocation(), "stored");
         String storeditem = getBlockData(b.getLocation(), "storeditem");
         String storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
 
-        //fix mistakes...
+        //start and fix bugs
 
-        if (storeditem == null || storeditem.equals("") || storeditemtype == null) {
+        if (storedtest == null || storeditem == null || storeditem.equals("") || storeditemtype == null) {
             setAmount(b, 0);
             setItem(b, null);
             setType(b, null);
         }
 
         //input
-
-        int INPUTSLOT = 10;
 
         ItemStack slotItem = inv.getItemInSlot(INPUTSLOT);
         //Check if empty slot
@@ -272,7 +232,6 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             int stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
             int outputRemaining;
-            int OUTPUTSLOT = 16;
 
             if (inv.getItemInSlot(OUTPUTSLOT) != null) {
                 outputRemaining = convert(storeditemtype, storeditem, 1).getMaxStackSize()-inv.getItemInSlot(OUTPUTSLOT).getAmount();
@@ -338,6 +297,8 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
     private void updateStatus(Block b) {
         BlockMenu inv = BlockStorage.getInventory(b);
+
+        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) return;
 
         String storeditem = getBlockData(b.getLocation(), "storeditem");
         String storeditemtype = getBlockData(b.getLocation(), "storeditemtype");

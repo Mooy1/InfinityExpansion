@@ -33,7 +33,7 @@ public final class Items {
     public static final SlimefunItemStack SINGULARITY_CONSTRUCTOR = new SlimefunItemStack(
             "SINGULARITY_CONSTRUCTOR",
             Material.QUARTZ_BRICKS,
-            "&7&lCore Combiner",
+            "&7&lSingularity Constructor",
             LoreBuilder.speed(1),
             LoreBuilder.powerPerSecond(1_000),
             ""
@@ -41,7 +41,7 @@ public final class Items {
     public static final SlimefunItemStack INFINITY_CONSTRUCTOR = new SlimefunItemStack(
             "INFINITY_CONSTRUCTOR",
             Material.CHISELED_QUARTZ_BLOCK,
-            "&b&lInfinity &7&lCore Constructor",
+            "&b&lInfinity &7&lConstructor",
             LoreBuilder.speed(10),
             LoreBuilder.powerPerSecond(10_000),
             ""
@@ -692,13 +692,13 @@ public final class Items {
 
     public static final SlimefunItemStack VOID_BIT = new SlimefunItemStack(
             "VOID_BIT",
-            Material.GUNPOWDER,
+            Material.IRON_NUGGET,
             "&8&lVoid &7&lBit",
             ""
     );
-    public static final SlimefunItemStack VOID_NUGGET = new SlimefunItemStack(
-            "VOID_NUGGET",
-            Material.IRON_NUGGET,
+    public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
+            "VOID_DUST",
+            Material.GUNPOWDER,
             "&8&lVoid &7&lNugget",
             ""
     );
@@ -711,11 +711,11 @@ public final class Items {
 
     //Materials
 
-    public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
-        "VOID_DUST",
-        Material.GUNPOWDER,
-        "&5&lVoid Dust",
-        "&8From the depths of the end...",
+    public static final SlimefunItemStack ENDER_ESSENCE = new SlimefunItemStack(
+        "ENDER_ESSENCE",
+        Material.BLAZE_POWDER,
+        "&5&lEnd Essence",
+        "&8From the depths of the void...",
         ""
     );
 
@@ -757,10 +757,10 @@ public final class Items {
 
     //Gear
 
-    public static final SlimefunItemStack VOID_FLAME = new SlimefunItemStack(
-        "VOID_FLAME",
+    public static final SlimefunItemStack ENDER_FLAME = new SlimefunItemStack(
+        "ENDER_FLAME",
         Material.ENCHANTED_BOOK,
-        "&d&lVoid &c&lFire",
+        "&d&lEnder &c&lFlame",
         ""
     );
 
@@ -864,7 +864,7 @@ public final class Items {
         MAGNONIUM_BLADE.addUnsafeEnchantment(unb, 10);
         MAGNONIUM_PICKAXE.addUnsafeEnchantment(eff, 10);
         MAGNONIUM_PICKAXE.addUnsafeEnchantment(unb, 10);
-        VOID_FLAME.addUnsafeEnchantment(fire, 10);
+        ENDER_FLAME.addUnsafeEnchantment(fire, 10);
         INFINITY_CROWN.addUnsafeEnchantment(prot, 40);
         INFINITY_CHESTPLATE.addUnsafeEnchantment(prot, 40);
         INFINITY_LEGGINGS.addUnsafeEnchantment(prot, 40);

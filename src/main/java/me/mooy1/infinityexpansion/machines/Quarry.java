@@ -72,7 +72,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
 
                 blockMenuPreset.addItem(STATUSSLOT,
                     new CustomItem(Material.RED_STAINED_GLASS_PANE,
-                        "&cNot Mining..."),
+                        "&aLoading..."),
                     ChestMenuUtils.getEmptyClickHandler());
             });
     }
@@ -180,6 +180,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
             removeCharge(b.getLocation(), type.getEnergyConsumption());
             menu.pushItem(output, getOutputSlots());
         } else {
+            //when not enough power
             if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
                 inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE,
                     "&cNot enough energy!"));

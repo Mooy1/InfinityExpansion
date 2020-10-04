@@ -1,8 +1,13 @@
 package me.mooy1.infinityexpansion.materials;
 
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
+import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -10,9 +15,23 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class VoidDustResource implements GEOResource {
+public class EnderEssence extends SlimefunItem implements GEOResource {
 
     private final NamespacedKey key = new NamespacedKey(InfinityExpansion.getInstance(), "VoidDust");
+
+    public EnderEssence() {
+        super(Categories.INFINITY_MATERIALS, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, new ItemStack[] {
+                null, null, null, null,
+                new CustomItem(
+                        Material.PAPER,
+                        "&fGEO-Miner Material",
+                        "&aFound in the End and Void biomes",
+                        "&aMake sure to GEO-Scan the chunk first"
+                ),
+                null, null, null, null
+                }
+        );
+    }
 
     @Override
     public int getDefaultSupply(@Nonnull World.Environment environment, @Nonnull Biome biome) {
@@ -46,7 +65,7 @@ public class VoidDustResource implements GEOResource {
     @Nonnull
     @Override
     public ItemStack getItem() {
-        return Items.VOID_DUST.clone();
+        return Items.ENDER_ESSENCE.clone();
     }
 
     @Override

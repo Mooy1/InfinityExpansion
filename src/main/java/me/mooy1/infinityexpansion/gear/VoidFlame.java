@@ -10,10 +10,10 @@ import org.bukkit.inventory.ItemStack;
 public class VoidFlame extends SlimefunItem {
 
     public VoidFlame() {
-        super(Categories.INFINITY_GEAR, Items.VOID_FLAME, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
-            Items.VOID_DUST, Items.VOID_DUST, Items.VOID_DUST,
-            Items.VOID_DUST, new ItemStack(Material.BOOK), Items.VOID_DUST,
-            Items.VOID_DUST, Items.VOID_DUST, Items.VOID_DUST,
+        super(Categories.INFINITY_GEAR, Items.ENDER_FLAME, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
+            Items.ENDER_ESSENCE, Items.ENDER_ESSENCE, Items.ENDER_ESSENCE,
+            Items.ENDER_ESSENCE, new ItemStack(Material.BOOK), Items.ENDER_ESSENCE,
+            Items.ENDER_ESSENCE, Items.ENDER_ESSENCE, Items.ENDER_ESSENCE,
         });
     }
 }

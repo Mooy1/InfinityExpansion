@@ -38,6 +38,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
     private static final int[] OUTPUTSLOTS = {
         13
     };
+
     private static final int STATUSSLOT = 4;
     private static final int TIME = 10000;
 
@@ -64,6 +65,24 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         });
     }
 
+    private void setupInv() {
+        createPreset(this, type.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
+            blockMenuPreset -> {
+                for (int i = 0; i < 13; i++) {
+                    blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+                }
+                for (int i = 14; i < 18; i++) {
+                    blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+                }
+
+                blockMenuPreset.addItem(STATUSSLOT,
+                        new CustomItem(Material.RED_STAINED_GLASS_PANE,
+                                "&aLoading..."
+                        ),
+                        ChestMenuUtils.getEmptyClickHandler());
+            });
+    }
+
     @Override
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
@@ -71,24 +90,6 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
 
             public boolean isSynchronized() { return false; }
         });
-    }
-
-    private void setupInv() {
-        createPreset(this, type.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
-                blockMenuPreset -> {
-                    for (int i = 0; i < 13; i++) {
-                        blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i = 14; i < 18; i++) {
-                        blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-                    }
-
-                    blockMenuPreset.addItem(STATUSSLOT,
-                            new CustomItem(Material.RED_STAINED_GLASS_PANE,
-                                    "&aLoading..."
-                            ),
-                            ChestMenuUtils.getEmptyClickHandler());
-                });
     }
 
     public void tick(Block b) {
@@ -136,10 +137,13 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
                 setProgress(b, progress+1);
 
             }
-            inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                    "&aHarvesting...",
-                    lore
-                    ));
+            //harvesting
+            if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
+                inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                        "&aHarvesting...",
+                        lore
+                ));
+            }
 
         } else {
             //not enough energy

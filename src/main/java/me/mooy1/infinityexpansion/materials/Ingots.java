@@ -10,6 +10,8 @@ import me.mooy1.infinityexpansion.machines.VoidHarvester;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -34,7 +36,7 @@ public class Ingots extends SlimefunItem {
         MAGNONIUM(Items.MAGNONIUM_INGOT, RecipeType.SMELTERY, new ItemStack[] {
             Items.MAGSTEEL,
             Items.MAGNESIUM_COMPRESSED_CORE,
-            Items.VOID_DUST,
+            Items.ENDER_ESSENCE,
             SlimefunItems.REINFORCED_ALLOY_INGOT,
             SlimefunItems.REDSTONE_ALLOY,
             SlimefunItems.COMPRESSED_CARBON,
@@ -51,9 +53,13 @@ public class Ingots extends SlimefunItem {
             null,
             null
         }),
-        BIT(Items.VOID_BIT, VoidHarvester.RECIPE_TYPE, null),
-        NUGGET(Items.VOID_NUGGET, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(Items.VOID_BIT)),
-        INGOT(Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(Items.VOID_NUGGET));
+        BIT(Items.VOID_BIT, VoidHarvester.RECIPE_TYPE, new ItemStack[] {
+                null, null, null,
+                null, new CustomItem(Material.PAPER, "&aHarvested by &8Void &7Harvesters"), null,
+                null, null, null,
+        }),
+        DUST(Items.VOID_DUST, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(Items.VOID_BIT)),
+        INGOT(Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(Items.VOID_DUST));
 
         @Nonnull
         private final SlimefunItemStack item;

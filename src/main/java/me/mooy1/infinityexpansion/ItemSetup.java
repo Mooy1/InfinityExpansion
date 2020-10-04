@@ -2,7 +2,6 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
-import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
 import me.mooy1.infinityexpansion.gear.InfinityGear;
 import me.mooy1.infinityexpansion.gear.MagnoniumGear;
 import me.mooy1.infinityexpansion.gear.VoidFlame;
@@ -44,6 +43,10 @@ public final class ItemSetup {
             new VoidHarvester(type).register(plugin);
         }
 
+        for (SingularityConstructor.Type type : SingularityConstructor.Type.values()) {
+            new SingularityConstructor(type).register(plugin);
+        }
+
         for (StorageUnit.Tier tier : StorageUnit.Tier.values()) {
             new StorageUnit(tier).register(plugin);
         }
@@ -66,6 +69,8 @@ public final class ItemSetup {
             new SFIngotBlocks(type).register(plugin);
         }
 
+        new EnderEssence().register();
+
         //add gear
 
         for (InfinityGear.Type type : InfinityGear.Type.values()) {
@@ -80,7 +85,7 @@ public final class ItemSetup {
 
         //add geominer recipe
 
-        new VoidDust().register(plugin);
+        new EnderEssence().register(plugin);
 
         //Slimefun constructors
 
