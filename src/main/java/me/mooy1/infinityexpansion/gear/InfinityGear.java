@@ -14,19 +14,27 @@ import javax.annotation.Nonnull;
 
 public class InfinityGear extends SlimefunItem {
 
-    private static final ItemStack ingot = Items.INFINITY_INGOT;
-    private final InfinityTool infinityTool;
+    private static final ItemStack ingot = Items.INFINITE_INGOT;
 
-    public InfinityGear(InfinityTool infinitytool) {
-        super(Categories.INFINITY_GEAR, infinitytool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
-            infinitytool.getRecipe());
-        this.infinityTool = infinitytool;
+    public InfinityGear(Type type) {
+        super(Categories.INFINITY_GEAR, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
+            type.getRecipe());
     }
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum InfinityTool {
+    public enum Type {
 
+        PICKAXE(Items.INFINITY_PICKAXE, new ItemStack[] {
+                ingot, ingot, ingot,
+                null, ingot, null,
+                null, ingot, null
+        }),
+        BLADE(Items.INFINITY_BLADE, new ItemStack[] {
+                null, ingot, null,
+                null, ingot, null,
+                null, ingot, null
+        }),
         CROWN(Items.INFINITY_CROWN, new ItemStack[] {
             ingot, ingot, ingot,
             ingot, null, ingot,
@@ -46,16 +54,6 @@ public class InfinityGear extends SlimefunItem {
             null, null, null,
             ingot, null, ingot,
             ingot, null, ingot
-        }),
-        PICKAXE(Items.INFINITY_PICKAXE, new ItemStack[] {
-            ingot, ingot, ingot,
-            null, ingot, null,
-            null, ingot, null
-        }),
-        BLADE(Items.INFINITY_BLADE, new ItemStack[] {
-            null, ingot, null,
-            null, ingot, null,
-            null, ingot, null
         });
 
         @Nonnull

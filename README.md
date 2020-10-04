@@ -16,19 +16,25 @@ Advanced Enchanter - a faster auto enchanter
 
 Advanced Disenchanter - a faster auto disenchanter
 
-Quarry - Mines resources for you at the cost of lots of power.
+Quarries - Mines resources for you at the cost of lots of power.
 
 Infinity Forge - WIP used to craft Infinity Items
+
+Storage Units - Hold huge amounts of items, work with cargo
 
 Infinity Machines - much faster versions of machines, crafted with infinity ingots
 
 # Materials
 
+Magsteel - Magnesium and steel alloy
+
 Magnonium Ingot - crafted with lots of magnesium
 
-Cores - crafted with large amounts of a material
+Cores and singularities - crafted with large amounts of a material
 
-Infinity Ingot - WIP crafted with large amounts of many cores and ingots
+Machine circuits, cores, and plates - Used to craft machines
+
+Infinity Ingot - crafted with many singularities
 
 Void Dust - geo miner resource from the end or void biome
 
@@ -36,4 +42,4 @@ Void Dust - geo miner resource from the end or void biome
 
 Magnonium Gear - Strong gear crafted with lots of Magnesium
 
-Infinity gear - extremly strong endgame gear crafter wihtb infinity ingots
+Infinity gear - extremly strong endgame gear crafter with infinity ingots

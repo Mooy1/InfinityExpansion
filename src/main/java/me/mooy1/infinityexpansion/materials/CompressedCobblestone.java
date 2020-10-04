@@ -17,15 +17,15 @@ import static me.mooy1.infinityexpansion.materials.Cores.Compress;
 
 public class CompressedCobblestone extends SlimefunItem {
 
-    public CompressedCobblestone(Compression compression) {
-        super(Categories.INFINITY_MATERIALS, compression.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
-            compression.getRecipe());
+    public CompressedCobblestone(Type type) {
+        super(Categories.INFINITY_MATERIALS, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
+                type.getRecipe());
     }
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
-    public enum Compression {
+    public enum Type {
         ONE(Items.COMPRESSED_COBBLESTONE_1, Compress(new ItemStack(Material.COBBLESTONE))),
         TWO(Items.COMPRESSED_COBBLESTONE_2, Compress(Items.COMPRESSED_COBBLESTONE_1)),
         THREE(Items.COMPRESSED_COBBLESTONE_3, Compress(Items.COMPRESSED_COBBLESTONE_2)),

@@ -15,18 +15,27 @@ import javax.annotation.Nonnull;
 public class MagnoniumGear extends SlimefunItem {
 
     private static final ItemStack alloy = Items.MAGNONIUM_INGOT;
-    private final MagnoniumTool magnoniumTool;
 
-    public MagnoniumGear(MagnoniumTool magnoniumtool) {
-        super(Categories.INFINITY_GEAR, magnoniumtool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
-            magnoniumtool.getRecipe());
-        this.magnoniumTool = magnoniumtool;
+    public MagnoniumGear(Type type) {
+        super(Categories.INFINITY_GEAR, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
+            type.getRecipe());
     }
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum MagnoniumTool {
+    public enum Type {
 
+        BLADE(Items.MAGNONIUM_BLADE, new ItemStack[] {
+                null, alloy, null,
+                null, alloy, null,
+                null, alloy, null
+        }),
+
+        PICKAXE(Items.MAGNONIUM_PICKAXE, new ItemStack[] {
+                alloy, alloy, alloy,
+                null, alloy, null,
+                null, alloy, null
+        }),
         CROWN(Items.MAGNONIUM_CROWN, new ItemStack[] {
             alloy, alloy, alloy,
             alloy, null, alloy,
@@ -49,18 +58,6 @@ public class MagnoniumGear extends SlimefunItem {
             null, null, null,
             alloy, null, alloy,
             alloy, null, alloy
-        }),
-
-        BLADE(Items.MAGNONIUM_BLADE, new ItemStack[] {
-            null, alloy, null,
-            null, alloy, null,
-            null, alloy, null
-        }),
-
-        PICKAXE(Items.MAGNONIUM_PICKAXE, new ItemStack[] {
-            alloy, alloy, alloy,
-            null, alloy, null,
-            null, alloy, null
         });
 
         @Nonnull

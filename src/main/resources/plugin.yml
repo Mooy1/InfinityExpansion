@@ -17,7 +17,7 @@ website: https://github.com/Mooy1/InfinityExpansion
 depend: [Slimefun]
 
 ## This value is automatically replaced by the version specified in your pom.xml file, do not change this.
-version: MODIFIED
+version: ${project.version}
 
 ## This is the minimum minecraft version required to run your plugin.
 api-version: 1.16
