@@ -4,7 +4,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
 import me.mooy1.infinityexpansion.gear.InfinityGear;
 import me.mooy1.infinityexpansion.gear.MagnoniumGear;
-import me.mooy1.infinityexpansion.gear.VoidFlame;
+import me.mooy1.infinityexpansion.gear.EnderFlame;
 import me.mooy1.infinityexpansion.machines.*;
 import me.mooy1.infinityexpansion.materials.*;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -57,12 +57,12 @@ public final class ItemSetup {
             new CompressedCobblestone(type).register(plugin);
         }
 
-        for (Cores.Type type : Cores.Type.values()) {
-            new Cores(type).register(plugin);
+        for (Singularities.Type type : Singularities.Type.values()) {
+            new Singularities(type).register(plugin);
         }
 
-        for (Ingots.Type type : Ingots.Type.values()) {
-            new Ingots(type).register(plugin);
+        for (EndgameMaterials.Type type : EndgameMaterials.Type.values()) {
+            new EndgameMaterials(type).register(plugin);
         }
 
         for (SFIngotBlocks.Type type: SFIngotBlocks.Type.values()) {
@@ -77,7 +77,7 @@ public final class ItemSetup {
             new InfinityGear(type).register(plugin);
         }
 
-        new VoidFlame().register(plugin);
+        new EnderFlame().register(plugin);
 
         for (MagnoniumGear.Type type : MagnoniumGear.Type.values()) {
             new MagnoniumGear(type).register(plugin);

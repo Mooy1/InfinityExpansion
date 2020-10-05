@@ -68,7 +68,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     };
 
     private final ItemStack loadingItem = new CustomItem(
-            Material.BARRIER,
+            Material.LIME_STAINED_GLASS_PANE,
             "&aLoading...");
 
     private final ItemStack inputBorderItem = new CustomItem(
@@ -239,20 +239,15 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             }
 
             if (stored > 1) {
+
                 int amount = 0;
 
                 for (int i = 0; i < outputRemaining; i++) {
                     stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
                     if (stored > 1+i) {
-                        if (storeditemtype.equals("slimefun")) {
-                            if (inv.fits(convert(storeditemtype, storeditem, 1), OUTPUTSLOTS)) {
-                                amount++;
-                            }
-                        } else if (storeditemtype.equals("material")) {
-                            if (inv.fits(convert(storeditemtype, storeditem, 1), OUTPUTSLOTS)) {
-                                amount++;
-                            }
+                        if (inv.fits(convert(storeditemtype, storeditem, 1+i), OUTPUTSLOTS)) {
+                            amount++;
                         }
                     }
                 }
@@ -260,17 +255,10 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                 setAmount(b, stored-amount);
 
             } else if (stored == 1 && inv.getItemInSlot(OUTPUTSLOT) == null) {
-                if (storeditemtype.equals("slimefun")) {
-                    inv.pushItem(convert(storeditemtype, storeditem, 1), OUTPUTSLOTS);
-                    setItem(b, null);
-                    setType(b, null);
-                    setAmount(b, 0);
-                } else if (storeditemtype.equals("material")) {
-                    inv.pushItem(convert(storeditemtype, storeditem, 1), OUTPUTSLOTS);
-                    setItem(b, null);
-                    setType(b, null);
-                    setAmount(b, 0);
-                }
+                inv.pushItem(convert(storeditemtype, storeditem, 1), OUTPUTSLOTS);
+                setItem(b, null);
+                setType(b, null);
+                setAmount(b, 0);
             }
         }
     }

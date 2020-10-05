@@ -13,9 +13,14 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-import static me.mooy1.infinityexpansion.materials.Cores.Compress;
-
 public class CompressedCobblestone extends SlimefunItem {
+
+
+    public static ItemStack[] Compress(ItemStack item) {
+        return new ItemStack[] {
+                item, item, item, item, item, item, item, item, item,
+        };
+    }
 
     public CompressedCobblestone(Type type) {
         super(Categories.INFINITY_MATERIALS, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,

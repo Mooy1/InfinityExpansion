@@ -18,19 +18,19 @@ import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
@@ -63,27 +63,25 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             6, 7, 8, 15, 17, 24, 25, 26
     };
 
-    private final ItemStack[] inputItems = new ItemStack[] {
-            SlimefunItems.COPPER_INGOT,
-            SlimefunItems.ZINC_INGOT,
-            SlimefunItems.TIN_INGOT,
-            SlimefunItems.ALUMINUM_INGOT,
-            SlimefunItems.SILVER_INGOT,
-            SlimefunItems.MAGNESIUM_INGOT,
-            SlimefunItems.LEAD_INGOT,
+    private final String[] inputItems = new String[] {
+            "COPPER_INGOT",
+            "ZINC_INGOT",
+            "TIN_INGOT",
+            "ALUMINUM_INGOT",
+            "SILVER_INGOT",
+            "MAGNESIUM_INGOT",
+            "LEAD_INGOT",
 
-            SlimefunItems.GOLD_4K,
-            new ItemStack(Material.GOLD_INGOT),
+            "GOLD_INGOT",
+            "IRON_INGOT",
+            "DIAMOND",
+            "EMERALD",
+            "NETHERITE_INGOT",
 
-            new ItemStack(Material.IRON_INGOT),
-            new ItemStack(Material.DIAMOND),
-            new ItemStack(Material.EMERALD),
-            new ItemStack(Material.NETHERITE_INGOT),
-
-            new ItemStack(Material.COAL),
-            new ItemStack(Material.REDSTONE),
-            new ItemStack(Material.LAPIS_LAZULI),
-            new ItemStack(Material.QUARTZ)
+            "COAL",
+            "REDSTONE",
+            "LAPIS_LAZULI",
+            "QUARTZ"
     };
 
     private final String[] outputItems = new String[] {
@@ -96,8 +94,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             "LEAD_SINGULARITY",
 
             "GOLD_SINGULARITY",
-            "GOLD_SINGULARITY",
-
             "IRON_SINGULARITY",
             "DIAMOND_SINGULARITY",
             "EMERALD_SINGULARITY",
@@ -110,17 +106,15 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     };
 
     private final int[] outputTimes = new int[] {
-            32,
             32000,
             32000,
             32000,
             32000,
             32000,
-            32000,
-
             32000,
             32000,
 
+            32000,
             64000,
             8000,
             8000,
@@ -131,9 +125,9 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             64000,
             64000,
     };
-    
+
     private final ItemStack loadingItem = new CustomItem(
-            Material.RED_STAINED_GLASS_PANE,
+            Material.LIME_STAINED_GLASS_PANE,
             "&aLoading...");
 
     private final ItemStack inputBorderItem = new CustomItem(
@@ -154,7 +148,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                String item = getBlockData(b.getLocation(), "item");
+                String input = getBlockData(b.getLocation(), "input");
                 int progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
 
                 inv.dropItems(b.getLocation(), getOutputSlots());
@@ -167,10 +161,10 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     int remainder = progress % stacksize;
 
                     for (int i = 0; i < stacks; i++) {
-                        b.getWorld().dropItemNaturally(b.getLocation(), new CustomItem(getInput(b), stacksize));
+                        b.getWorld().dropItemNaturally(b.getLocation(), new CustomItem(getItemFromID(input), stacksize));
                     }
                     if (remainder > 0) {
-                        b.getWorld().dropItemNaturally(b.getLocation(), new CustomItem(getInput(b), remainder));
+                        b.getWorld().dropItemNaturally(b.getLocation(), new CustomItem(getItemFromID(input), remainder));
                     }
                 }
             }
@@ -184,7 +178,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     }
 
     private void setupInv() {
-        createPreset(this, type.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
+        createPreset(this, type.getItem().getImmutableMeta().getDisplayName().orElse("&cTHIS IS A BUG"),
             blockMenuPreset -> {
                 for (int i : STATUSBORDER) {
                     blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
@@ -214,149 +208,195 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
-        String item = getBlockData(b.getLocation(), "item");
+        String progresstest = getBlockData(b.getLocation(), "progress");
+        String name = null;
+        Material statusmat = null;
 
         //start and fix bugs
 
-        if (getBlockData(b.getLocation(), "progress") == null || item == null) {
+        if (progresstest == null) {
             setProgress(b, 0);
-            setItem(b, null);
+            setTime(b, 0);
         }
 
         int progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
-        item = getBlockData(b.getLocation(), "item");
+        int time = Integer.parseInt(getBlockData(b.getLocation(), "time"));
+        String input = getBlockData(b.getLocation(), "input");
+        String output = getBlockData(b.getLocation(), "output");
+
+        ItemStack inputslotitem = inv.getItemInSlot(INPUTSLOT);
+
+        //start
+
+        if (getCharge(b.getLocation()) <type.getEnergyConsumption()) { //when not enough power
+
+            name = "&cNot enough energy!";
+            statusmat = Material.RED_STAINED_GLASS_PANE;
+
+        } else if (progress == 0) { //when not started
+
+            if (inputslotitem == null) { //no input
+
+                name = "&9Input a resource to start construction!";
+                statusmat = Material.BLUE_STAINED_GLASS_PANE;
+
+            } else { //input
+
+                if (inputslotitem.getAmount() >= type.getSpeed()) { //make sure there is enough
+
+                    if (checkItemAndSet(b, inv, inputslotitem)) { //try to start contruction
+
+                        name = "&aBeggining contruction!";
+                        statusmat = Material.GREEN_STAINED_GLASS_PANE;
+
+                    } else { //failed to start contruction
+
+                        name = "&cInvalid resource!";
+                        statusmat = Material.BARRIER;
+
+                    }
+                } else { //not enough
+
+                    name = "&cNot enough resource input!";
+                    statusmat = Material.BARRIER;
+
+                }
+            }
+
+        } else { //increase progress
+
+            if (inputslotitem == null) { //no input
+
+                if (!getItemFromID(input).getItemMeta().getDisplayName().equals("")) {
+                    name = "&cInput more " + getItemFromID(input).getItemMeta().getDisplayName() + "s&c!";
+                } else {
+                    name = "&cInput more " + getItemFromID(input).getType();
+                }
+
+                statusmat = Material.RED_STAINED_GLASS_PANE;
+
+            } else if (progress < time) { //input
+
+                if (inputslotitem.getAmount() >= type.getSpeed()) {
+
+                    if (getID(inputslotitem).equals(input)) { //input matches
+
+                        inv.consumeItem(INPUTSLOT, type.getSpeed());
+                        setProgress(b, progress + type.getSpeed());
+                        name = "&aContructing...";
+                        statusmat = Material.GREEN_STAINED_GLASS_PANE;
+
+                    } else { //input doesnt match
+
+                        name = "&cInvalid Input!";
+                        statusmat = Material.BARRIER;
+
+                    }
+
+                } else { //not enough
+
+                    name = "&cNot enough resource input!";
+                    statusmat = Material.BARRIER;
+
+                }
+            }
+
+            if (progress >= time) { //if contruction done
+
+                if (inv.fits(getItemFromID(output), OUTPUTSLOTS)) { //output
+
+                    inv.pushItem(getItemFromID(output), OUTPUTSLOTS);
+                    setTime(b, 0);
+                    setProgress(b, 0);
+                    setInput(b, null);
+                    setOutput(b, null);
+
+                    name = "&aContruction complete!";
+                    statusmat = Material.GREEN_STAINED_GLASS_PANE;
+
+                } else { //not enough room
+
+                    name = "&6Not enough room!";
+                    statusmat = Material.ORANGE_STAINED_GLASS_PANE;
+
+                }
+            }
+        }
+
+        //update status
+
+        progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
+        time = Integer.parseInt(getBlockData(b.getLocation(), "time"));
+        output = getBlockData(b.getLocation(), "output");
+
         String lore = "";
         String loree = "";
 
         if (progress > 0) {
-            lore = "&7Contructing: " + SlimefunItem.getByID(item).getItem().getItemMeta().getDisplayName();
-            loree = "&7(" + progress + "/" + getTime(b) + ")";
+            String displayname = "";
+            ItemMeta displaymeta = getItemFromID(output).getItemMeta();
+
+            if (displaymeta != null) {
+                displayname = displaymeta.getDisplayName();
+            }
+
+            lore = "&7Contructing: " + displayname;
+            loree = "&7Progress: (" + progress + "/" + time + ")";
+
         }
 
-        ItemStack inputitem = inv.getItemInSlot(INPUTSLOT);
+        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
+            inv.replaceExistingItem(STATUSSLOT, new CustomItem(statusmat,
+                    name,
+                    lore,
+                    loree
+            ));
+        }
+    }
 
-        if (inputitem != null) {
-            if (getCharge(b.getLocation()) >= type.getEnergyConsumption()) {
-                if (progress == 0) { //start new singularity
-                    if (getOutput(inputitem) != null) {
-                        setItem(b, inputToOutput(inputitem));
-                        setProgress(b, 1);
-                        removeCharge(b.getLocation(), type.getEnergyConsumption());
-
-                        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                            inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                                    lore,
-                                    loree
-                            ));
-                        }
-                    } else {
-                        //not started
-                        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                            inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.BARRIER,
-                                    "&cInput a valid resource!"
-                            ));
-                        }
-                    }
-                } else if (progress == getTime(b)){ //output singularity
-                    if (!inv.fits(SlimefunItem.getByID(item).getItem(), getOutputSlots())) {
-
-                        removeCharge(b.getLocation(), type.getEnergyConsumption());
-                        inv.pushItem(SlimefunItem.getByID(item).getItem(), getOutputSlots());
-                        setProgress(b, 0);
-                        setItem(b, null);
-
-                    } else {
-                        //not enough room
-                        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                            inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.ORANGE_STAINED_GLASS_PANE,
-                                    "&6Not enough room!",
-                                    lore,
-                                    loree
-                            ));
-                        }
-                    }
-                } else { //increase progress
-                    if (inputitem == getInput(b)) {
-                        removeCharge(b.getLocation(), type.getEnergyConsumption());
-                        inv.consumeItem(INPUTSLOT, 1);
-                        setProgress(b, progress + 1);
-
-                        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                            inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                                    lore,
-                                    loree
-                            ));
-                        }
-                    }
-                }
-            } else {
-                if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                    inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE,
-                            "&cNot enough energy!",
-                            lore,
-                            loree
-                    ));
-                }
+    private boolean checkItemAndSet(Block b, BlockMenu inv, ItemStack item) {
+        for (int i = 0 ; i < inputItems.length ; i++) {
+            if (getID(item).equals(inputItems[i])) {
+                setInput(b, inputItems[i]);
+                setOutput(b, outputItems[i]);
+                setTime(b, outputTimes[i]);
+                setProgress(b, type.getSpeed());
+                inv.consumeItem(INPUTSLOT, type.getSpeed());
+                return true;
             }
-            //when not enough power
+        }
+        return false;
+    }
+
+    private String getID(ItemStack item) {
+        if (SlimefunItem.getByItem(item) != null) {
+            return SlimefunItem.getByItem(item).getID();
         } else {
-            if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE,
-                        "&9Input a resource to start construction!"
-                ));
-            }
+            return item.getType().toString();
         }
     }
 
-    private int getTime(Block b) {
-        return outputToTime(getBlockData(b.getLocation(), "item"));
-    }
-
-    private ItemStack getInput(Block b) {
-        return outputToInput(getBlockData(b.getLocation(), "item"));
-    }
-
-    private ItemStack getOutput(ItemStack input) {
-        if (SlimefunItem.getByID(inputToOutput(input)) != null) {
-            return SlimefunItem.getByID(inputToOutput(input)).getItem();
+    private ItemStack getItemFromID(String id) {
+        if (SlimefunItem.getByID(id) != null) {
+            return new ItemStack (SlimefunItem.getByID(id).getItem());
         }
-        return null;
+        return new CustomItem (Material.getMaterial(id));
     }
-
-    private int outputToTime(String output) {
-        if (output != null) {
-            for (int i = 0 ; i < outputItems.length; i++) {
-                if (outputItems[i].equals(output)) return outputTimes[i];
-            }
-        }
-        return 0;
-    }
-
-    private ItemStack outputToInput(String output) {
-        if (output != null) {
-            for (int i = 0 ; i < outputItems.length ; i++) {
-                if (outputItems[i].equals(output)) return inputItems[i];
-            }
-        }
-        return null;
-    }
-
-    private String inputToOutput(ItemStack input) {
-        if (input != null) {
-            for (int i = 0 ; i < inputItems.length ; i++) {
-                if (inputItems[i] == input) return outputItems[i];
-            }
-        }
-        return null;
-    }
-
 
     private void setProgress(Block b, int progress) {
         setBlockData(b, "progress", String.valueOf(progress));
     }
 
-    private void setItem(Block b, String item) {
-        setBlockData(b, "item", item);
+    private void setTime(Block b, int time) {
+        setBlockData(b, "time", String.valueOf(time));
+    }
+
+    private void setOutput(Block b, String id) {
+        setBlockData(b, "output", id);
+    }
+
+    private void setInput(Block b, String id) {
+        setBlockData(b, "input", id);
     }
 
     private void setBlockData(Block b, String key, String data) {
@@ -389,7 +429,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     }
 
     public static final RecipeType SINGULARITY_CONSTRUCTOR = new RecipeType(
-            new NamespacedKey(InfinityExpansion.getInstance(), "singularity_contructor"), Items.SINGULARITY_CONSTRUCTOR
+            new NamespacedKey(InfinityExpansion.getInstance(), "singularity_constructor"), Items.SINGULARITY_CONSTRUCTOR
     );
 
     @Getter

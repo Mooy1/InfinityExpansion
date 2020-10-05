@@ -41,15 +41,10 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
             }
         }
 
-
-
         //Register items
 
         ItemSetup.setup(this);
 
-        //Geo miner resources
-
-        new EnderEssence().register();
     }
 
     @Override

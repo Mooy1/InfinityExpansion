@@ -15,21 +15,19 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+import static me.mooy1.infinityexpansion.materials.Singularities.MiddleItem;
+
 public class EnderEssence extends SlimefunItem implements GEOResource {
 
-    private final NamespacedKey key = new NamespacedKey(InfinityExpansion.getInstance(), "VoidDust");
+    private final NamespacedKey key = new NamespacedKey(InfinityExpansion.getInstance(), "EnderEssence");
 
     public EnderEssence() {
-        super(Categories.INFINITY_MATERIALS, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, new ItemStack[] {
-                null, null, null, null,
-                new CustomItem(
+        super(Categories.INFINITY_MATERIALS, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, MiddleItem(new CustomItem(
                         Material.PAPER,
                         "&fGEO-Miner Material",
                         "&aFound in the End and Void biomes",
                         "&aMake sure to GEO-Scan the chunk first"
-                ),
-                null, null, null, null
-                }
+                ))
         );
     }
 
@@ -59,7 +57,7 @@ public class EnderEssence extends SlimefunItem implements GEOResource {
     @Nonnull
     @Override
     public String getName() {
-        return "Void Dust";
+        return "Ender Essence";
     }
 
     @Nonnull

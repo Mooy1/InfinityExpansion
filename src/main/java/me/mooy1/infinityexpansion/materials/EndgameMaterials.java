@@ -16,11 +16,11 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-import static me.mooy1.infinityexpansion.materials.Cores.Compress;
+import static me.mooy1.infinityexpansion.materials.CompressedCobblestone.Compress;
 
-public class Ingots extends SlimefunItem {
+public class EndgameMaterials extends SlimefunItem {
 
-    public Ingots(Type type) {
+    public EndgameMaterials(Type type) {
         super(Categories.INFINITY_MATERIALS, type.getItem(), type.getRecipetype(), type.getRecipe());
     }
 
@@ -35,7 +35,7 @@ public class Ingots extends SlimefunItem {
         }),
         MAGNONIUM(Items.MAGNONIUM_INGOT, RecipeType.SMELTERY, new ItemStack[] {
             Items.MAGSTEEL,
-            Items.MAGNESIUM_COMPRESSED_CORE,
+            Items.MAGNESIUM_SINGULARITY,
             Items.ENDER_ESSENCE,
             SlimefunItems.REINFORCED_ALLOY_INGOT,
             SlimefunItems.REDSTONE_ALLOY,
@@ -55,11 +55,55 @@ public class Ingots extends SlimefunItem {
         }),
         BIT(Items.VOID_BIT, VoidHarvester.RECIPE_TYPE, new ItemStack[] {
                 null, null, null,
-                null, new CustomItem(Material.PAPER, "&aHarvested by &8Void &7Harvesters"), null,
+                null, new CustomItem(Material.PAPER, "&fHarvested by &8Void &7Harvesters"), null,
                 null, null, null,
         }),
         DUST(Items.VOID_DUST, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(Items.VOID_BIT)),
-        INGOT(Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(Items.VOID_DUST));
+        INGOT(Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, Compress(Items.VOID_DUST)),
+        FORTUNE(Items.FORTUNE_SINGULARITY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+            Items.DIAMOND_SINGULARITY,
+            Items.EMERALD_SINGULARITY,
+            Items.GOLD_SINGULARITY,
+            Items.NETHERITE_SINGULARITY,
+            null,
+            null,
+            null,
+            null,
+            null
+        }),
+        METAL(Items.METAL_SINGULARITY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+            Items.IRON_SINGULARITY,
+            Items.SILVER_SINGULARITY,
+            Items.ALUMINUM_SINGULARITY,
+            Items.ZINC_SINGULARITY,
+            null,
+            null,
+            null,
+            null,
+            null
+        }),
+        EARTH(Items.EARTH_SINGULARITY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+            Items.COAL_SINGULARITY,
+            Items.TIN_SINGULARITY,
+            Items.COPPER_SINGULARITY,
+            Items.LEAD_SINGULARITY,
+            null,
+            null,
+            null,
+            null,
+            null
+        }),
+        MAGIC(Items.MAGIC_SINGULARITY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+            Items.REDSTONE_SINGULARITY,
+            Items.LAPIS_SINGULARITY,
+            Items.QUARTZ_SINGULARITY,
+            Items.MAGNESIUM_SINGULARITY,
+            null,
+            null,
+            null,
+            null,
+            null
+        });
 
         @Nonnull
         private final SlimefunItemStack item;
