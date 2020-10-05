@@ -72,7 +72,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
 
                 blockMenuPreset.addItem(STATUSSLOT,
                     new CustomItem(Material.RED_STAINED_GLASS_PANE,
-                        "&aLoading..."),
+                        "&cLoading..."),
                     ChestMenuUtils.getEmptyClickHandler());
             });
     }
@@ -111,6 +111,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
         } else  {
             outputList.add(new ItemStack(Material.IRON_INGOT, speed), weight);
             outputList.add(new ItemStack(Material.GOLD_INGOT, speed), weight);
+            outputList.add(new ItemStack(Material.NETHERRACK, speed), weight);
             outputList.add(new ItemStack(Material.QUARTZ, speed*2), weight);
             outputList.add(new ItemStack(Material.NETHERITE_INGOT, speed/2), weight-2);
         }
@@ -133,7 +134,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
 
     @Override
     public int getCapacity() {
-        return type.getEnergyConsumption() * 2;
+        return type.getEnergyConsumption();
     }
 
     @Nonnull
@@ -198,17 +199,17 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
             new ItemStack(Material.DIAMOND_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.DIAMOND_PICKAXE),
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        ADVANCED(Items.ADVANCED_QUARRY, 2,64, 9, 7_200, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        ADVANCED(Items.ADVANCED_QUARRY, 2,64, 10, 7_200, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
             new ItemStack(Material.NETHERITE_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        VOID(Items.VOID_QUARRY, 4, 40, 12, 45_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        VOID(Items.VOID_QUARRY, 4, 35, 13, 45_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT,
             Items.MAGNONIUM_PICKAXE, Items.ADVANCED_QUARRY, Items.MAGNONIUM_PICKAXE,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Items.INFINITY_QUARRY, 8, 15, 17, 240_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        INFINITY(Items.INFINITY_QUARRY, 8, 15, 18, 240_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.INFINITE_INGOT, Items.INFINITY_CAPACITOR, Items.INFINITE_INGOT,
             Items.INFINITY_PICKAXE, Items.VOID_QUARRY, Items.INFINITY_PICKAXE,
             Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT

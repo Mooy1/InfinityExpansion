@@ -1,7 +1,6 @@
 package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import me.mooy1.infinityexpansion.materials.EnderEssence;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;

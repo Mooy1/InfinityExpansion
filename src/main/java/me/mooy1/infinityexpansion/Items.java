@@ -148,10 +148,24 @@ public final class Items {
     );
     public static final SlimefunItemStack INFINITY_FORGE = new SlimefunItemStack(
         "INFINITY_FORGE",
-        Material.NETHERITE_BLOCK,
-        "&c&lInfinity Forge",
+        Material.RESPAWN_ANCHOR,
+        "&b&lInfinity &7&lForge",
         "&c&onot yet functional"
     );
+
+    public static final SlimefunItemStack ADVANCED_ANVIL = new SlimefunItemStack(
+            "ADVANCED_ANVIL",
+            Material.ANVIL,
+            "&c&lAdvanced &7&lAnvil",
+            "&c&onot yet functional"
+    );
+    public static final SlimefunItemStack INFINITY_ANVIL = new SlimefunItemStack(
+            "INFINITY_ANVIL",
+            Material.ANVIL,
+            "&c&lInfinity &7&lAnvil",
+            "&c&onot yet functional"
+    );
+
     public static final SlimefunItemStack INFINITY_CAPACITOR = new SlimefunItemStack(
         "INFINITY_CAPACITOR",
         HeadTexture.CAPACITOR_25,
@@ -195,32 +209,32 @@ public final class Items {
             "BASIC_STORAGE",
             Material.OAK_WOOD,
             "&9&lBasic &7&lStorage Unit",
-            "&6Stores: &e2,560 &7items",
-            "&aworks with cargo",
+            "&6Stores: &e5,120 &7items",
+            "&aWorks with cargo",
             ""
     );
     public static final SlimefunItemStack ADVANCED_STORAGE = new SlimefunItemStack(
             "ADVANCED_STORAGE",
             Material.DARK_OAK_WOOD,
             "&c&lAdvanced &7&lStorage Unit",
-            "&6Stores: &e10,240 &7items",
-            "&aworks with cargo",
+            "&6Stores: &e20,480 &7items",
+            "&aWorks with cargo",
             ""
     );
     public static final SlimefunItemStack REINFORCED_STORAGE = new SlimefunItemStack(
             "REINFORCED_STORAGE",
             Material.ACACIA_WOOD,
             "&f&lReinforced &7&lStorage Unit",
-            "&6Stores: &e40,960 &7items",
-            "&aworks with cargo",
+            "&6Stores: &e81,920 &7items",
+            "&aWorks with cargo",
             ""
     );
     public static final SlimefunItemStack VOID_STORAGE = new SlimefunItemStack(
             "VOID_STORAGE",
             Material.CRIMSON_HYPHAE,
             "&8&lVoid &7&lStorage Unit",
-            "&6Stores: &e163,840 &7items",
-            "&aworks with cargo",
+            "&6Stores: &e327,680 &7items",
+            "&aWorks with cargo",
             ""
     );
     public static final SlimefunItemStack INFINITY_STORAGE = new SlimefunItemStack(
@@ -228,7 +242,7 @@ public final class Items {
             Material.WARPED_HYPHAE,
             "&b&lInfinity &7&lStorage Unit",
             "&6Stores: &binfinite &7items",
-            "&aworks with cargo",
+            "&aWorks with cargo",
             ""
     );
 
@@ -296,51 +310,6 @@ public final class Items {
         "&7&l9x Compressed Cobblestone",
         "&8387,420,489 cobblestone combined",
         ""
-    );
-    
-    //slimefun ingot blocks
-
-    public static final SlimefunItemStack MAGNESIUM_BLOCK = new SlimefunItemStack(
-            "MAGNESIUM_BLOCK",
-            Material.NETHER_BRICKS,
-            "&5&lMagnesium Block",
-            ""
-    );
-    public static final SlimefunItemStack COPPER_BLOCK = new SlimefunItemStack(
-            "COPPER_BLOCK",
-            Material.BRICKS,
-            "&6&lCopper Block",
-            ""
-    );
-    public static final SlimefunItemStack SILVER_BLOCK = new SlimefunItemStack(
-            "SILVER_BLOCK",
-            Material.IRON_BLOCK,
-            "&7&lSilver Block",
-            ""
-    );
-    public static final SlimefunItemStack TIN_BLOCK = new SlimefunItemStack(
-            "TIN_BLOCK",
-            Material.IRON_BLOCK,
-            "&7&lTin Block",
-            ""
-    );
-    public static final SlimefunItemStack LEAD_BLOCK = new SlimefunItemStack(
-            "LEAD_BLOCK",
-            Material.IRON_BLOCK,
-            "&8&lLead Block",
-            ""
-    );
-    public static final SlimefunItemStack ALUMINUM_BLOCK = new SlimefunItemStack(
-            "ALUMINUM_BLOCK",
-            Material.IRON_BLOCK,
-            "&7&lAluminum Block",
-            ""
-    );
-    public static final SlimefunItemStack ZINC_BLOCK = new SlimefunItemStack(
-            "ZINC_BLOCK",
-            Material.IRON_BLOCK,
-            "&7&lZinc Block",
-            ""
     );
 
     //singularities
@@ -485,7 +454,7 @@ public final class Items {
     );
     public static final SlimefunItemStack INFINITE_INGOT = new SlimefunItemStack(
         "INFINITE_INGOT",
-        Material.NETHERITE_INGOT,
+        Material.IRON_INGOT,
         "&b&lInfinity Ingot",
         ""
     );
@@ -523,7 +492,7 @@ public final class Items {
 
     public static final SlimefunItemStack MAGSTEEL_PLATE = new SlimefunItemStack(
             "MAGSTEEL_PLATE",
-            Material.PAPER,
+            Material.NETHERITE_SCRAP,
             "&4&lMagSteel &7&lPlate",
             "&7Machine Component",
             ""

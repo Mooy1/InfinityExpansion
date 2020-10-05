@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.machines;
+package me.mooy1.infinityexpansion.blocks;
 
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
@@ -68,8 +68,8 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     };
 
     private final ItemStack loadingItem = new CustomItem(
-            Material.LIME_STAINED_GLASS_PANE,
-            "&aLoading...");
+            Material.RED_STAINED_GLASS_PANE,
+            "&cLoading...");
 
     private final ItemStack inputBorderItem = new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
@@ -166,22 +166,22 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
         //input
 
-        ItemStack slotItem = inv.getItemInSlot(INPUTSLOT);
+        ItemStack inputSlotItem = inv.getItemInSlot(INPUTSLOT);
         //Check if empty slot
-        if (slotItem != null) {
+        if (inputSlotItem != null) {
             //Check if non stackable item
-            if (slotItem.getMaxStackSize() != 1) {
+            if (inputSlotItem.getMaxStackSize() != 1) {
 
-                int slotAmount = slotItem.getAmount();
+                int slotAmount = inputSlotItem.getAmount();
                 int stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
-                String id = slotItem.getType().toString();
+                String id = inputSlotItem.getType().toString();
 
                 //Check if empty
                 if (storeditem == null && storeditemtype == null && stored == 0) { //store new item
 
-                    if (SlimefunItem.getByItem(slotItem) != null) { //store slimefun item
-                        setItem(b, SlimefunItem.getByItem(slotItem).getID());
+                    if (SlimefunItem.getByItem(inputSlotItem) != null) { //store slimefun item
+                        setItem(b, SlimefunItem.getByItem(inputSlotItem).getID());
                         setType(b, "slimefun");
                     } else { //store vanilla item
                         setItem(b, id);
@@ -196,8 +196,8 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                     storeditem = getBlockData(b.getLocation(), "storeditem");
                     storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
 
-                    if (SlimefunItem.getByItem(slotItem) != null) {
-                        id = SlimefunItem.getByItem(slotItem).getID();
+                    if (SlimefunItem.getByItem(inputSlotItem) != null) {
+                        id = SlimefunItem.getByItem(inputSlotItem).getID();
                         if (storeditemtype.equals("slimefun") && storeditem.equals(id)) { //deposit slimefun item
 
                             if (slotAmount <= maxinput) {
@@ -218,6 +218,14 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                             inv.consumeItem(INPUTSLOT, maxinput);
                         }
                     }
+                }
+            } else {
+
+                if (inv.fits(inputSlotItem, OUTPUTSLOTS)) { //try to move to output slot to decrease timings
+
+                    inv.pushItem(inputSlotItem, OUTPUTSLOTS);
+                    inv.consumeItem(INPUTSLOT, inputSlotItem.getAmount());
+
                 }
             }
         }
@@ -352,27 +360,27 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Tier {
-        BASIC(Items.BASIC_STORAGE, 2560, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        BASIC(Items.BASIC_STORAGE, 5_120, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
         }),
-        ADVANCED(Items.ADVANCED_STORAGE, 10240, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        ADVANCED(Items.ADVANCED_STORAGE, 20_480, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.BASIC_STORAGE, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
         }),
-        REINFORCED(Items.REINFORCED_STORAGE, 40960, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        REINFORCED(Items.REINFORCED_STORAGE, 80_192, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
                 Items.MAGSTEEL_PLATE, Items.ADVANCED_STORAGE, Items.MAGSTEEL_PLATE,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE
         }),
-        VOID(Items.VOID_STORAGE, 163840, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        VOID(Items.VOID_STORAGE, 327_680, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
                 Items.MAGNONIUM_INGOT, Items.REINFORCED_STORAGE, Items.MAGNONIUM_INGOT,
-                Items.MAGNONIUM_INGOT, Items.MACHINE_CORE, Items.MAGNONIUM_INGOT
+                Items.VOID_INGOT, Items.MACHINE_CORE, Items.VOID_INGOT
         }),
-        INFINITY(Items.INFINITY_STORAGE, 10000000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        INFINITY(Items.INFINITY_STORAGE, 1_600_000_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.INFINITE_INGOT, Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_INGOT,
                 Items.MACHINE_PLATE, Items.VOID_STORAGE, Items.MACHINE_PLATE,
                 Items.INFINITE_INGOT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_INGOT

@@ -9,6 +9,7 @@ import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -40,7 +41,7 @@ public class MachineMaterials extends SlimefunItem {
         }),
         CORE(Items.MACHINE_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             SlimefunItems.STEEL_PLATE, Items.MACHINE_PLATE, SlimefunItems.STEEL_PLATE,
-            Items.MACHINE_CIRCUIT, Items.ALUMINUM_BLOCK, Items.MACHINE_CIRCUIT,
+            Items.MACHINE_CIRCUIT, new ItemStack(Material.IRON_BLOCK), Items.MACHINE_CIRCUIT,
             SlimefunItems.STEEL_PLATE, Items.MACHINE_PLATE, SlimefunItems.STEEL_PLATE
         }),
         ICIRCUIT(Items.INFINITE_MACHINE_CIRCUIT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

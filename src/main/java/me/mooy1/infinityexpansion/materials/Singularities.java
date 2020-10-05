@@ -23,7 +23,7 @@ public class Singularities extends SlimefunItem {
         super(Categories.INFINITY_MATERIALS,
                 type.getItem(),
                 SingularityConstructor.SINGULARITY_CONSTRUCTOR,
-                MiddleItem(new CustomItem(Material.PAPER, "&fCombine &e" + type.getAmount() + "&fitems")));
+                MiddleItem(new CustomItem(Material.PAPER, "&fContructed with &e" + type.getAmount() + " " + type.getResource())));
     }
 
     public static ItemStack[] MiddleItem(ItemStack item) {
@@ -36,29 +36,30 @@ public class Singularities extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        COPPER(Items.COPPER_SINGULARITY, 32000),
-        ZINC(Items.ZINC_SINGULARITY, 32000),
-        TIN(Items.TIN_SINGULARITY, 32000),
-        ALUMINUM(Items.ALUMINUM_SINGULARITY, 32000),
-        SILVER(Items.SILVER_SINGULARITY, 32000),
-        MAGNESIUM(Items.MAGNESIUM_SINGULARITY, 32000),
-        LEAD(Items.LEAD_SINGULARITY, 32000),
+        COPPER(Items.COPPER_SINGULARITY, 16000, "&6Copper Ingots"),
+        ZINC(Items.ZINC_SINGULARITY, 16000, "&7Zinc Ingots"),
+        TIN(Items.TIN_SINGULARITY, 16000, "&7Tin Ingots"),
+        ALUMINUM(Items.ALUMINUM_SINGULARITY, 16000, "&7Aluminum Ingots"),
+        SILVER(Items.SILVER_SINGULARITY, 16000, "&7Silver Ingots"),
+        MAGNESIUM(Items.MAGNESIUM_SINGULARITY, 16000, "&5Magnesium Ingots"),
+        LEAD(Items.LEAD_SINGULARITY, 16000, "&7Lead Ingots"),
 
-        GOLD(Items.GOLD_SINGULARITY, 32000),
-        IRON(Items.IRON_SINGULARITY, 64000),
-        DIAMOND(Items.DIAMOND_SINGULARITY, 8000),
-        EMERALD(Items.EMERALD_SINGULARITY, 8000),
-        NETHERITE(Items.NETHERITE_SINGULARITY, 800),
+        GOLD(Items.GOLD_SINGULARITY, 16000, "&6Gold Ingots"),
+        IRON(Items.IRON_SINGULARITY, 32000, "&7Iron Ingots"),
+        DIAMOND(Items.DIAMOND_SINGULARITY, 8000, "&bDiamonds"),
+        EMERALD(Items.EMERALD_SINGULARITY, 8000, "&aEmeralds"),
+        NETHERITE(Items.NETHERITE_SINGULARITY, 800, "&8Netherite Ingots"),
 
-        COAL(Items.COAL_SINGULARITY, 32000),
-        LAPIS(Items.LAPIS_SINGULARITY, 64000),
-        REDSTONE(Items.REDSTONE_SINGULARITY, 64000),
-        QUARTZ(Items.QUARTZ_SINGULARITY, 64000);
+        COAL(Items.COAL_SINGULARITY, 16000, "&8Coal"),
+        LAPIS(Items.LAPIS_SINGULARITY, 32000, "&9Lapis"),
+        REDSTONE(Items.REDSTONE_SINGULARITY, 32000, "&cRedstone"),
+        QUARTZ(Items.QUARTZ_SINGULARITY, 32000, "&fQuartz");
 
 
         @Nonnull
         private final SlimefunItemStack item;
         private final int amount;
+        private final String resource;
 
     }
 }

@@ -2,6 +2,8 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
+import me.mooy1.infinityexpansion.blocks.InfinityForge;
+import me.mooy1.infinityexpansion.blocks.StorageUnit;
 import me.mooy1.infinityexpansion.gear.InfinityGear;
 import me.mooy1.infinityexpansion.gear.MagnoniumGear;
 import me.mooy1.infinityexpansion.gear.EnderFlame;
@@ -24,14 +26,14 @@ public final class ItemSetup {
             new MachineMaterials(type).register(plugin);
         }
 
-        for (Quarry.Type tier : Quarry.Type.values()) {
-            new Quarry(tier).register(plugin);
-        }
-
         new AdvancedEnchanter(AdvancedEnchanter.Type.BASIC).register(plugin);
         new AdvancedDisenchanter(AdvancedDisenchanter.Type.BASIC).register(plugin);
         new AdvancedEnchanter(AdvancedEnchanter.Type.INFINITY).register(plugin);
         new AdvancedDisenchanter(AdvancedDisenchanter.Type.INFINITY).register(plugin);
+
+        for (Quarry.Type tier : Quarry.Type.values()) {
+            new Quarry(tier).register(plugin);
+        }
 
         new InfinityForge().register(plugin);
 
@@ -51,22 +53,22 @@ public final class ItemSetup {
             new StorageUnit(tier).register(plugin);
         }
 
+        for (AdvancedAnvil.Type type : AdvancedAnvil.Type.values()) {
+            new AdvancedAnvil(type).register(plugin);
+        }
+
         //add materials
 
         for (CompressedCobblestone.Type type : CompressedCobblestone.Type.values()) {
             new CompressedCobblestone(type).register(plugin);
         }
 
-        for (Singularities.Type type : Singularities.Type.values()) {
-            new Singularities(type).register(plugin);
-        }
-
         for (EndgameMaterials.Type type : EndgameMaterials.Type.values()) {
             new EndgameMaterials(type).register(plugin);
         }
 
-        for (SFIngotBlocks.Type type: SFIngotBlocks.Type.values()) {
-            new SFIngotBlocks(type).register(plugin);
+        for (Singularities.Type type : Singularities.Type.values()) {
+            new Singularities(type).register(plugin);
         }
 
         new EnderEssence().register();
@@ -95,8 +97,6 @@ public final class ItemSetup {
             Items.INFINITE_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITE_INGOT,
             Items.INFINITE_INGOT, Items.INFINITE_INGOT, Items.INFINITE_INGOT
         }).register(plugin);
-
-
 
     }
 }
