@@ -4,6 +4,8 @@ import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -13,7 +15,7 @@ public final class Items {
 
     public static final SlimefunItemStack VOID_HARVESTER = new SlimefunItemStack(
             "VOID_HARVESTER",
-            Material.CRYING_OBSIDIAN,
+            Material.OBSIDIAN,
             "&8&lVoid &7&lHarvester",
             "&7Slowly harvests &8Void &7Bits from nothing...",
             LoreBuilder.speed(1),
@@ -22,7 +24,7 @@ public final class Items {
     );
     public static final SlimefunItemStack INFINITE_VOID_HARVESTER = new SlimefunItemStack(
             "INFINITE_VOID_HARVESTER",
-            Material.RESPAWN_ANCHOR,
+            Material.CRYING_OBSIDIAN,
             "&b&lInfinite &8&lVoid &7&lHarvester",
             "&7Harvests &8Void &7Bits from nothing...",
             LoreBuilder.speed(10),
@@ -38,7 +40,6 @@ public final class Items {
             LoreBuilder.powerPerSecond(1_000),
             ""
     );
-
     public static final SlimefunItemStack INFINITY_CONSTRUCTOR = new SlimefunItemStack(
             "INFINITY_CONSTRUCTOR",
             Material.CHISELED_QUARTZ_BLOCK,
@@ -120,7 +121,7 @@ public final class Items {
         "ADVANCED_ENCHANTER",
         Material.ENCHANTING_TABLE,
         "&c&lAdvanced &7&lEnchanter",
-        LoreBuilder.speed(10),
+        LoreBuilder.speed(5),
         LoreBuilder.powerPerSecond(1000),
         ""
     );
@@ -128,7 +129,7 @@ public final class Items {
         "ADVANCED_DISENCHANTER",
         Material.ENCHANTING_TABLE,
         "&c&lAdvanced &7&lDisenchanter",
-        LoreBuilder.speed(10),
+        LoreBuilder.speed(5),
         LoreBuilder.powerPerSecond(1000),
         ""
     );
@@ -136,7 +137,7 @@ public final class Items {
         "INFINITY_ENCHANTER",
         Material.ENCHANTING_TABLE,
         "&b&lInfinity &7&lEnchanter",
-        LoreBuilder.speed(100),
+        LoreBuilder.speed(75),
         LoreBuilder.powerPerSecond(100000),
         ""
 
@@ -145,16 +146,26 @@ public final class Items {
         "INFINITY_DISENCHANTER",
         Material.ENCHANTING_TABLE,
         "&b&lInfinity &7&lDisenchanter",
-        LoreBuilder.speed(100),
+        LoreBuilder.speed(90),
         LoreBuilder.powerPerSecond(100000),
         ""
+    );
+    public static final SlimefunItemStack INGOT_FORGE = new SlimefunItemStack(
+            "INGOT_FORGE",
+            Material.LODESTONE,
+            "&c&lIngot &7&lForge",
+            "&7Used to create advanced ingots",
+            "&c&onot yet functional",
+            ""
     );
     public static final SlimefunItemStack INFINITY_FORGE = new SlimefunItemStack(
         "INFINITY_FORGE",
 
         Material.RESPAWN_ANCHOR,
         "&b&lInfinity &7&lForge",
-        "&c&onot yet functional"
+        "&7Used to forge infinity items",
+        "&c&onot yet functional",
+        ""
     );
 
     public static final SlimefunItemStack ADVANCED_ANVIL = new SlimefunItemStack(
@@ -166,7 +177,7 @@ public final class Items {
     public static final SlimefunItemStack INFINITY_ANVIL = new SlimefunItemStack(
             "INFINITY_ANVIL",
             Material.ANVIL,
-            "&c&lInfinity &7&lAnvil",
+            "&b&lInfinity &7&lAnvil",
             "&c&onot yet functional"
     );
 
@@ -179,10 +190,19 @@ public final class Items {
         "&c&o1 per energy network",
         ""
     );
+    public static final SlimefunItemStack GEOTHERMAL_GENERATOR = new SlimefunItemStack(
+            "GEOTHERMAL_GENERATOR",
+            Material.MAGMA_BLOCK,
+            "&c&lGeoThermal Generator",
+            "&7Generates energy from the heat of the earth",
+            LoreBuilder.powerBuffer(60_000),
+            LoreBuilder.powerPerSecond(600),
+            ""
+    );
     public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
         "CELESTIAL_PANEL",
         Material.WHITE_GLAZED_TERRACOTTA,
-        "&c&lCelestial Panel",
+        "&e&lCelestial Panel",
         "&7Generates during the day",
         LoreBuilder.powerBuffer(300_000),
         LoreBuilder.powerPerSecond(3_000),
@@ -423,23 +443,17 @@ public final class Items {
             "&6&lFortune Singularity",
             ""
     );
-    public static final SlimefunItemStack METAL_SINGULARITY = new SlimefunItemStack(
-            "METAL_SINGULARITY",
-            Material.NETHER_STAR,
-            "&7&lMetal Singularity",
-            ""
-    );
-    public static final SlimefunItemStack MAGIC_SINGULARITY = new SlimefunItemStack(
-            "MAGIC_SINGULARITY",
-            Material.NETHER_STAR,
-            "&d&lMagic Singularity",
-            ""
-    );
     public static final SlimefunItemStack EARTH_SINGULARITY = new SlimefunItemStack(
             "EARTH_SINGULARITY",
             Material.NETHER_STAR,
             "&a&lEarth Singularity",
             ""
+    );
+    public static final SlimefunItemStack INFINITY_SINGULARITY = new SlimefunItemStack(
+            "INFINITY_SINGULARITY",
+            Material.NETHER_STAR,
+            "&b&lInfinity Singularity",
+            "&7The Ultimate Flex"
     );
 
     //Ingots
@@ -447,7 +461,7 @@ public final class Items {
     public static final SlimefunItemStack MAGSTEEL = new SlimefunItemStack(
         "MAGSTEEL",
         Material.BRICK,
-        "&4&lMagSteel Ingot",
+        "&4&lMagSteel",
         ""
     );
     public static final SlimefunItemStack MAGNONIUM_INGOT = new SlimefunItemStack(
@@ -655,6 +669,7 @@ public final class Items {
         INFINITY_PICKAXE.addUnsafeEnchantment(fort, 20);
         INFINITY_BLADE.addUnsafeEnchantment(sharp, 20);
         INFINITY_BLADE.addUnsafeEnchantment(loot, 20);
+        INFINITY_BLADE.getItemMeta().addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("InfinityDamage", 12, AttributeModifier.Operation.ADD_NUMBER));
 
         //add unbreakables
 

@@ -90,8 +90,22 @@ public class InfinityPanel extends SlimefunItem implements EnergyNetProvider, In
 
     public int getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
 
-        if (world.getEnvironment() == World.Environment.NETHER) return this.type.getDayGenerationRate();
-        if (world.getEnvironment() == World.Environment.THE_END) return this.type.getNightGenerationRate();
+
+
+        if (world.getEnvironment() == World.Environment.NETHER) {
+            if (this.type == Type.GEOTHERMAL) {
+                return type.getDayGenerationRate() * 2;
+            } else {
+                return this.type.getNightGenerationRate();
+            }
+        }
+        if (world.getEnvironment() == World.Environment.THE_END) {
+            if (this.type == Type.GEOTHERMAL) {
+                return 0;
+            } else  {
+                return this.type.getNightGenerationRate();
+            }
+        }
 
         if (world.getTime() >= 13000 || block.getLocation().add(0, 1, 0).getBlock().getLightFromSky() != 15) {
             return this.type.getNightGenerationRate();
@@ -125,9 +139,14 @@ public class InfinityPanel extends SlimefunItem implements EnergyNetProvider, In
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
+        GEOTHERMAL(Items.GEOTHERMAL_GENERATOR, 360, 360, 60_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+            Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
+            SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2,
+            Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
+        }),
         CELESTIAL(Items.CELESTIAL_PANEL, 1_800, 0, 300_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-            Items.MACHINE_PLATE, SlimefunItems.SOLAR_GENERATOR_4, Items.MACHINE_PLATE,
+            Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
+                SlimefunItems.SOLAR_GENERATOR_4, SlimefunItems.SOLAR_GENERATOR_4, SlimefunItems.SOLAR_GENERATOR_4,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
         VOID(Items.VOID_PANEL, 0, 5_400, 900_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

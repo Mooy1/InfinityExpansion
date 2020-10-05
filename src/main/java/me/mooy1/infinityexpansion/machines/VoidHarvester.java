@@ -203,8 +203,8 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
         INFINITY(Items.INFINITE_VOID_HARVESTER, 10, 120_000, new ItemStack[] {
-                Items.INFINITE_INGOT, Items.MAGNONIUM_INGOT, Items.INFINITE_INGOT,
-                Items.MAGNONIUM_INGOT, Items.VOID_HARVESTER, Items.MAGNONIUM_INGOT,
+                Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT,
+                Items.VOID_INGOT, Items.VOID_HARVESTER, Items.VOID_INGOT,
                 Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
         });
 

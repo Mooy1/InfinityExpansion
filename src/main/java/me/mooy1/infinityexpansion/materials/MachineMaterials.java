@@ -46,13 +46,13 @@ public class MachineMaterials extends SlimefunItem {
         }),
         ICIRCUIT(Items.INFINITE_MACHINE_CIRCUIT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.INFINITE_INGOT, Items.MAGNONIUM_INGOT, Items.INFINITE_INGOT,
-            Items.INFINITE_INGOT, Items.MACHINE_CIRCUIT, Items.INFINITE_INGOT,
+            Items.VOID_INGOT, Items.MACHINE_CIRCUIT, Items.VOID_INGOT,
             Items.INFINITE_INGOT, Items.MAGNONIUM_INGOT, Items.INFINITE_INGOT
         }),
         ICORE(Items.INFINITE_MACHINE_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.MACHINE_PLATE, new ItemStack(org.bukkit.Material.NETHER_STAR), Items.MACHINE_PLATE,
+            Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE,
             Items.INFINITE_MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT,
-            Items.MACHINE_PLATE, new ItemStack(org.bukkit.Material.NETHER_STAR), Items.MACHINE_PLATE
+            Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE
         });
 
         @Nonnull

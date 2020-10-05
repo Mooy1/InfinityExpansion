@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.blocks;
+package me.mooy1.infinityexpansion.basics;
 
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
@@ -80,7 +80,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             "&6Output");
 
     public StorageUnit(Tier tier) {
-        super(Categories.INFINITY_MACHINES, tier.getItem(), tier.getRecipeType(), tier.getRecipe());
+        super(Categories.INFINITY_BASICS, tier.getItem(), tier.getRecipeType(), tier.getRecipe());
         this.tier = tier;
 
         setupInv();
