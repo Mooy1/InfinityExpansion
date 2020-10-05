@@ -29,7 +29,8 @@ import javax.annotation.Nullable;
 
 public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
 
-    private final Quarry.Tier tier;
+    private final Type type;
+
     private final int[] OUTPUTSLOTS = new int[] {
             9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, 20, 21, 22, 23, 24, 25, 26,
@@ -38,9 +39,10 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
     private final int STATUSSLOT = 4;
     private final RandomizedSet<ItemStack> outputList = new RandomizedSet<>();
 
-    public Quarry(Tier tier) {
-        super(Categories.INFINITY_MACHINES, tier.getItem(), tier.getRecipeType(), tier.getRecipe());
-        this.tier = tier;
+    public Quarry(Type type) {
+        super(Categories.INFINITY_MACHINES, type.getItem(), type.getRecipeType(), type.getRecipe());
+        this.type = type;
+
         setupInv();
 
         registerBlockHandler(getID(), (p, b, stack, reason) -> {
@@ -55,7 +57,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
     }
 
     private void setupInv() {
-        createPreset(this, tier.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
+        createPreset(this, type.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
             blockMenuPreset -> {
                 for (int i = 0; i < 4; i++) {
                     blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
@@ -70,7 +72,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
 
                 blockMenuPreset.addItem(STATUSSLOT,
                     new CustomItem(Material.RED_STAINED_GLASS_PANE,
-                        "&cNot Mining..."),
+                        "&cLoading..."),
                     ChestMenuUtils.getEmptyClickHandler());
             });
     }
@@ -89,9 +91,9 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
     public void postRegister() {
         super.postRegister();
 
-        int speed = tier.getSpeed();
-        int cobbleWeight = tier.getWeight();
-        int weight = (100-tier.getWeight())/tier.getOutputs();
+        int speed = type.getSpeed();
+        int cobbleWeight = type.getWeight();
+        int weight = (100-type.getWeight())/type.getOutputs();
 
         //setup outputs
 
@@ -103,20 +105,21 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
         outputList.add(new ItemStack(Material.LAPIS_LAZULI, speed*4), weight);
         outputList.add(new ItemStack(Material.COAL, speed*2), weight+2);
 
-        if (this.tier == Tier.BASIC) {
+        if (this.type == Type.BASIC) {
             outputList.add(new ItemStack(Material.IRON_ORE, speed), weight);
             outputList.add(new ItemStack(Material.GOLD_ORE, speed), weight);
         } else  {
             outputList.add(new ItemStack(Material.IRON_INGOT, speed), weight);
             outputList.add(new ItemStack(Material.GOLD_INGOT, speed), weight);
+            outputList.add(new ItemStack(Material.NETHERRACK, speed), weight);
             outputList.add(new ItemStack(Material.QUARTZ, speed*2), weight);
             outputList.add(new ItemStack(Material.NETHERITE_INGOT, speed/2), weight-2);
         }
 
-        if (this.tier == Tier.VOID) {
+        if (this.type == Type.VOID) {
             outputList.add(new SlimefunItemStack(SlimefunItems.SIFTED_ORE, speed*4), weight*2);
             outputList.add(new SlimefunItemStack(SlimefunItems.GOLD_24K, speed/4), weight);
-        } else if (this.tier == Tier.INFINITY) {
+        } else if (this.type == Type.INFINITY) {
             outputList.add(new SlimefunItemStack(SlimefunItems.COPPER_INGOT, speed), weight);
             outputList.add(new SlimefunItemStack(SlimefunItems.ZINC_INGOT, speed), weight);
             outputList.add(new SlimefunItemStack(SlimefunItems.TIN_INGOT, speed), weight);
@@ -131,7 +134,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
 
     @Override
     public int getCapacity() {
-        return tier.getEnergyConsumption() * 2;
+        return type.getEnergyConsumption();
     }
 
     @Nonnull
@@ -159,7 +162,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
 
         ItemStack output = outputList.getRandom();
 
-        if (getCharge(b.getLocation()) >= tier.getEnergyConsumption()) {
+        if (getCharge(b.getLocation()) >= type.getEnergyConsumption()) {
             BlockMenu menu = BlockStorage.getInventory(b);
 
             if (!menu.fits(output, getOutputSlots())) {
@@ -170,14 +173,15 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 return;
             } else {
                 if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                    inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.GREEN_STAINED_GLASS_PANE,
+                    inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                         "&aMining..."));
                 }
             }
 
-            removeCharge(b.getLocation(), tier.getEnergyConsumption());
+            removeCharge(b.getLocation(), type.getEnergyConsumption());
             menu.pushItem(output, getOutputSlots());
         } else {
+            //when not enough power
             if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
                 inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE,
                     "&cNot enough energy!"));
@@ -188,24 +192,24 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum Tier {
+    public enum Type {
 
         BASIC(Items.BASIC_QUARRY, 1, 79, 7, 2_400, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MACHINE_PLATE, SlimefunItems.LARGE_CAPACITOR, Items.MACHINE_PLATE,
             new ItemStack(Material.DIAMOND_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.DIAMOND_PICKAXE),
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        ADVANCED(Items.ADVANCED_QUARRY, 2,64, 9, 7_200, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        ADVANCED(Items.ADVANCED_QUARRY, 2,64, 10, 7_200, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
             new ItemStack(Material.NETHERITE_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        VOID(Items.VOID_QUARRY, 4, 40, 12, 45_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Items.MACHINE_PLATE,
+        VOID(Items.VOID_QUARRY, 4, 35, 13, 45_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+            Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT,
             Items.MAGNONIUM_PICKAXE, Items.ADVANCED_QUARRY, Items.MAGNONIUM_PICKAXE,
-            Items.MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.MACHINE_CIRCUIT
+            Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Items.INFINITY_QUARRY, 8, 15, 17, 240_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        INFINITY(Items.INFINITY_QUARRY, 8, 15, 18, 240_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.INFINITE_INGOT, Items.INFINITY_CAPACITOR, Items.INFINITE_INGOT,
             Items.INFINITY_PICKAXE, Items.VOID_QUARRY, Items.INFINITY_PICKAXE,
             Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT

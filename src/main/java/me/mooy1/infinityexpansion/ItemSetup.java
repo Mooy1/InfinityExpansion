@@ -2,16 +2,12 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
+import me.mooy1.infinityexpansion.blocks.InfinityForge;
+import me.mooy1.infinityexpansion.blocks.StorageUnit;
 import me.mooy1.infinityexpansion.gear.InfinityGear;
 import me.mooy1.infinityexpansion.gear.MagnoniumGear;
-import me.mooy1.infinityexpansion.gear.VoidFlame;
-import me.mooy1.infinityexpansion.machines.AdvancedDisenchanter;
-import me.mooy1.infinityexpansion.machines.AdvancedEnchanter;
-import me.mooy1.infinityexpansion.machines.InfinityDisenchanter;
-import me.mooy1.infinityexpansion.machines.InfinityEnchanter;
-import me.mooy1.infinityexpansion.machines.InfinityForge;
-import me.mooy1.infinityexpansion.machines.InfinityPanel;
-import me.mooy1.infinityexpansion.machines.Quarry;
+import me.mooy1.infinityexpansion.gear.EnderFlame;
+import me.mooy1.infinityexpansion.machines.*;
 import me.mooy1.infinityexpansion.materials.*;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import org.bukkit.inventory.ItemStack;
@@ -26,57 +22,72 @@ public final class ItemSetup {
 
         //add machines
 
-        for (MachineMaterials.Material material : MachineMaterials.Material.values()) {
-            new MachineMaterials(material).register(plugin);
+        for (MachineMaterials.Type type : MachineMaterials.Type.values()) {
+            new MachineMaterials(type).register(plugin);
         }
 
-        for (Quarry.Tier tier : Quarry.Tier.values()) {
+        new AdvancedEnchanter(AdvancedEnchanter.Type.BASIC).register(plugin);
+        new AdvancedDisenchanter(AdvancedDisenchanter.Type.BASIC).register(plugin);
+        new AdvancedEnchanter(AdvancedEnchanter.Type.INFINITY).register(plugin);
+        new AdvancedDisenchanter(AdvancedDisenchanter.Type.INFINITY).register(plugin);
+
+        for (Quarry.Type tier : Quarry.Type.values()) {
             new Quarry(tier).register(plugin);
         }
 
-        new AdvancedEnchanter().register(plugin);
-        new AdvancedDisenchanter().register(plugin);
         new InfinityForge().register(plugin);
-        new InfinityEnchanter().register(plugin);
-        new InfinityDisenchanter().register(plugin);
 
-        for (InfinityPanel.Panel panel : InfinityPanel.Panel.values()) {
-            new InfinityPanel(panel).register(plugin);
+        for (InfinityPanel.Type type : InfinityPanel.Type.values()) {
+            new InfinityPanel(type).register(plugin);
+        }
+
+        for (VoidHarvester.Type type : VoidHarvester.Type.values()) {
+            new VoidHarvester(type).register(plugin);
+        }
+
+        for (SingularityConstructor.Type type : SingularityConstructor.Type.values()) {
+            new SingularityConstructor(type).register(plugin);
+        }
+
+        for (StorageUnit.Tier tier : StorageUnit.Tier.values()) {
+            new StorageUnit(tier).register(plugin);
+        }
+
+        for (AdvancedAnvil.Type type : AdvancedAnvil.Type.values()) {
+            new AdvancedAnvil(type).register(plugin);
         }
 
         //add materials
 
-        for (CompressedCobblestone.Compression compression : CompressedCobblestone.Compression.values()) {
-            new CompressedCobblestone(compression).register(plugin);
+        for (CompressedCobblestone.Type type : CompressedCobblestone.Type.values()) {
+            new CompressedCobblestone(type).register(plugin);
         }
 
-        for (Cores.Core core : Cores.Core.values()) {
-            new Cores(core).register(plugin);
+        for (EndgameMaterials.Type type : EndgameMaterials.Type.values()) {
+            new EndgameMaterials(type).register(plugin);
         }
 
-        for (Ingots.Type type : Ingots.Type.values()) {
-            new Ingots(type).register(plugin);
+        for (Singularities.Type type : Singularities.Type.values()) {
+            new Singularities(type).register(plugin);
         }
 
-        for (SFIngotBlocks.Block block: SFIngotBlocks.Block.values()) {
-            new SFIngotBlocks(block).register(plugin);
-        }
+        new EnderEssence().register();
 
         //add gear
 
-        for (InfinityGear.InfinityTool infinityTool : InfinityGear.InfinityTool.values()) {
-            new InfinityGear(infinityTool).register(plugin);
+        for (InfinityGear.Type type : InfinityGear.Type.values()) {
+            new InfinityGear(type).register(plugin);
         }
 
-        new VoidFlame().register(plugin);
+        new EnderFlame().register(plugin);
 
-        for (MagnoniumGear.MagnoniumTool magnoniumTool : MagnoniumGear.MagnoniumTool.values()) {
-            new MagnoniumGear(magnoniumTool).register(plugin);
+        for (MagnoniumGear.Type type : MagnoniumGear.Type.values()) {
+            new MagnoniumGear(type).register(plugin);
         }
 
         //add geominer recipe
 
-        new VoidDust().register(plugin);
+        new EnderEssence().register(plugin);
 
         //Slimefun constructors
 

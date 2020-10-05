@@ -15,17 +15,15 @@ import javax.annotation.Nonnull;
 public class MagnoniumGear extends SlimefunItem {
 
     private static final ItemStack alloy = Items.MAGNONIUM_INGOT;
-    private final MagnoniumTool magnoniumTool;
 
-    public MagnoniumGear(MagnoniumTool magnoniumtool) {
-        super(Categories.INFINITY_GEAR, magnoniumtool.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
-            magnoniumtool.getRecipe());
-        this.magnoniumTool = magnoniumtool;
+    public MagnoniumGear(Type type) {
+        super(Categories.INFINITY_GEAR, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
+            type.getRecipe());
     }
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum MagnoniumTool {
+    public enum Type {
 
         BLADE(Items.MAGNONIUM_BLADE, new ItemStack[] {
                 null, alloy, null,

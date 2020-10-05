@@ -2,7 +2,6 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
-import me.mooy1.infinityexpansion.gear.InfinityGear;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,18 +11,38 @@ public final class Items {
 
     //Machines
 
-    public static final SlimefunItemStack CORE_COMBINER = new SlimefunItemStack(
-            "CORE_COMBINER",
+    public static final SlimefunItemStack VOID_HARVESTER = new SlimefunItemStack(
+            "VOID_HARVESTER",
+            Material.CRYING_OBSIDIAN,
+            "&8&lVoid &7&lHarvester",
+            "&7Slowly harvests &8Void &7Bits from nothing...",
+            LoreBuilder.speed(1),
+            LoreBuilder.powerPerSecond(2_000),
+            ""
+    );
+    public static final SlimefunItemStack INFINITE_VOID_HARVESTER = new SlimefunItemStack(
+            "INFINITE_VOID_HARVESTER",
+            Material.RESPAWN_ANCHOR,
+            "&b&lInfinite &8&lVoid &7&lHarvester",
+            "&7Harvests &8Void &7Bits from nothing...",
+            LoreBuilder.speed(10),
+            LoreBuilder.powerPerSecond(200_000),
+            ""
+    );
+
+    public static final SlimefunItemStack SINGULARITY_CONSTRUCTOR = new SlimefunItemStack(
+            "SINGULARITY_CONSTRUCTOR",
             Material.QUARTZ_BRICKS,
-            "&7&lCore Combiner",
+            "&7&lSingularity Constructor",
             LoreBuilder.speed(1),
             LoreBuilder.powerPerSecond(1_000),
             ""
     );
-    public static final SlimefunItemStack INFINITY_CORE_COMBINER = new SlimefunItemStack(
-            "INFINITY_CORE_COMBINER",
+
+    public static final SlimefunItemStack INFINITY_CONSTRUCTOR = new SlimefunItemStack(
+            "INFINITY_CONSTRUCTOR",
             Material.CHISELED_QUARTZ_BLOCK,
-            "&b&lInfinity &7&lCore Combiner",
+            "&b&lInfinity &7&lConstructor",
             LoreBuilder.speed(10),
             LoreBuilder.powerPerSecond(10_000),
             ""
@@ -31,17 +50,18 @@ public final class Items {
 
     public static final SlimefunItemStack INGOT_SYNTHESIZER = new SlimefunItemStack(
             "INGOT_SYNTHESIZER",
-            Material.STONE_BRICKS,
+            Material.FURNACE,
             "&7&lIngot Synthesizer",
+            "&7Creates alloys of of ingots",
             LoreBuilder.speed(1),
             LoreBuilder.powerPerSecond(1_000),
             ""
     );
     public static final SlimefunItemStack INFINITY_INGOT_SYNTHESIZER = new SlimefunItemStack(
             "INFINITY_INGOT_SYNTHESIZER",
-            Material.CHISELED_STONE_BRICKS,
+            Material.BLAST_FURNACE,
             "&b&lInfinity &7&lIngot Synthesizer",
-            "&7Creates advanced Slimefun alloys using cores",
+            "&7Creates alloys of of ingots",
             LoreBuilder.speed(10),
             LoreBuilder.powerPerSecond(10_000),
             ""
@@ -49,17 +69,19 @@ public final class Items {
 
     public static final SlimefunItemStack INFINITY_REACTOR = new SlimefunItemStack(
             "INFINITY_REACTOR",
-            Material.CRYING_OBSIDIAN,
+            Material.BEACON,
             "&b&lInfinity Reactor",
-            "&7Generates power through the melting of Infinity Ingots",
+            "&7Generates power through the compression",
+            "&7of &8&lVoid &7&land &b&lInfinity &7&lIngots",
             LoreBuilder.powerPerSecond(1_000_000),
+            LoreBuilder.powerBuffer(100_000_000),
             ""
     );
 
     public static final SlimefunItemStack BASIC_QUARRY = new SlimefunItemStack(
         "BASIC_QUARRY",
         Material.CHISELED_SANDSTONE,
-        "&8&lBasic &7&lQuarry",
+        "&9&lBasic &7&lQuarry",
         "&7Automatically mines vanilla overworld ores",
         LoreBuilder.speed(1),
         LoreBuilder.powerPerSecond(4_000),
@@ -77,7 +99,9 @@ public final class Items {
     public static final SlimefunItemStack VOID_QUARRY = new SlimefunItemStack(
         "VOID_QUARRY",
         Material.CHISELED_NETHER_BRICKS,
-        "&d&lVoid &7&lQuarry",
+
+        "&8&lVoid &7&lQuarry",
+
         "&7Can mine sifted ores or 24 karat gold occasionally",
         LoreBuilder.speed(4),
         LoreBuilder.powerPerSecond(75_000),
@@ -97,7 +121,7 @@ public final class Items {
         Material.ENCHANTING_TABLE,
         "&c&lAdvanced &7&lEnchanter",
         LoreBuilder.speed(10),
-        LoreBuilder.powerPerSecond(999),
+        LoreBuilder.powerPerSecond(1000),
         ""
     );
     public static final SlimefunItemStack ADVANCED_DISENCHANTER = new SlimefunItemStack(
@@ -105,7 +129,7 @@ public final class Items {
         Material.ENCHANTING_TABLE,
         "&c&lAdvanced &7&lDisenchanter",
         LoreBuilder.speed(10),
-        LoreBuilder.powerPerSecond(999),
+        LoreBuilder.powerPerSecond(1000),
         ""
     );
     public static final SlimefunItemStack INFINITY_ENCHANTER = new SlimefunItemStack(
@@ -113,7 +137,7 @@ public final class Items {
         Material.ENCHANTING_TABLE,
         "&b&lInfinity &7&lEnchanter",
         LoreBuilder.speed(100),
-        LoreBuilder.powerPerSecond(99999),
+        LoreBuilder.powerPerSecond(100000),
         ""
 
     );
@@ -122,15 +146,30 @@ public final class Items {
         Material.ENCHANTING_TABLE,
         "&b&lInfinity &7&lDisenchanter",
         LoreBuilder.speed(100),
-        LoreBuilder.powerPerSecond(99999),
+        LoreBuilder.powerPerSecond(100000),
         ""
     );
     public static final SlimefunItemStack INFINITY_FORGE = new SlimefunItemStack(
         "INFINITY_FORGE",
-        Material.NETHERITE_BLOCK,
-        "&c&lInfinity Forge",
+
+        Material.RESPAWN_ANCHOR,
+        "&b&lInfinity &7&lForge",
         "&c&onot yet functional"
     );
+
+    public static final SlimefunItemStack ADVANCED_ANVIL = new SlimefunItemStack(
+            "ADVANCED_ANVIL",
+            Material.ANVIL,
+            "&c&lAdvanced &7&lAnvil",
+            "&c&onot yet functional"
+    );
+    public static final SlimefunItemStack INFINITY_ANVIL = new SlimefunItemStack(
+            "INFINITY_ANVIL",
+            Material.ANVIL,
+            "&c&lInfinity &7&lAnvil",
+            "&c&onot yet functional"
+    );
+
     public static final SlimefunItemStack INFINITY_CAPACITOR = new SlimefunItemStack(
         "INFINITY_CAPACITOR",
         HeadTexture.CAPACITOR_25,
@@ -152,7 +191,7 @@ public final class Items {
     public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
         "VOID_PANEL",
         Material.LIGHT_GRAY_GLAZED_TERRACOTTA,
-        "&c&lVoid Panel",
+        "&8&lVoid Panel",
         "&7Generates during the night",
         LoreBuilder.powerBuffer(900_000),
         LoreBuilder.powerPerSecond(9_000),
@@ -166,6 +205,49 @@ public final class Items {
         LoreBuilder.powerBuffer(20_000_000),
         LoreBuilder.powerPerSecond(200_000),
         ""
+    );
+
+    //Deep storage units
+
+    public static final SlimefunItemStack BASIC_STORAGE = new SlimefunItemStack(
+            "BASIC_STORAGE",
+            Material.OAK_WOOD,
+            "&9&lBasic &7&lStorage Unit",
+            "&6Stores: &e5,120 &7items",
+            "&aWorks with cargo",
+            ""
+    );
+    public static final SlimefunItemStack ADVANCED_STORAGE = new SlimefunItemStack(
+            "ADVANCED_STORAGE",
+            Material.DARK_OAK_WOOD,
+            "&c&lAdvanced &7&lStorage Unit",
+            "&6Stores: &e20,480 &7items",
+            "&aWorks with cargo",
+            ""
+    );
+    public static final SlimefunItemStack REINFORCED_STORAGE = new SlimefunItemStack(
+            "REINFORCED_STORAGE",
+            Material.ACACIA_WOOD,
+            "&f&lReinforced &7&lStorage Unit",
+            "&6Stores: &e81,920 &7items",
+            "&aWorks with cargo",
+            ""
+    );
+    public static final SlimefunItemStack VOID_STORAGE = new SlimefunItemStack(
+            "VOID_STORAGE",
+            Material.CRIMSON_HYPHAE,
+            "&8&lVoid &7&lStorage Unit",
+            "&6Stores: &e327,680 &7items",
+            "&aWorks with cargo",
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_STORAGE = new SlimefunItemStack(
+            "INFINITY_STORAGE",
+            Material.WARPED_HYPHAE,
+            "&b&lInfinity &7&lStorage Unit",
+            "&6Stores: &binfinite &7items",
+            "&aWorks with cargo",
+            ""
     );
 
     //Compressed Cobblestones
@@ -232,249 +314,6 @@ public final class Items {
         "&7&l9x Compressed Cobblestone",
         "&8387,420,489 cobblestone combined",
         ""
-    );
-    
-    //slimefun ingot blocks
-
-    public static final SlimefunItemStack MAGNESIUM_BLOCK = new SlimefunItemStack(
-            "MAGNESIUM_BLOCK",
-            Material.NETHER_BRICKS,
-            "&5&lMagnesium Block",
-            ""
-    );
-    public static final SlimefunItemStack COPPER_BLOCK = new SlimefunItemStack(
-            "COPPER_BLOCK",
-            Material.BRICKS,
-            "&6&lCopper Block",
-            ""
-    );
-    public static final SlimefunItemStack SILVER_BLOCK = new SlimefunItemStack(
-            "SILVER_BLOCK",
-            Material.IRON_BLOCK,
-            "&7&lSilver Block",
-            ""
-    );
-    public static final SlimefunItemStack TIN_BLOCK = new SlimefunItemStack(
-            "TIN_BLOCK",
-            Material.IRON_BLOCK,
-            "&7&lTin Block",
-            ""
-    );
-    public static final SlimefunItemStack LEAD_BLOCK = new SlimefunItemStack(
-            "LEAD_BLOCK",
-            Material.IRON_BLOCK,
-            "&8&lLead Block",
-            ""
-    );
-    public static final SlimefunItemStack ALUMINUM_BLOCK = new SlimefunItemStack(
-            "ALUMINUM_BLOCK",
-            Material.IRON_BLOCK,
-            "&7&lAluminum Block",
-            ""
-    );
-    public static final SlimefunItemStack ZINC_BLOCK = new SlimefunItemStack(
-            "ZINC_BLOCK",
-            Material.IRON_BLOCK,
-            "&7&lZinc Block",
-            ""
-    );
-
-    //Cores
-
-    public static final SlimefunItemStack MAGNESIUM_CORE = new SlimefunItemStack(
-        "MAGNESIUM_CORE",
-        Material.NETHER_BRICKS,
-        "&5&lMagnesium Core",
-        ""
-    );
-    public static final SlimefunItemStack COPPER_CORE = new SlimefunItemStack(
-        "COPPER_CORE",
-        Material.BRICKS,
-        "&6&lCopper Core",
-        ""
-    );
-    public static final SlimefunItemStack SILVER_CORE = new SlimefunItemStack(
-        "SILVER_CORE",
-        Material.IRON_BLOCK,
-        "&7&lSilver Core",
-        ""
-    );
-    public static final SlimefunItemStack TIN_CORE = new SlimefunItemStack(
-        "TIN_CORE",
-        Material.IRON_BLOCK,
-        "&7&lTin Core",
-        ""
-    );
-    public static final SlimefunItemStack LEAD_CORE = new SlimefunItemStack(
-        "LEAD_CORE",
-        Material.IRON_BLOCK,
-        "&8&lLead Core",
-        ""
-    );
-    public static final SlimefunItemStack ALUMINUM_CORE = new SlimefunItemStack(
-        "ALUMINUM_CORE",
-        Material.IRON_BLOCK,
-        "&7&lAluminum Core",
-        ""
-    );
-    public static final SlimefunItemStack ZINC_CORE = new SlimefunItemStack(
-        "ZINC_CORE",
-        Material.IRON_BLOCK,
-        "&7&lZinc Core",
-        ""
-    );
-    public static final SlimefunItemStack IRON_CORE = new SlimefunItemStack(
-        "IRON_CORE",
-        Material.IRON_BLOCK,
-        "&7&lIron Core",
-        ""
-    );
-    public static final SlimefunItemStack GOLD_CORE = new SlimefunItemStack(
-        "GOLD_CORE",
-        Material.GOLD_BLOCK,
-        "&6&lGold Core",
-        ""
-    );
-    public static final SlimefunItemStack NETHERITE_CORE = new SlimefunItemStack(
-        "NETHERITE_CORE",
-        Material.NETHERITE_BLOCK,
-        "&4&lNetherite Core",
-        ""
-    );
-    public static final SlimefunItemStack EMERALD_CORE = new SlimefunItemStack(
-        "EMERALD_CORE",
-        Material.EMERALD_BLOCK,
-        "&a&lEmerald Core",
-        ""
-    );
-    public static final SlimefunItemStack DIAMOND_CORE = new SlimefunItemStack(
-        "DIAMOND_CORE",
-        Material.DIAMOND_BLOCK,
-        "&b&lDiamond Core",
-        ""
-    );
-    public static final SlimefunItemStack COAL_CORE = new SlimefunItemStack(
-        "COAL_CORE",
-        Material.COAL_BLOCK,
-        "&8&lCoal Core",
-        ""
-    );
-    public static final SlimefunItemStack REDSTONE_CORE = new SlimefunItemStack(
-        "REDSTONE_CORE",
-        Material.REDSTONE_BLOCK,
-        "&c&lRedstone Core",
-        ""
-    );
-    public static final SlimefunItemStack LAPIS_CORE = new SlimefunItemStack(
-        "LAPIS_CORE",
-        Material.LAPIS_BLOCK,
-        "&9&lLapis Core",
-        ""
-    );
-    public static final SlimefunItemStack QUARTZ_CORE = new SlimefunItemStack(
-        "QUARTZ_CORE",
-        Material.QUARTZ_BLOCK,
-        "&f&lQuartz Core",
-        ""
-    );
-
-    //Compressed cores
-
-    public static final SlimefunItemStack MAGNESIUM_COMPRESSED_CORE = new SlimefunItemStack(
-            "MAGNESIUM_COMPRESSED_CORE",
-            Material.NETHER_BRICKS,
-            "&5&lMagnesium Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack COPPER_COMPRESSED_CORE = new SlimefunItemStack(
-            "COPPER_COMPRESSED_CORE",
-            Material.BRICKS,
-            "&6&lCopper Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack SILVER_COMPRESSED_CORE = new SlimefunItemStack(
-            "SILVER_COMPRESSED_CORE",
-            Material.IRON_BLOCK,
-            "&7&lSilver Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack TIN_COMPRESSED_CORE = new SlimefunItemStack(
-            "TIN_COMPRESSED_CORE",
-            Material.IRON_BLOCK,
-            "&7&lTin Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack LEAD_COMPRESSED_CORE = new SlimefunItemStack(
-            "LEAD_COMPRESSED_CORE",
-            Material.IRON_BLOCK,
-            "&8&lLead Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack ALUMINUM_COMPRESSED_CORE = new SlimefunItemStack(
-            "ALUMINUM_COMPRESSED_CORE",
-            Material.IRON_BLOCK,
-            "&7&lAluminum Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack ZINC_COMPRESSED_CORE = new SlimefunItemStack(
-            "ZINC_COMPRESSED_CORE",
-            Material.IRON_BLOCK,
-            "&7&lZinc Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack IRON_COMPRESSED_CORE = new SlimefunItemStack(
-            "IRON_COMPRESSED_CORE",
-            Material.IRON_BLOCK,
-            "&7&lIron Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack GOLD_COMPRESSED_CORE = new SlimefunItemStack(
-            "GOLD_COMPRESSED_CORE",
-            Material.GOLD_BLOCK,
-            "&6&lGold Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack NETHERITE_COMPRESSED_CORE = new SlimefunItemStack(
-            "NETHERITE_COMPRESSED_CORE",
-            Material.NETHERITE_BLOCK,
-            "&4&lNetherite Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack EMERALD_COMPRESSED_CORE = new SlimefunItemStack(
-            "EMERALD_COMPRESSED_CORE",
-            Material.EMERALD_BLOCK,
-            "&a&lEmerald Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack DIAMOND_COMPRESSED_CORE = new SlimefunItemStack(
-            "DIAMOND_COMPRESSED_CORE",
-            Material.DIAMOND_BLOCK,
-            "&b&lDiamond Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack COAL_COMPRESSED_CORE = new SlimefunItemStack(
-            "COAL_COMPRESSED_CORE",
-            Material.COAL_BLOCK,
-            "&8&lCoal Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack REDSTONE_COMPRESSED_CORE = new SlimefunItemStack(
-            "REDSTONE_COMPRESSED_CORE",
-            Material.REDSTONE_BLOCK,
-            "&c&lRedstone Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack LAPIS_COMPRESSED_CORE = new SlimefunItemStack(
-            "LAPIS_COMPRESSED_CORE",
-            Material.LAPIS_BLOCK,
-            "&9&lLapis Compressed Core",
-            ""
-    );
-    public static final SlimefunItemStack QUARTZ_COMPRESSED_CORE = new SlimefunItemStack(
-            "QUARTZ_COMPRESSED_CORE",
-            Material.QUARTZ_BLOCK,
-            "&f&lQuartz Compressed Core",
-            ""
     );
 
     //singularities
@@ -619,21 +458,49 @@ public final class Items {
     );
     public static final SlimefunItemStack INFINITE_INGOT = new SlimefunItemStack(
         "INFINITE_INGOT",
-        Material.NETHERITE_INGOT,
+        Material.IRON_INGOT,
         "&b&lInfinity Ingot",
         ""
     );
 
+    //Void ingots
+
+    public static final SlimefunItemStack VOID_BIT = new SlimefunItemStack(
+            "VOID_BIT",
+            Material.IRON_NUGGET,
+            "&8&lVoid &7&lBit",
+            ""
+    );
+    public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
+            "VOID_DUST",
+            Material.GUNPOWDER,
+            "&8&lVoid &7&lNugget",
+            ""
+    );
+    public static final SlimefunItemStack VOID_INGOT = new SlimefunItemStack(
+            "VOID_INGOT",
+            Material.NETHERITE_INGOT,
+            "&8&lVoid &7&lIngot",
+            ""
+    );
+
     //Materials
 
-    public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
-        "VOID_DUST",
-        Material.GUNPOWDER,
-        "&5&lVoid Dust",
-        "&8From the depths of the end...",
+    public static final SlimefunItemStack ENDER_ESSENCE = new SlimefunItemStack(
+        "ENDER_ESSENCE",
+        Material.BLAZE_POWDER,
+        "&5&lEnder Essence",
+        "&8From the depths of the void...",
         ""
     );
 
+    public static final SlimefunItemStack MAGSTEEL_PLATE = new SlimefunItemStack(
+            "MAGSTEEL_PLATE",
+            Material.NETHERITE_SCRAP,
+            "&4&lMagSteel &7&lPlate",
+            "&7Machine Component",
+            ""
+    );
     public static final SlimefunItemStack MACHINE_PLATE = new SlimefunItemStack(
         "MACHINE_PLATE",
         Material.PAPER,
@@ -672,10 +539,10 @@ public final class Items {
 
     //Gear
 
-    public static final SlimefunItemStack VOID_FLAME = new SlimefunItemStack(
-        "VOID_FLAME",
+    public static final SlimefunItemStack ENDER_FLAME = new SlimefunItemStack(
+        "ENDER_FLAME",
         Material.ENCHANTED_BOOK,
-        "&d&lVoid &c&lFire",
+        "&d&lEnder &c&lFlame",
         ""
     );
 
@@ -779,7 +646,7 @@ public final class Items {
         MAGNONIUM_BLADE.addUnsafeEnchantment(unb, 10);
         MAGNONIUM_PICKAXE.addUnsafeEnchantment(eff, 10);
         MAGNONIUM_PICKAXE.addUnsafeEnchantment(unb, 10);
-        VOID_FLAME.addUnsafeEnchantment(fire, 10);
+        ENDER_FLAME.addUnsafeEnchantment(fire, 10);
         INFINITY_CROWN.addUnsafeEnchantment(prot, 40);
         INFINITY_CHESTPLATE.addUnsafeEnchantment(prot, 40);
         INFINITY_LEGGINGS.addUnsafeEnchantment(prot, 40);

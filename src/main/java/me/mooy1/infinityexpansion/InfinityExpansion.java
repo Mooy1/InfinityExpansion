@@ -1,12 +1,11 @@
 package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import me.mooy1.infinityexpansion.materials.VoidDustResource;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.ChatColor;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -48,9 +47,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         ItemSetup.setup(this);
 
-        //Geo miner resources
-
-        new VoidDustResource().register();
     }
 
     @Override

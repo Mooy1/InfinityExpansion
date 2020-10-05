@@ -22,11 +22,6 @@ public final class Categories {
         new CustomItem(Material.NETHERITE_CHESTPLATE, "&b&lInfinity &9&lGear"),
         2
     );
-    public static final Category INFINITY_CORES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
-        "INFINITY_CORES"),
-        new CustomItem(Material.NETHERITE_BLOCK, "&b&lInfinity &c&lSingularities"),
-        2
-    );
 
     private Categories() { }
 }

@@ -28,17 +28,18 @@ import javax.annotation.Nullable;
 
 public class InfinityPanel extends SlimefunItem implements EnergyNetProvider, InventoryBlock {
 
-    private final InfinityPanel.Panel panel;
+    private final Type type;
 
-    public InfinityPanel(Panel panel) {
-        super(Categories.INFINITY_MACHINES, panel.getItem(), panel.getRecipeType(), panel.getRecipe());
-        this.panel = panel;
+    public InfinityPanel(Type type) {
+        super(Categories.INFINITY_MACHINES, type.getItem(), type.getRecipeType(), type.getRecipe());
+        this.type = type;
 
         setupInv();
     }
 
     public void setupInv() {
-        createPreset(this, panel.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
+
+        createPreset(this, type.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
             blockMenuPreset -> {
                 for (int i = 0; i < 9; i++)
                     blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
@@ -64,9 +65,9 @@ public class InfinityPanel extends SlimefunItem implements EnergyNetProvider, In
             generationType = "&cNether &8(Night)";
         } else if (l.getWorld().getEnvironment() == World.Environment.THE_END) {
             generationType = "&5End &8(Night)";
-        } else if (rate == this.panel.getDayGenerationRate()) {
+        } else if (rate == this.type.getDayGenerationRate()) {
             generationType = "&aOverworld &e(Day)";
-        } else if (rate == this.panel.getNightGenerationRate()) {
+        } else if (rate == this.type.getNightGenerationRate()) {
             generationType = "&aOverworld &8(Night)";
         }
 
@@ -89,19 +90,19 @@ public class InfinityPanel extends SlimefunItem implements EnergyNetProvider, In
 
     public int getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
 
-        if (world.getEnvironment() == World.Environment.NETHER) return this.panel.getDayGenerationRate();
-        if (world.getEnvironment() == World.Environment.THE_END) return this.panel.getNightGenerationRate();
+        if (world.getEnvironment() == World.Environment.NETHER) return this.type.getDayGenerationRate();
+        if (world.getEnvironment() == World.Environment.THE_END) return this.type.getNightGenerationRate();
 
         if (world.getTime() >= 13000 || block.getLocation().add(0, 1, 0).getBlock().getLightFromSky() != 15) {
-            return this.panel.getNightGenerationRate();
+            return this.type.getNightGenerationRate();
         } else {
-            return this.panel.getDayGenerationRate();
+            return this.type.getDayGenerationRate();
         }
     }
 
     @Override
     public int getCapacity() {
-        return this.panel.getCapacity();
+        return this.type.getCapacity();
     }
 
     @Nonnull
@@ -122,7 +123,7 @@ public class InfinityPanel extends SlimefunItem implements EnergyNetProvider, In
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum Panel {
+    public enum Type {
 
         CELESTIAL(Items.CELESTIAL_PANEL, 1_800, 0, 300_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
@@ -130,8 +131,8 @@ public class InfinityPanel extends SlimefunItem implements EnergyNetProvider, In
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
         VOID(Items.VOID_PANEL, 0, 5_400, 900_000, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT, Items.MAGNONIUM_INGOT,
-            Items.MACHINE_PLATE, Items.CELESTIAL_PANEL, Items.MACHINE_PLATE,
+            Items.MAGNONIUM_INGOT, Items.VOID_INGOT, Items.MAGNONIUM_INGOT,
+            Items.VOID_INGOT, Items.CELESTIAL_PANEL, Items.VOID_INGOT,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
         INFINITY(Items.INFINITE_PANEL, 120_000, 120_000, 20_000_000, RecipeType.ENHANCED_CRAFTING_TABLE,
