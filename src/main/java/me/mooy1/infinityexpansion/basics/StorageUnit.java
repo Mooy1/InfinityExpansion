@@ -164,6 +164,10 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             setType(b, null);
         }
 
+        if (inv.toInventory() != null || !inv.toInventory().getViewers().isEmpty()) {
+            updateStatus(b);
+        }
+
         //input
 
         ItemStack inputSlotItem = inv.getItemInSlot(INPUTSLOT);
