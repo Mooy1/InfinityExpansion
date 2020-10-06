@@ -453,7 +453,8 @@ public final class Items {
             "INFINITY_SINGULARITY",
             Material.NETHER_STAR,
             "&b&lInfinity Singularity",
-            "&7The Ultimate Flex"
+            "&fThe Ultimate Flex",
+            "&7Plugin Version: &8" + InfinityExpansion.getInstance().getPluginVersion()
     );
 
     //Ingots

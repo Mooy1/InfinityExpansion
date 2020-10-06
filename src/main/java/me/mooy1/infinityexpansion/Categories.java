@@ -5,7 +5,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
-public final class Categories { //version "&7Version: &8" + InfinityExpansion.getInstance().getPluginVersion()
+public final class Categories {
 
     public static final Category INFINITY_BASICS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
         "INFINITY_BASICS"),

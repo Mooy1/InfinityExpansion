@@ -57,7 +57,7 @@ public class EnderEssence extends SlimefunItem implements GEOResource {
     @Nonnull
     @Override
     public String getName() {
-        return "Ender Essence";
+        return "EnderEssence";
     }
 
     @Nonnull
