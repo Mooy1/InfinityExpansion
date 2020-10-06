@@ -55,7 +55,7 @@ public class MainMaterials extends SlimefunItem {
         MAGNONIUM(Items.MAGNONIUM_INGOT, RecipeType.SMELTERY, new ItemStack[] {
                 Items.MAGSTEEL,
                 Items.MAGNESIUM_SINGULARITY,
-                Items.ENDER_ESSENCE,
+                Items.END_ESSENCE,
                 SlimefunItems.REINFORCED_ALLOY_INGOT,
                 SlimefunItems.REDSTONE_ALLOY,
                 null, null, null, null

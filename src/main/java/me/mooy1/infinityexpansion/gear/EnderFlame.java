@@ -11,9 +11,9 @@ public class EnderFlame extends SlimefunItem {
 
     public EnderFlame() {
         super(Categories.INFINITY_GEAR, Items.ENDER_FLAME, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
-            Items.ENDER_ESSENCE, Items.ENDER_ESSENCE, Items.ENDER_ESSENCE,
-            Items.ENDER_ESSENCE, new ItemStack(Material.BOOK), Items.ENDER_ESSENCE,
-            Items.ENDER_ESSENCE, Items.ENDER_ESSENCE, Items.ENDER_ESSENCE,
+            Items.END_ESSENCE, Items.END_ESSENCE, Items.END_ESSENCE,
+            Items.END_ESSENCE, new ItemStack(Material.BOOK), Items.END_ESSENCE,
+            Items.END_ESSENCE, Items.END_ESSENCE, Items.END_ESSENCE,
         });
     }
 }

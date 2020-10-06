@@ -111,24 +111,24 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     };
 
     private final int[] outputTimes = new int[] {
-            16000,
-            16000,
-            16000,
-            16000,
-            16000,
-            16000,
-            16000,
+            8000,
+            8000,
+            8000,
+            8000,
+            8000,
+            8000,
+            8000,
 
+            8000,
             16000,
-            32000,
             8000,
             8000,
             800,
 
+            8000,
             16000,
-            32000,
-            32000,
-            32000,
+            16000,
+            16000,
 
             1000
     };

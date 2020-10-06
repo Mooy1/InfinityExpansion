@@ -501,8 +501,8 @@ public final class Items {
 
     //Materials
 
-    public static final SlimefunItemStack ENDER_ESSENCE = new SlimefunItemStack(
-        "ENDER_ESSENCE",
+    public static final SlimefunItemStack END_ESSENCE = new SlimefunItemStack(
+        "END_ESSENCE",
         Material.BLAZE_POWDER,
         "&5&lEnder Essence",
         "&8From the depths of the void...",

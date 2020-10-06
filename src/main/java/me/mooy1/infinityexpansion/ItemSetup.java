@@ -80,7 +80,8 @@ public final class ItemSetup {
             new MainMaterials(type).register(plugin);
         }
 
-        new EnderEssence().register();
+        new EnderEssence().register(plugin);
+        new EnderEssenceResource().register();
 
         //add gear
 

@@ -36,24 +36,24 @@ public class Singularities extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        COPPER(Items.COPPER_SINGULARITY, 16000, "&6Copper Ingots"),
-        ZINC(Items.ZINC_SINGULARITY, 16000, "&7Zinc Ingots"),
-        TIN(Items.TIN_SINGULARITY, 16000, "&7Tin Ingots"),
-        ALUMINUM(Items.ALUMINUM_SINGULARITY, 16000, "&7Aluminum Ingots"),
-        SILVER(Items.SILVER_SINGULARITY, 16000, "&7Silver Ingots"),
-        MAGNESIUM(Items.MAGNESIUM_SINGULARITY, 16000, "&5Magnesium Ingots"),
-        LEAD(Items.LEAD_SINGULARITY, 16000, "&7Lead Ingots"),
+        COPPER(Items.COPPER_SINGULARITY, 8000, "&6Copper Ingots"),
+        ZINC(Items.ZINC_SINGULARITY, 8000, "&7Zinc Ingots"),
+        TIN(Items.TIN_SINGULARITY, 8000, "&7Tin Ingots"),
+        ALUMINUM(Items.ALUMINUM_SINGULARITY, 8000, "&7Aluminum Ingots"),
+        SILVER(Items.SILVER_SINGULARITY, 8000, "&7Silver Ingots"),
+        MAGNESIUM(Items.MAGNESIUM_SINGULARITY, 8000, "&5Magnesium Ingots"),
+        LEAD(Items.LEAD_SINGULARITY, 8000, "&7Lead Ingots"),
 
-        GOLD(Items.GOLD_SINGULARITY, 16000, "&6Gold Ingots"),
-        IRON(Items.IRON_SINGULARITY, 32000, "&7Iron Ingots"),
+        GOLD(Items.GOLD_SINGULARITY, 8000, "&6Gold Ingots"),
+        IRON(Items.IRON_SINGULARITY, 16000, "&7Iron Ingots"),
         DIAMOND(Items.DIAMOND_SINGULARITY, 8000, "&bDiamonds"),
         EMERALD(Items.EMERALD_SINGULARITY, 8000, "&aEmeralds"),
         NETHERITE(Items.NETHERITE_SINGULARITY, 800, "&8Netherite Ingots"),
 
-        COAL(Items.COAL_SINGULARITY, 16000, "&8Coal"),
-        LAPIS(Items.LAPIS_SINGULARITY, 32000, "&9Lapis"),
-        REDSTONE(Items.REDSTONE_SINGULARITY, 32000, "&cRedstone"),
-        QUARTZ(Items.QUARTZ_SINGULARITY, 32000, "&fQuartz"),
+        COAL(Items.COAL_SINGULARITY, 8000, "&8Coal"),
+        LAPIS(Items.LAPIS_SINGULARITY, 16000, "&9Lapis"),
+        REDSTONE(Items.REDSTONE_SINGULARITY, 16000, "&cRedstone"),
+        QUARTZ(Items.QUARTZ_SINGULARITY, 16000, "&fQuartz"),
 
         INFINITY(Items.INFINITY_SINGULARITY, 1000, "&bInfinity Ingots");
 
