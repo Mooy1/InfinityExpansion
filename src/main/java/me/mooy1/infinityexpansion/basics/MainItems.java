@@ -16,8 +16,8 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-import static me.mooy1.infinityexpansion.materials.CompressedCobblestone.Compress;
-import static me.mooy1.infinityexpansion.materials.Singularities.MiddleItem;
+import static me.mooy1.infinityexpansion.Utils.Compress;
+import static me.mooy1.infinityexpansion.Utils.MiddleItem;
 
 public class MainItems extends SlimefunItem {
 

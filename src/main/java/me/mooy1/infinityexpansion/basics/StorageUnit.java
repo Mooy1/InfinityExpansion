@@ -19,11 +19,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import me.mooy1.infinityexpansion.Utils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
+
+import static me.mooy1.infinityexpansion.Utils.getIDofItem;
+import static me.mooy1.infinityexpansion.Utils.getItemFromID;
 
 /**
  * Basically just barrels...
@@ -171,17 +176,17 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         //input
 
         ItemStack inputSlotItem = inv.getItemInSlot(INPUTSLOT);
-        //Check if empty slot
-        if (inputSlotItem != null) {
-            //Check if non stackable item
-            if (inputSlotItem.getMaxStackSize() != 1) {
 
-                int slotAmount = inputSlotItem.getAmount();
+        if (inputSlotItem != null) { //Check if empty slot
+
+            int slotAmount = inputSlotItem.getAmount();
+
+            if (inputSlotItem.getMaxStackSize() != 1) { //Check if non stackable item
+
                 int stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
                 String id = inputSlotItem.getType().toString();
 
-                //Check if empty
                 if (storeditem == null && storeditemtype == null && stored == 0) { //store new item
 
                     if (SlimefunItem.getByItem(inputSlotItem) != null) { //store slimefun item
@@ -196,6 +201,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                     inv.consumeItem(INPUTSLOT, slotAmount);
 
                 } else {
+
                     int maxinput = maxstorage-stored;
                     storeditem = getBlockData(b.getLocation(), "storeditem");
                     storeditemtype = getBlockData(b.getLocation(), "storeditemtype");

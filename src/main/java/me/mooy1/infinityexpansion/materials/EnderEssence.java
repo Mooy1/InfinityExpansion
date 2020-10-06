@@ -7,7 +7,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 
-import static me.mooy1.infinityexpansion.materials.Singularities.MiddleItem;
+import static me.mooy1.infinityexpansion.Utils.MiddleItem;
 
 public class EnderEssence extends SlimefunItem {
 

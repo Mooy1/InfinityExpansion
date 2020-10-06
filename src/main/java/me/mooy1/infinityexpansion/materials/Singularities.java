@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+import static me.mooy1.infinityexpansion.Utils.MiddleItem;
+
 public class Singularities extends SlimefunItem {
 
     public Singularities(Type type) {
@@ -24,12 +26,6 @@ public class Singularities extends SlimefunItem {
                 type.getItem(),
                 SingularityConstructor.SINGULARITY_CONSTRUCTOR,
                 MiddleItem(new CustomItem(Material.PAPER, "&fContructed with &e" + type.getAmount() + " " + type.getResource())));
-    }
-
-    public static ItemStack[] MiddleItem(ItemStack item) {
-        return new ItemStack[] {
-                null, null, null, null , item, null, null, null, null
-        };
     }
 
     @Getter

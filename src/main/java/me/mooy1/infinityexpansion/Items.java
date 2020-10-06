@@ -265,7 +265,7 @@ public final class Items {
             "INFINITY_STORAGE",
             Material.WARPED_HYPHAE,
             "&b&lInfinity &7&lStorage Unit",
-            "&6Stores: &binfinite &7items",
+            "&6Stores: &bInfinite &7items",
             "&aWorks with cargo",
             ""
     );
@@ -449,6 +449,11 @@ public final class Items {
             "&a&lEarth Singularity",
             ""
     );
+
+    /**
+     *
+     */
+
     public static final SlimefunItemStack INFINITY_SINGULARITY = new SlimefunItemStack(
             "INFINITY_SINGULARITY",
             Material.NETHER_STAR,

@@ -28,6 +28,8 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         Config cfg = new Config(this);
 
+        //SlimefunPlugin.getVersion()
+
         if (cfg.getBoolean("options.auto-update") && getDescription().getVersion().startsWith("DEV - ")) {
             Updater updater = new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master");
             updater.start();
