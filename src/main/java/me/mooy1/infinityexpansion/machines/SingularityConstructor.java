@@ -11,6 +11,7 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.Utils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -36,30 +37,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.UUID;
-
-import static me.mooy1.infinityexpansion.Utils.getIDofItem;
-import static me.mooy1.infinityexpansion.Utils.getItemFromID;
 
 public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
 
     private final Type type;
-    private final int STATUSSLOT = 13;
-    private final int[] INPUTSLOTS = {
+    private final int STATUS_SLOT = 13;
+    private final int[] INPUT_SLOTS = {
             10
     };
-    private final int INPUTSLOT = INPUTSLOTS[0];
-    private final int[] OUTPUTSLOTS = {
+    private final int INPUT_SLOT = INPUT_SLOTS[0];
+    private final int[] OUTPUT_SLOTS = {
             16
     };
-    private final int OUTPUTSLOT = OUTPUTSLOTS[0];
-    private final int[] INPUTBORDER = {
+    private final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
+    private final int[] INPUT_BORDER = {
             0, 1, 2, 9, 11, 18, 19, 20
     };
-    private final int[] STATUSBORDER = {
+    private final int[] STATUS_BORDER = {
             3, 4, 5, 12, 14, 21, 22, 23
     };
-    private final int[] OUTPUTBORDER = {
+    private final int[] OUTPUT_BORDER = {
             6, 7, 8, 15, 17, 24, 25, 26
     };
     private final String[] inputItems = {
@@ -131,11 +130,9 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     private final ItemStack loadingItem = new CustomItem(
             Material.LIME_STAINED_GLASS_PANE,
             "&aLoading...");
-
     private final ItemStack inputBorderItem = new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
             "&9Input");
-
     private final ItemStack outputBorderItem = new CustomItem(
             Material.ORANGE_STAINED_GLASS_PANE,
             "&6Output");
@@ -144,7 +141,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         super(Categories.INFINITY_MACHINES, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, type.getRecipe());
         this.type = type;
 
-        new BlockMenuPreset(getID(), type.getItem().getDisplayName()) {
+        new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -172,9 +169,9 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow == ItemTransportFlow.INSERT) {
-                    return INPUTSLOTS;
+                    return INPUT_SLOTS;
                 } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUTSLOTS;
+                    return OUTPUT_SLOTS;
                 } else {
                     return new int[0];
                 }
@@ -186,12 +183,13 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
             if (inv != null) {
                 int progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
-                String inputtest = getProgressID(b);
+                String inputTest = getProgressID(b);
+                Location l = b.getLocation();
 
-                inv.dropItems(b.getLocation(), getOutputSlots());
-                inv.dropItems(b.getLocation(), getInputSlots());
+                inv.dropItems(l, getOutputSlots());
+                inv.dropItems(l, getInputSlots());
 
-                if (progress > 0 && inputtest != null) {
+                if (progress > 0 && inputTest != null) {
 
                     String input = inputItems[Integer.parseInt(getProgressID(b))];
 
@@ -201,16 +199,16 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     int remainder = progress % stacksize;
 
                     for (int i = 0; i < stacks; i++) {
-                        b.getWorld().dropItemNaturally(b.getLocation(),getItemFromID(input, stacksize));
+                        b.getWorld().dropItemNaturally(l, Utils.getItemFromID(input, stacksize));
                     }
                     if (remainder > 0) {
-                        b.getWorld().dropItemNaturally(b.getLocation(),getItemFromID(input, remainder));
+                        b.getWorld().dropItemNaturally(l, Utils.getItemFromID(input, remainder));
                     }
                 }
             }
 
             if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand"))).remove();
+                Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
             }
 
             return true;
@@ -218,17 +216,17 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     }
 
     private void setupInv(BlockMenuPreset blockMenuPreset) {
-        for (int i : STATUSBORDER) {
+        for (int i : STATUS_BORDER) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : INPUTBORDER) {
+        for (int i : INPUT_BORDER) {
             blockMenuPreset.addItem(i, inputBorderItem, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : OUTPUTBORDER) {
+        for (int i : OUTPUT_BORDER) {
             blockMenuPreset.addItem(i, outputBorderItem, ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUSSLOT, loadingItem, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, loadingItem, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -246,34 +244,33 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         if (inv == null) return;
 
         String name = null;
-        Material statusmat = null;
+        Material statusMat = Material.BARRIER;
 
         int progress = Integer.parseInt(getProgress(b));
-        ItemStack inputSlotItem = inv.getItemInSlot(INPUTSLOT);
+        ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
         if (getCharge(b.getLocation()) < type.getEnergyConsumption()) { //when not enough power
 
             name = "&cNot enough energy!";
-            statusmat = Material.BARRIER;
 
         } else if (inputSlotItem == null) { //no input
 
             if (progress == 0 || getProgressID(b) == null) { //havent started
 
                 name = "&9Input a resource!";
-                statusmat = Material.BLUE_STAINED_GLASS_PANE;
+                statusMat = Material.BLUE_STAINED_GLASS_PANE;
 
             } else { //started
 
-                ItemStack input = getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
+                ItemStack input = Utils.getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
 
-                if (!input.getItemMeta().getDisplayName().equals("")) { //sf name
-                    name = "&cInput more " + ItemUtils.getItemName(input) + "s&c!";
-                } else { //vanilla name
-                    name = "&cInput more &f" + ItemUtils.getItemName(input) + "s&c!";
+                if (input.getItemMeta() != null) {
+                    if (!input.getItemMeta().getDisplayName().equals("")) { //sf name
+                        name = "&cInput more " + ItemUtils.getItemName(input) + "s&c!";
+                    } else { //vanilla name
+                        name = "&cInput more &f" + ItemUtils.getItemName(input) + "s&c!";
+                    }
                 }
-
-                statusmat = Material.BARRIER;
             }
 
         } else { //started
@@ -285,25 +282,15 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                 if (checkItemAndSet(b, inv, inputSlotItem, speed)) { //try to start contruction
 
                     name = "&aBeggining contruction!";
-                    statusmat = Material.NETHER_STAR;
-
-                    if (inputSlotItem.getAmount() >= speed) { //make sure there is enough
-
-                    } else { //not enough
-
-                        name = "&cNot enough resource input!";
-                        statusmat = Material.BARRIER;
-
-                    }
+                    statusMat = Material.NETHER_STAR;
 
                 } else { //failed to start contruction
 
                     name = "&cA singularity can't be contructed from this!";
-                    statusmat = Material.BARRIER;
 
-                    if (inv.getItemInSlot(OUTPUTSLOT) == null) {
-                        inv.pushItem(inputSlotItem, OUTPUTSLOTS);
-                        inv.consumeItem(INPUTSLOT, inputSlotItem.getAmount());
+                    if (inv.getItemInSlot(OUTPUT_SLOT) == null) {
+                        inv.pushItem(inputSlotItem, OUTPUT_SLOTS);
+                        inv.consumeItem(INPUT_SLOT, inputSlotItem.getAmount());
                     }
                 }
 
@@ -316,19 +303,19 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                 String input = inputItems[progressID];
 
-                if (getIDofItem(inputSlotItem).equals(input)) { //input matches
+                if (Utils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
 
                     int inputSlotAmount = inputSlotItem.getAmount();
 
                     if (inputSlotAmount >= speed) { //speed
 
                         setProgress(b, progress + speed);
-                        inv.consumeItem(INPUTSLOT, speed);
+                        inv.consumeItem(INPUT_SLOT, speed);
 
                     } else { //less than speed
 
                         setProgress(b, progress + inputSlotAmount);
-                        inv.consumeItem(INPUTSLOT, inputSlotAmount);
+                        inv.consumeItem(INPUT_SLOT, inputSlotAmount);
 
                     }
 
@@ -339,25 +326,25 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     }
 
                     name = "&aContructing...";
-                    statusmat = Material.NETHER_STAR;
+                    statusMat = Material.NETHER_STAR;
 
                     if (progress >= outputTime) { //if contruction done
 
-                        String output = outputItems[progressID];
+                        ItemStack output = Utils.getItemFromID(outputItems[progressID], 1);
 
-                        if (inv.fits(getItemFromID(output, 1), OUTPUTSLOTS)) { //output
+                        if (inv.fits(output)) { //output
 
-                            inv.pushItem(getItemFromID(output, 1), OUTPUTSLOTS);
+                            inv.pushItem(output, OUTPUT_SLOTS);
                             setProgress(b, 0);
                             setProgressID(b, null);
 
                             name = "&aContruction complete!";
-                            statusmat = Material.NETHER_STAR;
+                            statusMat = Material.NETHER_STAR;
 
                         } else { //not enough room
 
                             name = "&6Not enough room!";
-                            statusmat = Material.ORANGE_STAINED_GLASS_PANE;
+                            statusMat = Material.ORANGE_STAINED_GLASS_PANE;
 
                         }
                     }
@@ -365,11 +352,10 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     } else { //input doesnt match
 
                         name = "&cWrong resource input!";
-                        statusmat = Material.BARRIER;
 
-                        if (inv.getItemInSlot(OUTPUTSLOT) == null) {
-                            inv.pushItem(inputSlotItem, OUTPUTSLOTS);
-                            inv.consumeItem(INPUTSLOT, inputSlotItem.getAmount());
+                        if (inv.getItemInSlot(OUTPUT_SLOT) == null) {
+                            inv.pushItem(inputSlotItem, OUTPUT_SLOTS);
+                            inv.consumeItem(INPUT_SLOT, inputSlotItem.getAmount());
 
                         }
                     }
@@ -379,30 +365,28 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
         //update status
 
-        progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
+        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
+            progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
 
+            String lore = "";
+            String loree = "";
 
-        String lore = "";
-        String loree = "";
+            if (progress > 0) {
+                String output = outputItems[Integer.parseInt(getProgressID(b))];
+                int time = outputTimes[Integer.parseInt(getProgressID(b))];
 
-        if (progress > 0) {
-            String output = outputItems[Integer.parseInt(getProgressID(b))];
-            int time = outputTimes[Integer.parseInt(getProgressID(b))];
+                String displayname = "";
+                ItemMeta displaymeta = Utils.getItemFromID(output, 1).getItemMeta();
 
-            String displayname = "";
-            ItemMeta displaymeta = getItemFromID(output, 1).getItemMeta();
+                if (displaymeta != null) {
+                    displayname = displaymeta.getDisplayName();
+                }
 
-            if (displaymeta != null) {
-                displayname = displaymeta.getDisplayName();
+                lore = "&7Contructing: " + displayname;
+                loree = "&7Progress: (" + progress + "/" + time + ")";
             }
 
-            lore = "&7Contructing: " + displayname;
-            loree = "&7Progress: (" + progress + "/" + time + ")";
-
-        }
-
-        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-            inv.replaceExistingItem(STATUSSLOT, new CustomItem(statusmat,
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(statusMat,
                     name,
                     lore,
                     loree
@@ -414,13 +398,13 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         int itemAmount = item.getAmount();
 
         for (int i = 0 ; i < inputItems.length ; i++) {
-            if (getIDofItem(item).equals(inputItems[i])) {
+            if (Utils.getIDFromItem(item).equals(inputItems[i])) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
-                    inv.consumeItem(INPUTSLOT, speed);
+                    inv.consumeItem(INPUT_SLOT, speed);
                 } else {
                     setProgress(b, itemAmount);
-                    inv.consumeItem(INPUTSLOT, itemAmount);
+                    inv.consumeItem(INPUT_SLOT, itemAmount);
                 }
                 setProgressID(b, String.valueOf(i));
                 return true;
@@ -466,12 +450,12 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
     @Override
     public int[] getInputSlots() {
-        return INPUTSLOTS;
+        return INPUT_SLOTS;
     }
 
     @Override
     public int[] getOutputSlots() {
-        return OUTPUTSLOTS;
+        return OUTPUT_SLOTS;
     }
 
     public static final RecipeType SINGULARITY_CONSTRUCTOR = new RecipeType(

@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-import static me.mooy1.infinityexpansion.Utils.Compress;
+import me.mooy1.infinityexpansion.Utils;
 
 public class CompressedCobblestone extends SlimefunItem {
 
@@ -26,15 +26,15 @@ public class CompressedCobblestone extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Type {
-        ONE(Items.COMPRESSED_COBBLESTONE_1, Compress(new ItemStack(Material.COBBLESTONE))),
-        TWO(Items.COMPRESSED_COBBLESTONE_2, Compress(Items.COMPRESSED_COBBLESTONE_1)),
-        THREE(Items.COMPRESSED_COBBLESTONE_3, Compress(Items.COMPRESSED_COBBLESTONE_2)),
-        FOUR(Items.COMPRESSED_COBBLESTONE_4, Compress(Items.COMPRESSED_COBBLESTONE_3)),
-        FIVE(Items.COMPRESSED_COBBLESTONE_5, Compress(Items.COMPRESSED_COBBLESTONE_4)),
-        SIX(Items.COMPRESSED_COBBLESTONE_6, Compress(Items.COMPRESSED_COBBLESTONE_5)),
-        SEVEN(Items.COMPRESSED_COBBLESTONE_7, Compress(Items.COMPRESSED_COBBLESTONE_6)),
-        EIGHT(Items.COMPRESSED_COBBLESTONE_8, Compress(Items.COMPRESSED_COBBLESTONE_7)),
-        NINE(Items.COMPRESSED_COBBLESTONE_9, Compress(Items.COMPRESSED_COBBLESTONE_8));
+        ONE(Items.COMPRESSED_COBBLESTONE_1, Utils.Compress(new ItemStack(Material.COBBLESTONE))),
+        TWO(Items.COMPRESSED_COBBLESTONE_2, Utils.Compress(Items.COMPRESSED_COBBLESTONE_1)),
+        THREE(Items.COMPRESSED_COBBLESTONE_3, Utils.Compress(Items.COMPRESSED_COBBLESTONE_2)),
+        FOUR(Items.COMPRESSED_COBBLESTONE_4, Utils.Compress(Items.COMPRESSED_COBBLESTONE_3)),
+        FIVE(Items.COMPRESSED_COBBLESTONE_5, Utils.Compress(Items.COMPRESSED_COBBLESTONE_4)),
+        SIX(Items.COMPRESSED_COBBLESTONE_6, Utils.Compress(Items.COMPRESSED_COBBLESTONE_5)),
+        SEVEN(Items.COMPRESSED_COBBLESTONE_7, Utils.Compress(Items.COMPRESSED_COBBLESTONE_6)),
+        EIGHT(Items.COMPRESSED_COBBLESTONE_8, Utils.Compress(Items.COMPRESSED_COBBLESTONE_7)),
+        NINE(Items.COMPRESSED_COBBLESTONE_9, Utils.Compress(Items.COMPRESSED_COBBLESTONE_8));
 
         @Nonnull
         private final SlimefunItemStack item;

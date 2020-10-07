@@ -1,23 +1,18 @@
 package me.mooy1.infinityexpansion.materials;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.items.food.FortuneCookie;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.Utils;
 import me.mooy1.infinityexpansion.machines.SingularityConstructor;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-
-import static me.mooy1.infinityexpansion.Utils.MiddleItem;
 
 public class Singularities extends SlimefunItem {
 
@@ -25,7 +20,7 @@ public class Singularities extends SlimefunItem {
         super(Categories.INFINITY_MATERIALS,
                 type.getItem(),
                 SingularityConstructor.SINGULARITY_CONSTRUCTOR,
-                MiddleItem(new CustomItem(Material.PAPER, "&fContructed with &e" + type.getAmount() + " " + type.getResource())));
+                Utils.MiddleItem(new CustomItem(Material.PAPER, "&fContructed with &e" + type.getAmount() + " " + type.getResource())));
     }
 
     @Getter

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.Utils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -19,16 +20,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import me.mooy1.infinityexpansion.Utils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.UUID;
-
-import static me.mooy1.infinityexpansion.Utils.getIDofItem;
-import static me.mooy1.infinityexpansion.Utils.getItemFromID;
 
 /**
  * Basically just barrels...
@@ -46,29 +43,29 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
     private final Tier tier;
 
-    private final int STATUSSLOT = 13;
+    private final int STATUS_SLOT = 13;
 
-    private final int[] INPUTSLOTS = {
+    private final int[] INPUT_SLOTS = {
             10
     };
 
-    final int INPUTSLOT = INPUTSLOTS[0];
+    final int INPUT_SLOT = INPUT_SLOTS[0];
 
-    private final int[] OUTPUTSLOTS = {
+    private final int[] OUTPUT_SLOTS = {
             16
     };
 
-    final int OUTPUTSLOT = OUTPUTSLOTS[0];
+    final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
 
-    private final int[] INPUTBORDER = {
+    private final int[] INPUT_BORDER = {
             0, 1, 2, 9, 11, 18, 19, 20
     };
 
-    private final int[] STATUSBORDER = {
+    private final int[] STATUS_BORDER = {
             3, 4, 5, 12, 14, 21, 22, 23
     };
 
-    private final int[] OUTPUTBORDER = {
+    private final int[] OUTPUT_BORDER = {
             6, 7, 8, 15, 17, 24, 25, 26
     };
 
@@ -94,31 +91,35 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                String storeditem = getBlockData(b.getLocation(), "storeditem");
-                String storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
+                String storedItem = getBlockData(b.getLocation(), "storeditem");
                 int stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
                 inv.dropItems(b.getLocation(), getOutputSlots());
                 inv.dropItems(b.getLocation(), getInputSlots());
 
                 //drop stored items
+                if (stored > 0 && storedItem != null) {
 
-                if (stored > 0 && storeditem != null && storeditemtype != null) {
-                    int stacksize = convert(storeditemtype, storeditem, 1).getMaxStackSize();
+                    ItemStack storedItemStack = Utils.getItemFromID(storedItem, 1);
+                    int stackSize = storedItemStack.getMaxStackSize();
 
-                    int stacks = (int) Math.floor((float) stored / stacksize);
-                    int remainder = stored % stacksize;
+                    int stacks = (int) Math.floor((float) stored / stackSize);
+                    storedItemStack.setAmount(stackSize);
 
                     for (int i = 0; i < stacks; i++) {
-                        b.getWorld().dropItemNaturally(b.getLocation(), convert(storeditemtype, storeditem, stacksize));
+                        b.getWorld().dropItemNaturally(b.getLocation(), storedItemStack);
                     }
+
+                    int remainder = stored % stackSize;
+                    storedItemStack.setAmount(remainder);
+
                     if (remainder > 0) {
-                        b.getWorld().dropItemNaturally(b.getLocation(), convert(storeditemtype, storeditem, remainder));
+                        b.getWorld().dropItemNaturally(b.getLocation(), storedItemStack);
                     }
                 }
             }
             if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand"))).remove();
+                Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
             }
 
             return true;
@@ -128,17 +129,17 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     private void setupInv() {
         createPreset(this, tier.getItem().getImmutableMeta().getDisplayName().orElse("&7THIS IS A BUG"),
             blockMenuPreset -> {
-                for (int i : STATUSBORDER) {
+                for (int i : STATUS_BORDER) {
                     blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
                 }
-                for (int i : INPUTBORDER) {
+                for (int i : INPUT_BORDER) {
                     blockMenuPreset.addItem(i, inputBorderItem, ChestMenuUtils.getEmptyClickHandler());
                 }
-                for (int i : OUTPUTBORDER) {
+                for (int i : OUTPUT_BORDER) {
                     blockMenuPreset.addItem(i, outputBorderItem, ChestMenuUtils.getEmptyClickHandler());
                 }
 
-                blockMenuPreset.addItem(STATUSSLOT, loadingItem, ChestMenuUtils.getEmptyClickHandler());
+                blockMenuPreset.addItem(STATUS_SLOT, loadingItem, ChestMenuUtils.getEmptyClickHandler());
             });
     }
 
@@ -156,17 +157,15 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
-        int maxstorage = tier.getStorage();
-        String storedtest = getBlockData(b.getLocation(), "stored");
-        String storeditem = getBlockData(b.getLocation(), "storeditem");
-        String storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
+        int maxStorage = tier.getStorage();
+        String storedTest = getBlockData(b.getLocation(), "stored");
+        String storedItem = getBlockData(b.getLocation(), "storeditem");
 
         //start and fix bugs
 
-        if (storedtest == null || storeditem == null || storeditem.equals("") || storeditemtype == null) {
+        if (storedTest == null || storedItem == null || storedItem.equals("")) {
             setAmount(b, 0);
             setItem(b, null);
-            setType(b, null);
         }
 
         if (inv.toInventory() != null || !inv.toInventory().getViewers().isEmpty()) {
@@ -175,7 +174,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
         //input
 
-        ItemStack inputSlotItem = inv.getItemInSlot(INPUTSLOT);
+        ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
         if (inputSlotItem != null) { //Check if empty slot
 
@@ -183,58 +182,37 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
             if (inputSlotItem.getMaxStackSize() != 1) { //Check if non stackable item
 
+                String inputItemID = Utils.getIDFromItem(inputSlotItem);
                 int stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
-                String id = inputSlotItem.getType().toString();
+                if (stored == 0 && storedItem == null) { //store new item
 
-                if (storeditem == null && storeditemtype == null && stored == 0) { //store new item
-
-                    if (SlimefunItem.getByItem(inputSlotItem) != null) { //store slimefun item
-                        setItem(b, SlimefunItem.getByItem(inputSlotItem).getID());
-                        setType(b, "slimefun");
-                    } else { //store vanilla item
-                        setItem(b, id);
-                        setType(b, "material");
-                    }
-
+                    setItem(b, Utils.getIDFromItem(inputSlotItem));
                     setAmount(b, slotAmount);
-                    inv.consumeItem(INPUTSLOT, slotAmount);
+                    inv.consumeItem(INPUT_SLOT, slotAmount);
 
                 } else {
 
-                    int maxinput = maxstorage-stored;
-                    storeditem = getBlockData(b.getLocation(), "storeditem");
-                    storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
+                    int maxInput = maxStorage-stored;
+                    storedItem = getBlockData(b.getLocation(), "storeditem");
 
-                    if (SlimefunItem.getByItem(inputSlotItem) != null) {
-                        id = SlimefunItem.getByItem(inputSlotItem).getID();
-                        if (storeditemtype.equals("slimefun") && storeditem.equals(id)) { //deposit slimefun item
+                    if (storedItem.equals(inputItemID)) { //deposit item
 
-                            if (slotAmount <= maxinput) {
-                                setAmount(b, stored + slotAmount);
-                                inv.consumeItem(INPUTSLOT, slotAmount);
-                            } else {
-                                setAmount(b, stored + maxinput);
-                                inv.consumeItem(INPUTSLOT, maxinput);
-                            }
-                        }
-                    } else if (storeditemtype.equals("material") && storeditem.equals(id)) { //deposit vanilla item
-
-                        if (slotAmount <= maxinput) {
+                        if (slotAmount <= maxInput) {
                             setAmount(b, stored + slotAmount);
-                            inv.consumeItem(INPUTSLOT, slotAmount);
+                            inv.consumeItem(INPUT_SLOT, slotAmount);
                         } else {
-                            setAmount(b, stored + maxinput);
-                            inv.consumeItem(INPUTSLOT, maxinput);
+                            setAmount(b, stored + maxInput);
+                            inv.consumeItem(INPUT_SLOT, maxInput);
                         }
                     }
                 }
             } else {
 
-                if (inv.fits(inputSlotItem, OUTPUTSLOTS)) { //try to move to output slot to decrease timings
+                if (inv.fits(inputSlotItem, OUTPUT_SLOTS)) { //try to move to output slot to decrease timings
 
-                    inv.pushItem(inputSlotItem, OUTPUTSLOTS);
-                    inv.consumeItem(INPUTSLOT, inputSlotItem.getAmount());
+                    inv.pushItem(inputSlotItem, OUTPUT_SLOTS);
+                    inv.consumeItem(INPUT_SLOT, inputSlotItem.getAmount());
 
                 }
             }
@@ -242,18 +220,18 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
         //output
 
-        if (getBlockData(b.getLocation(), "storeditemtype") != null && getBlockData(b.getLocation(), "storeditem") != null) {
+        storedItem = getBlockData(b.getLocation(), "storeditem");
 
-            storeditem = getBlockData(b.getLocation(), "storeditem");
-            storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
+        if (storedItem != null) {
+
+            ItemStack storedItemStack = Utils.getItemFromID(storedItem, 1);
             int stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
-
             int outputRemaining;
 
-            if (inv.getItemInSlot(OUTPUTSLOT) != null) {
-                outputRemaining = convert(storeditemtype, storeditem, 1).getMaxStackSize()-inv.getItemInSlot(OUTPUTSLOT).getAmount();
+            if (inv.getItemInSlot(OUTPUT_SLOT) != null) {
+                outputRemaining = storedItemStack.getMaxStackSize()-inv.getItemInSlot(OUTPUT_SLOT).getAmount();
             } else {
-                outputRemaining = convert(storeditemtype, storeditem, 1).getMaxStackSize();
+                outputRemaining = storedItemStack.getMaxStackSize();
             }
 
             if (stored > 1) {
@@ -261,21 +239,21 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                 int amount = 0;
 
                 for (int i = 0; i < outputRemaining; i++) {
-                    stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
                     if (stored > 1+i) {
-                        if (inv.fits(convert(storeditemtype, storeditem, 1+i), OUTPUTSLOTS)) {
+                        storedItemStack.setAmount(1 + i);
+                        if (inv.fits(storedItemStack, OUTPUT_SLOTS)) {
                             amount++;
                         }
                     }
                 }
-                inv.pushItem(convert(storeditemtype, storeditem, amount), OUTPUTSLOTS);
+                storedItemStack.setAmount(amount);
+                inv.pushItem(storedItemStack, OUTPUT_SLOTS);
                 setAmount(b, stored-amount);
 
-            } else if (stored == 1 && inv.getItemInSlot(OUTPUTSLOT) == null) {
-                inv.pushItem(convert(storeditemtype, storeditem, 1), OUTPUTSLOTS);
+            } else if (stored == 1 && inv.getItemInSlot(OUTPUT_SLOT) == null) {
+                inv.pushItem(storedItemStack, OUTPUT_SLOTS);
                 setItem(b, null);
-                setType(b, null);
                 setAmount(b, 0);
             }
         }
@@ -283,10 +261,6 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
     private void setItem(Block b, String storeditem) {
         setBlockData(b, "storeditem", storeditem);
-    }
-
-    private void setType(Block b, String type) {
-        setBlockData(b, "storeditemtype", type);
     }
 
     private void setAmount(Block b, int stored) {
@@ -299,53 +273,41 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
         if (inv.toInventory() == null || inv.toInventory().getViewers().isEmpty()) return;
 
-        String storeditem = getBlockData(b.getLocation(), "storeditem");
-        String storeditemtype = getBlockData(b.getLocation(), "storeditemtype");
+        String storedItem = getBlockData(b.getLocation(), "storeditem");
         int stored = Integer.parseInt(getBlockData(b.getLocation(), "stored"));
 
-        if (storeditem == null || stored == 0 || storeditemtype == null) {
-            inv.replaceExistingItem(STATUSSLOT, new CustomItem(
+        if (storedItem == null || stored == 0) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                     new ItemStack(Material.BARRIER),
                     "&cInput an Item!"
             ));
         } else {
-            int maxstorage = tier.getStorage();
-            ItemStack converteditem = convert(storeditemtype, storeditem, 1);
+            int maxStorage = tier.getStorage();
+            ItemStack storedItemStack = Utils.getItemFromID(storedItem, 1);
 
             String converteditemname = "";
-            if (converteditem.getItemMeta() != null) {
-                converteditemname = converteditem.getItemMeta().getDisplayName();
+            if (storedItemStack.getItemMeta() != null) {
+                converteditemname = storedItemStack.getItemMeta().getDisplayName();
             }
 
-            String stacks = "&7Stacks: " + Math.round((float)stored / convert(storeditemtype, storeditem, 1).getMaxStackSize());
+            String stacks = "&7Stacks: " + Math.round((float)stored / storedItemStack.getMaxStackSize());
 
             if (this.tier == Tier.INFINITY) {
-                inv.replaceExistingItem(STATUSSLOT, new CustomItem(
-                        converteditem,
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                        storedItemStack,
                         converteditemname,
                         "&6Stored: &e" + stored,
                         stacks
                 ));
             } else {
-                inv.replaceExistingItem(STATUSSLOT, new CustomItem(
-                        converteditem,
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                        storedItemStack,
                         converteditemname,
-                        "&6Stored: &e" + stored + "/" + maxstorage + " &7(" + Math.round((float) 100 * stored / maxstorage )  + "%)",
+                        "&6Stored: &e" + stored + "/" + maxStorage + " &7(" + Math.round((float) 100 * stored / maxStorage )  + "%)",
                         stacks
                 ));
             }
         }
-    }
-
-    private ItemStack convert(String type, String id, int amount) {
-        ItemStack out = null;
-
-        if (type.equals("slimefun")) {
-            out = new CustomItem(SlimefunItem.getByID(id).getItem(), amount);
-        } else if (type.equals("material")) {
-            out = new ItemStack(Material.getMaterial(id), amount);
-        }
-        return out;
     }
 
     private void setBlockData(Block b, String key, String data) {
@@ -358,12 +320,12 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
     @Override
     public int[] getInputSlots() {
-        return INPUTSLOTS;
+        return INPUT_SLOTS;
     }
 
     @Override
     public int[] getOutputSlots() {
-        return OUTPUTSLOTS;
+        return OUTPUT_SLOTS;
     }
 
     @Getter

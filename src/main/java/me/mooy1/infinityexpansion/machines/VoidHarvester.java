@@ -1,7 +1,6 @@
 package me.mooy1.infinityexpansion.machines;
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
-import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -29,17 +28,15 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class VoidHarvester extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
 
-    private static final int[] OUTPUTSLOTS = {
+    private static final int[] OUTPUT_SLOTS = {
         13
     };
-
-    private static final int STATUSSLOT = 4;
+    private static final int STATUS_SLOT = 4;
     private static final int TIME = 10000;
 
     private final Type type;
@@ -58,7 +55,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
             }
 
             if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand"))).remove();
+                Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
             }
 
             return true;
@@ -75,7 +72,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
                     blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
                 }
 
-                blockMenuPreset.addItem(STATUSSLOT,
+                blockMenuPreset.addItem(STATUS_SLOT,
                         new CustomItem(Material.RED_STAINED_GLASS_PANE,
                                 "&aLoading..."
                         ),
@@ -99,20 +96,29 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
 
         ItemStack output = Items.VOID_BIT;
 
-        if (getBlockData(b.getLocation(), "progress") == null) {
+        if (getBlockData(b.getLocation()) == null) {
             setProgress(b, 1);
         }
 
-        int progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
+        int progress = Integer.parseInt(getBlockData(b.getLocation()));
 
         String lore = "&7(" + progress + "/" + TIME/type.getSpeed() + ")";
 
-        if (getCharge(b.getLocation()) >= type.getEnergyConsumption()) {
+        if (getCharge(b.getLocation()) == type.getEnergyConsumption()) {
 
+            //not enough energy
+            if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE,
+                        "&cNot enough energy!",
+                        lore
+                ));
+            }
+
+        } else {
             if (!inv.fits(output, getOutputSlots())) {
                 //output slots full
                 if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                    inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.ORANGE_STAINED_GLASS_PANE,
+                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.ORANGE_STAINED_GLASS_PANE,
                             "&cNot enough room!",
                             lore
                     ));
@@ -139,17 +145,8 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
             }
             //harvesting
             if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                         "&aHarvesting...",
-                        lore
-                ));
-            }
-
-        } else {
-            //not enough energy
-            if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(STATUSSLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE,
-                        "&cNot enough energy!",
                         lore
                 ));
             }
@@ -157,15 +154,15 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
     }
 
     private void setProgress(Block b, int progress) {
-        setBlockData(b, "progress", String.valueOf(progress));
+        setBlockData(b, String.valueOf(progress));
     }
 
-    private void setBlockData(Block b, String key, String data) {
-        BlockStorage.addBlockInfo(b, key, data);
+    private void setBlockData(Block b, String data) {
+        BlockStorage.addBlockInfo(b, "progress", data);
     }
 
-    private String getBlockData(Location l, String key) {
-        return BlockStorage.getLocationInfo(l, key);
+    private String getBlockData(Location l) {
+        return BlockStorage.getLocationInfo(l, "progress");
     }
 
     @Override
@@ -175,7 +172,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
 
     @Override
     public int[] getOutputSlots() {
-        return OUTPUTSLOTS;
+        return OUTPUT_SLOTS;
     }
 
     @Nonnull
