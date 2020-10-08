@@ -13,9 +13,8 @@ public final class Categories {
         new CustomItem(Material.NETHER_STAR, "&b&lInfinity &7&lExpansion",
                 "lore",
                 "&7Version: &8" + InfinityExpansion.getInstance().getPluginVersion(),
-                "&7SF Timings: &8" + LoreUtils.CUSTOM_TICKER_DELAY + "&7",
-                "&7SF TPS: &8" + LoreUtils.roundHundreds(LoreUtils.SERVER_TICK_RATIO)),
-        2
+                "&7Timings: &8" + LoreUtils.CUSTOM_TICKER_DELAY + " &7TPS: &8" + LoreUtils.roundHundreds(LoreUtils.SERVER_TICK_RATIO)
+        ), 2
     );
     public static final Category INFINITY_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
         "INFINITY_MACHINES"),
@@ -28,18 +27,19 @@ public final class Categories {
                 "5",
                 "6",
                 "7"
-        ),
-        2
+        ), 2
     );
     public static final Category INFINITY_MATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
         "INFINITY_MATERIALS"),
-        new CustomItem(Material.NETHERITE_INGOT, "&b&lInfinity &a&lMaterials"),
-        2
+        new CustomItem(Material.NETHERITE_INGOT,
+                "&b&lInfinity &a&lMaterials"
+        ), 2
     );
     public static final Category INFINITY_GEAR = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
         "INFINITY_GEAR"),
-        new CustomItem(Material.NETHERITE_CHESTPLATE, "&b&lInfinity &9&lGear"),
-        2
+        new CustomItem(Material.NETHERITE_CHESTPLATE,
+                "&b&lInfinity &9&lGear"
+        ), 2
     );
 
     private Categories() { }

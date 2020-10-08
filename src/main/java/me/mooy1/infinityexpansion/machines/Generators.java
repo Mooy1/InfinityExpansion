@@ -105,7 +105,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
                     Material.GREEN_STAINED_GLASS_PANE,
                     "&aGeneration",
                     "&bRate: " + generationType,
-                    "&7Generating at &6" + rate * LoreUtils.roundHundreds(LoreUtils.SERVER_TICK_RATIO) + " J/s ",
+                    "&7Generating at &6" + LoreUtils.roundHundreds(rate * LoreUtils.SERVER_TICK_RATIO) + " J/s ",
                     "&7Stored: &6" + (stored + rate) + " J"
             ));
         }

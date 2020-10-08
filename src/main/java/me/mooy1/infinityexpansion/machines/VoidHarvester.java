@@ -49,7 +49,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 10000;
+    private static final int TIME = 1000;
 
     private final Type type;
 
@@ -135,7 +135,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
-        ItemStack output = Items.VOID_BIT;
+        ItemStack output = Items.VOID_BIT.clone();
 
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 

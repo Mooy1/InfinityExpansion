@@ -454,8 +454,7 @@ public final class Items {
             "&d&lI&c&ln&6&lf&e&li&a&ln&b&li&3&lt&9&ly &f&lSingularity",
             "&fThe Ultimate Flex",
             "&7Version: &8" + InfinityExpansion.getInstance().getPluginVersion(),
-            "&7SF Timings: &8" + LoreUtils.CUSTOM_TICKER_DELAY + "&7",
-            "&7SF TPS: &8" + LoreUtils.roundHundreds(LoreUtils.SERVER_TICK_RATIO)
+            "&7Timings: &8" + LoreUtils.CUSTOM_TICKER_DELAY + " &7TPS: &8" + LoreUtils.roundHundreds(LoreUtils.SERVER_TICK_RATIO)
     );
 
     //Ingots
