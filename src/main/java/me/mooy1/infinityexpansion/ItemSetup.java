@@ -21,6 +21,20 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 
 public final class ItemSetup {
+    
+    public static int INFINITY_CAPACITOR = 1600000000;
+
+    public static int ADVANCED_EN_SPEED = 5;
+    public static int ADVANCED_EN_ENERGY = 600;
+
+    public static int ADVANCED_DIS_SPEED = 5;
+    public static int ADVANCED_DIS_ENERGY = 600;
+
+    public static int INFINITY_EN_SPEED = 75;
+    public static int INFINITY_EN_ENERGY = 60000;
+
+    public static int INFINITY_DIS_SPEED = 90;
+    public static int INFINITY_DIS_ENERGY = 60000;
 
     private ItemSetup() { }
 
@@ -50,8 +64,8 @@ public final class ItemSetup {
             new Quarry(tier).register(plugin);
         }
 
-        for (InfinityPanel.Type type : InfinityPanel.Type.values()) {
-            new InfinityPanel(type).register(plugin);
+        for (Generators.Type type : Generators.Type.values()) {
+            new Generators(type).register(plugin);
         }
 
         for (VoidHarvester.Type type : VoidHarvester.Type.values()) {
@@ -95,9 +109,9 @@ public final class ItemSetup {
             new MagnoniumGear(type).register(plugin);
         }
 
-        //Slimefun constructors
+        //Sf constructors
 
-        new Capacitor(Categories.INFINITY_MACHINES, 1_600_000_000, Items.INFINITY_CAPACITOR,
+        new Capacitor(Categories.INFINITY_MACHINES, INFINITY_CAPACITOR, Items.INFINITY_CAPACITOR,
             RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.INFINITE_INGOT, Items.INFINITE_INGOT, Items.INFINITE_INGOT,
             Items.INFINITE_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITE_INGOT,
@@ -115,15 +129,15 @@ public final class ItemSetup {
             }
             @Override
             public int getEnergyConsumption() {
-                return 600;
+                return ADVANCED_EN_ENERGY;
             }
             @Override
             public int getCapacity() {
-                return 600;
+                return ADVANCED_EN_ENERGY;
             }
             @Override
             public int getSpeed() {
-                return 5;
+                return ADVANCED_EN_SPEED;
             }
 
         }.register(plugin);
@@ -139,15 +153,15 @@ public final class ItemSetup {
             }
             @Override
             public int getEnergyConsumption() {
-                return 600;
+                return ADVANCED_DIS_ENERGY;
             }
             @Override
             public int getCapacity() {
-                return 600;
+                return ADVANCED_DIS_ENERGY;
             }
             @Override
             public int getSpeed() {
-                return 5;
+                return ADVANCED_DIS_SPEED;
             }
 
 
@@ -164,15 +178,15 @@ public final class ItemSetup {
             }
             @Override
             public int getEnergyConsumption() {
-                return 60000;
+                return INFINITY_EN_ENERGY;
             }
             @Override
             public int getCapacity() {
-                return 60000;
+                return INFINITY_EN_ENERGY;
             }
             @Override
             public int getSpeed() {
-                return 75;
+                return INFINITY_EN_SPEED;
             }
 
         }.register(plugin);
@@ -190,15 +204,15 @@ public final class ItemSetup {
             }
             @Override
             public int getEnergyConsumption() {
-                return 60000;
+                return INFINITY_DIS_ENERGY;
             }
             @Override
             public int getCapacity() {
-                return 60000;
+                return INFINITY_DIS_ENERGY;
             }
             @Override
             public int getSpeed() {
-                return 90;
+                return INFINITY_DIS_SPEED;
             }
 
         }.register(plugin);

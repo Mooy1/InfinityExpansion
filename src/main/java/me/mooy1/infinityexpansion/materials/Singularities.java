@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.Utils;
+import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mooy1.infinityexpansion.machines.SingularityConstructor;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -20,7 +20,7 @@ public class Singularities extends SlimefunItem {
         super(Categories.INFINITY_MATERIALS,
                 type.getItem(),
                 SingularityConstructor.SINGULARITY_CONSTRUCTOR,
-                Utils.MiddleItem(new CustomItem(Material.PAPER, "&fContructed with &e" + type.getAmount() + " " + type.getResource())));
+                RecipeUtils.MiddleItem(new CustomItem(Material.PAPER, "&fContructed with &e" + type.getAmount() + " " + type.getResource())));
     }
 
     @Getter
@@ -46,7 +46,7 @@ public class Singularities extends SlimefunItem {
         REDSTONE(Items.REDSTONE_SINGULARITY, 16000, "&cRedstone"),
         QUARTZ(Items.QUARTZ_SINGULARITY, 16000, "&fQuartz"),
 
-        INFINITY(Items.INFINITY_SINGULARITY, 1000, "&bInfinity Ingots");
+        INFINITY(Items.INFINITY_SINGULARITY, 1000, "&dI&cn&6f&ei&an&bi&3t&9y &fIngot");
 
         @Nonnull
         private final SlimefunItemStack item;

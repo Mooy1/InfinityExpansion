@@ -14,11 +14,15 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class IngotSynthesizer extends AContainer {
+public class AlloySynthesizer extends AContainer {
 
     private final Type type;
+    public static int BASIC_SPEED = 1;
+    public static int INFINITY_SPEED = 1;
+    public static int BASIC_ENERGY = 1000;
+    public static int INFINITY_ENERGY = 100000;
 
-    public IngotSynthesizer(Type type) {
+    public AlloySynthesizer(Type type) {
         super(Categories.INFINITY_MACHINES, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, type.getRecipe());
         this.type = type;
     }
@@ -30,12 +34,24 @@ public class IngotSynthesizer extends AContainer {
 
     @Override
     public int getEnergyConsumption() {
-        return type.getEnergyConsumption();
+        if (this.type == Type.BASIC) {
+            return BASIC_ENERGY;
+        } else if (this.type == Type.INFINITY) {
+            return INFINITY_ENERGY;
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public int getSpeed() {
-        return type.getSpeed();
+        if (this.type == Type.BASIC) {
+            return BASIC_SPEED;
+        } else if (this.type == Type.INFINITY) {
+            return INFINITY_SPEED;
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -45,28 +61,32 @@ public class IngotSynthesizer extends AContainer {
 
     @Override
     public int getCapacity() {
-        return type.getEnergyConsumption()*2;
+        if (this.type == Type.BASIC) {
+            return BASIC_ENERGY;
+        } else if (this.type == Type.INFINITY) {
+            return INFINITY_ENERGY;
+        } else {
+            return 0;
+        }
     }
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Type {
-        BASIC(Items.INGOT_SYNTHESIZER, 1, 1_000, new ItemStack[] {
+        BASIC(Items.ALLOY_SYNTHESIZER, new ItemStack[] {
             Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-            Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_FURNACE, Items.MACHINE_PLATE,
+            Items.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Items.MACHINE_PLATE,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Items.INFINITY_INGOT_SYNTHESIZER, 10, 100_000, new ItemStack[] {
+        INFINITY(Items.INFINITY_ALLOY_SYNTHESIZER, new ItemStack[] {
             Items.INFINITE_INGOT, Items.MACHINE_PLATE, Items.INFINITE_INGOT,
-            Items.MACHINE_PLATE, Items.INGOT_SYNTHESIZER, Items.MACHINE_PLATE,
+            Items.MACHINE_PLATE, Items.ALLOY_SYNTHESIZER, Items.MACHINE_PLATE,
             Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
         });
 
         @Nonnull
         private final SlimefunItemStack item;
-        private final int speed;
-        private final int energyConsumption;
         private final ItemStack[] recipe;
     }
 }

@@ -11,8 +11,11 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.Utils;
+import me.mooy1.infinityexpansion.utils.ConversionUtils;
+import me.mooy1.infinityexpansion.utils.PresetItemUtils;
+import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
+import me.mrCookieSlime.CSCoreLibPlugin.PlayerRunnable;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
@@ -41,6 +44,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
+
+    public static int BASIC_ENERGY = 300;
+    public static int BASIC_SPEED = 1;
+    public static int INFINITY_ENERGY = 30000;
+    public static int INFINITY_SPEED = 10;
 
     private final Type type;
     private final int STATUS_SLOT = 13;
@@ -127,15 +135,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
             1000
     };
-    private final ItemStack loadingItem = new CustomItem(
-            Material.LIME_STAINED_GLASS_PANE,
-            "&aLoading...");
-    private final ItemStack inputBorderItem = new CustomItem(
-            Material.BLUE_STAINED_GLASS_PANE,
-            "&9Input");
-    private final ItemStack outputBorderItem = new CustomItem(
-            Material.ORANGE_STAINED_GLASS_PANE,
-            "&6Output");
 
     public SingularityConstructor(Type type) {
         super(Categories.INFINITY_MACHINES, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, type.getRecipe());
@@ -199,10 +198,10 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     int remainder = progress % stacksize;
 
                     for (int i = 0; i < stacks; i++) {
-                        b.getWorld().dropItemNaturally(l, Utils.getItemFromID(input, stacksize));
+                        b.getWorld().dropItemNaturally(l, ConversionUtils.getItemFromID(input, stacksize));
                     }
                     if (remainder > 0) {
-                        b.getWorld().dropItemNaturally(l, Utils.getItemFromID(input, remainder));
+                        b.getWorld().dropItemNaturally(l, ConversionUtils.getItemFromID(input, remainder));
                     }
                 }
             }
@@ -220,13 +219,13 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i, inputBorderItem, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, PresetItemUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, outputBorderItem, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, PresetItemUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, loadingItem, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, PresetItemUtils.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -249,7 +248,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         int progress = Integer.parseInt(getProgress(b));
         ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
-        if (getCharge(b.getLocation()) < type.getEnergyConsumption()) { //when not enough power
+        if (getCharge(b.getLocation()) < getEnergyConsumption(type)) { //when not enough power
 
             name = "&cNot enough energy!";
 
@@ -262,7 +261,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
             } else { //started
 
-                ItemStack input = Utils.getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
+                ItemStack input = ConversionUtils.getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
 
                 if (input.getItemMeta() != null) {
                     if (!input.getItemMeta().getDisplayName().equals("")) { //sf name
@@ -275,7 +274,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
         } else { //started
 
-            int speed = type.getSpeed();
+            int speed = getSpeed(type);
 
             if (progress == 0 || getProgressID(b) == null) { //no input
 
@@ -303,7 +302,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                 String input = inputItems[progressID];
 
-                if (Utils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
+                if (ConversionUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
 
                     int inputSlotAmount = inputSlotItem.getAmount();
 
@@ -330,7 +329,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                     if (progress >= outputTime) { //if contruction done
 
-                        ItemStack output = Utils.getItemFromID(outputItems[progressID], 1);
+                        ItemStack output = ConversionUtils.getItemFromID(outputItems[progressID], 1);
 
                         if (inv.fits(output)) { //output
 
@@ -376,7 +375,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                 int time = outputTimes[Integer.parseInt(getProgressID(b))];
 
                 String displayname = "";
-                ItemMeta displaymeta = Utils.getItemFromID(output, 1).getItemMeta();
+                ItemMeta displaymeta = ConversionUtils.getItemFromID(output, 1).getItemMeta();
 
                 if (displaymeta != null) {
                     displayname = displaymeta.getDisplayName();
@@ -398,7 +397,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         int itemAmount = item.getAmount();
 
         for (int i = 0 ; i < inputItems.length ; i++) {
-            if (Utils.getIDFromItem(item).equals(inputItems[i])) {
+            if (ConversionUtils.getIDFromItem(item).equals(inputItems[i])) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
                     inv.consumeItem(INPUT_SLOT, speed);
@@ -445,7 +444,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
     @Override
     public int getCapacity() {
-        return type.getEnergyConsumption();
+        return getEnergyConsumption(type);
     }
 
     @Override
@@ -462,16 +461,36 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             new NamespacedKey(InfinityExpansion.getInstance(), "singularity_constructor"), Items.SINGULARITY_CONSTRUCTOR
     );
 
+    private int getEnergyConsumption(Type type) {
+        if (type == Type.BASIC) {
+            return BASIC_ENERGY;
+        } else if (type == Type.INFINITY) {
+            return INFINITY_ENERGY;
+        } else {
+            return 0;
+        }
+    }
+
+    private int getSpeed(Type type) {
+        if (type == Type.BASIC) {
+            return BASIC_SPEED;
+        } else if (type == Type.INFINITY) {
+            return INFINITY_SPEED;
+        } else {
+            return 0;
+        }
+    }
+
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Type {
-        BASIC(Items.SINGULARITY_CONSTRUCTOR, 1, 600, new ItemStack[] {
+        BASIC(Items.SINGULARITY_CONSTRUCTOR, new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MACHINE_PLATE, SlimefunItems.CARBON_PRESS_3, Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Items.INFINITY_CONSTRUCTOR, 10, 60_000, new ItemStack[] {
+        INFINITY(Items.INFINITY_CONSTRUCTOR, new ItemStack[] {
                 Items.INFINITE_INGOT, Items.MACHINE_PLATE, Items.INFINITE_INGOT,
                 Items.MACHINE_PLATE, Items.SINGULARITY_CONSTRUCTOR, Items.MACHINE_PLATE,
                 Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
@@ -479,8 +498,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
         @Nonnull
         private final SlimefunItemStack item;
-        private final int speed;
-        private final int energyConsumption;
         private final ItemStack[] recipe;
     }
 }

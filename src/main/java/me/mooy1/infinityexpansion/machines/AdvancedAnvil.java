@@ -1,5 +1,7 @@
 package me.mooy1.infinityexpansion.machines;
 
+import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
+import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,16 +9,52 @@ import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class AdvancedAnvil extends SlimefunItem {
+public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent, InventoryBlock {
+
+    private final Type type;
+
+    public static int ADVANCED_ENERGY = 100_000;
+    public static int INFINITY_ENERGY = 1_000_000;
 
     public AdvancedAnvil(Type type) {
         super(Categories.INFINITY_MACHINES, type.getItem(), type.getRecipetype(), type.getRecipe());
+        this.type = type;
+    }
+
+    @Nonnull
+    @Override
+    public EnergyNetComponentType getEnergyComponentType() {
+        return EnergyNetComponentType.CONSUMER;
+    }
+
+    @Override
+    public int getCapacity() {
+        if (this.type == Type.ADVANCED) {
+            return ADVANCED_ENERGY;
+
+        } else if (this.type == Type.INFINITY) {
+            return INFINITY_ENERGY;
+
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public int[] getInputSlots() {
+        return new int[0];
+    }
+
+    @Override
+    public int[] getOutputSlots() {
+        return new int[0];
     }
 
     @Getter

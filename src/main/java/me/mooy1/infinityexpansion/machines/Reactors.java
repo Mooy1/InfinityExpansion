@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class InfinityReactor extends AGenerator {
-    public InfinityReactor() {
+public class Reactors extends AGenerator {
+    public Reactors() {
         super(Categories.INFINITY_MACHINES,
                 Items.INFINITY_REACTOR,
                 RecipeType.ENHANCED_CRAFTING_TABLE,

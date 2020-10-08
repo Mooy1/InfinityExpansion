@@ -6,7 +6,7 @@
     <groupId>me.mooy1</groupId>
     <artifactId>InfinityExpansion</artifactId>
 
-    <version>UNOFFICIAL</version>
+    <version>MODIFIED</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
