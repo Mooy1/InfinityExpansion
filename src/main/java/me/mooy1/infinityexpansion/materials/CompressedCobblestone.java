@@ -13,14 +13,9 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+import me.mooy1.infinityexpansion.utils.RecipeUtils;
+
 public class CompressedCobblestone extends SlimefunItem {
-
-
-    public static ItemStack[] Compress(ItemStack item) {
-        return new ItemStack[] {
-                item, item, item, item, item, item, item, item, item,
-        };
-    }
 
     public CompressedCobblestone(Type type) {
         super(Categories.INFINITY_MATERIALS, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
@@ -31,15 +26,15 @@ public class CompressedCobblestone extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Type {
-        ONE(Items.COMPRESSED_COBBLESTONE_1, Compress(new ItemStack(Material.COBBLESTONE))),
-        TWO(Items.COMPRESSED_COBBLESTONE_2, Compress(Items.COMPRESSED_COBBLESTONE_1)),
-        THREE(Items.COMPRESSED_COBBLESTONE_3, Compress(Items.COMPRESSED_COBBLESTONE_2)),
-        FOUR(Items.COMPRESSED_COBBLESTONE_4, Compress(Items.COMPRESSED_COBBLESTONE_3)),
-        FIVE(Items.COMPRESSED_COBBLESTONE_5, Compress(Items.COMPRESSED_COBBLESTONE_4)),
-        SIX(Items.COMPRESSED_COBBLESTONE_6, Compress(Items.COMPRESSED_COBBLESTONE_5)),
-        SEVEN(Items.COMPRESSED_COBBLESTONE_7, Compress(Items.COMPRESSED_COBBLESTONE_6)),
-        EIGHT(Items.COMPRESSED_COBBLESTONE_8, Compress(Items.COMPRESSED_COBBLESTONE_7)),
-        NINE(Items.COMPRESSED_COBBLESTONE_9, Compress(Items.COMPRESSED_COBBLESTONE_8));
+        ONE(Items.COMPRESSED_COBBLESTONE_1, RecipeUtils.Compress(new ItemStack(Material.COBBLESTONE))),
+        TWO(Items.COMPRESSED_COBBLESTONE_2, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_1)),
+        THREE(Items.COMPRESSED_COBBLESTONE_3, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_2)),
+        FOUR(Items.COMPRESSED_COBBLESTONE_4, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_3)),
+        FIVE(Items.COMPRESSED_COBBLESTONE_5, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_4)),
+        SIX(Items.COMPRESSED_COBBLESTONE_6, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_5)),
+        SEVEN(Items.COMPRESSED_COBBLESTONE_7, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_6)),
+        EIGHT(Items.COMPRESSED_COBBLESTONE_8, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_7)),
+        NINE(Items.COMPRESSED_COBBLESTONE_9, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_8));
 
         @Nonnull
         private final SlimefunItemStack item;

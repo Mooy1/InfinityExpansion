@@ -1,6 +1,5 @@
 package me.mooy1.infinityexpansion.basics;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-import static me.mooy1.infinityexpansion.materials.CompressedCobblestone.Compress;
-import static me.mooy1.infinityexpansion.materials.Singularities.MiddleItem;
+import static me.mooy1.infinityexpansion.utils.RecipeUtils.Compress;
+import static me.mooy1.infinityexpansion.utils.RecipeUtils.MiddleItem;
 
 public class MainItems extends SlimefunItem {
 
