@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.PresetItemUtils;
+import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -59,7 +59,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
                     blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
 
                 blockMenuPreset.addItem(4,
-                    PresetItemUtils.loadingItemRed,
+                    PresetUtils.loadingItemRed,
                     ChestMenuUtils.getEmptyClickHandler());
             });
     }

@@ -7,7 +7,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.PresetItemUtils;
+import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
@@ -34,25 +34,22 @@ public class IngotForge extends SlimefunItem implements InventoryBlock, EnergyNe
             9,                      17,
             18,                     26,
             27,                     35,
+            36,        40,          44,
+            45,        49,          53,
     };
     private final int[] OUTPUT_SLOTS = {
-            52
+            51
     };
     private final int[] OUTPUT_BORDER = {
-            42, 43, 44,
-            51,     53
+            41, 42, 43,
+            50,     52
     };
     private final int RECIPE_SLOT = 4;
-    private final int STATUS_SLOT = 49;
+    private final int STATUS_SLOT = 47;
     private final int[] STATUS_BORDER = {
-            39, 40, 41,
-            48,     50,
+            37, 38, 39,
+            46,     48,
 
-    };
-    private final int ENERGY_SLOT = 46;
-    private final int[] ENERGY_BORDER = {
-            36, 37, 38,
-            45,     47,
     };
 
 
@@ -81,27 +78,22 @@ public class IngotForge extends SlimefunItem implements InventoryBlock, EnergyNe
     private void setupInv() {
         createPreset(this, Items.INGOT_FORGE.getDisplayName(),
                 blockMenuPreset -> {
-                    for (int i : ENERGY_BORDER) {
-                        blockMenuPreset.addItem(i, PresetItemUtils.borderItemEnergy, ChestMenuUtils.getEmptyClickHandler());
-                    }
 
                     for (int i : OUTPUT_BORDER) {
-                        blockMenuPreset.addItem(i, PresetItemUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+                        blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
                     }
 
                     for (int i : INPUT_BORDER) {
-                        blockMenuPreset.addItem(i, PresetItemUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+                        blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
                     }
 
                     for (int i : STATUS_BORDER) {
-                        blockMenuPreset.addItem(i, PresetItemUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+                        blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
                     }
 
-                    blockMenuPreset.addItem(STATUS_SLOT, PresetItemUtils.loadingItemBarrier,
+                    blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
                             ChestMenuUtils.getEmptyClickHandler());
-                    blockMenuPreset.addItem(ENERGY_SLOT, PresetItemUtils.loadingItemRed,
-                            ChestMenuUtils.getEmptyClickHandler());
-                    blockMenuPreset.addItem(RECIPE_SLOT, PresetItemUtils.recipesItem,
+                    blockMenuPreset.addItem(RECIPE_SLOT, PresetUtils.recipesItem,
                             ChestMenuUtils.getEmptyClickHandler());
                 });
     }

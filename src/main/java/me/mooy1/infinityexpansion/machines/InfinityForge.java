@@ -7,8 +7,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.PresetItemUtils;
-import me.mooy1.infinityexpansion.utils.RecipeUtils;
+import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
@@ -77,16 +76,16 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
                 blockMenuPreset -> {
 
                     for (int i : OUTPUT_BORDER) {
-                        blockMenuPreset.addItem(i, PresetItemUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+                        blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
                     }
 
                     for (int i : STATUS_BORDER) {
-                        blockMenuPreset.addItem(i, PresetItemUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+                        blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
                     }
 
-                    blockMenuPreset.addItem(STATUS_SLOT, PresetItemUtils.loadingItemBarrier,
+                    blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
                             ChestMenuUtils.getEmptyClickHandler());
-                    blockMenuPreset.addItem(RECIPE_SLOT, PresetItemUtils.recipesItem,
+                    blockMenuPreset.addItem(RECIPE_SLOT, PresetUtils.recipesItem,
                             ChestMenuUtils.getEmptyClickHandler());
                 });
     }

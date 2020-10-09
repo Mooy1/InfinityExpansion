@@ -4,8 +4,8 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoDisenchanter;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
-import me.mooy1.infinityexpansion.basics.MainItems;
-import me.mooy1.infinityexpansion.materials.MainMaterials;
+import me.mooy1.infinityexpansion.basics.MainMaterials;
+import me.mooy1.infinityexpansion.materials.OtherMaterials;
 import me.mooy1.infinityexpansion.machines.InfinityForge;
 import me.mooy1.infinityexpansion.machines.IngotForge;
 import me.mooy1.infinityexpansion.basics.StorageUnit;
@@ -15,6 +15,7 @@ import me.mooy1.infinityexpansion.gear.EnderFlame;
 import me.mooy1.infinityexpansion.machines.*;
 import me.mooy1.infinityexpansion.materials.*;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -42,8 +43,10 @@ public final class ItemSetup {
 
         //basics
 
-        for (MainItems.Type type : MainItems.Type.values()) {
-            new MainItems(type).register(plugin);
+        new SlimefunItem(Categories.INFINITY_BASICS, Items.ADDON_INFO, RecipeType.NULL, null).register(plugin);
+
+        for (MainMaterials.Type type : MainMaterials.Type.values()) {
+            new MainMaterials(type).register(plugin);
         }
 
         for (StorageUnit.Tier tier : StorageUnit.Tier.values()) {
@@ -52,16 +55,16 @@ public final class ItemSetup {
 
         //add machines
 
-        new IngotForge().register(plugin);
-
-        new InfinityForge().register(plugin);
-
         for (MachineMaterials.Type type : MachineMaterials.Type.values()) {
             new MachineMaterials(type).register(plugin);
         }
 
-        for (Quarry.Type tier : Quarry.Type.values()) {
-            new Quarry(tier).register(plugin);
+        for (AlloySynthesizer.Type type : AlloySynthesizer.Type.values()) {
+            new AlloySynthesizer(type).register(plugin);
+        }
+
+        for (Quarry.Type type : Quarry.Type.values()) {
+            new Quarry(type).register(plugin);
         }
 
         for (Generators.Type type : Generators.Type.values()) {
@@ -80,6 +83,12 @@ public final class ItemSetup {
             new AdvancedAnvil(type).register(plugin);
         }
 
+        new IngotForge().register(plugin);
+        new PoweredBedrock().register(plugin);
+        new ItemUpdater().register(plugin);
+        new InfinityForge().register(plugin);
+
+
         //add materials
 
         for (CompressedCobblestone.Type type : CompressedCobblestone.Type.values()) {
@@ -90,12 +99,17 @@ public final class ItemSetup {
             new Singularities(type).register(plugin);
         }
 
-        for (MainMaterials.Type type : MainMaterials.Type.values()) {
-            new MainMaterials(type).register(plugin);
+        for (OtherMaterials.Type type : OtherMaterials.Type.values()) {
+            new OtherMaterials(type).register(plugin);
         }
 
         new EnderEssence().register(plugin);
         new EnderEssenceResource().register();
+
+        for (RecipeItems.Type type : RecipeItems.Type.values()) {
+            new RecipeItems(type).register(plugin);
+        }
+
 
         //add gear
 

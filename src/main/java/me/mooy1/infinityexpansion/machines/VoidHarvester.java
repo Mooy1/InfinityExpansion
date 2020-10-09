@@ -11,7 +11,7 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.PresetItemUtils;
+import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -49,7 +49,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 1000;
+    private static final int TIME = 10000;
 
     private final Type type;
 
@@ -117,7 +117,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, PresetItemUtils.loadingItemRed,
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed,
                 ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -135,6 +135,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
+
         ItemStack output = Items.VOID_BIT.clone();
 
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
@@ -144,35 +145,42 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         if (getCharge(b.getLocation()) < energy) { //not enough energy
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetItemUtils.notEnoughEnergy);
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             }
 
         } else {
 
-            if (!inv.fits(output, getOutputSlots())) { //output slots full
+            int progress = Integer.parseInt(getProgress(b));
 
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, PresetItemUtils.notEnoughRoom);
-                }
+            int speed = getSpeed(type);
 
-            } else {
+            if (progress >= TIME) { //reached full progress
 
-                int progress = Integer.parseInt(getProgress(b));
-
-                int speed = getSpeed(type);
-
-                if (progress >= TIME) { //reached full progress
+                if (inv.fits(output, getOutputSlots())) {
 
                     inv.pushItem(output, getOutputSlots());
 
                     setProgress(b, speed);
 
-                } else { //increase progress
+                    removeCharge(b.getLocation(), energy);
 
-                    setProgress(b, progress+speed);
+                    if (playerWatching) { //done
+                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                                "&aHarvesting complete! - 100%",
+                                "&7(" + progress + "/" + TIME + ")"
+                        ));
+                    }
 
+                } else { //output slots full
+
+                    if (playerWatching) {
+                        inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                    }
                 }
 
+            } else { //increase progress
+
+                setProgress(b, progress+speed);
                 removeCharge(b.getLocation(), energy);
 
                 if (playerWatching) { //update status

@@ -13,7 +13,7 @@ public final class LoreUtils {
     private LoreUtils() {}
 
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + energy * LoreUtils.roundHundreds(SERVER_TICK_RATIO) + " J/s";
+        return "&8\u21E8 &e\u26A1 &7" + Math.round(energy * SERVER_TICK_RATIO) + " J/s";
     }
 
     public static String energyPerUse(int energy) {

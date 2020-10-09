@@ -7,9 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.ConversionUtils;
-import me.mooy1.infinityexpansion.utils.PresetItemUtils;
-import me.mooy1.infinityexpansion.utils.RecipeUtils;
+import me.mooy1.infinityexpansion.utils.ItemUtils;
+import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -129,7 +128,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                 //drop stored items
                 if (stored > 0 && storedItem != null) {
 
-                    ItemStack storedItemStack = ConversionUtils.getItemFromID(storedItem, 1);
+                    ItemStack storedItemStack = ItemUtils.getItemFromID(storedItem, 1);
                     int stackSize = storedItemStack.getMaxStackSize();
 
                     int stacks = (int) Math.floor((float) stored / stackSize);
@@ -160,13 +159,13 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetItemUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetItemUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, PresetItemUtils.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -200,12 +199,12 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
             if (inputSlotItem.getMaxStackSize() != 1) { //Check if non stackable item
 
-                String inputItemID = ConversionUtils.getIDFromItem(inputSlotItem);
+                String inputItemID = ItemUtils.getIDFromItem(inputSlotItem);
                 int stored = getStored(b);
 
                 if (stored == 0 && storedItem == null) { //store new item
 
-                    setStoredItem(b, ConversionUtils.getIDFromItem(inputSlotItem));
+                    setStoredItem(b, ItemUtils.getIDFromItem(inputSlotItem));
                     setStored(b, slotAmount);
                     inv.consumeItem(INPUT_SLOT, slotAmount);
 
@@ -242,7 +241,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
         if (storedItem != null) {
 
-            ItemStack storedItemStack = ConversionUtils.getItemFromID(storedItem, 1);
+            ItemStack storedItemStack = ItemUtils.getItemFromID(storedItem, 1);
             int stored = getStored(b);
             int outputRemaining;
 
@@ -292,7 +291,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             ));
         } else {
             int maxStorage = getStorage(tier);
-            ItemStack storedItemStack = ConversionUtils.getItemFromID(storedItem, 1);
+            ItemStack storedItemStack = ItemUtils.getItemFromID(storedItem, 1);
 
             String converteditemname = "";
             if (storedItemStack.getItemMeta() != null) {

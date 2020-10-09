@@ -11,11 +11,9 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.ConversionUtils;
-import me.mooy1.infinityexpansion.utils.PresetItemUtils;
-import me.mooy1.infinityexpansion.utils.RecipeUtils;
+import me.mooy1.infinityexpansion.utils.ItemUtils;
+import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.CSCoreLibPlugin.PlayerRunnable;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
@@ -26,7 +24,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Bukkit;
@@ -69,7 +66,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     private final int[] OUTPUT_BORDER = {
             6, 7, 8, 15, 17, 24, 25, 26
     };
-    private final String[] inputItems = {
+    public static final String[] inputItems = {
             "COPPER_INGOT",
             "ZINC_INGOT",
             "TIN_INGOT",
@@ -91,7 +88,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
             "INFINITE_INGOT"
     };
-    private final String[] outputItems = {
+    public static final String[] outputItems = {
             "COPPER_SINGULARITY",
             "ZINC_SINGULARITY",
             "TIN_SINGULARITY",
@@ -113,7 +110,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
             "INFINITY_SINGULARITY"
     };
-    private final int[] outputTimes = {
+    public static final int[] outputTimes = {
             8000,
             8000,
             8000,
@@ -198,10 +195,10 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     int remainder = progress % stacksize;
 
                     for (int i = 0; i < stacks; i++) {
-                        b.getWorld().dropItemNaturally(l, ConversionUtils.getItemFromID(input, stacksize));
+                        b.getWorld().dropItemNaturally(l, ItemUtils.getItemFromID(input, stacksize));
                     }
                     if (remainder > 0) {
-                        b.getWorld().dropItemNaturally(l, ConversionUtils.getItemFromID(input, remainder));
+                        b.getWorld().dropItemNaturally(l, ItemUtils.getItemFromID(input, remainder));
                     }
                 }
             }
@@ -219,13 +216,13 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetItemUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetItemUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, PresetItemUtils.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -261,13 +258,13 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
             } else { //started
 
-                ItemStack input = ConversionUtils.getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
+                ItemStack input = ItemUtils.getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
 
                 if (input.getItemMeta() != null) {
                     if (!input.getItemMeta().getDisplayName().equals("")) { //sf name
-                        name = "&cInput more " + ItemUtils.getItemName(input) + "s&c!";
+                        name = "&cInput more " + me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils.getItemName(input) + "s&c!";
                     } else { //vanilla name
-                        name = "&cInput more &f" + ItemUtils.getItemName(input) + "s&c!";
+                        name = "&cInput more &f" + me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils.getItemName(input) + "s&c!";
                     }
                 }
             }
@@ -302,7 +299,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                 String input = inputItems[progressID];
 
-                if (ConversionUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
+                if (ItemUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
 
                     int inputSlotAmount = inputSlotItem.getAmount();
 
@@ -329,7 +326,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                     if (progress >= outputTime) { //if contruction done
 
-                        ItemStack output = ConversionUtils.getItemFromID(outputItems[progressID], 1);
+                        ItemStack output = ItemUtils.getItemFromID(outputItems[progressID], 1);
 
                         if (inv.fits(output)) { //output
 
@@ -375,7 +372,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                 int time = outputTimes[Integer.parseInt(getProgressID(b))];
 
                 String displayname = "";
-                ItemMeta displaymeta = ConversionUtils.getItemFromID(output, 1).getItemMeta();
+                ItemMeta displaymeta = ItemUtils.getItemFromID(output, 1).getItemMeta();
 
                 if (displaymeta != null) {
                     displayname = displaymeta.getDisplayName();
@@ -397,7 +394,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         int itemAmount = item.getAmount();
 
         for (int i = 0 ; i < inputItems.length ; i++) {
-            if (ConversionUtils.getIDFromItem(item).equals(inputItems[i])) {
+            if (ItemUtils.getIDFromItem(item).equals(inputItems[i])) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
                     inv.consumeItem(INPUT_SLOT, speed);
@@ -457,7 +454,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         return OUTPUT_SLOTS;
     }
 
-    public static final RecipeType SINGULARITY_CONSTRUCTOR = new RecipeType(
+    public static final RecipeType RECIPE_TYPE = new RecipeType(
             new NamespacedKey(InfinityExpansion.getInstance(), "singularity_constructor"), Items.SINGULARITY_CONSTRUCTOR
     );
 

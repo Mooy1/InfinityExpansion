@@ -10,8 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.Categories;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.PresetItemUtils;
-import me.mooy1.infinityexpansion.utils.RecipeUtils;
+import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -122,7 +121,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, PresetItemUtils.loadingItemRed,
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed,
             ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -149,7 +148,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
         if (getCharge(l) < energyConsumption) {
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetItemUtils.notEnoughEnergy);
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             }
 
         } else {
@@ -159,7 +158,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
             if (!inv.fits(outputItem, getOutputSlots())) {
 
                 if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, PresetItemUtils.notEnoughRoom);
+                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
                 }
 
             } else {

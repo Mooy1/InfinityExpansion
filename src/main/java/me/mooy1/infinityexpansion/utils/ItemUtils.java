@@ -5,9 +5,9 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public final class ConversionUtils {
+public final class ItemUtils {
 
-    private ConversionUtils() {}
+    private ItemUtils() {}
 
     public static String getIDFromItem(ItemStack item) {
         if (SlimefunItem.getByItem(item) != null) {

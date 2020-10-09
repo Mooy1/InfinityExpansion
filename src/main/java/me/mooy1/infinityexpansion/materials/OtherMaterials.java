@@ -14,9 +14,9 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 
 
-public class MainMaterials extends SlimefunItem {
+public class OtherMaterials extends SlimefunItem {
 
-    public MainMaterials(Type type) {
+    public OtherMaterials(Type type) {
         super(Categories.INFINITY_MATERIALS, type.getItem(), type.getRecipetype(), type.getRecipe());
     }
 
