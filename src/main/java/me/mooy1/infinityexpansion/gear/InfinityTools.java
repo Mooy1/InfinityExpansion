@@ -52,6 +52,11 @@ public class InfinityTools extends SlimefunItem {
             infinityIngot, infinityIngot, voidIngot,
             null, infinityIngot, null
         }),
+        SHEILD(Items.INFINITY_SHEILD, new ItemStack[] {
+                infinityIngot, null, infinityIngot,
+                infinityIngot, infinityIngot, infinityIngot,
+                null, voidIngot, null
+        }),
         BLADE(Items.INFINITY_BLADE, new ItemStack[] {
             null, infinityIngot, infinityIngot,
             infinityIngot, infinityIngot, infinityIngot,

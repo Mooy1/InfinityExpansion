@@ -144,6 +144,9 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                     if (remainder > 0) {
                         b.getWorld().dropItemNaturally(b.getLocation(), storedItemStack);
                     }
+
+                    setStored(b, 0);
+                    setStoredItem(b, null);
                 }
             }
             if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {

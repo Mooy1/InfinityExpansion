@@ -117,7 +117,7 @@ public final class Items {
             "&7Instantly charges items",
             "",
             LoreUtils.speed(ItemSetup.INFINITY_CHARGER_SPEED),
-            LoreUtils.energyPerSecond(ItemSetup.INFINITY_CHARGER_ENERGY) + "per use",
+            LoreUtils.energyPerSecond(ItemSetup.INFINITY_CHARGER_ENERGY),
             ""
     );
 
@@ -824,7 +824,7 @@ public final class Items {
         "INFINITY_CHESTPLATE",
         Material.NETHERITE_CHESTPLATE,
         "&bInfinity Chestplate",
-        "&7&oAegis of the cosmos",
+        "&7&oStrength of the cosmos",
             "",
             "&a + Health Boost III",
             "&8 + Resistance II",
@@ -835,7 +835,7 @@ public final class Items {
         "INFINITY_LEGGINGS",
         Material.NETHERITE_LEGGINGS,
         "&bInfinity Leggings",
-        "&7&oStrength of the cosmos",
+        "&7&o",
             "",
             "&c + Strength II",
             "&6 + Haste III",
@@ -892,6 +892,13 @@ public final class Items {
         "&8&oInto the void",
             ""
     );
+    public static final SlimefunItemStack INFINITY_SHEILD = new SlimefunItemStack(
+            "INFINITY_SHEILD",
+            Material.SHIELD,
+            "&bCosmic Aegis",
+            "&7&o",
+            ""
+    );
 
     //enchant list
 
@@ -935,6 +942,9 @@ public final class Items {
         INFINITY_CHESTPLATE.addUnsafeEnchantment(prot, 40);
         INFINITY_CHESTPLATE.addUnsafeEnchantment(thorns, 20);
 
+        INFINITY_SHEILD.addUnsafeEnchantment(prot, 40);
+        INFINITY_SHEILD.addUnsafeEnchantment(thorns, 20);
+
         INFINITY_LEGGINGS.addUnsafeEnchantment(prot, 40);
 
         INFINITY_BOOTS.addUnsafeEnchantment(prot, 40);
@@ -964,61 +974,67 @@ public final class Items {
         ItemMeta hat = INFINITY_CROWN.getItemMeta();
         assert hat != null;
         hat.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_CROWN.setItemMeta(hat);
 
         ItemMeta shirt = INFINITY_CHESTPLATE.getItemMeta();
         assert shirt != null;
         shirt.setUnbreakable(true);
-        shirt.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //shirt.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_CHESTPLATE.setItemMeta(shirt);
 
         ItemMeta pants = INFINITY_LEGGINGS.getItemMeta();
         assert pants != null;
         pants.setUnbreakable(true);
-        pants.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //pants.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_LEGGINGS.setItemMeta(pants);
 
         ItemMeta shoes = INFINITY_BOOTS.getItemMeta();
         assert shoes != null;
         shoes.setUnbreakable(true);
-        shoes.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //shoes.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_BOOTS.setItemMeta(shoes);
 
         ItemMeta pick = INFINITY_PICKAXE.getItemMeta();
         assert pick != null;
         pick.setUnbreakable(true);
-        pick.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //pick.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_PICKAXE.setItemMeta(pick);
 
         ItemMeta blade = INFINITY_BLADE.getItemMeta();
         assert blade != null;
         blade.setUnbreakable(true);
-        blade.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //blade.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_BLADE.setItemMeta(blade);
 
         ItemMeta axe = INFINITY_AXE.getItemMeta();
         assert axe != null;
         axe.setUnbreakable(true);
-        axe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //axe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_AXE.setItemMeta(axe);
 
         ItemMeta shovel = INFINITY_SHOVEL.getItemMeta();
         assert shovel != null;
         shovel.setUnbreakable(true);
-        shovel.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //shovel.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_SHOVEL.setItemMeta(shovel);
+
+        ItemMeta sheild = INFINITY_SHEILD.getItemMeta();
+        assert sheild != null;
+        sheild.setUnbreakable(true);
+        //sheild.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        INFINITY_SHEILD.setItemMeta(sheild);
 
         ItemMeta bow = INFINITY_BOW.getItemMeta();
         assert bow != null;
         bow.setUnbreakable(true);
-        bow.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //bow.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_BOW.setItemMeta(bow);
 
         ItemMeta wings = INFINITY_WINGS.getItemMeta();
         assert wings != null;
         wings.setUnbreakable(true);
-        wings.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //wings.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_WINGS.setItemMeta(wings);
     }
 

@@ -58,12 +58,12 @@ public final class ItemSetup {
         for (EndgameMaterials.Type type : EndgameMaterials.Type.values()) {
             new EndgameMaterials(type).register(plugin);
         }
-        //for (StorageUnit.Type type : StorageUnit.Type.values()) {
-        //    new StorageUnit(type).register(plugin);
-        //}
-        for (StorageDrive.Type type : StorageDrive.Type.values()) {
-            new StorageDrive(type).register(plugin);
+        for (StorageUnit.Type type : StorageUnit.Type.values()) {
+            new StorageUnit(type).register(plugin);
         }
+        //for (StorageDrive.Type type : StorageDrive.Type.values()) {
+        //    new StorageDrive(type).register(plugin);
+        //}
 
         //add machines
 
