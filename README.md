@@ -22,6 +22,10 @@ Infinity Forge - WIP used to craft Infinity Items
 
 Storage Units - Hold huge amounts of items, work with cargo
 
+Advanced Anvil - WIP used to combine slimefun gear and enchants
+
+Alloy Synthesizer - Creates alloys from combinations of singularities.
+
 Void Harvester - Collects void bits using power
 
 Singularity Contructor - Creates singularities from huge amounts of resources
