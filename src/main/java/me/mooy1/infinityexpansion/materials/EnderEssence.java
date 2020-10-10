@@ -1,6 +1,6 @@
 package me.mooy1.infinityexpansion.materials;
 
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;

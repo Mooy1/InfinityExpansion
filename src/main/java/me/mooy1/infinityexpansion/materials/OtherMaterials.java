@@ -4,7 +4,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -29,7 +29,7 @@ public class OtherMaterials extends SlimefunItem {
             Items.EMERALD_SINGULARITY,
             Items.GOLD_SINGULARITY,
             Items.NETHERITE_SINGULARITY,
-            Items.VOID_INGOT,
+            Items.MAGNONIUM_INGOT,
             Items.REDSTONE_SINGULARITY,
             Items.LAPIS_SINGULARITY,
             Items.QUARTZ_SINGULARITY,
@@ -40,7 +40,7 @@ public class OtherMaterials extends SlimefunItem {
             Items.TIN_SINGULARITY,
             Items.COPPER_SINGULARITY,
             Items.LEAD_SINGULARITY,
-            Items.COMPRESSED_COBBLESTONE_6,
+            Items.COMPRESSED_COBBLESTONE_5,
             Items.IRON_SINGULARITY,
             Items.ALUMINUM_SINGULARITY,
             Items.ZINC_SINGULARITY,

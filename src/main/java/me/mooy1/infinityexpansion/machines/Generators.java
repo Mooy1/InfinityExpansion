@@ -7,7 +7,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
@@ -30,8 +30,8 @@ import javax.annotation.Nullable;
 
 public class Generators extends SlimefunItem implements EnergyNetProvider, InventoryBlock {
 
-    public static int GEO_RATE = 360;
-    public static int GEO_STORAGE = 60000;
+    public static int GEO_RATE = 210;
+    public static int GEO_STORAGE = 35_000;
 
     public static int CELE_RATE = 1800;
     public static int CELE_STORAGE = 300_000;
@@ -72,7 +72,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
         final boolean canGenerate = stored < getCapacity();
         final int rate = canGenerate ? getGeneratingAmount(inv.getBlock(), l.getWorld()) : 0;
 
-        String generationType = "&cNot Generating";
+        String generationType = "&cNot Generating - Full";
 
         if (l.getWorld().getEnvironment() == World.Environment.NETHER) {
             if (this.type == Type.GEOTHERMAL) {

@@ -3,24 +3,18 @@ package me.mooy1.infinityexpansion.materials;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.machines.SingularityConstructor;
-import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
 public class RecipeItems extends SlimefunItem {
 
     public RecipeItems(Type type) {
-        super(Categories.INFINITY_MATERIALS,
+        super(Categories.HIDDEN_RECIPES,
                 type.getItem(),
                 RecipeType.NULL,
                 null

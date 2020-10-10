@@ -29,7 +29,8 @@ public final class PresetUtils {
 
     public static final ItemStack recipesItem = new CustomItem(
             Material.BOOK,
-            "&6Recipes", "&cComing Soon");
+            "&6Recipes");
+
     public static final ItemStack inputItem = new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
             "&9Input an item!");

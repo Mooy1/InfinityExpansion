@@ -1,6 +1,8 @@
 package me.mooy1.infinityexpansion.utils;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.Hex;
 
 public final class LoreUtils {
 
@@ -16,8 +18,8 @@ public final class LoreUtils {
         return "&8\u21E8 &e\u26A1 &7" + Math.round(energy * SERVER_TICK_RATIO) + " J/s";
     }
 
-    public static String energyPerUse(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + energy + " J per use";
+    public static String energyPer(int energy) {
+        return "&8\u21E8 &e\u26A1 &7" + energy + " J ";
     }
 
     public static String speed(int speed) {
@@ -25,7 +27,19 @@ public final class LoreUtils {
     }
 
     public static String stores(int amount) {
-        return "&6Stores: &e" + amount + " &7items";
+        return "&7Stores: &e" + amount + " &7items";
+    }
+
+    public static String stored(int amount, int max) {
+        return "&7Stored: &e" + amount + " / " + max;
+    }
+
+    public static String storedItem(String id) {
+        if (id == null || id.equals("")) {
+            id = "None";
+        }
+
+        return "&7Item: &e" + id;
     }
 
     public static float roundHundreds(float number) {

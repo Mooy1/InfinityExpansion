@@ -1,6 +1,7 @@
 package me.mooy1.infinityexpansion.machines;
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
+import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -8,7 +9,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
@@ -35,10 +36,16 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class VoidHarvester extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
+public class VoidHarvester extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
+
+    public static final RecipeType RECIPE_TYPE = new RecipeType(
+            new NamespacedKey(InfinityExpansion.getInstance(), "void_harvester"), Items.VOID_HARVESTER
+    );
 
     public static int BASIC_ENERGY = 900;
     public static int BASIC_SPEED = 1;
@@ -230,10 +237,6 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         return getEnergyConsumption(type);
     }
 
-    public static final RecipeType RECIPE_TYPE = new RecipeType(
-            new NamespacedKey(InfinityExpansion.getInstance(), "void_harvester"), Items.VOID_HARVESTER
-    );
-
     private int getEnergyConsumption(Type type) {
         if (type == Type.BASIC) {
             return BASIC_ENERGY;
@@ -252,6 +255,16 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         } else {
             return 0;
         }
+    }
+
+    @Nonnull
+    @Override
+    public List<ItemStack> getDisplayRecipes() {
+        final List<ItemStack> items = new ArrayList<>();
+
+        items.add(Items.VOID_BIT);
+
+        return items;
     }
 
     @Getter

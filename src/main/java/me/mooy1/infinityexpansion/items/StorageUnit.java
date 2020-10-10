@@ -1,11 +1,11 @@
-package me.mooy1.infinityexpansion.basics;
+package me.mooy1.infinityexpansion.items;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.ItemUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
@@ -54,7 +54,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     public static int VOID = 327_680;
     public static int INFINITY = 1_600_000_000;
 
-    private final Tier tier;
+    private final Type type;
     private final int STATUS_SLOT = 13;
     private final int[] INPUT_SLOTS = {
             10
@@ -74,11 +74,11 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             6, 7, 8, 15, 17, 24, 25, 26
     };
 
-    public StorageUnit(Tier tier) {
-        super(Categories.INFINITY_BASICS, tier.getItem(), tier.getRecipeType(), tier.getRecipe());
-        this.tier = tier;
+    public StorageUnit(@Nonnull Type type) {
+        super(Categories.INFINITY_BASICS, type.getItem(), type.getRecipeType(), type.getRecipe());
+        this.type = type;
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(tier.getItem().getDisplayName())) {
+        new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -177,12 +177,12 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         });
     }
 
-    protected void tick(Block b) {
+    protected void tick(@Nonnull Block b) {
 
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
-        int maxStorage = getStorage(tier);
+        int maxStorage = getStorage(type);
         String storedItem = getStoredItem(b);
 
         if (inv.toInventory() != null || !inv.toInventory().getViewers().isEmpty()) {
@@ -290,7 +290,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                     "&cInput an Item!"
             ));
         } else {
-            int maxStorage = getStorage(tier);
+            int maxStorage = getStorage(type);
             ItemStack storedItemStack = ItemUtils.getItemFromID(storedItem, 1);
 
             String converteditemname = "";
@@ -300,7 +300,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
             String stacks = "&7Stacks: " + Math.round((float)stored / storedItemStack.getMaxStackSize());
 
-            if (this.tier == Tier.INFINITY) {
+            if (this.type == Type.INFINITY) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         storedItemStack,
                         converteditemname,
@@ -327,11 +327,11 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         setBlockData(b, "storeditem", storedItem);
     }
 
-    private int getStored(Block b) {
+    private int getStored(@Nonnull Block b) {
         return Integer.parseInt(getBlockData(b.getLocation(), "stored"));
     }
 
-    private String getStoredItem(Block b) {
+    private String getStoredItem(@Nonnull Block b) {
         return getBlockData(b.getLocation(), "storeditem");
     }
 
@@ -339,16 +339,16 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         BlockStorage.addBlockInfo(b, key, data);
     }
 
-    private int getStorage(Tier tier) {
-        if (tier == Tier.BASIC) {
+    private int getStorage(Type type) {
+        if (type == Type.BASIC) {
             return BASIC;
-        } else if (tier == Tier.ADVANCED) {
+        } else if (type == Type.ADVANCED) {
             return ADVANCED;
-        } else if (tier == Tier.REINFORCED) {
+        } else if (type == Type.REINFORCED) {
             return REINFORCED;
-        } else if (tier == Tier.VOID) {
+        } else if (type == Type.VOID) {
             return VOID;
-        } else if (tier == Tier.INFINITY) {
+        } else if (type == Type.INFINITY) {
             return INFINITY;
         } else {
             return 0;
@@ -372,7 +372,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
-    public enum Tier {
+    public enum Type {
         BASIC(Items.BASIC_STORAGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),

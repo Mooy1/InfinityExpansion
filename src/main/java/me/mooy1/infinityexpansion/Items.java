@@ -2,10 +2,12 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
-import me.mooy1.infinityexpansion.basics.StorageUnit;
+import me.mooy1.infinityexpansion.items.StorageUnit;
 import me.mooy1.infinityexpansion.machines.*;
+import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -19,10 +21,12 @@ public final class Items {
             "ITEM_UPDATER",
             Material.QUARTZ_PILLAR,
             "&6Item Updater",
-            "&7Will update lore and names of",
-            "&7Items that have been changed across versions",
+            "&7Will &creset &7and update the name and lore of",
+            "&7slimefun items if they are outdated or broken",
             "&cAll enchants will be removed, disenchant first!",
-            LoreUtils.energyPerUse(ItemUpdater.ENERGY),
+            "&cChargeable and upgradeable items will be reset!",
+            "",
+            LoreUtils.energyPer(ItemUpdater.ENERGY) + "per item",
             ""
     );
     public static final SlimefunItemStack POWERED_BEDROCK = new SlimefunItemStack(
@@ -41,6 +45,7 @@ public final class Items {
         Material.OBSIDIAN,
         "&8Void &7Harvester",
         "&7Slowly harvests &8Void &7Bits from nothing...",
+            "",
         LoreUtils.speed(VoidHarvester.BASIC_SPEED),
         LoreUtils.energyPerSecond(VoidHarvester.BASIC_ENERGY),
         ""
@@ -50,6 +55,7 @@ public final class Items {
         Material.CRYING_OBSIDIAN,
         "&bInfinite &8Void &7Harvester",
         "&7Harvests &8Void &7Bits from nothing...",
+            "",
         LoreUtils.speed(VoidHarvester.INFINITY_SPEED),
         LoreUtils.energyPerSecond(VoidHarvester.INFINITY_ENERGY),
         ""
@@ -58,7 +64,7 @@ public final class Items {
     public static final SlimefunItemStack SINGULARITY_CONSTRUCTOR = new SlimefunItemStack(
         "SINGULARITY_CONSTRUCTOR",
         Material.QUARTZ_BRICKS,
-        "&fSingularity &7&;Constructor",
+        "&fSingularity &7Constructor",
         LoreUtils.speed(SingularityConstructor.BASIC_SPEED),
         LoreUtils.energyPerSecond(SingularityConstructor.BASIC_ENERGY),
         ""
@@ -76,18 +82,9 @@ public final class Items {
         "ALLOY_SYNTHESIZER",
         Material.FURNACE,
         "&7Alloy Synthesizer",
-        "&7Creates alloys out of ingots",
-        LoreUtils.speed(AlloySynthesizer.BASIC_SPEED),
-        LoreUtils.energyPerUse(AlloySynthesizer.BASIC_ENERGY),
-        ""
-    );
-    public static final SlimefunItemStack INFINITY_ALLOY_SYNTHESIZER = new SlimefunItemStack(
-        "INFINITY_ALLOY_SYNTHESIZER",
-        Material.BLAST_FURNACE,
-        "&bInfinity &7Alloy Synthesizer",
-        "&7Creates alloys out of ingots",
-        LoreUtils.speed(AlloySynthesizer.INFINITY_SPEED),
-        LoreUtils.energyPerUse(AlloySynthesizer.INFINITY_ENERGY),
+        "&7Creates alloys out of singularities",
+            "",
+        LoreUtils.energyPer(AlloySynthesizer.ENERGY) + "per use",
         ""
     );
 
@@ -97,7 +94,31 @@ public final class Items {
         "&bInfinity Reactor",
         "&7Generates power through the compression",
         "&7of &8Void &7and &bInfinity &7Ingots",
-        ""
+        "",
+        LoreUtils.energyPerSecond(InfinityReactor.ENERGY),
+        LoreBuilder.powerBuffer(InfinityReactor.STORAGE),
+            ""
+    );
+
+    public static final SlimefunItemStack ADVANCED_CHARGER = new SlimefunItemStack(
+            "ADVANCED_CHARGER",
+            Material.CRIMSON_NYLIUM,
+            "&cAdvanced &7Charger",
+            "&7Quickly charges items",
+            "",
+            LoreUtils.speed(ItemSetup.ADVANCED_CHARGER_SPEED),
+            LoreUtils.energyPerSecond(ItemSetup.ADVANCED_CHARGER_ENERGY),
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_CHARGER = new SlimefunItemStack(
+            "INFINITY_CHARGER",
+            Material.WARPED_NYLIUM,
+            "&bInfinity &7Charger",
+            "&7Instantly charges items",
+            "",
+            LoreUtils.speed(ItemSetup.INFINITY_CHARGER_SPEED),
+            LoreUtils.energyPerSecond(ItemSetup.INFINITY_CHARGER_ENERGY) + "per use",
+            ""
     );
 
     public static final SlimefunItemStack BASIC_QUARRY = new SlimefunItemStack(
@@ -105,6 +126,7 @@ public final class Items {
         Material.CHISELED_SANDSTONE,
         "&9Basic &7Quarry",
         "&7Automatically mines vanilla overworld ores",
+        "",
         LoreUtils.speed(Quarry.BASIC_SPEED),
         LoreUtils.energyPerSecond(Quarry.BASIC_ENERGY),
         ""
@@ -114,6 +136,7 @@ public final class Items {
         Material.CHISELED_RED_SANDSTONE,
         "&cAdvanced &7Quarry",
         "&7Smelts vanilla ores and can mine nether ores",
+            "",
         LoreUtils.speed(Quarry.ADVANCED_SPEED),
         LoreUtils.energyPerSecond(Quarry.ADVANCED_ENERGY),
         ""
@@ -123,6 +146,7 @@ public final class Items {
         Material.CHISELED_NETHER_BRICKS,
         "&8Void &7Quarry",
         "&7Can mine sifted ores or 24 karat gold occasionally",
+            "",
         LoreUtils.speed(Quarry.VOID_SPEED),
         LoreUtils.energyPerSecond(Quarry.VOID_ENERGY),
         ""
@@ -132,6 +156,7 @@ public final class Items {
         Material.CHISELED_POLISHED_BLACKSTONE,
         "&bInfinity &7Quarry",
         "&7Can mine and smelt Slimefun ingots",
+            "",
         LoreUtils.speed(Quarry.INFINITY_SPEED),
         LoreUtils.energyPerSecond(Quarry.INFINITY_ENERGY),
         ""
@@ -174,7 +199,8 @@ public final class Items {
         Material.LODESTONE,
         "&cIngot &7Forge",
         "&7Used to create advanced ingots",
-        LoreUtils.energyPerUse(IngotForge.ENERGY),
+        "",
+        LoreUtils.energyPer(IngotForge.ENERGY) + "per item",
         ""
     );
     public static final SlimefunItemStack INFINITY_FORGE = new SlimefunItemStack(
@@ -182,23 +208,18 @@ public final class Items {
         Material.RESPAWN_ANCHOR,
         "&bInfinity &7Forge",
         "&7Used to forge infinity items",
-        LoreUtils.energyPerUse(InfinityForge.ENERGY),
+            "",
+        LoreUtils.energyPer(InfinityForge.ENERGY) + "per item",
         ""
     );
 
     public static final SlimefunItemStack ADVANCED_ANVIL = new SlimefunItemStack(
         "ADVANCED_ANVIL",
-        Material.STONE_BRICKS,
+        Material.SMITHING_TABLE,
         "&cAdvanced &7Anvil",
-        LoreUtils.energyPerUse(AdvancedAnvil.ADVANCED_ENERGY),
-        "&c&onot yet functional"
-    );
-    public static final SlimefunItemStack INFINITY_ANVIL = new SlimefunItemStack(
-        "INFINITY_ANVIL",
-        Material.POLISHED_BLACKSTONE_BRICKS,
-        "&bInfinity &7Anvil",
-        LoreUtils.energyPerUse(AdvancedAnvil.INFINITY_ENERGY),
-        "&c&onot yet functional"
+            "",
+        LoreUtils.energyPer(AdvancedAnvil.ENERGY) + "per use",
+        ""
     );
 
     public static final SlimefunItemStack INFINITY_CAPACITOR = new SlimefunItemStack(
@@ -214,7 +235,8 @@ public final class Items {
         "GEOTHERMAL_GENERATOR",
         Material.MAGMA_BLOCK,
         "&cGeoThermal Generator",
-        "&7Generates energy from the heat of the earth",
+        "&7Generates energy from the heat of the world",
+            "",
         LoreBuilder.powerBuffer(Generators.GEO_STORAGE),
         LoreUtils.energyPerSecond(Generators.GEO_RATE),
         ""
@@ -224,6 +246,7 @@ public final class Items {
         Material.WHITE_GLAZED_TERRACOTTA,
         "&eCelestial Panel",
         "&7Generates during the day",
+            "",
         LoreBuilder.powerBuffer(Generators.CELE_STORAGE),
         LoreUtils.energyPerSecond(Generators.CELE_RATE),
         ""
@@ -233,6 +256,7 @@ public final class Items {
         Material.LIGHT_GRAY_GLAZED_TERRACOTTA,
         "&8Void Panel",
         "&7Generates during the night",
+            "",
         LoreBuilder.powerBuffer(Generators.VOID_STORAGE),
         LoreUtils.energyPerSecond(Generators.VOID_RATE),
         ""
@@ -242,6 +266,7 @@ public final class Items {
         Material.LIGHT_BLUE_GLAZED_TERRACOTTA,
         "&bInfinity Panel",
         "&7Always generates",
+            "",
         LoreBuilder.powerBuffer(Generators.INFINITY_STORAGE),
         LoreUtils.energyPerSecond(Generators.INFINITY_RATE),
         ""
@@ -287,6 +312,68 @@ public final class Items {
             "&bInfinity &7Storage Unit",
             "&6Stores: &bInfinite &7items",
             "&aWorks with cargo",
+            ""
+    );
+    
+    //disks
+
+    public static final SlimefunItemStack BASIC_STORAGE_DRIVE = new SlimefunItemStack(
+            "BASIC_STORAGE_DRIVE",
+            Material.LEATHER_CHESTPLATE,
+            "&9Basic &7Storage Drive",
+            LoreUtils.stores(StorageUnit.BASIC),
+            "&aInput to a storage unit to transfer items",
+            "",
+            LoreUtils.storedItem(""),
+            LoreUtils.stored(0, StorageUnit.BASIC),
+            ""
+    );
+    public static final SlimefunItemStack ADVANCED_STORAGE_DRIVE = new SlimefunItemStack(
+            "ADVANCED_STORAGE_DRIVE",
+            Material.LEATHER_CHESTPLATE,
+            Color.fromRGB(82, 57, 42), //52392A
+            "&cAdvanced &7Storage Drive",
+            LoreUtils.stores(StorageUnit.ADVANCED),
+            "&aInput to a storage unit to transfer items",
+            "",
+            LoreUtils.storedItem(""),
+            LoreUtils.stored(0, StorageUnit.ADVANCED),
+            ""
+    );
+    public static final SlimefunItemStack REINFORCED_STORAGE_DRIVE = new SlimefunItemStack(
+            "REINFORCED_STORAGE_DRIVE",
+            Material.LEATHER_CHESTPLATE,
+            Color.fromRGB(115, 119, 117), //737775
+            "&fReinforced &7Storage Drive",
+            LoreUtils.stores(StorageUnit.REINFORCED),
+            "&aInput to a storage unit to transfer items",
+            "",
+            LoreUtils.storedItem(""),
+            LoreUtils.stored(0, StorageUnit.REINFORCED),
+            ""
+    );
+    public static final SlimefunItemStack VOID_STORAGE_DRIVE = new SlimefunItemStack(
+            "VOID_STORAGE_DRIVE",
+            Material.LEATHER_CHESTPLATE,
+            Color.fromRGB(176, 46, 38), //B02E26
+            "&8Void &7Storage Drive",
+            LoreUtils.stores(StorageUnit.VOID),
+            "&aInput to a storage unit to transfer items",
+            "",
+            LoreUtils.storedItem(""),
+            LoreUtils.stored(0,StorageUnit.VOID),
+            ""
+    );
+    public static final SlimefunItemStack INFINITY_STORAGE_DRIVE = new SlimefunItemStack(
+            "INFINITY_STORAGE_DRIVE",
+            Material.LEATHER_CHESTPLATE,
+            Color.fromRGB(88, 213, 195), //58D5C3
+            "&bInfinity &7Storage Drive",
+            "&6Stores: &bInfinite &7items",
+            "&aInput to a storage unit to transfer items",
+            "",
+            LoreUtils.storedItem(""),
+            LoreUtils.stored(0, StorageUnit.INFINITY),
             ""
     );
 
@@ -590,7 +677,14 @@ public final class Items {
         Material.IRON_INGOT,
         "&dI&cn&6f&ei&an&bi&3t&9y &fIngot",
         "&7&oThe fury of the cosmos in the palm of your hand",
-            ""
+        ""
+    );
+    public static final SlimefunItemStack INFINITE_DUST = new SlimefunItemStack(
+        "INFINITE_DUST",
+        Material.SUGAR,
+        "&dI&cn&6f&ei&an&bi&3t&9y &fDust",
+        "&7&oAll that remains...",
+        ""
     );
 
     //Void ingots
@@ -720,29 +814,41 @@ public final class Items {
         "INFINITY_CROWN",
         Material.NETHERITE_HELMET,
         "&bInfinity Crown",
-        "&8&o",
-            ""
+        "&7&oBreath of the cosmos",
+            "",
+            "&6 + Saturation",
+            "&8 + Night Vision",
+            "&9 + Water Breathing"
     );
     public static final SlimefunItemStack INFINITY_CHESTPLATE = new SlimefunItemStack(
         "INFINITY_CHESTPLATE",
         Material.NETHERITE_CHESTPLATE,
         "&bInfinity Chestplate",
-        "&8&o",
-            ""
+        "&7&oAegis of the cosmos",
+            "",
+            "&a + Health Boost III",
+            "&8 + Resistance II",
+            "&2 + Fire Resistance",
+            "&c + Regeneration"
     );
     public static final SlimefunItemStack INFINITY_LEGGINGS = new SlimefunItemStack(
         "INFINITY_LEGGINGS",
         Material.NETHERITE_LEGGINGS,
         "&bInfinity Leggings",
-        "&8&o",
-            ""
+        "&7&oStrength of the cosmos",
+            "",
+            "&c + Strength II",
+            "&6 + Haste III",
+            "&9 + Conduit Power"
     );
     public static final SlimefunItemStack INFINITY_BOOTS = new SlimefunItemStack(
         "INFINITY_BOOTS",
         Material.NETHERITE_BOOTS,
         "&bInfinity Boots",
-        "&8&o",
-            ""
+        "&7&oSpeed of the cosmos",
+            "",
+            "&b + Speed III",
+            "&3 + Dolphins Grace"
     );
     public static final SlimefunItemStack INFINITY_BLADE = new SlimefunItemStack(
         "INFINITY_BLADE",
@@ -775,8 +881,8 @@ public final class Items {
     public static final SlimefunItemStack INFINITY_BOW = new SlimefunItemStack(
         "INFINITY_BOW",
         Material.BOW,
-        "&6Longbow of the Heavens",
-        "&e&oThe piercer of clouds",
+        "&6Sky Piercer",
+        "&e&oThe longbow of the Heavens",
             ""
     );
     public static final SlimefunItemStack INFINITY_WINGS = new SlimefunItemStack(
@@ -830,10 +936,8 @@ public final class Items {
         INFINITY_CHESTPLATE.addUnsafeEnchantment(thorns, 20);
 
         INFINITY_LEGGINGS.addUnsafeEnchantment(prot, 40);
-        INFINITY_LEGGINGS.addUnsafeEnchantment(depth, 5);
 
         INFINITY_BOOTS.addUnsafeEnchantment(prot, 40);
-        INFINITY_BOOTS.addUnsafeEnchantment(soul, 5);
 
         INFINITY_PICKAXE.addUnsafeEnchantment(eff, 40);
         INFINITY_PICKAXE.addUnsafeEnchantment(fort, 20);
@@ -866,55 +970,55 @@ public final class Items {
         ItemMeta shirt = INFINITY_CHESTPLATE.getItemMeta();
         assert shirt != null;
         shirt.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        shirt.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_CHESTPLATE.setItemMeta(shirt);
 
         ItemMeta pants = INFINITY_LEGGINGS.getItemMeta();
         assert pants != null;
         pants.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        pants.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_LEGGINGS.setItemMeta(pants);
 
         ItemMeta shoes = INFINITY_BOOTS.getItemMeta();
         assert shoes != null;
         shoes.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        shoes.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_BOOTS.setItemMeta(shoes);
 
         ItemMeta pick = INFINITY_PICKAXE.getItemMeta();
         assert pick != null;
         pick.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        pick.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_PICKAXE.setItemMeta(pick);
 
         ItemMeta blade = INFINITY_BLADE.getItemMeta();
         assert blade != null;
         blade.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        blade.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_BLADE.setItemMeta(blade);
 
         ItemMeta axe = INFINITY_AXE.getItemMeta();
         assert axe != null;
         axe.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        axe.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_AXE.setItemMeta(axe);
 
         ItemMeta shovel = INFINITY_SHOVEL.getItemMeta();
         assert shovel != null;
         shovel.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        shovel.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_SHOVEL.setItemMeta(shovel);
 
         ItemMeta bow = INFINITY_BOW.getItemMeta();
         assert bow != null;
         bow.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        bow.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_BOW.setItemMeta(bow);
 
         ItemMeta wings = INFINITY_WINGS.getItemMeta();
         assert wings != null;
         wings.setUnbreakable(true);
-        hat.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        wings.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_WINGS.setItemMeta(wings);
     }
 

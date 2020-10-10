@@ -1,6 +1,7 @@
 package me.mooy1.infinityexpansion.machines;
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
+import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -8,7 +9,8 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.materials.Singularities;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.ItemUtils;
@@ -37,10 +39,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
+public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
+
+
+    public static final RecipeType RECIPE_TYPE = new RecipeType(
+            new NamespacedKey(InfinityExpansion.getInstance(), "singularity_constructor"), Items.SINGULARITY_CONSTRUCTOR
+    );
 
     public static int BASIC_ENERGY = 300;
     public static int BASIC_SPEED = 1;
@@ -85,8 +94,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             "REDSTONE",
             "LAPIS_LAZULI",
             "QUARTZ",
-
-            "INFINITE_INGOT"
     };
     public static final String[] outputItems = {
             "COPPER_SINGULARITY",
@@ -107,8 +114,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             "REDSTONE_SINGULARITY",
             "LAPIS_LAZULI_SINGULARITY",
             "QUARTZ_SINGULARITY",
-
-            "INFINITY_SINGULARITY"
     };
     public static final int[] outputTimes = {
             8000,
@@ -129,8 +134,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             16000,
             16000,
             16000,
-
-            1000
     };
 
     public SingularityConstructor(Type type) {
@@ -256,7 +259,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                 name = "&9Input a resource!";
                 statusMat = Material.BLUE_STAINED_GLASS_PANE;
 
-            } else { //started
+            } else { //started but wrong input
 
                 ItemStack input = ItemUtils.getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
 
@@ -269,7 +272,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                 }
             }
 
-        } else { //started
+        } else { //input
 
             int speed = getSpeed(type);
 
@@ -290,60 +293,37 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     }
                 }
 
-            } else {
+            } else { //progress
 
                 int progressID = Integer.parseInt(getProgressID(b));
                 int outputTime = outputTimes[progressID];
 
                 if (progress < outputTime) { //increase progress
 
-                String input = inputItems[progressID];
+                    String input = inputItems[progressID];
 
-                if (ItemUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
+                    if (ItemUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
 
-                    int inputSlotAmount = inputSlotItem.getAmount();
+                        int inputSlotAmount = inputSlotItem.getAmount();
 
-                    if (inputSlotAmount >= speed) { //speed
+                        if (inputSlotAmount + progress > outputTime) {
+                            inputSlotAmount = outputTime - progress;
+                        }
 
-                        setProgress(b, progress + speed);
-                        inv.consumeItem(INPUT_SLOT, speed);
+                        if (inputSlotAmount >= speed) { //speed
 
-                    } else { //less than speed
+                            setProgress(b, progress + speed);
+                            inv.consumeItem(INPUT_SLOT, speed);
 
-                        setProgress(b, progress + inputSlotAmount);
-                        inv.consumeItem(INPUT_SLOT, inputSlotAmount);
+                        } else { //less than speed
 
-                    }
-
-                    progress = Integer.parseInt(getProgress(b));
-
-                    if (progress > outputTime) {
-                        setProgress(b, outputTime);
-                    }
-
-                    name = "&aContructing...";
-                    statusMat = Material.NETHER_STAR;
-
-                    if (progress >= outputTime) { //if contruction done
-
-                        ItemStack output = ItemUtils.getItemFromID(outputItems[progressID], 1);
-
-                        if (inv.fits(output)) { //output
-
-                            inv.pushItem(output, OUTPUT_SLOTS);
-                            setProgress(b, 0);
-                            setProgressID(b, null);
-
-                            name = "&aContruction complete!";
-                            statusMat = Material.NETHER_STAR;
-
-                        } else { //not enough room
-
-                            name = "&6Not enough room!";
-                            statusMat = Material.ORANGE_STAINED_GLASS_PANE;
+                            setProgress(b, progress + inputSlotAmount);
+                            inv.consumeItem(INPUT_SLOT, inputSlotAmount);
 
                         }
-                    }
+
+                        name = "&aContructing...";
+                        statusMat = Material.NETHER_STAR;
 
                     } else { //input doesnt match
 
@@ -355,21 +335,40 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                         }
                     }
+                } else { //if contruction done
+
+                    ItemStack output = ItemUtils.getItemFromID(outputItems[progressID], 1);
+
+                    if (inv.fits(output, OUTPUT_SLOTS)) { //output
+
+                        inv.pushItem(output, OUTPUT_SLOTS);
+                        setProgress(b, 0);
+                        setProgressID(b, null);
+
+                        name = "&aContruction complete!";
+                        statusMat = Material.NETHER_STAR;
+
+                    } else { //not enough room
+
+                        name = "&6Not enough room!";
+                        statusMat = Material.ORANGE_STAINED_GLASS_PANE;
+                    }
                 }
             }
         }
 
-        //update status
+        //update status and finish
 
         if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-            progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
 
+            progress = Integer.parseInt(getProgress(b));
             String lore = "";
             String loree = "";
 
             if (progress > 0) {
                 String output = outputItems[Integer.parseInt(getProgressID(b))];
-                int time = outputTimes[Integer.parseInt(getProgressID(b))];
+                int progressID = Integer.parseInt(getProgressID(b));
+                int outputTime = outputTimes[progressID];
 
                 String displayname = "";
                 ItemMeta displaymeta = ItemUtils.getItemFromID(output, 1).getItemMeta();
@@ -379,7 +378,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                 }
 
                 lore = "&7Contructing: " + displayname;
-                loree = "&7Progress: (" + progress + "/" + time + ")";
+                loree = "&7Progress: (" + progress + "/" + outputTime + ")";
             }
 
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(statusMat,
@@ -454,10 +453,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         return OUTPUT_SLOTS;
     }
 
-    public static final RecipeType RECIPE_TYPE = new RecipeType(
-            new NamespacedKey(InfinityExpansion.getInstance(), "singularity_constructor"), Items.SINGULARITY_CONSTRUCTOR
-    );
-
     private int getEnergyConsumption(Type type) {
         if (type == Type.BASIC) {
             return BASIC_ENERGY;
@@ -476,6 +471,19 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         } else {
             return 0;
         }
+    }
+
+    @Nonnull
+    @Override
+    public List<ItemStack> getDisplayRecipes() {
+        final List<ItemStack> items = new ArrayList<>();
+
+        for (Singularities.Type type : Singularities.Type.values()) {
+            items.add(type.getRecipe());
+            items.add(type.getItem());
+        }
+
+        return items;
     }
 
     @Getter

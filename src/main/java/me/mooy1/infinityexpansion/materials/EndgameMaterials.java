@@ -1,9 +1,9 @@
-package me.mooy1.infinityexpansion.basics;
+package me.mooy1.infinityexpansion.materials;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.machines.VoidHarvester;
 import me.mooy1.infinityexpansion.utils.RecipeUtils;
@@ -14,10 +14,10 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class MainMaterials extends SlimefunItem {
+public class EndgameMaterials extends SlimefunItem {
 
-    public MainMaterials(Type type) {
-        super(Categories.INFINITY_BASICS, type.getItem(), type.getRecipetype(), type.recipe);
+    public EndgameMaterials(Type type) {
+        super(Categories.INFINITY_BASICS, type.getItem(), type.getRecipetype(), type.getRecipe());
     }
 
     @Getter
@@ -35,7 +35,7 @@ public class MainMaterials extends SlimefunItem {
                 null,
                 null
         }),
-        BIT(Items.VOID_BIT, VoidHarvester.RECIPE_TYPE, null),
+        BIT(Items.VOID_BIT, VoidHarvester.RECIPE_TYPE, RecipeUtils.MiddleItem(Items.VOID_BIT)),
         DUST(Items.VOID_DUST, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_BIT)),
         INGOT(Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_DUST));
 

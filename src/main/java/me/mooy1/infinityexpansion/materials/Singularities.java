@@ -3,7 +3,7 @@ package me.mooy1.infinityexpansion.materials;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mooy1.infinityexpansion.machines.SingularityConstructor;
@@ -15,10 +15,7 @@ import javax.annotation.Nonnull;
 public class Singularities extends SlimefunItem {
 
     public Singularities(Type type) {
-        super(Categories.INFINITY_MATERIALS,
-                type.getItem(),
-                SingularityConstructor.RECIPE_TYPE,
-                RecipeUtils.MiddleItem(type.getRecipe()));
+        super(Categories.INFINITY_MATERIALS, type.getItem(), SingularityConstructor.RECIPE_TYPE, RecipeUtils.MiddleItem(type.getRecipe()));
     }
 
     @Getter

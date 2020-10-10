@@ -1,6 +1,7 @@
 package me.mooy1.infinityexpansion.machines;
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
+import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -8,7 +9,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.Categories;
+import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -32,9 +33,12 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
+public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
     
     public static int BASIC_SPEED = 1;
     public static int ADVANCED_SPEED = 2;
@@ -228,6 +232,18 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
     @Override
     public int[] getOutputSlots() {
         return OUTPUT_SLOTS;
+    }
+
+    @Nonnull
+    @Override
+    public List<ItemStack> getDisplayRecipes() {
+        return new ArrayList<>(Arrays.asList(type.getOutput()));
+    }
+
+    @Nonnull
+    @Override
+    public String getRecipeSectionLabel(@Nonnull Player p) {
+        return "&7Outputs";
     }
 
     @Getter
