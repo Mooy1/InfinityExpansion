@@ -5,11 +5,9 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import io.github.thebusybiscuit.slimefun4.implementation.items.armor.SlimefunArmorPiece;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.ItemUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -31,10 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 
 public class InfinityReactor extends SlimefunItem implements EnergyNetComponent, InventoryBlock, RecipeDisplayItem {
@@ -42,21 +37,15 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
     public static int ENERGY = 600_000;
     public static int STORAGE = 60_000_000;
     public static int[] INPUT_SLOTS = {
-        10, 16, 19, 25, 28, 34, 37, 43
-    };
-    public static int[] OUTPUT_SLOTS = {
-        40
+        PresetUtils.slot1, PresetUtils.slot3
     };
     public static int[] VOID_INPUT = {
-        16, 25, 34, 43
+            PresetUtils.slot3
     };
     public static int[] INFINITY_INPUT = {
-        10, 19, 28, 37
+            PresetUtils.slot1
     };
-    public static int[] INPUT_BORDER = {
-        6, 7, 8, 15, 17, 24, 26, 33, 35, 42, 44, 51, 52, 53
-    };
-    public static int STATUS_SLOT = 13;
+    public static int STATUS_SLOT = PresetUtils.slot2;
 
 
 
@@ -100,7 +89,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
                 if (flow == ItemTransportFlow.INSERT) {
                     return INPUT_SLOTS;
                 } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
+                    return new int[0];
                 } else {
                     return new int[0];
                 }
@@ -129,14 +118,13 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
         for (int i : PresetUtils.slotChunk2) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : PresetUtils.slotChunk3) {
+            blockMenuPreset.addItem(i, new CustomItem(
+                    Material.BLACK_STAINED_GLASS_PANE, "&8Void Ingot Input"), ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i, new CustomItem(Material.BLACK_STAINED_GLASS_PANE, "&8Void Ingot Input"), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i - 6, new CustomItem(Material.WHITE_STAINED_GLASS_PANE, "&7Infinity Ingot Input"), ChestMenuUtils.getEmptyClickHandler());
+        for (int i : PresetUtils.slotChunk1) {
+            blockMenuPreset.addItem(i, new CustomItem(
+                    Material.WHITE_STAINED_GLASS_PANE, "&fInfinity Ingot Input"), ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
@@ -171,7 +159,6 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
         final List<ItemStack> items = new ArrayList<>();
 
         items.add(Items.INFINITE_INGOT);
-        items.add(Items.INFINITE_DUST);
         items.add(Items.VOID_INGOT);
 
         return items;
@@ -184,7 +171,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
 
     @Override
     public int[] getOutputSlots() {
-        return OUTPUT_SLOTS;
+        return new int[0];
     }
 
     private void setProgress(Block b, int progress) {

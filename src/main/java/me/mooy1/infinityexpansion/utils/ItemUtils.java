@@ -12,8 +12,10 @@ public final class ItemUtils {
     public static String getIDFromItem(ItemStack item) {
         if (SlimefunItem.getByItem(item) != null) {
             return SlimefunItem.getByItem(item).getID();
-        } else {
+        } else if (item != null){
             return item.getType().toString();
+        } else {
+            return "";
         }
     }
 

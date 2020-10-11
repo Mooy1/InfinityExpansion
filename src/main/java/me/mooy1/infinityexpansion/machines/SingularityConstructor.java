@@ -17,6 +17,7 @@ import me.mooy1.infinityexpansion.utils.ItemUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
@@ -45,7 +46,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
-
 
     public static final RecipeType RECIPE_TYPE = new RecipeType(
             new NamespacedKey(InfinityExpansion.getInstance(), "singularity_constructor"), Items.SINGULARITY_CONSTRUCTOR
@@ -112,7 +112,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
             "COAL_SINGULARITY",
             "REDSTONE_SINGULARITY",
-            "LAPIS_LAZULI_SINGULARITY",
+            "LAPIS_SINGULARITY",
             "QUARTZ_SINGULARITY",
     };
     public static final int[] outputTimes = {
@@ -137,7 +137,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     };
 
     public SingularityConstructor(Type type) {
-        super(Categories.INFINITY_MACHINES, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, type.getRecipe());
+        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
         new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
@@ -205,6 +205,8 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     }
                 }
             }
+            setProgressID(b, null);
+            setProgress(b, 0);
 
             if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
                 Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
@@ -366,8 +368,8 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             String loree = "";
 
             if (progress > 0) {
-                String output = outputItems[Integer.parseInt(getProgressID(b))];
                 int progressID = Integer.parseInt(getProgressID(b));
+                String output = outputItems[progressID];
                 int outputTime = outputTimes[progressID];
 
                 String displayname = "";
@@ -490,19 +492,21 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Type {
-        BASIC(Items.SINGULARITY_CONSTRUCTOR, new ItemStack[] {
+        BASIC(Categories.ADVANCED_MACHINES, Items.SINGULARITY_CONSTRUCTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MACHINE_PLATE, SlimefunItems.CARBON_PRESS_3, Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Items.INFINITY_CONSTRUCTOR, new ItemStack[] {
+        INFINITY(Categories.INFINITY_MACHINES, Items.INFINITY_CONSTRUCTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.INFINITE_INGOT, Items.MACHINE_PLATE, Items.INFINITE_INGOT,
                 Items.MACHINE_PLATE, Items.SINGULARITY_CONSTRUCTOR, Items.MACHINE_PLATE,
                 Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
         });
 
         @Nonnull
+        private final Category category;
         private final SlimefunItemStack item;
+        private final RecipeType recipeType;
         private final ItemStack[] recipe;
     }
 }

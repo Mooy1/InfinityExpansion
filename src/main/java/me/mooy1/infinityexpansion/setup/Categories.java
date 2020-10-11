@@ -8,26 +8,30 @@ import org.bukkit.NamespacedKey;
 
 public final class Categories {
 
-    public static final Category INFINITY_BASICS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
-        "INFINITY_BASICS"),
-        new CustomItem(Material.NETHER_STAR, "&b&lInfinity &7&lExpansion"), 2
+    public static final Category INFINITY_MAIN = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
+        "INFINITY_MAIN"),
+        new CustomItem(Material.NETHER_STAR, "&bInfinity &7Expansion"), 2
     );
-
     public static final Category INFINITY_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
         "INFINITY_MACHINES"),
-        new CustomItem(Material.SMITHING_TABLE, "&b&lInfinity &7&lMachines"), 2
+        new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Machines"), 2
     );
-
+    public static final Category ADVANCED_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
+            "ADVANCED_MACHINES"),
+            new CustomItem(Material.BLAST_FURNACE, "&cAdvanced &7Machines"), 2
+    );
+    public static final Category INFINITY_STORAGE = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
+        "INFINITY_STORAGE"),
+        new CustomItem(Material.ENDER_CHEST, "&bInfinity &6Storage"), 2
+    );
     public static final Category INFINITY_MATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
         "INFINITY_MATERIALS"),
-        new CustomItem(Material.NETHERITE_INGOT, "&b&lInfinity &a&lMaterials"), 2
+        new CustomItem(Material.NETHERITE_INGOT, "&bInfinity &aMaterials"), 2
     );
-
     public static final Category INFINITY_GEAR = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
         "INFINITY_GEAR"),
-        new CustomItem(Material.NETHERITE_CHESTPLATE, "&b&lInfinity &9&lGear"), 2
+        new CustomItem(Material.NETHERITE_CHESTPLATE, "&bInfinity &9Gear"), 2
     );
-
     public static final Category HIDDEN_RECIPES = new HiddenCategory(new NamespacedKey(InfinityExpansion.getInstance(),
         "HIDDEN_RECIPES"),
         new CustomItem(Material.BARRIER, "&c( ͡° ͜ʖ ͡°)"),  10

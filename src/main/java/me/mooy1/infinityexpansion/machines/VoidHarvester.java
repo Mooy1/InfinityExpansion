@@ -15,6 +15,7 @@ import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
@@ -61,7 +62,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
     private final Type type;
 
     public VoidHarvester(Type type) {
-        super(Categories.INFINITY_MACHINES, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE, type.getRecipe());
+        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
         new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
@@ -271,19 +272,21 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Type {
-        BASIC(Items.VOID_HARVESTER, new ItemStack[] {
+        BASIC(Categories.ADVANCED_MACHINES, Items.VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGNONIUM_INGOT, SlimefunItems.GEO_MINER, Items.MAGNONIUM_INGOT,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Items.INFINITE_VOID_HARVESTER, new ItemStack[] {
+        INFINITY(Categories.INFINITY_MACHINES, Items.INFINITE_VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT,
                 Items.VOID_INGOT, Items.VOID_HARVESTER, Items.VOID_INGOT,
                 Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
         });
 
         @Nonnull
+        private final Category category;
         private final SlimefunItemStack item;
+        private final RecipeType recipeType;
         private final ItemStack[] recipe;
     }
 }

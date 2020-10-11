@@ -19,6 +19,6 @@ public class EnderEssence extends SlimefunItem {
     ));
 
     public EnderEssence() {
-        super(Categories.INFINITY_MATERIALS, Items.END_ESSENCE, RecipeType.GEO_MINER, null);
+        super(Categories.INFINITY_MAIN, Items.END_ESSENCE, RecipeType.GEO_MINER, null);
     }
 }

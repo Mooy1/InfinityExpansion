@@ -31,10 +31,12 @@ public final class PresetUtils {
             Material.BOOK,
             "&6Recipes");
 
-    public static final ItemStack inputItem = new CustomItem(
+    public static final ItemStack inputAnItem = new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
             "&9Input an item!");
-
+    public static final ItemStack invalidRecipe = new CustomItem(
+            Material.BARRIER,
+            "&cInvalid Recipe!");
     public static final ItemStack notEnoughEnergy = new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cNot enough energy!");

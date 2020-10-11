@@ -38,7 +38,7 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent, Inv
     private final int STATUS_SLOT = PresetUtils.slot2;
 
     public ItemUpdater() {
-        super(Categories.INFINITY_MACHINES, Items.ITEM_UPDATER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.ADVANCED_MACHINES, Items.ITEM_UPDATER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
@@ -101,7 +101,7 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent, Inv
         } else if (input == null) { //check input
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.inputItem);
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.inputAnItem);
             }
 
         } else {

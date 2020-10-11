@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 public class OtherMaterials extends SlimefunItem {
 
     public OtherMaterials(Type type) {
-        super(Categories.INFINITY_MATERIALS, type.getItem(), type.getRecipetype(), type.getRecipe());
+        super(Categories.INFINITY_MAIN, type.getItem(), type.getRecipetype(), type.getRecipe());
     }
 
     @Getter

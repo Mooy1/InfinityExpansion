@@ -1,5 +1,7 @@
-package me.mooy1.infinityexpansion.items;
+package me.mooy1.infinityexpansion.storage;
 
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.items.armor.SlimefunArmorPiece;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +17,7 @@ import javax.annotation.Nonnull;
 public class StorageDrive extends SlimefunItem {
 
     public StorageDrive(Type type) {
-        super(Categories.INFINITY_BASICS, type.getItem(), type.getRecipeType(), type.getRecipe());
+        super(Categories.INFINITY_STORAGE, type.getItem(), type.getRecipeType(), type.getRecipe());
     }
 
     @Getter
@@ -23,7 +25,7 @@ public class StorageDrive extends SlimefunItem {
     public enum Type {
         BASIC(Items.BASIC_STORAGE_DRIVE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT,
-                Items.MAGSTEEL, Items.MAGSTEEL_PLATE, Items.MAGSTEEL,
+                Items.MAGSTEEL, SlimefunItems.ELECTRO_MAGNET, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL
         }),
         ADVANCED(Items.ADVANCED_STORAGE_DRIVE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

@@ -13,6 +13,7 @@ import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -45,7 +46,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
     private final Type type;
 
     public Generators(Type type) {
-        super(Categories.INFINITY_MACHINES, type.getItem(), type.getRecipeType(), type.getRecipe());
+        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
         setupInv();
@@ -205,22 +206,22 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        GEOTHERMAL(Items.GEOTHERMAL_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        GEOTHERMAL(Categories.ADVANCED_MACHINES, Items.GEOTHERMAL_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
             SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        CELESTIAL(Items.CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        CELESTIAL(Categories.ADVANCED_MACHINES, Items.CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
                 SlimefunItems.SOLAR_GENERATOR_4, SlimefunItems.SOLAR_GENERATOR_4, SlimefunItems.SOLAR_GENERATOR_4,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        VOID(Items.VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        VOID(Categories.ADVANCED_MACHINES, Items.VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MAGNONIUM_INGOT, Items.VOID_INGOT, Items.MAGNONIUM_INGOT,
             Items.VOID_INGOT, Items.CELESTIAL_PANEL, Items.VOID_INGOT,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Items.INFINITE_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE,
+        INFINITY(Categories.INFINITY_MACHINES, Items.INFINITE_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE,
             new ItemStack[] {
             Items.CELESTIAL_PANEL, Items.VOID_PANEL, Items.CELESTIAL_PANEL,
             Items.INFINITE_INGOT, Items.INFINITY_CAPACITOR, Items.INFINITE_INGOT,
@@ -228,6 +229,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
         });
 
         @Nonnull
+        private final Category category;
         private final SlimefunItemStack item;
         private final RecipeType recipeType;
         private final ItemStack[] recipe;
