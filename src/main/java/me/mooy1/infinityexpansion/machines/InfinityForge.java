@@ -8,6 +8,7 @@ import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.ItemUtils;
+import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -17,7 +18,6 @@ import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -43,23 +43,10 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
         36, 37, 38, 39, 40, 41,
         45, 46, 47, 48, 49, 50
     };
-
     private final int[] OUTPUT_SLOTS = {
-        43
+        PresetUtils.slot3 + 27
     };
-    private final int[] OUTPUT_BORDER = {
-            33, 34, 35,
-            42,     44,
-            51, 52, 53
-    };
-
-    private final int STATUS_SLOT = 25;
-    private final int[] STATUS_BORDER = {
-            6,     8,
-            15, 16,17,
-            24,    26,
-    };
-    private final int RECIPE_SLOT = 7;
+    private final int STATUS_SLOT = PresetUtils.slot3;
 
     public InfinityForge() {
         super(Categories.ADVANCED_MACHINES, Items.INFINITY_FORGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -86,15 +73,13 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
     private void setupInv() {
         createPreset(this, Items.INFINITY_FORGE.getDisplayName(),
                 blockMenuPreset -> {
-                    for (int i : OUTPUT_BORDER) {
-                        blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+                    for (int i : PresetUtils.slotChunk3) {
+                        blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
                     }
-                    for (int i : STATUS_BORDER) {
+                    for (int i : PresetUtils.slotChunk3) {
                         blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
                     }
                     blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
-                            ChestMenuUtils.getEmptyClickHandler());
-                    blockMenuPreset.addItem(RECIPE_SLOT, PresetUtils.recipesItem,
                             ChestMenuUtils.getEmptyClickHandler());
                 });
     }
@@ -133,16 +118,18 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
 
                 } else { //correct recipe
 
-                    if (!inv.fits(output.clone(), OUTPUT_SLOTS)) { //not enough room
+                    if (!inv.fits(output, OUTPUT_SLOTS)) { //not enough room
 
                         inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
 
                     } else { //enough room
 
                         for (int slot : INPUT_SLOTS) {
-                            inv.replaceExistingItem(slot, null);
+                            if (inv.getItemInSlot(slot) != null) {
+                                inv.consumeItem(slot);
+                            }
                         }
-                        inv.pushItem(output.clone(), OUTPUT_SLOTS);
+                        inv.pushItem(output, OUTPUT_SLOTS);
                         setCharge(b.getLocation(), 0);
                     }
                 }
@@ -202,13 +189,19 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
                 s31 ,s32, s33, s34, s35, s36
         };
 
-        int i = 0;
-        for (String[] recipe : RECIPES) {
-            if (inputs == recipe) {
-                return OUTPUTS[i];
+        for (int ii = 0 ; ii < RECIPES.length ; ii++) {
+            int matches = 0;
+            for (int i = 0 ; i < inputs.length ; i++) {
+                if (inputs[i].equals(RECIPES[ii][i])) {
+                    matches++;
+                }
             }
-            i++;
+            if (matches == 36) {
+                MessageUtils.broadcast("OUTPUTING: " + OUTPUTS[ii]);
+                return ItemUtils.getItemFromID(OUTPUTS[ii], 1);
+            }
         }
+
         return null;
     }
 
@@ -233,20 +226,20 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
         return OUTPUT_SLOTS;
     }
 
-    public static final ItemStack[] OUTPUTS = {
-            new ItemStack(Material.COBBLESTONE),
-            Items.VOID_INGOT,
-            null
+    public static final String[] OUTPUTS = {
+            "INFINITE_PANEL",
+            "IRON_INGOT",
+            "COBBLESTONE"
     };
 
     public static final String[][] RECIPES = {
             {
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", "",
-                    "", "", "DIRT", "DIRT", "", "",
-                    "", "", "DIRT", "DIRT", "", "",
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", ""
+                    "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT",
+                    "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL",
+                    "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL",
+                    "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT",
+                    "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT",
+                    "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT"
             },
             {
                     "DIRT", "", "", "", "", "DIRT",
@@ -257,7 +250,7 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
                     "DIRT", "", "", "", "", "DIRT"
             },
             {
-                    "DIRT", "", "", "", "", "",
+                    "COPPER_INGOT", "", "", "", "", "",
                     "", "", "", "", "", "",
                     "", "", "", "", "", "",
                     "", "", "", "", "", "",
