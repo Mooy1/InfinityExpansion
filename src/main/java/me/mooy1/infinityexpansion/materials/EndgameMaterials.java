@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 public class EndgameMaterials extends SlimefunItem {
 
     public EndgameMaterials(Type type) {
-        super(Categories.INFINITY_BASICS, type.getItem(), type.getRecipetype(), type.getRecipe());
+        super(Categories.INFINITY_MAIN, type.getItem(), type.getRecipetype(), type.getRecipe());
     }
 
     @Getter

@@ -41,7 +41,7 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent, I
     };
 
     public AdvancedAnvil() {
-        super(Categories.INFINITY_MACHINES, Items.ADVANCED_ANVIL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.ADVANCED_MACHINES, Items.ADVANCED_ANVIL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_PLATE, new ItemStack(Material.ANVIL), Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT

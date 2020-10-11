@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.items;
+package me.mooy1.infinityexpansion.storage;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -75,7 +75,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
     };
 
     public StorageUnit(@Nonnull Type type) {
-        super(Categories.INFINITY_BASICS, type.getItem(), type.getRecipeType(), type.getRecipe());
+        super(Categories.INFINITY_STORAGE, type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
         new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
@@ -144,11 +144,11 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                     if (remainder > 0) {
                         b.getWorld().dropItemNaturally(b.getLocation(), storedItemStack);
                     }
-
-                    setStored(b, 0);
-                    setStoredItem(b, null);
                 }
             }
+            setStored(b, 0);
+            setStoredItem(b, null);
+
             if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
                 Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
             }

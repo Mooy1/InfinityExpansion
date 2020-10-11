@@ -14,6 +14,7 @@ import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
@@ -62,7 +63,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
     private final int STATUS_SLOT = 4;
 
     public Quarry(Type type) {
-        super(Categories.INFINITY_MACHINES, type.getItem(), type.getRecipeType(), type.getRecipe());
+        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
         new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
@@ -250,7 +251,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        BASIC(Items.BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        BASIC(Categories.ADVANCED_MACHINES, Items.BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MACHINE_PLATE, SlimefunItems.LARGE_CAPACITOR, Items.MACHINE_PLATE,
             new ItemStack(Material.DIAMOND_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.DIAMOND_PICKAXE),
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -276,7 +277,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 new ItemStack(Material.COBBLESTONE, 1),
         }),
 
-        ADVANCED(Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        ADVANCED(Categories.ADVANCED_MACHINES, Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
             new ItemStack(Material.NETHERITE_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -306,7 +307,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 new ItemStack(Material.NETHERITE_SCRAP, 2),
         }),
 
-        VOID(Items.VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        VOID(Categories.ADVANCED_MACHINES, Items.VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT,
             Items.MAGNONIUM_PICKAXE, Items.ADVANCED_QUARRY, Items.MAGNONIUM_PICKAXE,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -339,7 +340,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 new ItemStack(Material.NETHERITE_SCRAP, 4),
         }),
 
-        INFINITY(Items.INFINITY_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        INFINITY(Categories.INFINITY_MACHINES, Items.INFINITY_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.INFINITE_INGOT, Items.INFINITY_CAPACITOR, Items.INFINITE_INGOT,
             Items.INFINITY_PICKAXE, Items.VOID_QUARRY, Items.INFINITY_PICKAXE,
             Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
@@ -378,6 +379,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
         });
 
         @Nonnull
+        private final Category category;
         private final SlimefunItemStack item;
         private final RecipeType recipeType;
         private final ItemStack[] recipe;

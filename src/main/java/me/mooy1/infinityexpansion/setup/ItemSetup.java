@@ -8,11 +8,11 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.gear.InfinityArmor;
-import me.mooy1.infinityexpansion.items.StorageDrive;
+import me.mooy1.infinityexpansion.storage.StorageDrive;
 import me.mooy1.infinityexpansion.materials.EndgameMaterials;
 import me.mooy1.infinityexpansion.materials.OtherMaterials;
 import me.mooy1.infinityexpansion.machines.InfinityForge;
-import me.mooy1.infinityexpansion.items.StorageUnit;
+import me.mooy1.infinityexpansion.storage.StorageUnit;
 import me.mooy1.infinityexpansion.gear.InfinityTools;
 import me.mooy1.infinityexpansion.gear.MagnoniumGear;
 import me.mooy1.infinityexpansion.gear.EnderFlame;
@@ -53,7 +53,7 @@ public final class ItemSetup {
 
         //basics
 
-        new SlimefunItem(Categories.INFINITY_BASICS, Items.ADDON_INFO, RecipeType.NULL, null).register(plugin);
+        new SlimefunItem(Categories.INFINITY_MAIN, Items.ADDON_INFO, RecipeType.NULL, null).register(plugin);
 
         for (EndgameMaterials.Type type : EndgameMaterials.Type.values()) {
             new EndgameMaterials(type).register(plugin);
@@ -61,9 +61,9 @@ public final class ItemSetup {
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
         }
-        //for (StorageDrive.Type type : StorageDrive.Type.values()) {
-        //    new StorageDrive(type).register(plugin);
-        //}
+        for (StorageDrive.Type type : StorageDrive.Type.values()) {
+            new StorageDrive(type).register(plugin);
+        }
 
         //add machines
 
@@ -84,12 +84,11 @@ public final class ItemSetup {
         }
 
         new AdvancedAnvil().register(plugin);
-        //new IngotForge().register(plugin);
         new PoweredBedrock().register(plugin);
         new ItemUpdater().register(plugin);
         new InfinityForge().register(plugin);
         new InfinityReactor().register(plugin);
-        new AlloySynthesizer().register(plugin);
+        new ResourceSynthesizer().register(plugin);
 
         //add materials
 
@@ -130,7 +129,7 @@ public final class ItemSetup {
             Items.INFINITE_INGOT, Items.INFINITE_INGOT, Items.INFINITE_INGOT
         }).register(plugin);
 
-        new AutoEnchanter(Categories.INFINITY_MACHINES, Items.ADVANCED_ENCHANTER,RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new AutoEnchanter(Categories.ADVANCED_MACHINES, Items.ADVANCED_ENCHANTER,RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGSTEEL_PLATE, SlimefunItems.AUTO_ENCHANTER, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -154,7 +153,7 @@ public final class ItemSetup {
 
         }.register(plugin);
 
-        new AutoDisenchanter(Categories.INFINITY_MACHINES, Items.ADVANCED_DISENCHANTER,RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new AutoDisenchanter(Categories.ADVANCED_MACHINES, Items.ADVANCED_DISENCHANTER,RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGSTEEL_PLATE, SlimefunItems.AUTO_DISENCHANTER, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -229,7 +228,7 @@ public final class ItemSetup {
 
         }.register(plugin);
 
-        new ChargingBench(Categories.INFINITY_MACHINES, Items.ADVANCED_CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new ChargingBench(Categories.ADVANCED_MACHINES, Items.ADVANCED_CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, SlimefunItems.CHARGING_BENCH, Items.MACHINE_CIRCUIT,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE,
