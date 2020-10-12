@@ -9,9 +9,9 @@ import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.gear.InfinityArmor;
 import me.mooy1.infinityexpansion.storage.StorageDrive;
-import me.mooy1.infinityexpansion.materials.EndgameMaterials;
-import me.mooy1.infinityexpansion.materials.OtherMaterials;
+import me.mooy1.infinityexpansion.materials.MainMaterials;
 import me.mooy1.infinityexpansion.machines.InfinityForge;
+import me.mooy1.infinityexpansion.storage.StorageNetworkCore;
 import me.mooy1.infinityexpansion.storage.StorageUnit;
 import me.mooy1.infinityexpansion.gear.InfinityTools;
 import me.mooy1.infinityexpansion.gear.MagnoniumGear;
@@ -51,21 +51,25 @@ public final class ItemSetup {
 
     public static void setup(@Nonnull InfinityExpansion plugin) {
 
-        //basics
+        //main
 
         new SlimefunItem(Categories.INFINITY_MAIN, Items.ADDON_INFO, RecipeType.NULL, null).register(plugin);
 
-        for (EndgameMaterials.Type type : EndgameMaterials.Type.values()) {
-            new EndgameMaterials(type).register(plugin);
+        for (MainMaterials.Type type : MainMaterials.Type.values()) {
+            new MainMaterials(type).register(plugin);
         }
+
+        //storage
+
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
         }
         for (StorageDrive.Type type : StorageDrive.Type.values()) {
             new StorageDrive(type).register(plugin);
         }
+        new StorageNetworkCore().register(plugin);
 
-        //add machines
+        //machine
 
         for (MachineMaterials.Type type : MachineMaterials.Type.values()) {
             new MachineMaterials(type).register(plugin);
@@ -90,7 +94,7 @@ public final class ItemSetup {
         new InfinityReactor().register(plugin);
         new ResourceSynthesizer().register(plugin);
 
-        //add materials
+        //materials
 
         for (CompressedCobblestone.Type type : CompressedCobblestone.Type.values()) {
             new CompressedCobblestone(type).register(plugin);
@@ -98,16 +102,13 @@ public final class ItemSetup {
         for (Singularities.Type type : Singularities.Type.values()) {
             new Singularities(type).register(plugin);
         }
-        for (OtherMaterials.Type type : OtherMaterials.Type.values()) {
-            new OtherMaterials(type).register(plugin);
-        }
         new EnderEssence().register(plugin);
         new EnderEssenceResource().register();
         for (RecipeItems.Type type : RecipeItems.Type.values()) {
             new RecipeItems(type).register(plugin);
         }
 
-        //add gear
+        //gear
 
         for (InfinityArmor.Type type : InfinityArmor.Type.values()) {
             new InfinityArmor(type).register(plugin);

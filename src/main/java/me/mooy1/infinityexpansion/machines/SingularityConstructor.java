@@ -47,9 +47,13 @@ import java.util.UUID;
 
 public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
 
-    public static final RecipeType RECIPE_TYPE = new RecipeType(
-            new NamespacedKey(InfinityExpansion.getInstance(), "singularity_constructor"), Items.SINGULARITY_CONSTRUCTOR
-    );
+     public static final RecipeType RECIPE_TYPE = new RecipeType(
+            new NamespacedKey(InfinityExpansion.getInstance(), "constructor"), new CustomItem(
+            Material.QUARTZ_BRICKS,
+            "&fSingularity &7Constructor",
+             "&7Condenses large amounts of resources",
+             ""
+    ));
 
     public static int BASIC_ENERGY = 300;
     public static int BASIC_SPEED = 1;
@@ -74,66 +78,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     };
     private final int[] OUTPUT_BORDER = {
             6, 7, 8, 15, 17, 24, 25, 26
-    };
-    public static final String[] inputItems = {
-            "COPPER_INGOT",
-            "ZINC_INGOT",
-            "TIN_INGOT",
-            "ALUMINUM_INGOT",
-            "SILVER_INGOT",
-            "MAGNESIUM_INGOT",
-            "LEAD_INGOT",
-
-            "GOLD_INGOT",
-            "IRON_INGOT",
-            "DIAMOND",
-            "EMERALD",
-            "NETHERITE_INGOT",
-
-            "COAL",
-            "REDSTONE",
-            "LAPIS_LAZULI",
-            "QUARTZ",
-    };
-    public static final String[] outputItems = {
-            "COPPER_SINGULARITY",
-            "ZINC_SINGULARITY",
-            "TIN_SINGULARITY",
-            "ALUMINUM_SINGULARITY",
-            "SILVER_SINGULARITY",
-            "MAGNESIUM_SINGULARITY",
-            "LEAD_SINGULARITY",
-
-            "GOLD_SINGULARITY",
-            "IRON_SINGULARITY",
-            "DIAMOND_SINGULARITY",
-            "EMERALD_SINGULARITY",
-            "NETHERITE_SINGULARITY",
-
-            "COAL_SINGULARITY",
-            "REDSTONE_SINGULARITY",
-            "LAPIS_SINGULARITY",
-            "QUARTZ_SINGULARITY",
-    };
-    public static final int[] outputTimes = {
-            8000,
-            8000,
-            8000,
-            8000,
-            8000,
-            8000,
-            8000,
-
-            8000,
-            16000,
-            8000,
-            8000,
-            800,
-
-            8000,
-            16000,
-            16000,
-            16000,
     };
 
     public SingularityConstructor(Type type) {
@@ -487,6 +431,67 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
         return items;
     }
+
+    public static final String[] inputItems = {
+            "COPPER_INGOT",
+            "ZINC_INGOT",
+            "TIN_INGOT",
+            "ALUMINUM_INGOT",
+            "SILVER_INGOT",
+            "MAGNESIUM_INGOT",
+            "LEAD_INGOT",
+
+            "GOLD_INGOT",
+            "IRON_INGOT",
+            "DIAMOND",
+            "EMERALD",
+            "NETHERITE_INGOT",
+
+            "COAL",
+            "REDSTONE",
+            "LAPIS_LAZULI",
+            "QUARTZ",
+    };
+    public static final String[] outputItems = {
+            "COPPER_SINGULARITY",
+            "ZINC_SINGULARITY",
+            "TIN_SINGULARITY",
+            "ALUMINUM_SINGULARITY",
+            "SILVER_SINGULARITY",
+            "MAGNESIUM_SINGULARITY",
+            "LEAD_SINGULARITY",
+
+            "GOLD_SINGULARITY",
+            "IRON_SINGULARITY",
+            "DIAMOND_SINGULARITY",
+            "EMERALD_SINGULARITY",
+            "NETHERITE_SINGULARITY",
+
+            "COAL_SINGULARITY",
+            "REDSTONE_SINGULARITY",
+            "LAPIS_SINGULARITY",
+            "QUARTZ_SINGULARITY",
+    };
+    public static final int[] outputTimes = {
+            4000,
+            4000,
+            4000,
+            4000,
+            4000,
+            4000,
+            4000,
+
+            4000,
+            8000,
+            4000,
+            4000,
+            400,
+
+            4000,
+            8000,
+            8000,
+            8000
+    };
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)

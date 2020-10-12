@@ -1,8 +1,10 @@
 package me.mooy1.infinityexpansion.machines;
 
+import com.sun.org.apache.xerces.internal.xs.StringList;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.InfinityExpansion;
@@ -11,27 +13,42 @@ import me.mooy1.infinityexpansion.utils.ItemUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
+import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class InfinityForge extends SlimefunItem implements InventoryBlock, EnergyNetComponent {
 
     public static final RecipeType RECIPE_TYPE = new RecipeType(
-            new NamespacedKey(InfinityExpansion.getInstance(), "infinity_forge"), Items.INFINITY_FORGE
-    );
+            new NamespacedKey(InfinityExpansion.getInstance(), "infinity_forge"), new CustomItem(
+            Material.RESPAWN_ANCHOR,
+            "&bInfinity &7Forge",
+            "&7Used to forge infinity items",
+            ""
+    ));
 
     public static int ENERGY = 10_000_000;
 
@@ -55,33 +72,67 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT
         });
 
-        setupInv();
+        new BlockMenuPreset(getID(), Objects.requireNonNull(Items.INFINITY_FORGE.getDisplayName())) {
+
+            @Override
+            public void init() {
+                setupInv(this);
+            }
+
+            @Override
+            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+                menu.addMenuClickHandler(STATUS_SLOT, (p, slot, item, action) -> {
+                    craft(b, p);
+                    return false;
+                });
+            }
+
+            @Override
+            public boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
+                return (p.hasPermission("slimefun.inventory.bypass")
+                        || SlimefunPlugin.getProtectionManager().hasPermission(
+                        p, b.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
+            }
+
+            @Override
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
+                return new int[0];
+            }
+
+            @Override
+            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return new int[0];
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
+            }
+        };
 
         registerBlockHandler(getID(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
             Location l = b.getLocation();
 
             if (inv != null) {
-                inv.dropItems(l, getOutputSlots());
-                inv.dropItems(l, getInputSlots());
+                inv.dropItems(l, OUTPUT_SLOTS);
+                inv.dropItems(l, INPUT_SLOTS);
             }
 
             return true;
         });
     }
 
-    private void setupInv() {
-        createPreset(this, Items.INFINITY_FORGE.getDisplayName(),
-                blockMenuPreset -> {
-                    for (int i : PresetUtils.slotChunk3) {
-                        blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk3) {
-                        blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
-                            ChestMenuUtils.getEmptyClickHandler());
-                });
+    private void setupInv(BlockMenuPreset blockMenuPreset) {
+        for (int i : PresetUtils.slotChunk3) {
+            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk3) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
+                ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -105,7 +156,9 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         Material.RED_STAINED_GLASS_PANE,
                         "&cNot enough energy!",
-                        "&aCharge: " + charge + "/" + ENERGY + " J"
+                        "",
+                        "&aCharge: " + charge + "/" + ENERGY + " J",
+                        ""
                 ));
 
             } else { //enough energy
@@ -116,26 +169,71 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
 
                     inv.replaceExistingItem(STATUS_SLOT, PresetUtils.invalidRecipe);
 
-                } else { //correct recipe
+                } else if (output.getItemMeta() != null){ //correct recipe
 
-                    if (!inv.fits(output, OUTPUT_SLOTS)) { //not enough room
+                    ItemMeta meta = output.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    lore.add("");
+                    lore.add(ChatColor.GREEN + "\u21E8 Click to forge");
+                    lore.add("");
+                    meta.setLore(lore);
+                    output.setItemMeta(meta);
 
-                        inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                    inv.replaceExistingItem(STATUS_SLOT, output);
+                }
+            }
+        }
+    }
 
-                    } else { //enough room
+    public void craft(Block b, Player p) {
+        @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
+        if (inv == null) return;
 
-                        for (int slot : INPUT_SLOTS) {
-                            if (inv.getItemInSlot(slot) != null) {
-                                inv.consumeItem(slot);
-                            }
+        int charge = getCharge(b.getLocation());
+
+        if (charge < ENERGY) { //not enough energy
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                    Material.RED_STAINED_GLASS_PANE,
+                    "&cNot enough energy!",
+                    "",
+                    "&aCharge: " + charge + "/" + ENERGY + " J",
+                    ""
+            ));
+
+        } else { //enough energy
+
+            ItemStack output = getOutput(inv);
+
+            if (output == null) { //invalid
+
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.invalidRecipe);
+                MessageUtils.message(p, ChatColor.RED + "Invalid Recipe!");
+
+            } else { //correct recipe
+
+                if (!inv.fits(output, OUTPUT_SLOTS)) { //not enough room
+
+                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                    MessageUtils.message(p, ChatColor.GOLD + "Not enough room!");
+
+                } else { //enough room
+
+                    for (int slot : INPUT_SLOTS) {
+                        if (inv.getItemInSlot(slot) != null) {
+                            inv.consumeItem(slot);
                         }
-                        inv.pushItem(output, OUTPUT_SLOTS);
-                        setCharge(b.getLocation(), 0);
+                    }
+                    inv.pushItem(output, OUTPUT_SLOTS);
+                    setCharge(b.getLocation(), 0);
+                    if (output.getItemMeta() != null) {
+                        MessageUtils.message(p, ChatColor.GREEN + "Successfully forged: " + output.getItemMeta().getDisplayName());
                     }
                 }
             }
         }
     }
+
 
     public ItemStack getOutput(BlockMenu inv) {
         String s1 = ItemUtils.getIDFromItem(inv.getItemInSlot(0));
@@ -197,7 +295,6 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
                 }
             }
             if (matches == 36) {
-                MessageUtils.broadcast("OUTPUTING: " + OUTPUTS[ii]);
                 return ItemUtils.getItemFromID(OUTPUTS[ii], 1);
             }
         }
@@ -218,7 +315,7 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
 
     @Override
     public int[] getInputSlots() {
-        return INPUT_SLOTS;
+        return new int[0];
     }
 
     @Override
@@ -233,29 +330,29 @@ public class InfinityForge extends SlimefunItem implements InventoryBlock, Energ
     };
 
     public static final String[][] RECIPES = {
-            {
-                    "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT",
-                    "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL",
-                    "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL",
-                    "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT",
-                    "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT",
-                    "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT"
-            },
-            {
-                    "DIRT", "", "", "", "", "DIRT",
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", "",
-                    "DIRT", "", "", "", "", "DIRT"
-            },
-            {
-                    "COPPER_INGOT", "", "", "", "", "",
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", "",
-                    "", "", "", "", "", ""
-            },
+        {
+                "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT", "VOID_INGOT",
+                "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL", "CELESTIAL_PANEL",
+                "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL", "VOID_PANEL",
+                "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT",
+                "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CORE", "INFINITE_MACHINE_CIRCUIT", "INFINITE_MACHINE_CIRCUIT",
+                "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT", "INFINITE_INGOT"
+        },
+        {
+                "DIRT", "", "", "", "", "DIRT",
+                "", "", "", "", "", "",
+                "", "", "", "", "", "",
+                "", "", "", "", "", "",
+                "", "", "", "", "", "",
+                "DIRT", "", "", "", "", "DIRT"
+        },
+        {
+                "COPPER_INGOT", "", "", "", "", "",
+                "", "", "", "", "", "",
+                "", "", "", "", "", "",
+                "", "", "", "", "", "",
+                "", "", "", "", "", "",
+                "", "", "", "", "", ""
+        },
     };
 }

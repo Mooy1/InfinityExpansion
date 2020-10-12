@@ -45,8 +45,12 @@ import java.util.UUID;
 public class VoidHarvester extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
 
     public static final RecipeType RECIPE_TYPE = new RecipeType(
-            new NamespacedKey(InfinityExpansion.getInstance(), "void_harvester"), Items.VOID_HARVESTER
-    );
+            new NamespacedKey(InfinityExpansion.getInstance(), "void_harvester"), new CustomItem(
+            Material.OBSIDIAN,
+            "&8Void &7Harvester",
+            "&7Slowly harvests &8Void &7Bits from nothing...",
+            ""
+    ));
 
     public static int BASIC_ENERGY = 900;
     public static int BASIC_SPEED = 1;

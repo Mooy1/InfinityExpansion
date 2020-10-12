@@ -64,6 +64,8 @@ public final class Items {
         "SINGULARITY_CONSTRUCTOR",
         Material.QUARTZ_BRICKS,
         "&fSingularity &7Constructor",
+            "&7Condenses large amounts of resources",
+            "",
         LoreUtils.speed(SingularityConstructor.BASIC_SPEED),
         LoreUtils.energyPerSecond(SingularityConstructor.BASIC_ENERGY),
         ""
@@ -72,6 +74,8 @@ public final class Items {
         "INFINITY_CONSTRUCTOR",
         Material.CHISELED_QUARTZ_BLOCK,
         "&bInfinity &7Constructor",
+            "&7Quickly condenses large amounts of resources",
+        "",
         LoreUtils.speed(SingularityConstructor.INFINITY_SPEED),
         LoreUtils.energyPerSecond(SingularityConstructor.INFINITY_ENERGY),
         ""
@@ -646,6 +650,16 @@ public final class Items {
             Material.NETHER_STAR,
             "&aEarth Singularity"
     );
+    public static final SlimefunItemStack METAL_SINGULARITY = new SlimefunItemStack(
+            "METAL_SINGULARITY",
+            Material.NETHER_STAR,
+            "&8Metal Singularity"
+    );
+    public static final SlimefunItemStack MAGIC_SINGULARITY = new SlimefunItemStack(
+            "MAGIC_SINGULARITY",
+            Material.NETHER_STAR,
+            "&dMagic Singularity"
+    );
 
     //Info thingies
 
@@ -689,6 +703,12 @@ public final class Items {
     );
 
     //Void ingots
+
+    public static final SlimefunItemStack VOID_BIT_DUMMY = new SlimefunItemStack(
+            "VOID_BIT_DUMMY",
+            Material.BLACK_STAINED_GLASS_PANE,
+            "&8Void Bit"
+    );
 
     public static final SlimefunItemStack VOID_BIT = new SlimefunItemStack(
             "VOID_BIT",

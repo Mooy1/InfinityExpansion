@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
@@ -25,6 +28,7 @@ public class RecipeItems extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
+        VOID(Items.VOID_BIT_DUMMY),
         COPPER(Items.COPPER_AMOUNT),
         ZINC(Items.ZINC_AMOUNT),
         TIN(Items.TIN_AMOUNT),

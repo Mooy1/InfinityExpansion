@@ -47,8 +47,6 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
     };
     public static int STATUS_SLOT = PresetUtils.slot2;
 
-
-
     public InfinityReactor() {
         super(Categories.INFINITY_MACHINES,
                 Items.INFINITY_REACTOR,
