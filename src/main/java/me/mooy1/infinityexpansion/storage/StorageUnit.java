@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.ItemUtils;
+import me.mooy1.infinityexpansion.utils.IDUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -128,7 +128,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
                 //drop stored items
                 if (stored > 0 && storedItem != null) {
 
-                    ItemStack storedItemStack = ItemUtils.getItemFromID(storedItem, 1);
+                    ItemStack storedItemStack = IDUtils.getItemFromID(storedItem, 1);
                     int stackSize = storedItemStack.getMaxStackSize();
 
                     int stacks = (int) Math.floor((float) stored / stackSize);
@@ -202,12 +202,12 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
             if (inputSlotItem.getMaxStackSize() != 1) { //Check if non stackable item
 
-                String inputItemID = ItemUtils.getIDFromItem(inputSlotItem);
+                String inputItemID = IDUtils.getIDFromItem(inputSlotItem);
                 int stored = getStored(b);
 
                 if (stored == 0 && storedItem == null) { //store new item
 
-                    setStoredItem(b, ItemUtils.getIDFromItem(inputSlotItem));
+                    setStoredItem(b, IDUtils.getIDFromItem(inputSlotItem));
                     setStored(b, slotAmount);
                     inv.consumeItem(INPUT_SLOT, slotAmount);
 
@@ -244,7 +244,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
         if (storedItem != null) {
 
-            ItemStack storedItemStack = ItemUtils.getItemFromID(storedItem, 1);
+            ItemStack storedItemStack = IDUtils.getItemFromID(storedItem, 1);
             int stored = getStored(b);
             int outputRemaining;
 
@@ -294,7 +294,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             ));
         } else {
             int maxStorage = getStorage(type);
-            ItemStack storedItemStack = ItemUtils.getItemFromID(storedItem, 1);
+            ItemStack storedItemStack = IDUtils.getItemFromID(storedItem, 1);
 
             String converteditemname = "";
             if (storedItemStack.getItemMeta() != null) {

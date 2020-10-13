@@ -11,9 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.materials.Singularities;
 import me.mooy1.infinityexpansion.setup.Categories;
-import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.ItemUtils;
+import me.mooy1.infinityexpansion.utils.IDUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -27,12 +26,12 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -46,14 +45,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
-
-     public static final RecipeType RECIPE_TYPE = new RecipeType(
-            new NamespacedKey(InfinityExpansion.getInstance(), "constructor"), new CustomItem(
-            Material.QUARTZ_BRICKS,
-            "&fSingularity &7Constructor",
-             "&7Condenses large amounts of resources",
-             ""
-    ));
 
     public static int BASIC_ENERGY = 300;
     public static int BASIC_SPEED = 1;
@@ -142,10 +133,10 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     int remainder = progress % stacksize;
 
                     for (int i = 0; i < stacks; i++) {
-                        b.getWorld().dropItemNaturally(l, ItemUtils.getItemFromID(input, stacksize));
+                        b.getWorld().dropItemNaturally(l, IDUtils.getItemFromID(input, stacksize));
                     }
                     if (remainder > 0) {
-                        b.getWorld().dropItemNaturally(l, ItemUtils.getItemFromID(input, remainder));
+                        b.getWorld().dropItemNaturally(l, IDUtils.getItemFromID(input, remainder));
                     }
                 }
             }
@@ -207,15 +198,10 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
             } else { //started but wrong input
 
-                ItemStack input = ItemUtils.getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
+                ItemStack input = IDUtils.getItemFromID(inputItems[Integer.parseInt(getProgressID(b))], 1);
 
-                if (input.getItemMeta() != null) {
-                    if (!input.getItemMeta().getDisplayName().equals("")) { //sf name
-                        name = "&cInput more " + me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils.getItemName(input) + "s&c!";
-                    } else { //vanilla name
-                        name = "&cInput more &f" + me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils.getItemName(input) + "s&c!";
-                    }
-                }
+                name = "&cInput more &f" + ItemUtils.getItemName(input) + "&c!";
+
             }
 
         } else { //input
@@ -248,7 +234,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                     String input = inputItems[progressID];
 
-                    if (ItemUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
+                    if (IDUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
 
                         int inputSlotAmount = inputSlotItem.getAmount();
 
@@ -283,7 +269,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     }
                 } else { //if contruction done
 
-                    ItemStack output = ItemUtils.getItemFromID(outputItems[progressID], 1);
+                    ItemStack output = IDUtils.getItemFromID(outputItems[progressID], 1);
 
                     if (inv.fits(output, OUTPUT_SLOTS)) { //output
 
@@ -317,7 +303,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                 int outputTime = outputTimes[progressID];
 
                 String displayname = "";
-                ItemMeta displaymeta = ItemUtils.getItemFromID(output, 1).getItemMeta();
+                ItemMeta displaymeta = IDUtils.getItemFromID(output, 1).getItemMeta();
 
                 if (displaymeta != null) {
                     displayname = displaymeta.getDisplayName();
@@ -339,7 +325,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         int itemAmount = item.getAmount();
 
         for (int i = 0 ; i < inputItems.length ; i++) {
-            if (ItemUtils.getIDFromItem(item).equals(inputItems[i])) {
+            if (IDUtils.getIDFromItem(item).equals(inputItems[i])) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
                     inv.consumeItem(INPUT_SLOT, speed);
@@ -425,7 +411,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         final List<ItemStack> items = new ArrayList<>();
 
         for (Singularities.Type type : Singularities.Type.values()) {
-            items.add(type.getRecipe());
+            items.add(type.getDisplayRecipe());
             items.add(type.getItem());
         }
 
@@ -473,24 +459,24 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             "QUARTZ_SINGULARITY",
     };
     public static final int[] outputTimes = {
-            4000,
-            4000,
-            4000,
-            4000,
-            4000,
-            4000,
-            4000,
-
-            4000,
-            8000,
-            4000,
-            4000,
+            400,
+            400,
+            400,
+            400,
+            400,
+            800,
             400,
 
-            4000,
-            8000,
-            8000,
-            8000
+            800,
+            800,
+            400,
+            400,
+            100,
+
+            800,
+            800,
+            800,
+            800
     };
 
     @Getter

@@ -30,9 +30,7 @@ public class CompressedCobblestone extends SlimefunItem {
         TWO(Items.COMPRESSED_COBBLESTONE_2, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_1)),
         THREE(Items.COMPRESSED_COBBLESTONE_3, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_2)),
         FOUR(Items.COMPRESSED_COBBLESTONE_4, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_3)),
-        FIVE(Items.COMPRESSED_COBBLESTONE_5, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_4)),
-        SIX(Items.COMPRESSED_COBBLESTONE_6, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_5)),
-        SEVEN(Items.COMPRESSED_COBBLESTONE_7, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_6));
+        FIVE(Items.COMPRESSED_COBBLESTONE_5, RecipeUtils.Compress(Items.COMPRESSED_COBBLESTONE_4));
 
         @Nonnull
         private final SlimefunItemStack item;

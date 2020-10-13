@@ -31,20 +31,15 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         //SlimefunPlugin.getVersion()
 
-        if (cfg.getBoolean("options.auto-update") && getDescription().getVersion().startsWith("DEV - ")) {
+        if (getDescription().getVersion().startsWith("DEV - ")) {
             Updater updater = new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master");
             updater.start();
         } else {
-            if (!cfg.getBoolean("options.auto-update")) {
-                getLogger().log(Level.WARNING, "Enable auto updates in the config to get the latest builds!");
-            }
             if (!getDescription().getVersion().startsWith("DEV - ")){
                 getLogger().log(Level.INFO, "You must be on a DEV build to auto update!");
                 getLogger().log(Level.INFO, "Current version: " + getDescription().getVersion());
             }
         }
-
-
 
         //Register items
 

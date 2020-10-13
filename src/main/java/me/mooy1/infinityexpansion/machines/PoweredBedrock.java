@@ -4,15 +4,15 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.setup.InfinityRecipes;
+import me.mooy1.infinityexpansion.setup.RecipeTypes;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
@@ -21,11 +21,7 @@ public class PoweredBedrock extends SlimefunItem implements EnergyNetComponent, 
     public static final int ENERGY = 60_000;
 
     public PoweredBedrock() {
-        super (Categories.INFINITY_MACHINES, Items.POWERED_BEDROCK, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.COMPRESSED_COBBLESTONE_7, Items.VOID_INGOT, Items.COMPRESSED_COBBLESTONE_7,
-                Items.VOID_INGOT, Items.INFINITE_MACHINE_CIRCUIT, Items.VOID_INGOT,
-                Items.COMPRESSED_COBBLESTONE_7, Items.VOID_INGOT,Items.COMPRESSED_COBBLESTONE_7
-        });
+        super (Categories.INFINITY_MACHINES, Items.POWERED_BEDROCK, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.BEDROCK_RECIPE);
     }
 
     @Override

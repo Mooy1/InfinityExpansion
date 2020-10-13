@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.setup.InfinityRecipes;
+import me.mooy1.infinityexpansion.setup.RecipeTypes;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -221,12 +223,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
             Items.VOID_INGOT, Items.CELESTIAL_PANEL, Items.VOID_INGOT,
             Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Categories.INFINITY_MACHINES, Items.INFINITE_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE,
-            new ItemStack[] {
-            Items.CELESTIAL_PANEL, Items.VOID_PANEL, Items.CELESTIAL_PANEL,
-            Items.INFINITE_INGOT, Items.INFINITY_CAPACITOR, Items.INFINITE_INGOT,
-            Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT,
-        });
+        INFINITY(Categories.INFINITY_MACHINES, Items.INFINITE_PANEL, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.PANEL_RECIPE);
 
         @Nonnull
         private final Category category;

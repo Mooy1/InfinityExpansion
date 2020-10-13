@@ -7,7 +7,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.utils.ItemUtils;
+import me.mooy1.infinityexpansion.utils.IDUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -51,11 +51,11 @@ public class ResourceSynthesizer extends SlimefunItem implements EnergyNetCompon
     private final int STATUS_SLOT = PresetUtils.slot2;
 
     private final ItemStack[] RECIPES = {
-            Items.IRON_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 64),
-            Items.IRON_SINGULARITY, Items.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 64),
-            Items.DIAMOND_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.COMPRESSED_CARBON, 32),
-            Items.GOLD_SINGULARITY, Items.EMERALD_SINGULARITY, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 8),
-            Items.COPPER_SINGULARITY, Items.IRON_SINGULARITY, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
+            Items.IRON_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
+            Items.IRON_SINGULARITY, Items.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
+            Items.DIAMOND_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.COMPRESSED_CARBON, 16),
+            Items.GOLD_SINGULARITY, Items.EMERALD_SINGULARITY, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 4),
+            Items.COPPER_SINGULARITY, Items.IRON_SINGULARITY, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 32),
             Items.IRON_SINGULARITY, Items.QUARTZ_SINGULARITY, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
     };
 
@@ -138,17 +138,17 @@ public class ResourceSynthesizer extends SlimefunItem implements EnergyNetCompon
                 }
 
             } else { //start
-                String id1 = ItemUtils.getIDFromItem(input1);
-                String id2 = ItemUtils.getIDFromItem(input2);
+                String id1 = IDUtils.getIDFromItem(input1);
+                String id2 = IDUtils.getIDFromItem(input2);
 
                 ItemStack recipe = null;
 
                 for (int i = 0; i < RECIPES.length; i += 3) {
-                    if (((id1.equals(ItemUtils.getIDFromItem(RECIPES[i])))
-                            && (id2.equals(ItemUtils.getIDFromItem(RECIPES[i + 1]))))
+                    if (((id1.equals(IDUtils.getIDFromItem(RECIPES[i])))
+                            && (id2.equals(IDUtils.getIDFromItem(RECIPES[i + 1]))))
                             ||
-                            ((id1.equals(ItemUtils.getIDFromItem(RECIPES[i + 1])))
-                            && (id2.equals(ItemUtils.getIDFromItem(RECIPES[i]))))) {
+                            ((id1.equals(IDUtils.getIDFromItem(RECIPES[i + 1])))
+                            && (id2.equals(IDUtils.getIDFromItem(RECIPES[i]))))) {
                         recipe = RECIPES[i + 2];
                     }
                 }
@@ -174,7 +174,7 @@ public class ResourceSynthesizer extends SlimefunItem implements EnergyNetCompon
                             inv.replaceExistingItem(STATUS_SLOT,
                                     new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
                         }
-                    } else if ((ItemUtils.getIDFromItem(outputSlot).equals(ItemUtils.getIDFromItem(recipe))
+                    } else if ((IDUtils.getIDFromItem(outputSlot).equals(IDUtils.getIDFromItem(recipe))
                             && outputSlot.getAmount() + recipe.getAmount() <= recipe.getMaxStackSize())) { //already an item
 
                         outputSlot.setAmount(recipe.getAmount() + outputSlot.getAmount());

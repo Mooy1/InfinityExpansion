@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 
 public class EnderEssenceResource implements GEOResource {
 
-    private final NamespacedKey key = new NamespacedKey(InfinityExpansion.getInstance(), "EndEssence");
+    private final NamespacedKey key = new NamespacedKey(InfinityExpansion.getInstance(), "ender_essence");
 
     @Override
     public int getDefaultSupply(@Nonnull World.Environment environment, @Nonnull Biome biome) {

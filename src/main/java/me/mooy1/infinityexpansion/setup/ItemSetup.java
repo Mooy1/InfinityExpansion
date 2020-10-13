@@ -10,7 +10,7 @@ import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.gear.InfinityArmor;
 import me.mooy1.infinityexpansion.storage.StorageDrive;
 import me.mooy1.infinityexpansion.materials.MainMaterials;
-import me.mooy1.infinityexpansion.machines.InfinityForge;
+import me.mooy1.infinityexpansion.machines.InfinityWorkbench;
 import me.mooy1.infinityexpansion.storage.StorageNetworkCore;
 import me.mooy1.infinityexpansion.storage.StorageUnit;
 import me.mooy1.infinityexpansion.gear.InfinityTools;
@@ -55,10 +55,6 @@ public final class ItemSetup {
 
         new SlimefunItem(Categories.INFINITY_MAIN, Items.ADDON_INFO, RecipeType.NULL, null).register(plugin);
 
-        for (MainMaterials.Type type : MainMaterials.Type.values()) {
-            new MainMaterials(type).register(plugin);
-        }
-
         //storage
 
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
@@ -90,12 +86,15 @@ public final class ItemSetup {
         new AdvancedAnvil().register(plugin);
         new PoweredBedrock().register(plugin);
         new ItemUpdater().register(plugin);
-        new InfinityForge().register(plugin);
+        new InfinityWorkbench().register(plugin);
         new InfinityReactor().register(plugin);
         new ResourceSynthesizer().register(plugin);
 
         //materials
 
+        for (MainMaterials.Type type : MainMaterials.Type.values()) {
+            new MainMaterials(type).register(plugin);
+        }
         for (CompressedCobblestone.Type type : CompressedCobblestone.Type.values()) {
             new CompressedCobblestone(type).register(plugin);
         }
@@ -104,9 +103,6 @@ public final class ItemSetup {
         }
         new EnderEssence().register(plugin);
         new EnderEssenceResource().register();
-        for (RecipeItems.Type type : RecipeItems.Type.values()) {
-            new RecipeItems(type).register(plugin);
-        }
 
         //gear
 

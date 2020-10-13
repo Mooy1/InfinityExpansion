@@ -200,10 +200,10 @@ public final class Items {
     public static final SlimefunItemStack INFINITY_FORGE = new SlimefunItemStack(
         "INFINITY_FORGE",
         Material.RESPAWN_ANCHOR,
-        "&bInfinity &7Forge",
-        "&7Used to forge infinity items",
+        "&bInfinity &6Workbench",
+        "&7Used to craft infinity items",
             "",
-        LoreUtils.energyPer(InfinityForge.ENERGY) + "per item",
+        LoreUtils.energyPer(InfinityWorkbench.ENERGY) + "per item",
         "",
             "&cNot yet functional"
     );
@@ -393,7 +393,7 @@ public final class Items {
 
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_1 = new SlimefunItemStack(
         "COMPRESSED_COBBLESTONE_1",
-        Material.COBBLESTONE,
+        Material.ANDESITE,
         "&71x Compressed Cobblestone",
         "&89 cobblestone combined",
         ""
@@ -407,7 +407,7 @@ public final class Items {
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_3 = new SlimefunItemStack(
         "COMPRESSED_COBBLESTONE_3",
-        Material.ANDESITE,
+        Material.STONE,
         "&73x Compressed Cobblestone",
         "&8243 cobblestone combined",
         ""
@@ -421,23 +421,9 @@ public final class Items {
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_5 = new SlimefunItemStack(
         "COMPRESSED_COBBLESTONE_5",
-        Material.STONE,
+        Material.POLISHED_ANDESITE,
         "&75x Compressed Cobblestone",
         "&859,049 cobblestone combined",
-        ""
-    );
-    public static final SlimefunItemStack COMPRESSED_COBBLESTONE_6 = new SlimefunItemStack(
-        "COMPRESSED_COBBLESTONE_6",
-        Material.POLISHED_ANDESITE,
-        "&76x Compressed Cobblestone",
-        "&8531,441 cobblestone combined",
-        ""
-    );
-    public static final SlimefunItemStack COMPRESSED_COBBLESTONE_7 = new SlimefunItemStack(
-        "COMPRESSED_COBBLESTONE_7",
-        Material.POLISHED_ANDESITE,
-        "&77x Compressed Cobblestone",
-        "&84,782,969 cobblestone combined",
         ""
     );
 
@@ -449,82 +435,46 @@ public final class Items {
             "&6Copper Singularity",
             ""
     );
-    public static final SlimefunItemStack COPPER_AMOUNT = new SlimefunItemStack(
-            "COPPER_AMOUNT",
-            Material.BRICK,
-            "&7" + SingularityConstructor.outputTimes[0] + " &6Copper Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack ZINC_SINGULARITY = new SlimefunItemStack(
             "ZINC_SINGULARITY",
             Material.IRON_BLOCK,
             "&7Zinc Singularity",
             ""
     );
-    public static final SlimefunItemStack ZINC_AMOUNT = new SlimefunItemStack(
-            "ZINC_AMOUNT",
-            Material.IRON_INGOT,
-            "&7" + SingularityConstructor.outputTimes[1] + " &7Zinc Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack TIN_SINGULARITY = new SlimefunItemStack(
             "TIN_SINGULARITY",
             Material.IRON_BLOCK,
             "&7Tin Singularity",
             ""
     );
-    public static final SlimefunItemStack TIN_AMOUNT = new SlimefunItemStack(
-            "TIN_AMOUNT",
-            Material.IRON_INGOT,
-            "&7" + SingularityConstructor.outputTimes[2] + " &7Tin Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack ALUMINUM_SINGULARITY = new SlimefunItemStack(
             "ALUMINUM_SINGULARITY",
             Material.IRON_BLOCK,
             "&7Aluminum Singularity",
             ""
     );
-    public static final SlimefunItemStack ALUMINUM_AMOUNT = new SlimefunItemStack(
-            "ALUMINUM_AMOUNT",
-            Material.IRON_INGOT,
-            "&7" + SingularityConstructor.outputTimes[3] + " &7Aluminum Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack SILVER_SINGULARITY = new SlimefunItemStack(
             "SILVER_SINGULARITY",
             Material.IRON_BLOCK,
             "&7Silver Singularity",
             ""
     );
-    public static final SlimefunItemStack SILVER_AMOUNT = new SlimefunItemStack(
-            "SILVER_AMOUNT",
-            Material.IRON_INGOT,
-            "&7" + SingularityConstructor.outputTimes[4] + " &7Silver Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack MAGNESIUM_SINGULARITY = new SlimefunItemStack(
             "MAGNESIUM_SINGULARITY",
             Material.NETHER_BRICKS,
             "&5Magnesium Singularity",
             ""
     );
-    public static final SlimefunItemStack MAGNESIUM_AMOUNT = new SlimefunItemStack(
-            "MAGNESIUM_AMOUNT",
-            Material.NETHER_BRICK,
-            "&7" + SingularityConstructor.outputTimes[5] + " &5Magnesium Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack LEAD_SINGULARITY = new SlimefunItemStack(
             "LEAD_SINGULARITY",
             Material.IRON_BLOCK,
             "&8Lead Singularity",
-            ""
-    );
-    public static final SlimefunItemStack LEAD_AMOUNT = new SlimefunItemStack(
-            "LEAD_AMOUNT",
-            Material.IRON_INGOT,
-            "&7" + SingularityConstructor.outputTimes[6] + " &8Lead Ingots",
             ""
     );
 
@@ -535,108 +485,63 @@ public final class Items {
             "&6Gold Singularity",
             ""
     );
-    public static final SlimefunItemStack GOLD_AMOUNT = new SlimefunItemStack(
-            "GOLD_AMOUNT",
-            Material.GOLD_INGOT,
-            "&7" + SingularityConstructor.outputTimes[7] + " &6Gold Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack IRON_SINGULARITY = new SlimefunItemStack(
             "IRON_SINGULARITY",
             Material.IRON_BLOCK,
             "&7Iron Singularity",
             ""
     );
-    public static final SlimefunItemStack IRON_AMOUNT = new SlimefunItemStack(
-            "IRON_AMOUNT",
-            Material.IRON_INGOT,
-            "&7" + SingularityConstructor.outputTimes[8] + " &7Iron Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack DIAMOND_SINGULARITY = new SlimefunItemStack(
             "DIAMOND_SINGULARITY",
             Material.DIAMOND_BLOCK,
             "&bDiamond Singularity",
             ""
     );
-    public static final SlimefunItemStack DIAMOND_AMOUNT = new SlimefunItemStack(
-            "DIAMOND_AMOUNT",
-            Material.DIAMOND,
-            "&7" + SingularityConstructor.outputTimes[9] + " &bDiamonds",
-            ""
-    );
+
     public static final SlimefunItemStack EMERALD_SINGULARITY = new SlimefunItemStack(
             "EMERALD_SINGULARITY",
             Material.EMERALD_BLOCK,
             "&aEmerald Singularity",
             ""
     );
-    public static final SlimefunItemStack EMERALD_AMOUNT = new SlimefunItemStack(
-            "EMERALD_AMOUNT",
-            Material.EMERALD,
-            "&7" + SingularityConstructor.outputTimes[10] + " &aEmeralds",
-            ""
-    );
+
     public static final SlimefunItemStack NETHERITE_SINGULARITY = new SlimefunItemStack(
             "NETHERITE_SINGULARITY",
             Material.NETHERITE_BLOCK,
             "&4Netherite Singularity",
             ""
     );
-    public static final SlimefunItemStack NETHERITE_AMOUNT = new SlimefunItemStack(
-            "NETHERITE_AMOUNT",
-            Material.NETHERITE_INGOT,
-            "&7" + SingularityConstructor.outputTimes[11] + " &4Netherite Ingots",
-            ""
-    );
+
     public static final SlimefunItemStack COAL_SINGULARITY = new SlimefunItemStack(
             "COAL_SINGULARITY",
             Material.COAL_BLOCK,
             "&8Coal Singularity",
             ""
     );
-    public static final SlimefunItemStack COAL_AMOUNT = new SlimefunItemStack(
-            "COAL_AMOUNT",
-            Material.COAL,
-            "&7" + SingularityConstructor.outputTimes[12] + " &8Coal",
-            ""
-    );
+
     public static final SlimefunItemStack REDSTONE_SINGULARITY = new SlimefunItemStack(
             "REDSTONE_SINGULARITY",
             Material.REDSTONE_BLOCK,
             "&cRedstone Singularity",
             ""
     );
-    public static final SlimefunItemStack REDSTONE_AMOUNT = new SlimefunItemStack(
-            "REDSTONE_AMOUNT",
-            Material.REDSTONE,
-            "&7" + SingularityConstructor.outputTimes[13] + " &cRedstone",
-            ""
-    );
+
     public static final SlimefunItemStack LAPIS_SINGULARITY = new SlimefunItemStack(
             "LAPIS_SINGULARITY",
             Material.LAPIS_BLOCK,
             "&9Lapis Singularity",
             ""
     );
-    public static final SlimefunItemStack LAPIS_AMOUNT = new SlimefunItemStack(
-            "LAPIS_AMOUNT",
-            Material.LAPIS_LAZULI,
-            "&7" + SingularityConstructor.outputTimes[14] + " &9Lapis",
-            ""
-    );
+
     public static final SlimefunItemStack QUARTZ_SINGULARITY = new SlimefunItemStack(
             "QUARTZ_SINGULARITY",
             Material.QUARTZ_BLOCK,
             "&fQuartz Singularity",
             ""
     );
-    public static final SlimefunItemStack QUARTZ_AMOUNT = new SlimefunItemStack(
-            "QUARTZ_AMOUNT",
-            Material.QUARTZ,
-            "&7" + SingularityConstructor.outputTimes[15] + " &fQuartz",
-            ""
-    );
+
 
     //Infinity Singularities
 
@@ -932,8 +837,6 @@ public final class Items {
     private static final Enchantment loot = Enchantment.LOOT_BONUS_MOBS;
     private static final Enchantment silk = Enchantment.SILK_TOUCH;
     private static final Enchantment thorns = Enchantment.THORNS;
-    private static final Enchantment soul = Enchantment.SOUL_SPEED;
-    private static final Enchantment depth = Enchantment.DEPTH_STRIDER;
     private static final Enchantment aqua = Enchantment.WATER_WORKER;
     private static final Enchantment power = Enchantment.ARROW_DAMAGE;
     private static final Enchantment flame = Enchantment.ARROW_FIRE;

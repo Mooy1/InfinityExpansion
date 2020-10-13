@@ -4,8 +4,11 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import me.mooy1.infinityexpansion.machines.InfinityWorkbench;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.setup.InfinityRecipes;
+import me.mooy1.infinityexpansion.setup.RecipeTypes;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -44,16 +47,8 @@ public class MachineMaterials extends SlimefunItem {
             Items.MACHINE_CIRCUIT, new ItemStack(Material.IRON_BLOCK), Items.MACHINE_CIRCUIT,
             SlimefunItems.STEEL_PLATE, Items.MACHINE_PLATE, SlimefunItems.STEEL_PLATE
         }),
-        ICIRCUIT(Items.INFINITE_MACHINE_CIRCUIT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.INFINITE_INGOT, Items.MAGNONIUM_INGOT, Items.INFINITE_INGOT,
-            Items.VOID_INGOT, Items.MACHINE_CIRCUIT, Items.VOID_INGOT,
-            Items.INFINITE_INGOT, Items.MAGNONIUM_INGOT, Items.INFINITE_INGOT
-        }),
-        ICORE(Items.INFINITE_MACHINE_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE,
-            Items.INFINITE_MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT,
-            Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE
-        });
+        ICIRCUIT(Items.INFINITE_MACHINE_CIRCUIT, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.CIRCUIT_RECIPE),
+        ICORE(Items.INFINITE_MACHINE_CORE, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.CORE_RECIPE);
 
         @Nonnull
         private final SlimefunItemStack item;

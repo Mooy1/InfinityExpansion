@@ -8,6 +8,8 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.setup.InfinityRecipes;
+import me.mooy1.infinityexpansion.setup.RecipeTypes;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -50,12 +52,8 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
     public InfinityReactor() {
         super(Categories.INFINITY_MACHINES,
                 Items.INFINITY_REACTOR,
-                RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT,
-                Items.VOID_INGOT, SlimefunItems.NETHER_STAR_REACTOR, Items.VOID_INGOT,
-                Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
-        });
+                RecipeTypes.INFINITY_WORKBENCH,
+                InfinityRecipes.REACTOR_RECIPE);
 
         new BlockMenuPreset(getID(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
             @Override

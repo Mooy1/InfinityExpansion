@@ -10,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.setup.Categories;
-import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -30,7 +29,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -44,14 +42,6 @@ import java.util.UUID;
 
 public class VoidHarvester extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
 
-    public static final RecipeType RECIPE_TYPE = new RecipeType(
-            new NamespacedKey(InfinityExpansion.getInstance(), "void_harvester"), new CustomItem(
-            Material.OBSIDIAN,
-            "&8Void &7Harvester",
-            "&7Slowly harvests &8Void &7Bits from nothing...",
-            ""
-    ));
-
     public static int BASIC_ENERGY = 900;
     public static int BASIC_SPEED = 1;
     public static int INFINITY_ENERGY = 90000;
@@ -61,7 +51,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 10000;
+    private static final int TIME = 1000;
 
     private final Type type;
 
@@ -270,6 +260,12 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         items.add(Items.VOID_BIT);
 
         return items;
+    }
+
+    @Nonnull
+    @Override
+    public String getRecipeSectionLabel(@Nonnull Player p) {
+        return "&7Harvests:";
     }
 
     @Getter

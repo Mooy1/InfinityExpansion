@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.setup.RecipeTypes;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -244,7 +245,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
     @Nonnull
     @Override
     public String getRecipeSectionLabel(@Nonnull Player p) {
-        return "&7Outputs";
+        return "&7Mines:";
     }
 
     @Getter
@@ -340,7 +341,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 new ItemStack(Material.NETHERITE_SCRAP, 4),
         }),
 
-        INFINITY(Categories.INFINITY_MACHINES, Items.INFINITY_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        INFINITY(Categories.INFINITY_MACHINES, Items.INFINITY_QUARRY, RecipeTypes.INFINITY_WORKBENCH, new ItemStack[] {
             Items.INFINITE_INGOT, Items.INFINITY_CAPACITOR, Items.INFINITE_INGOT,
             Items.INFINITY_PICKAXE, Items.VOID_QUARRY, Items.INFINITY_PICKAXE,
             Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT

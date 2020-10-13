@@ -32,10 +32,8 @@ public final class Categories {
         "INFINITY_GEAR"),
         new CustomItem(Material.NETHERITE_CHESTPLATE, "&bInfinity &9Gear"), 2
     );
-    public static final Category HIDDEN_RECIPES = new HiddenCategory(new NamespacedKey(InfinityExpansion.getInstance(),
-        "HIDDEN_RECIPES"),
-        new CustomItem(Material.BARRIER, "&c( ͡° ͜ʖ ͡°)"),  10
-    );
+    public static final Category HIDDEN_RECIPES = new HiddenCategory();
+    public static final Category INFINITY_RECIPES = new InfinityCategory();
 
     private Categories() { }
 }
