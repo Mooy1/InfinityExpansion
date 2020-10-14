@@ -633,6 +633,18 @@ public final class Items {
             "&7" + SingularityConstructor.outputTimes[15] + " &fQuartz",
             ""
     );
+    public static final SlimefunItemStack INFINITY_SINGULARITY = new SlimefunItemStack(
+        "INFINITY_SINGULARITY",
+        Material.NETHER_STAR,
+        "&fInfinity Singularity",
+        ""
+    );
+    public static final SlimefunItemStack INFINITY_AMOUNT = new SlimefunItemStack(
+        "INFINITY_AMOUNT",
+        Material.IRON_INGOT,
+        "&7" + SingularityConstructor.outputTimes[16] + " &fInfinite Ingots",
+        ""
+    );
 
     //Infinity Singularities
 

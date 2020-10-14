@@ -94,6 +94,8 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             "REDSTONE",
             "LAPIS_LAZULI",
             "QUARTZ",
+
+            "INFINITE_INGOT",
     };
     public static final String[] outputItems = {
             "COPPER_SINGULARITY",
@@ -114,6 +116,8 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             "REDSTONE_SINGULARITY",
             "LAPIS_SINGULARITY",
             "QUARTZ_SINGULARITY",
+
+            "INFINITY_SINGULARITY",
     };
     public static final int[] outputTimes = {
             8000,
@@ -134,6 +138,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             16000,
             16000,
             16000,
+            2880,
     };
 
     public SingularityConstructor(Type type) {

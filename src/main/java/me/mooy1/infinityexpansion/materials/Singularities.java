@@ -39,7 +39,9 @@ public class Singularities extends SlimefunItem {
         COAL(Items.COAL_SINGULARITY, Items.COAL_AMOUNT),
         LAPIS(Items.LAPIS_SINGULARITY, Items.LAPIS_AMOUNT),
         REDSTONE(Items.REDSTONE_SINGULARITY, Items.REDSTONE_AMOUNT),
-        QUARTZ(Items.QUARTZ_SINGULARITY, Items.QUARTZ_AMOUNT);
+        QUARTZ(Items.QUARTZ_SINGULARITY, Items.QUARTZ_AMOUNT),
+
+        INFINITY(Items.INFINITY_SINGULARITY, Items.INFINITY_AMOUNT);
 
         @Nonnull
         private final SlimefunItemStack item;
