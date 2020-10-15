@@ -459,24 +459,24 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             "QUARTZ_SINGULARITY",
     };
     public static final int[] outputTimes = {
-            400,
-            400,
-            400,
-            400,
-            400,
-            800,
+            1600,
+            1600,
+            1600,
+            1600,
+            1600,
+            3200,
+            1600,
+
+            3200,
+            3200,
+            1600,
+            1600,
             400,
 
-            800,
-            800,
-            400,
-            400,
-            100,
-
-            800,
-            800,
-            800,
-            800
+            3200,
+            3200,
+            3200,
+            3200
     };
 
     @Getter

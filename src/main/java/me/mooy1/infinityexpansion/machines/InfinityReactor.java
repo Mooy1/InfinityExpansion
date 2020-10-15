@@ -1,18 +1,18 @@
 package me.mooy1.infinityexpansion.machines;
 
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
+import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
+import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNet;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.setup.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.RecipeTypes;
+import me.mooy1.infinityexpansion.utils.IDUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
@@ -24,28 +24,30 @@ import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 
-public class InfinityReactor extends SlimefunItem implements EnergyNetComponent, InventoryBlock, RecipeDisplayItem {
+public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, InventoryBlock, RecipeDisplayItem {
 
     public static int ENERGY = 600_000;
-    public static int STORAGE = 60_000_000;
+    public static int STORAGE = 120_000_000;
+    public static int INFINITY_INTERVAL = 144000;
+    public static int VOID_INTERVAL = 24000;
     public static int[] INPUT_SLOTS = {
-        PresetUtils.slot1, PresetUtils.slot3
-    };
-    public static int[] VOID_INPUT = {
-            PresetUtils.slot3
-    };
-    public static int[] INFINITY_INPUT = {
-            PresetUtils.slot1
+            PresetUtils.slot1, PresetUtils.slot3
     };
     public static int STATUS_SLOT = PresetUtils.slot2;
 
@@ -53,7 +55,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
         super(Categories.INFINITY_MACHINES,
                 Items.INFINITY_REACTOR,
                 RecipeTypes.INFINITY_WORKBENCH,
-                InfinityRecipes.REACTOR_RECIPE);
+                InfinityRecipes.REACTOR);
 
         new BlockMenuPreset(getID(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
             @Override
@@ -97,8 +99,6 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
 
             if (inv != null) {
                 Location l = b.getLocation();
-
-                inv.dropItems(l, getOutputSlots());
                 inv.dropItems(l, getInputSlots());
             }
 
@@ -128,20 +128,117 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
     @Override
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { InfinityReactor.this.tick(b); }
+            public void tick(Block b, SlimefunItem sf, Config data) {
+                InfinityReactor.this.tick(b);
+            }
 
-            public boolean isSynchronized() { return false; }
+            public boolean isSynchronized() {
+                return true;
+            }
         });
     }
 
     public void tick(Block b) {
+        Location l = b.getLocation();
 
+        if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) {
+            @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
+            if (inv == null) return;
+
+            if (!inv.toInventory().getViewers().isEmpty()) {
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.connectToEnergyNet);
+            }
+        }
     }
 
-    @Nonnull
     @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.GENERATOR;
+    public int getGeneratedOutput(@Nonnull Location l, @Nonnull Config config) {
+        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
+        if (inv == null) return 0;
+        Block b = l.getBlock();
+
+        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
+
+        int progress = Integer.parseInt(getProgress(b));
+
+        if (progress == 0) { //need infinity + void
+
+            if (!IDUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[0])).equals("INFINITE_INGOT")) { //wrong input
+
+                if (playerWatching) {
+                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
+                }
+                return 0;
+
+            } else if (!IDUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])).equals("VOID_INGOT")) { //wrong input
+
+                if (playerWatching) {
+                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
+                }
+                return 0;
+
+            } else { //correct input
+
+                if (playerWatching) {
+                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                                    "&aStarting Generation",
+                                    "&aTime until infinity ingot needed: " + INFINITY_INTERVAL,
+                                    "&aTime until void ingot needed: " + VOID_INTERVAL
+                            )
+                    );
+                }
+                inv.consumeItem(INPUT_SLOTS[0]);
+                inv.consumeItem(INPUT_SLOTS[1]);
+                setProgress(b, 1);
+                return ENERGY;
+
+            }
+
+        } else if (progress == INFINITY_INTERVAL) { //done
+
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aFinished Generation"));
+            }
+            setProgress(b, 0);
+            return ENERGY;
+
+        } else if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
+
+            if (!IDUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])).equals("VOID_INGOT")) { //wrong input
+
+                if (playerWatching) {
+                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
+                }
+                return 0;
+
+            } else { //right input
+
+                if (playerWatching) {
+                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                                    "&aGenerating...",
+                                    "&aTime until infinity ingot needed: " + (INFINITY_INTERVAL - progress),
+                                    "&aTime until void ingot needed: " + (VOID_INTERVAL - Math.floorMod(progress, VOID_INTERVAL))
+                            )
+                    );
+                }
+                setProgress(b, progress + 1);
+                inv.consumeItem(INPUT_SLOTS[1]);
+                return ENERGY;
+            }
+
+        } else { //generate
+
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                                "&aGenerating...",
+                                "&aTime until infinity ingot needed: " + (INFINITY_INTERVAL - progress),
+                                "&aTime until void ingot needed: " + (VOID_INTERVAL - Math.floorMod(progress, VOID_INTERVAL))
+                        )
+                );
+            }
+            setProgress(b, progress + 1);
+            return ENERGY;
+        }
     }
 
     @Override
@@ -151,11 +248,40 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetComponent,
 
     @Nonnull
     @Override
+    public EnergyNetComponentType getEnergyComponentType() {
+        return EnergyNetComponentType.GENERATOR;
+    }
+
+    @Nonnull
+    @Override
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
-        items.add(Items.INFINITE_INGOT);
-        items.add(Items.VOID_INGOT);
+        ItemStack item = Items.INFINITE_INGOT.clone();
+        ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+        List<String> lore = meta.getLore();
+        assert lore != null;
+        lore.add("");
+        lore.add(ChatColor.GREEN + "Lasts for 1 day");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        items.add(item);
+
+        items.add(null);
+
+        item = Items.VOID_INGOT.clone();
+        meta = item.getItemMeta();
+        assert meta != null;
+        lore = meta.getLore();
+        assert lore != null;
+        lore.add("");
+        lore.add(ChatColor.GREEN + "Lasts for 3 hours");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        items.add(item);
 
         return items;
     }

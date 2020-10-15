@@ -51,9 +51,17 @@ public final class ItemSetup {
 
     public static void setup(@Nonnull InfinityExpansion plugin) {
 
+        //basic
+
+        new StrainerBase().register(plugin);
+        for (Strainer.Type type : Strainer.Type.values()) {
+            new Strainer(type).register(plugin);
+        }
+
         //main
 
         new SlimefunItem(Categories.INFINITY_MAIN, Items.ADDON_INFO, RecipeType.NULL, null).register(plugin);
+        new SlimefunItem(Categories.HIDDEN_RECIPES, Items.POTATO_FISH, RecipeType.NULL, null).register(plugin);
 
         //storage
 

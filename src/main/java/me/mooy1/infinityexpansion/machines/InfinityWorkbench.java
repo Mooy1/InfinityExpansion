@@ -7,7 +7,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.setup.Categories;
-import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.setup.InfinityRecipes;
 import me.mooy1.infinityexpansion.utils.IDUtils;
@@ -243,17 +242,18 @@ public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, E
         }
 
         for (int ii = 0; ii < InfinityRecipes.RECIPES.length ; ii++) {
-            int matches = 0;
+            int amount = 0;
             for (int i = 0 ; i < input.length ; i++) {
                 if (input[i].equals(IDUtils.getIDFromItem(InfinityRecipes.RECIPES[ii][i]))) {
-                    matches++;
+                    amount++;
+                } else {
+                    i = 36;
                 }
             }
-            if (matches == 36) {
+            if (amount == 36) {
                 return IDUtils.getItemFromID(InfinityRecipes.OUTPUTS[ii], 1);
             }
         }
-
         return null;
     }
 

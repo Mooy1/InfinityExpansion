@@ -1,6 +1,7 @@
 package me.mooy1.infinityexpansion.materials;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +31,16 @@ public class MainMaterials extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        INFINITY(Categories.INFINITY_MAIN, Items.INFINITE_INGOT, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.INGOT_RECIPE),
-        FAKE(Categories.INFINITY_MAIN, Items.VOID_BIT_DUMMY, RecipeType.NULL, null),
+        INFINITY(Categories.INFINITY_MAIN, Items.INFINITE_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                Items.EARTH_SINGULARITY,
+                SlimefunItems.REINFORCED_ALLOY_INGOT,
+                Items.FORTUNE_SINGULARITY,
+                Items.MAGIC_SINGULARITY,
+                Items.VOID_INGOT,
+                Items.METAL_SINGULARITY,
+                null, null, null
+        }),
+        FAKE(Categories.HIDDEN_RECIPES, Items.VOID_BIT_DUMMY, RecipeType.NULL, null),
         BIT(Categories.INFINITY_MAIN, Items.VOID_BIT, RecipeTypes.VOID_HARVESTER, RecipeUtils.MiddleItem(Items.VOID_BIT_DUMMY)),
         DUST(Categories.INFINITY_MAIN, Items.VOID_DUST, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_BIT)),
         INGOT(Categories.INFINITY_MAIN, Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_DUST)),

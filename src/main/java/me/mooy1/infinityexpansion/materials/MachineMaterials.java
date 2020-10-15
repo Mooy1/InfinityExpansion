@@ -47,8 +47,8 @@ public class MachineMaterials extends SlimefunItem {
             Items.MACHINE_CIRCUIT, new ItemStack(Material.IRON_BLOCK), Items.MACHINE_CIRCUIT,
             SlimefunItems.STEEL_PLATE, Items.MACHINE_PLATE, SlimefunItems.STEEL_PLATE
         }),
-        ICIRCUIT(Items.INFINITE_MACHINE_CIRCUIT, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.CIRCUIT_RECIPE),
-        ICORE(Items.INFINITE_MACHINE_CORE, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.CORE_RECIPE);
+        ICIRCUIT(Items.INFINITE_MACHINE_CIRCUIT, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.CIRCUIT),
+        ICORE(Items.INFINITE_MACHINE_CORE, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.CORE);
 
         @Nonnull
         private final SlimefunItemStack item;

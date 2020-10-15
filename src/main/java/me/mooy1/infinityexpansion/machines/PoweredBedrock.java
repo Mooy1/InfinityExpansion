@@ -21,7 +21,7 @@ public class PoweredBedrock extends SlimefunItem implements EnergyNetComponent, 
     public static final int ENERGY = 60_000;
 
     public PoweredBedrock() {
-        super (Categories.INFINITY_MACHINES, Items.POWERED_BEDROCK, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.BEDROCK_RECIPE);
+        super (Categories.INFINITY_MACHINES, Items.POWERED_BEDROCK, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.BEDROCK);
     }
 
     @Override
