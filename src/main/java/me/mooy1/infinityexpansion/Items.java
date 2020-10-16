@@ -105,7 +105,7 @@ public final class Items {
 
     public static final SlimefunItemStack ADVANCED_CHARGER = new SlimefunItemStack(
             "ADVANCED_CHARGER",
-            Material.CRIMSON_NYLIUM,
+            Material.HONEYCOMB_BLOCK,
             "&cAdvanced &7Charger",
             "&7Quickly charges items",
             "",
@@ -115,7 +115,7 @@ public final class Items {
     );
     public static final SlimefunItemStack INFINITY_CHARGER = new SlimefunItemStack(
             "INFINITY_CHARGER",
-            Material.WARPED_NYLIUM,
+            Material.SEA_LANTERN,
             "&bInfinity &7Charger",
             "&7Instantly charges items",
             "",
@@ -239,21 +239,43 @@ public final class Items {
             LoreUtils.energyPerSecond(Generators.WATER_RATE),
             ""
     );
+    public static final SlimefunItemStack REINFORCED_HYDRO_GENERATOR = new SlimefunItemStack(
+            "REINFORCED_HYDRO_GENERATOR",
+            Material.END_STONE_BRICK_WALL,
+            "&fReinforced &9Hydro Gen",
+            "&3Generates large amounts of energy",
+            "from the movement of water",
+            "",
+            LoreBuilder.powerBuffer(Generators.WATER_STORAGE2),
+            LoreUtils.energyPerSecond(Generators.WATER_RATE2),
+            ""
+    );
     public static final SlimefunItemStack GEOTHERMAL_GENERATOR = new SlimefunItemStack(
             "GEOTHERMAL_GENERATOR",
             Material.MAGMA_BLOCK,
-            "&cGeoThermal Generator",
+            "&cGeothermal Generator",
             "&7Generates energy from the heat of the world",
             "",
             LoreBuilder.powerBuffer(Generators.GEO_STORAGE),
             LoreUtils.energyPerSecond(Generators.GEO_RATE),
             ""
     );
+    public static final SlimefunItemStack REINFORCED_GEOTHERMAL_GENERATOR = new SlimefunItemStack(
+            "REINFORCED_GEOTHERMAL_GENERATOR",
+            Material.SHROOMLIGHT,
+            "&fReinforced &cGeothermal Gen",
+            "&7Generates large amounts of energy",
+            "from the heat of the world",
+            "",
+            LoreBuilder.powerBuffer(Generators.GEO_STORAGE2),
+            LoreUtils.energyPerSecond(Generators.GEO_RATE2),
+            ""
+    );
     public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
             "CELESTIAL_PANEL",
             Material.WHITE_GLAZED_TERRACOTTA,
             "&eCelestial Panel",
-            "&7Generates during the day",
+            "&7Generates energy from the sun",
             "",
             LoreBuilder.powerBuffer(Generators.CELE_STORAGE),
             LoreUtils.energyPerSecond(Generators.CELE_RATE),
@@ -263,7 +285,7 @@ public final class Items {
             "VOID_PANEL",
             Material.LIGHT_GRAY_GLAZED_TERRACOTTA,
             "&8Void Panel",
-            "&7Generates during the night",
+            "&7Generates energy from darkness",
             "",
             LoreBuilder.powerBuffer(Generators.VOID_STORAGE),
             LoreUtils.energyPerSecond(Generators.VOID_RATE),
@@ -273,7 +295,7 @@ public final class Items {
             "INFINITE_PANEL",
             Material.LIGHT_BLUE_GLAZED_TERRACOTTA,
             "&bInfinity Panel",
-            "&7Always generates",
+            "&7Generates energy from the cosmos",
             "",
             LoreBuilder.powerBuffer(Generators.INFINITY_STORAGE),
             LoreUtils.energyPerSecond(Generators.INFINITY_RATE),
@@ -314,6 +336,80 @@ public final class Items {
             "",
             LoreBuilder.speed(StrainerBase.REINFORCED_SPEED),
             ""
+    );
+
+    //tree grower
+
+    public static final SlimefunItemStack BASIC_TREE_GROWER = new SlimefunItemStack(
+            "BASIC_TREE_GROWER",
+            Material.STRIPPED_OAK_WOOD,
+            "&9Basic &aTree Grower",
+            "&7Automatically grows, harvests, and replants trees",
+            "",
+            "&cNot yet functional"
+    );
+    public static final SlimefunItemStack ADVANCED_TREE_GROWER = new SlimefunItemStack(
+            "BASIC_TREE_GROWER",
+            Material.STRIPPED_ACACIA_WOOD,
+            "&cAdvanced &aTree Grower",
+            "&7Automatically grows, harvests, and replants trees",
+            "",
+            "&cNot yet functional"
+    );
+    public static final SlimefunItemStack INFINITY_TREE_GROWER = new SlimefunItemStack(
+            "BASIC_TREE_GROWER",
+            Material.STRIPPED_WARPED_HYPHAE,
+            "&bInfinity &aTree Grower",
+            "&7Automatically grows, harvests, and replants trees",
+            "",
+            "&cNot yet functional"
+    );
+
+    //virtual farm
+
+    public static final SlimefunItemStack BASIC_VIRTUAL_FARM = new SlimefunItemStack(
+            "BASIC_VIRTUAL_FARM",
+            Material.GRASS_BLOCK,
+            "&9Basic &aVirtual Farm",
+            "&7Automatically grows, harvests, and replants crops",
+            "",
+            "&cNot yet functional"
+    );
+    public static final SlimefunItemStack ADVANCED_VIRTUAL_FARM = new SlimefunItemStack(
+            "ADVANCED_VIRTUAL_FARM",
+            Material.CRIMSON_NYLIUM,
+            "&cAdvanced &aVirtual Farm",
+            "&7Automatically grows, harvests, and replants crops",
+            "",
+            "&cNot yet functional"
+    );
+    public static final SlimefunItemStack INFINITY_VIRTUAL_FARM = new SlimefunItemStack(
+            "INFINITY_VIRTUAL_FARM",
+            Material.WARPED_NYLIUM,
+            "&bInfinity &aVirtual Farm",
+            "&7Automatically grows, harvests, and replants crops",
+            "",
+            "&cNot yet functional"
+    );
+
+    //custom gear
+
+    public static final SlimefunItemStack GEAR_FORGE = new SlimefunItemStack(
+            "GEAR_FORGE",
+            Material.LODESTONE,
+            "&7Gear Forge",
+            "&7Forges customizable gear",
+            "",
+            "&cNot yet functional"
+    );
+
+    public static final SlimefunItemStack TOOL_TRANSFORMER = new SlimefunItemStack(
+            "TOOL_TRANSFORMER",
+            Material.EMERALD_BLOCK,
+            "&7Tool Transformer",
+            "&7Can change the material of gear",
+            "",
+            "&cNot yet functional"
     );
 
     //Deep storage units
@@ -363,7 +459,7 @@ public final class Items {
 
     public static final SlimefunItemStack STORAGE_NETWORK_CORE = new SlimefunItemStack(
             "STORAGE_NETWORK_CORE",
-            Material.LODESTONE,
+            Material.CHISELED_STONE_BRICKS,
             "&7Storage Network Core",
             "&7Gives access to many storage units at once",
             "",
@@ -1017,6 +1113,5 @@ public final class Items {
         INFINITY_WINGS.setItemMeta(wings);
     }
 
-    private Items() {
-    }
+    private Items() { }
 }

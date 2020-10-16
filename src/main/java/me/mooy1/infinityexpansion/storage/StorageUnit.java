@@ -48,29 +48,29 @@ import java.util.UUID;
 
 public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
-    public static int BASIC = 2560;
-    public static int ADVANCED = 20_480;
-    public static int REINFORCED = 81_920;
-    public static int VOID = 327_680;
-    public static int INFINITY = 1_600_000_000;
+    public static final int BASIC = 2560;
+    public static final int ADVANCED = 20_480;
+    public static final int REINFORCED = 81_920;
+    public static final int VOID = 327_680;
+    public static final int INFINITY = 1_600_000_000;
 
     private final Type type;
-    private final int STATUS_SLOT = 13;
-    private final int[] INPUT_SLOTS = {
+    private static final int STATUS_SLOT = 13;
+    private static final int[] INPUT_SLOTS = {
             10
     };
-    final int INPUT_SLOT = INPUT_SLOTS[0];
-    private final int[] OUTPUT_SLOTS = {
+    private static final int INPUT_SLOT = INPUT_SLOTS[0];
+    private static final int[] OUTPUT_SLOTS = {
             16
     };
-    final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
-    private final int[] INPUT_BORDER = {
+    private static final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
+    private static final int[] INPUT_BORDER = {
             0, 1, 2, 9, 11, 18, 19, 20
     };
-    private final int[] STATUS_BORDER = {
+    private static final int[] STATUS_BORDER = {
             3, 4, 5, 12, 14, 21, 22, 23
     };
-    private final int[] OUTPUT_BORDER = {
+    private static final int[] OUTPUT_BORDER = {
             6, 7, 8, 15, 17, 24, 25, 26
     };
 

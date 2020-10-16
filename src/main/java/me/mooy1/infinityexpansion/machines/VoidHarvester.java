@@ -42,10 +42,10 @@ import java.util.UUID;
 
 public class VoidHarvester extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
 
-    public static int BASIC_ENERGY = 900;
-    public static int BASIC_SPEED = 1;
-    public static int INFINITY_ENERGY = 90000;
-    public static int INFINITY_SPEED = 10;
+    public static final int BASIC_ENERGY = 900;
+    public static final int BASIC_SPEED = 1;
+    public static final int INFINITY_ENERGY = 90000;
+    public static final int INFINITY_SPEED = 10;
 
     private static final int[] OUTPUT_SLOTS = {
         13
@@ -270,7 +270,6 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-
     public enum Type {
         BASIC(Categories.ADVANCED_MACHINES, Items.VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,

@@ -34,11 +34,11 @@ import java.util.UUID;
 
 public class StorageNetworkCore extends SlimefunItem implements InventoryBlock {
 
-    private final int STATUS_SLOT = 4;
-    private final int[] INPUT_SLOTS = {
+    private static final int STATUS_SLOT = 4;
+    private static final int[] INPUT_SLOTS = {
 
     };
-    private final int[] OUTPUT_SLOTS = {
+    private static final int[] OUTPUT_SLOTS = {
 
     };
 

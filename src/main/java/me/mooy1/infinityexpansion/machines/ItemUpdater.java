@@ -26,16 +26,16 @@ import java.util.Map;
 
 public class ItemUpdater extends SlimefunItem implements EnergyNetComponent, InventoryBlock {
 
-    public static int ENERGY = 200;
+    public static final int ENERGY = 200;
 
-    private final int[] OUTPUT_SLOTS= {
+    private static final int[] OUTPUT_SLOTS= {
             PresetUtils.slot3
     };
-    private final int[] INPUT_SLOTS = {
+    private static final int[] INPUT_SLOTS = {
             PresetUtils.slot1
     };
-    private final int INPUT_SLOT = INPUT_SLOTS[0];
-    private final int STATUS_SLOT = PresetUtils.slot2;
+    private static final int INPUT_SLOT = INPUT_SLOTS[0];
+    private static final int STATUS_SLOT = PresetUtils.slot2;
 
     public ItemUpdater() {
         super(Categories.ADVANCED_MACHINES, Items.ITEM_UPDATER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

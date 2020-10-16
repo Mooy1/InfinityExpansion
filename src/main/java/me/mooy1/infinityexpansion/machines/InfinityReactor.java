@@ -42,14 +42,14 @@ import java.util.UUID;
 
 public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, InventoryBlock, RecipeDisplayItem {
 
-    public static int ENERGY = 600_000;
-    public static int STORAGE = 120_000_000;
-    public static int INFINITY_INTERVAL = 144000;
-    public static int VOID_INTERVAL = 24000;
-    public static int[] INPUT_SLOTS = {
+    public static final int ENERGY = 600_000;
+    public static final int STORAGE = 120_000_000;
+    public static final int INFINITY_INTERVAL = 144000;
+    public static final int VOID_INTERVAL = 24000;
+    public static final int[] INPUT_SLOTS = {
             PresetUtils.slot1, PresetUtils.slot3
     };
-    public static int STATUS_SLOT = PresetUtils.slot2;
+    public static final int STATUS_SLOT = PresetUtils.slot2;
 
     public InfinityReactor() {
         super(Categories.INFINITY_MACHINES,

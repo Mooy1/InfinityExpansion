@@ -50,20 +50,22 @@ import java.util.Objects;
 
 public class Generators extends SlimefunItem implements EnergyNetProvider, InventoryBlock {
 
-    public static int WATER_RATE = 12;
-    public static int WATER_STORAGE = 2_000;
+    public static final int WATER_RATE = 12;
+    public static final int WATER_STORAGE = 2_000;
+    public static final int WATER_RATE2 = 96;
+    public static final int WATER_STORAGE2 = 16_000;
 
-    public static int GEO_RATE = 210;
-    public static int GEO_STORAGE = 35_000;
+    public static final int GEO_RATE = 210;
+    public static final int GEO_STORAGE = 35_000;
+    public static final int GEO_RATE2 = 1680;
+    public static final int GEO_STORAGE2 = 280_000;
 
-    public static int CELE_RATE = 1800;
-    public static int CELE_STORAGE = 300_000;
-
-    public static int VOID_RATE = 5400;
-    public static int VOID_STORAGE = 900_000;
-
-    public static int INFINITY_RATE = 120000;
-    public static int INFINITY_STORAGE = 20_000_000;
+    public static final int CELE_RATE = 1800;
+    public static final int CELE_STORAGE = 300_000;
+    public static final int VOID_RATE = 5400;
+    public static final int VOID_STORAGE = 900_000;
+    public static final int INFINITY_RATE = 120000;
+    public static final int INFINITY_STORAGE = 20_000_000;
 
     private final Type type;
 
@@ -155,9 +157,9 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
 
         if (rate == INFINITY_RATE) return "Infinity";
 
-        if (rate == GEO_RATE) return "Geothermal";
+        if (rate == GEO_RATE || rate == GEO_RATE2) return "Geothermal";
 
-        if (rate == GEO_RATE * 2) return "GeoThermal - Nether";
+        if (rate == GEO_RATE * 2 || rate == GEO_RATE2 * 2) return "GeoThermal - Nether";
 
         if (rate == CELE_RATE) return "Day";
 
@@ -174,7 +176,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
     public int getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
         int generation = type.getGeneration();
 
-        if (type == Type.WATER) {
+        if (type == Type.WATER || type == Type.WATER2) {
             BlockData blockData = block.getBlockData();
 
             if (blockData instanceof Waterlogged) {
@@ -192,7 +194,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
         }
 
         if (world.getEnvironment() == World.Environment.NETHER) {
-            if (type == Type.GEOTHERMAL) {
+            if (type == Type.GEOTHERMAL || type == Type.GEOTHERMAL2) {
                 return generation * 2;
             }
             if (type == Type.VOID) {
@@ -211,7 +213,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
         }
 
         if (world.getTime() >= 13000 || block.getLocation().add(0, 1, 0).getBlock().getLightFromSky() != 15) {
-            if (type == Type.VOID || type == Type.GEOTHERMAL) {
+            if (type == Type.VOID || type == Type.GEOTHERMAL || type == Type.GEOTHERMAL2) {
                 return generation;
             }
         } else {
@@ -253,10 +255,20 @@ public class Generators extends SlimefunItem implements EnergyNetProvider, Inven
                 new ItemStack(Material.BUCKET), SlimefunItems.ELECTRO_MAGNET, new ItemStack(Material.BUCKET),
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
         }),
+        WATER2(WATER_RATE2, WATER_STORAGE2, Categories.ADVANCED_MACHINES, Items.REINFORCED_HYDRO_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                Items.HYDRO_GENERATOR, Items.MACHINE_CIRCUIT, Items.HYDRO_GENERATOR,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE,
+                Items.HYDRO_GENERATOR, Items.MACHINE_CIRCUIT, Items.HYDRO_GENERATOR
+        }),
         GEOTHERMAL(GEO_RATE, GEO_STORAGE, Categories.ADVANCED_MACHINES, Items.GEOTHERMAL_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
                 SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
+        }),
+        GEOTHERMAL2(GEO_RATE2, GEO_STORAGE2, Categories.ADVANCED_MACHINES, Items.REINFORCED_GEOTHERMAL_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                Items.GEOTHERMAL_GENERATOR, Items.MACHINE_CIRCUIT, Items.GEOTHERMAL_GENERATOR,
+                Items.MACHINE_PLATE, Items.MACHINE_CORE, Items.MACHINE_PLATE,
+                Items.GEOTHERMAL_GENERATOR, Items.MACHINE_CIRCUIT, Items.GEOTHERMAL_GENERATOR
         }),
         CELESTIAL(CELE_RATE, CELE_STORAGE, Categories.ADVANCED_MACHINES, Items.CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,

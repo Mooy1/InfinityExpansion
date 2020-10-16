@@ -29,28 +29,28 @@ import java.util.List;
 
 public class ResourceSynthesizer extends SlimefunItem implements EnergyNetComponent, InventoryBlock, RecipeDisplayItem {
 
-    public static int ENERGY = 1_000_000;
+    public static final int ENERGY = 1_000_000;
 
-    private final int[] OUTPUT_SLOTS = {
+    private static final int[] OUTPUT_SLOTS = {
             PresetUtils.slot2 + 27
     };
-    private final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
-    private final int[] BACKGROUND = {
+    private static final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
+    private static final int[] BACKGROUND = {
             27, 29, 33, 35,
             36, 44,
             45, 46, 47, 51, 52, 53
     };
-    private final int[] OUTPUT_BORDER = {
+    private static final int[] OUTPUT_BORDER = {
             28, 34, 37, 38, 42, 43
     };
-    private final int[] INPUT_SLOTS = {
+    private static final int[] INPUT_SLOTS = {
             PresetUtils.slot1, PresetUtils.slot3
     };
-    private final int INPUT_SLOT1 = INPUT_SLOTS[0];
-    private final int INPUT_SLOT2 = INPUT_SLOTS[1];
-    private final int STATUS_SLOT = PresetUtils.slot2;
+    private static final int INPUT_SLOT1 = INPUT_SLOTS[0];
+    private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
+    private static final int STATUS_SLOT = PresetUtils.slot2;
 
-    private final ItemStack[] RECIPES = {
+    private static final ItemStack[] RECIPES = {
             Items.IRON_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
             Items.IRON_SINGULARITY, Items.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
             Items.DIAMOND_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.COMPRESSED_CARBON, 16),

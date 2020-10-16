@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Singularities extends SlimefunItem {
 
-    public static final int[] TIME = {
+    private static final int[] TIME = {
         SingularityConstructor.outputTimes[0],
         SingularityConstructor.outputTimes[1],
         SingularityConstructor.outputTimes[2],
@@ -40,7 +40,7 @@ public class Singularities extends SlimefunItem {
         SingularityConstructor.outputTimes[15]
     };
 
-    public static final ItemStack[] ITEM = {
+    private static final ItemStack[] ITEM = {
         SlimefunItems.COPPER_INGOT.clone(),
         SlimefunItems.ZINC_INGOT.clone(),
         SlimefunItems.TIN_INGOT.clone(),

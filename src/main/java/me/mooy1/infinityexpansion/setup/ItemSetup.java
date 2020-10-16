@@ -91,6 +91,8 @@ public final class ItemSetup {
             new SingularityConstructor(type).register(plugin);
         }
 
+        new ToolTransformer().register(plugin);
+        new GearForge().register(plugin);
         new AdvancedAnvil().register(plugin);
         new PoweredBedrock().register(plugin);
         new ItemUpdater().register(plugin);

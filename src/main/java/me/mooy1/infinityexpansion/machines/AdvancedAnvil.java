@@ -22,19 +22,19 @@ import javax.annotation.Nullable;
 
 public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent, InventoryBlock {
 
-    public static int ENERGY = 100_000;
+    public static final int ENERGY = 100_000;
     
-    private final int[] INPUT_SLOTS= {
+    private static final int[] INPUT_SLOTS= {
             PresetUtils.slot1, PresetUtils.slot2
     };
-    private final int INPUT_SLOT1 = INPUT_SLOTS[0];
-    private final int INPUT_SLOT2 = INPUT_SLOTS[1];
-    private final int[] OUTPUT_SLOTS = {
+    private static final int INPUT_SLOT1 = INPUT_SLOTS[0];
+    private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
+    private static final int[] OUTPUT_SLOTS = {
             PresetUtils.slot3
     };
-    private final int STATUS_SLOT = PresetUtils.slot2 + 27;
-    private final int[] OTHER_STATUS = { 47, 51 };
-    private final int[] BACKROUND = {
+    private static final int STATUS_SLOT = PresetUtils.slot2 + 27;
+    private static final int[] OTHER_STATUS = { 47, 51 };
+    private static final int[] BACKGROUND = {
             27, 28, 29, 33, 34, 35,
             36, 37, 38, 42, 43, 44,
             45, 46,         52, 53
@@ -66,7 +66,7 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent, I
                     for (int i : PresetUtils.slotChunk3) {
                         blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
                     }
-                    for (int i : BACKROUND) {
+                    for (int i : BACKGROUND) {
                         blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
                     }
                     for (int i : PresetUtils.slotChunk1) {

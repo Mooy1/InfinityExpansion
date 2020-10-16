@@ -12,6 +12,7 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.setup.RecipeTypes;
+import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -29,6 +30,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,26 +44,26 @@ import java.util.Objects;
 
 public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
     
-    public static int BASIC_SPEED = 1;
-    public static int ADVANCED_SPEED = 2;
-    public static int VOID_SPEED = 4;
-    public static int INFINITY_SPEED = 8;
+    public static final int BASIC_SPEED = 1;
+    public static final int ADVANCED_SPEED = 2;
+    public static final int VOID_SPEED = 4;
+    public static final int INFINITY_SPEED = 8;
 
-    public static int BASIC_ENERGY = 2400;
-    public static int ADVANCED_ENERGY = 7200;
-    public static int VOID_ENERGY = 45000;
-    public static int INFINITY_ENERGY = 240000;
+    public static final int BASIC_ENERGY = 2400;
+    public static final int ADVANCED_ENERGY = 7200;
+    public static final int VOID_ENERGY = 30000;
+    public static final int INFINITY_ENERGY = 180000;
 
     private final Type type;
 
-    private final int[] OUTPUT_SLOTS = {
+    private static final int[] OUTPUT_SLOTS = {
             9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, 20, 21, 22, 23, 24, 25, 26,
             27, 28, 29, 30, 31, 32, 33, 34, 35,
             36, 37, 38, 39, 40, 41, 42, 43, 44
     };
 
-    private final int STATUS_SLOT = 4;
+    private static final int STATUS_SLOT = 4;
 
     public Quarry(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
@@ -158,8 +160,18 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
             }
 
         } else {
+
             int outputID = Integer.parseInt(getNext(b));
             ItemStack outputItem = type.getOutput()[outputID].clone();
+            Material outputType = outputItem.getType();
+
+            if (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK) {
+
+                if (l.getWorld().getEnvironment() != World.Environment.NETHER) {
+
+                    outputItem = type.getOutput()[0].clone();
+                }
+            }
 
             if (!inv.fits(outputItem, getOutputSlots())) {
 
@@ -305,7 +317,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 new ItemStack(Material.REDSTONE, 8),
                 new ItemStack(Material.COBBLESTONE, 2),
                 new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.NETHERITE_SCRAP, 2),
+                new ItemStack(Material.NETHERITE_INGOT, 1),
         }),
 
         VOID(Categories.ADVANCED_MACHINES, Items.VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -338,7 +350,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 new ItemStack(Material.COBBLESTONE, 4),
                 new SlimefunItemStack(SlimefunItems.GOLD_24K, 4),
                 new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.NETHERITE_SCRAP, 4),
+                new ItemStack(Material.NETHERITE_INGOT, 2),
         }),
 
         INFINITY(Categories.INFINITY_MACHINES, Items.INFINITY_QUARRY, RecipeTypes.INFINITY_WORKBENCH, new ItemStack[] {
@@ -376,7 +388,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 new ItemStack(Material.COBBLESTONE, 8),
                 new SlimefunItemStack(SlimefunItems.GOLD_24K, 8),
                 new ItemStack(Material.COBBLESTONE, 8),
-                new ItemStack(Material.NETHERITE_SCRAP, 8),
+                new ItemStack(Material.NETHERITE_INGOT, 4),
         });
 
         @Nonnull

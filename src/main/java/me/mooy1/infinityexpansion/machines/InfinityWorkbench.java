@@ -41,9 +41,9 @@ import java.util.Objects;
 
 public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
 
-    public static int ENERGY = 10_000_000;
+    public static final int ENERGY = 10_000_000;
 
-    private final int[] INPUT_SLOTS = {
+    private static final int[] INPUT_SLOTS = {
         0, 1, 2, 3, 4, 5,
         9, 10, 11, 12, 13, 14,
         18, 19, 20, 21, 22, 23,
@@ -51,10 +51,10 @@ public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, E
         36, 37, 38, 39, 40, 41,
         45, 46, 47, 48, 49, 50
     };
-    private final int[] OUTPUT_SLOTS = {
+    private static final int[] OUTPUT_SLOTS = {
         PresetUtils.slot3 + 27
     };
-    private final int STATUS_SLOT = PresetUtils.slot3;
+    private static final int STATUS_SLOT = PresetUtils.slot3;
 
     public InfinityWorkbench() {
         super(Categories.ADVANCED_MACHINES, Items.INFINITY_FORGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -275,7 +275,7 @@ public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, E
 
     @Override
     public int[] getOutputSlots() {
-        return OUTPUT_SLOTS;
+        return new int[0];
     }
 
     @Nonnull

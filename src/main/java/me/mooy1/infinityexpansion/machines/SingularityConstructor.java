@@ -46,28 +46,28 @@ import java.util.UUID;
 
 public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
 
-    public static int BASIC_ENERGY = 300;
-    public static int BASIC_SPEED = 1;
-    public static int INFINITY_ENERGY = 30000;
-    public static int INFINITY_SPEED = 10;
+    public static final int BASIC_ENERGY = 300;
+    public static final int BASIC_SPEED = 1;
+    public static final int INFINITY_ENERGY = 30000;
+    public static final int INFINITY_SPEED = 10;
 
     private final Type type;
-    private final int STATUS_SLOT = 13;
-    private final int[] INPUT_SLOTS = {
+    private static final int STATUS_SLOT = 13;
+    private static final int[] INPUT_SLOTS = {
             10
     };
-    private final int INPUT_SLOT = INPUT_SLOTS[0];
-    private final int[] OUTPUT_SLOTS = {
+    private static final int INPUT_SLOT = INPUT_SLOTS[0];
+    private static final int[] OUTPUT_SLOTS = {
             16
     };
-    private final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
-    private final int[] INPUT_BORDER = {
+    private static final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
+    private static final int[] INPUT_BORDER = {
             0, 1, 2, 9, 11, 18, 19, 20
     };
-    private final int[] STATUS_BORDER = {
+    private static final int[] STATUS_BORDER = {
             3, 4, 5, 12, 14, 21, 22, 23
     };
-    private final int[] OUTPUT_BORDER = {
+    private static final int[] OUTPUT_BORDER = {
             6, 7, 8, 15, 17, 24, 25, 26
     };
 
@@ -179,7 +179,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
-        String name = null;
+        String name;
         Material statusMat = Material.BARRIER;
 
         int progress = Integer.parseInt(getProgress(b));
