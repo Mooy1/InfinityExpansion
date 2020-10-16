@@ -3,7 +3,9 @@ This addon aims to add a larger endgame to slimefun by adding 'Infinity Ingots' 
 
 # Requirements
 Minecraft Version: 1.16+ (Paper recommended)
+
 Slimefun Version: 683
+
 CS-CoreLib Version: 91 (recommended, will most likely work on previous)
 
 # Download
