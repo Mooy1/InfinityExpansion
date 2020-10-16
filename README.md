@@ -1,6 +1,11 @@
 # Infinity Expansion
 This addon aims to add a larger endgame to slimefun by adding 'Infinity Ingots' which take an extreme amount of resources and energy to create, and are used to craft extremely powerful machines and gear.
 
+# Requirements
+Minecraft Version: 1.16+ (Paper recommended)
+Slimefun Version: 683
+CS-CoreLib Version: 91 (recommended, will most likely work on previous)
+
 # Download
 https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
 
