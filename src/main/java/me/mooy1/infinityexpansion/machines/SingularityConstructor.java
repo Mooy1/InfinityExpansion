@@ -206,18 +206,20 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
         } else { //input
 
+            int energy = getEnergyConsumption(type);
             int speed = getSpeed(type);
 
             if (progress == 0 || getProgressID(b) == null) { //no input
 
-                if (checkItemAndSet(b, inv, inputSlotItem, speed)) { //try to start contruction
+                if (checkItemAndSet(b, inv, inputSlotItem, speed)) { //try to start construction
 
-                    name = "&aBeggining contruction!";
+                    removeCharge(b.getLocation(), energy);
+                    name = "&aBeginning construction!";
                     statusMat = Material.NETHER_STAR;
 
-                } else { //failed to start contruction
+                } else { //failed to start construction
 
-                    name = "&cA singularity can't be contructed from this!";
+                    name = "&cA singularity can't be constructed from this!";
 
                     if (inv.getItemInSlot(OUTPUT_SLOT) == null) {
                         inv.pushItem(inputSlotItem, OUTPUT_SLOTS);
@@ -237,6 +239,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     if (IDUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
 
                         int inputSlotAmount = inputSlotItem.getAmount();
+                        removeCharge(b.getLocation(), energy);
 
                         if (inputSlotAmount + progress > outputTime) {
                             inputSlotAmount = outputTime - progress;
@@ -254,7 +257,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                         }
 
-                        name = "&aContructing...";
+                        name = "&aContracting...";
                         statusMat = Material.NETHER_STAR;
 
                     } else { //input doesnt match
@@ -267,17 +270,19 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
 
                         }
                     }
-                } else { //if contruction done
+
+                } else { //if construction done
 
                     ItemStack output = IDUtils.getItemFromID(outputItems[progressID], 1);
 
                     if (inv.fits(output, OUTPUT_SLOTS)) { //output
 
+                        removeCharge(b.getLocation(), energy);
                         inv.pushItem(output, OUTPUT_SLOTS);
                         setProgress(b, 0);
                         setProgressID(b, null);
 
-                        name = "&aContruction complete!";
+                        name = "&aConstruction complete!";
                         statusMat = Material.NETHER_STAR;
 
                     } else { //not enough room
@@ -309,7 +314,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                     displayname = displaymeta.getDisplayName();
                 }
 
-                lore = "&7Contructing: " + displayname;
+                lore = "&7Constructing: " + displayname;
                 loree = "&7Progress: (" + progress + "/" + outputTime + ")";
             }
 

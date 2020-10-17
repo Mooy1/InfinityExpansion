@@ -38,6 +38,7 @@ public class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor
     public boolean isFullSetRequired() {
         return false;
     }
+
     @Nullable
     @Override
     public NamespacedKey getArmorSetId() {
@@ -67,7 +68,6 @@ public class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor
                 new PotionEffect(PotionEffectType.SPEED, 1200, 2),
                 new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 1200, 0)
         });
-
 
         @Nonnull
         private final SlimefunItemStack item;

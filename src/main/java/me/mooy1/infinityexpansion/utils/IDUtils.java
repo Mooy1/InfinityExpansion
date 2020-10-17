@@ -26,4 +26,8 @@ public final class IDUtils {
             return new ItemStack(Material.getMaterial(id), amount);
         }
     }
+
+    public static ItemStack getCustomItemFromID(String id, int amount, String name, String... lore) {
+        return new CustomItem(getItemFromID(id, amount), name, lore);
+    }
 }

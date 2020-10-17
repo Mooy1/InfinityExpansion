@@ -57,6 +57,12 @@ public final class ItemSetup {
         for (Strainer.Type type : Strainer.Type.values()) {
             new Strainer(type).register(plugin);
         }
+        for (VirtualFarm.Type type : VirtualFarm.Type.values()) {
+            new VirtualFarm(type).register(plugin);
+        }
+        for (TreeGrower.Type type : TreeGrower.Type.values()) {
+            new TreeGrower(type).register(plugin);
+        }
 
         //main
 

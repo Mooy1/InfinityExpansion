@@ -41,11 +41,12 @@ import java.util.Objects;
  * Solar panels and some other basic generators
  *
  * @author Mooy1
- * <p>
+ *
  * Thanks to
  * @author NCBPFluffyBear
  * for idea, a few bits of code,
  * and code to learn from
+ *
  */
 
 public class Generators extends SlimefunItem implements EnergyNetProvider, InventoryBlock {

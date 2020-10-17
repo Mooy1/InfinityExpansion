@@ -25,7 +25,7 @@ public final class PresetUtils {
             "&cLoading...");
     public static final ItemStack inputAnItem = new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
-            "&9Input an item!");
+            "&9Input an item");
     public static final ItemStack invalidRecipe = new CustomItem(
             Material.BARRIER,
             "&cInvalid Recipe!");

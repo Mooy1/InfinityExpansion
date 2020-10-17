@@ -281,21 +281,7 @@ public class StrainerBase extends SlimefunItem implements InventoryBlock, Recipe
         if (inv.fits(potato, OUTPUT_SLOTS)) {
             inv.pushItem(potato, OUTPUT_SLOTS);
 
-            if (!inv.toInventory().getViewers().isEmpty()) {
-
-                HumanEntity[] viewers = inv.toInventory().getViewers().toArray(new HumanEntity[0]);
-                Player[] players = new Player[viewers.length];
-
-                int i = 0;
-                for (HumanEntity viewer : viewers) {
-                    players[i] = (Player) viewer;
-                    i++;
-                }
-
-                for (Player player : players) {
-                    MessageUtils.message(player, ChatColor.YELLOW + "You caught a lucky potato! ... fish?");
-                }
-            }
+            MessageUtils.messagePlayersInInv(inv, ChatColor.YELLOW + "You caught a lucky potato! ... fish?");
         }
     }
 

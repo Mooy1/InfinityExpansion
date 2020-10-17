@@ -244,7 +244,7 @@ public final class Items {
             Material.END_STONE_BRICK_WALL,
             "&fReinforced &9Hydro Gen",
             "&3Generates large amounts of energy",
-            "from the movement of water",
+            "&7from the movement of water",
             "",
             LoreBuilder.powerBuffer(Generators.WATER_STORAGE2),
             LoreUtils.energyPerSecond(Generators.WATER_RATE2),
@@ -265,7 +265,7 @@ public final class Items {
             Material.SHROOMLIGHT,
             "&fReinforced &cGeothermal Gen",
             "&7Generates large amounts of energy",
-            "from the heat of the world",
+            "&7from the heat of the world",
             "",
             LoreBuilder.powerBuffer(Generators.GEO_STORAGE2),
             LoreUtils.energyPerSecond(Generators.GEO_RATE2),
@@ -343,24 +343,33 @@ public final class Items {
     public static final SlimefunItemStack BASIC_TREE_GROWER = new SlimefunItemStack(
             "BASIC_TREE_GROWER",
             Material.STRIPPED_OAK_WOOD,
-            "&9Basic &aTree Grower",
+            "&9Basic &2Tree Grower",
             "&7Automatically grows, harvests, and replants trees",
+            "",
+            LoreUtils.speed(TreeGrower.SPEED1),
+            LoreUtils.energyPerSecond(TreeGrower.ENERGY1),
             "",
             "&cNot yet functional"
     );
     public static final SlimefunItemStack ADVANCED_TREE_GROWER = new SlimefunItemStack(
-            "BASIC_TREE_GROWER",
+            "ADVANCED_TREE_GROWER",
             Material.STRIPPED_ACACIA_WOOD,
-            "&cAdvanced &aTree Grower",
+            "&cAdvanced &2Tree Grower",
             "&7Automatically grows, harvests, and replants trees",
+            "",
+            LoreUtils.speed(TreeGrower.SPEED2),
+            LoreUtils.energyPerSecond(TreeGrower.ENERGY2),
             "",
             "&cNot yet functional"
     );
     public static final SlimefunItemStack INFINITY_TREE_GROWER = new SlimefunItemStack(
-            "BASIC_TREE_GROWER",
+            "INFINITY_TREE_GROWER",
             Material.STRIPPED_WARPED_HYPHAE,
-            "&bInfinity &aTree Grower",
+            "&bInfinity &2Tree Grower",
             "&7Automatically grows, harvests, and replants trees",
+            "",
+            LoreUtils.speed(TreeGrower.SPEED3),
+            LoreUtils.energyPerSecond(TreeGrower.ENERGY3),
             "",
             "&cNot yet functional"
     );
@@ -373,6 +382,9 @@ public final class Items {
             "&9Basic &aVirtual Farm",
             "&7Automatically grows, harvests, and replants crops",
             "",
+            LoreUtils.speed(VirtualFarm.SPEED1),
+            LoreUtils.energyPerSecond(VirtualFarm.ENERGY1),
+            "",
             "&cNot yet functional"
     );
     public static final SlimefunItemStack ADVANCED_VIRTUAL_FARM = new SlimefunItemStack(
@@ -381,6 +393,9 @@ public final class Items {
             "&cAdvanced &aVirtual Farm",
             "&7Automatically grows, harvests, and replants crops",
             "",
+            LoreUtils.speed(VirtualFarm.SPEED2),
+            LoreUtils.energyPerSecond(VirtualFarm.ENERGY2),
+            "",
             "&cNot yet functional"
     );
     public static final SlimefunItemStack INFINITY_VIRTUAL_FARM = new SlimefunItemStack(
@@ -388,6 +403,9 @@ public final class Items {
             Material.WARPED_NYLIUM,
             "&bInfinity &aVirtual Farm",
             "&7Automatically grows, harvests, and replants crops",
+            "",
+            LoreUtils.speed(VirtualFarm.SPEED3),
+            LoreUtils.energyPerSecond(VirtualFarm.ENERGY3),
             "",
             "&cNot yet functional"
     );
@@ -407,9 +425,10 @@ public final class Items {
             "TOOL_TRANSFORMER",
             Material.EMERALD_BLOCK,
             "&7Tool Transformer",
-            "&7Can change the material of gear",
+            "&7Changes the material of gear",
             "",
-            "&cNot yet functional"
+            LoreUtils.energyPer(ToolTransformer.ENERGY) + "Per Use",
+            ""
     );
 
     //Deep storage units
