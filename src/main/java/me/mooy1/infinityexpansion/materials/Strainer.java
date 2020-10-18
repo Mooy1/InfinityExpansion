@@ -1,9 +1,10 @@
-package me.mooy1.infinityexpansion.machines;
+package me.mooy1.infinityexpansion.materials;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.machines.StrainerBase;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;

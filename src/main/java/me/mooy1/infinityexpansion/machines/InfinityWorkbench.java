@@ -15,7 +15,6 @@ import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -36,10 +35,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
+public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 10_000_000;
 
@@ -57,13 +57,13 @@ public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, E
     private static final int STATUS_SLOT = PresetUtils.slot3;
 
     public InfinityWorkbench() {
-        super(Categories.ADVANCED_MACHINES, Items.INFINITY_FORGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.ADVANCED_MACHINES, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
                 SlimefunItems.ENERGIZED_CAPACITOR, new ItemStack(Material.CRAFTING_TABLE), SlimefunItems.ENERGIZED_CAPACITOR,
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT
         });
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(Items.INFINITY_FORGE.getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.INFINITY_WORKBENCH.getDisplayName())) {
 
             @Override
             public void init() {
@@ -102,7 +102,7 @@ public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, E
             }
         };
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
             Location l = b.getLocation();
 
@@ -138,7 +138,7 @@ public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, E
     public void tick(Block b) {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
-
+        
         if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) { //only active when player watching
             int charge = getCharge(b.getLocation());
 
@@ -251,7 +251,7 @@ public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, E
                 }
             }
             if (amount == 36) {
-                return IDUtils.getItemFromID(InfinityRecipes.OUTPUTS[ii], 1);
+                return InfinityRecipes.OUTPUTS[ii];
             }
         }
         return null;
@@ -268,26 +268,10 @@ public class InfinityWorkbench extends SlimefunItem implements InventoryBlock, E
         return ENERGY;
     }
 
-    @Override
-    public int[] getInputSlots() {
-        return new int[0];
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return new int[0];
-    }
-
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
-        List<ItemStack> items = new ArrayList<>();
-
-        for (String id : InfinityRecipes.OUTPUTS) {
-            items.add(IDUtils.getItemFromID(id, 1));
-        }
-
-        return items;
+        return new ArrayList<>(Arrays.asList(InfinityRecipes.OUTPUTS));
     }
 
     @Nonnull

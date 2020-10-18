@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class StorageNetworkCore extends SlimefunItem implements InventoryBlock {
+public class StorageNetworkCore extends SlimefunItem {
 
     private static final int STATUS_SLOT = 4;
     private static final int[] INPUT_SLOTS = {
@@ -50,7 +50,7 @@ public class StorageNetworkCore extends SlimefunItem implements InventoryBlock {
                 Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE,
         });
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -138,15 +138,5 @@ public class StorageNetworkCore extends SlimefunItem implements InventoryBlock {
         } else { //has cargo net
 
         }
-    }
-
-    @Override
-    public int[] getInputSlots() {
-        return new int[0];
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return new int[0];
     }
 }

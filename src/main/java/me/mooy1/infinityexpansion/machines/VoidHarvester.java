@@ -16,7 +16,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -26,7 +25,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -38,9 +36,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
-public class VoidHarvester extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
+public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 900;
     public static final int BASIC_SPEED = 1;
@@ -59,7 +56,7 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -96,15 +93,11 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
             }
         };
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                inv.dropItems(b.getLocation(), getOutputSlots());
-            }
-
-            if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
+                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
             }
 
             return true;
@@ -158,9 +151,9 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
 
             if (progress >= TIME) { //reached full progress
 
-                if (inv.fits(output, getOutputSlots())) {
+                if (inv.fits(output, OUTPUT_SLOTS)) {
 
-                    inv.pushItem(output, getOutputSlots());
+                    inv.pushItem(output, OUTPUT_SLOTS);
 
                     setProgress(b, speed);
 
@@ -209,16 +202,6 @@ public class VoidHarvester extends SlimefunItem implements InventoryBlock, Energ
 
     private String getBlockData(Location l, String key) {
         return BlockStorage.getLocationInfo(l, key);
-    }
-
-    @Override
-    public int[] getInputSlots() {
-        return new int[0];
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return OUTPUT_SLOTS;
     }
 
     @Nonnull

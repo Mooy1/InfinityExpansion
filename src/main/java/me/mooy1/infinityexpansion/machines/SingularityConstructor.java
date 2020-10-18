@@ -18,7 +18,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -29,7 +28,6 @@ import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -42,9 +40,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
-public class SingularityConstructor extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
+public class SingularityConstructor extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 300;
     public static final int BASIC_SPEED = 1;
@@ -75,7 +72,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -112,7 +109,7 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             }
         };
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
@@ -120,8 +117,8 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
                 String inputTest = getProgressID(b);
                 Location l = b.getLocation();
 
-                inv.dropItems(l, getOutputSlots());
-                inv.dropItems(l, getInputSlots());
+                inv.dropItems(l, OUTPUT_SLOTS);
+                inv.dropItems(l, INPUT_SLOTS);
 
                 if (progress > 0 && inputTest != null) {
 
@@ -142,10 +139,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
             }
             setProgressID(b, null);
             setProgress(b, 0);
-
-            if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
-            }
 
             return true;
         });
@@ -378,16 +371,6 @@ public class SingularityConstructor extends SlimefunItem implements InventoryBlo
     @Override
     public int getCapacity() {
         return getEnergyConsumption(type);
-    }
-
-    @Override
-    public int[] getInputSlots() {
-        return INPUT_SLOTS;
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return OUTPUT_SLOTS;
     }
 
     private int getEnergyConsumption(Type type) {

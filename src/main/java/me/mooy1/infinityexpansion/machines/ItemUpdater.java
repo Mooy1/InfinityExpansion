@@ -46,7 +46,7 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent, Inv
 
         setupInv();
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {

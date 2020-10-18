@@ -11,7 +11,7 @@ public final class IDUtils {
 
     public static String getIDFromItem(ItemStack item) {
         if (SlimefunItem.getByItem(item) != null) {
-            return SlimefunItem.getByItem(item).getID();
+            return SlimefunItem.getByItem(item).getId();
         } else if (item != null){
             return item.getType().toString();
         } else {

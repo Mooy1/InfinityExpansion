@@ -98,8 +98,8 @@ public final class Items {
             "&7Generates power through the compression",
             "&7of &8Void &7and &bInfinity &7Ingots",
             "",
-            LoreUtils.energyPerSecond(InfinityReactor.ENERGY),
             LoreBuilder.powerBuffer(InfinityReactor.STORAGE),
+            LoreUtils.energyPerSecond(InfinityReactor.ENERGY),
             ""
     );
 
@@ -168,6 +168,7 @@ public final class Items {
             "ADVANCED_ENCHANTER",
             Material.ENCHANTING_TABLE,
             "&cAdvanced &7Enchanter",
+            "",
             LoreUtils.speed(ItemSetup.ADVANCED_EN_SPEED),
             LoreUtils.energyPerSecond(ItemSetup.ADVANCED_EN_ENERGY),
             ""
@@ -176,6 +177,7 @@ public final class Items {
             "ADVANCED_DISENCHANTER",
             Material.ENCHANTING_TABLE,
             "&cAdvanced &7Disenchanter",
+            "",
             LoreUtils.speed(ItemSetup.ADVANCED_DIS_SPEED),
             LoreUtils.energyPerSecond(ItemSetup.ADVANCED_DIS_ENERGY),
             ""
@@ -184,6 +186,7 @@ public final class Items {
             "INFINITY_ENCHANTER",
             Material.ENCHANTING_TABLE,
             "&bInfinity &7Enchanter",
+            "",
             LoreUtils.speed(ItemSetup.INFINITY_EN_SPEED),
             LoreUtils.energyPerSecond(ItemSetup.INFINITY_EN_ENERGY),
             ""
@@ -193,19 +196,19 @@ public final class Items {
             "INFINITY_DISENCHANTER",
             Material.ENCHANTING_TABLE,
             "&bInfinity &7Disenchanter",
+            "",
             LoreUtils.speed(ItemSetup.INFINITY_DIS_SPEED),
             LoreUtils.energyPerSecond(ItemSetup.INFINITY_DIS_ENERGY),
             ""
     );
-    public static final SlimefunItemStack INFINITY_FORGE = new SlimefunItemStack(
+    public static final SlimefunItemStack INFINITY_WORKBENCH = new SlimefunItemStack(
             "INFINITY_FORGE",
             Material.RESPAWN_ANCHOR,
             "&bInfinity &6Workbench",
             "&7Used to craft infinity items",
             "",
             LoreUtils.energyPer(InfinityWorkbench.ENERGY) + "per item",
-            "",
-            "&cNot yet functional"
+            ""
     );
 
     public static final SlimefunItemStack ADVANCED_ANVIL = new SlimefunItemStack(
@@ -348,8 +351,7 @@ public final class Items {
             "",
             LoreUtils.speed(TreeGrower.SPEED1),
             LoreUtils.energyPerSecond(TreeGrower.ENERGY1),
-            "",
-            "&cNot yet functional"
+            ""
     );
     public static final SlimefunItemStack ADVANCED_TREE_GROWER = new SlimefunItemStack(
             "ADVANCED_TREE_GROWER",
@@ -359,8 +361,7 @@ public final class Items {
             "",
             LoreUtils.speed(TreeGrower.SPEED2),
             LoreUtils.energyPerSecond(TreeGrower.ENERGY2),
-            "",
-            "&cNot yet functional"
+            ""
     );
     public static final SlimefunItemStack INFINITY_TREE_GROWER = new SlimefunItemStack(
             "INFINITY_TREE_GROWER",
@@ -370,8 +371,7 @@ public final class Items {
             "",
             LoreUtils.speed(TreeGrower.SPEED3),
             LoreUtils.energyPerSecond(TreeGrower.ENERGY3),
-            "",
-            "&cNot yet functional"
+            ""
     );
 
     //virtual farm
@@ -384,8 +384,7 @@ public final class Items {
             "",
             LoreUtils.speed(VirtualFarm.SPEED1),
             LoreUtils.energyPerSecond(VirtualFarm.ENERGY1),
-            "",
-            "&cNot yet functional"
+            ""
     );
     public static final SlimefunItemStack ADVANCED_VIRTUAL_FARM = new SlimefunItemStack(
             "ADVANCED_VIRTUAL_FARM",
@@ -395,8 +394,7 @@ public final class Items {
             "",
             LoreUtils.speed(VirtualFarm.SPEED2),
             LoreUtils.energyPerSecond(VirtualFarm.ENERGY2),
-            "",
-            "&cNot yet functional"
+            ""
     );
     public static final SlimefunItemStack INFINITY_VIRTUAL_FARM = new SlimefunItemStack(
             "INFINITY_VIRTUAL_FARM",
@@ -406,8 +404,7 @@ public final class Items {
             "",
             LoreUtils.speed(VirtualFarm.SPEED3),
             LoreUtils.energyPerSecond(VirtualFarm.ENERGY3),
-            "",
-            "&cNot yet functional"
+            ""
     );
 
     //custom gear
@@ -750,7 +747,7 @@ public final class Items {
             "POTATO_FISH",
             Material.POTATO,
             "&7:&6Potatofish&7:",
-            "&cDon't cheat in potato fish :(",
+            "&cDon't cheat in potatofish :(",
             ""
     );
 
@@ -1063,7 +1060,7 @@ public final class Items {
 
         INFINITY_WINGS.addUnsafeEnchantment(prot, 20);
 
-        //add unbreakables
+        //add unbreakable items
 
         ItemMeta hat = INFINITY_CROWN.getItemMeta();
         assert hat != null;
@@ -1113,11 +1110,11 @@ public final class Items {
         //shovel.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         INFINITY_SHOVEL.setItemMeta(shovel);
 
-        ItemMeta sheild = INFINITY_SHIELD.getItemMeta();
-        assert sheild != null;
-        sheild.setUnbreakable(true);
-        //sheild.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        INFINITY_SHIELD.setItemMeta(sheild);
+        ItemMeta shield = INFINITY_SHIELD.getItemMeta();
+        assert shield != null;
+        shield.setUnbreakable(true);
+        //shield.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        INFINITY_SHIELD.setItemMeta(shield);
 
         ItemMeta bow = INFINITY_BOW.getItemMeta();
         assert bow != null;

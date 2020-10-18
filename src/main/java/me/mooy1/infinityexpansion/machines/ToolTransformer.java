@@ -55,7 +55,7 @@ public class ToolTransformer extends SlimefunItem implements InventoryBlock, Ene
 
         setupInv();
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
@@ -177,6 +177,7 @@ public class ToolTransformer extends SlimefunItem implements InventoryBlock, Ene
                                 inv.consumeItem(INPUT_SLOT2, getAmount(inputMaterial, inputToolType));
 
                                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
+
                             }
                         }
                     }
@@ -220,9 +221,13 @@ public class ToolTransformer extends SlimefunItem implements InventoryBlock, Ene
     private int getAmount(ItemStack inputMaterial, String inputToolType) {
 
         for (String toolType : TOOL_TYPES) {
+
             if (inputToolType.equals(toolType)) {
+
                 for (ItemStack input : TOOL_RECIPE) {
+
                     if (inputMaterial.getType() == input.getType() && inputMaterial.getAmount() >= input.getAmount()) {
+
                         return input.getAmount();
                     }
                 }
@@ -230,8 +235,11 @@ public class ToolTransformer extends SlimefunItem implements InventoryBlock, Ene
         }
 
         for (String armorType : ARMOR_TYPES) {
+
             if (inputToolType.equals(armorType)) {
+
                 for (ItemStack input : ARMOR_RECIPE) {
+
                     if (inputMaterial.getType() == input.getType() && inputMaterial.getAmount() >= input.getAmount()) {
                         
                         return input.getAmount();
@@ -247,7 +255,9 @@ public class ToolTransformer extends SlimefunItem implements InventoryBlock, Ene
         Material material = item.getType();
 
         for (String toolType : TOOL_TYPES) {
+
             for (String toolMaterial : TOOL_MATERIALS) {
+
                 if (material == Material.getMaterial(toolMaterial + toolType)) return toolType;
             }
         }
@@ -258,7 +268,9 @@ public class ToolTransformer extends SlimefunItem implements InventoryBlock, Ene
         Material material = item.getType();
 
         for (String armorType : ARMOR_TYPES) {
+
             for (String armorMaterial : ARMOR_MATERIALS) {
+
                 if (material == Material.getMaterial(armorMaterial + armorType)) return armorType;
             }
         }

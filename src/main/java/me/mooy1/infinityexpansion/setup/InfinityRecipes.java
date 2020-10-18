@@ -2,28 +2,54 @@ package me.mooy1.infinityexpansion.setup;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.utils.IDUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class InfinityRecipes {
 
-    static ItemStack m_circuit = Items.MACHINE_CIRCUIT;
-    static ItemStack m_plate = Items.MACHINE_PLATE;
-    static ItemStack m_core = Items.MACHINE_CORE;
-    static ItemStack voii = Items.VOID_INGOT;
-    static ItemStack iing = Items.INFINITE_INGOT;
-    static ItemStack i_circuit = Items.INFINITE_MACHINE_CIRCUIT;
-    static ItemStack i_core = Items.INFINITE_MACHINE_CORE;
-    static ItemStack v_panel = Items.VOID_PANEL;
-    static ItemStack c_panel = Items.CELESTIAL_PANEL;
-    static ItemStack f_s = Items.FORTUNE_SINGULARITY;
-    static ItemStack m_s = Items.METAL_SINGULARITY;
-    static ItemStack a_s = Items.MAGIC_SINGULARITY;
-    static ItemStack e_s = Items.EARTH_SINGULARITY;
-    static ItemStack c_5 = Items.COMPRESSED_COBBLESTONE_5;
-    static ItemStack reactor = SlimefunItems.NETHER_STAR_REACTOR;
-    static ItemStack elytra = new ItemStack(Material.ELYTRA);
-    static ItemStack e_c = SlimefunItems.ENERGIZED_CAPACITOR;
+    public static final ItemStack[] OUTPUTS = {
+            Items.INFINITE_MACHINE_CORE,
+            Items.INFINITE_MACHINE_CIRCUIT,
+            Items.INFINITE_PANEL,
+            Items.POWERED_BEDROCK,
+            Items.INFINITY_REACTOR,
+            Items.INFINITY_BLADE,
+            Items.INFINITY_PICKAXE,
+            Items.INFINITY_AXE,
+            Items.INFINITY_SHOVEL,
+            Items.INFINITY_CROWN,
+            Items.INFINITY_CHESTPLATE,
+            Items.INFINITY_LEGGINGS,
+            Items.INFINITY_BOOTS,
+            Items.INFINITY_WINGS,
+            Items.INFINITY_SHIELD,
+            Items.INFINITY_BOW
+    };
+
+    public static int getRecipeID(ItemStack item) {
+        String itemID = IDUtils.getIDFromItem(item);
+        int i = 0;
+        for (ItemStack output : OUTPUTS) {
+            if (itemID.equals(IDUtils.getIDFromItem(output))) return i;
+            i++;
+        }
+        return 0;
+    }
+
+    private static final ItemStack m_circuit = Items.MACHINE_CIRCUIT;
+    private static final ItemStack m_plate = Items.MACHINE_PLATE;
+    private static final ItemStack m_core = Items.MACHINE_CORE;
+    private static final ItemStack voii = Items.VOID_INGOT;
+    private static final ItemStack iing = Items.INFINITE_INGOT;
+    private static final ItemStack i_circuit = Items.INFINITE_MACHINE_CIRCUIT;
+    private static final ItemStack i_core = Items.INFINITE_MACHINE_CORE;
+    private static final ItemStack v_panel = Items.VOID_PANEL;
+    private static final ItemStack c_panel = Items.CELESTIAL_PANEL;
+    private static final ItemStack c_5 = Items.COMPRESSED_COBBLESTONE_5;
+    private static final ItemStack reactor = SlimefunItems.NETHER_STAR_REACTOR;
+    private static final ItemStack elytra = new ItemStack(Material.ELYTRA);
+    private static final ItemStack e_c = SlimefunItems.ENERGIZED_CAPACITOR;
 
     public static final ItemStack[][] RECIPES = {
             {
@@ -154,26 +180,6 @@ public class InfinityRecipes {
                     null, null, voii, null, null, iing,
                     null, null, null, voii, iing, null
             },
-    };
-
-
-    public static final String[] OUTPUTS = {
-            "INFINITE_MACHINE_CORE",
-            "INFINITE_MACHINE_CIRCUIT",
-            "INFINITE_PANEL",
-            "POWERED_BEDROCK",
-            "INFINITY_REACTOR",
-            "INFINITY_BLADE",
-            "INFINITY_PICKAXE",
-            "INFINITY_AXE",
-            "INFINITY_SHOVEL",
-            "INFINITY_CROWN",
-            "INFINITY_CHESTPLATE",
-            "INFINITY_LEGGINGS",
-            "INFINITY_BOOTS",
-            "INFINITY_WINGS",
-            "INFINITY_SHIELD",
-            "INFINITY_BOW",
     };
 
     public static final ItemStack[] CIRCUIT = RECIPES[0];

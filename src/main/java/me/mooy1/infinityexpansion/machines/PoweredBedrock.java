@@ -8,7 +8,6 @@ import me.mooy1.infinityexpansion.setup.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.RecipeTypes;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +15,7 @@ import org.bukkit.block.Block;
 
 import javax.annotation.Nonnull;
 
-public class PoweredBedrock extends SlimefunItem implements EnergyNetComponent, InventoryBlock {
+public class PoweredBedrock extends SlimefunItem implements EnergyNetComponent {
 
     public static final int ENERGY = 60_000;
 
@@ -58,13 +57,4 @@ public class PoweredBedrock extends SlimefunItem implements EnergyNetComponent, 
         return ENERGY * 2;
     }
 
-    @Override
-    public int[] getInputSlots() {
-        return new int[0];
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return new int[0];
-    }
 }

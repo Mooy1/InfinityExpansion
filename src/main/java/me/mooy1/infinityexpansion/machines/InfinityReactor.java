@@ -14,7 +14,6 @@ import me.mooy1.infinityexpansion.utils.IDUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -40,7 +39,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, InventoryBlock, RecipeDisplayItem {
+public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, RecipeDisplayItem {
 
     public static final int ENERGY = 600_000;
     public static final int STORAGE = 120_000_000;
@@ -57,7 +56,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
                 RecipeTypes.INFINITY_WORKBENCH,
                 InfinityRecipes.REACTOR);
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -94,12 +93,12 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
             }
         };
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
                 Location l = b.getLocation();
-                inv.dropItems(l, getInputSlots());
+                inv.dropItems(l, INPUT_SLOTS);
             }
 
             if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
@@ -284,16 +283,6 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
         items.add(item);
 
         return items;
-    }
-
-    @Override
-    public int[] getInputSlots() {
-        return INPUT_SLOTS;
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return new int[0];
     }
 
     private void setProgress(Block b, int progress) {

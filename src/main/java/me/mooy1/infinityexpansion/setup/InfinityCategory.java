@@ -2,14 +2,15 @@ package me.mooy1.infinityexpansion.setup;
 
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
-import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,10 +20,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class InfinityCategory extends FlexCategory {
 
-    private final int[] recipeSlots = {
+    private static final int[] RECIPE_SLOTS = {
             1, 2, 3, 4, 5, 6,
             10, 11, 12, 13, 14, 15,
             19, 20, 21, 22, 23, 24,
@@ -30,99 +32,207 @@ public class InfinityCategory extends FlexCategory {
             37, 38, 39, 40, 41, 42,
             46, 47, 48, 49, 50, 51
     };
-
-    private ChestMenu menu;
+    private static final int[] NORMAL_RECIPE_SLOTS = {
+            3, 4, 5,
+            12, 13, 14,
+            21, 22, 23
+    };
+    private static final int[] OUTPUT_BORDER = {
+            25, 26, 34, 43, 44
+    };
+    private static final int[] BACKGROUND = {
+            9, 18, 27, 36, 52
+    };
+    private static final int OUTPUT = 35;
+    private static final int BACK = 0;
+    private static final int PREVIOUS = 45;
+    private static final int NEXT = 53;
+    private static final int WORKBENCH = 8;
+    private static final int[] WORKBENCH_BORDER = {
+            7, 16, 17
+    };
 
     public InfinityCategory() {
         super(new NamespacedKey(InfinityExpansion.getInstance(), "INFINITY_RECIPES"),
                 new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Recipes"), 2
         );
-
-        setupInv();
     }
 
     @Override
     public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
-        return true;
-    }
-
-    private void setupInv() {
-        menu = new ChestMenu("&bInfinity &7Recipes");
-        // Header
-        for (int i = 0; i < 9; ++i) {
-            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-    }
-
-    private ChestMenu create(Player p) {
-        final ChestMenu playerMenu = new ChestMenu(SlimefunPlugin.getLocalization().getMessage(p, "guide.title.main"));
-        playerMenu.setEmptySlotsClickable(false);
-        return playerMenu;
-    }
-
-    private void displayItem(PlayerProfile profile, ItemStack result) {
-        final Player p = profile.getPlayer();
-        if (p != null) {
-            final ChestMenu menu = this.create(p);
-
-            // Header and back button
-            for (int i = 0; i < 9; i++) {
-                if (i == 1) {
-                    menu.addItem(i, new CustomItem(ChestMenuUtils.getBackButton(p, "",
-                            ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(p, "guide.back.guide")))
-                    );
-                    menu.addMenuClickHandler(i, (pl, s, is, action) -> {
-                        open(p, profile, SlimefunGuideLayout.CHEST);
-                        return false;
-                    });
-                } else
-                    menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-            }
-
-
-            for (int i = 36; i < 45; i++) {
-                menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-            }
-
-            menu.open(p);
-        }
-    }
-
-    private void displayItem(ChestMenu menu, Player p, PlayerProfile profile, ItemStack output, ItemStack[] recipe) {
-        final ChestMenu.MenuClickHandler clickHandler = (pl, s, clickedItem, a) -> onIngredientClick(profile,
-                clickedItem);
-
-        for (int i = 0; i < 9; ++i) {
-            menu.addItem(recipeSlots[i], recipe[i], clickHandler);
-        }
-
-        p.playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
-        menu.addItem(19, RecipeType.ENHANCED_CRAFTING_TABLE.getItem(p), ChestMenuUtils.getEmptyClickHandler());
-        menu.addItem(25, output, ChestMenuUtils.getEmptyClickHandler());
-    }
-
-    private boolean onIngredientClick(PlayerProfile profile, ItemStack clickedItem) {
-        if (clickedItem != null) {
-            // This must be UU Matter then.
-            SlimefunGuide.displayItem(profile, Items.INFINITE_INGOT, true);
-        }
-
-        return false;
+        return !slimefunGuideLayout.equals(SlimefunGuideLayout.CHEAT_SHEET);
     }
 
     @Override
     public void open(Player player, PlayerProfile playerProfile, SlimefunGuideLayout slimefunGuideLayout) {
+        ChestMenu menu = new ChestMenu("&bInfinity Recipes");
+
+        int i;
+        menu.addItem(0, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        menu.setEmptySlotsClickable(false);
+
         menu.addItem(1, new CustomItem(ChestMenuUtils.getBackButton(player, "",
                 ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(player, "guide.back.guide")))
         );
-
-        menu.addMenuClickHandler(1, (pl, slot, item, action) -> {
+        menu.addMenuClickHandler(1, (p, slot, item, action) -> {
             SlimefunPlugin.getRegistry().getGuideLayout(slimefunGuideLayout).openMainMenu(playerProfile, 1);
             return false;
         });
 
+        for (i = 2 ; i < 9 ; i++) {
+            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+
+        i = 9;
+        for (ItemStack items : InfinityRecipes.OUTPUTS) {
+            menu.addItem(i, items, (p, slot, item, action) -> {
+                openRecipe(p, slot - 9, playerProfile, slimefunGuideLayout);
+                return false;
+            });
+
+            i++;
+            if (i == 45) break;
+        }
+
+        menu.addItem(45, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+
+        menu.addItem(46, ChestMenuUtils.getPreviousButton(player,1, 1), ChestMenuUtils.getEmptyClickHandler());
+
+        for (i = 47 ; i < 52 ; i++) {
+            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+
+        menu.addItem(52, ChestMenuUtils.getNextButton(player,1, 1), ChestMenuUtils.getEmptyClickHandler());
+
+        menu.addItem(53, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
         playerProfile.getGuideHistory().add(this, 1);
+
+        menu.open(player);
+    }
+
+    private void openRecipe(Player player, int id, PlayerProfile playerProfile, SlimefunGuideLayout slimefunGuideLayout) {
+
+        ItemStack output = InfinityRecipes.OUTPUTS[id];
+        ChestMenu menu = new ChestMenu(Objects.requireNonNull(output.getItemMeta()).getDisplayName());
+        menu.setEmptySlotsClickable(false);
+
+        menu.addItem(BACK, ChestMenuUtils.getBackButton(player, ""), (p, slot, item, action) -> {
+            open(player, playerProfile, slimefunGuideLayout);
+            return false;
+        });
+
+        menu.addItem(PREVIOUS, ChestMenuUtils.getPreviousButton(player, id + 1, InfinityRecipes.OUTPUTS.length), (p, slot, item, action) -> {
+            if (id > 0) {
+                openRecipe(p, id - 1, playerProfile, slimefunGuideLayout);
+            }
+            return false;
+        });
+        menu.addItem(NEXT, ChestMenuUtils.getNextButton(player, id + 1, InfinityRecipes.OUTPUTS.length), (p, slot, item, action) -> {
+            if (id + 1< InfinityRecipes.OUTPUTS.length) {
+                openRecipe(p, id + 1, playerProfile, slimefunGuideLayout);
+            }
+            return false;
+        });
+        for (int slot : BACKGROUND) {
+            menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int slot : OUTPUT_BORDER) {
+            menu.addItem(slot, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        menu.addItem(OUTPUT, output, ChestMenuUtils.getEmptyClickHandler());
+        for (int slot : WORKBENCH_BORDER) {
+            menu.addItem(slot, new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&3Crafted in"), ChestMenuUtils.getEmptyClickHandler());
+        }
+        menu.addItem(WORKBENCH, Items.INFINITY_WORKBENCH, (p, slot, item, action) -> {
+            openNormalRecipe(player, Objects.requireNonNull(SlimefunItem.getByItem(Items.INFINITY_WORKBENCH)), id, playerProfile, slimefunGuideLayout);
+            return false;
+        });
+
+        int i = 0;
+        for (int recipeSlot : RECIPE_SLOTS) {
+            ItemStack recipeItem = InfinityRecipes.RECIPES[id][i];
+
+            if (recipeItem != null) {
+
+                menu.addItem(recipeSlot, recipeItem, (p, slot, item, action) -> {
+                    SlimefunItem slimefunItem = SlimefunItem.getByItem(recipeItem);
+
+                    if (slimefunItem != null ) {
+                        if (slimefunItem.getRecipeType() == RecipeTypes.INFINITY_WORKBENCH) {
+                            openRecipe(player, InfinityRecipes.getRecipeID(recipeItem), playerProfile, slimefunGuideLayout);
+                        } else {
+                            openNormalRecipe(player, Objects.requireNonNull(SlimefunItem.getByItem(recipeItem)), id, playerProfile, slimefunGuideLayout);
+                        }
+                    }
+                    return false;
+                });
+            }
+            i++;
+        }
+
+        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
+
+        menu.open(player);
+    }
+
+    private void openNormalRecipe(Player player, SlimefunItem slimefunItem, int fromID, PlayerProfile playerProfile, SlimefunGuideLayout slimefunGuideLayout) {
+        ChestMenu menu = new ChestMenu(slimefunItem.getItemName());
+        menu.setEmptySlotsClickable(false);
+
+        menu.addItem(0, ChestMenuUtils.getBackButton(player, ""), (p, slot, item, action) -> {
+            openRecipe(player, fromID, playerProfile, slimefunGuideLayout);
+            return false;
+        });
+        menu.addItem(10, slimefunItem.getRecipeType().toItem(), ChestMenuUtils.getEmptyClickHandler());
+
+        int i = 0;
+        for (int recipeSlot : NORMAL_RECIPE_SLOTS) {
+            ItemStack recipeItem = slimefunItem.getRecipe()[i];
+            menu.addItem(recipeSlot, recipeItem, (p, slot, item, action) -> {
+                SlimefunItem recipeSlimefunItem = SlimefunItem.getByItem(recipeItem);
+                if (recipeSlimefunItem != null) {
+                    openNormalRecipeRecipe(player, recipeSlimefunItem, fromID, slimefunItem, playerProfile, slimefunGuideLayout);
+                }
+                return false;
+            });
+            i++;
+        }
+
+        menu.addItem(16, slimefunItem.getRecipeOutput(), ChestMenuUtils.getEmptyClickHandler());
+
+        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
+
+        menu.open(player);
+    }
+
+    private void openNormalRecipeRecipe(Player player, SlimefunItem slimefunItem, int fromID, SlimefunItem fromSlimefunItem, PlayerProfile playerProfile, SlimefunGuideLayout slimefunGuideLayout) {
+        ChestMenu menu = new ChestMenu(slimefunItem.getItemName());
+        menu.setEmptySlotsClickable(false);
+
+        menu.addItem(0, ChestMenuUtils.getBackButton(player, ""), (p, slot, item, action) -> {
+            openNormalRecipe(player, fromSlimefunItem, fromID, playerProfile, slimefunGuideLayout);
+            return false;
+        });
+        menu.addItem(10, slimefunItem.getRecipeType().toItem(), ChestMenuUtils.getEmptyClickHandler());
+
+        int i = 0;
+        for (int recipeSlot : NORMAL_RECIPE_SLOTS) {
+            ItemStack recipeItem = slimefunItem.getRecipe()[i];
+            menu.addItem(recipeSlot, recipeItem, (p, slot, item, action) -> {
+                SlimefunItem recipeSlimefunItem = SlimefunItem.getByItem(recipeItem);
+                if (recipeSlimefunItem != null) {
+                    openNormalRecipeRecipe(player, recipeSlimefunItem, fromID, fromSlimefunItem, playerProfile, slimefunGuideLayout);
+                }
+                return false;
+            });
+            i++;
+        }
+
+        menu.addItem(16, slimefunItem.getRecipeOutput(), ChestMenuUtils.getEmptyClickHandler());
+
+        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 
         menu.open(player);
     }

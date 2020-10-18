@@ -7,12 +7,12 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.setup.Categories;
 import me.mooy1.infinityexpansion.utils.IDUtils;
+import me.mooy1.infinityexpansion.utils.MathUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -22,14 +22,12 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -41,9 +39,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
-public class StrainerBase extends SlimefunItem implements InventoryBlock, RecipeDisplayItem {
+public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
     public static final int ADVANCED_SPEED = 4;
@@ -51,23 +48,12 @@ public class StrainerBase extends SlimefunItem implements InventoryBlock, Recipe
     private static final int TIME = 128;
 
     private static final int STATUS_SLOT = PresetUtils.slot1;
-    private static final int[] OUTPUT_SLOTS = {
-            13, 14, 15, 16,
-            22, 23, 24, 25,
-            31, 32, 33, 34,
-            40, 41, 42, 43
-    };
+    private static final int[] OUTPUT_SLOTS = PresetUtils.largeOutput;
+
     private static final int[] INPUT_SLOTS = {
             PresetUtils.slot1 + 27
     };
-    private static final int[] OUTPUT_BORDER = {
-            3, 4, 5, 6, 7, 8,
-            12, 17,
-            21, 26,
-            30, 35,
-            39, 44,
-            48, 49, 50, 51, 52, 53
-    };
+
     private static final ItemStack[] OUTPUTS = {
             new ItemStack(Material.STICK),
             new ItemStack(Material.SAND),
@@ -92,7 +78,7 @@ public class StrainerBase extends SlimefunItem implements InventoryBlock, Recipe
 
         });
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(Items.STRAINER_BASE.getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.STRAINER_BASE.getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -129,17 +115,13 @@ public class StrainerBase extends SlimefunItem implements InventoryBlock, Recipe
             }
         };
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
                 Location l = b.getLocation();
-                inv.dropItems(l, getOutputSlots());
-                inv.dropItems(l, getInputSlots());
-            }
-
-            if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
+                inv.dropItems(l, OUTPUT_SLOTS);
+                inv.dropItems(l, INPUT_SLOTS);
             }
 
             return true;
@@ -153,7 +135,7 @@ public class StrainerBase extends SlimefunItem implements InventoryBlock, Recipe
         for (int i : PresetUtils.slotChunk1) {
             blockMenuPreset.addItem(i + 27, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : OUTPUT_BORDER) {
+        for (int i : PresetUtils.largeOutputBorder) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
@@ -213,10 +195,10 @@ public class StrainerBase extends SlimefunItem implements InventoryBlock, Recipe
 
                 } else {
                     double random = Math.random();
-                    if (Math.ceil(random * 10000) == 10000) {
+                    if (MathUtils.chanceIn(random, 10000)) {
                         fish(inv);
                     }
-                    ItemStack output = OUTPUTS[(int) Math.ceil((float) random * (OUTPUTS.length - 1))].clone();
+                    ItemStack output = OUTPUTS[MathUtils.randomFrom(random, (OUTPUTS.length - 1))].clone();
 
                     if (inv.fits(output, OUTPUT_SLOTS)) { //output
 
@@ -234,7 +216,7 @@ public class StrainerBase extends SlimefunItem implements InventoryBlock, Recipe
                     }
                     setProgress(b, 0);
 
-                    if (Math.ceil(random * speed) == speed) {
+                    if (MathUtils.chanceIn(random, speed)) {
                         ItemMeta itemMeta = strainer.getItemMeta();
                         Damageable durability = (Damageable) itemMeta;
 
@@ -283,16 +265,6 @@ public class StrainerBase extends SlimefunItem implements InventoryBlock, Recipe
 
             MessageUtils.messagePlayersInInv(inv, ChatColor.YELLOW + "You caught a lucky potato! ... fish?");
         }
-    }
-
-    @Override
-    public int[] getInputSlots() {
-        return INPUT_SLOTS;
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return OUTPUT_SLOTS;
     }
 
     private void setProgress(Block b, int progress) {

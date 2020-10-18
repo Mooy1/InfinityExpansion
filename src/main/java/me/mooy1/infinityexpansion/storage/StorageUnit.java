@@ -12,7 +12,6 @@ import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -22,7 +21,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -32,7 +30,6 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Basically just barrels...
@@ -46,7 +43,7 @@ import java.util.UUID;
  *
  */
 
-public class StorageUnit extends SlimefunItem implements InventoryBlock {
+public class StorageUnit extends SlimefunItem {
 
     public static final int BASIC = 2560;
     public static final int ADVANCED = 20_480;
@@ -78,7 +75,7 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
         super(Categories.INFINITY_STORAGE, type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -115,15 +112,15 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             }
         };
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
                 String storedItem = getStoredItem(b);
                 int stored = getStored(b);
 
-                inv.dropItems(b.getLocation(), getOutputSlots());
-                inv.dropItems(b.getLocation(), getInputSlots());
+                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
+                inv.dropItems(b.getLocation(), INPUT_SLOTS);
 
                 //drop stored items
                 if (stored > 0 && storedItem != null) {
@@ -148,10 +145,6 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
             }
             setStored(b, 0);
             setStoredItem(b, null);
-
-            if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
-            }
 
             return true;
         });
@@ -360,16 +353,6 @@ public class StorageUnit extends SlimefunItem implements InventoryBlock {
 
     private String getBlockData(Location l, String key) {
         return BlockStorage.getLocationInfo(l, key);
-    }
-
-    @Override
-    public int[] getInputSlots() {
-        return INPUT_SLOTS;
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return OUTPUT_SLOTS;
     }
 
     @Getter

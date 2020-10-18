@@ -51,6 +51,10 @@ public final class ItemSetup {
 
     public static void setup(@Nonnull InfinityExpansion plugin) {
 
+        //infinity recipes
+
+        new InfinityCategory().register();
+
         //basic
 
         new StrainerBase().register(plugin);

@@ -4,24 +4,32 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.Items;
 import me.mooy1.infinityexpansion.setup.Categories;
+import me.mooy1.infinityexpansion.utils.MathUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
+import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -30,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TreeGrower extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
+public class TreeGrower extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 36;
     public static final int ENERGY2 = 360;
@@ -38,62 +46,85 @@ public class TreeGrower extends SlimefunItem implements InventoryBlock, EnergyNe
     public static final int SPEED1 = 1;
     public static final int SPEED2 = 4;
     public static final int SPEED3 = 16;
+
+    public static final int TIME = 640;
     private final Type type;
 
-    private static final int[] OUTPUT_SLOTS = {
-            37, 38, 39, 40, 41, 42, 43
-    };
-    private static final int[] OUTPUT_BORDER = {
-            27, 28, 29, 30, 31, 32, 33, 34, 35,
-            36, 44,
-            45, 46, 47 ,48, 49 ,50, 51, 52 ,53
-    };
-    private static final int[] BACKGROUND = {
-            0, 4, 8,
-            9, 13, 17,
-            18, 22, 26
-    };
+    private static final int[] OUTPUT_SLOTS = PresetUtils.largeOutput;
     private static final int[] INPUT_SLOTS = {
-            PresetUtils.slot1 + 28
+            PresetUtils.slot1 + 27
     };
-    private static final int STATUS_SLOT = PresetUtils.slot3 + 26;
+    private static final int STATUS_SLOT = PresetUtils.slot1;
 
     public TreeGrower(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
-        setupInv();
+        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
+            @Override
+            public void init() {
+                setupInv(this);
+            }
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+            @Override
+            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+                if (getProgress(b) == null) {
+                    setProgress(b, 0);
+                }
+            }
+
+            @Override
+            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
+                return (player.hasPermission("slimefun.inventory.bypass")
+                        || SlimefunPlugin.getProtectionManager().hasPermission(
+                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
+            }
+
+            @Override
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
+                return new int[0];
+            }
+
+            @Override
+            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
+            }
+        };
+
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                inv.dropItems(b.getLocation(), getOutputSlots());
-                inv.dropItems(b.getLocation(), getInputSlots());
+                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
+                inv.dropItems(b.getLocation(), INPUT_SLOTS);
+
+                String progressType = getType(b);
+                if (progressType != null) {
+                    b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(Objects.requireNonNull(Material.getMaterial(progressType + "_SAPLING"))));
+                }
             }
 
             return true;
         });
     }
 
-    private void setupInv() {
-        createPreset(this, type.getItem().getDisplayName(),
-                blockMenuPreset -> {
-                    for (int i : BACKGROUND) {
-                        blockMenuPreset.addItem(i + 27, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk1) {
-                        blockMenuPreset.addItem(i + 28, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk3) {
-                        blockMenuPreset.addItem(i + 26, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : OUTPUT_BORDER) {
-                        blockMenuPreset.addItem(i - 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
-                            ChestMenuUtils.getEmptyClickHandler());
-                });
+    private void setupInv(BlockMenuPreset blockMenuPreset) {
+        for (int i : PresetUtils.slotChunk1) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk1) {
+            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.largeOutputBorder) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -106,14 +137,15 @@ public class TreeGrower extends SlimefunItem implements InventoryBlock, EnergyNe
     }
 
     public void tick(Block b) {
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
+        Location l = b.getLocation();
+        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return;
 
         int energy = type.getEnergy();
-
+        int charge = getCharge(l);
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
-        if (getCharge(b.getLocation()) < energy) { //not enough energy
+        if (charge < energy) { //not enough energy
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
@@ -121,7 +153,126 @@ public class TreeGrower extends SlimefunItem implements InventoryBlock, EnergyNe
 
         } else {
 
+            int progress = Integer.parseInt(getProgress(b));
+
+            if (progress == 0) { //try to start
+                ItemStack input = inv.getItemInSlot(INPUT_SLOTS[0]);
+
+                if (input == null) {
+
+                    if (playerWatching) {
+                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a sapling"));
+                    }
+
+                } else {
+
+                    String inputType = getInputType(input);
+
+                    if (inputType == null) {
+
+                        if (playerWatching) {
+                            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a sapling!"));
+                        }
+
+                        for (int slot : OUTPUT_SLOTS) {
+                            if (inv.getItemInSlot(slot) == null) {
+                                inv.replaceExistingItem(slot, input);
+                                inv.consumeItem(INPUT_SLOTS[0], input.getAmount());
+                                break;
+                            }
+                        }
+
+                    } else { //start
+
+                        setProgress(b, type.getSpeed());
+                        setType(b, inputType);
+                        inv.consumeItem(INPUT_SLOTS[0], 1);
+                        setCharge(l, charge - energy);
+
+                        if (playerWatching) {
+                            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                                    "&aPlanting... (" + type.getSpeed() + "/" + TIME + ")"));
+                        }
+
+                    }
+                }
+
+            } else if (progress < TIME) { //progress
+
+                setProgress(b, progress + type.getSpeed());
+                setCharge(l, charge - energy);
+
+                if (playerWatching) {
+                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                            "&aGrowing... (" + (progress + type.getSpeed()) + "/" + TIME + ")"));
+                }
+
+            } else { //done
+
+                String type = getType(b);
+
+                ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), 4 + MathUtils.randomFrom(Math.random(), 6));
+                ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), 6 + MathUtils.randomFrom(Math.random(), 10));
+                ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), MathUtils.randomFrom(Math.random(), 2));
+
+                if (!inv.fits(output1, OUTPUT_SLOTS)) {
+
+                    if (playerWatching) {
+                        inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                    }
+
+                } else {
+                    inv.pushItem(output1, OUTPUT_SLOTS);
+                    if (inv.fits(output2, OUTPUT_SLOTS)) inv.pushItem(output2, OUTPUT_SLOTS);
+                    if (inv.fits(output3, INPUT_SLOTS)) inv.pushItem(output3, INPUT_SLOTS);
+
+                    if (type.equals("OAK")) {
+                        ItemStack apple = new ItemStack(Material.APPLE);
+                        if (inv.fits(apple, OUTPUT_SLOTS)) inv.pushItem(apple, OUTPUT_SLOTS);
+                    }
+
+                    if (playerWatching) {
+                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aHarvesting..."));
+                    }
+
+                    setProgress(b, 0);
+                    setType(b, null);
+                    setCharge(l, charge - energy);
+
+                }
+            }
         }
+    }
+
+    private String getInputType(ItemStack input) {
+        for (String recipe : INPUTS) {
+            if (input.getType() == Material.getMaterial(recipe + "_SAPLING")) return recipe;
+        }
+        return null;
+    }
+
+    private void setType(Block b, String type) {
+        setBlockData(b, "type", type);
+    }
+
+    private String getType(Block b) {
+        return getBlockData(b.getLocation(), "type");
+    }
+
+    private void setProgress(Block b, int progress) {
+        setBlockData(b, "progress", String.valueOf(progress));
+    }
+
+    private String getProgress(Block b) {
+        return getBlockData(b.getLocation(), "progress");
+    }
+
+    private void setBlockData(Block b, String key, String data) {
+        BlockStorage.addBlockInfo(b, key, data);
+    }
+
+    private String getBlockData(Location l, String key) {
+        return BlockStorage.getLocationInfo(l, key);
     }
 
     @Nonnull
@@ -156,15 +307,6 @@ public class TreeGrower extends SlimefunItem implements InventoryBlock, EnergyNe
             "JUNGLE"
     };
 
-    @Override
-    public int[] getInputSlots() {
-        return INPUT_SLOTS;
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return OUTPUT_SLOTS;
-    }
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)

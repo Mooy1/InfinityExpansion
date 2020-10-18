@@ -14,7 +14,7 @@ public final class Categories {
     );
     public static final Category INFINITY_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "INFINITY_MACHINES"),
-            new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Machines"), 3
+            new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Machines"), 2
     );
     public static final Category ADVANCED_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "ADVANCED_MACHINES"),
@@ -30,14 +30,14 @@ public final class Categories {
     );
     public static final Category INFINITY_MATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "INFINITY_MATERIALS"),
-            new CustomItem(Material.NETHERITE_INGOT, "&bInfinity &aMaterials"), 3
+            new CustomItem(Material.NETHERITE_INGOT, "&bInfinity &aMaterials"), 2
     );
     public static final Category INFINITY_GEAR = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "INFINITY_GEAR"),
             new CustomItem(Material.NETHERITE_CHESTPLATE, "&bInfinity &9Gear"), 4
     );
     public static final Category HIDDEN_RECIPES = new HiddenCategory();
-    public static final Category INFINITY_RECIPES = new InfinityCategory();
+    public static final Category INFINITY_CHEAT = new CheatCategory();
 
     private Categories() { }
 }

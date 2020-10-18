@@ -17,7 +17,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.InventoryBlock;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -41,7 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetComponent, RecipeDisplayItem {
+public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
     
     public static final int BASIC_SPEED = 1;
     public static final int ADVANCED_SPEED = 2;
@@ -68,7 +67,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
-        new BlockMenuPreset(getID(), Objects.requireNonNull(type.getItem().getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -105,11 +104,11 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
             }
         };
 
-        registerBlockHandler(getID(), (p, b, stack, reason) -> {
+        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                inv.dropItems(b.getLocation(), getOutputSlots());
+                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
             }
 
             return true;
@@ -172,7 +171,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                 }
             }
 
-            if (!inv.fits(outputItem, getOutputSlots())) {
+            if (!inv.fits(outputItem, OUTPUT_SLOTS)) {
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
@@ -185,7 +184,7 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
                             "&aMining..."));
                 }
                 removeCharge(l, energyConsumption);
-                inv.pushItem(outputItem, getOutputSlots());
+                inv.pushItem(outputItem, OUTPUT_SLOTS);
 
                 if (outputID + 1 == type.getOutput().length) {
                     setNext(b, 0);
@@ -235,16 +234,6 @@ public class Quarry extends SlimefunItem implements InventoryBlock, EnergyNetCom
     @Override
     public EnergyNetComponentType getEnergyComponentType() {
         return EnergyNetComponentType.CONSUMER;
-    }
-
-    @Override
-    public int[] getInputSlots() {
-        return new int[0];
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return OUTPUT_SLOTS;
     }
 
     @Nonnull
