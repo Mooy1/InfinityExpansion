@@ -11,11 +11,11 @@ Minecraft Version: 1.16+ (Paper recommended)
 
 https://papermc.io/downloads
 
-Slimefun Version: 683
+Slimefun Version: DEV 721 (RC-17, use DEV builds please)
 
 https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/
 
-CS-CoreLib Version: 91 (recommended, will most likely work on previous)
+CS-CoreLib Version: DEV 91 (recommended, will most likely work on previous)
 
 https://thebusybiscuit.github.io/builds/TheBusyBiscuit/CS-CoreLib/master/
 
@@ -31,7 +31,7 @@ Advanced Disenchanter - a faster auto disenchanter
 
 Quarries - Mines resources for you at the cost of lots of power.
 
-Infinity Forge - WIP used to craft Infinity Items
+Infinity Workbench - Used to craft Infinity Items
 
 Storage Units - Hold huge amounts of items, work with cargo
 
