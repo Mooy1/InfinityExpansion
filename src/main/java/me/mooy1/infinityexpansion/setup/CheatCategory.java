@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
-public class HiddenCategory extends Category {
-    public HiddenCategory() {
-        super(new NamespacedKey(InfinityExpansion.getInstance(), "HIDDEN_RECIPES"),
-                new CustomItem(Material.BARRIER, "&c( ͡° ͜ʖ ͡°)"), 10
+public class CheatCategory extends Category {
+    public CheatCategory() {
+        super(new NamespacedKey(InfinityExpansion.getInstance(), "INFINITY_CHEAT"),
+                new CustomItem(Material.SMITHING_TABLE, "&bInfinity &cCheat"), 2
         );
     }
 
