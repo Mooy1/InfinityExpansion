@@ -2,6 +2,8 @@ package me.mooy1.infinityexpansion.utils;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 
+import java.text.DecimalFormat;
+
 public final class LoreUtils {
 
     public static final int SERVER_TICK = 20;
@@ -13,23 +15,26 @@ public final class LoreUtils {
     private LoreUtils() {}
 
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + Math.round(energy * SERVER_TICK_RATIO) + " J/s";
+        return "&8\u21E8 &e\u26A1 &7" + format(Math.round(energy * SERVER_TICK_RATIO)) + " J/s";
+    }
+    public static String energyBuffer(int energy) {
+        return "&8\u21E8 &e\u26A1 &7" + format(energy) + " Buffer";
     }
 
     public static String energyPer(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + energy + " J ";
+        return "&8\u21E8 &e\u26A1 &7" + format(energy) + " J ";
     }
 
     public static String speed(int speed) {
         return "&8\u21E8 &b\u26A1 &7Speed: &b" + speed + 'x';
     }
 
-    public static String stores(int amount) {
-        return "&7Stores: &e" + amount + " &7items";
+    public static String storesItem(int amount) {
+        return "&7Stores: &e" + format(amount) + " &7items";
     }
 
-    public static String stored(int amount, int max) {
-        return "&7Stored: &e" + amount + " / " + max;
+    public static String storedItems(int amount, int max) {
+        return "&7Stored: &e" + format(amount) + " / " + max;
     }
 
     public static String storedItem(String id) {
@@ -40,7 +45,13 @@ public final class LoreUtils {
         return "&7Item: &e" + id;
     }
 
-    public static float roundHundreds(float number) {
-        return (float) Math.round(number * 100) / 100;
+    public static String roundHundreds(float number) {
+        return format(Math.round(number * 100) / 100);
+    }
+
+    public static final DecimalFormat decimalFormat = new DecimalFormat("###,###,###,###");
+
+    public static String format(int number) {
+        return decimalFormat.format(number);
     }
 }

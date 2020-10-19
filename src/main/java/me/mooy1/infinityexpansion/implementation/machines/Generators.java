@@ -163,7 +163,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider {
                 inv.replaceExistingItem(4, new CustomItem(
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&cNot generating",
-                        "&7Stored: &6" + (stored + rate) + " J"
+                        "&7Stored: &6" + LoreUtils.format(stored + rate) + " J"
                 ));
 
             } else {
@@ -173,7 +173,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider {
                         "&aGeneration",
                         "&7Type: &6" + getGenerationType(rate, l),
                         "&7Generating: &6" + LoreUtils.roundHundreds(rate * LoreUtils.SERVER_TICK_RATIO) + " J/s ",
-                        "&7Stored: &6" + (stored + rate) + " J"
+                        "&7Stored: &6" + LoreUtils.format(stored + rate) + " J"
                 ));
             }
         }
