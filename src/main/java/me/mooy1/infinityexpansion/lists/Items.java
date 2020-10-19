@@ -9,7 +9,6 @@ import me.mooy1.infinityexpansion.implementation.machines.*;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -421,13 +420,13 @@ public final class Items {
             "&cNot yet functional"
     );
 
-    public static final SlimefunItemStack TOOL_TRANSFORMER = new SlimefunItemStack(
-            "TOOL_TRANSFORMER",
+    public static final SlimefunItemStack GEAR_TRANSFORMER = new SlimefunItemStack(
+            "GEAR_TRANSFORMER",
             Material.EMERALD_BLOCK,
-            "&7Tool Transformer",
-            "&7Changes the material of gear",
+            "&7Gear Transformer",
+            "&7Changes the material of tools and gear",
             "",
-            LoreUtils.energyPer(ToolTransformer.ENERGY) + "Per Use",
+            LoreUtils.energyPer(GearTransformer.ENERGY) + "Per Use",
             ""
     );
 

@@ -26,6 +26,7 @@ assignees: ''
 <!-- We may also close your Issue if you are not providing the exact version numbers. -->
 <!-- "latest" IS NOT A VERSION NUMBER. -->
 <!-- You can also just run "/sf versions" and show us a screenshot of that. -->
+<!-- You can look under the "Infinity Expansion" Category top left item to find the Plugin version. -->
 
  - Minecraft Version:
  - CS-CoreLib Version:

@@ -21,7 +21,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         instance = this;
 
-        //bstats
+        //stats
 
         final Metrics metrics = new Metrics(this, 8991);
 
@@ -32,18 +32,26 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         //SlimefunPlugin.getVersion()
 
         if (getDescription().getVersion().startsWith("DEV - ")) {
+            getLogger().log(Level.INFO, "Starting auto update");
             Updater updater = new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master");
             updater.start();
         } else {
-            if (!getDescription().getVersion().startsWith("DEV - ")){
-                getLogger().log(Level.INFO, "You must be on a DEV build to auto update!");
-                getLogger().log(Level.INFO, "Current version: " + getDescription().getVersion());
-            }
+            getLogger().log(Level.WARNING, "You must be on a DEV build to auto update!");
         }
 
         //Register items
 
         ItemSetup.setup(this);
+
+        getLogger().log(Level.INFO, "######################################");
+        getLogger().log(Level.INFO, "     Infinity Expansion v" + getDescription().getVersion() + "      ");
+        getLogger().log(Level.INFO, "     -----------------------------    ");
+        getLogger().log(Level.INFO, "              Changelog               ");
+        getLogger().log(Level.INFO, " ");
+        getLogger().log(Level.INFO, " - Added Changelog");
+        getLogger().log(Level.INFO, " - Fixed Tool Transformer bug");
+        getLogger().log(Level.INFO, " ");
+        getLogger().log(Level.INFO, "######################################");
 
     }
 

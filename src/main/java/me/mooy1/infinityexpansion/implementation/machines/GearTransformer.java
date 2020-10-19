@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ToolTransformer extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
+public class GearTransformer extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 100000;
 
@@ -54,12 +54,14 @@ public class ToolTransformer extends SlimefunItem implements EnergyNetComponent,
     private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
     private static final int STATUS_SLOT = PresetUtils.slot2;
 
-    public ToolTransformer() {
-        super(Categories.ADVANCED_MACHINES, Items.TOOL_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-
+    public GearTransformer() {
+        super(Categories.ADVANCED_MACHINES, Items.GEAR_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
+                Items.MACHINE_CIRCUIT, new ItemStack(Material.SMITHING_TABLE), Items.MACHINE_CIRCUIT,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE
         });
 
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.TOOL_TRANSFORMER.getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.GEAR_TRANSFORMER.getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -127,7 +129,7 @@ public class ToolTransformer extends SlimefunItem implements EnergyNetComponent,
     @Override
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { ToolTransformer.this.tick(b); }
+            public void tick(Block b, SlimefunItem sf, Config data) { GearTransformer.this.tick(b); }
 
             public boolean isSynchronized() { return false; }
         });
