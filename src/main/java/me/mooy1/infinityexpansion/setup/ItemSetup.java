@@ -6,18 +6,22 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ChargingBench;
 import me.mooy1.infinityexpansion.InfinityExpansion;
-import me.mooy1.infinityexpansion.Items;
-import me.mooy1.infinityexpansion.gear.InfinityArmor;
-import me.mooy1.infinityexpansion.storage.StorageDrive;
-import me.mooy1.infinityexpansion.materials.MainMaterials;
-import me.mooy1.infinityexpansion.machines.InfinityWorkbench;
-import me.mooy1.infinityexpansion.storage.StorageNetworkCore;
-import me.mooy1.infinityexpansion.storage.StorageUnit;
-import me.mooy1.infinityexpansion.gear.InfinityTools;
-import me.mooy1.infinityexpansion.gear.MagnoniumGear;
-import me.mooy1.infinityexpansion.gear.EnderFlame;
-import me.mooy1.infinityexpansion.machines.*;
-import me.mooy1.infinityexpansion.materials.*;
+import me.mooy1.infinityexpansion.implementation.gear.InfinityArmor;
+import me.mooy1.infinityexpansion.implementation.items.GearForge;
+import me.mooy1.infinityexpansion.implementation.items.Strainer;
+import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
+import me.mooy1.infinityexpansion.implementation.storage.StorageDrive;
+import me.mooy1.infinityexpansion.implementation.materials.MainMaterials;
+import me.mooy1.infinityexpansion.implementation.machines.InfinityWorkbench;
+import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkCore;
+import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
+import me.mooy1.infinityexpansion.implementation.gear.InfinityTools;
+import me.mooy1.infinityexpansion.implementation.gear.EnderFlame;
+import me.mooy1.infinityexpansion.implementation.machines.*;
+import me.mooy1.infinityexpansion.implementation.materials.*;
+import me.mooy1.infinityexpansion.lists.Categories;
+import me.mooy1.infinityexpansion.lists.InfinityRecipes;
+import me.mooy1.infinityexpansion.lists.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.Material;
@@ -133,18 +137,11 @@ public final class ItemSetup {
             new InfinityTools(type).register(plugin);
         }
         new EnderFlame().register(plugin);
-        for (MagnoniumGear.Type type : MagnoniumGear.Type.values()) {
-            new MagnoniumGear(type).register(plugin);
-        }
 
         //sf constructors
 
-        new Capacitor(Categories.INFINITY_MACHINES, INFINITY_CAPACITOR, Items.INFINITY_CAPACITOR,
-            RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.INFINITE_INGOT, Items.INFINITE_INGOT, Items.INFINITE_INGOT,
-            Items.INFINITE_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITE_INGOT,
-            Items.INFINITE_INGOT, Items.INFINITE_INGOT, Items.INFINITE_INGOT
-        }).register(plugin);
+        new Capacitor(Categories.INFINITY_CHEAT, INFINITY_CAPACITOR, Items.INFINITY_CAPACITOR,
+            RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_CAPACITOR)).register(plugin);
 
         new AutoEnchanter(Categories.ADVANCED_MACHINES, Items.ADVANCED_ENCHANTER,RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
@@ -195,11 +192,7 @@ public final class ItemSetup {
 
         }.register(plugin);
 
-        new AutoEnchanter(Categories.INFINITY_MACHINES, Items.INFINITY_ENCHANTER,RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT,
-                Items.MAGNONIUM_INGOT, Items.ADVANCED_ENCHANTER, Items.MAGNONIUM_INGOT,
-                Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
-        }) {
+        new AutoEnchanter(Categories.INFINITY_CHEAT, Items.INFINITY_ENCHANTER,RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_ENCHANTER)) {
             @Override
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.NETHERITE_CHESTPLATE);
@@ -219,13 +212,7 @@ public final class ItemSetup {
 
         }.register(plugin);
 
-
-
-        new AutoDisenchanter(Categories.INFINITY_MACHINES, Items.INFINITY_DISENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT,
-                Items.MAGNONIUM_INGOT, Items.ADVANCED_DISENCHANTER, Items.MAGNONIUM_INGOT,
-                Items.INFINITE_MACHINE_CIRCUIT, Items.INFINITE_MACHINE_CORE, Items.INFINITE_MACHINE_CIRCUIT
-        }) {
+        new AutoDisenchanter(Categories.INFINITY_CHEAT, Items.INFINITY_DISENCHANTER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_DISENCHANTER)) {
             @Override
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.ENCHANTED_BOOK);
@@ -265,11 +252,7 @@ public final class ItemSetup {
 
         }.register(plugin);
 
-        new ChargingBench(Categories.INFINITY_MACHINES, Items.INFINITY_CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MACHINE_PLATE, Items.INFINITE_MACHINE_CIRCUIT, Items.MACHINE_PLATE,
-                Items.INFINITE_MACHINE_CIRCUIT, Items.ADVANCED_CHARGER, Items.INFINITE_MACHINE_CIRCUIT,
-                Items.MACHINE_PLATE, Items.INFINITE_MACHINE_CIRCUIT, Items.MACHINE_PLATE,
-        }) {
+        new ChargingBench(Categories.INFINITY_CHEAT, Items.INFINITY_CHARGER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_CHARGER)) {
             @Override
             public int getEnergyConsumption() {
                 return INFINITY_CHARGER_ENERGY;
@@ -284,6 +267,5 @@ public final class ItemSetup {
             }
 
         }.register(plugin);
-
     }
 }

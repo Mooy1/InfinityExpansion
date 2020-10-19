@@ -39,6 +39,9 @@ public final class PresetUtils {
     public static final ItemStack invisibleBackground = new CustomItem(
             Material.LIGHT_GRAY_STAINED_GLASS_PANE,
             " ");
+    public static final ItemStack craftedIn =  new CustomItem(
+            Material.CYAN_STAINED_GLASS_PANE,
+            "&3Crafted in");
     public static final ItemStack loadingItemBarrier = new CustomItem(
             Material.BARRIER,
             "&cLoading...");

@@ -6,10 +6,10 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.InfinityExpansion;
-import me.mooy1.infinityexpansion.Items;
+import me.mooy1.infinityexpansion.lists.InfinityRecipes;
+import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
@@ -33,9 +33,15 @@ public class InfinityCategory extends FlexCategory {
             46, 47, 48, 49, 50, 51
     };
     private static final int[] NORMAL_RECIPE_SLOTS = {
-            3, 4, 5,
             12, 13, 14,
-            21, 22, 23
+            21, 22, 23,
+            30, 31, 32
+    };
+    private static final int NORMAL_RECIPE_TYPE = 19;
+    private static final int NORMAL_RECIPE_OUTPUT = 25;
+    private static final int[] NORMAL_RECIPE_BACKGROUND = {
+            1, 2, 3, 4, 5, 6, 7, 8,
+            36, 37, 38 ,39 ,40, 41 ,42 ,43, 44
     };
     private static final int[] OUTPUT_BORDER = {
             25, 26, 34, 43, 44
@@ -143,7 +149,7 @@ public class InfinityCategory extends FlexCategory {
         }
         menu.addItem(OUTPUT, output, ChestMenuUtils.getEmptyClickHandler());
         for (int slot : WORKBENCH_BORDER) {
-            menu.addItem(slot, new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&3Crafted in"), ChestMenuUtils.getEmptyClickHandler());
+            menu.addItem(slot, PresetUtils.craftedIn, ChestMenuUtils.getEmptyClickHandler());
         }
         menu.addItem(WORKBENCH, Items.INFINITY_WORKBENCH, (p, slot, item, action) -> {
             openNormalRecipe(player, Objects.requireNonNull(SlimefunItem.getByItem(Items.INFINITY_WORKBENCH)), id, playerProfile, slimefunGuideLayout);
@@ -185,7 +191,7 @@ public class InfinityCategory extends FlexCategory {
             openRecipe(player, fromID, playerProfile, slimefunGuideLayout);
             return false;
         });
-        menu.addItem(10, slimefunItem.getRecipeType().toItem(), ChestMenuUtils.getEmptyClickHandler());
+        menu.addItem(NORMAL_RECIPE_TYPE, slimefunItem.getRecipeType().toItem(), ChestMenuUtils.getEmptyClickHandler());
 
         int i = 0;
         for (int recipeSlot : NORMAL_RECIPE_SLOTS) {
@@ -200,7 +206,11 @@ public class InfinityCategory extends FlexCategory {
             i++;
         }
 
-        menu.addItem(16, slimefunItem.getRecipeOutput(), ChestMenuUtils.getEmptyClickHandler());
+        for (int slot : NORMAL_RECIPE_BACKGROUND) {
+            menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+
+        menu.addItem(NORMAL_RECIPE_OUTPUT, slimefunItem.getRecipeOutput(), ChestMenuUtils.getEmptyClickHandler());
 
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 
@@ -215,7 +225,7 @@ public class InfinityCategory extends FlexCategory {
             openNormalRecipe(player, fromSlimefunItem, fromID, playerProfile, slimefunGuideLayout);
             return false;
         });
-        menu.addItem(10, slimefunItem.getRecipeType().toItem(), ChestMenuUtils.getEmptyClickHandler());
+        menu.addItem(NORMAL_RECIPE_TYPE, slimefunItem.getRecipeType().toItem(), ChestMenuUtils.getEmptyClickHandler());
 
         int i = 0;
         for (int recipeSlot : NORMAL_RECIPE_SLOTS) {
@@ -230,7 +240,11 @@ public class InfinityCategory extends FlexCategory {
             i++;
         }
 
-        menu.addItem(16, slimefunItem.getRecipeOutput(), ChestMenuUtils.getEmptyClickHandler());
+        for (int slot : NORMAL_RECIPE_BACKGROUND) {
+            menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+
+        menu.addItem(NORMAL_RECIPE_OUTPUT, slimefunItem.getRecipeOutput(), ChestMenuUtils.getEmptyClickHandler());
 
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 

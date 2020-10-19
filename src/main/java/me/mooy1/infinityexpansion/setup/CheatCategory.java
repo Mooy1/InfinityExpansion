@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 public class CheatCategory extends Category {
     public CheatCategory() {
         super(new NamespacedKey(InfinityExpansion.getInstance(), "INFINITY_CHEAT"),
-                new CustomItem(Material.SMITHING_TABLE, "&cInfinity &7Cheating"), 2
+                new CustomItem(Material.SMITHING_TABLE, "&bInfinity &cCheat"), 2
         );
     }
 
