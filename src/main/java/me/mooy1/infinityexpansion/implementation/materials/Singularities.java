@@ -1,6 +1,5 @@
 package me.mooy1.infinityexpansion.implementation.materials;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
