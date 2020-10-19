@@ -9,6 +9,7 @@ import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -296,20 +297,20 @@ public class StorageUnit extends SlimefunItem {
                 converteditemname = storedItemStack.getItemMeta().getDisplayName();
             }
 
-            String stacks = "&7Stacks: " + Math.round((float)stored / storedItemStack.getMaxStackSize());
+            String stacks = "&7Stacks: " + LoreUtils.format(Math.round((float) stored / storedItemStack.getMaxStackSize()));
 
             if (this.type == Type.INFINITY) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         storedItemStack,
                         converteditemname,
-                        "&6Stored: &e" + stored,
+                        "&6Stored: &e" + LoreUtils.format(stored),
                         stacks
                 ));
             } else {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         storedItemStack,
                         converteditemname,
-                        "&6Stored: &e" + stored + "/" + maxStorage + " &7(" + Math.round((float) 100 * stored / maxStorage )  + "%)",
+                        "&6Stored: &e" + LoreUtils.format(stored) + "/" + LoreUtils.format(maxStorage) + " &7(" + Math.round((float) 100 * stored / maxStorage )  + "%)",
                         stacks
                 ));
             }

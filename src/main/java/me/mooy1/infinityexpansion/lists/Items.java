@@ -4,8 +4,20 @@ import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
+import me.mooy1.infinityexpansion.implementation.machines.AdvancedAnvil;
+import me.mooy1.infinityexpansion.implementation.machines.GearTransformer;
+import me.mooy1.infinityexpansion.implementation.machines.Generators;
+import me.mooy1.infinityexpansion.implementation.machines.InfinityReactor;
+import me.mooy1.infinityexpansion.implementation.machines.InfinityWorkbench;
+import me.mooy1.infinityexpansion.implementation.machines.ItemUpdater;
+import me.mooy1.infinityexpansion.implementation.machines.PoweredBedrock;
+import me.mooy1.infinityexpansion.implementation.machines.Quarry;
+import me.mooy1.infinityexpansion.implementation.machines.ResourceSynthesizer;
+import me.mooy1.infinityexpansion.implementation.machines.SingularityConstructor;
+import me.mooy1.infinityexpansion.implementation.machines.TreeGrower;
+import me.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
+import me.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
-import me.mooy1.infinityexpansion.implementation.machines.*;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -100,7 +112,7 @@ public final class Items {
             "&7Generates power through the compression",
             "&7of &8Void &7and &bInfinity &7Ingots",
             "",
-            LoreBuilder.powerBuffer(InfinityReactor.STORAGE),
+            LoreUtils.energyBuffer(InfinityReactor.STORAGE),
             LoreUtils.energyPerSecond(InfinityReactor.ENERGY),
             ""
     );
@@ -238,9 +250,9 @@ public final class Items {
             "HYDRO_GENERATOR",
             Material.PRISMARINE_WALL,
             "&9Hydro Generator",
-            "&3Generates energy from the movement of water",
+            "&7Generates energy from the movement of water",
             "",
-            LoreBuilder.powerBuffer(Generators.WATER_STORAGE),
+            LoreUtils.energyBuffer(Generators.WATER_STORAGE),
             LoreUtils.energyPerSecond(Generators.WATER_RATE),
             ""
     );
@@ -248,10 +260,10 @@ public final class Items {
             "REINFORCED_HYDRO_GENERATOR",
             Material.END_STONE_BRICK_WALL,
             "&fReinforced &9Hydro Gen",
-            "&3Generates large amounts of energy",
+            "&7Generates large amounts of energy",
             "&7from the movement of water",
             "",
-            LoreBuilder.powerBuffer(Generators.WATER_STORAGE2),
+            LoreUtils.energyBuffer(Generators.WATER_STORAGE2),
             LoreUtils.energyPerSecond(Generators.WATER_RATE2),
             ""
     );
@@ -261,7 +273,7 @@ public final class Items {
             "&cGeothermal Generator",
             "&7Generates energy from the heat of the world",
             "",
-            LoreBuilder.powerBuffer(Generators.GEO_STORAGE),
+            LoreUtils.energyBuffer(Generators.GEO_STORAGE),
             LoreUtils.energyPerSecond(Generators.GEO_RATE),
             ""
     );
@@ -272,7 +284,7 @@ public final class Items {
             "&7Generates large amounts of energy",
             "&7from the heat of the world",
             "",
-            LoreBuilder.powerBuffer(Generators.GEO_STORAGE2),
+            LoreUtils.energyBuffer(Generators.GEO_STORAGE2),
             LoreUtils.energyPerSecond(Generators.GEO_RATE2),
             ""
     );
@@ -282,7 +294,7 @@ public final class Items {
             "&eCelestial Panel",
             "&7Generates energy from the sun",
             "",
-            LoreBuilder.powerBuffer(Generators.CELE_STORAGE),
+            LoreUtils.energyBuffer(Generators.CELE_STORAGE),
             LoreUtils.energyPerSecond(Generators.CELE_RATE),
             ""
     );
@@ -292,7 +304,7 @@ public final class Items {
             "&8Void Panel",
             "&7Generates energy from darkness",
             "",
-            LoreBuilder.powerBuffer(Generators.VOID_STORAGE),
+            LoreUtils.energyBuffer(Generators.VOID_STORAGE),
             LoreUtils.energyPerSecond(Generators.VOID_RATE),
             ""
     );
@@ -302,7 +314,7 @@ public final class Items {
             "&bInfinity Panel",
             "&7Generates energy from the cosmos",
             "",
-            LoreBuilder.powerBuffer(Generators.INFINITY_STORAGE),
+            LoreUtils.energyBuffer(Generators.INFINITY_STORAGE),
             LoreUtils.energyPerSecond(Generators.INFINITY_RATE),
             ""
     );
@@ -436,7 +448,7 @@ public final class Items {
             "BASIC_STORAGE",
             Material.OAK_WOOD,
             "&9Basic &7Storage Unit",
-            LoreUtils.stores(StorageUnit.BASIC),
+            LoreUtils.storesItem(StorageUnit.BASIC),
             "&aWorks with cargo",
             ""
     );
@@ -444,7 +456,7 @@ public final class Items {
             "ADVANCED_STORAGE",
             Material.DARK_OAK_WOOD,
             "&cAdvanced &7Storage Unit",
-            LoreUtils.stores(StorageUnit.ADVANCED),
+            LoreUtils.storesItem(StorageUnit.ADVANCED),
             "&aWorks with cargo",
             ""
     );
@@ -452,7 +464,7 @@ public final class Items {
             "REINFORCED_STORAGE",
             Material.ACACIA_WOOD,
             "&fReinforced &7Storage Unit",
-            LoreUtils.stores(StorageUnit.REINFORCED),
+            LoreUtils.storesItem(StorageUnit.REINFORCED),
             "&aWorks with cargo",
             ""
     );
@@ -460,7 +472,7 @@ public final class Items {
             "VOID_STORAGE",
             Material.CRIMSON_HYPHAE,
             "&8Void &7Storage Unit",
-            LoreUtils.stores(StorageUnit.VOID),
+            LoreUtils.storesItem(StorageUnit.VOID),
             "&aWorks with cargo",
             ""
     );
@@ -492,7 +504,7 @@ public final class Items {
             "&3Put in a storage input to withdraw items",
             "",
             LoreUtils.storedItem(""),
-            LoreUtils.stored(0, StorageUnit.BASIC),
+            LoreUtils.storedItems(0, StorageUnit.BASIC),
             "",
             "&cNot yet functional"
     );
@@ -505,7 +517,7 @@ public final class Items {
             "&3Put in a storage input to withdraw items",
             "",
             LoreUtils.storedItem(""),
-            LoreUtils.stored(0, StorageUnit.ADVANCED),
+            LoreUtils.storedItems(0, StorageUnit.ADVANCED),
             "",
             "&cNot yet functional"
     );
@@ -518,7 +530,7 @@ public final class Items {
             "&3Put in a storage input to withdraw items",
             "",
             LoreUtils.storedItem(""),
-            LoreUtils.stored(0, StorageUnit.REINFORCED),
+            LoreUtils.storedItems(0, StorageUnit.REINFORCED),
             "",
             "&cNot yet functional"
     );
@@ -531,7 +543,7 @@ public final class Items {
             "&3Put in a storage input to withdraw items",
             "",
             LoreUtils.storedItem(""),
-            LoreUtils.stored(0, StorageUnit.VOID),
+            LoreUtils.storedItems(0, StorageUnit.VOID),
             "",
             "&cNot yet functional"
     );
@@ -544,7 +556,7 @@ public final class Items {
             "&3Put in a storage input to withdraw items",
             "",
             LoreUtils.storedItem(""),
-            LoreUtils.stored(0, StorageUnit.INFINITY),
+            LoreUtils.storedItems(0, StorageUnit.INFINITY),
             "",
             "&cNot yet functional"
     );
