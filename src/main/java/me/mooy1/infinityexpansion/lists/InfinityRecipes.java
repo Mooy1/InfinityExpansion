@@ -5,6 +5,21 @@ import me.mooy1.infinityexpansion.utils.ItemStackUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * The recipes for the Infinity Workbench
+ *
+ * @author Mooy1
+ *
+ * Items and recipes can be added by:
+ *
+ * - adding the item's ItemStack to OUTPUTS
+ * - adding the recipe ItemStack[] to RECIPES
+ * - setting the Category of the Item to Categories.INFINITY_CHEAT
+ * - setting the RecipeType to RecipeTypes.INFINITY_WORKBENCH
+ * - setting the Recipe to InfinityRecipes.getRecipe([Item's ItemStack])
+ *
+ */
+
 public class InfinityRecipes {
 
     private InfinityRecipes() {}
