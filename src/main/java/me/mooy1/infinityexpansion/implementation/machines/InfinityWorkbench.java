@@ -9,6 +9,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
+import me.mooy1.infinityexpansion.setup.InfinityCategory;
 import me.mooy1.infinityexpansion.utils.ItemStackUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
@@ -43,7 +44,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
 
     public static final int ENERGY = 10_000_000;
 
-    private static final int[] INPUT_SLOTS = {
+    public static final int[] INPUT_SLOTS = {
         0, 1, 2, 3, 4, 5,
         9, 10, 11, 12, 13, 14,
         18, 19, 20, 21, 22, 23,
@@ -55,6 +56,12 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         PresetUtils.slot3 + 27
     };
     private static final int STATUS_SLOT = PresetUtils.slot3;
+    private static final int[] STATUS_BORDER = {
+            6, 8,
+            15, 17,
+            24, 25, 26
+    };
+    private static final int RECIPE_SLOT = 7;
 
     public InfinityWorkbench() {
         super(Categories.ADVANCED_MACHINES, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -74,6 +81,10 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
                 menu.addMenuClickHandler(STATUS_SLOT, (p, slot, item, action) -> {
                     craft(b, p);
+                    return false;
+                });
+                menu.addMenuClickHandler(RECIPE_SLOT, (p, slot, item, action) -> {
+                    InfinityCategory.openFromWorkBench(p, menu);
                     return false;
                 });
             }
@@ -119,9 +130,11 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         for (int i : PresetUtils.slotChunk3) {
             blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk3) {
+        for (int i : STATUS_BORDER) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
+        blockMenuPreset.addItem(RECIPE_SLOT, new CustomItem(Material.BOOK, "&6Recipes"),
+                ChestMenuUtils.getEmptyClickHandler());
         blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
                 ChestMenuUtils.getEmptyClickHandler());
     }

@@ -12,6 +12,8 @@ import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -36,9 +38,13 @@ public class MainMaterials extends SlimefunItem {
                 Items.METAL_SINGULARITY,
                 null, null, null
         }),
-        BIT(Categories.INFINITY_MAIN, Items.VOID_BIT, RecipeTypes.VOID_HARVESTER, RecipeUtils.MiddleItem(Items.VOID_BIT_DUMMY)),
+
+        BIT(Categories.INFINITY_MAIN, Items.VOID_BIT, RecipeTypes.VOID_HARVESTER,
+                RecipeUtils.MiddleItem(new CustomItem(Material.IRON_NUGGET, "Void Bit", "&8Ignore this its for SF Calc"))),
+
         DUST(Categories.INFINITY_MAIN, Items.VOID_DUST, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_BIT)),
         INGOT(Categories.INFINITY_MAIN, Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_DUST)),
+
         FORTUNE(Categories.INFINITY_MATERIALS, Items.FORTUNE_SINGULARITY, RecipeType.SMELTERY, new ItemStack[] {
                 Items.GOLD_SINGULARITY,
                 Items.DIAMOND_SINGULARITY,

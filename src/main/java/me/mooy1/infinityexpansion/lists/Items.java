@@ -9,6 +9,7 @@ import me.mooy1.infinityexpansion.implementation.machines.*;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -801,13 +802,6 @@ public final class Items {
     );
 
     //Void ingots
-
-    public static final SlimefunItemStack VOID_BIT_DUMMY = new SlimefunItemStack(
-            "VOID_BIT_DUMMY",
-            Material.BLACK_STAINED_GLASS_PANE,
-            "&eVoid Bit",
-            "&8&oIgnore this, it is for SF Calc"
-    );
 
     public static final SlimefunItemStack VOID_BIT = new SlimefunItemStack(
             "VOID_BIT",

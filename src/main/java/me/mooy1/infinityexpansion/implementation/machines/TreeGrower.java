@@ -110,6 +110,9 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
                 }
             }
 
+            setProgress(b, 0);
+            setBlockData(b, "type", null);
+
             return true;
         });
     }

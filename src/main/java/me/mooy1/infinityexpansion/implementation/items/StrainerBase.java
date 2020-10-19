@@ -124,6 +124,8 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
                 inv.dropItems(l, INPUT_SLOTS);
             }
 
+            setProgress(b, 0);
+
             return true;
         });
     }

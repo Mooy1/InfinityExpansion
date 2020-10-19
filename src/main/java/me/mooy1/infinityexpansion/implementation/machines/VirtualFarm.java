@@ -105,6 +105,9 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
                 inv.dropItems(b.getLocation(), INPUT_SLOTS);
             }
 
+            setProgress(b, 0);
+            setBlockData(b, "type", null);
+
             return true;
         });
     }
