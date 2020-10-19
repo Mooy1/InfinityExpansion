@@ -13,11 +13,11 @@ https://papermc.io/downloads
 
 Slimefun Version: DEV 721 (RC-17, use DEV builds please)
 
-https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/
+[![Build Status](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/badge.svg)](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/)
 
 CS-CoreLib Version: DEV 91 (recommended, will most likely work on previous)
 
-https://thebusybiscuit.github.io/builds/TheBusyBiscuit/CS-CoreLib/master/
+[![Build Status](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/CS-CoreLib/master/badge.svg)](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/CS-CoreLib/master/)
 
 # Bugs/Suggestions
 Make a new issue or pull request and contact me on discord @Riley#5911
