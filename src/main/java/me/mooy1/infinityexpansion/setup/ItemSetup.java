@@ -45,19 +45,26 @@ public final class ItemSetup {
     public static int INFINITY_DIS_SPEED = 90;
     public static int INFINITY_DIS_ENERGY = 60000;
 
-    public static int ADVANCED_CHARGER_SPEED = 25;
-    public static int ADVANCED_CHARGER_ENERGY = 250;
+    public static int ADVANCED_CHARGER_SPEED = 30;
+    public static int ADVANCED_CHARGER_ENERGY = 300;
 
-    public static int INFINITY_CHARGER_SPEED = 5000;
-    public static int INFINITY_CHARGER_ENERGY = 50000;
+    public static int INFINITY_CHARGER_SPEED = 6000;
+    public static int INFINITY_CHARGER_ENERGY = 60000;
 
     private ItemSetup() { }
 
     public static void setup(@Nonnull InfinityExpansion plugin) {
 
-        //infinity recipes
+        //categories in order
 
+        Categories.BASIC_MACHINES.register();
+        Categories.INFINITY_MAIN.register();
+        Categories.ADVANCED_MACHINES.register();
+        Categories.INFINITY_STORAGE.register();
         new InfinityCategory().register();
+        Categories.INFINITY_CHEAT.register();
+        Categories.INFINITY_MATERIALS.register();
+        new HiddenCategory().register();
 
         //basic
 
@@ -89,6 +96,9 @@ public final class ItemSetup {
 
         //machine
 
+        for (MainMaterials.Type type : MainMaterials.Type.values()) {
+            new MainMaterials(type).register(plugin);
+        }
         for (MachineMaterials.Type type : MachineMaterials.Type.values()) {
             new MachineMaterials(type).register(plugin);
         }
@@ -116,9 +126,6 @@ public final class ItemSetup {
 
         //materials
 
-        for (MainMaterials.Type type : MainMaterials.Type.values()) {
-            new MainMaterials(type).register(plugin);
-        }
         for (CompressedCobblestone.Type type : CompressedCobblestone.Type.values()) {
             new CompressedCobblestone(type).register(plugin);
         }

@@ -74,8 +74,10 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
     };
 
     public StrainerBase() {
-        super(Categories.BASIC_MACHINES, Items.STRAINER_BASE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-
+        super(Categories.BASIC_MACHINES, Items.STRAINER_BASE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
+                new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
+                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
         });
 
         new BlockMenuPreset(getId(), Objects.requireNonNull(Items.STRAINER_BASE.getDisplayName())) {
