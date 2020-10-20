@@ -48,7 +48,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 1000;
+    private static final int TIME = 640;
 
     private final Type type;
 

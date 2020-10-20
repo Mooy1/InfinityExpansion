@@ -750,8 +750,8 @@ public final class Items {
      * Thanks to NCBPFluffyBear for the idea
      */
 
-    public static final SlimefunItemStack ADDON_INFO = new SlimefunItemStack(
-            "ADDON_INFO",
+    public static final SlimefunItemStack INFINITY_ADDON_INFO = new SlimefunItemStack(
+            "INFINITY_ADDON_INFO",
             Material.NETHER_STAR,
             "&bAddon Info",
             "&fVersion: &7" + InfinityExpansion.getInstance().getPluginVersion(),

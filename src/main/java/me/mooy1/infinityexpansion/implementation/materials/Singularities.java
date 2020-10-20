@@ -6,7 +6,7 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.implementation.machines.SingularityConstructor;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
-import me.mooy1.infinityexpansion.setup.RecipeTypes;
+import me.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -74,7 +74,7 @@ public class Singularities extends SlimefunItem {
     };
 
     public static ItemStack recipeMaker(int id) {
-        ItemStack item = INPUT_ITEMS[id];
+        ItemStack item = INPUT_ITEMS[id].clone();
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
 

@@ -22,6 +22,7 @@ import me.mooy1.infinityexpansion.implementation.materials.*;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.Items;
+import me.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.Material;
@@ -81,7 +82,7 @@ public final class ItemSetup {
 
         //main
 
-        new SlimefunItem(Categories.INFINITY_MAIN, Items.ADDON_INFO, RecipeType.NULL, null).register(plugin);
+        new SlimefunItem(Categories.INFINITY_MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
         new SlimefunItem(Categories.HIDDEN_RECIPES, Items.POTATO_FISH, RecipeType.NULL, null).register(plugin);
 
         //storage

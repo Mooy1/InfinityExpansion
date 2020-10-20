@@ -7,11 +7,12 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
-import me.mooy1.infinityexpansion.setup.RecipeTypes;
+import me.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -42,9 +43,9 @@ public class MachineMaterials extends SlimefunItem {
             SlimefunItems.COPPER_INGOT, SlimefunItems.ELECTRO_MAGNET, SlimefunItems.COPPER_INGOT
         }),
         CORE(Categories.INFINITY_MAIN, Items.MACHINE_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                SlimefunItems.STEEL_PLATE, Items.MACHINE_PLATE, SlimefunItems.STEEL_PLATE,
-            Items.MACHINE_CIRCUIT, Items.TITANIUM, Items.MACHINE_CIRCUIT,
-                SlimefunItems.STEEL_PLATE, Items.MACHINE_PLATE, SlimefunItems.STEEL_PLATE
+                Items.TITANIUM, Items.MACHINE_PLATE, Items.TITANIUM,
+            Items.MACHINE_CIRCUIT, new ItemStack(Material.IRON_BLOCK), Items.MACHINE_CIRCUIT,
+                Items.TITANIUM, Items.MACHINE_PLATE, Items.TITANIUM,
         }),
         I_CIRCUIT(Categories.INFINITY_CHEAT, Items.INFINITE_MACHINE_CIRCUIT, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITE_MACHINE_CIRCUIT)),
         I_CORE(Categories.INFINITY_CHEAT, Items.INFINITE_MACHINE_CORE, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITE_MACHINE_CORE));

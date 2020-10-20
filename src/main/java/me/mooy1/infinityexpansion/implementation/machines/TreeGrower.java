@@ -12,6 +12,7 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
+import me.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mooy1.infinityexpansion.utils.MathUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -324,7 +325,7 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
                 Items.MAGNONIUM, Items.BASIC_TREE_GROWER, Items.MAGNONIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(ENERGY3, SPEED3, Categories.INFINITY_CHEAT, Items.INFINITY_TREE_GROWER, RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITY_TREE_GROWER));
+        INFINITY(ENERGY3, SPEED3, Categories.INFINITY_CHEAT, Items.INFINITY_TREE_GROWER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_TREE_GROWER));
 
         private final int energy;
         private final int speed;

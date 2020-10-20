@@ -12,6 +12,7 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
+import me.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mooy1.infinityexpansion.utils.MathUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -306,7 +307,8 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
             Material.COCOA_BEANS,
             Material.CACTUS,
             Material.BAMBOO,
-            Material.CHORUS_FLOWER
+            Material.CHORUS_FLOWER,
+            Material.NETHER_WART,
     };
 
     private static final Material[] OUTPUTS = {
@@ -320,11 +322,12 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
             Material.COCOA_BEANS,
             Material.CACTUS,
             Material.BAMBOO,
-            Material.CHORUS_FRUIT
+            Material.CHORUS_FRUIT,
+            Material.NETHER_WART,
     };
 
     private static final int[] OUTPUT_AMOUNTS = {
-            2, 3, 4, 2, 1, 6, 2, 3, 2, 4, 4
+            2, 3, 4, 2, 1, 6, 2, 3, 2, 4, 4, 2
     };
 
     @Getter
@@ -340,7 +343,7 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
                 Items.MAGNONIUM, Items.BASIC_VIRTUAL_FARM, Items.MAGNONIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(ENERGY3, SPEED3, Categories.INFINITY_CHEAT, Items.INFINITY_VIRTUAL_FARM, RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITY_VIRTUAL_FARM));
+        INFINITY(ENERGY3, SPEED3, Categories.INFINITY_CHEAT, Items.INFINITY_VIRTUAL_FARM, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_VIRTUAL_FARM));
 
         private final int energy;
         private final int speed;
