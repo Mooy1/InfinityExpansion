@@ -1,7 +1,6 @@
 package me.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
-import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -36,11 +35,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
+public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponent {
 
     public static final int ENERGY = 10_000_000;
 
@@ -174,7 +172,9 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
                     inv.replaceExistingItem(STATUS_SLOT, PresetUtils.invalidRecipe);
 
                 } else { //correct recipe
+
                     inv.replaceExistingItem(STATUS_SLOT, getDisplayItem(output));
+
                 }
             }
         }
@@ -207,25 +207,23 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.invalidRecipe);
                 MessageUtils.message(p, ChatColor.RED + "Invalid Recipe!");
 
-            } else { //correct recipe
+            } else if (!inv.fits(output, OUTPUT_SLOTS)) { //not enough room
 
-                if (!inv.fits(output, OUTPUT_SLOTS)) { //not enough room
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                MessageUtils.message(p, ChatColor.GOLD + "Not enough room!");
 
-                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
-                    MessageUtils.message(p, ChatColor.GOLD + "Not enough room!");
+            } else { //enough room
 
-                } else { //enough room
-
-                    for (int slot : INPUT_SLOTS) {
-                        if (inv.getItemInSlot(slot) != null) {
-                            inv.consumeItem(slot);
-                        }
+                for (int slot : INPUT_SLOTS) {
+                    if (inv.getItemInSlot(slot) != null) {
+                        inv.consumeItem(slot);
                     }
-                    MessageUtils.message(p, ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + ItemUtils.getItemName(output));
-
-                    inv.pushItem(output, OUTPUT_SLOTS);
-                    setCharge(b.getLocation(), 0);
                 }
+                MessageUtils.message(p, ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + ItemUtils.getItemName(output));
+
+                inv.pushItem(output, OUTPUT_SLOTS);
+                setCharge(b.getLocation(), 0);
+
             }
         }
     }
@@ -279,17 +277,5 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
     @Override
     public int getCapacity() {
         return ENERGY;
-    }
-
-    @Nonnull
-    @Override
-    public List<ItemStack> getDisplayRecipes() {
-        return new ArrayList<>(Arrays.asList(InfinityRecipes.OUTPUTS));
-    }
-
-    @Nonnull
-    @Override
-    public String getRecipeSectionLabel(@Nonnull Player p) {
-        return "&7Crafts:";
     }
 }

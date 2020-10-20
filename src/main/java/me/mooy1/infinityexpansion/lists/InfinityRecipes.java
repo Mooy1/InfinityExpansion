@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * Items and recipes can be added by:
  *
- * - adding the item's ItemStack to OUTPUTS
+ * - adding the item's @link ItemStack to OUTPUTS
  * - adding the recipe ItemStack[] to RECIPES
  * - setting the Category of the Item to Categories.INFINITY_CHEAT
  * - setting the RecipeType to RecipeTypes.INFINITY_WORKBENCH
@@ -24,7 +24,7 @@ public class InfinityRecipes {
 
     private InfinityRecipes() {}
 
-    public static final ItemStack[] OUTPUTS = {
+    public static ItemStack[] OUTPUTS = {
             Items.INFINITE_MACHINE_CORE,
             Items.INFINITE_MACHINE_CIRCUIT,
             Items.INFINITE_PANEL,
@@ -95,7 +95,7 @@ public class InfinityRecipes {
     private static final ItemStack podzol = new ItemStack(Material.PODZOL);
     private static final ItemStack grass = new ItemStack(Material.GRASS_BLOCK);
 
-    public static final ItemStack[][] RECIPES = {
+    public static ItemStack[][] RECIPES = {
             {
                     infinite, infinite, infinite, infinite, infinite, infinite,
                     infinite, voidIng, voidIng, voidIng, voidIng, infinite,
@@ -310,8 +310,8 @@ public class InfinityRecipes {
                     infinite, voidIng, infinite, infinite, voidIng, infinite,
                     infinite, voidIng, infinite, infinite, voidIng, infinite,
                     infinite, voidIng, infinite, infinite, voidIng, infinite,
-                    null, infinite, infinite, infinite, infinite, null,
-                    null, infinite, infinite, infinite, infinite, null
+                    null, infinite, voidIng, voidIng, infinite, null,
+                    null, infinite, voidIng, voidIng, infinite, null
             },
     };
 }

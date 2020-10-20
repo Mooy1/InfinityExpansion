@@ -11,7 +11,7 @@ import me.mooy1.infinityexpansion.implementation.items.GearForge;
 import me.mooy1.infinityexpansion.implementation.items.Strainer;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
 import me.mooy1.infinityexpansion.implementation.storage.StorageDrive;
-import me.mooy1.infinityexpansion.implementation.materials.MainMaterials;
+import me.mooy1.infinityexpansion.implementation.materials.MainMaterial;
 import me.mooy1.infinityexpansion.implementation.machines.InfinityWorkbench;
 import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkCore;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
@@ -79,6 +79,9 @@ public final class ItemSetup {
         for (TreeGrower.Type type : TreeGrower.Type.values()) {
             new TreeGrower(type).register(plugin);
         }
+        for (MaterialGenerator.Type type : MaterialGenerator.Type.values()) {
+            new MaterialGenerator(type).register(plugin);
+        }
 
         //main
 
@@ -97,17 +100,17 @@ public final class ItemSetup {
 
         //machine
 
-        for (MainMaterials.Type type : MainMaterials.Type.values()) {
-            new MainMaterials(type).register(plugin);
+        for (MainMaterial.Type type : MainMaterial.Type.values()) {
+            new MainMaterial(type).register(plugin);
         }
-        for (MachineMaterials.Type type : MachineMaterials.Type.values()) {
-            new MachineMaterials(type).register(plugin);
+        for (MachineMaterial.Type type : MachineMaterial.Type.values()) {
+            new MachineMaterial(type).register(plugin);
         }
         for (Quarry.Type type : Quarry.Type.values()) {
             new Quarry(type).register(plugin);
         }
-        for (Generators.Type type : Generators.Type.values()) {
-            new Generators(type).register(plugin);
+        for (EnergyGenerator.Type type : EnergyGenerator.Type.values()) {
+            new EnergyGenerator(type).register(plugin);
         }
         for (VoidHarvester.Type type : VoidHarvester.Type.values()) {
             new VoidHarvester(type).register(plugin);
@@ -130,8 +133,8 @@ public final class ItemSetup {
         for (CompressedCobblestone.Type type : CompressedCobblestone.Type.values()) {
             new CompressedCobblestone(type).register(plugin);
         }
-        for (Singularities.Type type : Singularities.Type.values()) {
-            new Singularities(type).register(plugin);
+        for (Singularity.Type type : Singularity.Type.values()) {
+            new Singularity(type).register(plugin);
         }
         new EnderEssence().register(plugin);
         new EnderEssenceResource().register();
