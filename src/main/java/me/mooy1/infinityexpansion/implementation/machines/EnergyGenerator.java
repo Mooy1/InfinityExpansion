@@ -53,7 +53,7 @@ import java.util.Objects;
  *
  */
 
-public class Generators extends SlimefunItem implements EnergyNetProvider {
+public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
 
     public static final int WATER_RATE = 12;
     public static final int WATER_STORAGE = 2_000;
@@ -74,7 +74,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider {
 
     private final Type type;
 
-    public Generators(Type type) {
+    public EnergyGenerator(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
@@ -122,7 +122,7 @@ public class Generators extends SlimefunItem implements EnergyNetProvider {
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
             public void tick(Block b, SlimefunItem sf, Config data) {
-                Generators.this.tick(b);
+                EnergyGenerator.this.tick(b);
             }
 
             public boolean isSynchronized() {

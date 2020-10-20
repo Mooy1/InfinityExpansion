@@ -6,9 +6,10 @@ import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
 import me.mooy1.infinityexpansion.implementation.machines.AdvancedAnvil;
 import me.mooy1.infinityexpansion.implementation.machines.GearTransformer;
-import me.mooy1.infinityexpansion.implementation.machines.Generators;
+import me.mooy1.infinityexpansion.implementation.machines.EnergyGenerator;
 import me.mooy1.infinityexpansion.implementation.machines.InfinityReactor;
 import me.mooy1.infinityexpansion.implementation.machines.InfinityWorkbench;
+import me.mooy1.infinityexpansion.implementation.machines.MaterialGenerator;
 import me.mooy1.infinityexpansion.implementation.machines.ItemUpdater;
 import me.mooy1.infinityexpansion.implementation.machines.PoweredBedrock;
 import me.mooy1.infinityexpansion.implementation.machines.Quarry;
@@ -252,8 +253,8 @@ public final class Items {
             "&9Hydro Generator",
             "&7Generates energy from the movement of water",
             "",
-            LoreUtils.energyBuffer(Generators.WATER_STORAGE),
-            LoreUtils.energyPerSecond(Generators.WATER_RATE),
+            LoreUtils.energyBuffer(EnergyGenerator.WATER_STORAGE),
+            LoreUtils.energyPerSecond(EnergyGenerator.WATER_RATE),
             ""
     );
     public static final SlimefunItemStack REINFORCED_HYDRO_GENERATOR = new SlimefunItemStack(
@@ -263,8 +264,8 @@ public final class Items {
             "&7Generates large amounts of energy",
             "&7from the movement of water",
             "",
-            LoreUtils.energyBuffer(Generators.WATER_STORAGE2),
-            LoreUtils.energyPerSecond(Generators.WATER_RATE2),
+            LoreUtils.energyBuffer(EnergyGenerator.WATER_STORAGE2),
+            LoreUtils.energyPerSecond(EnergyGenerator.WATER_RATE2),
             ""
     );
     public static final SlimefunItemStack GEOTHERMAL_GENERATOR = new SlimefunItemStack(
@@ -273,8 +274,8 @@ public final class Items {
             "&cGeothermal Generator",
             "&7Generates energy from the heat of the world",
             "",
-            LoreUtils.energyBuffer(Generators.GEO_STORAGE),
-            LoreUtils.energyPerSecond(Generators.GEO_RATE),
+            LoreUtils.energyBuffer(EnergyGenerator.GEO_STORAGE),
+            LoreUtils.energyPerSecond(EnergyGenerator.GEO_RATE),
             ""
     );
     public static final SlimefunItemStack REINFORCED_GEOTHERMAL_GENERATOR = new SlimefunItemStack(
@@ -284,8 +285,8 @@ public final class Items {
             "&7Generates large amounts of energy",
             "&7from the heat of the world",
             "",
-            LoreUtils.energyBuffer(Generators.GEO_STORAGE2),
-            LoreUtils.energyPerSecond(Generators.GEO_RATE2),
+            LoreUtils.energyBuffer(EnergyGenerator.GEO_STORAGE2),
+            LoreUtils.energyPerSecond(EnergyGenerator.GEO_RATE2),
             ""
     );
     public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
@@ -294,8 +295,8 @@ public final class Items {
             "&eCelestial Panel",
             "&7Generates energy from the sun",
             "",
-            LoreUtils.energyBuffer(Generators.CELE_STORAGE),
-            LoreUtils.energyPerSecond(Generators.CELE_RATE),
+            LoreUtils.energyBuffer(EnergyGenerator.CELE_STORAGE),
+            LoreUtils.energyPerSecond(EnergyGenerator.CELE_RATE),
             ""
     );
     public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
@@ -304,8 +305,8 @@ public final class Items {
             "&8Void Panel",
             "&7Generates energy from darkness",
             "",
-            LoreUtils.energyBuffer(Generators.VOID_STORAGE),
-            LoreUtils.energyPerSecond(Generators.VOID_RATE),
+            LoreUtils.energyBuffer(EnergyGenerator.VOID_STORAGE),
+            LoreUtils.energyPerSecond(EnergyGenerator.VOID_RATE),
             ""
     );
     public static final SlimefunItemStack INFINITE_PANEL = new SlimefunItemStack(
@@ -314,8 +315,8 @@ public final class Items {
             "&bInfinity Panel",
             "&7Generates energy from the cosmos",
             "",
-            LoreUtils.energyBuffer(Generators.INFINITY_STORAGE),
-            LoreUtils.energyPerSecond(Generators.INFINITY_RATE),
+            LoreUtils.energyBuffer(EnergyGenerator.INFINITY_STORAGE),
+            LoreUtils.energyPerSecond(EnergyGenerator.INFINITY_RATE),
             ""
     );
 
@@ -439,6 +440,36 @@ public final class Items {
             "&7Changes the material of tools and gear",
             "",
             LoreUtils.energyPer(GearTransformer.ENERGY) + "Per Use",
+            ""
+    );
+
+    //generators
+
+    public static final SlimefunItemStack BASIC_COBBLE_GEN = new SlimefunItemStack(
+            "BASIC_COBBLE_GEN",
+            Material.LIGHT_GRAY_CONCRETE,
+            "&9Basic &7Cobble Generator",
+            "",
+            LoreUtils.speed(MaterialGenerator.COBBLE_SPEED),
+            LoreUtils.energyPerSecond(MaterialGenerator.COBBLE_ENERGY),
+            ""
+    );
+    public static final SlimefunItemStack ADVANCED_COBBLE_GEN = new SlimefunItemStack(
+            "ADVANCED_COBBLE_GEN",
+            Material.GRAY_CONCRETE,
+            "&cAdvanced &7Cobble Generator",
+            "",
+            LoreUtils.speed(MaterialGenerator.COBBLE2_SPEED),
+            LoreUtils.energyPerSecond(MaterialGenerator.COBBLE2_ENERGY),
+            ""
+    );
+    public static final SlimefunItemStack BASIC_OBSIDIAN_GEN = new SlimefunItemStack(
+            "BASIC_OBSIDIAN_GEN",
+            Material.BLACK_CONCRETE,
+            "&7Obsidian Generator",
+            "",
+            LoreUtils.speed(MaterialGenerator.OBSIDIAN_SPEED),
+            LoreUtils.energyPerSecond(MaterialGenerator.OBSIDIAN_ENERGY),
             ""
     );
 
@@ -721,7 +752,7 @@ public final class Items {
             ""
     );
 
-    //Infinity Singularities
+    //Infinity Singularity
 
     public static final SlimefunItemStack FORTUNE_SINGULARITY = new SlimefunItemStack(
             "FORTUNE_SINGULARITY",
@@ -1019,13 +1050,13 @@ public final class Items {
         INFINITY_PICKAXE.addUnsafeEnchantment(eff, 40);
         INFINITY_PICKAXE.addUnsafeEnchantment(fort, 20);
         INFINITY_SHOVEL.addUnsafeEnchantment(eff, 40);
-        INFINITY_SHOVEL.addUnsafeEnchantment(fort, 20);
+        INFINITY_SHOVEL.addUnsafeEnchantment(fort, 10);
         INFINITY_SHOVEL.addUnsafeEnchantment(silk, 1);
         INFINITY_AXE.addUnsafeEnchantment(eff, 40);
         INFINITY_AXE.addUnsafeEnchantment(sharp, 20);
         INFINITY_AXE.addUnsafeEnchantment(fire, 20);
         INFINITY_BLADE.addUnsafeEnchantment(sharp, 20);
-        INFINITY_BLADE.addUnsafeEnchantment(loot, 20);
+        INFINITY_BLADE.addUnsafeEnchantment(loot, 10);
         INFINITY_BOW.addUnsafeEnchantment(power, 20);
         INFINITY_BOW.addUnsafeEnchantment(flame, 20);
         INFINITY_BOW.addUnsafeEnchantment(infinity, 10);

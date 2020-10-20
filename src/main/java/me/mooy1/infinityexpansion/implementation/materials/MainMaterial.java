@@ -20,9 +20,9 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 
 
-public class MainMaterials extends SlimefunItem {
+public class MainMaterial extends SlimefunItem {
 
-    public MainMaterials(Type type) {
+    public MainMaterial(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipetype(), type.getRecipe());
     }
 

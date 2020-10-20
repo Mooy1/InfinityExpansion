@@ -9,7 +9,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mooy1.infinityexpansion.implementation.materials.Singularities;
+import me.mooy1.infinityexpansion.implementation.materials.Singularity;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
@@ -399,8 +399,8 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
-        for (Singularities.Type type : Singularities.Type.values()) {
-            items.add(Singularities.recipeMaker(type.getId()));
+        for (Singularity.Type type : Singularity.Type.values()) {
+            items.add(Singularity.recipeMaker(type.getId()));
             items.add(type.getItem());
         }
 

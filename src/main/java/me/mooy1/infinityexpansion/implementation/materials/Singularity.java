@@ -20,9 +20,9 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Singularities extends SlimefunItem {
+public class Singularity extends SlimefunItem {
 
-    public Singularities(Type type) {
+    public Singularity(Type type) {
         super(Categories.INFINITY_MATERIALS, type.getItem(), RecipeTypes.SINGULARITY_CONSTRUCTOR, RecipeUtils.MiddleItem(recipeMaker(type.getId())));
     }
 
