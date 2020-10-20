@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.setup;
+package me.mooy1.infinityexpansion.lists;
 
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;

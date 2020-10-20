@@ -6,14 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
-import me.mooy1.infinityexpansion.setup.RecipeTypes;
+import me.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.Slimefun;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -86,19 +86,19 @@ public class MainMaterials extends SlimefunItem {
         }),
         TITANIUM(Categories.INFINITY_MAIN, Items.TITANIUM, RecipeType.SMELTERY, new ItemStack[] {
                 SlimefunItems.REINFORCED_ALLOY_INGOT,
-                Items.IRON_SINGULARITY,
+                SlimefunItems.DAMASCUS_STEEL_INGOT,
                 SlimefunItems.HARDENED_METAL_INGOT,
                 null, null, null, null, null, null
         }),
         MYTHRIL(Categories.INFINITY_MAIN, Items.MYTHRIL, RecipeType.SMELTERY, new ItemStack[] {
                 SlimefunItems.REINFORCED_ALLOY_INGOT,
-                Items.DIAMOND_SINGULARITY,
+                Items.IRON_SINGULARITY,
                 SlimefunItems.HARDENED_METAL_INGOT,
                 null, null, null, null, null, null
         }),
         ADAMANTITE(Categories.INFINITY_MAIN, Items.ADAMANTITE, RecipeType.SMELTERY, new ItemStack[] {
                 SlimefunItems.REDSTONE_ALLOY,
-                Items.REDSTONE_SINGULARITY,
+                Items.DIAMOND_SINGULARITY,
                 Items.MAGSTEEL,
                 null, null, null, null, null, null
         }),

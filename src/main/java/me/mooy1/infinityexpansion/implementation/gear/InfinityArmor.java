@@ -10,7 +10,7 @@ import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
-import me.mooy1.infinityexpansion.setup.RecipeTypes;
+import me.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffect;

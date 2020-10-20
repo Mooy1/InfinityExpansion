@@ -750,8 +750,8 @@ public final class Items {
      * Thanks to NCBPFluffyBear for the idea
      */
 
-    public static final SlimefunItemStack ADDON_INFO = new SlimefunItemStack(
-            "ADDON_INFO",
+    public static final SlimefunItemStack INFINITY_ADDON_INFO = new SlimefunItemStack(
+            "INFINITY_ADDON_INFO",
             Material.NETHER_STAR,
             "&bAddon Info",
             "&fVersion: &7" + InfinityExpansion.getInstance().getPluginVersion(),
@@ -1005,43 +1005,30 @@ public final class Items {
     private static final Enchantment flame = Enchantment.ARROW_FIRE;
     private static final Enchantment infinity = Enchantment.ARROW_INFINITE;
 
-    static {
-
-        //add enchants
+    static { //add enchants
 
         ENDER_FLAME.addUnsafeEnchantment(fire, 10);
-
         INFINITY_CROWN.addUnsafeEnchantment(prot, 40);
         INFINITY_CROWN.addUnsafeEnchantment(aqua, 10);
-
         INFINITY_CHESTPLATE.addUnsafeEnchantment(prot, 40);
         INFINITY_CHESTPLATE.addUnsafeEnchantment(thorns, 20);
-
         INFINITY_SHIELD.addUnsafeEnchantment(prot, 40);
         INFINITY_SHIELD.addUnsafeEnchantment(thorns, 20);
-
         INFINITY_LEGGINGS.addUnsafeEnchantment(prot, 40);
-
         INFINITY_BOOTS.addUnsafeEnchantment(prot, 40);
-
         INFINITY_PICKAXE.addUnsafeEnchantment(eff, 40);
         INFINITY_PICKAXE.addUnsafeEnchantment(fort, 20);
-
         INFINITY_SHOVEL.addUnsafeEnchantment(eff, 40);
         INFINITY_SHOVEL.addUnsafeEnchantment(fort, 20);
         INFINITY_SHOVEL.addUnsafeEnchantment(silk, 1);
-
         INFINITY_AXE.addUnsafeEnchantment(eff, 40);
         INFINITY_AXE.addUnsafeEnchantment(sharp, 20);
         INFINITY_AXE.addUnsafeEnchantment(fire, 20);
-
         INFINITY_BLADE.addUnsafeEnchantment(sharp, 20);
         INFINITY_BLADE.addUnsafeEnchantment(loot, 20);
-
         INFINITY_BOW.addUnsafeEnchantment(power, 20);
         INFINITY_BOW.addUnsafeEnchantment(flame, 20);
         INFINITY_BOW.addUnsafeEnchantment(infinity, 10);
-
         INFINITY_WINGS.addUnsafeEnchantment(prot, 20);
 
         //add unbreakable items
