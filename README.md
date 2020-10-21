@@ -10,6 +10,8 @@ https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
 
 [![Build Status](https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/badge.svg)](https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master)
 
+If you would like your own local server, check out my guide here: https://github.com/Mooy1/InfinityExpansion/wiki/How-to-make-a-Slimefun-Server
+
 # Requirements
 Minecraft Version: 1.16+ (Paper recommended)
 
