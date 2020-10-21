@@ -17,6 +17,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -127,6 +128,10 @@ public class StorageNetworkCore extends SlimefunItem {
                 ));
             }
         } else { //has cargo net
+
+            BlockMenuPreset a = BlockMenuPreset.getPreset("");
+            Validate.notNull(a, "eeee");
+            a.getSlotsAccessedByItemTransport(a.getSlotsAccessedByItemTransport(ItemTransportFlow.WITHDRAW, ));
 
         }
     }

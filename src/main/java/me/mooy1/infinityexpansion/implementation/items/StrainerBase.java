@@ -6,7 +6,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.Categories;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
 import me.mooy1.infinityexpansion.utils.MathUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
@@ -160,90 +159,120 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
     public void tick(Block b) {
 
-        BlockData blockData = b.getBlockData();
-        Waterlogged waterLogged = (Waterlogged) blockData;
-
         Location l = b.getLocation();
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return;
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
-        if (!waterLogged.isWaterlogged()) { //wait for water
+        //check water
+
+        BlockData blockData = b.getBlockData();
+        Waterlogged waterLogged = (Waterlogged) blockData;
+
+        if (!waterLogged.isWaterlogged()) {
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cMust be in water!"));
             }
 
-        } else {
+            return;
+        }
 
-            ItemStack strainer = inv.getItemInSlot(INPUT_SLOTS[0]);
-            int speed = getStrainer(ItemStackUtils.getIDFromItem(strainer));
+        //check input
 
-            if (speed == 0) { //wrong input
+        ItemStack strainer = inv.getItemInSlot(INPUT_SLOTS[0]);
+        SlimefunItem slimefunItem = SlimefunItem.getByItem(strainer);
 
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a Strainer!"));
-                }
+        if (slimefunItem == null) {
 
-            } else { //progress
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a Strainer!"));
+            }
 
-                int time = TIME / speed;
-                int progress = Integer.parseInt(getProgress(b));
+            return;
+        }
 
-                if (progress < time) {
-                    setProgress(b, progress + 1);
+        int speed = getStrainer(slimefunItem.getId());
 
-                    if (playerWatching) {
-                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
-                    }
+        if (speed == 0) {
 
-                } else {
-                    double random = Math.random();
-                    if (MathUtils.chanceIn(random, 10000)) {
-                        fish(inv);
-                    }
-                    ItemStack output = OUTPUTS[MathUtils.randomFrom(random, (OUTPUTS.length - 1))].clone();
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a Strainer!"));
+            }
 
-                    if (inv.fits(output, OUTPUT_SLOTS)) { //output
+            return;
+        }
 
-                        inv.pushItem(output, OUTPUT_SLOTS);
+        //progress
 
-                        if (playerWatching) {
-                            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMaterial Collected!"));
-                        }
+        int time = TIME / speed;
+        int progress = Integer.parseInt(getProgress(b));
 
-                    } else { //full
+        if (progress < time) {
 
-                        if (playerWatching) {
-                            inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
-                        }
-                    }
-                    setProgress(b, 0);
+            setProgress(b, progress + 1);
 
-                    if (MathUtils.chanceIn(random, speed)) {
-                        ItemMeta itemMeta = strainer.getItemMeta();
-                        Damageable durability = (Damageable) itemMeta;
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
+            }
 
-                        assert durability != null;
-                        int current = durability.getDamage();
+            return;
+        }
 
-                        if (current + 1 == Material.FISHING_ROD.getMaxDurability()) { //break
+        //fish
 
-                            inv.consumeItem(INPUT_SLOTS[0]);
+        double random = Math.random();
+        if (MathUtils.chanceIn(random, 10000)) {
+            fish(inv);
+        }
 
-                        } else { //reduce
 
-                            ((Damageable) itemMeta).setDamage(current + 1);
-                            strainer.setItemMeta(itemMeta);
-                            inv.replaceExistingItem(INPUT_SLOTS[0], strainer);
+        ItemStack output = OUTPUTS[MathUtils.randomFrom(random, (OUTPUTS.length - 1))].clone();
 
-                        }
-                    }
-                }
-                //((Waterlogged) blockData).setWaterlogged(false);
-                //b.setBlockData(blockData);
+        //check fits
+
+        if (!inv.fits(output, OUTPUT_SLOTS)) {
+
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+            }
+
+            return;
+        }
+
+        //output
+
+        inv.pushItem(output, OUTPUT_SLOTS);
+
+        if (playerWatching) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMaterial Collected!"));
+        }
+
+        setProgress(b, 0);
+
+        //reduce durability
+
+        if (MathUtils.chanceIn(random, speed)) {
+            ItemMeta itemMeta = strainer.getItemMeta();
+            Damageable durability = (Damageable) itemMeta;
+
+            assert durability != null;
+            int current = durability.getDamage();
+
+            if (current + 1 == Material.FISHING_ROD.getMaxDurability()) {
+
+                inv.consumeItem(INPUT_SLOTS[0]);
+
+            } else { //reduce
+
+                ((Damageable) itemMeta).setDamage(current + 1);
+                strainer.setItemMeta(itemMeta);
+                inv.replaceExistingItem(INPUT_SLOTS[0], strainer);
+
             }
         }
+        //((Waterlogged) blockData).setWaterlogged(false);
+        //b.setBlockData(blockData);
     }
 
     private int getStrainer(String id) {
@@ -254,20 +283,16 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
     }
 
     private void fish(BlockMenu inv) {
-        ItemStack potato = Items.POTATO_FISH.clone();
-        ItemMeta meta = potato.getItemMeta();
-        assert meta != null;
-        List<String> lore = meta.getLore();
-        assert lore != null;
-        lore.clear();
-        lore.add(ChatColor.YELLOW + "Lucky...");
-        lore.add("");
-        meta.setLore(lore);
-        potato.setItemMeta(meta);
+        ItemStack potato = new CustomItem(
+                Material.POTATO,
+                "&7:&6Potatofish&7:",
+                "&eLucky"
+        );
+
         if (inv.fits(potato, OUTPUT_SLOTS)) {
             inv.pushItem(potato, OUTPUT_SLOTS);
 
-            MessageUtils.messagePlayersInInv(inv, ChatColor.YELLOW + "You caught a lucky potato! ... fish?");
+            MessageUtils.messagePlayersInInv(inv, ChatColor.YELLOW + "You caught a lucky fish! ... potato?");
         }
     }
 

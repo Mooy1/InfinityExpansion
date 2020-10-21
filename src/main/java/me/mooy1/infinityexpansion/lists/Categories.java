@@ -2,7 +2,7 @@ package me.mooy1.infinityexpansion.lists;
 
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.setup.CheatCategory;
-import me.mooy1.infinityexpansion.setup.HiddenCategory;
+import me.mooy1.infinityexpansion.setup.InfinityCategory;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -12,7 +12,7 @@ public final class Categories {
 
     public static final Category BASIC_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "BASIC_MACHINES"),
-            new CustomItem(Material.LOOM, "&9Basic &7Machines"), 1
+            new CustomItem(Material.LOOM, "&9Basic &7Powered Machines"), 1
     );
 
     public static final Category INFINITY_MAIN = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
@@ -22,7 +22,7 @@ public final class Categories {
 
     public static final Category ADVANCED_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "ADVANCED_MACHINES"),
-            new CustomItem(Material.BLAST_FURNACE, "&cAdvanced &7Machines"), 2
+            new CustomItem(Material.BLAST_FURNACE, "&cAdvanced &7Powered Machines"), 2
     );
 
     public static final Category INFINITY_STORAGE = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
@@ -35,9 +35,8 @@ public final class Categories {
             new CustomItem(Material.NETHERITE_BLOCK, "&bInfinity &aMaterials"), 3
     );
 
-    public static final Category HIDDEN_RECIPES = new HiddenCategory();
+    public static final Category INFINITY_RECIPES = new InfinityCategory();
     public static final Category INFINITY_CHEAT = new CheatCategory();
 
-    private Categories() {
-    }
+    private Categories() { }
 }

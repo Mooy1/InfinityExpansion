@@ -1,4 +1,4 @@
-package me.mooy1.infinityexpansion.implementation.machines;
+package me.mooy1.infinityexpansion.implementation.items;
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -62,7 +62,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
     private static final int RECIPE_SLOT = 7;
 
     public InfinityWorkbench() {
-        super(Categories.ADVANCED_MACHINES, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.INFINITY_MAIN, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
                 SlimefunItems.ENERGIZED_CAPACITOR, new ItemStack(Material.CRAFTING_TABLE), SlimefunItems.ENERGIZED_CAPACITOR,
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT
@@ -104,7 +104,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
                 if (flow == ItemTransportFlow.INSERT) {
                     return new int[0];
                 } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
+                    return new int[0];
                 } else {
                     return new int[0];
                 }

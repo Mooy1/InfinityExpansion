@@ -7,12 +7,11 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ChargingBench;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.implementation.gear.InfinityArmor;
-import me.mooy1.infinityexpansion.implementation.items.GearForge;
 import me.mooy1.infinityexpansion.implementation.items.Strainer;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
 import me.mooy1.infinityexpansion.implementation.storage.StorageDrive;
 import me.mooy1.infinityexpansion.implementation.materials.MainMaterial;
-import me.mooy1.infinityexpansion.implementation.machines.InfinityWorkbench;
+import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
 import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkCore;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import me.mooy1.infinityexpansion.implementation.gear.InfinityTools;
@@ -62,10 +61,9 @@ public final class ItemSetup {
         Categories.INFINITY_MAIN.register();
         Categories.ADVANCED_MACHINES.register();
         Categories.INFINITY_STORAGE.register();
-        new InfinityCategory().register();
+        Categories.INFINITY_RECIPES.register();
         Categories.INFINITY_CHEAT.register();
         Categories.INFINITY_MATERIALS.register();
-        new HiddenCategory().register();
 
         //basic
 
@@ -86,7 +84,8 @@ public final class ItemSetup {
         //main
 
         new SlimefunItem(Categories.INFINITY_MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
-        new SlimefunItem(Categories.HIDDEN_RECIPES, Items.POTATO_FISH, RecipeType.NULL, null).register(plugin);
+        new SlimefunItem(Categories.INFINITY_CHEAT, Items.POTATO_FISH, RecipeType.NULL, null).register(plugin);
+        new InfinityWorkbench().register(plugin);
 
         //storage
 
@@ -103,6 +102,7 @@ public final class ItemSetup {
         for (MainMaterial.Type type : MainMaterial.Type.values()) {
             new MainMaterial(type).register(plugin);
         }
+        new AdvancedAnvil().register(plugin);
         for (MachineMaterial.Type type : MachineMaterial.Type.values()) {
             new MachineMaterial(type).register(plugin);
         }
@@ -120,11 +120,8 @@ public final class ItemSetup {
         }
 
         new GearTransformer().register(plugin);
-        new GearForge().register(plugin);
-        new AdvancedAnvil().register(plugin);
         new PoweredBedrock().register(plugin);
         new ItemUpdater().register(plugin);
-        new InfinityWorkbench().register(plugin);
         new InfinityReactor().register(plugin);
         new ResourceSynthesizer().register(plugin);
 
