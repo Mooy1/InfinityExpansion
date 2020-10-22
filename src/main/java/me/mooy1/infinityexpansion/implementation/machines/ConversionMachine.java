@@ -10,9 +10,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mooy1.infinityexpansion.lists.Categories;
-import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.Items;
-import me.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mooy1.infinityexpansion.utils.ItemStackUtils;
 import me.mooy1.infinityexpansion.utils.MathUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
@@ -45,18 +43,14 @@ import java.util.Objects;
 public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem, EnergyNetComponent {
 
     public static final int TIME = 4;
-    public static final int FREEZER_SPEED = 1;
+    public static final int FREEZER_SPEED = 2;
     public static final int FREEZER_ENERGY = 240;
     public static final int URANIUM_SPEED = 1;
     public static final int URANIUM_ENERGY = 600;
-    public static final int URANIUM2_SPEED = 4;
-    public static final int URANIUM2_ENERGY = 2400;
-    public static final int DUST_SPEED = 2;
+    public static final int DUST_SPEED = 4;
     public static final int DUST_ENERGY = 300;
-    public static final int DUST2_SPEED = 4;
-    public static final int DUST2_ENERGY = 1200;
-    private static final int[] INPUT_SLOTS = { PresetUtils.slot1 };
-    private static final int[] OUTPUT_SLOTS = { PresetUtils.slot3 };
+    private static final int[] INPUT_SLOTS = {PresetUtils.slot1};
+    private static final int[] OUTPUT_SLOTS = {PresetUtils.slot3};
     private static final int STATUS_SLOT = PresetUtils.slot2;
     private final Type type;
 
@@ -166,7 +160,7 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
             return;
         }
 
-        if (!ItemStackUtils.getIDFromItem(input).equals(ItemStackUtils.getIDFromItem(correctInput))) {
+        if (!Objects.equals(ItemStackUtils.getIDFromItem(input), ItemStackUtils.getIDFromItem(correctInput))) {
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more: &f" + ItemUtils.getItemName(correctInput)));
             }
@@ -238,46 +232,36 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
         FREEZER(Categories.ADVANCED_MACHINES, Items.EXTREME_FREEZER, FREEZER_ENERGY, FREEZER_SPEED,
-                new ItemStack(Material.ICE), new ItemStack[]{SlimefunItems.REACTOR_COOLANT_CELL.clone()},
+                new ItemStack(Material.ICE), new ItemStack[]{SlimefunItems.REACTOR_COOLANT_CELL.clone()}, RecipeType.ENHANCED_CRAFTING_TABLE,
+                new ItemStack[]{
+                        SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2,
+                        new ItemStack(Material.WATER_BUCKET), SlimefunItems.FLUID_PUMP, new ItemStack(Material.WATER_BUCKET),
+                        Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
+                }),
+        DUST(Categories.ADVANCED_MACHINES, Items.DUST_EXTRACTOR, DUST_ENERGY, DUST_SPEED, new ItemStack(Material.COBBLESTONE),
+                new ItemStack[]{
+                        SlimefunItems.COPPER_DUST,
+                        SlimefunItems.ZINC_DUST,
+                        SlimefunItems.TIN_DUST,
+                        SlimefunItems.ALUMINUM_DUST,
+                        SlimefunItems.LEAD_DUST,
+                        SlimefunItems.SILVER_DUST,
+                        SlimefunItems.GOLD_DUST,
+                        SlimefunItems.IRON_DUST,
+                        SlimefunItems.MAGNESIUM_DUST,},
                 RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-
+                SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
+                SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
         }),
-        DUST(Categories.ADVANCED_MACHINES, Items.DUST_EXTRACTOR, DUST_ENERGY, DUST_SPEED,
-                new ItemStack(Material.COBBLESTONE), new ItemStack[]{
-                SlimefunItems.COPPER_DUST,
-                SlimefunItems.ZINC_DUST,
-                SlimefunItems.TIN_DUST,
-                SlimefunItems.ALUMINUM_DUST,
-                SlimefunItems.LEAD_DUST,
-                SlimefunItems.SILVER_DUST,
-                SlimefunItems.GOLD_DUST,
-                SlimefunItems.IRON_DUST,
-                SlimefunItems.MAGNESIUM_DUST,},
-                RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-
-        }),
-        DUST2(Categories.INFINITY_CHEAT, Items.INFINITY_DUST_EXTRACTOR, DUST2_ENERGY, DUST2_SPEED,
-                new ItemStack(Material.COBBLESTONE), new ItemStack[]{
-                SlimefunItems.COPPER_DUST,
-                SlimefunItems.ZINC_DUST,
-                SlimefunItems.TIN_DUST,
-                SlimefunItems.ALUMINUM_DUST,
-                SlimefunItems.LEAD_DUST,
-                SlimefunItems.SILVER_DUST,
-                SlimefunItems.GOLD_DUST,
-                SlimefunItems.IRON_DUST,
-                SlimefunItems.MAGNESIUM_DUST,},
-                RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_DUST_EXTRACTOR)
-        ),
         URANIUM(Categories.ADVANCED_MACHINES, Items.URANIUM_EXTRACTOR, URANIUM_ENERGY, URANIUM_SPEED,
-                new ItemStack(Material.COBBLESTONE), new ItemStack[] {SlimefunItems.SMALL_URANIUM.clone()},
-                RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                new ItemStack(Material.COBBLESTONE), new ItemStack[]{SlimefunItems.SMALL_URANIUM.clone()}, RecipeType.ENHANCED_CRAFTING_TABLE,
+                new ItemStack[]{
+                        SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2,
+                        SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3, SlimefunItems.AUTOMATED_CRAFTING_CHAMBER,
+                        Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
+                });
 
-        }),
-        URANIUM2(Categories.INFINITY_CHEAT, Items.INFINITY_URANIUM_EXTRACTOR, URANIUM2_ENERGY, URANIUM2_SPEED,
-                new ItemStack(Material.COBBLESTONE), new ItemStack[] {SlimefunItems.SMALL_URANIUM.clone()},
-                RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_URANIUM_EXTRACTOR)
-        );
 
         @Nonnull
         private final Category category;

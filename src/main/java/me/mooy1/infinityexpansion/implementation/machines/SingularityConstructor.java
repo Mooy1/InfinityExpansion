@@ -130,11 +130,19 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                     int stacks = (int) Math.floor((float) progress / stacksize);
                     int remainder = progress % stacksize;
 
-                    for (int i = 0; i < stacks; i++) {
-                        b.getWorld().dropItemNaturally(l, ItemStackUtils.getItemFromID(input, stacksize));
+                    ItemStack drops = ItemStackUtils.getItemFromID(input, stacksize);
+
+                    if (drops != null) {
+                        for (int i = 0; i < stacks; i++) {
+                            b.getWorld().dropItemNaturally(l, drops);
+                        }
                     }
+
                     if (remainder > 0) {
-                        b.getWorld().dropItemNaturally(l, ItemStackUtils.getItemFromID(input, remainder));
+                        ItemStack drop = ItemStackUtils.getItemFromID(input, remainder);
+                        if (drop != null) {
+                            b.getWorld().dropItemNaturally(l, drop);
+                        }
                     }
                 }
             }
@@ -185,7 +193,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
         } else if (inputSlotItem == null) { //no input
 
-            if (progress == 0 || getProgressID(b) == null) { //havent started
+            if (progress == 0 || getProgressID(b) == null) { //haven't started
 
                 name = "&9Input a resource!";
                 statusMat = Material.BLUE_STAINED_GLASS_PANE;
@@ -230,7 +238,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
                     String input = INPUT_ITEM_IDS[progressID];
 
-                    if (ItemStackUtils.getIDFromItem(inputSlotItem).equals(input)) { //input matches
+                    if (Objects.equals(ItemStackUtils.getIDFromItem(inputSlotItem), input)) { //input matches
 
                         int inputSlotAmount = inputSlotItem.getAmount();
                         removeCharge(b.getLocation(), energy);
@@ -269,20 +277,29 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
                     ItemStack output = ItemStackUtils.getItemFromID(OUTPUT_ITEM_IDS[progressID], 1);
 
-                    if (inv.fits(output, OUTPUT_SLOTS)) { //output
+                    if (output != null) {
 
-                        removeCharge(b.getLocation(), energy);
-                        inv.pushItem(output, OUTPUT_SLOTS);
-                        setProgress(b, 0);
-                        setProgressID(b, null);
+                        if (inv.fits(output, OUTPUT_SLOTS)) { //output
 
-                        name = "&aConstruction complete!";
-                        statusMat = Material.NETHER_STAR;
+                            removeCharge(b.getLocation(), energy);
+                            inv.pushItem(output, OUTPUT_SLOTS);
+                            setProgress(b, 0);
+                            setProgressID(b, null);
 
-                    } else { //not enough room
+                            name = "&aConstruction complete!";
+                            statusMat = Material.NETHER_STAR;
 
-                        name = "&6Not enough room!";
-                        statusMat = Material.ORANGE_STAINED_GLASS_PANE;
+                        } else { //not enough room
+
+                            name = "&6Not enough room!";
+                            statusMat = Material.ORANGE_STAINED_GLASS_PANE;
+                        }
+
+                    } else {
+
+                        name = "&cError! Report this!";
+                        statusMat = Material.BARRIER;
+
                     }
                 }
             }
@@ -302,10 +319,10 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                 int outputTime = OUTPUT_TIMES[progressID];
 
                 String displayname = "";
-                ItemMeta displaymeta = ItemStackUtils.getItemFromID(output, 1).getItemMeta();
+                ItemMeta displayMeta = Objects.requireNonNull(ItemStackUtils.getItemFromID(output, 1)).getItemMeta();
 
-                if (displaymeta != null) {
-                    displayname = displaymeta.getDisplayName();
+                if (displayMeta != null) {
+                    displayname = displayMeta.getDisplayName();
                 }
 
                 lore = "&7Constructing: " + displayname;
@@ -324,7 +341,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         int itemAmount = item.getAmount();
 
         for (int i = 0; i < INPUT_ITEM_IDS.length ; i++) {
-            if (ItemStackUtils.getIDFromItem(item).equals(INPUT_ITEM_IDS[i])) {
+            if (Objects.equals(ItemStackUtils.getIDFromItem(item), INPUT_ITEM_IDS[i])) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
                     inv.consumeItem(INPUT_SLOT, speed);

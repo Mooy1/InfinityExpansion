@@ -65,7 +65,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
                 if (getProgress(b) == null) {
-                    setProgress(b, getSpeed(type));
+                    setProgress(b, 0);
                 }
             }
 
@@ -131,11 +131,9 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
         if (inv == null) return;
 
 
-        ItemStack output = Items.VOID_BIT.clone();
-
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
-        int energy = getEnergyConsumption(type);
+        int energy = type.getEnergy();
 
         if (getCharge(b.getLocation()) < energy) { //not enough energy
 
@@ -147,9 +145,11 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
 
             int progress = Integer.parseInt(getProgress(b));
 
-            int speed = getSpeed(type);
+            int speed = type.getSpeed();
 
             if (progress >= TIME) { //reached full progress
+
+                ItemStack output = Items.VOID_BIT.clone();
 
                 if (inv.fits(output, OUTPUT_SLOTS)) {
 
@@ -204,27 +204,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
 
     @Override
     public int getCapacity() {
-        return getEnergyConsumption(type);
-    }
-
-    private int getEnergyConsumption(Type type) {
-        if (type == Type.BASIC) {
-            return BASIC_ENERGY;
-        } else if (type == Type.INFINITY) {
-            return INFINITY_ENERGY;
-        } else {
-            return 0;
-        }
-    }
-
-    private int getSpeed(Type type) {
-        if (type == Type.BASIC) {
-            return BASIC_SPEED;
-        } else if (type == Type.INFINITY) {
-            return INFINITY_SPEED;
-        } else {
-            return 0;
-        }
+        return type.getEnergy();
     }
 
     @Nonnull
@@ -246,15 +226,17 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
-        BASIC(Categories.ADVANCED_MACHINES, Items.VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        BASIC(Categories.ADVANCED_MACHINES, BASIC_ENERGY, BASIC_SPEED, Items.VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
                 Items.MAGNONIUM, SlimefunItems.GEO_MINER, Items.MAGNONIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Categories.INFINITY_CHEAT, Items.INFINITE_VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITE_VOID_HARVESTER));
+        INFINITY(Categories.INFINITY_CHEAT, INFINITY_ENERGY, INFINITY_SPEED, Items.INFINITE_VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITE_VOID_HARVESTER));
 
         @Nonnull
         private final Category category;
+        private final int energy;
+        private final int speed;
         private final SlimefunItemStack item;
         private final RecipeType recipeType;
         private final ItemStack[] recipe;

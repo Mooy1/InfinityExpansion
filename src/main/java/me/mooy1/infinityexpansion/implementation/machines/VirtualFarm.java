@@ -240,6 +240,7 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
         }
     }
 
+    @Nullable
     private String getInputType(Material input) {
         for (int i = 0; i < INPUTS.length; i++) {
             if (input == INPUTS[i]) return String.valueOf(i);

@@ -1,5 +1,6 @@
 package me.mooy1.infinityexpansion.implementation.storage;
 
+import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
@@ -10,6 +11,7 @@ import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.utils.ItemStackUtils;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
+import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -24,14 +26,18 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -85,13 +91,6 @@ public class StorageUnit extends SlimefunItem {
             }
 
             @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (getBlockData(b.getLocation(), "stored") == null) {
-                    setStored(b, 0);
-                }
-            }
-
-            @Override
             public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
                 return (player.hasPermission("slimefun.inventory.bypass")
                         || SlimefunPlugin.getProtectionManager().hasPermission(
@@ -115,42 +114,145 @@ public class StorageUnit extends SlimefunItem {
             }
         };
 
+        addItemHandler(new BlockPlaceHandler(false) { //transfer stuffs
+            @Override
+            public void onPlayerPlace(BlockPlaceEvent e) {
+                Block b = e.getBlock();
+                setStored(b, 0);
+                ItemStack placedItem = e.getItemInHand();
+
+                ItemMeta meta = placedItem.getItemMeta();
+                if (meta != null) {
+
+                    List<String> lore = meta.getLore();
+                    if (lore != null) {
+
+                        int i = 0;
+                        for (String line : lore) {
+                            if (ChatColor.stripColor(line).equals("Stored Item:")) {
+                                Player p = e.getPlayer();
+
+                                String storedItem = ChatColor.stripColor(lore.get(i + 1));
+                                setStoredItem(b, storedItem);
+
+                                String stored = ChatColor.stripColor(lore.get(i + 3));
+                                setStored(b, Integer.parseInt(stored));
+
+                                MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to placed item");
+
+                                break;
+                            }
+                            i++;
+                        }
+                    }
+                }
+            }
+        });
+
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
+                Location l = b.getLocation();
                 String storedItem = getStoredItem(b);
                 int stored = getStored(b);
 
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
-                inv.dropItems(b.getLocation(), INPUT_SLOTS);
+                inv.dropItems(l, INPUT_SLOTS);
 
-                //drop stored items
+                ItemStack drop = stack.getItem().clone();
+
                 if (stored > 0 && storedItem != null) {
+                    tryToStoreOrDrop(b, inv, INPUT_SLOTS);
+                    tryToStoreOrDrop(b, inv, OUTPUT_SLOTS);
 
-                    ItemStack storedItemStack = ItemStackUtils.getItemFromID(storedItem, 1);
-                    int stackSize = storedItemStack.getMaxStackSize();
+                    stored = getStored(b);
 
-                    int stacks = (int) Math.floor((float) stored / stackSize);
-                    storedItemStack.setAmount(stackSize);
+                    ItemMeta meta = drop.getItemMeta();
+                    if (meta != null) {
+                        List<String> lore = meta.getLore();
+                        if (lore != null) {
+                            lore.add("");
+                            lore.add(ChatColor.AQUA + "Stored Item:");
+                            lore.add(ChatColor.GREEN + storedItem);
+                            lore.add(ChatColor.AQUA + "Amount:");
+                            lore.add(ChatColor.GREEN + String.valueOf(stored));
+                            lore.add(ChatColor.RED + "Stored item will be reset if stored in another storage unit");
+                            lore.add(ChatColor.RED + "Or placed in the Item Updater");
+                            meta.setLore(lore);
+                            drop.setItemMeta(meta);
 
-                    for (int i = 0; i < stacks; i++) {
-                        b.getWorld().dropItemNaturally(b.getLocation(), storedItemStack);
+                            if (p != null) {
+                                MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to dropped item");
+                            }
+                        }
+
+                    } else {
+
+                        inv.dropItems(l, OUTPUT_SLOTS);
+                        inv.dropItems(l, INPUT_SLOTS);
                     }
 
-                    int remainder = stored % stackSize;
-                    storedItemStack.setAmount(remainder);
 
-                    if (remainder > 0) {
-                        b.getWorld().dropItemNaturally(b.getLocation(), storedItemStack);
-                    }
+                    /*ItemStack storedItemStack = ItemStackUtils.getItemFromID(storedItem, 1);
+                    if (storedItemStack != null) {
+                        int stackSize = storedItemStack.getMaxStackSize();
+
+                        int stacks = (int) Math.floor((float) stored / stackSize);
+                        storedItemStack.setAmount(stackSize);
+
+                        for (int i = 0; i < stacks; i++) {
+                            b.getWorld().dropItemNaturally(l, storedItemStack);
+                        }
+
+                        int remainder = stored % stackSize;
+                        storedItemStack.setAmount(remainder);
+
+                        if (remainder > 0) {
+                            b.getWorld().dropItemNaturally(l, storedItemStack);
+                        }
+                    }*/
                 }
-            }
-            setStored(b, 0);
-            setStoredItem(b, null);
 
-            return true;
+                b.getWorld().dropItemNaturally(l, drop);
+            }
+
+            BlockStorage.clearBlockInfo(b);
+            b.setType(Material.AIR);
+            return false;
         });
+    }
+    
+    private void tryToStoreOrDrop(Block b, BlockMenu inv, int[] slots) {
+        int stored = getStored(b);
+        String storedItem = getStoredItem(b);
+
+        Location l = b.getLocation();
+
+        ItemStack inputSlot = inv.getItemInSlot(slots[0]);
+        if (Objects.equals(ItemStackUtils.getIDFromItem(inputSlot), storedItem)) {
+
+            int inputAmount = inputSlot.getAmount();
+            if (type.getMax() >= stored + inputAmount) {
+
+                setStored(b, stored + inputAmount);
+                inv.replaceExistingItem(slots[0], null);
+
+            } else {
+
+                int amount = type.getMax() - stored;
+
+                setStored(b, type.getMax());
+                inputSlot.setAmount(inputAmount - amount);
+                inv.replaceExistingItem(slots[0], inputSlot);
+                inv.dropItems(l, slots);
+
+            }
+
+        } else {
+
+            inv.dropItems(l, slots);
+
+        }
     }
 
     private void setupInv(BlockMenuPreset blockMenuPreset) {
@@ -181,7 +283,7 @@ public class StorageUnit extends SlimefunItem {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
-        int maxStorage = getStorage(type);
+        int maxStorage = type.getMax();
         String storedItem = getStoredItem(b);
 
         if (inv.toInventory() != null || !inv.toInventory().getViewers().isEmpty()) {
@@ -241,6 +343,10 @@ public class StorageUnit extends SlimefunItem {
         if (storedItem != null) {
 
             ItemStack storedItemStack = ItemStackUtils.getItemFromID(storedItem, 1);
+            if (storedItemStack == null) {
+                setStoredItem(b, null);
+                return;
+            }
             int stored = getStored(b);
             int outputRemaining;
 
@@ -275,7 +381,7 @@ public class StorageUnit extends SlimefunItem {
         }
     }
 
-    private void updateStatus(Block b) {
+    private void updateStatus(@Nonnull Block b) {
         BlockMenu inv = BlockStorage.getInventory(b);
 
         if (inv.toInventory() == null || inv.toInventory().getViewers().isEmpty()) return;
@@ -289,27 +395,31 @@ public class StorageUnit extends SlimefunItem {
                     "&cInput an Item!"
             ));
         } else {
-            int maxStorage = getStorage(type);
+            int maxStorage = type.getMax();
             ItemStack storedItemStack = ItemStackUtils.getItemFromID(storedItem, 1);
+            if (storedItemStack == null) {
+                setStoredItem(b, null);
+                return;
+            }
 
-            String converteditemname = "";
+            String convertedItemName = "";
             if (storedItemStack.getItemMeta() != null) {
-                converteditemname = storedItemStack.getItemMeta().getDisplayName();
+                convertedItemName = storedItemStack.getItemMeta().getDisplayName();
             }
 
             String stacks = "&7Stacks: " + LoreUtils.format(Math.round((float) stored / storedItemStack.getMaxStackSize()));
 
-            if (this.type == Type.INFINITY) {
+            if (this.type == Type.INFINITIES) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         storedItemStack,
-                        converteditemname,
+                        convertedItemName,
                         "&6Stored: &e" + LoreUtils.format(stored),
                         stacks
                 ));
             } else {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         storedItemStack,
-                        converteditemname,
+                        convertedItemName,
                         "&6Stored: &e" + LoreUtils.format(stored) + "/" + LoreUtils.format(maxStorage) + " &7(" + Math.round((float) 100 * stored / maxStorage )  + "%)",
                         stacks
                 ));
@@ -338,22 +448,6 @@ public class StorageUnit extends SlimefunItem {
         BlockStorage.addBlockInfo(b, key, data);
     }
 
-    private int getStorage(Type type) {
-        if (type == Type.BASIC) {
-            return BASIC;
-        } else if (type == Type.ADVANCED) {
-            return ADVANCED;
-        } else if (type == Type.REINFORCED) {
-            return REINFORCED;
-        } else if (type == Type.VOID) {
-            return VOID;
-        } else if (type == Type.INFINITY) {
-            return INFINITY;
-        } else {
-            return 0;
-        }
-    }
-
     private String getBlockData(Location l, String key) {
         return BlockStorage.getLocationInfo(l, key);
     }
@@ -362,31 +456,32 @@ public class StorageUnit extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Type {
-        BASIC(Categories.INFINITY_STORAGE, Items.BASIC_STORAGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        BASICS(Categories.STORAGE_TRANSPORT, Items.BASIC_STORAGE, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
         }),
-        ADVANCED(Categories.INFINITY_STORAGE, Items.ADVANCED_STORAGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        ADVANCES(Categories.STORAGE_TRANSPORT, Items.ADVANCED_STORAGE, ADVANCED, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.BASIC_STORAGE, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
         }),
-        REINFORCED(Categories.INFINITY_STORAGE, Items.REINFORCED_STORAGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        REINFORCED_(Categories.STORAGE_TRANSPORT, Items.REINFORCED_STORAGE, REINFORCED, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
                 Items.MAGSTEEL_PLATE, Items.ADVANCED_STORAGE, Items.MAGSTEEL_PLATE,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE
         }),
-        VOID(Categories.INFINITY_STORAGE, Items.VOID_STORAGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        VOIDS(Categories.STORAGE_TRANSPORT, Items.VOID_STORAGE, VOID, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
                 Items.MAGNONIUM, Items.REINFORCED_STORAGE, Items.MAGNONIUM,
                 Items.VOID_INGOT, Items.MACHINE_CORE, Items.VOID_INGOT
         }),
-        INFINITY(Categories.INFINITY_CHEAT, Items.INFINITY_STORAGE, RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITY_STORAGE));
+        INFINITIES(Categories.INFINITY_CHEAT, Items.INFINITY_STORAGE, INFINITY, RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITY_STORAGE));
 
         @Nonnull
         private final Category category;
         private final SlimefunItemStack item;
+        private final int max;
         private final RecipeType recipeType;
         private final ItemStack[] recipe;
     }

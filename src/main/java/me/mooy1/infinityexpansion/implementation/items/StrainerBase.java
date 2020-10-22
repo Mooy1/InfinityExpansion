@@ -274,7 +274,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
         //b.setBlockData(blockData);
     }
 
-    private int getStrainer(String id) {
+    private int getStrainer(@Nonnull String id) {
         if (id.equals("BASIC_STRAINER")) return BASIC_SPEED;
         if (id.equals("ADVANCED_STRAINER")) return ADVANCED_SPEED;
         if (id.equals("REINFORCED_STRAINER")) return REINFORCED_SPEED;

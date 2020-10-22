@@ -23,7 +23,6 @@ import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -177,15 +176,7 @@ public final class Items {
             LoreUtils.speed(ConversionMachine.DUST_SPEED),
             LoreUtils.energyPerSecond(ConversionMachine.DUST_ENERGY)
     );
-    public static final SlimefunItemStack INFINITY_DUST_EXTRACTOR = new SlimefunItemStack(
-            "INFINITY_DUST_EXTRACTOR",
-            Material.BLAST_FURNACE,
-            "&bInfinity &7Dust Extractor",
-            "&7Converts large amounts of cobble into dusts",
-            "",
-            LoreUtils.speed(ConversionMachine.DUST2_SPEED),
-            LoreUtils.energyPerSecond(ConversionMachine.DUST2_ENERGY)
-    );
+
     public static final SlimefunItemStack URANIUM_EXTRACTOR = new SlimefunItemStack(
             "URANIUM_EXTRACTOR",
             Material.LIME_CONCRETE,
@@ -195,15 +186,7 @@ public final class Items {
             LoreUtils.speed(ConversionMachine.URANIUM_SPEED),
             LoreUtils.energyPerSecond(ConversionMachine.URANIUM_ENERGY)
     );
-    public static final SlimefunItemStack INFINITY_URANIUM_EXTRACTOR = new SlimefunItemStack(
-            "INFINITY_URANIUM_EXTRACTOR",
-            Material.GREEN_CONCRETE,
-            "&bInfinity &aUranium Extractor",
-            "&7Converts large amounts of cobble into uranium",
-            "",
-            LoreUtils.speed(ConversionMachine.URANIUM2_SPEED),
-            LoreUtils.energyPerSecond(ConversionMachine.URANIUM2_ENERGY)
-    );
+
 
     public static final SlimefunItemStack BASIC_QUARRY = new SlimefunItemStack(
             "BASIC_QUARRY",
@@ -502,39 +485,32 @@ public final class Items {
             "BASIC_STORAGE",
             Material.OAK_WOOD,
             "&9Basic &7Storage Unit",
-            LoreUtils.storesItem(StorageUnit.BASIC),
-            "&aWorks with cargo"
+            LoreUtils.storesItem(StorageUnit.BASIC)
     );
     public static final SlimefunItemStack ADVANCED_STORAGE = new SlimefunItemStack(
             "ADVANCED_STORAGE",
             Material.DARK_OAK_WOOD,
             "&cAdvanced &7Storage Unit",
-            LoreUtils.storesItem(StorageUnit.ADVANCED),
-            "&aWorks with cargo"
+            LoreUtils.storesItem(StorageUnit.ADVANCED)
     );
     public static final SlimefunItemStack REINFORCED_STORAGE = new SlimefunItemStack(
             "REINFORCED_STORAGE",
             Material.ACACIA_WOOD,
             "&fReinforced &7Storage Unit",
-            LoreUtils.storesItem(StorageUnit.REINFORCED),
-            "&aWorks with cargo"
+            LoreUtils.storesItem(StorageUnit.REINFORCED)
     );
     public static final SlimefunItemStack VOID_STORAGE = new SlimefunItemStack(
             "VOID_STORAGE",
             Material.CRIMSON_HYPHAE,
             "&8Void &7Storage Unit",
-            LoreUtils.storesItem(StorageUnit.VOID),
-            "&aWorks with cargo"
+            LoreUtils.storesItem(StorageUnit.VOID)
     );
     public static final SlimefunItemStack INFINITY_STORAGE = new SlimefunItemStack(
             "INFINITY_STORAGE",
             Material.WARPED_HYPHAE,
             "&bInfinity &7Storage Unit",
-            "&6Stores: &bInfinite &7items",
-            "&aWorks with cargo"
+            LoreUtils.storesInfinity()
     );
-
-    //drives
 
     public static final SlimefunItemStack STORAGE_NETWORK_VIEWER = new SlimefunItemStack(
             "STORAGE_NETWORK_VIEWER",
@@ -546,75 +522,6 @@ public final class Items {
     
     );
 
-    public static final SlimefunItemStack BASIC_STORAGE_DRIVE = new SlimefunItemStack(
-            "BASIC_STORAGE_DRIVE",
-            Material.LEATHER_CHESTPLATE,
-            "&9Basic &7Storage Drive",
-            "&6Put in a storage output to store items",
-            "&3Put in a storage input to withdraw items",
-            "",
-            LoreUtils.storedItem(""),
-            LoreUtils.storedItems(0, StorageUnit.BASIC),
-            "",
-            "&cNot yet functional"
-    
-    );
-    public static final SlimefunItemStack ADVANCED_STORAGE_DRIVE = new SlimefunItemStack(
-            "ADVANCED_STORAGE_DRIVE",
-            Material.LEATHER_CHESTPLATE,
-            Color.fromRGB(82, 57, 42), //52392A
-            "&cAdvanced &7Storage Drive",
-            "&6Put in a storage output to store items",
-            "&3Put in a storage input to withdraw items",
-            "",
-            LoreUtils.storedItem(""),
-            LoreUtils.storedItems(0, StorageUnit.ADVANCED),
-            "",
-            "&cNot yet functional"
-    
-    );
-    public static final SlimefunItemStack REINFORCED_STORAGE_DRIVE = new SlimefunItemStack(
-            "REINFORCED_STORAGE_DRIVE",
-            Material.LEATHER_CHESTPLATE,
-            Color.fromRGB(115, 119, 117), //737775
-            "&fReinforced &7Storage Drive",
-            "&6Put in a storage output to store items",
-            "&3Put in a storage input to withdraw items",
-            "",
-            LoreUtils.storedItem(""),
-            LoreUtils.storedItems(0, StorageUnit.REINFORCED),
-            "",
-            "&cNot yet functional"
-    
-    );
-    public static final SlimefunItemStack VOID_STORAGE_DRIVE = new SlimefunItemStack(
-            "VOID_STORAGE_DRIVE",
-            Material.LEATHER_CHESTPLATE,
-            Color.fromRGB(176, 46, 38), //B02E26
-            "&8Void &7Storage Drive",
-            "&6Put in a storage output to store items",
-            "&3Put in a storage input to withdraw items",
-            "",
-            LoreUtils.storedItem(""),
-            LoreUtils.storedItems(0, StorageUnit.VOID),
-            "",
-            "&cNot yet functional"
-    
-    );
-    public static final SlimefunItemStack INFINITY_STORAGE_DRIVE = new SlimefunItemStack(
-            "INFINITY_STORAGE_DRIVE",
-            Material.LEATHER_CHESTPLATE,
-            Color.fromRGB(88, 213, 195), //58D5C3
-            "&bInfinity &7Storage Drive",
-            "&6Put in a storage output to store items",
-            "&3Put in a storage input to withdraw items",
-            "",
-            LoreUtils.storedItem(""),
-            LoreUtils.storedItems(0, StorageUnit.INFINITY),
-            "",
-            "&cNot yet functional"
-    
-    );
 
     //Compressed Cobblestones
 

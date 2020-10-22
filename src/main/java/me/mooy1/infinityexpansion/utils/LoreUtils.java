@@ -30,19 +30,11 @@ public final class LoreUtils {
     }
 
     public static String storesItem(int amount) {
-        return "&7Stores: &e" + format(amount) + " &7items";
+        return "&6Capacity: &e" + format(amount) + " &eitems";
     }
 
-    public static String storedItems(int amount, int max) {
-        return "&7Stored: &e" + format(amount) + " / " + max;
-    }
-
-    public static String storedItem(String id) {
-        if (id == null || id.equals("")) {
-            id = "None";
-        }
-
-        return "&7Item: &e" + id;
+    public static String storesInfinity() {
+        return "&6Capacity: &bInfinite &eitems";
     }
 
     public static String roundHundreds(float number) {

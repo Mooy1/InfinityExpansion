@@ -181,6 +181,7 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
         return rate;
     }
 
+    @Nonnull
     public String getGenerationType(int rate, Location l) {
 
         if (rate == WATER_RATE) return "Hydroelectric";

@@ -180,7 +180,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         }
     }
 
-    public void craft(Block b, Player p) {
+    public void craft(@Nonnull Block b, @Nonnull  Player p) {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
@@ -228,7 +228,8 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         }
     }
 
-    public ItemStack getDisplayItem(ItemStack output) {
+    @Nonnull
+    public ItemStack getDisplayItem(@Nonnull ItemStack output) {
         if (output.getItemMeta() != null) {
             ItemMeta meta = output.getItemMeta();
             List<String> lore = new ArrayList<>();
@@ -244,7 +245,8 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         return output;
     }
 
-    public ItemStack getOutput(BlockMenu inv) {
+    @Nullable
+    public ItemStack getOutput(@Nonnull BlockMenu inv) {
 
         String[] input = new String[36];
 
@@ -255,10 +257,11 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         for (int ii = 0; ii < InfinityRecipes.RECIPES.length ; ii++) {
             int amount = 0;
             for (int i = 0 ; i < input.length ; i++) {
-                if (input[i].equals(ItemStackUtils.getIDFromItem(InfinityRecipes.RECIPES[ii][i]))) {
+                String recipe = ItemStackUtils.getIDFromItem(InfinityRecipes.RECIPES[ii][i]);
+                if (Objects.equals(input[i], recipe)) {
                     amount++;
                 } else {
-                    i = 36;
+                    break;
                 }
             }
             if (amount == 36) {

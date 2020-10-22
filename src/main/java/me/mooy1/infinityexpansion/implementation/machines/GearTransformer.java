@@ -55,7 +55,7 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
     private static final int STATUS_SLOT = PresetUtils.slot2;
 
     public GearTransformer() {
-        super(Categories.ADVANCED_MACHINES, Items.GEAR_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.ADVANCED_MACHINES, Items.GEAR_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, new ItemStack(Material.SMITHING_TABLE), Items.MACHINE_CIRCUIT,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE
@@ -104,34 +104,38 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
     }
 
     private void setupInv(BlockMenuPreset blockMenuPreset) {
-                    for (int i : BACKGROUND) {
-                        blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk1) {
-                        blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Tool Input"), ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk3) {
-                        blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Material Input"), ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : OUTPUT_BORDER) {
-                        blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk2) {
-                        blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk2) {
-                        blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
-                            ChestMenuUtils.getEmptyClickHandler());
+        for (int i : BACKGROUND) {
+            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk1) {
+            blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Tool Input"), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk3) {
+            blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Material Input"), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : OUTPUT_BORDER) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk2) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk2) {
+            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
+                ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { GearTransformer.this.tick(b); }
+            public void tick(Block b, SlimefunItem sf, Config data) {
+                GearTransformer.this.tick(b);
+            }
 
-            public boolean isSynchronized() { return false; }
+            public boolean isSynchronized() {
+                return false;
+            }
         });
     }
 
@@ -186,14 +190,14 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
 
                             if (outputMaterial == null) { //invalid material
 
-                            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
+                                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
 
                             /*if (inv.getItemInSlot(OUTPUT_SLOTS[0]) == null) {
                                 inv.pushItem(inputMaterial, OUTPUT_SLOTS);
                                 inv.consumeItem(INPUT_SLOT2, inputMaterial.getAmount());
                             }*/
 
-                            } else if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null){ //valid material, not enough room
+                            } else if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null) { //valid material, not enough room
 
                                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
 
@@ -219,12 +223,13 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         }
     }
 
+    @Nullable
     private Material getOutput(ItemStack inputMaterial, String inputToolType) {
 
         for (String toolType : TOOL_TYPES) {
             if (inputToolType.equals(toolType)) { //make sure its a tool
 
-                for (int i = 0; i < TOOL_RECIPE.length ; i++) { //compare to each recipe
+                for (int i = 0; i < TOOL_RECIPE.length; i++) { //compare to each recipe
                     ItemStack recipe = TOOL_RECIPE[i];
 
                     if (inputMaterial.getType() == recipe.getType() && inputMaterial.getAmount() >= recipe.getAmount()) {
@@ -237,7 +242,7 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         for (String armorType : ARMOR_TYPES) {
             if (inputToolType.equals(armorType)) { //make sure its a armor
 
-                for (int i = 0; i < ARMOR_RECIPE.length ; i++) { //compare to each recipe
+                for (int i = 0; i < ARMOR_RECIPE.length; i++) { //compare to each recipe
                     ItemStack recipe = ARMOR_RECIPE[i];
 
                     if (inputMaterial.getType() == recipe.getType() && inputMaterial.getAmount() >= recipe.getAmount()) {
@@ -274,7 +279,7 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
                 for (ItemStack input : ARMOR_RECIPE) {
 
                     if (inputMaterial.getType() == input.getType() && inputMaterial.getAmount() >= input.getAmount()) {
-                        
+
                         return input.getAmount();
                     }
                 }
@@ -284,6 +289,7 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         return 0;
     }
 
+    @Nullable
     private String getToolType(ItemStack item) {
         Material material = item.getType();
 
@@ -297,6 +303,7 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         return null;
     }
 
+    @Nullable
     private String getArmorType(ItemStack item) {
         Material material = item.getType();
 
@@ -359,7 +366,7 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         items.add(new CustomItem(Material.DIAMOND_PICKAXE, "&7For Tools >>>"));
         items.add(new CustomItem(Material.DIAMOND_CHESTPLATE, "&7For Armor >>>"));
 
-        for (int i = 0; i < TOOL_RECIPE.length ; i++) {
+        for (int i = 0; i < TOOL_RECIPE.length; i++) {
             items.add(TOOL_RECIPE[i]);
             items.add(ARMOR_RECIPE[i]);
         }

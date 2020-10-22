@@ -25,9 +25,9 @@ public final class Categories {
             new CustomItem(Material.BLAST_FURNACE, "&cAdvanced &7Powered Machines"), 2
     );
 
-    public static final Category INFINITY_STORAGE = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
-            "INFINITY_STORAGE"),
-            new CustomItem(Material.ENDER_CHEST, "&bInfinity &6Storage"), 2
+    public static final Category STORAGE_TRANSPORT = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
+            "STORAGE_TRANSPORT"),
+            new CustomItem(Material.ENDER_CHEST, "&Item Storage and Transport"), 2
     );
 
     public static final Category INFINITY_MATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),

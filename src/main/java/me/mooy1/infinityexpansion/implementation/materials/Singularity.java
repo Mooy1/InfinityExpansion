@@ -73,6 +73,7 @@ public class Singularity extends SlimefunItem {
             new CustomItem(Material.IRON_INGOT, "Infinity Ingot")
     };
 
+    @Nonnull
     public static ItemStack recipeMaker(int id) {
         ItemStack item = INPUT_ITEMS[id].clone();
         ItemMeta meta = item.getItemMeta();

@@ -9,7 +9,6 @@ import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.implementation.gear.InfinityArmor;
 import me.mooy1.infinityexpansion.implementation.items.Strainer;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
-import me.mooy1.infinityexpansion.implementation.storage.StorageDrive;
 import me.mooy1.infinityexpansion.implementation.materials.MainMaterial;
 import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
 import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
@@ -60,7 +59,7 @@ public final class ItemSetup {
         Categories.BASIC_MACHINES.register();
         Categories.INFINITY_MAIN.register();
         Categories.ADVANCED_MACHINES.register();
-        Categories.INFINITY_STORAGE.register();
+        Categories.STORAGE_TRANSPORT.register();
         Categories.INFINITY_RECIPES.register();
         Categories.INFINITY_CHEAT.register();
         Categories.INFINITY_MATERIALS.register();
@@ -90,9 +89,6 @@ public final class ItemSetup {
 
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
-        }
-        for (StorageDrive.Type type : StorageDrive.Type.values()) {
-            new StorageDrive(type).register(plugin);
         }
         new StorageNetworkViewer().register(plugin);
 

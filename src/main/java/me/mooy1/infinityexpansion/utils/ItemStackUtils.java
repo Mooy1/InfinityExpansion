@@ -5,23 +5,27 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public final class ItemStackUtils {
 
     private ItemStackUtils() {}
 
+    @Nullable
     public static String getIDFromItem(ItemStack item) {
-        if (SlimefunItem.getByItem(item) != null) {
+        if (item == null) {
+            return null;
+        } else if (SlimefunItem.getByItem(item) != null) {
             return Objects.requireNonNull(SlimefunItem.getByItem(item)).getId();
-        } else if (item != null){
-            return item.getType().toString();
         } else {
-            return "";
+            return item.getType().toString();
         }
     }
 
-    public static ItemStack getItemFromID(String id, int amount) {
+    @Nullable
+    public static ItemStack getItemFromID(@Nonnull String id, int amount) {
         if (SlimefunItem.getByID(id) != null) {
             return new CustomItem(Objects.requireNonNull(SlimefunItem.getByID(id)).getItem(), amount);
         } else if (Material.getMaterial(id) != null){

@@ -248,6 +248,7 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
         }
     }
 
+    @Nullable
     private String getInputType(ItemStack input) {
         for (String recipe : INPUTS) {
             if (input.getType() == Material.getMaterial(recipe + "_SAPLING")) return recipe;
@@ -310,7 +311,6 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
             "BIRCH",
             "JUNGLE"
     };
-
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
