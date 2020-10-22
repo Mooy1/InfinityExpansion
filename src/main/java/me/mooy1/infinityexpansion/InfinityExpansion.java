@@ -58,9 +58,11 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         getLogger().log(Level.INFO, "     Infinity Expansion v" + getDescription().getVersion() + "      ");
         getLogger().log(Level.INFO, "     -----------------------------    ");
         getLogger().log(Level.INFO, "              Changelog               ");
-        getLogger().log(Level.INFO, " - Added Changelog");
-        getLogger().log(Level.INFO, " - Fixed Tool Transformer bug");
-        getLogger().log(Level.INFO, " - Added number formatting");
+        getLogger().log(Level.INFO, " - Added some item generators");
+        getLogger().log(Level.INFO, " - Optimized strainers");
+        getLogger().log(Level.INFO, " - added item converters");
+        getLogger().log(Level.INFO, " - Stored Items in storage units will");
+        getLogger().log(Level.INFO, " No longer be dropped, instead stored in drop");
         getLogger().log(Level.INFO, "######################################");
 
     }

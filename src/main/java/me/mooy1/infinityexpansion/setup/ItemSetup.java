@@ -7,13 +7,12 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ChargingBench;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.implementation.gear.InfinityArmor;
-import me.mooy1.infinityexpansion.implementation.items.GearForge;
 import me.mooy1.infinityexpansion.implementation.items.Strainer;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
-import me.mooy1.infinityexpansion.implementation.storage.StorageDrive;
 import me.mooy1.infinityexpansion.implementation.materials.MainMaterial;
-import me.mooy1.infinityexpansion.implementation.machines.InfinityWorkbench;
-import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkCore;
+import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
+import me.mooy1.infinityexpansion.implementation.storage.StorageForge;
+import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import me.mooy1.infinityexpansion.implementation.gear.InfinityTools;
 import me.mooy1.infinityexpansion.implementation.gear.EnderFlame;
@@ -61,11 +60,10 @@ public final class ItemSetup {
         Categories.BASIC_MACHINES.register();
         Categories.INFINITY_MAIN.register();
         Categories.ADVANCED_MACHINES.register();
-        Categories.INFINITY_STORAGE.register();
-        new InfinityCategory().register();
+        Categories.STORAGE_TRANSPORT.register();
+        Categories.INFINITY_RECIPES.register();
         Categories.INFINITY_CHEAT.register();
         Categories.INFINITY_MATERIALS.register();
-        new HiddenCategory().register();
 
         //basic
 
@@ -86,23 +84,22 @@ public final class ItemSetup {
         //main
 
         new SlimefunItem(Categories.INFINITY_MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
-        new SlimefunItem(Categories.HIDDEN_RECIPES, Items.POTATO_FISH, RecipeType.NULL, null).register(plugin);
+        new InfinityWorkbench().register(plugin);
 
         //storage
 
+        new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
         }
-        for (StorageDrive.Type type : StorageDrive.Type.values()) {
-            new StorageDrive(type).register(plugin);
-        }
-        new StorageNetworkCore().register(plugin);
+        new StorageNetworkViewer().register(plugin);
 
         //machine
 
         for (MainMaterial.Type type : MainMaterial.Type.values()) {
             new MainMaterial(type).register(plugin);
         }
+        new AdvancedAnvil().register(plugin);
         for (MachineMaterial.Type type : MachineMaterial.Type.values()) {
             new MachineMaterial(type).register(plugin);
         }
@@ -118,13 +115,13 @@ public final class ItemSetup {
         for (SingularityConstructor.Type type : SingularityConstructor.Type.values()) {
             new SingularityConstructor(type).register(plugin);
         }
+        for (ConversionMachine.Type type : ConversionMachine.Type.values()) {
+            new ConversionMachine(type).register(plugin);
+        }
 
         new GearTransformer().register(plugin);
-        new GearForge().register(plugin);
-        new AdvancedAnvil().register(plugin);
         new PoweredBedrock().register(plugin);
         new ItemUpdater().register(plugin);
-        new InfinityWorkbench().register(plugin);
         new InfinityReactor().register(plugin);
         new ResourceSynthesizer().register(plugin);
 

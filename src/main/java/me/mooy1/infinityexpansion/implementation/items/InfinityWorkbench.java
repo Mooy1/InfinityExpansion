@@ -1,9 +1,10 @@
-package me.mooy1.infinityexpansion.implementation.machines;
+package me.mooy1.infinityexpansion.implementation.items;
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import io.github.thebusybiscuit.slimefun4.implementation.guide.ChestSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
@@ -12,6 +13,7 @@ import me.mooy1.infinityexpansion.setup.InfinityCategory;
 import me.mooy1.infinityexpansion.utils.ItemStackUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
+import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -62,7 +64,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
     private static final int RECIPE_SLOT = 7;
 
     public InfinityWorkbench() {
-        super(Categories.ADVANCED_MACHINES, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.INFINITY_MAIN, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
                 SlimefunItems.ENERGIZED_CAPACITOR, new ItemStack(Material.CRAFTING_TABLE), SlimefunItems.ENERGIZED_CAPACITOR,
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT
@@ -104,7 +106,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
                 if (flow == ItemTransportFlow.INSERT) {
                     return new int[0];
                 } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
+                    return new int[0];
                 } else {
                     return new int[0];
                 }
@@ -173,14 +175,14 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
 
                 } else { //correct recipe
 
-                    inv.replaceExistingItem(STATUS_SLOT, getDisplayItem(output));
+                    inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output));
 
                 }
             }
         }
     }
 
-    public void craft(Block b, Player p) {
+    public void craft(@Nonnull Block b, @Nonnull  Player p) {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
@@ -228,37 +230,25 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         }
     }
 
-    public ItemStack getDisplayItem(ItemStack output) {
-        if (output.getItemMeta() != null) {
-            ItemMeta meta = output.getItemMeta();
-            List<String> lore = new ArrayList<>();
-            if (meta.getLore() != null) {
-                lore = meta.getLore();
-            }
-            lore.add(ChatColor.GREEN + "-------------------");
-            lore.add(ChatColor.GREEN + "\u21E8 Click to craft");
-            lore.add(ChatColor.GREEN + "-------------------");
-            meta.setLore(lore);
-            output.setItemMeta(meta);
-        }
-        return output;
-    }
-
-    public ItemStack getOutput(BlockMenu inv) {
+    @Nullable
+    public ItemStack getOutput(@Nonnull BlockMenu inv) {
 
         String[] input = new String[36];
 
         for (int i = 0 ; i < 36 ; i++) {
-            input[i] = ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[i]));
+            ItemStack inputItem = inv.getItemInSlot(INPUT_SLOTS[i]);
+
+            input[i] = ItemStackUtils.getIDFromItem(inputItem);
         }
 
         for (int ii = 0; ii < InfinityRecipes.RECIPES.length ; ii++) {
             int amount = 0;
             for (int i = 0 ; i < input.length ; i++) {
-                if (input[i].equals(ItemStackUtils.getIDFromItem(InfinityRecipes.RECIPES[ii][i]))) {
+                String recipe = ItemStackUtils.getIDFromItem(InfinityRecipes.RECIPES[ii][i]);
+                if (Objects.equals(input[i], recipe)) {
                     amount++;
                 } else {
-                    i = 36;
+                    break;
                 }
             }
             if (amount == 36) {

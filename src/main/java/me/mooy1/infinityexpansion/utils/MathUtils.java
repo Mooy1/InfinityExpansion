@@ -1,14 +1,16 @@
 package me.mooy1.infinityexpansion.utils;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class MathUtils {
 
     private MathUtils() {}
 
-    public static int randomFrom(double random, int range) {
-        return (int) Math.ceil(random * range);
+    public static int randomFrom(int range) {
+        return (int) Math.ceil(ThreadLocalRandom.current().nextDouble() * range);
     }
 
-    public static boolean chanceIn(double random, int chance) {
-        return randomFrom(random, chance) == chance;
+    public static boolean chanceIn(int chance) {
+        return randomFrom(chance) == chance;
     }
 }

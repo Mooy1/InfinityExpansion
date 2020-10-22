@@ -54,7 +54,7 @@ public class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor
         }),
         CHEST(Items.INFINITY_CHESTPLATE, new PotionEffect[] {
                 new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 1200, 1),
-                new PotionEffect(PotionEffectType.HEALTH_BOOST, 1200, 2),
+                new PotionEffect(PotionEffectType.ABSORPTION, 1200, 1),
                 new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1200, 0),
                 new PotionEffect(PotionEffectType.REGENERATION, 1200, 0),
         }),

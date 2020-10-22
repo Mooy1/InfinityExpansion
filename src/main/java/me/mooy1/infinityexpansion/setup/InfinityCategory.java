@@ -6,7 +6,7 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.InfinityExpansion;
-import me.mooy1.infinityexpansion.implementation.machines.InfinityWorkbench;
+import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.RecipeTypes;

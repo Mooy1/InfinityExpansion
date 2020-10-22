@@ -40,8 +40,8 @@ import java.util.Objects;
 
 public class MaterialGenerator extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
-    public static final int COBBLE_ENERGY = 45;
-    public static final int COBBLE2_ENERGY = 180;
+    public static final int COBBLE_ENERGY = 30;
+    public static final int COBBLE2_ENERGY = 120;
     public static final int OBSIDIAN_ENERGY = 360;
 
     public static final int COBBLE_SPEED = 1;
@@ -148,9 +148,7 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
 
             } else {
 
-                if (MathUtils.chanceIn(Math.random(), 2)) {
-                    inv.pushItem(output, OUTPUT_SLOTS);
-                }
+                inv.pushItem(output, OUTPUT_SLOTS);
 
                 removeCharge(l, energy);
 

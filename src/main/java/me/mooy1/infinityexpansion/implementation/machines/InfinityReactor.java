@@ -22,7 +22,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,8 +35,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-
 
 public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, RecipeDisplayItem {
 
@@ -101,10 +98,6 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
                 inv.dropItems(l, INPUT_SLOTS);
             }
 
-            if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                Objects.requireNonNull(Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")))).remove();
-            }
-
             return true;
         });
     }
@@ -162,14 +155,14 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
 
         if (progress == 0) { //need infinity + void
 
-            if (!ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[0])).equals("INFINITE_INGOT")) { //wrong input
+            if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
                 }
                 return 0;
 
-            } else if (!ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])).equals("VOID_INGOT")) { //wrong input
+            } else if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -203,7 +196,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
 
         } else if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
-            if (!ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])).equals("VOID_INGOT")) { //wrong input
+            if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -286,18 +279,14 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
     }
 
     private void setProgress(Block b, int progress) {
-        setBlockData(b, "progress", String.valueOf(progress));
+        setBlockData(b, String.valueOf(progress));
     }
 
     private String getProgress(Block b) {
-        return getBlockData(b.getLocation(), "progress");
+        return BlockStorage.getLocationInfo(b.getLocation(), "progress");
     }
 
-    private void setBlockData(Block b, String key, String data) {
-        BlockStorage.addBlockInfo(b, key, data);
-    }
-
-    private String getBlockData(Location l, String key) {
-        return BlockStorage.getLocationInfo(l, key);
+    private void setBlockData(Block b, String data) {
+        BlockStorage.addBlockInfo(b, "progress", data);
     }
 }

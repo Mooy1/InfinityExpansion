@@ -175,11 +175,11 @@ public class ResourceSynthesizer extends SlimefunItem implements EnergyNetCompon
                 ItemStack recipe = null;
 
                 for (int i = 0; i < RECIPES.length; i += 3) {
-                    if (((id1.equals(ItemStackUtils.getIDFromItem(RECIPES[i])))
-                            && (id2.equals(ItemStackUtils.getIDFromItem(RECIPES[i + 1]))))
+                    if (((Objects.equals(id1, ItemStackUtils.getIDFromItem(RECIPES[i])))
+                            && (Objects.equals(id2, ItemStackUtils.getIDFromItem(RECIPES[i + 1]))))
                             ||
-                            ((id1.equals(ItemStackUtils.getIDFromItem(RECIPES[i + 1])))
-                            && (id2.equals(ItemStackUtils.getIDFromItem(RECIPES[i]))))) {
+                            ((Objects.equals(id1, ItemStackUtils.getIDFromItem(RECIPES[i + 1])))
+                            && (Objects.equals(id2, ItemStackUtils.getIDFromItem(RECIPES[i]))))) {
                         recipe = RECIPES[i + 2];
                     }
                 }
@@ -205,7 +205,7 @@ public class ResourceSynthesizer extends SlimefunItem implements EnergyNetCompon
                             inv.replaceExistingItem(STATUS_SLOT,
                                     new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
                         }
-                    } else if ((ItemStackUtils.getIDFromItem(outputSlot).equals(ItemStackUtils.getIDFromItem(recipe))
+                    } else if ((Objects.equals(ItemStackUtils.getIDFromItem(outputSlot), ItemStackUtils.getIDFromItem(recipe))
                             && outputSlot.getAmount() + recipe.getAmount() <= recipe.getMaxStackSize())) { //already an item
 
                         outputSlot.setAmount(recipe.getAmount() + outputSlot.getAmount());

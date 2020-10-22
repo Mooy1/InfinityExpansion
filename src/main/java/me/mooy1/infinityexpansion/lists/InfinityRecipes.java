@@ -35,8 +35,6 @@ public class InfinityRecipes {
             Items.INFINITY_TREE_GROWER,
             Items.INFINITY_VIRTUAL_FARM,
             Items.INFINITE_VOID_HARVESTER,
-            Items.INFINITY_STORAGE,
-            Items.INFINITY_STORAGE_DRIVE,
             Items.INFINITY_CAPACITOR,
             Items.INFINITY_ENCHANTER,
             Items.INFINITY_DISENCHANTER,
@@ -56,10 +54,12 @@ public class InfinityRecipes {
 
     public static int getRecipeID(ItemStack item) {
         String itemID = ItemStackUtils.getIDFromItem(item);
-        int i = 0;
-        for (ItemStack output : OUTPUTS) {
-            if (itemID.equals(ItemStackUtils.getIDFromItem(output))) return i;
-            i++;
+        if (itemID != null) {
+            int i = 0;
+            for (ItemStack output : OUTPUTS) {
+                if (itemID.equals(ItemStackUtils.getIDFromItem(output))) return i;
+                i++;
+            }
         }
         return 0;
     }
@@ -79,7 +79,6 @@ public class InfinityRecipes {
     private static final ItemStack v_panel = Items.VOID_PANEL;
     private static final ItemStack c_panel = Items.CELESTIAL_PANEL;
     private static final ItemStack c_5 = Items.COMPRESSED_COBBLESTONE_5;
-    private static final ItemStack v_store = Items.VOID_STORAGE;
     private static final ItemStack reactor = SlimefunItems.NETHER_STAR_REACTOR;
     private static final ItemStack elytra = new ItemStack(Material.ELYTRA);
     private static final ItemStack e_c = SlimefunItems.ENERGIZED_CAPACITOR;
@@ -87,7 +86,6 @@ public class InfinityRecipes {
     private static final ItemStack en = Items.ADVANCED_ENCHANTER;
     private static final ItemStack dis = Items.ADVANCED_DISENCHANTER;
     private static final ItemStack s_c = Items.SINGULARITY_CONSTRUCTOR;
-    private static final ItemStack v_drive = Items.VOID_STORAGE_DRIVE;
     private static final ItemStack charger = Items.ADVANCED_CHARGER;
     private static final ItemStack tree = SlimefunItems.TREE_GROWTH_ACCELERATOR;
     private static final ItemStack crop = SlimefunItems.CROP_GROWTH_ACCELERATOR_2;
@@ -175,22 +173,6 @@ public class InfinityRecipes {
                     mag, voidIng, i_core, i_core, voidIng, mag,
                     mag, voidIng, voidIng, voidIng, voidIng, mag,
                     m_plate, m_plate, m_plate, m_plate, m_plate, m_plate
-            },
-            {
-                    infinite, infinite, voidIng, voidIng, infinite, infinite,
-                    infinite, m_plate, i_circuit, i_circuit, m_plate, infinite,
-                    voidIng, m_plate, v_store, v_store, m_plate, voidIng,
-                    voidIng, m_plate, v_store, v_store, m_plate, voidIng,
-                    infinite, m_plate, i_core, i_core, m_plate, infinite,
-                    infinite, infinite, voidIng, voidIng, infinite, infinite
-            },
-            {
-                    infinite, null, null, null, null, infinite,
-                    infinite, i_circuit, i_circuit, i_circuit, i_circuit, infinite,
-                    infinite, i_circuit, v_drive, v_drive, i_circuit, infinite,
-                    infinite, i_circuit, v_drive, v_drive, i_circuit, infinite,
-                    infinite, voidIng, voidIng, voidIng, voidIng, infinite,
-                    infinite, infinite, infinite, infinite, infinite, infinite
             },
             {
                     null, infinite, voidIng, voidIng, infinite, null,

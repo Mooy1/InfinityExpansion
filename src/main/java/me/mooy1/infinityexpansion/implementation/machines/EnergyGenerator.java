@@ -47,9 +47,8 @@ import java.util.Objects;
  * @author Mooy1
  *
  * Thanks to
- * @author NCBPFluffyBear
- * for idea, a few bits of code,
- * and code to learn from
+ * @author J3fftw1
+ * for some stuff to work off of
  *
  */
 
@@ -65,6 +64,10 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
     public static final int GEO_RATE2 = 1680;
     public static final int GEO_STORAGE2 = 280_000;
 
+    public static final int BASIC_RATE = 18;
+    public static final int BASIC_STORAGE = 3_000;
+    public static final int ADVANCED_RATE = 180;
+    public static final int ADVANCED_STORAGE = 30_000;
     public static final int CELE_RATE = 1800;
     public static final int CELE_STORAGE = 300_000;
     public static final int VOID_RATE = 5400;
@@ -181,6 +184,7 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
         return rate;
     }
 
+    @Nonnull
     public String getGenerationType(int rate, Location l) {
 
         if (rate == WATER_RATE) return "Hydroelectric";
@@ -191,7 +195,7 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
 
         if (rate == GEO_RATE * 2 || rate == GEO_RATE2 * 2) return "GeoThermal - Nether";
 
-        if (rate == CELE_RATE) return "Day";
+        if (rate == CELE_RATE || rate == BASIC_RATE || rate == ADVANCED_RATE) return "Day";
 
         if (rate == VOID_RATE) {
             World.Environment environment = l.getBlock().getWorld().getEnvironment();
@@ -247,7 +251,7 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
                 return generation;
             }
         } else {
-            if (type == Type.CELESTIAL) {
+            if (type == Type.CELESTIAL || type == Type.BASIC || type == Type.ADVANCED) {
                 return generation;
             }
         }
@@ -290,14 +294,24 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
                 Items.MACHINE_PLATE, Items.MACHINE_CORE, Items.MACHINE_PLATE,
                 Items.GEOTHERMAL_GENERATOR, Items.MACHINE_CIRCUIT, Items.GEOTHERMAL_GENERATOR
         }),
+        BASIC(BASIC_RATE, BASIC_STORAGE, Categories.BASIC_MACHINES, Items.BASIC_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                Items.MAGSTEEL, Items.MAGSTEEL_PLATE, Items.MAGSTEEL,
+                SlimefunItems.SOLAR_PANEL, SlimefunItems.SOLAR_PANEL, SlimefunItems.SOLAR_PANEL,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT
+        }),
+        ADVANCED(ADVANCED_RATE, ADVANCED_STORAGE, Categories.ADVANCED_MACHINES, Items.ADVANCED_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                Items.TITANIUM, Items.MACHINE_PLATE, Items.TITANIUM,
+                Items.BASIC_PANEL, SlimefunItems.SOLAR_GENERATOR_4, Items.BASIC_PANEL,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT
+        }),
         CELESTIAL(CELE_RATE, CELE_STORAGE, Categories.ADVANCED_MACHINES, Items.CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
-                SlimefunItems.SOLAR_GENERATOR_4, SlimefunItems.SOLAR_GENERATOR_4, SlimefunItems.SOLAR_GENERATOR_4,
+                Items.ADVANCED_PANEL, Items.ADVANCED_PANEL, Items.ADVANCED_PANEL,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
         VOID(VOID_RATE, VOID_STORAGE, Categories.ADVANCED_MACHINES, Items.VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGNONIUM, Items.VOID_INGOT, Items.MAGNONIUM,
-                Items.VOID_INGOT, Items.CELESTIAL_PANEL, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT,
+                Items.MAGNONIUM, Items.CELESTIAL_PANEL, Items.MAGNONIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
         INFINITY(INFINITY_RATE, INFINITY_STORAGE, Categories.INFINITY_CHEAT, Items.INFINITE_PANEL, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITE_PANEL));

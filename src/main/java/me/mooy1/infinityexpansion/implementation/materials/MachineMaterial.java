@@ -8,6 +8,7 @@ import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.RecipeTypes;
+import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -27,11 +28,8 @@ public class MachineMaterial extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        MAGSTEEL_PLATE(Categories.INFINITY_MAIN, Items.MAGSTEEL_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-                Items.MAGSTEEL, SlimefunItems.STEEL_PLATE, Items.MAGSTEEL,
-                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL
-        }),
+        MAGSTEEL_PLATE(Categories.INFINITY_MAIN, Items.MAGSTEEL_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.MAGSTEEL)
+        ),
         PLATE(Categories.INFINITY_MAIN, Items.MACHINE_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, SlimefunItems.REINFORCED_PLATE, Items.MAGSTEEL_PLATE,
             SlimefunItems.REINFORCED_PLATE, Items.TITANIUM, SlimefunItems.REINFORCED_PLATE,
