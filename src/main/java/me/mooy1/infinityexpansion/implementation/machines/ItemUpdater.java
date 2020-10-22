@@ -4,8 +4,10 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mooy1.infinityexpansion.implementation.storage.StorageForge;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
+import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -18,6 +20,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -140,8 +143,18 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
             ItemStack output = null;
             int inputAmount = input.getAmount();
             if (SlimefunItem.getByItem(input) != null) {
-                output = Objects.requireNonNull(SlimefunItem.getByItem(input)).getItem().clone();
-                output.setAmount(inputAmount);
+                SlimefunItem slimefunItem = SlimefunItem.getByItem(input);
+                if (slimefunItem != null) {
+                    output = slimefunItem.getItem().clone();
+                    output.setAmount(inputAmount);
+
+                    if (slimefunItem.getId().endsWith("_STORAGE") && !Objects.equals(output, input)) {
+
+                        MessageUtils.messagePlayersInInv(inv, ChatColor.GREEN + "Stored items transferred!");
+                        StorageForge.transferItems(output, input);
+
+                    }
+                }
             }
 
             if (output == null) { //not sf item
@@ -169,8 +182,15 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
                     if (amount > 0 ) {
                         for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                             output.removeEnchantment(entry.getKey());
+
                         }
                     }
+                }
+
+                output.addUnsafeEnchantments(input.getEnchantments());
+
+                if (!output.getEnchantments().isEmpty()) {
+                    MessageUtils.messagePlayersInInv(inv, ChatColor.GREEN + "Enchantments transferred!");
                 }
 
                 removeCharge(b.getLocation(), ENERGY);

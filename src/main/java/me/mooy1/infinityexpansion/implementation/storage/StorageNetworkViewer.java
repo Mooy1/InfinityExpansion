@@ -41,9 +41,9 @@ public class StorageNetworkViewer extends SlimefunItem {
 
     public StorageNetworkViewer() {
         super(Categories.STORAGE_TRANSPORT, Items.STORAGE_NETWORK_VIEWER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE,
+                Items.TITANIUM, Items.MACHINE_CIRCUIT, Items.TITANIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
-                Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE,
+                Items.TITANIUM, Items.MACHINE_CIRCUIT, Items.TITANIUM,
         });
 
         new BlockMenuPreset(getId(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
@@ -95,11 +95,7 @@ public class StorageNetworkViewer extends SlimefunItem {
     }
 
     private void setupInv(BlockMenuPreset blockMenuPreset) {
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-        }
 
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override

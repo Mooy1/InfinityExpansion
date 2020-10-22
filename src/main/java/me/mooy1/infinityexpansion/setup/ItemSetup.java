@@ -11,6 +11,7 @@ import me.mooy1.infinityexpansion.implementation.items.Strainer;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
 import me.mooy1.infinityexpansion.implementation.materials.MainMaterial;
 import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
+import me.mooy1.infinityexpansion.implementation.storage.StorageForge;
 import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import me.mooy1.infinityexpansion.implementation.gear.InfinityTools;
@@ -87,6 +88,7 @@ public final class ItemSetup {
 
         //storage
 
+        new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
         }

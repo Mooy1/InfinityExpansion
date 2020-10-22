@@ -35,7 +35,6 @@ public class InfinityRecipes {
             Items.INFINITY_TREE_GROWER,
             Items.INFINITY_VIRTUAL_FARM,
             Items.INFINITE_VOID_HARVESTER,
-            Items.INFINITY_STORAGE,
             Items.INFINITY_CAPACITOR,
             Items.INFINITY_ENCHANTER,
             Items.INFINITY_DISENCHANTER,
@@ -80,7 +79,6 @@ public class InfinityRecipes {
     private static final ItemStack v_panel = Items.VOID_PANEL;
     private static final ItemStack c_panel = Items.CELESTIAL_PANEL;
     private static final ItemStack c_5 = Items.COMPRESSED_COBBLESTONE_5;
-    private static final ItemStack v_store = Items.VOID_STORAGE;
     private static final ItemStack reactor = SlimefunItems.NETHER_STAR_REACTOR;
     private static final ItemStack elytra = new ItemStack(Material.ELYTRA);
     private static final ItemStack e_c = SlimefunItems.ENERGIZED_CAPACITOR;
@@ -175,14 +173,6 @@ public class InfinityRecipes {
                     mag, voidIng, i_core, i_core, voidIng, mag,
                     mag, voidIng, voidIng, voidIng, voidIng, mag,
                     m_plate, m_plate, m_plate, m_plate, m_plate, m_plate
-            },
-            {
-                    infinite, infinite, voidIng, voidIng, infinite, infinite,
-                    infinite, m_plate, i_circuit, i_circuit, m_plate, infinite,
-                    voidIng, m_plate, v_store, v_store, m_plate, voidIng,
-                    voidIng, m_plate, v_store, v_store, m_plate, voidIng,
-                    infinite, m_plate, i_core, i_core, m_plate, infinite,
-                    infinite, infinite, voidIng, voidIng, infinite, infinite
             },
             {
                     null, infinite, voidIng, voidIng, infinite, null,

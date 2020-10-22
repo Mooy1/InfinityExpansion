@@ -4,6 +4,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import io.github.thebusybiscuit.slimefun4.implementation.guide.ChestSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
@@ -12,6 +13,7 @@ import me.mooy1.infinityexpansion.setup.InfinityCategory;
 import me.mooy1.infinityexpansion.utils.ItemStackUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
+import me.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -173,7 +175,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
 
                 } else { //correct recipe
 
-                    inv.replaceExistingItem(STATUS_SLOT, getDisplayItem(output));
+                    inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output));
 
                 }
             }
@@ -228,30 +230,15 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         }
     }
 
-    @Nonnull
-    public ItemStack getDisplayItem(@Nonnull ItemStack output) {
-        if (output.getItemMeta() != null) {
-            ItemMeta meta = output.getItemMeta();
-            List<String> lore = new ArrayList<>();
-            if (meta.getLore() != null) {
-                lore = meta.getLore();
-            }
-            lore.add(ChatColor.GREEN + "-------------------");
-            lore.add(ChatColor.GREEN + "\u21E8 Click to craft");
-            lore.add(ChatColor.GREEN + "-------------------");
-            meta.setLore(lore);
-            output.setItemMeta(meta);
-        }
-        return output;
-    }
-
     @Nullable
     public ItemStack getOutput(@Nonnull BlockMenu inv) {
 
         String[] input = new String[36];
 
         for (int i = 0 ; i < 36 ; i++) {
-            input[i] = ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[i]));
+            ItemStack inputItem = inv.getItemInSlot(INPUT_SLOTS[i]);
+
+            input[i] = ItemStackUtils.getIDFromItem(inputItem);
         }
 
         for (int ii = 0; ii < InfinityRecipes.RECIPES.length ; ii++) {

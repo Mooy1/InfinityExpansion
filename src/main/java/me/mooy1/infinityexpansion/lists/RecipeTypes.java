@@ -12,23 +12,23 @@ public class RecipeTypes {
             new NamespacedKey(InfinityExpansion.getInstance(), "infinity_workbench"), new CustomItem(
             Material.RESPAWN_ANCHOR,
             "&bInfinity &6Workbench",
-            "&7Used to craft infinity items",
-            ""
+            "&7Used to craft infinity items"
     ));
     public static final RecipeType VOID_HARVESTER = new RecipeType(
             new NamespacedKey(InfinityExpansion.getInstance(), "void_harvester"), new CustomItem(
             Material.OBSIDIAN,
             "&8Void &7Harvester",
-            "&7Slowly harvests &8Void &7Bits from nothing...",
-            ""
+            "&7Slowly harvests &8Void &7Bits from nothing..."
     ));
     public static final RecipeType SINGULARITY_CONSTRUCTOR = new RecipeType(
             new NamespacedKey(InfinityExpansion.getInstance(), "singularity_constructor"), new CustomItem(
             Material.QUARTZ_BRICKS,
             "&fSingularity &7Constructor",
-            "&7Condenses large amounts of resources",
-            ""
+            "&7Condenses large amounts of resources"
     ));
+    public static final RecipeType STORAGE_FORGE = new RecipeType(
+            new NamespacedKey(InfinityExpansion.getInstance(), "storage_forge"), Items.STORAGE_FORGE
+    );
 
     private RecipeTypes() {}
 }

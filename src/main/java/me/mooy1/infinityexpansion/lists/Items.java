@@ -55,6 +55,12 @@ public final class Items {
             "&7Item Duct",
             "&7Changes the direction of a transport flow"
     );
+    public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
+            "STORAGE_FORGE",
+            Material.CRAFTING_TABLE,
+            "&6Storage Forge",
+            "&7Upgrades the tier of Storage Units"
+    );
 
     //Machines
 
@@ -64,7 +70,6 @@ public final class Items {
             "&6Item Updater",
             "&7Will &creset &7and update the name and lore of",
             "&7slimefun items if they are outdated or broken",
-            "&cAll enchants will be removed, disenchant first!",
             "&cChargeable and upgradeable items will be reset!",
             "",
             LoreUtils.energyPer(ItemUpdater.ENERGY) + "per item"
@@ -323,9 +328,27 @@ public final class Items {
             LoreUtils.energyBuffer(EnergyGenerator.GEO_STORAGE2),
             LoreUtils.energyPerSecond(EnergyGenerator.GEO_RATE2)
     );
+    public static final SlimefunItemStack BASIC_PANEL = new SlimefunItemStack(
+            "BASIC_PANEL",
+            Material.BLUE_GLAZED_TERRACOTTA,
+            "&9Basic Solar Panel",
+            "&7Generates energy from the sun",
+            "",
+            LoreUtils.energyBuffer(EnergyGenerator.BASIC_STORAGE),
+            LoreUtils.energyPerSecond(EnergyGenerator.BASIC_RATE)
+    );
+    public static final SlimefunItemStack ADVANCED_PANEL = new SlimefunItemStack(
+            "ADVANCED_PANEL",
+            Material.RED_GLAZED_TERRACOTTA,
+            "&cAdvanced Solar Panel",
+            "&7Generates energy from the sun",
+            "",
+            LoreUtils.energyBuffer(EnergyGenerator.ADVANCED_STORAGE),
+            LoreUtils.energyPerSecond(EnergyGenerator.ADVANCED_RATE)
+    );
     public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
             "CELESTIAL_PANEL",
-            Material.WHITE_GLAZED_TERRACOTTA,
+            Material.YELLOW_GLAZED_TERRACOTTA,
             "&eCelestial Panel",
             "&7Generates energy from the sun",
             "",
