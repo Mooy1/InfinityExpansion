@@ -171,13 +171,17 @@ public class StorageUnit extends SlimefunItem {
                     if (meta != null) {
                         List<String> lore = meta.getLore();
                         if (lore != null) {
+
                             lore.add("");
                             lore.add(ChatColor.AQUA + "Stored Item:");
                             lore.add(ChatColor.GREEN + storedItem);
                             lore.add(ChatColor.AQUA + "Amount:");
                             lore.add(ChatColor.GREEN + String.valueOf(stored));
-                            lore.add(ChatColor.RED + "Stored item will be reset if stored in another storage unit");
-                            lore.add(ChatColor.RED + "Or placed in the Item Updater");
+                            lore.add("");
+                            lore.add(ChatColor.RED + "" + ChatColor.ITALIC + "Stored item will be reset if");
+                            lore.add(ChatColor.RED + "" + ChatColor.ITALIC + "stored in another storage unit");
+                            lore.add(ChatColor.RED + "" + ChatColor.ITALIC + "or placed in the Item Updater");
+
                             meta.setLore(lore);
                             drop.setItemMeta(meta);
 

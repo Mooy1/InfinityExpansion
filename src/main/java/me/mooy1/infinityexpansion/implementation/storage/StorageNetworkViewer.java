@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.Optional;
 
 public class StorageNetworkViewer extends SlimefunItem {
 
@@ -119,16 +120,20 @@ public class StorageNetworkViewer extends SlimefunItem {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return;
 
-        if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, CargoNet.class).isPresent()) {
-            if (!inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                        Material.RED_STAINED_GLASS_PANE,
-                        "&cConnect to a cargo network!"
-                ));
-            }
-        } else { //has cargo net
+        if (!inv.toInventory().getViewers().isEmpty()) {
+            return;
+        }
 
+        Optional<CargoNet> cargoNet = SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, CargoNet.class);
+
+        if (!cargoNet.isPresent()) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                    Material.RED_STAINED_GLASS_PANE,
+                    "&cConnect to a cargo network!"
+            ));
 
         }
+
+
     }
 }
