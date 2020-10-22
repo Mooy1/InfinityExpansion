@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class StorageNetworkCore extends SlimefunItem {
+public class StorageNetworkViewer extends SlimefunItem {
 
     private static final int STATUS_SLOT = 4;
     private static final int[] INPUT_SLOTS = {
@@ -38,8 +38,8 @@ public class StorageNetworkCore extends SlimefunItem {
     };
 
 
-    public StorageNetworkCore() {
-        super(Categories.INFINITY_STORAGE, Items.STORAGE_NETWORK_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+    public StorageNetworkViewer() {
+        super(Categories.INFINITY_STORAGE, Items.STORAGE_NETWORK_VIEWER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
                 Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE,
@@ -107,7 +107,7 @@ public class StorageNetworkCore extends SlimefunItem {
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
             public void tick(Block b, SlimefunItem sf, Config data) {
-                StorageNetworkCore.this.tick(b);
+                StorageNetworkViewer.this.tick(b);
             }
 
             public boolean isSynchronized() {

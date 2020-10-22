@@ -5,6 +5,7 @@ import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
 import me.mooy1.infinityexpansion.implementation.machines.AdvancedAnvil;
+import me.mooy1.infinityexpansion.implementation.machines.ConversionMachine;
 import me.mooy1.infinityexpansion.implementation.machines.GearTransformer;
 import me.mooy1.infinityexpansion.implementation.machines.EnergyGenerator;
 import me.mooy1.infinityexpansion.implementation.machines.InfinityReactor;
@@ -28,6 +29,33 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public final class Items {
+
+    //ducts
+
+    public static final SlimefunItemStack ITEM_DUCT = new SlimefunItemStack(
+            "ITEM_DUCT",
+            Material.END_ROD,
+            "&fItem Duct",
+            "&7Transports items between Input, Output, and Connector Ducts"
+    );
+    public static final SlimefunItemStack INPUT_DUCT = new SlimefunItemStack(
+            "INPUT_DUCT",
+            Material.CYAN_STAINED_GLASS,
+            "&3Input Duct",
+            "&7Pulls items out of machines and inventories"
+    );
+    public static final SlimefunItemStack OUTPUT_DUCT = new SlimefunItemStack(
+            "OUTPUT_DUCT",
+            Material.ORANGE_STAINED_GLASS,
+            "&6Output Duct",
+            "&7Pushes items into machines and inventories"
+    );
+    public static final SlimefunItemStack CONNECTOR_DUCT = new SlimefunItemStack(
+            "CONNECTOR_DUCT",
+            Material.WHITE_STAINED_GLASS,
+            "&7Item Duct",
+            "&7Changes the direction of a transport flow"
+    );
 
     //Machines
 
@@ -127,6 +155,54 @@ public final class Items {
             "",
             LoreUtils.speed(ItemSetup.INFINITY_CHARGER_SPEED),
             LoreUtils.energyPerSecond(ItemSetup.INFINITY_CHARGER_ENERGY)
+    );
+
+    //conversion machines
+
+    public static final SlimefunItemStack EXTREME_FREEZER = new SlimefunItemStack(
+            "EXTREME_FREEZER",
+            Material.LIGHT_BLUE_CONCRETE,
+            "&bExtreme Freezer",
+            "&7Converts ice into coolant",
+            "",
+            LoreUtils.speed(ConversionMachine.FREEZER_SPEED),
+            LoreUtils.energyPerSecond(ConversionMachine.FREEZER_ENERGY)
+    );
+    public static final SlimefunItemStack DUST_EXTRACTOR = new SlimefunItemStack(
+            "DUST_EXTRACTOR",
+            Material.FURNACE,
+            "&7Dust Extractor",
+            "&7Converts cobble into dusts",
+            "",
+            LoreUtils.speed(ConversionMachine.DUST_SPEED),
+            LoreUtils.energyPerSecond(ConversionMachine.DUST_ENERGY)
+    );
+    public static final SlimefunItemStack INFINITY_DUST_EXTRACTOR = new SlimefunItemStack(
+            "INFINITY_DUST_EXTRACTOR",
+            Material.BLAST_FURNACE,
+            "&bInfinity &7Dust Extractor",
+            "&7Converts large amounts of cobble into dusts",
+            "",
+            LoreUtils.speed(ConversionMachine.DUST2_SPEED),
+            LoreUtils.energyPerSecond(ConversionMachine.DUST2_ENERGY)
+    );
+    public static final SlimefunItemStack URANIUM_EXTRACTOR = new SlimefunItemStack(
+            "URANIUM_EXTRACTOR",
+            Material.LIME_CONCRETE,
+            "&aUranium Extractor",
+            "&7Converts cobble into uranium",
+            "",
+            LoreUtils.speed(ConversionMachine.URANIUM_SPEED),
+            LoreUtils.energyPerSecond(ConversionMachine.URANIUM_ENERGY)
+    );
+    public static final SlimefunItemStack INFINITY_URANIUM_EXTRACTOR = new SlimefunItemStack(
+            "INFINITY_URANIUM_EXTRACTOR",
+            Material.GREEN_CONCRETE,
+            "&bInfinity &aUranium Extractor",
+            "&7Converts large amounts of cobble into uranium",
+            "",
+            LoreUtils.speed(ConversionMachine.URANIUM2_SPEED),
+            LoreUtils.energyPerSecond(ConversionMachine.URANIUM2_ENERGY)
     );
 
     public static final SlimefunItemStack BASIC_QUARRY = new SlimefunItemStack(
@@ -460,11 +536,11 @@ public final class Items {
 
     //drives
 
-    public static final SlimefunItemStack STORAGE_NETWORK_CORE = new SlimefunItemStack(
-            "STORAGE_NETWORK_CORE",
+    public static final SlimefunItemStack STORAGE_NETWORK_VIEWER = new SlimefunItemStack(
+            "STORAGE_NETWORK_VIEWER",
             Material.CHISELED_STONE_BRICKS,
-            "&7Storage Network Core",
-            "&7Gives access to many storage units at once",
+            "&7Storage Network Viewer",
+            "&7Shows status of any Storage Units in the connected Cargo Network",
             "",
             "&cNot yet functional"
     
@@ -722,13 +798,6 @@ public final class Items {
             "",
             "&fGithub: &b@&8&7Mooy1",
             "&7" + InfinityExpansion.getInstance().getBugTrackerURL()
-    );
-
-    public static final SlimefunItemStack POTATO_FISH = new SlimefunItemStack(
-            "POTATO_FISH",
-            Material.POTATO,
-            "&7:&6Potatofish&7:",
-            "&cDon't cheat in potatofish :("
     );
 
     //Ingots

@@ -12,7 +12,7 @@ import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
 import me.mooy1.infinityexpansion.implementation.storage.StorageDrive;
 import me.mooy1.infinityexpansion.implementation.materials.MainMaterial;
 import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
-import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkCore;
+import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import me.mooy1.infinityexpansion.implementation.gear.InfinityTools;
 import me.mooy1.infinityexpansion.implementation.gear.EnderFlame;
@@ -84,7 +84,6 @@ public final class ItemSetup {
         //main
 
         new SlimefunItem(Categories.INFINITY_MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
-        new SlimefunItem(Categories.INFINITY_CHEAT, Items.POTATO_FISH, RecipeType.NULL, null).register(plugin);
         new InfinityWorkbench().register(plugin);
 
         //storage
@@ -95,7 +94,7 @@ public final class ItemSetup {
         for (StorageDrive.Type type : StorageDrive.Type.values()) {
             new StorageDrive(type).register(plugin);
         }
-        new StorageNetworkCore().register(plugin);
+        new StorageNetworkViewer().register(plugin);
 
         //machine
 
@@ -117,6 +116,9 @@ public final class ItemSetup {
         }
         for (SingularityConstructor.Type type : SingularityConstructor.Type.values()) {
             new SingularityConstructor(type).register(plugin);
+        }
+        for (ConversionMachine.Type type : ConversionMachine.Type.values()) {
+            new ConversionMachine(type).register(plugin);
         }
 
         new GearTransformer().register(plugin);

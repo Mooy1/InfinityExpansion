@@ -221,13 +221,12 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
         //fish
 
-        double random = Math.random();
-        if (MathUtils.chanceIn(random, 10000)) {
+        if (MathUtils.chanceIn(10000)) {
             fish(inv);
         }
 
 
-        ItemStack output = OUTPUTS[MathUtils.randomFrom(random, (OUTPUTS.length - 1))].clone();
+        ItemStack output = OUTPUTS[MathUtils.randomFrom(OUTPUTS.length - 1)].clone();
 
         //check fits
 
@@ -252,7 +251,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
         //reduce durability
 
-        if (MathUtils.chanceIn(random, speed)) {
+        if (MathUtils.chanceIn(speed)) {
             ItemMeta itemMeta = strainer.getItemMeta();
             Damageable durability = (Damageable) itemMeta;
 
