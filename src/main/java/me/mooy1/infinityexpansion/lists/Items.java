@@ -57,7 +57,7 @@ public final class Items {
     );
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",
-            Material.CRAFTING_TABLE,
+            Material.BEEHIVE,
             "&6Storage Forge",
             "&7Upgrades the tier of Storage Units"
     );

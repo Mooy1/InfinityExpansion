@@ -3,6 +3,7 @@ package me.mooy1.infinityexpansion;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
+import me.mooy1.infinityexpansion.setup.Listeners;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
@@ -51,6 +52,10 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         //get enabled infinity recipes
 
         setupInfinityRecipes();
+
+        //listeners
+
+        new Listeners(this);
 
         //spam console
 

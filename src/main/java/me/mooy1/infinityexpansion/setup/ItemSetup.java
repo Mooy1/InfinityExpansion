@@ -18,6 +18,9 @@ import me.mooy1.infinityexpansion.implementation.gear.InfinityTools;
 import me.mooy1.infinityexpansion.implementation.gear.EnderFlame;
 import me.mooy1.infinityexpansion.implementation.machines.*;
 import me.mooy1.infinityexpansion.implementation.materials.*;
+import me.mooy1.infinityexpansion.implementation.transport.ConnectorDuct;
+import me.mooy1.infinityexpansion.implementation.transport.ItemDuct;
+import me.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.Items;
@@ -86,13 +89,16 @@ public final class ItemSetup {
         new SlimefunItem(Categories.INFINITY_MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
         new InfinityWorkbench().register(plugin);
 
-        //storage
+        //storage and transport
 
         new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
         }
         new StorageNetworkViewer().register(plugin);
+        new ItemDuct().register(plugin);
+        new ConnectorDuct().register(plugin);
+        new OutputDuct().register(plugin);
 
         //machine
 
