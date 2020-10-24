@@ -77,15 +77,17 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[0];
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
                 } else {
                     return new int[0];

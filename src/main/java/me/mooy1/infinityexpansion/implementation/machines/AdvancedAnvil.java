@@ -74,13 +74,7 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[0];
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return new int[0];
-                } else {
-                    return new int[0];
-                }
+                return new int[0];
             }
         };
 

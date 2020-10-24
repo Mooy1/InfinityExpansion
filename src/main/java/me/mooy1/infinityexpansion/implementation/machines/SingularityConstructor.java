@@ -94,8 +94,14 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
@@ -125,12 +131,12 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
                     String input = INPUT_ITEM_IDS[Integer.parseInt(getProgressID(b))];
 
-                    int stacksize = 64;
+                    int stackSize = 64;
 
-                    int stacks = (int) Math.floor((float) progress / stacksize);
-                    int remainder = progress % stacksize;
+                    int stacks = (int) Math.floor((float) progress / stackSize);
+                    int remainder = progress % stackSize;
 
-                    ItemStack drops = ItemStackUtils.getItemFromID(input, stacksize);
+                    ItemStack drops = ItemStackUtils.getItemFromID(input, stackSize);
 
                     if (drops != null) {
                         for (int i = 0; i < stacks; i++) {
@@ -163,7 +169,6 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         for (int i : OUTPUT_BORDER) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-
         blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -187,7 +192,9 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         int progress = Integer.parseInt(getProgress(b));
         ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
-        if (getCharge(b.getLocation()) < getEnergyConsumption(type)) { //when not enough power
+        int energy = type.getEnergy();
+
+        if (getCharge(b.getLocation()) < energy) { //when not enough power
 
             name = "&cNot enough energy!";
 
@@ -208,8 +215,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
         } else { //input
 
-            int energy = getEnergyConsumption(type);
-            int speed = getSpeed(type);
+            int speed = type.getSpeed();
 
             if (progress == 0 || getProgressID(b) == null) { //no input
 
@@ -318,14 +324,14 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                 String output = OUTPUT_ITEM_IDS[progressID];
                 int outputTime = OUTPUT_TIMES[progressID];
 
-                String displayname = "";
+                String displayName = "";
                 ItemMeta displayMeta = Objects.requireNonNull(ItemStackUtils.getItemFromID(output, 1)).getItemMeta();
 
                 if (displayMeta != null) {
-                    displayname = displayMeta.getDisplayName();
+                    displayName = displayMeta.getDisplayName();
                 }
 
-                lore = "&7Constructing: " + displayname;
+                lore = "&7Constructing: " + displayName;
                 loree = "&7Progress: (" + progress + "/" + outputTime + ")";
             }
 
@@ -388,27 +394,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
     @Override
     public int getCapacity() {
-        return getEnergyConsumption(type);
-    }
-
-    private int getEnergyConsumption(Type type) {
-        if (type == Type.BASIC) {
-            return BASIC_ENERGY;
-        } else if (type == Type.INFINITY) {
-            return INFINITY_ENERGY;
-        } else {
-            return 0;
-        }
-    }
-
-    private int getSpeed(Type type) {
-        if (type == Type.BASIC) {
-            return BASIC_SPEED;
-        } else if (type == Type.INFINITY) {
-            return INFINITY_SPEED;
-        } else {
-            return 0;
-        }
+        return type.getEnergy();
     }
 
     @Nonnull
@@ -496,15 +482,20 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
     public enum Type {
-        BASIC(Categories.ADVANCED_MACHINES, Items.SINGULARITY_CONSTRUCTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        BASIC(Categories.ADVANCED_MACHINES, BASIC_SPEED, BASIC_ENERGY,Items.SINGULARITY_CONSTRUCTOR,
+                RecipeType.ENHANCED_CRAFTING_TABLE,
+                new ItemStack[] {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MACHINE_PLATE, SlimefunItems.CARBON_PRESS_3, Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Categories.INFINITY_CHEAT, Items.INFINITY_CONSTRUCTOR, RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITY_CONSTRUCTOR));
+        INFINITY(Categories.INFINITY_CHEAT, INFINITY_SPEED, INFINITY_ENERGY,Items.INFINITY_CONSTRUCTOR,
+                RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITY_CONSTRUCTOR));
 
         @Nonnull
         private final Category category;
+        private final int speed;
+        private final int energy;
         private final SlimefunItemStack item;
         private final RecipeType recipeType;
         private final ItemStack[] recipe;

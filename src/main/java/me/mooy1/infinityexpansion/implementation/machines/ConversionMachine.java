@@ -79,8 +79,14 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
@@ -171,7 +177,7 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
         if (progress < TIME) {
 
             inv.consumeItem(INPUT_SLOTS[0], 1);
-            setProgress(b, progress + 1);
+            setProgress(b, progress + type.getSpeed());
             removeCharge(l, energy);
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverting..."));
@@ -181,7 +187,7 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
 
         ItemStack currentOutput = inv.getItemInSlot(OUTPUT_SLOTS[0]);
         ItemStack[] outputs = type.getOutput();
-        ItemStack output = outputs[MathUtils.randomFrom(outputs.length - 1)].clone();
+        ItemStack output = outputs[MathUtils.randomFromZeroTo(outputs.length - 1)].clone();
 
         if (currentOutput == null || (ItemUtils.canStack(currentOutput, output)) && currentOutput.getAmount() < 64) {
             inv.consumeItem(INPUT_SLOTS[0], 1);
@@ -248,7 +254,8 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
                         SlimefunItems.SILVER_DUST,
                         SlimefunItems.GOLD_DUST,
                         SlimefunItems.IRON_DUST,
-                        SlimefunItems.MAGNESIUM_DUST,},
+                        SlimefunItems.MAGNESIUM_DUST,
+                },
                 RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,

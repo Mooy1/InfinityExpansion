@@ -74,16 +74,18 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow == ItemTransportFlow.INSERT) {
                     return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return new int[0];
                 } else {
                     return new int[0];
                 }

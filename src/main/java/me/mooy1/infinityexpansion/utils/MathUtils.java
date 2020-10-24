@@ -6,11 +6,15 @@ public class MathUtils {
 
     private MathUtils() {}
 
-    public static int randomFrom(int range) {
-        return (int) Math.ceil(ThreadLocalRandom.current().nextDouble() * range);
+    public static int randomFromZeroTo(int max) {
+        return (int) Math.floor(ThreadLocalRandom.current().nextFloat() * (max + 1));
+    }
+
+    public static int randomFromOneTo(int max) {
+        return (int) Math.floor(ThreadLocalRandom.current().nextFloat() * (max));
     }
 
     public static boolean chanceIn(int chance) {
-        return randomFrom(chance) == chance;
+        return randomFromOneTo(chance) == chance;
     }
 }

@@ -13,6 +13,7 @@ import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.RecipeTypes;
+import me.mooy1.infinityexpansion.utils.MathUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -75,13 +76,6 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
             }
 
             @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (getNext(b) == null) {
-                    setNext(b, 0);
-                }
-            }
-
-            @Override
             public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
                 return (player.hasPermission("slimefun.inventory.bypass")
                         || SlimefunPlugin.getProtectionManager().hasPermission(
@@ -89,15 +83,17 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[0];
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                 if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
                 } else {
                     return new int[0];
@@ -154,7 +150,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
         Location l = b.getLocation();
-        int energyConsumption = getEnergyConsumption(type);
+        int energyConsumption = type.getEnergy();
 
         if (getCharge(l) < energyConsumption) {
 
@@ -164,13 +160,15 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
 
         } else {
 
-            int outputID = Integer.parseInt(getNext(b));
-            ItemStack outputItem = type.getOutput()[outputID].clone();
+            ItemStack[] outputs = type.getOutput();
+            ItemStack outputItem = outputs[MathUtils.randomFromZeroTo(outputs.length - 1)].clone();
             Material outputType = outputItem.getType();
 
             if (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK) {
 
-                if (Objects.requireNonNull(l.getWorld()).getEnvironment() != World.Environment.NETHER) {
+                World world = l.getWorld();
+
+                if (world != null && world.getEnvironment() != World.Environment.NETHER) {
 
                     outputItem = type.getOutput()[0].clone();
                 }
@@ -191,44 +189,13 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
                 removeCharge(l, energyConsumption);
                 inv.pushItem(outputItem, OUTPUT_SLOTS);
 
-                if (outputID + 1 == type.getOutput().length) {
-                    setNext(b, 0);
-                } else {
-                    setNext(b, outputID + 1);
-                }
             }
         }
     }
 
-    private void setNext(Block b, int next) {
-        BlockStorage.addBlockInfo(b, "next", String.valueOf(next));
-    }
-
-    private String getNext(Block b) {
-        return getBlockData(b.getLocation());
-    }
-
-    private String getBlockData(Location l) {
-        return BlockStorage.getLocationInfo(l, "next");
-    }
-
     @Override
     public int getCapacity() {
-        return getEnergyConsumption(type);
-    }
-
-    private int getEnergyConsumption(Type type) {
-        if (type == Type.BASIC) {
-            return BASIC_ENERGY;
-        } else if (type == Type.ADVANCED) {
-            return ADVANCED_ENERGY;
-        } else if (type == Type.VOID) {
-            return VOID_ENERGY;
-        } else if (type == Type.INFINITY) {
-            return INFINITY_ENERGY;
-        } else {
-            return 0;
-        }
+        return type.getEnergy();
     }
 
     @Nonnull
@@ -253,7 +220,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        BASIC(Categories.ADVANCED_MACHINES, Items.BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        BASIC(Categories.ADVANCED_MACHINES, BASIC_ENERGY, Items.BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MACHINE_PLATE, SlimefunItems.LARGE_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -279,7 +246,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
                 new ItemStack(Material.COBBLESTONE, 1),
         }),
 
-        ADVANCED(Categories.ADVANCED_MACHINES, Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        ADVANCED(Categories.ADVANCED_MACHINES, ADVANCED_ENERGY, Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -309,7 +276,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
                 new ItemStack(Material.NETHERITE_INGOT, 1),
         }),
 
-        VOID(Categories.ADVANCED_MACHINES, Items.VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        VOID(Categories.ADVANCED_MACHINES, VOID_ENERGY, Items.VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), Items.ADVANCED_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -342,7 +309,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
                 new ItemStack(Material.NETHERITE_INGOT, 2),
         }),
 
-        INFINITY(Categories.INFINITY_CHEAT, Items.INFINITY_QUARRY, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_QUARRY), new ItemStack[]{
+        INFINITY(Categories.INFINITY_CHEAT, INFINITY_ENERGY, Items.INFINITY_QUARRY, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_QUARRY), new ItemStack[]{
                 new ItemStack(Material.COBBLESTONE, 16),
                 new ItemStack(Material.COAL, 64),
                 new ItemStack(Material.COBBLESTONE, 16),
@@ -378,6 +345,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
 
         @Nonnull
         private final Category category;
+        private final int energy;
         private final SlimefunItemStack item;
         private final RecipeType recipeType;
         private final ItemStack[] recipe;

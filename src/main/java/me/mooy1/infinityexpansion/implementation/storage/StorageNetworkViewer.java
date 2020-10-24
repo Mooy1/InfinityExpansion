@@ -2,10 +2,8 @@ package me.mooy1.infinityexpansion.implementation.storage;
 
 import io.github.thebusybiscuit.slimefun4.core.networks.cargo.CargoNet;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.Categories;
-import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -31,13 +29,6 @@ import java.util.Optional;
 public class StorageNetworkViewer extends SlimefunItem {
 
     private static final int STATUS_SLOT = 4;
-    private static final int[] INPUT_SLOTS = {
-
-    };
-    private static final int[] OUTPUT_SLOTS = {
-
-    };
-
 
     public StorageNetworkViewer() {
         super(Categories.STORAGE_TRANSPORT, Items.STORAGE_NETWORK_VIEWER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -46,7 +37,7 @@ public class StorageNetworkViewer extends SlimefunItem {
                 Items.TITANIUM, Items.MACHINE_CIRCUIT, Items.TITANIUM,
         });
 
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
+        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.STORAGE_NETWORK_VIEWER.getDisplayName())) {
             @Override
             public void init() {
                 setupInv(this);
@@ -71,27 +62,9 @@ public class StorageNetworkViewer extends SlimefunItem {
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[0];
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return new int[0];
-                } else {
-                    return new int[0];
-                }
+                return new int[0];
             }
         };
-
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-
-            if (inv != null) {
-                Location l = b.getLocation();
-                inv.dropItems(l, INPUT_SLOTS);
-                inv.dropItems(l, OUTPUT_SLOTS);
-            }
-
-            return true;
-        });
     }
 
     private void setupInv(BlockMenuPreset blockMenuPreset) {
