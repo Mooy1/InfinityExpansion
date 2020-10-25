@@ -20,6 +20,7 @@ import me.mooy1.infinityexpansion.implementation.machines.TreeGrower;
 import me.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import me.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
+import me.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -33,33 +34,25 @@ public final class Items {
 
     public static final SlimefunItemStack ITEM_DUCT = new SlimefunItemStack(
             "ITEM_DUCT",
-            Material.END_ROD,
+            Material.WHITE_STAINED_GLASS,
             "&fItem Duct",
-            "&7Transports items between Input, Output, and Connector Ducts"
-    );
-    public static final SlimefunItemStack INPUT_DUCT = new SlimefunItemStack(
-            "INPUT_DUCT",
-            Material.CYAN_STAINED_GLASS,
-            "&3Input Duct",
-            "&7Pulls items out of machines and inventories"
+            "&7Connects machines, inventories, and output ducts"
     );
     public static final SlimefunItemStack OUTPUT_DUCT = new SlimefunItemStack(
             "OUTPUT_DUCT",
             Material.ORANGE_STAINED_GLASS,
             "&6Output Duct",
-            "&7Pushes items into machines and inventories"
-    );
-    public static final SlimefunItemStack CONNECTOR_DUCT = new SlimefunItemStack(
-            "CONNECTOR_DUCT",
-            Material.WHITE_STAINED_GLASS,
-            "&7Item Duct",
-            "&7Changes the direction of a transport flow"
+            "&7Pushes items into machines and inventories",
+            "&7Also serves as an Item Duct",
+            "",
+            "&6Range: &e" + OutputDuct.LENGTH + " &6blocks"
     );
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",
             Material.BEEHIVE,
             "&6Storage Forge",
-            "&7Upgrades the tier of Storage Units"
+            "&7Upgrades the tier of Storage Units",
+            "&7Retains stored items"
     );
 
     //Machines

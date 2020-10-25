@@ -5,7 +5,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mooy1.infinityexpansion.utils.RecipeUtils;
@@ -224,13 +224,13 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
         for (int i = 0 ; i < 9 ; i++) {
             ItemStack inputItem = inv.getItemInSlot(INPUT_SLOTS[i]);
 
-            input[i] = ItemStackUtils.getIDFromItem(inputItem);
+            input[i] = StackUtils.getIDFromItem(inputItem);
         }
 
         for (int ii = 0; ii < StorageForge.RECIPES.length ; ii++) {
             int amount = 0;
             for (int i = 0 ; i < input.length ; i++) {
-                String recipe = ItemStackUtils.getIDFromItem(StorageForge.RECIPES[ii][i]);
+                String recipe = StackUtils.getIDFromItem(StorageForge.RECIPES[ii][i]);
 
                 if (Objects.equals(input[i], recipe)) {
                     amount++;

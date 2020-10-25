@@ -1,10 +1,15 @@
 package me.mooy1.infinityexpansion.implementation.transport;
 
+import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import io.github.thebusybiscuit.slimefun4.utils.itemstack.ItemStackWrapper;
+import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -19,30 +24,39 @@ import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.BrewerInventory;
+import org.bukkit.inventory.FurnaceInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class OutputDuct extends SlimefunItem {
 
-    private static final int[] WHITELIST = {
-            PresetUtils.slot2
+    private static final int[] WHITELIST_SLOTS = {
+            10, 11, 12, 13
     };
-    private static final int[] BACKGROUND = {
-            0, 1, 2, 6, 7, 8,
-            9, 10 ,11, 15, 16, 17,
-            18, 19, 20, 24, 25, 26
+    private static final int[] BORDER = {
+            0, 1, 2, 3, 4, 5,
+            9, 14,
+            18, 19, 20, 21, 22, 23
     };
-    private static final int LENGTH = 16;
+    private static final int[] STATUS_BORDER = PresetUtils.slotChunk3;
+
+    private static final int STATUS = 16;
+    public static final int LENGTH = 12;
 
     public OutputDuct() {
         super(Categories.STORAGE_TRANSPORT, Items.OUTPUT_DUCT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -53,6 +67,11 @@ public class OutputDuct extends SlimefunItem {
             @Override
             public void init() {
                 setupInv(this);
+            }
+
+            @Override
+            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+
             }
 
             @Override
@@ -73,25 +92,85 @@ public class OutputDuct extends SlimefunItem {
             }
         };
 
+        addItemHandler(new BlockPlaceHandler(false) {
+            @Override
+            public void onPlayerPlace(BlockPlaceEvent e) {
+                Block targetBlock = e.getBlockAgainst();
+                Location targetLocation = targetBlock.getLocation();
+
+                BlockMenu machine = getOutputMachine(targetLocation);
+                Inventory inventory = getInventory(targetBlock);
+
+                if (inventory == null && machine == null) {
+                    MessageUtils.message(e.getPlayer(), ChatColor.RED + "Must be placed on a machine or inventory");
+
+                } else {
+
+                    Location here = e.getBlockPlaced().getLocation();
+                    int relative = getRelativeLocation(targetLocation, here);
+
+                    BlockStorage.addBlockInfo(here, "connected", String.valueOf(relative));
+
+                    ItemStack item = null;
+                    String idCheck = BlockStorage.checkID(targetLocation);
+
+                    if (idCheck != null) {
+                        ItemStack test = StackUtils.getItemFromID(idCheck, 1);
+
+                        if (test != null) {
+                            item = test;
+                        }
+                    }
+
+                    if (item == null) {
+                        item = new ItemStack(targetBlock.getType());
+                    }
+
+                    List<String> lore = new ArrayList<>();
+
+                    if (targetLocation.getWorld() != null) {
+                        lore.add("");
+                        lore.add(ChatColor.GREEN + "Location: ");
+                        lore.add(ChatColor.GREEN + "X " + targetLocation.getX());
+                        lore.add(ChatColor.GREEN + "Y " + targetLocation.getY());
+                        lore.add(ChatColor.GREEN + "Z " + targetLocation.getZ());
+                    }
+
+                    StackUtils.addLore(item, lore);
+
+                    BlockStorage.getInventory(here).replaceExistingItem(STATUS, item);
+
+                }
+            }
+        });
+
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
-            if (inv != null) {
-                inv.dropItems(b.getLocation(), WHITELIST);
-            }
+            onDrop(inv, b);
 
             return true;
         });
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
-        for (int i : BACKGROUND) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+    private static void onDrop(BlockMenu inv, Block b) {
+        if (inv != null) {
+            inv.dropItems(b.getLocation(), WHITELIST_SLOTS);
         }
-        for (int i : PresetUtils.slotChunk2) {
+    }
+
+    private void setupInv(BlockMenuPreset blockMenuPreset) {
+
+        for (int i : BORDER) {
             blockMenuPreset.addItem(i, new CustomItem(Material.WHITE_STAINED_GLASS_PANE, "&fWhitelist"),
                     ChestMenuUtils.getEmptyClickHandler());
         }
+        for (int i : STATUS_BORDER) {
+            blockMenuPreset.addItem(i, new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&3Connected Block"),
+                    ChestMenuUtils.getEmptyClickHandler());
+        }
+
+        blockMenuPreset.addMenuClickHandler(STATUS, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -107,53 +186,140 @@ public class OutputDuct extends SlimefunItem {
         });
     }
 
-    public void tick(Block b) {
-        Location l = b.getLocation();
+    public void tick(Block thisBlock) {
+        BlockMenu thisMenu = BlockStorage.getInventory(thisBlock);
+        if (thisMenu == null) return;
 
-        BlockMenu machine = getOutputMachine(b);
-        int[] inputSlots = getSlots(machine, ItemTransportFlow.INSERT);
+        Location thisLocation = thisBlock.getLocation();
 
-        if (machine != null && inputSlots != null && inputSlots.length > 0) {
-            Location location = machine.getLocation();
-            int loc = getRelativeLocation(location, l);
-            List<Location> checked = new ArrayList<>();
-            checked.add(l);
-            checked.add(location);
+        String relative = BlockStorage.getLocationInfo(thisLocation, "connected");
 
-            Pair<List<BlockMenu>, Pair<List<Location>, Integer>> flow = inputFlow(0, l, new ArrayList<>(), loc, checked);
-            List<BlockMenu> list = flow.getFirstValue();
-            int count = flow.getSecondValue().getSecondValue();
+        BlockMenu targetMachine;
+        Inventory targetInventory;
+        Location targetLocation;
 
-            MessageUtils.broadcast("COUNT" + count);
+        if (relative != null) {
+            targetLocation = getTargetLocation(thisLocation, Integer.parseInt(relative));
 
-            if (list.isEmpty()) return;
+            if (targetLocation == null || targetLocation.getBlock().getType() == Material.AIR) { //break when nothing connected
+                breakBlock(thisBlock);
+                return;
+            }
 
-            MessageUtils.broadcast("CONNECTED" + machine);
-            MessageUtils.broadcast("LIST" + list.toString());
+            targetMachine = getOutputMachine(targetLocation);
+            targetInventory = getInventory(targetLocation.getBlock());
 
-            for (int whiteList : WHITELIST) {
-                String whiteListID = ItemStackUtils.getIDFromItem(machine.getItemInSlot(whiteList));
+            if (targetMachine == null && targetInventory == null) { //error
+                breakBlock(thisBlock);
+                return;
+            }
 
-                if (whiteListID != null) {
-                    for (BlockMenu menu : list) {
-                        int[] slots = getSlots(menu, ItemTransportFlow.WITHDRAW);
+        } else { //error
 
-                        if (slots != null && slots.length > 0) {
-                            for (int slot : slots) {
-                                ItemStack output = menu.getItemInSlot(slot);
-                                String id = ItemStackUtils.getIDFromItem(output);
+            breakBlock(thisBlock);
+            return;
+        }
 
-                                if (id != null && id.equals(whiteListID) && machine.fits(output, inputSlots)) {
-                                    int amount = output.getAmount();
-                                    ItemStack oneOutput = output.clone();
-                                    oneOutput.setAmount(1);
+        List<Location> checkedLocations = new ArrayList<>();
+        checkedLocations.add(targetLocation);
 
-                                    for (int i = 0 ; i < amount ; i ++) {
-                                        machine.pushItem(oneOutput, inputSlots);
+        Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> flow = inputFlow(0, thisLocation, new ArrayList<>(), new ArrayList<>(), checkedLocations, targetLocation);
+        Pair<List<BlockMenu>, List<Inventory>> flowA = flow.getFirstValue();
+        List<BlockMenu> menuList = flowA.getFirstValue();
+        List<Inventory> invList = flowA.getSecondValue();
+
+        if (menuList.isEmpty() && invList.isEmpty()) return;
+
+        for (int whiteListSlot : WHITELIST_SLOTS) {
+            ItemStack whiteListItem = thisMenu.getItemInSlot(whiteListSlot);
+            String whiteListID = StackUtils.getIDFromItem(whiteListItem);
+            if (whiteListID != null) {
+
+                for (BlockMenu extractionMenu : menuList) {
+                    int[] extractionSlots = getSlots(extractionMenu, ItemTransportFlow.WITHDRAW, whiteListItem);
+
+                    if (extractionSlots != null && extractionSlots.length > 0) {
+                        for (int slot : extractionSlots) {
+                            ItemStack outputItem = extractionMenu.getItemInSlot(slot);
+                            String outputID = StackUtils.getIDFromItem(outputItem);
+
+                            if (outputItem != null && outputID != null && outputID.equals(whiteListID)) {
+
+                                if (targetMachine != null) {
+                                    int[] destinationSlots = getSlots(targetMachine, ItemTransportFlow.INSERT, outputItem);
+
+                                    if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
+                                        int amount = outputItem.getAmount();
+
+                                        targetMachine.pushItem(outputItem, destinationSlots);
+
+                                        extractionMenu.consumeItem(slot, amount);
                                     }
 
-                                    menu.consumeItem(slot, amount);
+                                } else {
+
+                                    ItemStack remainingItems = insertIntoVanillaInventory(outputItem, targetInventory);
+
+                                    int extractedAmount;
+                                    if (remainingItems == null) {
+                                        extractedAmount = outputItem.getAmount();
+                                    } else {
+                                        extractedAmount = outputItem.getAmount() - remainingItems.getAmount();
+                                    }
+
+                                    extractionMenu.consumeItem(slot, extractedAmount);
+
                                 }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                for (Inventory extractionInv : invList) {
+
+                    ItemStack[] contents = extractionInv.getContents();
+                    int[] range = getOutputSlotRange(extractionInv);
+                    int minSlot = range[0];
+                    int maxSlot = range[1];
+
+                    for (int slot = minSlot; slot < maxSlot; slot++) {
+
+                        ItemStack slotItem = contents[slot];
+
+                        if (slotItem != null) {
+
+                            ItemStack outputItem = slotItem.clone();
+                            String outputID = StackUtils.getIDFromItem(outputItem);
+
+                            if (outputID != null && outputID.equals(whiteListID)) {
+
+                                if (targetMachine != null) {
+                                    int[] destinationSlots = getSlots(targetMachine, ItemTransportFlow.INSERT, outputItem);
+
+                                    if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
+
+                                        targetMachine.pushItem(outputItem, destinationSlots);
+
+                                        slotItem.setAmount(slotItem.getAmount() - outputItem.getAmount());
+                                    }
+
+                                } else {
+
+                                    ItemStack remainingItems = insertIntoVanillaInventory(outputItem, targetInventory);
+
+                                    int amount;
+                                    if (remainingItems == null) {
+                                        amount = 0;
+                                    } else {
+                                        amount = remainingItems.getAmount();
+                                    }
+
+                                    slotItem.setAmount(amount);
+                                }
+
+                                break;
                             }
                         }
                     }
@@ -162,35 +328,113 @@ public class OutputDuct extends SlimefunItem {
         }
     }
 
-    @Nullable
-    private BlockMenu getOutputMachine(@Nonnull Block b) {
-        Location l = b.getLocation();
-        Location[] locations = getAdjacentLocations(l);
+    @Nonnull
+    private Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> inputFlow(int count, @Nonnull Location thisLocation, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
+        Block thisBlock = thisLocation.getBlock();
+        checkedLocations.add(thisLocation);
 
-        for (Location location : locations) {
-            String id = locationID(location);
+        String thisID = BlockStorage.checkID(thisLocation);
 
-            if (id != null) {
-                BlockMenuPreset preset = BlockMenuPreset.getPreset(id);
+        if (thisID != null) { //try sf
 
-                if (preset != null) {
+            if (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT")) { //connector
 
-                    return BlockStorage.getInventory(location);
+                count++;
 
+                for (Location location : getAdjacentLocations(thisLocation)) {
 
+                    if (location != prev && !checkedLocations.contains(location) && count < LENGTH) {
+
+                        Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> flow = inputFlow(count, location, menuList, invList, checkedLocations, location);
+                        Pair<List<BlockMenu>, List<Inventory>> flowA = flow.getFirstValue();
+                        Pair<List<Location>, Integer> flowB = flow.getSecondValue();
+                        menuList = flowA.getFirstValue();
+                        invList = flowA.getSecondValue();
+                        checkedLocations = flowB.getFirstValue();
+                        count = flowB.getSecondValue();
+
+                    }
                 }
+
+            } else if (BlockStorage.hasInventory(thisBlock)) { //machine
+
+                menuList.add(BlockStorage.getInventory(thisLocation));
+
+            }
+
+        } else { //try vanilla
+
+            Inventory inv = getInventory(thisBlock);
+
+            if (inv != null) {
+
+                invList.add(inv);
+
+            }
+        }
+
+        return new Pair<>(new Pair<>(menuList, invList), new Pair<>(checkedLocations, count));
+    }
+
+    private static void breakBlock(@Nonnull Block b) {
+        SlimefunItem sfItem = BlockStorage.check(b);
+
+        List<ItemStack> drops = new ArrayList<>();
+
+        if (sfItem != null) {
+            drops.addAll(sfItem.getDrops());
+        }
+
+        onDrop(BlockStorage.getInventory(b), b);
+
+        BlockStorage.clearBlockInfo(b);
+        b.setType(Material.AIR);
+
+        for (ItemStack drop : drops) {
+            if (drop != null && drop.getType() != Material.AIR) {
+                b.getWorld().dropItemNaturally(b.getLocation(), drop);
+            }
+        }
+    }
+
+    @Nullable
+    private static BlockMenu getOutputMachine(@Nonnull Location location) {
+        String id = BlockStorage.checkID(location);
+
+        if (id != null) {
+            BlockMenuPreset preset = BlockMenuPreset.getPreset(id);
+
+            if (preset != null) {
+
+                return BlockStorage.getInventory(location);
+
             }
         }
         return null;
     }
 
     @Nullable
-    private int[] getSlots(@Nullable BlockMenu menu, ItemTransportFlow itemTransportFlow) {
+    private static Inventory getInventory(@Nonnull Block b) {
+        if (hasInventory(b)) {
+
+            BlockState state = PaperLib.getBlockState(b, false).getState();
+
+            if (state instanceof InventoryHolder) {
+
+                return ((InventoryHolder) state).getInventory();
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private static int[] getSlots(@Nullable BlockMenu menu, @Nonnull ItemTransportFlow itemTransportFlow, @Nullable ItemStack item) {
         if (menu != null) {
 
             BlockMenuPreset preset = menu.getPreset();
 
-            int[] slots = preset.getSlotsAccessedByItemTransport(menu, itemTransportFlow, new ItemStack(Material.COBBLESTONE));
+            int[] slots = preset.getSlotsAccessedByItemTransport(menu, itemTransportFlow, item);
 
             if (slots != null && slots.length > 0) {
                 return slots;
@@ -207,52 +451,6 @@ public class OutputDuct extends SlimefunItem {
     }
 
     @Nonnull
-    private Pair<List<BlockMenu>, Pair<List<Location>, Integer>> inputFlow(int count, @Nonnull Location l, @Nonnull List<BlockMenu> list, int prev, @Nonnull List<Location> checked) {
-        checked.add(l);
-
-        String here = BlockStorage.getLocationInfo(l, "id");
-        if (here == null) {
-            return new Pair<>(list, new Pair<>(checked, count));
-        }
-
-        Location[] locations = new Location[0];
-
-        if (here.equals("OUTPUT_DUCT") || here.equals("CONNECTOR_DUCT")) {
-
-            locations = getAdjacentLocations(l);
-            count++;
-
-        } else if (here.equals("ITEM_DUCT")) {
-
-            locations = getOneLocation(l, prev);
-            count++;
-
-            MessageUtils.broadcast("DUCT_LOCATIONS" + Arrays.toString(locations));
-
-        } else if (BlockStorage.hasInventory(l.getBlock())) {
-
-            list.add(BlockStorage.getInventory(l));
-
-        }
-
-        for (Location location : locations) {
-            if (!checked.contains(location) && count < LENGTH) {
-
-                int loc = getRelativeLocation(location, l);
-
-                Pair<List<BlockMenu>, Pair<List<Location>, Integer>> flowA = inputFlow(count, location, list, loc, checked);
-                Pair<List<Location>, Integer> flowB = flowA.getSecondValue();
-                list = flowA.getFirstValue();
-                checked = flowB.getFirstValue();
-                count = flowB.getSecondValue();
-            }
-        }
-
-        return new Pair<>(list, new Pair<>(checked, count));
-
-    }
-
-    @Nonnull
     private static Location[] getAdjacentLocations(@Nonnull Location l) {
         Location[] locations = new Location[6];
         locations[0] = l.clone().add(1, 0, 0);
@@ -265,22 +463,23 @@ public class OutputDuct extends SlimefunItem {
         return locations;
     }
 
-    @Nonnull
-    private static Location[] getOneLocation(@Nonnull Location l, int direction) {
-        Location[] location = {l};
+    @Nullable
+    private static Location getTargetLocation(@Nonnull Location l, int direction) {
+        Location location = null;
+        Location clone = l.clone();
 
         if (direction == 0) {
-            location[0] = l.add(1, 0, 0);
+            location = clone.add(1, 0, 0);
         } else if (direction == 1) {
-            location[0] = l.add(-1, 0, 0);
+            location = clone.add(-1, 0, 0);
         } else if (direction == 2) {
-            location[0] = l.add(0, 1, 0);
+            location = clone.add(0, 1, 0);
         } else if (direction == 3) {
-            location[0] = l.add(0, -1, 0);
+            location = clone.add(0, -1, 0);
         } else if (direction == 4) {
-            location[0] = l.add(0, 0, 1);
+            location = clone.add(0, 0, 1);
         } else if (direction == 5) {
-            location[0] = l.add(0, 0, -1);
+            location = clone.add(0, 0, -1);
         }
 
         return location;
@@ -311,11 +510,124 @@ public class OutputDuct extends SlimefunItem {
         }
     }
 
-    @Nullable
-    private static String locationID(@Nullable Location l) {
-        if (l != null) {
-            return BlockStorage.getLocationInfo(l, "id");
+    /**
+     * The following methods are from CargoUtils
+     * (Some slightly modified)
+     *
+     * @author TheBusyBiscuit
+     * @author Mooy1
+     *
+     */
+
+    public static boolean hasInventory(@Nonnull Block block) {
+
+        Material type = block.getType();
+
+        if (SlimefunTag.SHULKER_BOXES.isTagged(type)) {
+            return true;
         }
-        return null;
+
+        switch (type) {
+            case CHEST:
+            case TRAPPED_CHEST:
+            case FURNACE:
+            case DISPENSER:
+            case DROPPER:
+            case HOPPER:
+            case BREWING_STAND:
+            case BARREL:
+            case BLAST_FURNACE:
+            case SMOKER:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static int[] getOutputSlotRange(Inventory inv) {
+        if (inv instanceof FurnaceInventory) {
+            // Slot 2-3
+            return new int[]{2, 3};
+        } else if (inv instanceof BrewerInventory) {
+            // Slot 0-3
+            return new int[]{0, 3};
+        } else {
+            // Slot 0-size
+            return new int[]{0, inv.getSize()};
+        }
+    }
+
+    public static int[] getInputSlotRange(@Nonnull Inventory inv, @Nullable ItemStack item) {
+        if (inv instanceof FurnaceInventory) {
+            if (item != null && item.getType().isFuel()) {
+                if (isSmeltable(item)) {
+                    // Any non-smeltable items should not land in the upper slot
+                    return new int[]{0, 2};
+                } else {
+                    return new int[]{1, 2};
+                }
+            } else {
+                return new int[]{0, 1};
+            }
+        } else if (inv instanceof BrewerInventory) {
+            if (isPotion(item)) {
+                // Slots for potions
+                return new int[]{0, 3};
+            } else if (item != null && item.getType() == Material.BLAZE_POWDER) {
+                // Blaze Powder slot
+                return new int[]{4, 5};
+            } else {
+                // Input slot
+                return new int[]{3, 4};
+            }
+        } else {
+            // Slot 0-size
+            return new int[]{0, inv.getSize()};
+        }
+    }
+
+    public static boolean isSmeltable(@Nullable ItemStack stack) {
+        return SlimefunPlugin.getMinecraftRecipeService().isSmeltable(stack);
+    }
+
+    public static boolean isPotion(@Nullable ItemStack item) {
+        return item != null && (item.getType() == Material.POTION || item.getType() == Material.SPLASH_POTION || item.getType() == Material.LINGERING_POTION);
+    }
+
+    @Nullable
+    private static ItemStack insertIntoVanillaInventory(@Nonnull ItemStack stack, @Nonnull Inventory inv) {
+        ItemStack[] contents = inv.getContents();
+        int[] range = getInputSlotRange(inv, stack);
+        int minSlot = range[0];
+        int maxSlot = range[1];
+
+        ItemStackWrapper wrapper = new ItemStackWrapper(stack);
+
+        for (int slot = minSlot; slot < maxSlot; slot++) {
+            // Changes to this ItemStack are synchronized with the Item in the Inventory
+            ItemStack itemInSlot = contents[slot];
+
+            if (itemInSlot == null) {
+                inv.setItem(slot, stack);
+                return null;
+            } else {
+                int maxStackSize = itemInSlot.getType().getMaxStackSize();
+
+                if (SlimefunUtils.isItemSimilar(itemInSlot, wrapper, true, false) && itemInSlot.getAmount() < maxStackSize) {
+                    int amount = itemInSlot.getAmount() + stack.getAmount();
+
+                    if (amount > maxStackSize) {
+                        stack.setAmount(amount - maxStackSize);
+                    } else {
+                        stack = null;
+                    }
+
+                    itemInSlot.setAmount(Math.min(amount, maxStackSize));
+                    return stack;
+                }
+            }
+        }
+
+        return stack;
     }
 }

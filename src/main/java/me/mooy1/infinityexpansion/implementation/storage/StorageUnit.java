@@ -9,7 +9,7 @@ import lombok.Getter;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.RecipeTypes;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
@@ -185,7 +185,7 @@ public class StorageUnit extends SlimefunItem {
                         }
                     }
 
-                    /*ItemStack storedItemStack = ItemStackUtils.getItemFromID(storedItem, 1);
+                    /*ItemStack storedItemStack = StackUtils.getItemFromID(storedItem, 1);
                     if (storedItemStack != null) {
                         int stackSize = storedItemStack.getMaxStackSize();
 
@@ -226,7 +226,7 @@ public class StorageUnit extends SlimefunItem {
 
         ItemStack inputSlot = inv.getItemInSlot(slots[0]);
 
-        String inputID = ItemStackUtils.getIDFromItem(inputSlot);
+        String inputID = StackUtils.getIDFromItem(inputSlot);
 
         if (Objects.equals(inputID, storedItem)) {
 
@@ -297,7 +297,7 @@ public class StorageUnit extends SlimefunItem {
 
             int slotAmount = inputSlotItem.getAmount();
 
-            String inputItemID = ItemStackUtils.getIDFromItem(inputSlotItem);
+            String inputItemID = StackUtils.getIDFromItem(inputSlotItem);
 
             if (inputSlotItem.getMaxStackSize() != 1 && inputItemID != null && !inputItemID.endsWith("_STORAGE")) { //Check if non stackable item or another storage unit
 
@@ -305,7 +305,7 @@ public class StorageUnit extends SlimefunItem {
 
                 if (stored == 0 && storedItem == null) { //store new item
 
-                    setStoredItem(b, ItemStackUtils.getIDFromItem(inputSlotItem));
+                    setStoredItem(b, StackUtils.getIDFromItem(inputSlotItem));
                     setStored(b, slotAmount);
                     inv.consumeItem(INPUT_SLOT, slotAmount);
 
@@ -343,7 +343,7 @@ public class StorageUnit extends SlimefunItem {
 
         if (storedItem != null) {
 
-            ItemStack storedItemStack = ItemStackUtils.getItemFromID(storedItem, 1);
+            ItemStack storedItemStack = StackUtils.getItemFromID(storedItem, 1);
             if (storedItemStack == null) {
                 setStoredItem(b, null);
                 return;
@@ -397,7 +397,7 @@ public class StorageUnit extends SlimefunItem {
             ));
         } else {
             int maxStorage = type.getMax();
-            ItemStack storedItemStack = ItemStackUtils.getItemFromID(storedItem, 1);
+            ItemStack storedItemStack = StackUtils.getItemFromID(storedItem, 1);
             if (storedItemStack == null) {
                 setStoredItem(b, null);
                 return;

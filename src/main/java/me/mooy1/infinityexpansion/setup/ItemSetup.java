@@ -18,7 +18,6 @@ import me.mooy1.infinityexpansion.implementation.gear.InfinityTools;
 import me.mooy1.infinityexpansion.implementation.gear.EnderFlame;
 import me.mooy1.infinityexpansion.implementation.machines.*;
 import me.mooy1.infinityexpansion.implementation.materials.*;
-import me.mooy1.infinityexpansion.implementation.transport.ConnectorDuct;
 import me.mooy1.infinityexpansion.implementation.transport.ItemDuct;
 import me.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import me.mooy1.infinityexpansion.lists.Categories;
@@ -97,7 +96,6 @@ public final class ItemSetup {
         }
         new StorageNetworkViewer().register(plugin);
         new ItemDuct().register(plugin);
-        new ConnectorDuct().register(plugin);
         new OutputDuct().register(plugin);
 
         //machine

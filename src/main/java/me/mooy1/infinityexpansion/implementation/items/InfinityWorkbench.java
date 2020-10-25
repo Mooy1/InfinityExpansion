@@ -4,13 +4,12 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import io.github.thebusybiscuit.slimefun4.implementation.guide.ChestSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.InfinityCategory;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mooy1.infinityexpansion.utils.RecipeUtils;
@@ -32,12 +31,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponent {
@@ -238,13 +234,13 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
         for (int i = 0 ; i < 36 ; i++) {
             ItemStack inputItem = inv.getItemInSlot(INPUT_SLOTS[i]);
 
-            input[i] = ItemStackUtils.getIDFromItem(inputItem);
+            input[i] = StackUtils.getIDFromItem(inputItem);
         }
 
         for (int ii = 0; ii < InfinityRecipes.RECIPES.length ; ii++) {
             int amount = 0;
             for (int i = 0 ; i < input.length ; i++) {
-                String recipe = ItemStackUtils.getIDFromItem(InfinityRecipes.RECIPES[ii][i]);
+                String recipe = StackUtils.getIDFromItem(InfinityRecipes.RECIPES[ii][i]);
                 if (Objects.equals(input[i], recipe)) {
                     amount++;
                 } else {

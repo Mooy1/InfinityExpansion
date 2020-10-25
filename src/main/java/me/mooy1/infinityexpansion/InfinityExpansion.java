@@ -1,6 +1,7 @@
 package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.setup.Listeners;
@@ -9,7 +10,8 @@ import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
 import org.bstats.bukkit.Metrics;
-
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +23,19 @@ import java.util.logging.Level;
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     private static InfinityExpansion instance;
+
+    private final String[] CHANGELOG = {
+            "######################################",
+            "     Infinity Expansion v" + getDescription().getVersion(),
+            "     -----------------------------    ",
+            "              Changelog               ",
+            " - Added some item generators",
+            " - Optimized strainers",
+            " - added item converters",
+            " - Stored Items in storage units will",
+            " No longer be dropped, instead stored in drop",
+            "######################################"
+    };
 
     @Override
     public void onEnable() {
@@ -37,6 +52,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         //SlimefunPlugin.getVersion()
 
+        PaperLib.suggestPaper(this);
         if (getDescription().getVersion().startsWith("DEV - ")) {
             getLogger().log(Level.INFO, "Starting auto update");
             Updater updater = new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master");
@@ -59,17 +75,11 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         //spam console
 
-        getLogger().log(Level.INFO, "######################################");
-        getLogger().log(Level.INFO, "     Infinity Expansion v" + getDescription().getVersion() + "      ");
-        getLogger().log(Level.INFO, "     -----------------------------    ");
-        getLogger().log(Level.INFO, "              Changelog               ");
-        getLogger().log(Level.INFO, " - Added some item generators");
-        getLogger().log(Level.INFO, " - Optimized strainers");
-        getLogger().log(Level.INFO, " - added item converters");
-        getLogger().log(Level.INFO, " - Stored Items in storage units will");
-        getLogger().log(Level.INFO, " No longer be dropped, instead stored in drop");
-        getLogger().log(Level.INFO, "######################################");
+        for (String line : CHANGELOG) {
 
+            getLogger().log(Level.INFO, line);
+
+        }
     }
 
     private static void setupInfinityRecipes() {
@@ -85,7 +95,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 enabledOutputs.add(output);
                 enabledRecipes.add(InfinityRecipes.RECIPES[i]);
             } else {
-               instance.getLogger().log(Level.INFO, "Infinity Item " + slimefunItem.getId() + " disabled!");
+                instance.getLogger().log(Level.INFO, "Infinity Item " + slimefunItem.getId() + " disabled!");
             }
             i++;
         }
@@ -113,5 +123,11 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     public static InfinityExpansion getInstance() {
         return instance;
+    }
+
+    @Override
+    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
+
+        return true;
     }
 }

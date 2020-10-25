@@ -13,7 +13,7 @@ import me.mooy1.infinityexpansion.implementation.materials.Singularity;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -136,7 +136,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                     int stacks = (int) Math.floor((float) progress / stackSize);
                     int remainder = progress % stackSize;
 
-                    ItemStack drops = ItemStackUtils.getItemFromID(input, stackSize);
+                    ItemStack drops = StackUtils.getItemFromID(input, stackSize);
 
                     if (drops != null) {
                         for (int i = 0; i < stacks; i++) {
@@ -145,7 +145,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                     }
 
                     if (remainder > 0) {
-                        ItemStack drop = ItemStackUtils.getItemFromID(input, remainder);
+                        ItemStack drop = StackUtils.getItemFromID(input, remainder);
                         if (drop != null) {
                             b.getWorld().dropItemNaturally(l, drop);
                         }
@@ -207,7 +207,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
             } else { //started but wrong input
 
-                ItemStack input = ItemStackUtils.getItemFromID(INPUT_ITEM_IDS[Integer.parseInt(getProgressID(b))], 1);
+                ItemStack input = StackUtils.getItemFromID(INPUT_ITEM_IDS[Integer.parseInt(getProgressID(b))], 1);
 
                 name = "&cInput more &f" + ItemUtils.getItemName(input) + "&c!";
 
@@ -244,7 +244,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
                     String input = INPUT_ITEM_IDS[progressID];
 
-                    if (Objects.equals(ItemStackUtils.getIDFromItem(inputSlotItem), input)) { //input matches
+                    if (Objects.equals(StackUtils.getIDFromItem(inputSlotItem), input)) { //input matches
 
                         int inputSlotAmount = inputSlotItem.getAmount();
                         removeCharge(b.getLocation(), energy);
@@ -281,7 +281,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
                 } else { //if construction done
 
-                    ItemStack output = ItemStackUtils.getItemFromID(OUTPUT_ITEM_IDS[progressID], 1);
+                    ItemStack output = StackUtils.getItemFromID(OUTPUT_ITEM_IDS[progressID], 1);
 
                     if (output != null) {
 
@@ -325,7 +325,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                 int outputTime = OUTPUT_TIMES[progressID];
 
                 String displayName = "";
-                ItemMeta displayMeta = Objects.requireNonNull(ItemStackUtils.getItemFromID(output, 1)).getItemMeta();
+                ItemMeta displayMeta = Objects.requireNonNull(StackUtils.getItemFromID(output, 1)).getItemMeta();
 
                 if (displayMeta != null) {
                     displayName = displayMeta.getDisplayName();
@@ -347,7 +347,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         int itemAmount = item.getAmount();
 
         for (int i = 0; i < INPUT_ITEM_IDS.length ; i++) {
-            if (Objects.equals(ItemStackUtils.getIDFromItem(item), INPUT_ITEM_IDS[i])) {
+            if (Objects.equals(StackUtils.getIDFromItem(item), INPUT_ITEM_IDS[i])) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
                     inv.consumeItem(INPUT_SLOT, speed);

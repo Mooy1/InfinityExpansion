@@ -8,7 +8,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -179,17 +179,17 @@ public class ResourceSynthesizer extends SlimefunItem implements EnergyNetCompon
                 }
 
             } else { //start
-                String id1 = ItemStackUtils.getIDFromItem(input1);
-                String id2 = ItemStackUtils.getIDFromItem(input2);
+                String id1 = StackUtils.getIDFromItem(input1);
+                String id2 = StackUtils.getIDFromItem(input2);
 
                 ItemStack recipe = null;
 
                 for (int i = 0; i < RECIPES.length; i += 3) {
-                    if (((Objects.equals(id1, ItemStackUtils.getIDFromItem(RECIPES[i])))
-                            && (Objects.equals(id2, ItemStackUtils.getIDFromItem(RECIPES[i + 1]))))
+                    if (((Objects.equals(id1, StackUtils.getIDFromItem(RECIPES[i])))
+                            && (Objects.equals(id2, StackUtils.getIDFromItem(RECIPES[i + 1]))))
                             ||
-                            ((Objects.equals(id1, ItemStackUtils.getIDFromItem(RECIPES[i + 1])))
-                                    && (Objects.equals(id2, ItemStackUtils.getIDFromItem(RECIPES[i]))))) {
+                            ((Objects.equals(id1, StackUtils.getIDFromItem(RECIPES[i + 1])))
+                                    && (Objects.equals(id2, StackUtils.getIDFromItem(RECIPES[i]))))) {
                         recipe = RECIPES[i + 2];
                     }
                 }
@@ -215,7 +215,7 @@ public class ResourceSynthesizer extends SlimefunItem implements EnergyNetCompon
                             inv.replaceExistingItem(STATUS_SLOT,
                                     new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
                         }
-                    } else if ((Objects.equals(ItemStackUtils.getIDFromItem(outputSlot), ItemStackUtils.getIDFromItem(recipe))
+                    } else if ((Objects.equals(StackUtils.getIDFromItem(outputSlot), StackUtils.getIDFromItem(recipe))
                             && outputSlot.getAmount() + recipe.getAmount() <= recipe.getMaxStackSize())) { //already an item
 
                         outputSlot.setAmount(recipe.getAmount() + outputSlot.getAmount());

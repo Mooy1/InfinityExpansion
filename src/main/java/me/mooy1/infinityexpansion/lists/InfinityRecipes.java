@@ -1,7 +1,7 @@
 package me.mooy1.infinityexpansion.lists;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -53,11 +53,11 @@ public class InfinityRecipes {
     };
 
     public static int getRecipeID(ItemStack item) {
-        String itemID = ItemStackUtils.getIDFromItem(item);
+        String itemID = StackUtils.getIDFromItem(item);
         if (itemID != null) {
             int i = 0;
             for (ItemStack output : OUTPUTS) {
-                if (itemID.equals(ItemStackUtils.getIDFromItem(output))) return i;
+                if (itemID.equals(StackUtils.getIDFromItem(output))) return i;
                 i++;
             }
         }

@@ -10,7 +10,7 @@ import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.RecipeTypes;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -77,18 +77,21 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow == ItemTransportFlow.INSERT) {
                     return INPUT_SLOTS;
-                } else {
-                    return new int[0];
                 }
+                return new int[0];
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else {
-                    return new int[0];
+                    if (Objects.equals(StackUtils.getIDFromItem(item), "VOID_INGOT")) {
+                        return new int[] {INPUT_SLOTS[1]};
+                    } else if (Objects.equals(StackUtils.getIDFromItem(item), "INFINITE_INGOT")) {
+                        return new int[] {INPUT_SLOTS[0]};
+                    }
                 }
+
+                return new int[0];
             }
         };
 
@@ -157,14 +160,14 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
 
         if (progress == 0) { //need infinity + void
 
-            if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
                 }
                 return 0;
 
-            } else if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            } else if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -198,7 +201,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
 
         } else if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
-            if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));

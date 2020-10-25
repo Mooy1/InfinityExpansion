@@ -287,13 +287,9 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
         return 0;
     }
 
-    private void fish(BlockMenu inv) {
-        ItemStack potato = new CustomItem(
-                Material.POTATO,
-                "&7:&6Potatofish&7:",
-                "&eLucky"
-        );
+    private static final ItemStack potato = new CustomItem(Material.POTATO, "&7:&6Potatofish&7:", "&eLucky");
 
+    private void fish(BlockMenu inv) {
         if (inv.fits(potato, OUTPUT_SLOTS)) {
             inv.pushItem(potato, OUTPUT_SLOTS);
 

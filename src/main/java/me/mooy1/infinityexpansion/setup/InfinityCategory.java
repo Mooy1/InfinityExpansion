@@ -10,7 +10,7 @@ import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.RecipeTypes;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -232,7 +232,7 @@ public class InfinityCategory extends FlexCategory {
 
                     int slot = 0;
                     for (ItemStack item : inv.getContents()) { //each slot in their inv
-                        if (ItemStackUtils.getIDFromItem(recipeItem).equals(ItemStackUtils.getIDFromItem(item))) {
+                        if (StackUtils.getIDFromItem(recipeItem).equals(StackUtils.getIDFromItem(item))) {
 
                             //remove item
                             int amount = item.getAmount();
