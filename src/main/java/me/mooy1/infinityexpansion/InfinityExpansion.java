@@ -4,18 +4,19 @@ import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
-import me.mooy1.infinityexpansion.setup.Listeners;
+import me.mooy1.infinityexpansion.setup.Events;
+import me.mooy1.infinityexpansion.setup.command.InfinityCommand;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,36 +24,32 @@ import java.util.logging.Level;
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     private static InfinityExpansion instance;
-
-    private final String[] CHANGELOG = {
-            "######################################",
-            "     Infinity Expansion v" + getDescription().getVersion(),
-            "     -----------------------------    ",
-            "              Changelog               ",
-            " - Added some item generators",
-            " - Optimized strainers",
-            " - added item converters",
-            " - Stored Items in storage units will",
-            " No longer be dropped, instead stored in drop",
-            "######################################"
+    private final Config cfg = new Config(this);
+    private final InfinityCommand command = new InfinityCommand(this);
+    public String[] changelog = new String[] {
+            ChatColor.GREEN + "######################################",
+            ChatColor.AQUA + "     Infinity Expansion v" + this.getPluginVersion(),
+            ChatColor.GREEN + "     -------------------------    ",
+            ChatColor.AQUA + "              Changelog            ",
+            ChatColor.GRAY + " - Added commands!",
+            ChatColor.GRAY + " - Optimized strainers",
+            ChatColor.GRAY + " - added item converters",
+            ChatColor.GRAY + " - Stored Items in storage units will",
+            ChatColor.GRAY + " No longer be dropped, instead stored in drop",
+            ChatColor.GRAY + "",
+            ChatColor.GREEN + "######################################"
     };
 
     @Override
     public void onEnable() {
-
         instance = this;
 
         //stats
-
         final Metrics metrics = new Metrics(this, 8991);
 
-        //config
-
-        Config cfg = new Config(this);
-
-        //SlimefunPlugin.getVersion()
-
         PaperLib.suggestPaper(this);
+
+        //auto update
         if (getDescription().getVersion().startsWith("DEV - ")) {
             getLogger().log(Level.INFO, "Starting auto update");
             Updater updater = new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master");
@@ -62,26 +59,38 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         }
 
         //Register items
-
         ItemSetup.setup(this);
 
-        //get enabled infinity recipes
-
-        setupInfinityRecipes();
+        //register researches if enabled
+        if (cfg.getBoolean("options.enable-researches")) {
+            //ResearchSetup.setup(this);
+        }
 
         //listeners
+        new Events(this);
 
-        new Listeners(this);
+        //commands
+        command.register();
+
+        //set enabled infinity recipes
+        setupInfinityRecipes();
 
         //spam console
+        sendChangeLog();
+    }
 
-        for (String line : CHANGELOG) {
+    private void sendChangeLog() {
+        for (String line : changelog) {
 
             getLogger().log(Level.INFO, line);
 
         }
     }
 
+    /**
+     * This method gets the enabled infinity items and
+     * adds them and their recipe to the machine
+     */
     private static void setupInfinityRecipes() {
         List<ItemStack> enabledOutputs = new ArrayList<>();
         List<ItemStack[]> enabledRecipes = new ArrayList<>();
@@ -121,13 +130,8 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         return this;
     }
 
+    @Nullable
     public static InfinityExpansion getInstance() {
         return instance;
-    }
-
-    @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
-
-        return true;
     }
 }

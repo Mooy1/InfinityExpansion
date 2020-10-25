@@ -54,19 +54,19 @@ import java.util.Objects;
 
 public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
 
-    public static final int WATER_RATE = 12;
-    public static final int WATER_STORAGE = 2_000;
-    public static final int WATER_RATE2 = 96;
-    public static final int WATER_STORAGE2 = 16_000;
+    public static final int WATER_RATE = 9;
+    public static final int WATER_STORAGE = 1_500;
+    public static final int WATER_RATE2 = 90;
+    public static final int WATER_STORAGE2 = 15_000;
 
     public static final int GEO_RATE = 210;
     public static final int GEO_STORAGE = 35_000;
     public static final int GEO_RATE2 = 1680;
     public static final int GEO_STORAGE2 = 280_000;
 
-    public static final int BASIC_RATE = 18;
-    public static final int BASIC_STORAGE = 3_000;
-    public static final int ADVANCED_RATE = 180;
+    public static final int BASIC_RATE = 6;
+    public static final int BASIC_STORAGE = 1_000;
+    public static final int ADVANCED_RATE = 300;
     public static final int ADVANCED_STORAGE = 30_000;
     public static final int CELE_RATE = 1800;
     public static final int CELE_STORAGE = 300_000;
