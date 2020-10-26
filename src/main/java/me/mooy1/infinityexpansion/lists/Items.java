@@ -19,6 +19,7 @@ import me.mooy1.infinityexpansion.implementation.machines.SingularityConstructor
 import me.mooy1.infinityexpansion.implementation.machines.TreeGrower;
 import me.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import me.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
+import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import me.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
@@ -53,6 +54,12 @@ public final class Items {
             "&6Storage Forge",
             "&7Upgrades the tier of Storage Units",
             "&7Retains stored items"
+    );
+    public static final SlimefunItemStack STORAGE_DUCT = new SlimefunItemStack(
+            "STORAGE_DUCT",
+            Material.GRAY_STAINED_GLASS,
+            "&7Storage Duct",
+            "&7Extends the reach of your storage network viewer"
     );
 
     //Machines
@@ -531,10 +538,11 @@ public final class Items {
     public static final SlimefunItemStack STORAGE_NETWORK_VIEWER = new SlimefunItemStack(
             "STORAGE_NETWORK_VIEWER",
             Material.CHISELED_STONE_BRICKS,
-            "&7Storage Network Viewer",
-            "&7Shows status of any Storage Units in the connected Cargo Network",
+            "&6Storage Network Viewer",
+            "&7Shows status of any Storage Units",
+            "&7connected through item ducts or other storage units",
             "",
-            "&cNot yet functional"
+            "&6Range: &e" + StorageNetworkViewer.LENGTH + " &6blocks"
     
     );
 

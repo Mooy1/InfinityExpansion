@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -130,7 +129,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         return this;
     }
 
-    @Nullable
+    @Nonnull
     public static InfinityExpansion getInstance() {
         return instance;
     }
