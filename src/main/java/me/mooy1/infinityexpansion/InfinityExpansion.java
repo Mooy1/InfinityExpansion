@@ -2,7 +2,6 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
-import lombok.NonNull;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.setup.Events;
@@ -17,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,15 +24,11 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     private static InfinityExpansion instance;
     private final Config config = new Config(this);
-    private final Config data = new Config("plugins/" + this.getDescription().getName() + "/player-data.yml"); //fix this
     private final InfinityCommand command = new InfinityCommand(this);
 
     @Override
     public void onEnable() {
         instance = this;
-
-        //files
-        createDirectories();
 
         //stats
         final Metrics metrics = new Metrics(this, 8991);
@@ -70,18 +64,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         //spam console
         for (String line : getChangeLog()) {
             getLogger().log(Level.INFO, line);
-        }
-    }
-
-    private void createDirectories() { //fix this
-        String[] pluginFolders = { "data" };
-
-        for (String folder : pluginFolders) {
-            File file = new File("plugins/Slimefun", folder);
-
-            if (!file.exists()) {
-                file.mkdirs();
-            }
         }
     }
 
