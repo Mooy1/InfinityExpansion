@@ -14,6 +14,6 @@ public class Changelog extends SubCommand {
 
     @Override
     public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
-        sender.sendMessage(plugin.changelog);
+        sender.sendMessage(InfinityExpansion.getChangeLog());
     }
 }

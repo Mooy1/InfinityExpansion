@@ -19,6 +19,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
@@ -57,6 +58,7 @@ public class OutputDuct extends SlimefunItem {
 
     private static final int STATUS = 16;
     public static final int LENGTH = 12;
+    public static final int MAX = 12;
 
     public OutputDuct() {
         super(Categories.STORAGE_TRANSPORT, Items.OUTPUT_DUCT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -215,7 +217,6 @@ public class OutputDuct extends SlimefunItem {
             }
 
         } else { //error
-
             breakBlock(thisBlock);
             return;
         }
@@ -234,6 +235,19 @@ public class OutputDuct extends SlimefunItem {
         Pair<List<BlockMenu>, List<Inventory>> flowA = flow.getFirstValue();
         List<BlockMenu> menuList = flowA.getFirstValue();
         List<Inventory> invList = flowA.getSecondValue();
+
+        if (thisMenu.hasViewer()) {
+            int length = flow.getSecondValue().getSecondValue();
+            int size = menuList.size() + invList.size();
+
+            List<String> lore = new ArrayList<>();
+            lore.add("");
+            lore.add(ChatColors.color("&6Inventories: &e" + size + " / " + MAX));
+            lore.add(ChatColors.color("&6Length: &e" + length + " / " + LENGTH));
+
+            StackUtils.insertLore(thisMenu.getItemInSlot(STATUS), lore, "Location:", 4);
+
+        }
 
         if (menuList.isEmpty() && invList.isEmpty()) return;
 
@@ -351,53 +365,56 @@ public class OutputDuct extends SlimefunItem {
      */
     @Nonnull
     private Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> inputFlow(int count, @Nonnull Location thisLocation, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
-        Block thisBlock = thisLocation.getBlock();
         checkedLocations.add(thisLocation);
 
-        String thisID = BlockStorage.checkID(thisLocation);
+        if (menuList.size() + invList.size() < MAX) {
 
-        if (thisID != null) { //try sf
+            Block thisBlock = thisLocation.getBlock();
+            String thisID = BlockStorage.checkID(thisLocation);
 
-            if (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT")) { //connector
+            if (thisID != null) { //try sf
 
-                count++;
+                if (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT")) { //connector
 
-                for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
+                    count++;
 
-                    if (location != prev && !checkedLocations.contains(location) && count < LENGTH) {
+                    for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
 
-                        Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> flow = inputFlow(count, location, menuList, invList, checkedLocations, location);
-                        Pair<List<BlockMenu>, List<Inventory>> flowA = flow.getFirstValue();
-                        Pair<List<Location>, Integer> flowB = flow.getSecondValue();
-                        menuList = flowA.getFirstValue();
-                        invList = flowA.getSecondValue();
-                        checkedLocations = flowB.getFirstValue();
-                        count = flowB.getSecondValue();
+                        if (location != prev && !checkedLocations.contains(location) && count < LENGTH) {
 
+                            Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> flow = inputFlow(count, location, menuList, invList, checkedLocations, location);
+                            Pair<List<BlockMenu>, List<Inventory>> flowA = flow.getFirstValue();
+                            Pair<List<Location>, Integer> flowB = flow.getSecondValue();
+                            menuList = flowA.getFirstValue();
+                            invList = flowA.getSecondValue();
+                            checkedLocations = flowB.getFirstValue();
+                            count = flowB.getSecondValue();
+
+                        }
                     }
+
+                } else if (BlockStorage.hasInventory(thisBlock)) { //machine
+
+                    menuList.add(BlockStorage.getInventory(thisLocation));
+
                 }
 
-            } else if (BlockStorage.hasInventory(thisBlock)) { //machine
+            } else { //try vanilla
 
-                menuList.add(BlockStorage.getInventory(thisLocation));
+                Inventory inv = TransferUtils.getInventory(thisBlock);
 
-            }
+                if (inv != null) {
 
-        } else { //try vanilla
+                    invList.add(inv);
 
-            Inventory inv = TransferUtils.getInventory(thisBlock);
+                    //add other part of double chest
 
-            if (inv != null) {
+                    Location doubleChestCheck = TransferUtils.getOtherChest(inv, thisLocation);
+                    if (doubleChestCheck != null) {
+                        checkedLocations.add(doubleChestCheck);
+                    }
 
-                invList.add(inv);
-
-                //add other part of double chest
-
-                Location doubleChestCheck = TransferUtils.getOtherChest(inv, thisLocation);
-                if (doubleChestCheck != null) {
-                    checkedLocations.add(doubleChestCheck);
                 }
-
             }
         }
 

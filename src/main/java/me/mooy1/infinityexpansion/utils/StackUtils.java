@@ -11,7 +11,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public final class StackUtils {
 
@@ -32,19 +31,6 @@ public final class StackUtils {
                 return sfItem.getId();
 
             }
-        }
-
-        return item.getType().toString();
-    }
-
-    @Nonnull
-    public static String getIDFromNonNullItem(@Nonnull ItemStack item) {
-        SlimefunItem sfItem = SlimefunItem.getByItem(item);
-
-        if (sfItem != null) {
-
-            return sfItem.getId();
-
         }
 
         return item.getType().toString();
@@ -90,5 +76,38 @@ public final class StackUtils {
 
             item.setItemMeta(meta);
         }
+    }
+
+    public static void insertLore(@Nonnull ItemStack item, @Nonnull List<String> lores, @Nonnull String find, int offset) {
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta == null) return;
+
+        List<String> lore = new ArrayList<>();
+
+        if (meta.getLore() != null) {
+            lore = meta.getLore();
+        }
+
+        int position = 0;
+        int i = 0;
+        for (String line : lore) {
+            if(ChatColor.stripColor(line).contains(ChatColor.stripColor(find))) {
+                position = i;
+            }
+            i++;
+        }
+
+        position += offset;
+
+        if (position < 0) return;
+
+        lore = lore.subList(0, position);
+
+        lore.addAll(lores);
+
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
     }
 }

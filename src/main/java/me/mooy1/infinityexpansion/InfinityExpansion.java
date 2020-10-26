@@ -2,6 +2,7 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
+import lombok.NonNull;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.setup.Events;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,25 +25,16 @@ import java.util.logging.Level;
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     private static InfinityExpansion instance;
-    private final Config cfg = new Config(this);
+    private final Config config = new Config(this);
+    private final Config data = new Config("plugins/" + this.getDescription().getName() + "/player-data.yml"); //fix this
     private final InfinityCommand command = new InfinityCommand(this);
-    public String[] changelog = new String[] {
-            ChatColor.GREEN + "######################################",
-            ChatColor.AQUA + "     Infinity Expansion v" + this.getPluginVersion(),
-            ChatColor.GREEN + "     -------------------------    ",
-            ChatColor.AQUA + "              Changelog            ",
-            ChatColor.GRAY + " - Added commands!",
-            ChatColor.GRAY + " - Optimized strainers",
-            ChatColor.GRAY + " - added item converters",
-            ChatColor.GRAY + " - Stored Items in storage units will",
-            ChatColor.GRAY + " No longer be dropped, instead stored in drop",
-            ChatColor.GRAY + "",
-            ChatColor.GREEN + "######################################"
-    };
 
     @Override
     public void onEnable() {
         instance = this;
+
+        //files
+        createDirectories();
 
         //stats
         final Metrics metrics = new Metrics(this, 8991);
@@ -57,11 +50,11 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
             getLogger().log(Level.WARNING, "You must be on a DEV build to auto update!");
         }
 
-        //Register items
+        //items
         ItemSetup.setup(this);
 
         //register researches if enabled
-        if (cfg.getBoolean("options.enable-researches")) {
+        if (config.getBoolean("options.enable-researches")) {
             //ResearchSetup.setup(this);
         }
 
@@ -75,14 +68,20 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         setupInfinityRecipes();
 
         //spam console
-        sendChangeLog();
+        for (String line : getChangeLog()) {
+            getLogger().log(Level.INFO, line);
+        }
     }
 
-    private void sendChangeLog() {
-        for (String line : changelog) {
+    private void createDirectories() { //fix this
+        String[] pluginFolders = { "data" };
 
-            getLogger().log(Level.INFO, line);
+        for (String folder : pluginFolders) {
+            File file = new File("plugins/Slimefun", folder);
 
+            if (!file.exists()) {
+                file.mkdirs();
+            }
         }
     }
 
@@ -132,5 +131,24 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Nonnull
     public static InfinityExpansion getInstance() {
         return instance;
+    }
+
+    @Nonnull
+    public static String[] getChangeLog() {
+        return new  String[] {
+                ChatColor.GREEN + "",
+                ChatColor.GREEN + "########################################",
+                ChatColor.AQUA + "     Infinity Expansion v" + getInstance().getPluginVersion(),
+                ChatColor.GREEN + "     -------------------------    ",
+                ChatColor.AQUA + "              Changelog            ",
+                ChatColor.GRAY + " - Added commands!",
+                ChatColor.GRAY + " - Optimized strainers",
+                ChatColor.GRAY + " - added item converters",
+                ChatColor.GRAY + " - Stored Items in storage units will",
+                ChatColor.GRAY + " No longer be dropped, instead stored in drop",
+                ChatColor.GRAY + "",
+                ChatColor.GREEN + "########################################",
+                ChatColor.GREEN + ""
+        };
     }
 }

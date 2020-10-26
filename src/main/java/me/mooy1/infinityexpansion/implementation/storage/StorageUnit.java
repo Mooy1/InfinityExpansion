@@ -396,36 +396,47 @@ public class StorageUnit extends SlimefunItem {
                     "&cInput an Item!"
             ));
         } else {
-            int maxStorage = type.getMax();
+
             ItemStack storedItemStack = StackUtils.getItemFromID(storedItem, 1);
             if (storedItemStack == null) {
                 setStoredItem(b, null);
                 return;
             }
 
-            String convertedItemName = "";
-            if (storedItemStack.getItemMeta() != null) {
-                convertedItemName = storedItemStack.getItemMeta().getDisplayName();
-            }
+            ItemStack item = makeDisplayItem(type.getMax(), storedItemStack, stored, type == Type.INFINITIES);
 
-            String stacks = "&7Stacks: " + LoreUtils.format(Math.round((float) stored / storedItemStack.getMaxStackSize()));
-
-            if (this.type == Type.INFINITIES) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                        storedItemStack,
-                        convertedItemName,
-                        "&6Stored: &e" + LoreUtils.format(stored),
-                        stacks
-                ));
-            } else {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                        storedItemStack,
-                        convertedItemName,
-                        "&6Stored: &e" + LoreUtils.format(stored) + "/" + LoreUtils.format(maxStorage) + " &7(" + Math.round((float) 100 * stored / maxStorage )  + "%)",
-                        stacks
-                ));
-            }
+            inv.replaceExistingItem(STATUS_SLOT, item);
         }
+    }
+
+    @Nonnull
+    public static ItemStack makeDisplayItem(int max, @Nonnull ItemStack storedItemStack, int stored, boolean infinity) {
+        ItemStack item;
+
+        String convertedItemName = "";
+        if (storedItemStack.getItemMeta() != null) {
+            convertedItemName = storedItemStack.getItemMeta().getDisplayName();
+        }
+
+        String stacks = "&7Stacks: " + LoreUtils.format(Math.round((float) stored / storedItemStack.getMaxStackSize()));
+
+        if (infinity) {
+            item = new CustomItem(
+                    storedItemStack,
+                    convertedItemName,
+                    "&6Stored: &e" + LoreUtils.format(stored),
+                    stacks
+            );
+        } else {
+            item = new CustomItem(
+                    storedItemStack,
+                    convertedItemName,
+                    "&6Stored: &e" + LoreUtils.format(stored) + "/" + LoreUtils.format(max) + " &7(" + Math.round((float) 100 * stored / max )  + "%)",
+                    stacks
+            );
+        }
+
+        return item;
     }
 
     private void setStored(Block b, int stored) {
@@ -437,11 +448,11 @@ public class StorageUnit extends SlimefunItem {
         setBlockData(b, "storeditem", storedItem);
     }
 
-    private int getStored(@Nonnull Block b) {
+    public int getStored(@Nonnull Block b) {
         return Integer.parseInt(getBlockData(b.getLocation(), "stored"));
     }
 
-    private String getStoredItem(@Nonnull Block b) {
+    public String getStoredItem(@Nonnull Block b) {
         return getBlockData(b.getLocation(), "storeditem");
     }
 

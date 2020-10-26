@@ -5,7 +5,7 @@ name: InfinityExpansion
 author: Mooy1
 
 ## CHANGE this to a meaningful but short description of your plugin.
-description: slimefun endgame
+description: more slimefun content
 
 ## CHANGE this to the path of the class that extends JavaPlugin.
 main: me.mooy1.infinityexpansion.InfinityExpansion

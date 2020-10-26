@@ -5,8 +5,8 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.utils.LocationUtils;
-import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -17,8 +17,10 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +33,8 @@ import java.util.Objects;
 
 public class StorageNetworkViewer extends SlimefunItem {
 
-    public static final int LENGTH = 64;
+    public static final int RANGE = 48;
+    public static final int MAX = 18;
     private static final int STATUS_SLOT = 4;
     private static final String[] CONNECTABLE = {
             "STORAGE_NETWORK_VIEWER",
@@ -40,14 +43,14 @@ public class StorageNetworkViewer extends SlimefunItem {
             "ADVANCED_STORAGE",
             "REINFORCED_STORAGE",
             "VOID_STORAGE",
-            "INFINITE_STORAGE",
+            "INFINITY_STORAGE",
     };
     private static final String[] UNITS = {
-            "BASIC_STORAGE",
-            "ADVANCED_STORAGE",
-            "REINFORCED_STORAGE",
-            "VOID_STORAGE",
             "INFINITY_STORAGE",
+            "VOID_STORAGE",
+            "REINFORCED_STORAGE",
+            "ADVANCED_STORAGE",
+            "BASIC_STORAGE",
     };
 
     public StorageNetworkViewer() {
@@ -61,6 +64,11 @@ public class StorageNetworkViewer extends SlimefunItem {
             @Override
             public void init() {
                 setupInv(this);
+            }
+
+            @Override
+            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+
             }
 
             @Override
@@ -83,13 +91,15 @@ public class StorageNetworkViewer extends SlimefunItem {
     }
 
     private void setupInv(BlockMenuPreset blockMenuPreset) {
-        blockMenuPreset.setEmptySlotsClickable(false);
         for (int i = 0 ; i < 9 ; i ++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
         for (int i = 45 ; i < 54 ; i ++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i = 9 ; i < 45 ; i++) {
+            blockMenuPreset.addItem(i, PresetUtils.invisibleBackground, ChestMenuUtils.getEmptyClickHandler());
         }
     }
 
@@ -111,18 +121,44 @@ public class StorageNetworkViewer extends SlimefunItem {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return;
 
-        if (!inv.toInventory().getViewers().isEmpty()) {
+        if (!inv.hasViewer()) {
             return;
         }
 
-        Pair<List<Location>, Pair<List<Location>, Integer>> flow = inputFlow(0, l, new ArrayList<>(), new ArrayList<>(), l);
-        Pair<List<Location>, Integer> flowB = flow.getSecondValue();
-        List<Location> foundLocations = flow.getFirstValue();
+        Pair<Pair<List<Location>, List<String>>, Pair<List<Location>, Integer>> flow = inputFlow(0, l, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), l);
+        Pair<List<Location>, List<String>> flowA = flow.getFirstValue();
+        List<Location> foundLocations = flowA.getFirstValue();
+        List<String> foundIDs = flowA.getSecondValue();
+        int length = flow.getSecondValue().getSecondValue();
+        int size = foundIDs.size();
 
-        for (Location location : foundLocations) {
-            MessageUtils.broadcast("LOCATION" + location);
+        Material material = Material.ORANGE_STAINED_GLASS_PANE;
+        String name = "&6No storage units connected";
+
+        if (size > 0)  {
+            material = Material.LIME_STAINED_GLASS_PANE;
+            name = "&aConnected to Storage Network";
         }
 
+        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                material, name, "&6Units: &e" + size + " / " + MAX, "&6Length: &e" + length + " / " + RANGE
+        ));
+
+        for (int i = 9 ; i < 45 ; i++) {
+            inv.replaceExistingItem(i, PresetUtils.invisibleBackground);
+        }
+
+        int spot = 0;
+        for (String id : UNITS) {
+            int index = 0;
+            for (String found : foundIDs) {
+                if (id.equals(found)) {
+                    displayStatus(inv, spot, foundLocations.get(index), found);
+                    spot++;
+                }
+                index++;
+            }
+        }
     }
 
     /**
@@ -131,48 +167,112 @@ public class StorageNetworkViewer extends SlimefunItem {
      * @param count length of network so far
      * @param thisLocation location being checked
      * @param foundLocations list of units
+     * @param foundIDs list of found unit ids
      * @param checkedLocations checked locations
      * @param prev previous location
-     * @return list of locations
+     * @return list of locations, ids
      */
     @Nonnull
-    private Pair<List<Location>, Pair<List<Location>, Integer>> inputFlow(int count, @Nonnull Location thisLocation, @Nonnull List<Location> foundLocations, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
+    private Pair<Pair<List<Location>, List<String>>, Pair<List<Location>, Integer>> inputFlow(int count, @Nonnull Location thisLocation, @Nonnull List<Location> foundLocations, @Nonnull List<String> foundIDs, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
         checkedLocations.add(thisLocation);
 
-        String thisID = BlockStorage.checkID(thisLocation);
+        if (foundIDs.size() < MAX) {
 
-        if (thisID != null) { //try sf
+            String thisID = BlockStorage.checkID(thisLocation);
 
-            for (String check : CONNECTABLE) {
-                if (thisID.equals(check)) { //connector
+            if (thisID != null) { //try sf
 
-                    for (String unit : UNITS) { //add if unit
-                        if (thisID.equals(unit)) {
-                            foundLocations.add(thisLocation);
-                            break;
+                for (String check : CONNECTABLE) {
+                    if (thisID.equals(check)) { //connector
+
+                        for (String unit : UNITS) { //add if unit
+                            if (thisID.equals(unit)) {
+                                foundIDs.add(thisID);
+                                foundLocations.add(thisLocation);
+                                break;
+                            }
                         }
-                    }
 
-                    count++;
+                        count++;
 
-                    for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
+                        for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
 
-                        if (location != prev && !checkedLocations.contains(location) && count < LENGTH) {
+                            if (location != prev && !checkedLocations.contains(location) && count < RANGE) {
 
-                            Pair<List<Location>, Pair<List<Location>, Integer>> flow = inputFlow(count, location, foundLocations, checkedLocations, location);
-                            Pair<List<Location>, Integer> flowB = flow.getSecondValue();
-                            foundLocations = flow.getFirstValue();
-                            checkedLocations = flowB.getFirstValue();
-                            count = flowB.getSecondValue();
+                                Pair<Pair<List<Location>, List<String>>, Pair<List<Location>, Integer>> flow = inputFlow(count, location, foundLocations, foundIDs, checkedLocations, location);
+                                Pair<List<Location>, List<String>> flowA = flow.getFirstValue();
+                                Pair<List<Location>, Integer> flowB = flow.getSecondValue();
+                                foundLocations = flowA.getFirstValue();
+                                foundIDs = flowA.getSecondValue();
+                                checkedLocations = flowB.getFirstValue();
+                                count = flowB.getSecondValue();
 
+                            }
                         }
-                    }
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
 
-        return new Pair<>(foundLocations, new Pair<>(checkedLocations, count));
+        return new Pair<>(new Pair<>(foundLocations, foundIDs), new Pair<>(checkedLocations, count));
+    }
+
+    private void displayStatus(@Nonnull BlockMenu inv, int spot, @Nonnull Location l, @Nonnull String id) {
+
+        ItemStack unit = StackUtils.getItemFromID(id, 1);
+        ItemStack item = new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "&8Nothing stored");
+
+        if (unit == null) {
+            unit = new CustomItem(Material.BARRIER, "&cERROR");
+        }
+
+        String amount = BlockStorage.getLocationInfo(l, "stored");
+
+        if (amount != null) {
+
+            int stored = Integer.parseInt(amount);
+
+            if (stored > 0) {
+
+                String type = BlockStorage.getLocationInfo(l, "storeditem");
+
+                if (type != null) {
+
+                    ItemStack storedItemStack = StackUtils.getItemFromID(type, 1);
+
+                    if (storedItemStack != null) {
+
+                        item = StorageUnit.makeDisplayItem(getMax(id), storedItemStack, stored, id.equals("INFINITY_STORAGE"));
+                    }
+                }
+            }
+        }
+
+        displayItem(inv, unit, item, spot);
+    }
+
+    private void displayItem(BlockMenu inv, ItemStack item1, ItemStack item2, int spot) {
+        int rows = (int) (1 + Math.floor((float) spot / 9));
+        int slot = rows * 9 + spot;
+        inv.replaceExistingItem(slot, item1);
+        inv.replaceExistingItem(slot + 9, item2);
+    }
+
+    private int getMax(@Nonnull String id) {
+        switch (id) {
+            case "BASIC_STORAGE":
+                return StorageUnit.BASIC;
+            case "ADVANCED_STORAGE":
+                return StorageUnit.ADVANCED;
+            case "REINFORCED_STORAGE":
+                return StorageUnit.REINFORCED;
+            case "VOID_STORAGE":
+                return StorageUnit.VOID;
+            case "INFINITY_STORAGE":
+                return StorageUnit.INFINITY;
+        }
+        return 0;
     }
 }

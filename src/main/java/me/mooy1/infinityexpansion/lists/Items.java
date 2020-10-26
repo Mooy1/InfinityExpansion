@@ -24,6 +24,7 @@ import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import me.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -46,6 +47,7 @@ public final class Items {
             "&7Pushes items into machines and inventories",
             "&7Also serves as an Item Duct",
             "",
+            "&6Connects up to &e" + OutputDuct.MAX + " &6Inventories",
             "&6Range: &e" + OutputDuct.LENGTH + " &6blocks"
     );
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
@@ -542,8 +544,8 @@ public final class Items {
             "&7Shows status of any Storage Units",
             "&7connected through item ducts or other storage units",
             "",
-            "&6Range: &e" + StorageNetworkViewer.LENGTH + " &6blocks"
-    
+            "&6Connects up to &e" + StorageNetworkViewer.MAX + " &6Inventories",
+            "&6Range: &e" + StorageNetworkViewer.RANGE + " &6blocks"
     );
 
 
