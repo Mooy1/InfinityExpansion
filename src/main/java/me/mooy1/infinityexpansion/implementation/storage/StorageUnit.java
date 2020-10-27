@@ -51,7 +51,6 @@ import java.util.Objects;
  * and code to learn from
  *
  */
-
 public class StorageUnit extends SlimefunItem {
 
     public static final int BASIC = 6400;
@@ -217,7 +216,14 @@ public class StorageUnit extends SlimefunItem {
             return false;
         });
     }
-    
+
+    /**
+     * This method will attempt to store an item before the unit is broken, otherwise drop it
+     *
+     * @param b block broken
+     * @param inv BlockMenu of block
+     * @param slots slots to perform this on
+     */
     private void tryToStoreOrDrop(Block b, @Nonnull BlockMenu inv, @Nonnull int[] slots) {
         int stored = getStored(b);
         String storedItem = getStoredItem(b);
@@ -382,6 +388,11 @@ public class StorageUnit extends SlimefunItem {
         }
     }
 
+    /**
+     * This method updates the status slot of the storage unit
+     *
+     * @param b block of storage unit
+     */
     private void updateStatus(@Nonnull Block b) {
         BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -409,6 +420,15 @@ public class StorageUnit extends SlimefunItem {
         }
     }
 
+    /**
+     * This method makes a display item with lore from the amount, type, and max storage
+     *
+     * @param max max storage
+     * @param storedItemStack ItemStack gotten from the stored item id
+     * @param stored amount stored
+     * @param infinity whether the storage unit is a infinity storage unit
+     * @return the display item
+     */
     @Nonnull
     public static ItemStack makeDisplayItem(int max, @Nonnull ItemStack storedItemStack, int stored, boolean infinity) {
         ItemStack item;

@@ -8,6 +8,11 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Collection of utils for sending messages to players and broadcasting
+ *
+ * @author Mooy1
+ */
 public class MessageUtils {
 
     private MessageUtils() {}

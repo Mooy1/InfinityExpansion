@@ -6,6 +6,11 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
+/**
+ * RecipeTypes for this addon
+ *
+ * @author Mooy1
+ */
 public class RecipeTypes {
 
     public static final RecipeType INFINITY_WORKBENCH = new RecipeType(

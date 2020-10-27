@@ -36,12 +36,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A reactor that generates huge power but costs infinity ingots and void ingots
+ *
+ * @author Mooy1
+ */
 public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, RecipeDisplayItem {
 
     public static final int ENERGY = 600_000;
     public static final int STORAGE = 120_000_000;
-    public static final int INFINITY_INTERVAL = 144000;
-    public static final int VOID_INTERVAL = 24000;
+    public static final int INFINITY_INTERVAL = 72000;
+    public static final int VOID_INTERVAL = 12000;
     public static final int[] INPUT_SLOTS = {
             PresetUtils.slot1, PresetUtils.slot3
     };

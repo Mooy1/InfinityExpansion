@@ -2,6 +2,11 @@ package me.mooy1.infinityexpansion.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Collection of utils for math and random stuffs
+ *
+ * @author Mooy1
+ */
 public class MathUtils {
 
     private MathUtils() {}

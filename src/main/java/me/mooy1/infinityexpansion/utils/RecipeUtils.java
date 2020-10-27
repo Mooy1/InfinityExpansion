@@ -7,6 +7,11 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Collection of utils for making recipes
+ *
+ * @author Mooy1
+ */
 public final class RecipeUtils {
 
     private RecipeUtils() {}

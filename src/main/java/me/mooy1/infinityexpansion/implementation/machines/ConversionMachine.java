@@ -40,6 +40,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Machines that convert 1 item to another with energy
+ *
+ * @author Mooy1
+ */
 public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem, EnergyNetComponent {
 
     public static final int TIME = 4;

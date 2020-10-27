@@ -40,6 +40,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Grows crops in a virtual interface
+ *
+ * @author Mooy1
+ */
 public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 18;
@@ -246,6 +251,12 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
         }
     }
 
+    /**
+     * This method gets the input type
+     *
+     * @param input input item
+     * @return type if any
+     */
     @Nullable
     private String getInputType(Material input) {
         for (int i = 0; i < INPUTS.length; i++) {

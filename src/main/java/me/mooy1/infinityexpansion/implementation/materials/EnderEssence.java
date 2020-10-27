@@ -5,6 +5,11 @@ import me.mooy1.infinityexpansion.lists.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 
+/**
+ * Guide item for ender essence geo-resource
+ *
+ * @author Mooy1
+ */
 public class EnderEssence extends SlimefunItem {
 
     public EnderEssence() {

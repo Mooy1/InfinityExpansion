@@ -3,6 +3,7 @@ package me.mooy1.infinityexpansion.implementation.storage;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import lombok.NonNull;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.utils.StackUtils;
@@ -34,6 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A crafting machine for upgrading storage units and retaining the stored items
+ *
+ * @author Mooy1
+ */
 public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
     public static final ItemStack[][] RECIPES = {
             {
@@ -101,7 +107,7 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
                 menu.addMenuClickHandler(STATUS_SLOT, (p, slot, item, action) -> {
-                    craft(b, p);
+                    craft(menu, p);
                     return false;
                 });
             }
@@ -128,8 +134,9 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
-                inv.dropItems(b.getLocation(), INPUT_SLOTS);
+                Location l = b.getLocation();
+                inv.dropItems(l, OUTPUT_SLOTS);
+                inv.dropItems(l, INPUT_SLOTS);
             }
 
             return true;
@@ -185,10 +192,13 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
         }
     }
 
-    public void craft(@Nonnull Block b, @Nonnull Player p) {
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
-        if (inv == null) return;
-
+    /**
+     * This method crafts an item and updates the status of the menu
+     *
+     * @param inv BlockMenu
+     * @param p player crafting it
+     */
+    public void craft(@NonNull BlockMenu inv, @Nonnull Player p) {
         ItemStack output = getOutput(inv);
 
         if (output == null) { //invalid
@@ -216,6 +226,12 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
         }
     }
 
+    /**
+     * This method gets the output from an inventory
+     *
+     * @param inv inventory to check
+     * @return the output if any
+     */
     @Nullable
     public ItemStack getOutput(@Nonnull BlockMenu inv) {
 
@@ -250,6 +266,12 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
         return null;
     }
 
+    /**
+     * This method transfers the stored item lore from the input to output
+     *
+     * @param output output item being modified
+     * @param input input item
+     */
     public static void transferItems(ItemStack output, ItemStack input) {
         ItemMeta inputMeta = input.getItemMeta();
         if (inputMeta != null) {
@@ -259,7 +281,6 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
                 int i = 0;
                 for (String line : inputLore) {
                     if (ChatColor.stripColor(line).equals("Stored Item:")) {
-
 
                         ItemMeta outputMeta = output.getItemMeta();
                         if (outputMeta != null) {

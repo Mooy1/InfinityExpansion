@@ -42,6 +42,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Mines stuff... from nothing
+ *
+ * @author Mooy1
+ */
 public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
@@ -49,10 +54,10 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
     public static final int VOID_SPEED = 4;
     public static final int INFINITY_SPEED = 16;
 
-    public static final int BASIC_ENERGY = 2400;
-    public static final int ADVANCED_ENERGY = 7200;
-    public static final int VOID_ENERGY = 30000;
-    public static final int INFINITY_ENERGY = 180000;
+    public static final int BASIC_ENERGY = 1800;
+    public static final int ADVANCED_ENERGY = 5400;
+    public static final int VOID_ENERGY = 24000;
+    public static final int INFINITY_ENERGY = 165000;
 
     private final Type type;
 
@@ -221,7 +226,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
     public enum Type {
 
         BASIC(Categories.ADVANCED_MACHINES, BASIC_ENERGY, Items.BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MACHINE_PLATE, SlimefunItems.LARGE_CAPACITOR, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, new ItemStack[]{
@@ -247,7 +252,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
         }),
 
         ADVANCED(Categories.ADVANCED_MACHINES, ADVANCED_ENERGY, Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, new ItemStack[]{
@@ -277,7 +282,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
         }),
 
         VOID(Categories.ADVANCED_MACHINES, VOID_ENERGY, Items.VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.VOID_CAPACITOR, Items.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), Items.ADVANCED_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, new ItemStack[]{

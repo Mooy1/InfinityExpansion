@@ -7,6 +7,11 @@ import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Just a cool way to get fire aspect X
+ *
+ * @author Mooy1
+ */
 public class EnderFlame extends UnplaceableBlock {
 
     public EnderFlame() {

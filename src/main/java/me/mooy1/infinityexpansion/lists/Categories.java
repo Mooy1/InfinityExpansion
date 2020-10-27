@@ -8,6 +8,11 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
+/**
+ * Categories for this addon
+ *
+ * @author Mooy1
+ */
 public final class Categories {
 
     public static final Category BASIC_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),

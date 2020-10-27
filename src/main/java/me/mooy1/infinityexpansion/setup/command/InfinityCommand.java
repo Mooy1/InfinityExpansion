@@ -18,9 +18,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Command stuff
+ * Command stuff, Many stuffs from Slimefun's Command stuff
  *
- * Many stuffs from Slimefun's Command stuff
+ * @author Mooy1
  *
  */
 public class InfinityCommand implements CommandExecutor, Listener {

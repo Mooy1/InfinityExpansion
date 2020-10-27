@@ -20,6 +20,11 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Singularities and there recipe displays
+ *
+ * @author Mooy1
+ */
 public class Singularity extends SlimefunItem {
 
     public Singularity(Type type) {

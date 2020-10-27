@@ -9,6 +9,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
@@ -40,6 +41,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Grows trees
+ *
+ * @author Mooy1
+ */
 public class TreeGrower extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 36;
@@ -254,8 +260,14 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
         }
     }
 
+    /**
+     * This method gets the type of input
+     *
+     * @param input input item
+     * @return type of input
+     */
     @Nullable
-    private String getInputType(ItemStack input) {
+    private String getInputType(@NonNull ItemStack input) {
         for (String recipe : INPUTS) {
             if (input.getType() == Material.getMaterial(recipe + "_SAPLING")) return recipe;
         }

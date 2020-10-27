@@ -51,7 +51,6 @@ import java.util.Objects;
  * for some stuff to work off of
  *
  */
-
 public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
 
     public static final int WATER_RATE = 9;
@@ -178,6 +177,13 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
         return rate;
     }
 
+    /**
+     * This method gets a string depending on the type of generation
+     *
+     * @param rate generation rate
+     * @param l location of generator
+     * @return type of generation
+     */
     @Nonnull
     public String getGenerationType(int rate, Location l) {
 
@@ -201,7 +207,14 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
         return "";
     }
 
-    public int getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
+    /**
+     * This method gets the output of the generator depending on certain circumstances
+     *
+     * @param block block of generator
+     * @param world world of generator
+     * @return amount to generate
+     */
+    private int getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
         int generation = type.getGeneration();
 
         if (type == Type.WATER || type == Type.WATER2) {

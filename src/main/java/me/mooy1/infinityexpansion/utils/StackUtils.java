@@ -12,6 +12,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Collection of utils for modifying ItemStacks and getting their ids
+ *
+ * @author Mooy1
+ */
 public final class StackUtils {
 
     private StackUtils() {}

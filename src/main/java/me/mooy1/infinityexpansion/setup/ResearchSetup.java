@@ -7,6 +7,11 @@ import org.bukkit.NamespacedKey;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Sets up researches but... i don't really like researches
+ *
+ * @author Mooy1
+ */
 public final class ResearchSetup {
 
     private ResearchSetup() {

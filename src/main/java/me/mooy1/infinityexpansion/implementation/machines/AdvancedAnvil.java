@@ -1,6 +1,5 @@
 package me.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.thebusybiscuit.slimefun4.api.items.ItemSetting;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -27,6 +26,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+/**
+ * Combines slimefun items, exceeded vanilla anvil limits
+ *
+ * @author Mooy1
+ */
 public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
 
     public static final int ENERGY = 100_000;

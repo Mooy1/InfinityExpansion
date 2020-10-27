@@ -31,6 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Allows you to view the status of up to 18 storage units at once
+ *
+ * @author Mooy1
+ */
 public class StorageNetworkViewer extends SlimefunItem {
 
     public static final int RANGE = 48;
@@ -219,7 +224,15 @@ public class StorageNetworkViewer extends SlimefunItem {
         return new Pair<>(new Pair<>(foundLocations, foundIDs), new Pair<>(checkedLocations, count));
     }
 
-    private void displayStatus(@Nonnull BlockMenu inv, int spot, @Nonnull Location l, @Nonnull String id) {
+    /**
+     * This method has does a series of checks before displaying the storage and it's item in a BlockMenu
+     *
+     * @param inv BlockMenu to display in
+     * @param spot spot to display in
+     * @param l location of storage unit
+     * @param id id of storage unit
+     */
+    private static void displayStatus(@Nonnull BlockMenu inv, int spot, @Nonnull Location l, @Nonnull String id) {
 
         ItemStack unit = StackUtils.getItemFromID(id, 1);
         ItemStack item = new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "&8Nothing stored");
@@ -253,14 +266,28 @@ public class StorageNetworkViewer extends SlimefunItem {
         displayItem(inv, unit, item, spot);
     }
 
-    private void displayItem(BlockMenu inv, ItemStack item1, ItemStack item2, int spot) {
+    /**
+     * This method will display 2 the stored item and machine in an inventory at a specified spot
+     *
+     * @param inv BlockMenu to display in
+     * @param item1 machine
+     * @param item2 stored item
+     * @param spot range 0 - MAX
+     */
+    private static void displayItem(BlockMenu inv, ItemStack item1, ItemStack item2, int spot) {
         int rows = (int) (1 + Math.floor((float) spot / 9));
         int slot = rows * 9 + spot;
         inv.replaceExistingItem(slot, item1);
         inv.replaceExistingItem(slot + 9, item2);
     }
 
-    private int getMax(@Nonnull String id) {
+    /**
+     * This method gets the max storage of a storage unit from its id
+     *
+     * @param id id
+     * @return the max storage
+     */
+    private static int getMax(@Nonnull String id) {
         switch (id) {
             case "BASIC_STORAGE":
                 return StorageUnit.BASIC;

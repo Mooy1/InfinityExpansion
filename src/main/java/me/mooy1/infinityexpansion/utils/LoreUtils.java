@@ -4,6 +4,11 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 
 import java.text.DecimalFormat;
 
+/**
+ * Collection of utils for building item lore
+ *
+ * @author Mooy1
+ */
 public final class LoreUtils {
 
     public static final int SERVER_TICK = 20;

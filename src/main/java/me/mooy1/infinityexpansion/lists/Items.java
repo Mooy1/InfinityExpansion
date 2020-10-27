@@ -24,12 +24,16 @@ import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import me.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
-import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * Items for this addon
+ *
+ * @author Mooy1
+ */
 public final class Items {
 
     //ducts
@@ -291,6 +295,13 @@ public final class Items {
             "&c&o1 per energy network",
             "",
             "&8\u21E8 &e\u26A1 &bInfinite &7J Capacity"
+    );
+    public static final SlimefunItemStack VOID_CAPACITOR = new SlimefunItemStack(
+            "VOID_CAPACITOR",
+            HeadTexture.CAPACITOR_25,
+            "&8Void &7Capacitor",
+            "",
+            "&8\u21E8 &e\u26A1 " + ItemSetup.VOID_CAPACITOR + " &7J Capacity"
     );
     public static final SlimefunItemStack HYDRO_GENERATOR = new SlimefunItemStack(
             "HYDRO_GENERATOR",

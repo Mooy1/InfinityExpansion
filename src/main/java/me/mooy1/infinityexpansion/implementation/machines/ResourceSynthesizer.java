@@ -33,6 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Creates special resources from the combination of singularities
+ *
+ * @author Mooy1
+ */
 public class ResourceSynthesizer extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 1_000_000;

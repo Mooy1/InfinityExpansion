@@ -9,6 +9,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import me.mooy1.infinityexpansion.implementation.materials.Singularity;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
@@ -42,6 +43,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Constructs singularities form many items
+ *
+ * @author Mooy1
+ */
 public class SingularityConstructor extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 300;
@@ -343,7 +349,16 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         }
     }
 
-    private boolean checkItemAndSet(Block b, BlockMenu inv, ItemStack item, int speed) {
+    /**
+     * This method will check the input and add location data if it is valid
+     *
+     * @param b block
+     * @param inv BlockMenu
+     * @param item item input
+     * @param speed speed of machine
+     * @return whether it was successful
+     */
+    private boolean checkItemAndSet(@NonNull Block b, @NonNull BlockMenu inv, @NonNull ItemStack item, int speed) {
         int itemAmount = item.getAmount();
 
         for (int i = 0; i < INPUT_ITEM_IDS.length ; i++) {
@@ -455,6 +470,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
             "INFINITY_SINGULARITY"
     };
+
     public static final int[] OUTPUT_TIMES = {
             1600,
             1600,

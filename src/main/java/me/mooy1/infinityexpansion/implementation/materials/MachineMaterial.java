@@ -18,6 +18,11 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+/**
+ * machine material items
+ *
+ * @author Mooy1
+ */
 public class MachineMaterial extends SlimefunItem {
 
     public MachineMaterial(Type type) {

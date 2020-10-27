@@ -9,6 +9,11 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Category for infinity item cheating since flex category doesn't work for that
+ *
+ * @author Mooy1
+ */
 public class CheatCategory extends Category {
     public CheatCategory() {
         super(new NamespacedKey(InfinityExpansion.getInstance(), "INFINITY_CHEAT"),

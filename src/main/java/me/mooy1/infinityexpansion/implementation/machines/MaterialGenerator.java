@@ -38,6 +38,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Machines that generate materials at the cost of energy
+ *
+ * @author Mooy1
+ */
 public class MaterialGenerator extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int COBBLE_ENERGY = 30;
