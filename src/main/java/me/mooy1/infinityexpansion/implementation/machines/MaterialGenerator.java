@@ -45,7 +45,7 @@ import java.util.Objects;
  */
 public class MaterialGenerator extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
-    public static final int COBBLE_ENERGY = 30;
+    public static final int COBBLE_ENERGY = 24;
     public static final int COBBLE2_ENERGY = 120;
     public static final int OBSIDIAN_ENERGY = 360;
 

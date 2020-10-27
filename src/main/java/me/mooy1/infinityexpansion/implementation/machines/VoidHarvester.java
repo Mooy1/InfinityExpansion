@@ -46,7 +46,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
 
     public static final int BASIC_ENERGY = 900;
     public static final int BASIC_SPEED = 1;
-    public static final int INFINITY_ENERGY = 90000;
+    public static final int INFINITY_ENERGY = 9000;
     public static final int INFINITY_SPEED = 10;
 
     private static final int[] OUTPUT_SLOTS = {

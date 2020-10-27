@@ -57,7 +57,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
     public static final int BASIC_ENERGY = 1800;
     public static final int ADVANCED_ENERGY = 5400;
     public static final int VOID_ENERGY = 24000;
-    public static final int INFINITY_ENERGY = 165000;
+    public static final int INFINITY_ENERGY = 120000;
 
     private final Type type;
 

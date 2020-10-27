@@ -9,6 +9,7 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -81,11 +82,10 @@ public class TransferUtils {
      * This method gets the location of the other chest in a double chest
      *
      * @param inventory inventory of chest
-     * @param found location thats already known
-     * @return the other location
+     * @return both locations
      */
     @Nullable
-    public static Location getOtherChest(@Nonnull Inventory inventory, @Nonnull Location found) {
+    public static Pair<Location, Location> getOtherChest(@Nonnull Inventory inventory) {
         InventoryHolder holder = inventory.getHolder();
 
         if (holder instanceof DoubleChest) {
@@ -95,12 +95,7 @@ public class TransferUtils {
             Chest rightChest = (Chest) doubleChest.getRightSide();
 
             if (leftChest != null && rightChest != null) {
-
-                if (leftChest.getLocation() == found) {
-                    return rightChest.getLocation();
-                } else {
-                    return leftChest.getLocation();
-                }
+                return new Pair<>(leftChest.getLocation(), rightChest.getLocation());
             }
         }
 

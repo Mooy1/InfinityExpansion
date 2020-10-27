@@ -52,7 +52,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
     public static final int BASIC_ENERGY = 300;
     public static final int BASIC_SPEED = 1;
-    public static final int INFINITY_ENERGY = 30000;
+    public static final int INFINITY_ENERGY = 3000;
     public static final int INFINITY_SPEED = 10;
 
     private final Type type;

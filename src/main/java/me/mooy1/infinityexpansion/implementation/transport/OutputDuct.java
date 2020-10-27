@@ -58,12 +58,14 @@ public class OutputDuct extends SlimefunItem {
 
     private static final int STATUS = 16;
     public static final int LENGTH = 12;
-    public static final int MAX = 12;
+    public static final int MAX = 8;
 
     public OutputDuct() {
         super(Categories.STORAGE_TRANSPORT, Items.OUTPUT_DUCT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-
-        });
+                Items.ITEM_DUCT, new ItemStack(Material.HOPPER), Items.ITEM_DUCT,
+                Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE,
+                Items.ITEM_DUCT, new ItemStack(Material.HOPPER), Items.ITEM_DUCT
+        }, new CustomItem(Items.OUTPUT_DUCT, 2));
 
         new BlockMenuPreset(getId(), Objects.requireNonNull(Items.OUTPUT_DUCT.getDisplayName())) {
             @Override
@@ -225,10 +227,7 @@ public class OutputDuct extends SlimefunItem {
         checkedLocations.add(targetLocation);
 
         if (targetInventory != null) { //add double chest to checked
-            Location doubleChestCheck = TransferUtils.getOtherChest(targetInventory, targetLocation);
-            if (doubleChestCheck != null) {
-                checkedLocations.add(doubleChestCheck);
-            }
+            addDoubleChest(targetInventory, checkedLocations);
         }
 
         Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> flow = inputFlow(0, thisLocation, new ArrayList<>(), new ArrayList<>(), checkedLocations, targetLocation);
@@ -272,9 +271,11 @@ public class OutputDuct extends SlimefunItem {
                                     if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
                                         int amount = outputItem.getAmount();
 
-                                        targetMachine.pushItem(outputItem, destinationSlots);
+                                        try {
+                                            targetMachine.pushItem(outputItem, destinationSlots);
+                                            extractionMenu.consumeItem(slot, amount);
+                                        } catch (NullPointerException ignored) { }
 
-                                        extractionMenu.consumeItem(slot, amount);
                                     }
 
                                 } else {
@@ -406,14 +407,7 @@ public class OutputDuct extends SlimefunItem {
                 if (inv != null) {
 
                     invList.add(inv);
-
-                    //add other part of double chest
-
-                    Location doubleChestCheck = TransferUtils.getOtherChest(inv, thisLocation);
-                    if (doubleChestCheck != null) {
-                        checkedLocations.add(doubleChestCheck);
-                    }
-
+                    addDoubleChest(inv, checkedLocations);
                 }
             }
         }
@@ -445,6 +439,14 @@ public class OutputDuct extends SlimefunItem {
             if (drop != null && drop.getType() != Material.AIR) {
                 b.getWorld().dropItemNaturally(b.getLocation(), drop);
             }
+        }
+    }
+
+    private static void addDoubleChest(Inventory inv, List<Location> checkedLocations) {
+        Pair<Location, Location> doubleChestCheck = TransferUtils.getOtherChest(inv);
+        if (doubleChestCheck != null) {
+            checkedLocations.add(doubleChestCheck.getFirstValue());
+            checkedLocations.add(doubleChestCheck.getSecondValue());
         }
     }
 }
