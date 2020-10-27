@@ -11,6 +11,7 @@ import me.mooy1.infinityexpansion.implementation.items.Strainer;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
 import me.mooy1.infinityexpansion.implementation.materials.MainMaterial;
 import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
+import me.mooy1.infinityexpansion.implementation.storage.StorageDuct;
 import me.mooy1.infinityexpansion.implementation.storage.StorageForge;
 import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
@@ -18,6 +19,8 @@ import me.mooy1.infinityexpansion.implementation.gear.InfinityTools;
 import me.mooy1.infinityexpansion.implementation.gear.EnderFlame;
 import me.mooy1.infinityexpansion.implementation.machines.*;
 import me.mooy1.infinityexpansion.implementation.materials.*;
+import me.mooy1.infinityexpansion.implementation.transport.ItemDuct;
+import me.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.Items;
@@ -29,9 +32,15 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Sets up items
+ *
+ * @author Mooy1
+ */
 public final class ItemSetup {
-    
+
     public static int INFINITY_CAPACITOR = 1600000000;
+    public static int VOID_CAPACITOR = 16000000;
 
     public static int ADVANCED_EN_SPEED = 5;
     public static int ADVANCED_EN_ENERGY = 600;
@@ -86,13 +95,16 @@ public final class ItemSetup {
         new SlimefunItem(Categories.INFINITY_MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
         new InfinityWorkbench().register(plugin);
 
-        //storage
+        //storage and transport
 
         new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
         }
         new StorageNetworkViewer().register(plugin);
+        new StorageDuct().register(plugin);
+        new ItemDuct().register(plugin);
+        new OutputDuct().register(plugin);
 
         //machine
 
@@ -149,9 +161,16 @@ public final class ItemSetup {
         //sf constructors
 
         new Capacitor(Categories.INFINITY_CHEAT, INFINITY_CAPACITOR, Items.INFINITY_CAPACITOR,
-            RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_CAPACITOR)).register(plugin);
+                RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_CAPACITOR)).register(plugin);
 
-        new AutoEnchanter(Categories.ADVANCED_MACHINES, Items.ADVANCED_ENCHANTER,RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new Capacitor(Categories.ADVANCED_MACHINES, VOID_CAPACITOR, Items.VOID_CAPACITOR,
+                RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                Items.VOID_INGOT, Items.REDSTONE_SINGULARITY, Items.VOID_INGOT,
+                Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.REDSTONE_SINGULARITY, Items.VOID_INGOT
+        }).register(plugin);
+
+        new AutoEnchanter(Categories.ADVANCED_MACHINES, Items.ADVANCED_ENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGSTEEL_PLATE, SlimefunItems.AUTO_ENCHANTER, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -160,14 +179,17 @@ public final class ItemSetup {
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.NETHERITE_CHESTPLATE);
             }
+
             @Override
             public int getEnergyConsumption() {
                 return ADVANCED_EN_ENERGY;
             }
+
             @Override
             public int getCapacity() {
                 return ADVANCED_EN_ENERGY;
             }
+
             @Override
             public int getSpeed() {
                 return ADVANCED_EN_SPEED;
@@ -175,7 +197,7 @@ public final class ItemSetup {
 
         }.register(plugin);
 
-        new AutoDisenchanter(Categories.ADVANCED_MACHINES, Items.ADVANCED_DISENCHANTER,RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new AutoDisenchanter(Categories.ADVANCED_MACHINES, Items.ADVANCED_DISENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGSTEEL_PLATE, SlimefunItems.AUTO_DISENCHANTER, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -184,14 +206,17 @@ public final class ItemSetup {
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.ENCHANTED_BOOK);
             }
+
             @Override
             public int getEnergyConsumption() {
                 return ADVANCED_DIS_ENERGY;
             }
+
             @Override
             public int getCapacity() {
                 return ADVANCED_DIS_ENERGY;
             }
+
             @Override
             public int getSpeed() {
                 return ADVANCED_DIS_SPEED;
@@ -200,19 +225,22 @@ public final class ItemSetup {
 
         }.register(plugin);
 
-        new AutoEnchanter(Categories.INFINITY_CHEAT, Items.INFINITY_ENCHANTER,RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_ENCHANTER)) {
+        new AutoEnchanter(Categories.INFINITY_CHEAT, Items.INFINITY_ENCHANTER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_ENCHANTER)) {
             @Override
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.NETHERITE_CHESTPLATE);
             }
+
             @Override
             public int getEnergyConsumption() {
                 return INFINITY_EN_ENERGY;
             }
+
             @Override
             public int getCapacity() {
                 return INFINITY_EN_ENERGY;
             }
+
             @Override
             public int getSpeed() {
                 return INFINITY_EN_SPEED;
@@ -225,14 +253,17 @@ public final class ItemSetup {
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.ENCHANTED_BOOK);
             }
+
             @Override
             public int getEnergyConsumption() {
                 return INFINITY_DIS_ENERGY;
             }
+
             @Override
             public int getCapacity() {
                 return INFINITY_DIS_ENERGY;
             }
+
             @Override
             public int getSpeed() {
                 return INFINITY_DIS_SPEED;
@@ -240,7 +271,7 @@ public final class ItemSetup {
 
         }.register(plugin);
 
-        new ChargingBench(Categories.ADVANCED_MACHINES, Items.ADVANCED_CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new ChargingBench(Categories.ADVANCED_MACHINES, Items.ADVANCED_CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, SlimefunItems.CHARGING_BENCH, Items.MACHINE_CIRCUIT,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE,
@@ -249,10 +280,12 @@ public final class ItemSetup {
             public int getEnergyConsumption() {
                 return ADVANCED_CHARGER_ENERGY;
             }
+
             @Override
             public int getCapacity() {
                 return ADVANCED_CHARGER_ENERGY;
             }
+
             @Override
             public int getSpeed() {
                 return ADVANCED_CHARGER_SPEED;
@@ -265,10 +298,12 @@ public final class ItemSetup {
             public int getEnergyConsumption() {
                 return INFINITY_CHARGER_ENERGY;
             }
+
             @Override
             public int getCapacity() {
                 return INFINITY_CHARGER_ENERGY;
             }
+
             @Override
             public int getSpeed() {
                 return INFINITY_CHARGER_SPEED;

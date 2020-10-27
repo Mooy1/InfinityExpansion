@@ -10,7 +10,11 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-
+/**
+ * ender essence geo-resource
+ *
+ * @author Mooy1
+ */
 public class EnderEssenceResource implements GEOResource {
 
     private static final NamespacedKey key = new NamespacedKey(InfinityExpansion.getInstance(), "ender_essence");

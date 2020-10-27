@@ -12,6 +12,11 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 import javax.annotation.Nonnull;
 
+/**
+ * String tools lul
+ *
+ * @author Mooy1
+ */
 public class InfinityTools extends SlimefunItem {
 
     public InfinityTools(@Nonnull Type type) {

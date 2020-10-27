@@ -19,6 +19,11 @@ import org.bukkit.potion.PotionEffectType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Strong armor... maybe give flight at some point
+ *
+ * @author Mooy1
+ */
 public class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor { //add sf bow too
 
     public InfinityArmor(@Nonnull Type type) {

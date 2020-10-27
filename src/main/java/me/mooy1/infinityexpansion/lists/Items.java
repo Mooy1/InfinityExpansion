@@ -19,7 +19,9 @@ import me.mooy1.infinityexpansion.implementation.machines.SingularityConstructor
 import me.mooy1.infinityexpansion.implementation.machines.TreeGrower;
 import me.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import me.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
+import me.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import me.mooy1.infinityexpansion.implementation.storage.StorageUnit;
+import me.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.utils.LoreUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -27,39 +29,43 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * Items for this addon
+ *
+ * @author Mooy1
+ */
 public final class Items {
 
     //ducts
 
     public static final SlimefunItemStack ITEM_DUCT = new SlimefunItemStack(
             "ITEM_DUCT",
-            Material.END_ROD,
+            Material.WHITE_STAINED_GLASS,
             "&fItem Duct",
-            "&7Transports items between Input, Output, and Connector Ducts"
-    );
-    public static final SlimefunItemStack INPUT_DUCT = new SlimefunItemStack(
-            "INPUT_DUCT",
-            Material.CYAN_STAINED_GLASS,
-            "&3Input Duct",
-            "&7Pulls items out of machines and inventories"
+            "&7Connects machines, inventories, and output ducts"
     );
     public static final SlimefunItemStack OUTPUT_DUCT = new SlimefunItemStack(
             "OUTPUT_DUCT",
             Material.ORANGE_STAINED_GLASS,
             "&6Output Duct",
-            "&7Pushes items into machines and inventories"
-    );
-    public static final SlimefunItemStack CONNECTOR_DUCT = new SlimefunItemStack(
-            "CONNECTOR_DUCT",
-            Material.WHITE_STAINED_GLASS,
-            "&7Item Duct",
-            "&7Changes the direction of a transport flow"
+            "&7Pushes items into machines and inventories",
+            "&7Also serves as an Item Duct",
+            "",
+            "&6Connects up to &e" + OutputDuct.MAX_INVS + " &6Inventories",
+            "&6Range: &e" + OutputDuct.DUCT_LENGTH + " &6blocks"
     );
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",
-            Material.CRAFTING_TABLE,
+            Material.BEEHIVE,
             "&6Storage Forge",
-            "&7Upgrades the tier of Storage Units"
+            "&7Upgrades the tier of Storage Units",
+            "&7Retains stored items"
+    );
+    public static final SlimefunItemStack STORAGE_DUCT = new SlimefunItemStack(
+            "STORAGE_DUCT",
+            Material.GRAY_STAINED_GLASS,
+            "&7Storage Duct",
+            "&7Extends the reach of your storage network viewer"
     );
 
     //Machines
@@ -289,6 +295,13 @@ public final class Items {
             "&c&o1 per energy network",
             "",
             "&8\u21E8 &e\u26A1 &bInfinite &7J Capacity"
+    );
+    public static final SlimefunItemStack VOID_CAPACITOR = new SlimefunItemStack(
+            "VOID_CAPACITOR",
+            HeadTexture.CAPACITOR_25,
+            "&8Void &7Capacitor",
+            "",
+            "&8\u21E8 &e\u26A1 " + ItemSetup.VOID_CAPACITOR + " &7J Capacity"
     );
     public static final SlimefunItemStack HYDRO_GENERATOR = new SlimefunItemStack(
             "HYDRO_GENERATOR",
@@ -538,11 +551,12 @@ public final class Items {
     public static final SlimefunItemStack STORAGE_NETWORK_VIEWER = new SlimefunItemStack(
             "STORAGE_NETWORK_VIEWER",
             Material.CHISELED_STONE_BRICKS,
-            "&7Storage Network Viewer",
-            "&7Shows status of any Storage Units in the connected Cargo Network",
+            "&6Storage Network Viewer",
+            "&7Shows status of any Storage Units",
+            "&7connected through item ducts or other storage units",
             "",
-            "&cNot yet functional"
-    
+            "&6Connects up to &e" + StorageNetworkViewer.MAX + " &6Inventories",
+            "&6Range: &e" + StorageNetworkViewer.RANGE + " &6blocks"
     );
 
 

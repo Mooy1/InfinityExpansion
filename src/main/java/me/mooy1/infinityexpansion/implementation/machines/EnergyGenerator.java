@@ -51,22 +51,21 @@ import java.util.Objects;
  * for some stuff to work off of
  *
  */
-
 public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
 
-    public static final int WATER_RATE = 12;
-    public static final int WATER_STORAGE = 2_000;
-    public static final int WATER_RATE2 = 96;
-    public static final int WATER_STORAGE2 = 16_000;
+    public static final int WATER_RATE = 9;
+    public static final int WATER_STORAGE = 1_500;
+    public static final int WATER_RATE2 = 90;
+    public static final int WATER_STORAGE2 = 15_000;
 
     public static final int GEO_RATE = 210;
     public static final int GEO_STORAGE = 35_000;
     public static final int GEO_RATE2 = 1680;
     public static final int GEO_STORAGE2 = 280_000;
 
-    public static final int BASIC_RATE = 18;
-    public static final int BASIC_STORAGE = 3_000;
-    public static final int ADVANCED_RATE = 180;
+    public static final int BASIC_RATE = 6;
+    public static final int BASIC_STORAGE = 1_000;
+    public static final int ADVANCED_RATE = 300;
     public static final int ADVANCED_STORAGE = 30_000;
     public static final int CELE_RATE = 1800;
     public static final int CELE_STORAGE = 300_000;
@@ -101,13 +100,7 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[0];
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return new int[0];
-                } else {
-                    return new int[0];
-                }
+                return new int[0];
             }
         };
     }
@@ -184,6 +177,13 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
         return rate;
     }
 
+    /**
+     * This method gets a string depending on the type of generation
+     *
+     * @param rate generation rate
+     * @param l location of generator
+     * @return type of generation
+     */
     @Nonnull
     public String getGenerationType(int rate, Location l) {
 
@@ -207,7 +207,14 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
         return "";
     }
 
-    public int getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
+    /**
+     * This method gets the output of the generator depending on certain circumstances
+     *
+     * @param block block of generator
+     * @param world world of generator
+     * @return amount to generate
+     */
+    private int getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
         int generation = type.getGeneration();
 
         if (type == Type.WATER || type == Type.WATER2) {

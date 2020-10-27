@@ -33,11 +33,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * A machine that makes a new slimefun item from the inputted item's id
+ * will transfer same enchants and transfer storage units stored items
+ *
+ * @author Mooy1
+ */
 public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
 
     public static final int ENERGY = 200;
 
-    private static final int[] OUTPUT_SLOTS= {
+    private static final int[] OUTPUT_SLOTS = {
             PresetUtils.slot3
     };
     private static final int[] INPUT_SLOTS = {
@@ -47,7 +53,7 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
     private static final int STATUS_SLOT = PresetUtils.slot2;
 
     public ItemUpdater() {
-        super(Categories.BASIC_MACHINES, Items.ITEM_UPDATER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.BASIC_MACHINES, Items.ITEM_UPDATER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
@@ -67,8 +73,14 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
@@ -96,25 +108,29 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
     }
 
     private void setupInv(BlockMenuPreset blockMenuPreset) {
-                    for (int i : PresetUtils.slotChunk3) {
-                        blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk2) {
-                        blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    for (int i : PresetUtils.slotChunk1) {
-                        blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
-                    }
-                    blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed,
-                            ChestMenuUtils.getEmptyClickHandler());
+        for (int i : PresetUtils.slotChunk3) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk2) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk1) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed,
+                ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { ItemUpdater.this.tick(b); }
+            public void tick(Block b, SlimefunItem sf, Config data) {
+                ItemUpdater.this.tick(b);
+            }
 
-            public boolean isSynchronized() { return false; }
+            public boolean isSynchronized() {
+                return false;
+            }
         });
     }
 
@@ -179,7 +195,7 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
                         enchantments.put(entry.getKey(), entry.getValue());
                         amount++;
                     }
-                    if (amount > 0 ) {
+                    if (amount > 0) {
                         for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                             output.removeEnchantment(entry.getKey());
 

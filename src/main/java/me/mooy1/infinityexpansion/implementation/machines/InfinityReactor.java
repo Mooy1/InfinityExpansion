@@ -10,7 +10,7 @@ import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.RecipeTypes;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -36,12 +36,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A reactor that generates huge power but costs infinity ingots and void ingots
+ *
+ * @author Mooy1
+ */
 public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, RecipeDisplayItem {
 
     public static final int ENERGY = 600_000;
     public static final int STORAGE = 120_000_000;
-    public static final int INFINITY_INTERVAL = 144000;
-    public static final int VOID_INTERVAL = 24000;
+    public static final int INFINITY_INTERVAL = 72000;
+    public static final int VOID_INTERVAL = 12000;
     public static final int[] INPUT_SLOTS = {
             PresetUtils.slot1, PresetUtils.slot3
     };
@@ -74,19 +79,24 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                }
                 return new int[0];
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return new int[0];
-                } else {
-                    return new int[0];
+                    if (Objects.equals(StackUtils.getIDFromItem(item), "VOID_INGOT")) {
+                        return new int[] {INPUT_SLOTS[1]};
+                    } else if (Objects.equals(StackUtils.getIDFromItem(item), "INFINITE_INGOT")) {
+                        return new int[] {INPUT_SLOTS[0]};
+                    }
                 }
+
+                return new int[0];
             }
         };
 
@@ -155,14 +165,14 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
 
         if (progress == 0) { //need infinity + void
 
-            if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
                 }
                 return 0;
 
-            } else if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            } else if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -196,7 +206,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
 
         } else if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
-            if (!Objects.equals(ItemStackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));

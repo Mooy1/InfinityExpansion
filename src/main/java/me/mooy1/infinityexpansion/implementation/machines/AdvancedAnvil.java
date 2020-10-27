@@ -26,6 +26,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+/**
+ * Combines slimefun items, exceeded vanilla anvil limits
+ *
+ * @author Mooy1
+ */
 public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
 
     public static final int ENERGY = 100_000;
@@ -73,13 +78,7 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[0];
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return new int[0];
-                } else {
-                    return new int[0];
-                }
+                return new int[0];
             }
         };
 

@@ -38,9 +38,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Machines that generate materials at the cost of energy
+ *
+ * @author Mooy1
+ */
 public class MaterialGenerator extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
-    public static final int COBBLE_ENERGY = 30;
+    public static final int COBBLE_ENERGY = 24;
     public static final int COBBLE2_ENERGY = 120;
     public static final int OBSIDIAN_ENERGY = 360;
 
@@ -73,15 +78,17 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[0];
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
                 } else {
                     return new int[0];

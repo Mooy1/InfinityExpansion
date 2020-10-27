@@ -15,6 +15,11 @@ import javax.annotation.Nonnull;
 
 import me.mooy1.infinityexpansion.utils.RecipeUtils;
 
+/**
+ * Compressed cobbles
+ *
+ * @author Mooy1
+ */
 public class CompressedCobblestone extends SlimefunItem {
 
     public CompressedCobblestone(Type type) {

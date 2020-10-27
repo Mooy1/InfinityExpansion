@@ -40,6 +40,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Grows crops in a virtual interface
+ *
+ * @author Mooy1
+ */
 public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 18;
@@ -82,8 +87,14 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
@@ -215,7 +226,7 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
                 int type = Integer.parseInt(getType(b));
 
                 ItemStack output1 = new ItemStack(OUTPUTS[type], OUTPUT_AMOUNTS[type]);
-                ItemStack output2 = new ItemStack(INPUTS[type], MathUtils.randomFrom(2));
+                ItemStack output2 = new ItemStack(INPUTS[type], MathUtils.randomFromOneTo(1));
 
                 if (!inv.fits(output1, OUTPUT_SLOTS)) {
 
@@ -240,6 +251,12 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
         }
     }
 
+    /**
+     * This method gets the input type
+     *
+     * @param input input item
+     * @return type if any
+     */
     @Nullable
     private String getInputType(Material input) {
         for (int i = 0; i < INPUTS.length; i++) {

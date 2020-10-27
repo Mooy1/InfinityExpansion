@@ -2,36 +2,25 @@ package me.mooy1.infinityexpansion.implementation.transport;
 
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemDuct extends SlimefunItem{
+/**
+ * Extends an output duct's range
+ *
+ * @author Mooy1
+ */
+public class ItemDuct extends SlimefunItem {
+    private static final ItemStack glass = new ItemStack(Material.GLASS);
+
     public ItemDuct() {
         super(Categories.STORAGE_TRANSPORT, Items.ITEM_DUCT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-
-        });
-
-    }
-
-    @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                ItemDuct.this.tick(b);
-            }
-
-            public boolean isSynchronized() {
-                return true;
-            }
-        });
-    }
-
-    public void tick(Block b) {
-        Location l = b.getLocation();
+                glass, glass, glass,
+                new ItemStack(Material.REDSTONE), Items.MAGSTEEL, new ItemStack(Material.QUARTZ),
+                glass, glass, glass
+        }, new CustomItem(Items.ITEM_DUCT, 4));
     }
 }

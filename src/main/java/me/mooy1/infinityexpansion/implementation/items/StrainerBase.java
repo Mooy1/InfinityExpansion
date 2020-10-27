@@ -39,6 +39,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Generates items slowly using up strainers, must be waterlogged
+ *
+ * @author Mooy1
+ */
 public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
@@ -100,8 +105,14 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
@@ -226,7 +237,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
         }
 
 
-        ItemStack output = OUTPUTS[MathUtils.randomFrom(OUTPUTS.length - 1)].clone();
+        ItemStack output = OUTPUTS[MathUtils.randomFromZeroTo(OUTPUTS.length - 1)].clone();
 
         //check fits
 
@@ -274,20 +285,27 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
         //b.setBlockData(blockData);
     }
 
-    private int getStrainer(@Nonnull String id) {
+    /**
+     * This method gets the speed of strainer from its id
+     *
+     * @param id id of strainer
+     * @return speed
+     */
+    private static int getStrainer(@Nonnull String id) {
         if (id.equals("BASIC_STRAINER")) return BASIC_SPEED;
         if (id.equals("ADVANCED_STRAINER")) return ADVANCED_SPEED;
         if (id.equals("REINFORCED_STRAINER")) return REINFORCED_SPEED;
         return 0;
     }
 
-    private void fish(BlockMenu inv) {
-        ItemStack potato = new CustomItem(
-                Material.POTATO,
-                "&7:&6Potatofish&7:",
-                "&eLucky"
-        );
+    private static final ItemStack potato = new CustomItem(Material.POTATO, "&7:&6Potatofish&7:", "&eLucky");
 
+    /**
+     * This method will try to output a lucky potatofish
+     *
+     * @param inv inventory to output to
+     */
+    private static void fish(BlockMenu inv) {
         if (inv.fits(potato, OUTPUT_SLOTS)) {
             inv.pushItem(potato, OUTPUT_SLOTS);
 

@@ -19,7 +19,11 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-
+/**
+ * Important materials
+ *
+ * @author Mooy1
+ */
 public class MainMaterial extends SlimefunItem {
 
     public MainMaterial(Type type) {

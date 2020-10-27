@@ -5,12 +5,13 @@ import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import lombok.NonNull;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.RecipeTypes;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -28,6 +29,11 @@ import org.bukkit.inventory.PlayerInventory;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
+/**
+ * A custom category for displaying 6x6 recipes and their sub-recipes
+ *
+ * @author Mooy1
+ */
 public class InfinityCategory extends FlexCategory {
 
     private static final int[] RECIPE_SLOTS = {
@@ -76,7 +82,7 @@ public class InfinityCategory extends FlexCategory {
     }
 
     @Override
-    public void open(Player player, PlayerProfile playerProfile, SlimefunGuideLayout slimefunGuideLayout) {
+    public void open(@NonNull Player player, @NonNull PlayerProfile playerProfile, @NonNull SlimefunGuideLayout slimefunGuideLayout) {
         ChestMenu menu = new ChestMenu("&bInfinity Recipes");
 
         setupMain(menu, player);
@@ -105,7 +111,7 @@ public class InfinityCategory extends FlexCategory {
         menu.open(player);
     }
 
-    private static void setupMain(ChestMenu menu, Player player) {
+    private static void setupMain(@NonNull ChestMenu menu, @NonNull Player player) {
         int i;
         menu.addItem(0, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         menu.setEmptySlotsClickable(false);
@@ -127,7 +133,7 @@ public class InfinityCategory extends FlexCategory {
         menu.addItem(53, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
     }
 
-    public static void openFromWorkBench(Player player, BlockMenu inv) {
+    public static void openFromWorkBench(@NonNull Player player, @NonNull BlockMenu inv) {
         ChestMenu menu = new ChestMenu("&bInfinity Recipes");
 
         setupMain(menu, player);
@@ -155,7 +161,7 @@ public class InfinityCategory extends FlexCategory {
         menu.open(player);
     }
 
-    private static void openRecipeFromWorkBench(Player player, BlockMenu inv, int id) {
+    private static void openRecipeFromWorkBench(@NonNull Player player, @NonNull  BlockMenu inv, int id) {
         ItemStack output = InfinityRecipes.OUTPUTS[id];
         ChestMenu menu = new ChestMenu(Objects.requireNonNull(output.getItemMeta()).getDisplayName());
         menu.setEmptySlotsClickable(false);
@@ -218,7 +224,7 @@ public class InfinityCategory extends FlexCategory {
         menu.open(player);
     }
 
-    private static void makeRecipe(Player player, BlockMenu menu, int id, int count) {
+    private static void makeRecipe(@NonNull Player player, @NonNull BlockMenu menu, int id, int count) {
         ItemStack[] recipe = InfinityRecipes.RECIPES[id];
         PlayerInventory inv = player.getInventory();
 
@@ -232,7 +238,7 @@ public class InfinityCategory extends FlexCategory {
 
                     int slot = 0;
                     for (ItemStack item : inv.getContents()) { //each slot in their inv
-                        if (ItemStackUtils.getIDFromItem(recipeItem).equals(ItemStackUtils.getIDFromItem(item))) {
+                        if (Objects.equals(StackUtils.getIDFromItem(recipeItem), StackUtils.getIDFromItem(item))) {
 
                             //remove item
                             int amount = item.getAmount();
@@ -258,7 +264,7 @@ public class InfinityCategory extends FlexCategory {
         }
     }
 
-    private void openInfinityRecipe(Player player, int id, PlayerProfile playerProfile, SlimefunGuideLayout slimefunGuideLayout) {
+    private void openInfinityRecipe(@NonNull Player player, int id, @NonNull PlayerProfile playerProfile, @NonNull SlimefunGuideLayout slimefunGuideLayout) {
         ItemStack output = InfinityRecipes.OUTPUTS[id];
 
         ChestMenu menu = new ChestMenu(ItemUtils.getItemName(output));
@@ -315,7 +321,7 @@ public class InfinityCategory extends FlexCategory {
         menu.open(player);
     }
 
-    private void openSlimefunRecipe(Player player, int backID, SlimefunItem[] slimefunHistory, PlayerProfile playerProfile, SlimefunGuideLayout slimefunGuideLayout) {
+    private void openSlimefunRecipe(@NonNull Player player, int backID, @NonNull SlimefunItem[] slimefunHistory, @NonNull PlayerProfile playerProfile, @NonNull SlimefunGuideLayout slimefunGuideLayout) {
         int length = slimefunHistory.length;
 
         SlimefunItem slimefunItem = slimefunHistory[length - 1];
@@ -364,7 +370,7 @@ public class InfinityCategory extends FlexCategory {
         menu.open(player);
     }
 
-    private static void setupInfinityRecipeMenu(ChestMenu menu, ItemStack output) {
+    private static void setupInfinityRecipeMenu(@NonNull ChestMenu menu, @NonNull ItemStack output) {
         for (int slot : BACKGROUND) {
             menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -377,7 +383,7 @@ public class InfinityCategory extends FlexCategory {
         }
     }
 
-    private static void setupNormalRecipeMenu(ChestMenu menu, ItemStack output, ItemStack recipeType) {
+    private static void setupNormalRecipeMenu(@NonNull ChestMenu menu, @NonNull ItemStack output, @NonNull ItemStack recipeType) {
         menu.addItem(NORMAL_RECIPE_TYPE, recipeType, ChestMenuUtils.getEmptyClickHandler());
 
         for (int slot : NORMAL_RECIPE_BACKGROUND) {

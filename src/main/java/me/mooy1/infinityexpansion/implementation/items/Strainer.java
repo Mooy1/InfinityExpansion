@@ -13,6 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Items to be used in the Strainer Base
+ *
+ * @author Mooy1
+ */
 public class Strainer extends SlimefunItem {
 
     private static final ItemStack stick = new ItemStack(Material.STICK);

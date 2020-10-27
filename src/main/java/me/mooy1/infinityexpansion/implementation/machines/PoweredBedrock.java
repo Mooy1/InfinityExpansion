@@ -15,9 +15,14 @@ import org.bukkit.block.Block;
 
 import javax.annotation.Nonnull;
 
+/**
+ * A block that becomes bedrock when powered, for decoration of course
+ *
+ * @author Mooy1
+ */
 public class PoweredBedrock extends SlimefunItem implements EnergyNetComponent {
 
-    public static final int ENERGY = 60_000;
+    public static final int ENERGY = 120_000;
 
     public PoweredBedrock() {
         super (Categories.INFINITY_CHEAT, Items.POWERED_BEDROCK, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.POWERED_BEDROCK));

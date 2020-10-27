@@ -20,6 +20,11 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Singularities and there recipe displays
+ *
+ * @author Mooy1
+ */
 public class Singularity extends SlimefunItem {
 
     public Singularity(Type type) {
@@ -104,8 +109,8 @@ public class Singularity extends SlimefunItem {
         NETHERITE(Items.NETHERITE_SINGULARITY, 11),
 
         COAL(Items.COAL_SINGULARITY, 12),
-        LAPIS(Items.LAPIS_SINGULARITY, 13),
-        REDSTONE(Items.REDSTONE_SINGULARITY, 14),
+        REDSTONE(Items.REDSTONE_SINGULARITY, 13),
+        LAPIS(Items.LAPIS_SINGULARITY, 14),
         QUARTZ(Items.QUARTZ_SINGULARITY, 15),
 
         INFINITY(Items.INFINITY_SINGULARITY, 16);

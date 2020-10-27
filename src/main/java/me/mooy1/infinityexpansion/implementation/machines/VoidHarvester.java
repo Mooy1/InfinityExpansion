@@ -37,11 +37,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * harvests void bits from... the void
+ *
+ * @author Mooy1
+ */
 public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 900;
     public static final int BASIC_SPEED = 1;
-    public static final int INFINITY_ENERGY = 90000;
+    public static final int INFINITY_ENERGY = 9000;
     public static final int INFINITY_SPEED = 10;
 
     private static final int[] OUTPUT_SLOTS = {
@@ -77,19 +82,21 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                }
+
                 return new int[0];
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[0];
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
                 }
+
+                return new int[0];
             }
         };
 

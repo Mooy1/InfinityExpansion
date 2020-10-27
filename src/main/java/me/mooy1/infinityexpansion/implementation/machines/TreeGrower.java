@@ -9,6 +9,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
@@ -40,6 +41,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Grows trees
+ *
+ * @author Mooy1
+ */
 public class TreeGrower extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 36;
@@ -82,8 +88,14 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
@@ -215,9 +227,9 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
 
                 String type = getType(b);
 
-                ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), 4 + MathUtils.randomFrom(6));
-                ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), 6 + MathUtils.randomFrom(10));
-                ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), MathUtils.randomFrom(2));
+                ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), 4 + MathUtils.randomFromOneTo(6));
+                ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), 6 + MathUtils.randomFromOneTo(10));
+                ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), MathUtils.randomFromOneTo(2));
 
                 if (!inv.fits(output1, OUTPUT_SLOTS)) {
 
@@ -248,8 +260,14 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
         }
     }
 
+    /**
+     * This method gets the type of input
+     *
+     * @param input input item
+     * @return type of input
+     */
     @Nullable
-    private String getInputType(ItemStack input) {
+    private String getInputType(@NonNull ItemStack input) {
         for (String recipe : INPUTS) {
             if (input.getType() == Material.getMaterial(recipe + "_SAPLING")) return recipe;
         }

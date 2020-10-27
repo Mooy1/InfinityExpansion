@@ -1,9 +1,12 @@
 package me.mooy1.infinityexpansion.lists;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mooy1.infinityexpansion.utils.ItemStackUtils;
+import lombok.NonNull;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * The recipes for the Infinity Workbench
@@ -19,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
  * - setting the Recipe to InfinityRecipes.getRecipe([Item's ItemStack])
  *
  */
-
 public class InfinityRecipes {
 
     private InfinityRecipes() {}
@@ -52,19 +54,20 @@ public class InfinityRecipes {
             Items.INFINITY_SHIELD,
     };
 
-    public static int getRecipeID(ItemStack item) {
-        String itemID = ItemStackUtils.getIDFromItem(item);
+    public static int getRecipeID(@Nullable ItemStack item) {
+        String itemID = StackUtils.getIDFromItem(item);
         if (itemID != null) {
             int i = 0;
             for (ItemStack output : OUTPUTS) {
-                if (itemID.equals(ItemStackUtils.getIDFromItem(output))) return i;
+                if (itemID.equals(StackUtils.getIDFromItem(output))) return i;
                 i++;
             }
         }
         return 0;
     }
 
-    public static ItemStack[] getRecipe(ItemStack item) {
+    @NonNull
+    public static ItemStack[] getRecipe(@NonNull ItemStack item) {
         return RECIPES[getRecipeID(item)];
     }
 
@@ -81,7 +84,7 @@ public class InfinityRecipes {
     private static final ItemStack c_5 = Items.COMPRESSED_COBBLESTONE_5;
     private static final ItemStack reactor = SlimefunItems.NETHER_STAR_REACTOR;
     private static final ItemStack elytra = new ItemStack(Material.ELYTRA);
-    private static final ItemStack e_c = SlimefunItems.ENERGIZED_CAPACITOR;
+    private static final ItemStack e_c = Items.VOID_CAPACITOR;
     private static final ItemStack i_pick = Items.INFINITY_PICKAXE;
     private static final ItemStack en = Items.ADVANCED_ENCHANTER;
     private static final ItemStack dis = Items.ADVANCED_DISENCHANTER;

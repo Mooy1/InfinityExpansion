@@ -5,7 +5,7 @@ name: InfinityExpansion
 author: Mooy1
 
 ## CHANGE this to a meaningful but short description of your plugin.
-description: slimefun endgame
+description: more slimefun content
 
 ## CHANGE this to the path of the class that extends JavaPlugin.
 main: me.mooy1.infinityexpansion.InfinityExpansion
@@ -21,3 +21,14 @@ version: ${project.version}
 
 ## This is the minimum minecraft version required to run your plugin.
 api-version: 1.16
+
+commands:
+  infinityexpansion:
+    description: Do /infinityexpansion help for a list of commands
+    usage: /<command> <subcommand>
+    aliases: [ie, ix, infinity]
+
+permissions:
+  infinityexpansion.admin:
+    description: InfinityExpansion admin commands
+    default: op

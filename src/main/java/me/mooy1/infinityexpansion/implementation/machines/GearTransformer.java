@@ -32,6 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Machine that changes the material of gear and tools
+ *
+ * @author Mooy1
+ */
 public class GearTransformer extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 100000;
@@ -75,8 +80,14 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
             }
 
             @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
+            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.INSERT) {
+                    return INPUT_SLOTS;
+                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                } else {
+                    return new int[0];
+                }
             }
 
             @Override
@@ -223,6 +234,13 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         }
     }
 
+    /**
+     * This method gets the output from the input material and input tool
+     * 
+     * @param inputMaterial material
+     * @param inputToolType tools type
+     * @return output if any
+     */
     @Nullable
     private Material getOutput(ItemStack inputMaterial, String inputToolType) {
 
@@ -256,6 +274,13 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         return null;
     }
 
+    /**
+     * This method gets the amount of material required to transform and item
+     * 
+     * @param inputMaterial material input type
+     * @param inputToolType tool input type
+     * @return amount needed
+     */
     private int getAmount(ItemStack inputMaterial, String inputToolType) {
 
         for (String toolType : TOOL_TYPES) {
@@ -289,6 +314,12 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         return 0;
     }
 
+    /**
+     * This method gets the type of tool that an item is
+     * 
+     * @param item item to check
+     * @return type of tool if any
+     */
     @Nullable
     private String getToolType(ItemStack item) {
         Material material = item.getType();
@@ -302,7 +333,13 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         }
         return null;
     }
-
+    
+    /**
+     * This method gets the type of armor that an item is
+     *
+     * @param item item to check
+     * @return type of armor if any
+     */
     @Nullable
     private String getArmorType(ItemStack item) {
         Material material = item.getType();

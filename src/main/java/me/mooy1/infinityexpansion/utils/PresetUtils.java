@@ -4,6 +4,11 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Collection of utils for creating BlockMenuPresets
+ *
+ * @author Mooy1
+ */
 public final class PresetUtils {
 
     private PresetUtils() {}
