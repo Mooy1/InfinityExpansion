@@ -51,8 +51,8 @@ public final class Items {
             "&7Pushes items into machines and inventories",
             "&7Also serves as an Item Duct",
             "",
-            "&6Connects up to &e" + OutputDuct.MAX + " &6Inventories",
-            "&6Range: &e" + OutputDuct.LENGTH + " &6blocks"
+            "&6Connects up to &e" + OutputDuct.MAX_INVS + " &6Inventories",
+            "&6Range: &e" + OutputDuct.DUCT_LENGTH + " &6blocks"
     );
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",

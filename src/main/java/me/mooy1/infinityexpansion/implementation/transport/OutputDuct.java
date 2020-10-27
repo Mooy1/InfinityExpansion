@@ -56,9 +56,10 @@ public class OutputDuct extends SlimefunItem {
     };
     private static final int[] STATUS_BORDER = PresetUtils.slotChunk3;
 
-    private static final int STATUS = 16;
-    public static final int LENGTH = 12;
-    public static final int MAX = 8;
+    private static final int STATUS_SLOT = 16;
+    public static final int DUCT_LENGTH = 12;
+    public static final int MAX_INVS = 8;
+    private static final int MAX_SLOTS = 9;
 
     public OutputDuct() {
         super(Categories.STORAGE_TRANSPORT, Items.OUTPUT_DUCT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -142,7 +143,7 @@ public class OutputDuct extends SlimefunItem {
 
                     StackUtils.addLore(item, lore);
 
-                    BlockStorage.getInventory(here).replaceExistingItem(STATUS, item);
+                    BlockStorage.getInventory(here).replaceExistingItem(STATUS_SLOT, item);
 
                 }
             }
@@ -174,7 +175,7 @@ public class OutputDuct extends SlimefunItem {
                     ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addMenuClickHandler(STATUS, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addMenuClickHandler(STATUS_SLOT, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -241,10 +242,10 @@ public class OutputDuct extends SlimefunItem {
 
             List<String> lore = new ArrayList<>();
             lore.add("");
-            lore.add(ChatColors.color("&6Inventories: &e" + size + " / " + MAX));
-            lore.add(ChatColors.color("&6Length: &e" + length + " / " + LENGTH));
+            lore.add(ChatColors.color("&6Inventories: &e" + size + " / " + MAX_INVS));
+            lore.add(ChatColors.color("&6Length: &e" + length + " / " + DUCT_LENGTH));
 
-            StackUtils.insertLore(thisMenu.getItemInSlot(STATUS), lore, "Location:", 4);
+            StackUtils.insertLore(thisMenu.getItemInSlot(STATUS_SLOT), lore, "Location:", 4);
 
         }
 
@@ -255,9 +256,12 @@ public class OutputDuct extends SlimefunItem {
             String whiteListID = StackUtils.getIDFromItem(whiteListItem);
             if (whiteListID != null) {
 
+                //sf extractions
+
                 for (BlockMenu extractionMenu : menuList) {
                     int[] extractionSlots = TransferUtils.getSlots(extractionMenu, ItemTransportFlow.WITHDRAW, whiteListItem);
 
+                    int count = 1;
                     if (extractionSlots != null && extractionSlots.length > 0) {
                         for (int slot : extractionSlots) {
                             ItemStack outputItem = extractionMenu.getItemInSlot(slot);
@@ -265,7 +269,8 @@ public class OutputDuct extends SlimefunItem {
 
                             if (outputItem != null && outputID != null && outputID.equals(whiteListID)) {
 
-                                if (targetMachine != null) {
+                                if (targetMachine != null) { //sf insertion
+
                                     int[] destinationSlots = TransferUtils.getSlots(targetMachine, ItemTransportFlow.INSERT, outputItem);
 
                                     if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
@@ -278,7 +283,7 @@ public class OutputDuct extends SlimefunItem {
 
                                     }
 
-                                } else {
+                                } else { //vanilla insertion
 
                                     ItemStack remainingItems = TransferUtils.insertToVanillaInventory(outputItem, targetInventory);
 
@@ -296,8 +301,12 @@ public class OutputDuct extends SlimefunItem {
                                 break;
                             }
                         }
+                        count++;
+                        if (count >= MAX_SLOTS) break;
                     }
                 }
+
+                //vanilla extractions
 
                 for (Inventory extractionInv : invList) {
 
@@ -306,6 +315,7 @@ public class OutputDuct extends SlimefunItem {
                     int minSlot = range[0];
                     int maxSlot = range[1];
 
+                    int count = 1;
                     for (int slot = minSlot; slot < maxSlot; slot++) {
 
                         ItemStack slotItem = contents[slot];
@@ -317,7 +327,8 @@ public class OutputDuct extends SlimefunItem {
 
                             if (outputID != null && outputID.equals(whiteListID)) {
 
-                                if (targetMachine != null) {
+                                if (targetMachine != null) { //sf insertion
+
                                     int[] destinationSlots = TransferUtils.getSlots(targetMachine, ItemTransportFlow.INSERT, outputItem);
 
                                     if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
@@ -327,7 +338,7 @@ public class OutputDuct extends SlimefunItem {
                                         slotItem.setAmount(slotItem.getAmount() - outputItem.getAmount());
                                     }
 
-                                } else {
+                                } else { //vanilla insertion
 
                                     ItemStack remainingItems = TransferUtils.insertToVanillaInventory(outputItem, targetInventory);
 
@@ -344,6 +355,8 @@ public class OutputDuct extends SlimefunItem {
                                 break;
                             }
                         }
+                        count++;
+                        if (count >= MAX_SLOTS) break;
                     }
                 }
             }
@@ -368,7 +381,7 @@ public class OutputDuct extends SlimefunItem {
     private Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> inputFlow(int count, @Nonnull Location thisLocation, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
         checkedLocations.add(thisLocation);
 
-        if (menuList.size() + invList.size() < MAX) {
+        if (menuList.size() + invList.size() < MAX_INVS) {
 
             Block thisBlock = thisLocation.getBlock();
             String thisID = BlockStorage.checkID(thisLocation);
@@ -381,7 +394,7 @@ public class OutputDuct extends SlimefunItem {
 
                     for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
 
-                        if (location != prev && !checkedLocations.contains(location) && count < LENGTH) {
+                        if (location != prev && !checkedLocations.contains(location) && count < DUCT_LENGTH) {
 
                             Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> flow = inputFlow(count, location, menuList, invList, checkedLocations, location);
                             Pair<List<BlockMenu>, List<Inventory>> flowA = flow.getFirstValue();
