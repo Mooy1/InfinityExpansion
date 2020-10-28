@@ -24,7 +24,7 @@ Storage Units - Hold huge amounts of items, work with cargo
 
 Void Harvester - Collects void bits using power
 
-Singularity Contructor - Creates singularities from huge amounts of resources
+Singularity Constructor - Creates singularities from huge amounts of resources
 
 Infinity Machines - much faster versions of machines, crafted with infinity ingots
 
@@ -48,4 +48,4 @@ Ender Essence - geo miner resource from the end or void biome
 
 Magnonium Gear - Strong gear crafted with Magnonium ingots
 
-Infinity gear - extremly strong endgame gear crafter with infinity ingots
+Infinity gear - extremely strong endgame gear crafter with infinity ingots

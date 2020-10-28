@@ -56,7 +56,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
 
     public static final int BASIC_ENERGY = 1800;
     public static final int ADVANCED_ENERGY = 5400;
-    public static final int VOID_ENERGY = 24000;
+    public static final int VOID_ENERGY = 21000;
     public static final int INFINITY_ENERGY = 120000;
 
     private final Type type;
@@ -98,7 +98,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                 if (flow == ItemTransportFlow.WITHDRAW) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
                 } else {
                     return new int[0];
@@ -152,7 +152,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b);
         if (inv == null) return;
 
-        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
+        boolean playerWatching = inv.hasViewer();
 
         Location l = b.getLocation();
         int energyConsumption = type.getEnergy();
@@ -166,7 +166,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
         } else {
 
             ItemStack[] outputs = type.getOutput();
-            ItemStack outputItem = outputs[MathUtils.randomFromZeroTo(outputs.length - 1)].clone();
+            ItemStack outputItem = MathUtils.randomOutput(outputs);
             Material outputType = outputItem.getType();
 
             if (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK) {
@@ -229,124 +229,23 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
                 Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, new ItemStack[]{
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.COAL, 4),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.IRON_ORE, 1),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.GOLD_ORE, 1),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.LAPIS_LAZULI, 4),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.EMERALD, 1),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.DIAMOND, 1),
-                new ItemStack(Material.REDSTONE, 4),
-                new ItemStack(Material.COBBLESTONE, 1),
-                new ItemStack(Material.COBBLESTONE, 1),
-        }),
+        }, BASIC_OUTPUTS),
 
         ADVANCED(Categories.ADVANCED_MACHINES, ADVANCED_ENERGY, Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, new ItemStack[]{
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.COAL, 8),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.IRON_INGOT, 2),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.NETHERRACK, 2),
-                new ItemStack(Material.NETHERRACK, 2),
-                new ItemStack(Material.QUARTZ, 8),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.GOLD_INGOT, 2),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.LAPIS_LAZULI, 8),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.EMERALD, 2),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.DIAMOND, 2),
-                new ItemStack(Material.REDSTONE, 8),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.COBBLESTONE, 2),
-                new ItemStack(Material.NETHERITE_INGOT, 1),
-        }),
+        }, ADVANCED_OUTPUTS),
 
         VOID(Categories.ADVANCED_MACHINES, VOID_ENERGY, Items.VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.VOID_INGOT, Items.VOID_CAPACITOR, Items.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), Items.ADVANCED_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, new ItemStack[]{
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.COAL, 16),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new SlimefunItemStack(SlimefunItems.SIFTED_ORE, 6),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.IRON_INGOT, 4),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.NETHERRACK, 4),
-                new ItemStack(Material.NETHERRACK, 4),
-                new ItemStack(Material.QUARTZ, 16),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.GOLD_INGOT, 4),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new SlimefunItemStack(SlimefunItems.SIFTED_ORE, 6),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.LAPIS_LAZULI, 46),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.EMERALD, 4),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.DIAMOND, 4),
-                new ItemStack(Material.REDSTONE, 16),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new SlimefunItemStack(SlimefunItems.GOLD_24K, 4),
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.NETHERITE_INGOT, 2),
-        }),
+        }, VOID_OUTPUTS),
 
-        INFINITY(Categories.INFINITY_CHEAT, INFINITY_ENERGY, Items.INFINITY_QUARRY, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_QUARRY), new ItemStack[]{
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.COAL, 64),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.IRON_INGOT, 16),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.NETHERRACK, 16),
-                new ItemStack(Material.NETHERRACK, 16),
-                new ItemStack(Material.QUARTZ, 64),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.GOLD_INGOT, 16),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new SlimefunItemStack(SlimefunItems.MAGNESIUM_INGOT, 16),
-                new SlimefunItemStack(SlimefunItems.COPPER_INGOT, 16),
-                new SlimefunItemStack(SlimefunItems.ZINC_INGOT, 16),
-                new SlimefunItemStack(SlimefunItems.TIN_INGOT, 16),
-                new SlimefunItemStack(SlimefunItems.ALUMINUM_INGOT, 16),
-                new SlimefunItemStack(SlimefunItems.SILVER_INGOT, 16),
-                new SlimefunItemStack(SlimefunItems.LEAD_INGOT, 16),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.LAPIS_LAZULI, 68),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.EMERALD, 16),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.DIAMOND, 16),
-                new ItemStack(Material.REDSTONE, 64),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new SlimefunItemStack(SlimefunItems.GOLD_24K, 16),
-                new ItemStack(Material.COBBLESTONE, 16),
-                new ItemStack(Material.NETHERITE_INGOT, 8),
-        });
+        INFINITY(Categories.INFINITY_CHEAT, INFINITY_ENERGY, Items.INFINITY_QUARRY, RecipeTypes.INFINITY_WORKBENCH,
+                InfinityRecipes.getRecipe(Items.INFINITY_QUARRY),
+                INFINITY_OUTPUTS);
 
         @Nonnull
         private final Category category;
@@ -356,4 +255,115 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
         private final ItemStack[] recipe;
         private final ItemStack[] output;
     }
+
+    private static final ItemStack[] BASIC_OUTPUTS = {
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.COAL, 4),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.IRON_ORE, 1),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.GOLD_ORE, 1),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.LAPIS_LAZULI, 4),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.EMERALD, 1),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.DIAMOND, 1),
+            new ItemStack(Material.REDSTONE, 4),
+            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.COBBLESTONE, 1),
+    };
+
+    private static final ItemStack[] ADVANCED_OUTPUTS = {
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.COAL, 8),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.IRON_INGOT, 2),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.NETHERRACK, 2),
+            new ItemStack(Material.NETHERRACK, 2),
+            new ItemStack(Material.QUARTZ, 8),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.GOLD_INGOT, 2),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.LAPIS_LAZULI, 8),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.EMERALD, 2),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.DIAMOND, 2),
+            new ItemStack(Material.REDSTONE, 8),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.NETHERITE_INGOT, 1)
+    };
+
+    private static final ItemStack[] VOID_OUTPUTS = {
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.COAL, 16),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new SlimefunItemStack(SlimefunItems.SIFTED_ORE, 6),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.IRON_INGOT, 4),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.NETHERRACK, 4),
+            new ItemStack(Material.NETHERRACK, 4),
+            new ItemStack(Material.QUARTZ, 16),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.GOLD_INGOT, 4),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new SlimefunItemStack(SlimefunItems.SIFTED_ORE, 6),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.LAPIS_LAZULI, 46),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.EMERALD, 4),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.DIAMOND, 4),
+            new ItemStack(Material.REDSTONE, 16),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new SlimefunItemStack(SlimefunItems.GOLD_24K, 4),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.NETHERITE_INGOT, 2),
+    };
+
+    private static final ItemStack[] INFINITY_OUTPUTS = {
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.COAL, 64),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.IRON_INGOT, 16),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.NETHERRACK, 16),
+            new ItemStack(Material.NETHERRACK, 16),
+            new ItemStack(Material.QUARTZ, 64),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.GOLD_INGOT, 16),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new SlimefunItemStack(SlimefunItems.MAGNESIUM_INGOT, 16),
+            new SlimefunItemStack(SlimefunItems.COPPER_INGOT, 16),
+            new SlimefunItemStack(SlimefunItems.ZINC_INGOT, 16),
+            new SlimefunItemStack(SlimefunItems.TIN_INGOT, 16),
+            new SlimefunItemStack(SlimefunItems.ALUMINUM_INGOT, 16),
+            new SlimefunItemStack(SlimefunItems.SILVER_INGOT, 16),
+            new SlimefunItemStack(SlimefunItems.LEAD_INGOT, 16),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.LAPIS_LAZULI, 68),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.EMERALD, 16),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.DIAMOND, 16),
+            new ItemStack(Material.REDSTONE, 64),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new SlimefunItemStack(SlimefunItems.GOLD_24K, 16),
+            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.NETHERITE_INGOT, 8),
+    };
 }

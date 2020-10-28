@@ -9,6 +9,7 @@ import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.utils.MathUtils;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -48,8 +49,8 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
     public static final int ADVANCED_SPEED = 4;
-    public static final int REINFORCED_SPEED = 16;
-    private static final int TIME = 128;
+    public static final int REINFORCED_SPEED = 12;
+    private static final int TIME = 96;
 
     private static final int STATUS_SLOT = PresetUtils.slot1;
     private static final int[] OUTPUT_SLOTS = PresetUtils.largeOutput;
@@ -91,13 +92,6 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
             }
 
             @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (getProgress(b) == null) {
-                    setProgress(b, 0);
-                }
-            }
-
-            @Override
             public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
                 return (player.hasPermission("slimefun.inventory.bypass")
                         || SlimefunPlugin.getProtectionManager().hasPermission(
@@ -106,24 +100,24 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
                 }
+                return new int[0];
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
                 }
+                String id = StackUtils.getIDFromItem(item);
+
+                if (id != null && id.endsWith("_STRAINER")) {
+                    return INPUT_SLOTS;
+                }
+
+                return new int[0];
             }
         };
 
@@ -135,8 +129,6 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
                 inv.dropItems(l, OUTPUT_SLOTS);
                 inv.dropItems(l, INPUT_SLOTS);
             }
-
-            setProgress(b, 0);
 
             return true;
         });
@@ -173,19 +165,24 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
         Location l = b.getLocation();
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return;
-        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
+        boolean playerWatching = inv.hasViewer();
 
         //check water
 
         BlockData blockData = b.getBlockData();
-        Waterlogged waterLogged = (Waterlogged) blockData;
+        if (blockData instanceof Waterlogged) {
+            Waterlogged waterlogged = (Waterlogged) blockData;
 
-        if (!waterLogged.isWaterlogged()) {
+            if (!waterlogged.isWaterlogged()) {
 
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cMust be in water!"));
+                if (playerWatching) {
+                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cMust be in water!"));
+                }
+
+                return;
             }
 
+        } else {
             return;
         }
 
@@ -216,12 +213,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
         //progress
 
-        int time = TIME / speed;
-        int progress = Integer.parseInt(getProgress(b));
-
-        if (progress < time) {
-
-            setProgress(b, progress + 1);
+        if (MathUtils.chanceIn(TIME / speed)) {
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
@@ -237,7 +229,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
         }
 
 
-        ItemStack output = OUTPUTS[MathUtils.randomFromZeroTo(OUTPUTS.length - 1)].clone();
+        ItemStack output = MathUtils.randomOutput(OUTPUTS);
 
         //check fits
 
@@ -258,11 +250,9 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMaterial Collected!"));
         }
 
-        setProgress(b, 0);
-
         //reduce durability
 
-        if (MathUtils.chanceIn(speed)) {
+        if (MathUtils.chanceIn(5)) {
             ItemMeta itemMeta = strainer.getItemMeta();
             Damageable durability = (Damageable) itemMeta;
 
@@ -311,18 +301,6 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
             MessageUtils.messagePlayersInInv(inv, ChatColor.YELLOW + "You caught a lucky fish! ... potato?");
         }
-    }
-
-    private void setProgress(Block b, int progress) {
-        BlockStorage.addBlockInfo(b, "progress", String.valueOf(progress));
-    }
-
-    private String getProgress(Block b) {
-        return getBlockData(b.getLocation());
-    }
-
-    private String getBlockData(Location l) {
-        return BlockStorage.getLocationInfo(l, "progress");
     }
 
     @Nonnull

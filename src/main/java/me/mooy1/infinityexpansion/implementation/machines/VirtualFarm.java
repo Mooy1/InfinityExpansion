@@ -226,7 +226,7 @@ public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, Rec
                 int type = Integer.parseInt(getType(b));
 
                 ItemStack output1 = new ItemStack(OUTPUTS[type], OUTPUT_AMOUNTS[type]);
-                ItemStack output2 = new ItemStack(INPUTS[type], MathUtils.randomFromOneTo(1));
+                ItemStack output2 = new ItemStack(INPUTS[type], MathUtils.randomFromRange(1, 2));
 
                 if (!inv.fits(output1, OUTPUT_SLOTS)) {
 

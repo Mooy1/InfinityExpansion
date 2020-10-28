@@ -2,12 +2,13 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
+import lombok.NonNull;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
-import me.mooy1.infinityexpansion.setup.Events;
+import me.mooy1.infinityexpansion.lists.Events;
 import me.mooy1.infinityexpansion.setup.command.InfinityCommand;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
 import org.bstats.bukkit.Metrics;
@@ -115,21 +116,27 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         return instance;
     }
 
+    @NonNull
+    public Config getMainConfig() {
+        return config;
+    }
+
     @Nonnull
     public static String[] getChangeLog() {
         return new  String[] {
                 ChatColor.GREEN + "",
                 ChatColor.GREEN + "########################################",
+                ChatColor.GREEN + "",
                 ChatColor.AQUA + "     Infinity Expansion v" + getInstance().getPluginVersion(),
                 ChatColor.GREEN + "     -------------------------    ",
                 ChatColor.AQUA + "              Changelog            ",
                 ChatColor.GRAY + " - Added commands!",
-                ChatColor.GRAY + " - Optimized strainers",
+                ChatColor.GRAY + " - Advanced anvil",
                 ChatColor.GRAY + " - Added ItemDucts and OutputDucts,",
                 ChatColor.GRAY + " These may be buggy, make sure to report issues!",
                 ChatColor.GRAY + " - Stored Items in storage units will",
                 ChatColor.GRAY + " No longer be dropped, instead stored in drop",
-                ChatColor.GRAY + "",
+                ChatColor.GREEN + "",
                 ChatColor.GREEN + "########################################",
                 ChatColor.GREEN + ""
         };
