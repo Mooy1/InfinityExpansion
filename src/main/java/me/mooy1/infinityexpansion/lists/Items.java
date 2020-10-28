@@ -694,7 +694,7 @@ public final class Items {
 
     public static final SlimefunItemStack INFINITY_SINGULARITY = new SlimefunItemStack(
             "INFINITY_SINGULARITY",
-            Material.NETHER_STAR,
+            Material.SMOOTH_QUARTZ,
             "&bInfinity Singularity"
     );
 
@@ -920,11 +920,13 @@ public final class Items {
             "&6Sky Piercer",
             "&e&oThe longbow of the Heavens"
     );
-    public static final SlimefunItemStack INFINITY_WINGS = new SlimefunItemStack(
-            "INFINITY_WINGS",
-            Material.ELYTRA,
-            "&dVoid Wings",
-            "&8&oInto the void"
+    public static final SlimefunItemStack INFINITY_MATRIX = new SlimefunItemStack(
+            "INFINITY_MATRIX",
+            Material.NETHER_STAR,
+            "&fInfinity Matrix",
+            "&6Gives Unlimited Flight",
+            "&7Right-Click to enable/disable",
+            "&7Crouch and Right-Click to remove ownership"
     );
     public static final SlimefunItemStack INFINITY_SHIELD = new SlimefunItemStack(
             "INFINITY_SHIELD",
@@ -972,7 +974,6 @@ public final class Items {
         INFINITY_BOW.addUnsafeEnchantment(power, 20);
         INFINITY_BOW.addUnsafeEnchantment(flame, 20);
         INFINITY_BOW.addUnsafeEnchantment(infinity, 10);
-        INFINITY_WINGS.addUnsafeEnchantment(prot, 20);
 
         //add unbreakable items
 
@@ -1035,12 +1036,6 @@ public final class Items {
         bow.setUnbreakable(true);
 
         INFINITY_BOW.setItemMeta(bow);
-
-        ItemMeta wings = INFINITY_WINGS.getItemMeta();
-        assert wings != null;
-        wings.setUnbreakable(true);
-
-        INFINITY_WINGS.setItemMeta(wings);
     }
 
     private Items() {

@@ -50,7 +50,7 @@ public class InfinityRecipes {
             Items.INFINITY_CHESTPLATE,
             Items.INFINITY_LEGGINGS,
             Items.INFINITY_BOOTS,
-            Items.INFINITY_WINGS,
+            Items.INFINITY_MATRIX,
             Items.INFINITY_SHIELD,
     };
 

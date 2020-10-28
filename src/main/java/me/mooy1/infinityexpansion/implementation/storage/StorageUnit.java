@@ -305,7 +305,8 @@ public class StorageUnit extends SlimefunItem {
 
             String inputItemID = StackUtils.getIDFromItem(inputSlotItem);
 
-            if (inputSlotItem.getMaxStackSize() != 1 && inputItemID != null && !inputItemID.endsWith("_STORAGE")) { //Check if non stackable item or another storage unit
+            //Check if non stackable item or another storage unit
+            if (inputSlotItem.getMaxStackSize() != 1 && inputItemID != null && !inputItemID.endsWith("_STORAGE") && !inputItemID.equals("INFINITY_MATRIX")) {
 
                 int stored = getStored(b);
 

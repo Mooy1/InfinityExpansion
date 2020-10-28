@@ -25,7 +25,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     private static InfinityExpansion instance;
     private final Config config = new Config(this);
-    private final InfinityCommand command = new InfinityCommand(this);
 
     @Override
     public void onEnable() {
@@ -57,7 +56,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         new Events(this);
 
         //commands
-        command.register();
+        new InfinityCommand(this).register();
 
         //set enabled infinity recipes
         setupInfinityRecipes();

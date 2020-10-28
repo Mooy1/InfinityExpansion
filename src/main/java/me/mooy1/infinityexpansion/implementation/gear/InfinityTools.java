@@ -28,7 +28,7 @@ public class InfinityTools extends SlimefunItem {
     public enum Type {
 
         PICKAXE(Items.INFINITY_PICKAXE),
-        WINGS(Items.INFINITY_WINGS),
+        WINGS(Items.INFINITY_MATRIX),
         BOW(Items.INFINITY_BOW),
         SHOVEL(Items.INFINITY_SHOVEL),
         AXE(Items.INFINITY_AXE),
