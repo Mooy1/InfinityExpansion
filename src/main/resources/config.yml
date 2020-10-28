@@ -1,10 +1,4 @@
 options:
   enable-researches: false
 
-# by default, most of these are 1 level higher than what you can normally get with slimefun
-# not recommended to change them
-advanced-anvil-max-enchants:
-  sharpness: 9
-  protection: 10
-  unbreaking: 13
-  fortune: 6
+

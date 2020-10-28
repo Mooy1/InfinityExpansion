@@ -251,7 +251,10 @@ public class InfinityCategory extends FlexCategory {
 
                             //add item
 
-                            menu.pushItem(recipeItem.clone(), InfinityWorkbench.INPUT_SLOTS[recipeSlot]);
+                            ItemStack output = item.clone();
+                            output.setAmount(1);
+
+                            menu.pushItem(output, InfinityWorkbench.INPUT_SLOTS[recipeSlot]);
                             break;
                         }
 

@@ -36,7 +36,7 @@ public class InfinityMatrix extends SlimefunItem {
             if (ChatColor.stripColor(line).contains("UUID: ")) {
                 Player owner = Bukkit.getOfflinePlayer(UUID.fromString(ChatColor.stripColor(line).substring(6))).getPlayer();
                 if (!p.equals(owner)) {
-                    MessageUtils.message(p, "&eYou do not own this matrix!");
+                    MessageUtils.message(p,  ChatColor.YELLOW + "You do not own this matrix!");
                     return;
                 }
 

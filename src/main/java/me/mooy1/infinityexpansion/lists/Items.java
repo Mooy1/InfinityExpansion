@@ -925,7 +925,7 @@ public final class Items {
             Material.NETHER_STAR,
             "&fInfinity Matrix",
             "&6Gives Unlimited Flight",
-            "&7Right-Click to enable/disable",
+            "&7Right-Click to enable/disable and claim",
             "&7Crouch and Right-Click to remove ownership"
     );
     public static final SlimefunItemStack INFINITY_SHIELD = new SlimefunItemStack(
