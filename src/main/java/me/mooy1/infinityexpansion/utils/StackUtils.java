@@ -1,5 +1,6 @@
 package me.mooy1.infinityexpansion.utils;
 
+import lombok.NonNull;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
@@ -75,7 +76,11 @@ public final class StackUtils {
                 lore = meta.getLore();
             }
 
-            lore.addAll(lores);
+            for (String line : lores) {
+                if (line != null) {
+                    lore.add(line);
+                }
+            }
 
             meta.setLore(lore);
 
@@ -109,10 +114,58 @@ public final class StackUtils {
 
         lore = lore.subList(0, position);
 
-        lore.addAll(lores);
+        for (String line : lores) {
+            if (line != null) {
+                lore.add(line);
+            }
+        }
 
         meta.setLore(lore);
 
         item.setItemMeta(meta);
+    }
+
+    /**
+     * This method transfers parts of lore from 1 item to another
+     *
+     * @param output item to transfer to
+     * @param input item to transfer from
+     * @param key string of lore to look for
+     * @param offset index of first line relative to key index
+     * @param lines total lines to transfer
+     */
+    public static void transferLore(@NonNull ItemStack output, @NonNull ItemStack input, @NonNull String key, int offset, int lines) {
+        ItemMeta inputMeta = input.getItemMeta();
+        if (inputMeta == null) {
+            return;
+        }
+        List<String> inputLore = inputMeta.getLore();
+        if (inputLore == null) {
+            return;
+        }
+
+        ItemMeta outputMeta = output.getItemMeta();
+        if (outputMeta == null) {
+            return;
+        }
+
+        List<String> outputLore = outputMeta.getLore();
+        if (outputLore == null) {
+            return;
+        }
+
+        int i = 0;
+        for (String line : inputLore) {
+            if (ChatColor.stripColor(line).contains(key)) {
+
+                for (int ii = i + offset ; ii < i + lines + offset ; ii++) {
+                    outputLore.add(inputLore.get(ii));
+                }
+                outputMeta.setLore(outputLore);
+                output.setItemMeta(outputMeta);
+
+            }
+            i++;
+        }
     }
 }

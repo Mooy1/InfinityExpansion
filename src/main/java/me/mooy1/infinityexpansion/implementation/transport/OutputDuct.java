@@ -428,9 +428,9 @@ public class OutputDuct extends SlimefunItem {
         return new Pair<>(new Pair<>(menuList, invList), new Pair<>(checkedLocations, count));
     }
 
+
     /**
      * Method to break this block, drop the corrected items, and clear block data
-     * Modified version of Slimefuns method
      *
      * @param b block to break
      */

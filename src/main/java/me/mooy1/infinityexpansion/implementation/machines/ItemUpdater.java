@@ -9,6 +9,7 @@ import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.utils.MessageUtils;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
+import me.mooy1.infinityexpansion.utils.StackUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -21,6 +22,7 @@ import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -99,8 +101,9 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
-                inv.dropItems(b.getLocation(), INPUT_SLOTS);
+                Location l = b.getLocation();
+                inv.dropItems(l, OUTPUT_SLOTS);
+                inv.dropItems(l, INPUT_SLOTS);
             }
 
             return true;
@@ -138,7 +141,7 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
-        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
+        boolean playerWatching = inv.hasViewer();
 
         ItemStack input = inv.getItemInSlot(INPUT_SLOT);
 
@@ -164,10 +167,16 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
                     output = slimefunItem.getItem().clone();
                     output.setAmount(inputAmount);
 
-                    if (slimefunItem.getId().endsWith("_STORAGE") && !Objects.equals(output, input)) {
+                    String id = slimefunItem.getId();
+
+                    if (id.endsWith("_STORAGE") && !Objects.equals(output, input)) {
 
                         MessageUtils.messagePlayersInInv(inv, ChatColor.GREEN + "Stored items transferred!");
                         StorageForge.transferItems(output, input);
+
+                    } else if (id.equals("INFINITY_MATRIX") && !Objects.equals(output, input)) {
+
+                        StackUtils.transferLore(output, input, "UUID:", -1, 2);
 
                     }
                 }

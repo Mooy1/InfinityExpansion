@@ -191,8 +191,7 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
         }
 
         ItemStack currentOutput = inv.getItemInSlot(OUTPUT_SLOTS[0]);
-        ItemStack[] outputs = type.getOutput();
-        ItemStack output = outputs[MathUtils.randomFromZeroTo(outputs.length - 1)].clone();
+        ItemStack output = MathUtils.randomOutput(type.getOutput());
 
         if (currentOutput == null || (ItemUtils.canStack(currentOutput, output)) && currentOutput.getAmount() < 64) {
             inv.consumeItem(INPUT_SLOTS[0], 1);

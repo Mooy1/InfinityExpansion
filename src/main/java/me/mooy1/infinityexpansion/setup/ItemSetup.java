@@ -7,6 +7,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ChargingBench;
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.implementation.gear.InfinityArmor;
+import me.mooy1.infinityexpansion.implementation.gear.InfinityMatrix;
 import me.mooy1.infinityexpansion.implementation.items.Strainer;
 import me.mooy1.infinityexpansion.implementation.items.StrainerBase;
 import me.mooy1.infinityexpansion.implementation.materials.MainMaterial;
@@ -60,7 +61,7 @@ public final class ItemSetup {
     public static int INFINITY_CHARGER_SPEED = 6000;
     public static int INFINITY_CHARGER_ENERGY = 60000;
 
-    private ItemSetup() { }
+    private ItemSetup() {}
 
     public static void setup(@Nonnull InfinityExpansion plugin) {
 
@@ -111,7 +112,7 @@ public final class ItemSetup {
         for (MainMaterial.Type type : MainMaterial.Type.values()) {
             new MainMaterial(type).register(plugin);
         }
-        new AdvancedAnvil().register(plugin);
+        //new AdvancedAnvil().register(plugin);
         for (MachineMaterial.Type type : MachineMaterial.Type.values()) {
             new MachineMaterial(type).register(plugin);
         }
@@ -150,6 +151,7 @@ public final class ItemSetup {
 
         //gear
 
+        new InfinityMatrix().register(plugin);
         for (InfinityArmor.Type type : InfinityArmor.Type.values()) {
             new InfinityArmor(type).register(plugin);
         }

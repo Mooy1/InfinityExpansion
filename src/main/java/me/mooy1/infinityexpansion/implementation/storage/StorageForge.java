@@ -27,7 +27,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -273,32 +272,7 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
      * @param input input item
      */
     public static void transferItems(ItemStack output, ItemStack input) {
-        ItemMeta inputMeta = input.getItemMeta();
-        if (inputMeta != null) {
-            List<String> inputLore = inputMeta.getLore();
-            if (inputLore != null) {
-
-                int i = 0;
-                for (String line : inputLore) {
-                    if (ChatColor.stripColor(line).equals("Stored Item:")) {
-
-                        ItemMeta outputMeta = output.getItemMeta();
-                        if (outputMeta != null) {
-                            List<String> outputLore = outputMeta.getLore();
-                            if (outputLore != null) {
-                                for (int ii = i - 1 ; ii < i + 4 ; ii++) {
-                                    outputLore.add(inputLore.get(ii));
-                                }
-                            }
-                            outputMeta.setLore(outputLore);
-                            output.setItemMeta(outputMeta);
-                        }
-
-                    }
-                    i++;
-                }
-            }
-        }
+        StackUtils.transferLore(output, input, "Stored Item:", -1, 5);
     }
 
     @Nonnull

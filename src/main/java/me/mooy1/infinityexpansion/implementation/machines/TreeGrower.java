@@ -227,9 +227,9 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
 
                 String type = getType(b);
 
-                ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), 4 + MathUtils.randomFromOneTo(6));
-                ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), 6 + MathUtils.randomFromOneTo(10));
-                ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), MathUtils.randomFromOneTo(2));
+                ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), MathUtils.randomFromRange(6, 12));
+                ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), MathUtils.randomFromRange(8, 16));
+                ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), MathUtils.randomFromRange(1, 2));
 
                 if (!inv.fits(output1, OUTPUT_SLOTS)) {
 
