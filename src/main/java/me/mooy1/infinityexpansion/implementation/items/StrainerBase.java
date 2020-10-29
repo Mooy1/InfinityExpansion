@@ -50,7 +50,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
     public static final int BASIC_SPEED = 1;
     public static final int ADVANCED_SPEED = 4;
     public static final int REINFORCED_SPEED = 12;
-    private static final int TIME = 96;
+    private static final int TIME = 48;
 
     private static final int STATUS_SLOT = PresetUtils.slot1;
     private static final int[] OUTPUT_SLOTS = PresetUtils.largeOutput;
@@ -213,7 +213,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
         //progress
 
-        if (MathUtils.chanceIn(TIME / speed)) {
+        if (!MathUtils.chanceIn(TIME / speed)) {
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
@@ -252,7 +252,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
 
         //reduce durability
 
-        if (MathUtils.chanceIn(5)) {
+        if (MathUtils.chanceIn(speed == 1 ? 2 : speed == 4 ? 4 : 8)) {
             ItemMeta itemMeta = strainer.getItemMeta();
             Damageable durability = (Damageable) itemMeta;
 

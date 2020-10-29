@@ -89,24 +89,28 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
 
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
+                    return OUTPUT_SLOTS;
+                }
+
                 if (flow == ItemTransportFlow.INSERT) {
                     return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
                 }
+
+                return new int[0];
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
+                if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
                 }
+
+                if (flow == ItemTransportFlow.INSERT && item.getType().toString().endsWith("SAPLING")) {
+                    return INPUT_SLOTS;
+                }
+
+                return new int[0];
             }
         };
 
@@ -114,12 +118,13 @@ public class TreeGrower extends SlimefunItem implements EnergyNetComponent, Reci
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
-                inv.dropItems(b.getLocation(), INPUT_SLOTS);
+                Location l = b.getLocation();
+                inv.dropItems(l, OUTPUT_SLOTS);
+                inv.dropItems(l, INPUT_SLOTS);
 
                 String progressType = getType(b);
                 if (progressType != null) {
-                    b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(Objects.requireNonNull(Material.getMaterial(progressType + "_SAPLING"))));
+                    b.getWorld().dropItemNaturally(l, new ItemStack(Objects.requireNonNull(Material.getMaterial(progressType + "_SAPLING"))));
                 }
             }
 

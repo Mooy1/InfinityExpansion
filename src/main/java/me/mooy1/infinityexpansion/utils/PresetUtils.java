@@ -41,6 +41,9 @@ public final class PresetUtils {
     public static final ItemStack loadingItemRed = new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cLoading...");
+    public static final ItemStack invalidInput = new CustomItem(
+            Material.BARRIER,
+            "&cInvalid Input!");
     public static final ItemStack invisibleBackground = new CustomItem(
             Material.LIGHT_GRAY_STAINED_GLASS_PANE,
             " ");

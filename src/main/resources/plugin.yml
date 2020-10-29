@@ -1,25 +1,10 @@
-## CHANGE this to the name of your plugin.
 name: InfinityExpansion
-
-## CHANGE this to your username.
 author: Mooy1
-
-## CHANGE this to a meaningful but short description of your plugin.
 description: more slimefun content
-
-## CHANGE this to the path of the class that extends JavaPlugin.
 main: me.mooy1.infinityexpansion.InfinityExpansion
-
-## You can change this to link to your website or repository. You can also remove this line if you want to.
 website: https://github.com/Mooy1/InfinityExpansion
-
-## This is required and marks Slimefun as a plugin dependency.
 depend: [Slimefun]
-
-## This value is automatically replaced by the version specified in your pom.xml file, do not change this.
 version: ${project.version}
-
-## This is the minimum minecraft version required to run your plugin.
 api-version: 1.16
 
 commands:

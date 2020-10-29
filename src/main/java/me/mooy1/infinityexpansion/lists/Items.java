@@ -284,7 +284,16 @@ public final class Items {
             LoreUtils.energyPer(AdvancedAnvil.ENERGY) + "per use",
             "",
             "&cNot yet functional"
-    
+
+    );
+    public static final SlimefunItemStack DECOMPRESSOR = new SlimefunItemStack(
+            "DECOMPRESSOR",
+            Material.TARGET,
+            "&7Decompressor",
+            "&7Reduces blocks to their base material",
+            "",
+            LoreUtils.speed(ConversionMachine.DECOM_SPEED),
+            LoreUtils.energyPerSecond(ConversionMachine.DECOM_ENERGY)
     );
 
     public static final SlimefunItemStack INFINITY_CAPACITOR = new SlimefunItemStack(
@@ -704,25 +713,25 @@ public final class Items {
             "FORTUNE_SINGULARITY",
             Material.NETHER_STAR,
             "&6Fortune Singularity"
-    
+
     );
     public static final SlimefunItemStack EARTH_SINGULARITY = new SlimefunItemStack(
             "EARTH_SINGULARITY",
             Material.NETHER_STAR,
             "&aEarth Singularity"
-    
+
     );
     public static final SlimefunItemStack METAL_SINGULARITY = new SlimefunItemStack(
             "METAL_SINGULARITY",
             Material.NETHER_STAR,
             "&8Metal Singularity"
-    
+
     );
     public static final SlimefunItemStack MAGIC_SINGULARITY = new SlimefunItemStack(
             "MAGIC_SINGULARITY",
             Material.NETHER_STAR,
             "&dMagic Singularity"
-    
+
     );
 
     //Info thingies
@@ -775,7 +784,8 @@ public final class Items {
             "INFINITE_INGOT",
             Material.IRON_INGOT,
             "&dI&cn&6f&ei&an&bi&3t&9y &fIngot",
-            "&7&oThe fury of the cosmos in the palm of your hand"
+            "&7&oThe fury of the cosmos",
+            "&7in the palm of your hand"
     );
 
     //Void ingots
@@ -796,7 +806,8 @@ public final class Items {
             "VOID_INGOT",
             Material.NETHERITE_INGOT,
             "&8Void &7Ingot",
-            "&8&oThe emptiness of the cosmos in the palm of your hand"
+            "&8&oThe emptiness of the cosmos,",
+            "&8in the palm of your hand"
     );
 
     //Materials
@@ -843,7 +854,7 @@ public final class Items {
             Material.DIAMOND_BLOCK,
             "&bInfinite &7Machine Core",
             "&7Machine Component"
-    
+
     );
 
     //Gear
