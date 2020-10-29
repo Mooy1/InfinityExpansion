@@ -23,6 +23,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -226,23 +227,22 @@ public class OutputDuct extends SlimefunItem {
 
         List<Location> checkedLocations = new ArrayList<>();
         checkedLocations.add(targetLocation);
-
         if (targetInventory != null) { //add double chest to checked
             addDoubleChest(targetInventory, checkedLocations);
         }
+        MutableInt length = new MutableInt(0);
+        List<BlockMenu> menuList = new ArrayList<>();
+        List<Inventory> invList = new ArrayList<>();
 
-        Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> flow = inputFlow(0, thisLocation, new ArrayList<>(), new ArrayList<>(), checkedLocations, targetLocation);
-        Pair<List<BlockMenu>, List<Inventory>> flowA = flow.getFirstValue();
-        List<BlockMenu> menuList = flowA.getFirstValue();
-        List<Inventory> invList = flowA.getSecondValue();
+        inputFlow(thisLocation, targetLocation, checkedLocations, length, menuList, invList);
+
+        int found = menuList.size() + invList.size();
 
         if (thisMenu.hasViewer()) {
-            int length = flow.getSecondValue().getSecondValue();
-            int size = menuList.size() + invList.size();
 
             List<String> lore = new ArrayList<>();
             lore.add("");
-            lore.add(ChatColors.color("&6Inventories: &e" + size + " / " + MAX_INVS));
+            lore.add(ChatColors.color("&6Inventories: &e" + found + " / " + MAX_INVS));
             lore.add(ChatColors.color("&6Length: &e" + length + " / " + DUCT_LENGTH));
 
             StackUtils.insertLore(thisMenu.getItemInSlot(STATUS_SLOT), lore, "Location:", 4);
@@ -302,6 +302,7 @@ public class OutputDuct extends SlimefunItem {
                             }
                         }
                         count++;
+
                         if (count >= MAX_SLOTS) break;
                     }
                 }
@@ -356,6 +357,7 @@ public class OutputDuct extends SlimefunItem {
                             }
                         }
                         count++;
+
                         if (count >= MAX_SLOTS) break;
                     }
                 }
@@ -369,65 +371,63 @@ public class OutputDuct extends SlimefunItem {
      * It will stop when the count reaches max
      * or their are no locations to check.
      *
-     * @param count current amount of ducts found
+     * @param length current amount of ducts found
      * @param thisLocation the location if the block being checked
      * @param menuList list of found BlockMenus
      * @param invList list of found Inventories
      * @param checkedLocations list of checked locations so it wont check the same spot twice
      * @param prev the previous location, fast way to not check the previous location
-     * @return The list of BlockMenus, List of Inventories, count, checked locations
      */
-    @Nonnull
-    private Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> inputFlow(int count, @Nonnull Location thisLocation, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
+    private void inputFlow(@Nonnull Location thisLocation, @Nonnull Location prev, @Nonnull List<Location> checkedLocations, MutableInt length, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList) {
         checkedLocations.add(thisLocation);
 
-        if (menuList.size() + invList.size() < MAX_INVS) {
-
-            Block thisBlock = thisLocation.getBlock();
-            String thisID = BlockStorage.checkID(thisLocation);
-
-            if (thisID != null) { //try sf
-
-                if (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT")) { //connector
-
-                    count++;
-
-                    for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
-
-                        if (location != prev && !checkedLocations.contains(location) && count < DUCT_LENGTH) {
-
-                            Pair<Pair<List<BlockMenu>, List<Inventory>>, Pair<List<Location>, Integer>> flow = inputFlow(count, location, menuList, invList, checkedLocations, location);
-                            Pair<List<BlockMenu>, List<Inventory>> flowA = flow.getFirstValue();
-                            Pair<List<Location>, Integer> flowB = flow.getSecondValue();
-                            menuList = flowA.getFirstValue();
-                            invList = flowA.getSecondValue();
-                            checkedLocations = flowB.getFirstValue();
-                            count = flowB.getSecondValue();
-
-                        }
-                    }
-
-                } else if (BlockStorage.hasInventory(thisBlock)) { //machine
-
-                    menuList.add(BlockStorage.getInventory(thisLocation));
-
-                }
-
-            } else { //try vanilla
-
-                Inventory inv = TransferUtils.getInventory(thisBlock);
-
-                if (inv != null) {
-
-                    invList.add(inv);
-                    addDoubleChest(inv, checkedLocations);
-                }
-            }
+        if (menuList.size() + invList.size() >= MAX_INVS) {
+            return;
         }
 
-        return new Pair<>(new Pair<>(menuList, invList), new Pair<>(checkedLocations, count));
-    }
+        Block thisBlock = thisLocation.getBlock();
 
+        if (thisBlock.getType() == Material.AIR) {
+            return;
+        }
+
+        String thisID = BlockStorage.checkID(thisLocation);
+
+        if (thisID == null) { //try vanilla
+
+            Inventory inv = TransferUtils.getInventory(thisBlock);
+
+            if (inv != null) {
+
+                invList.add(inv);
+                addDoubleChest(inv, checkedLocations);
+            }
+
+            return;
+        }
+
+        if (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT")) { //connector
+
+            length.increment();
+
+            for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
+
+                if (location != prev && !checkedLocations.contains(location) && length.intValue() < DUCT_LENGTH) {
+
+                    inputFlow(location, thisLocation, checkedLocations, length, menuList, invList);
+
+                }
+            }
+
+            return;
+        }
+
+        if (BlockStorage.hasInventory(thisBlock)) { //machine
+
+            menuList.add(BlockStorage.getInventory(thisLocation));
+
+        }
+    }
 
     /**
      * Method to break this block, drop the corrected items, and clear block data
@@ -455,9 +455,16 @@ public class OutputDuct extends SlimefunItem {
         }
     }
 
+    /**
+     * This method adds the second chest of a double chest to a list of locations
+     *
+     * @param inv double chest inv
+     * @param checkedLocations list
+     */
     private static void addDoubleChest(Inventory inv, List<Location> checkedLocations) {
         Pair<Location, Location> doubleChestCheck = TransferUtils.getOtherChest(inv);
         if (doubleChestCheck != null) {
+
             checkedLocations.add(doubleChestCheck.getFirstValue());
             checkedLocations.add(doubleChestCheck.getSecondValue());
         }

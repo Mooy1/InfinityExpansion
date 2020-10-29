@@ -16,9 +16,9 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -130,11 +130,11 @@ public class StorageNetworkViewer extends SlimefunItem {
             return;
         }
 
-        Pair<Pair<List<Location>, List<String>>, Pair<List<Location>, Integer>> flow = inputFlow(0, l, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), l);
-        Pair<List<Location>, List<String>> flowA = flow.getFirstValue();
-        List<Location> foundLocations = flowA.getFirstValue();
-        List<String> foundIDs = flowA.getSecondValue();
-        int length = flow.getSecondValue().getSecondValue();
+        List<Location> foundLocations = new ArrayList<>();
+        List<String> foundIDs = new ArrayList<>();
+        MutableInt length = new MutableInt(0);
+        MutableInt count = new MutableInt(0);
+        inputFlow(count, l, foundLocations, foundIDs, new ArrayList<>(), l);
         int size = foundIDs.size();
 
         Material material = Material.ORANGE_STAINED_GLASS_PANE;
@@ -175,10 +175,8 @@ public class StorageNetworkViewer extends SlimefunItem {
      * @param foundIDs list of found unit ids
      * @param checkedLocations checked locations
      * @param prev previous location
-     * @return list of locations, ids
      */
-    @Nonnull
-    private Pair<Pair<List<Location>, List<String>>, Pair<List<Location>, Integer>> inputFlow(int count, @Nonnull Location thisLocation, @Nonnull List<Location> foundLocations, @Nonnull List<String> foundIDs, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
+    private void inputFlow(MutableInt count, @Nonnull Location thisLocation, @Nonnull List<Location> foundLocations, @Nonnull List<String> foundIDs, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
         checkedLocations.add(thisLocation);
 
         if (foundIDs.size() < MAX) {
@@ -198,19 +196,13 @@ public class StorageNetworkViewer extends SlimefunItem {
                             }
                         }
 
-                        count++;
+                        count.increment();
 
                         for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
 
-                            if (location != prev && !checkedLocations.contains(location) && count < RANGE) {
+                            if (location != prev && !checkedLocations.contains(location) && count.intValue() < RANGE) {
 
-                                Pair<Pair<List<Location>, List<String>>, Pair<List<Location>, Integer>> flow = inputFlow(count, location, foundLocations, foundIDs, checkedLocations, location);
-                                Pair<List<Location>, List<String>> flowA = flow.getFirstValue();
-                                Pair<List<Location>, Integer> flowB = flow.getSecondValue();
-                                foundLocations = flowA.getFirstValue();
-                                foundIDs = flowA.getSecondValue();
-                                checkedLocations = flowB.getFirstValue();
-                                count = flowB.getSecondValue();
+                                inputFlow(count, location, foundLocations, foundIDs, checkedLocations, location);
 
                             }
                         }
@@ -220,8 +212,6 @@ public class StorageNetworkViewer extends SlimefunItem {
                 }
             }
         }
-
-        return new Pair<>(new Pair<>(foundLocations, foundIDs), new Pair<>(checkedLocations, count));
     }
 
     /**
