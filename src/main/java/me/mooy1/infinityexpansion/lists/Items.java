@@ -286,6 +286,14 @@ public final class Items {
             "&cNot yet functional"
 
     );
+    public static final SlimefunItemStack PROJECT_TABLE = new SlimefunItemStack(
+            "PROJECT_TABLE",
+            Material.LODESTONE,
+            "&6Project Table",
+            "&7",
+            "",
+            "&cNot yet functional"
+    );
     public static final SlimefunItemStack DECOMPRESSOR = new SlimefunItemStack(
             "DECOMPRESSOR",
             Material.TARGET,

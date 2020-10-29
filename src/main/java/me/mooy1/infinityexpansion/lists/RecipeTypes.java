@@ -17,7 +17,8 @@ public class RecipeTypes {
             new NamespacedKey(InfinityExpansion.getInstance(), "infinity_workbench"), new CustomItem(
             Material.RESPAWN_ANCHOR,
             "&bInfinity &6Workbench",
-            "&7Used to craft infinity items"
+            "&7Used to craft infinity items",
+            "&cUse the infinity recipes category to see the correct recipe!"
     ));
     public static final RecipeType VOID_HARVESTER = new RecipeType(
             new NamespacedKey(InfinityExpansion.getInstance(), "void_harvester"), new CustomItem(
