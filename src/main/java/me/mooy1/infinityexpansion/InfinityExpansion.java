@@ -47,16 +47,13 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         //items
         ItemSetup.setup(this);
 
-        //register researches if enabled
-        if (config.getBoolean("options.enable-researches")) {
-            //ResearchSetup.setup(this);
-        }
-
         //listeners
         new Events(this);
 
         //commands
         new InfinityCommand(this).register();
+
+
 
         //set enabled infinity recipes
         setupInfinityRecipes();
@@ -84,14 +81,13 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 enabledOutputs.add(output);
                 enabledRecipes.add(InfinityRecipes.RECIPES[i]);
             } else {
-                instance.getLogger().log(Level.INFO, "Infinity Item " + slimefunItem.getId() + " disabled!");
+                instance.getLogger().log(Level.INFO, ChatColor.RED + "Infinity Item " + slimefunItem.getId() + " disabled!");
             }
             i++;
         }
 
         InfinityRecipes.OUTPUTS = enabledOutputs.toArray(new ItemStack[0]);
         InfinityRecipes.RECIPES = enabledRecipes.toArray(new ItemStack[0][]);
-
     }
 
     @Override

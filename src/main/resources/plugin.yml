@@ -3,7 +3,8 @@ author: Mooy1
 description: more slimefun content
 main: me.mooy1.infinityexpansion.InfinityExpansion
 website: https://github.com/Mooy1/InfinityExpansion
-depend: [Slimefun]
+depend: [Slimefun, CS-CoreLib]
+softdepend: []
 version: ${project.version}
 api-version: 1.16
 

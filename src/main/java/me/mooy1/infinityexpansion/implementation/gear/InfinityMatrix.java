@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class InfinityMatrix extends SlimefunItem {
+
     public InfinityMatrix() {
         super(Categories.INFINITY_CHEAT, Items.INFINITY_MATRIX, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_MATRIX));
     }
@@ -36,7 +37,7 @@ public class InfinityMatrix extends SlimefunItem {
             if (ChatColor.stripColor(line).contains("UUID: ")) {
                 Player owner = Bukkit.getOfflinePlayer(UUID.fromString(ChatColor.stripColor(line).substring(6))).getPlayer();
                 if (!p.equals(owner)) {
-                    MessageUtils.message(p,  ChatColor.YELLOW + "You do not own this matrix!");
+                    MessageUtils.message(p, ChatColor.YELLOW + "You do not own this matrix!");
                     return;
                 }
 

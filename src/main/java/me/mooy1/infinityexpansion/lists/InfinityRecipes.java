@@ -283,12 +283,12 @@ public class InfinityRecipes {
                     infinite, infinite, null, null, infinite, infinite
             },
             {
-                    infinite, null, null, null, null, infinite,
-                    voidIng, voidIng, voidIng, voidIng, voidIng, voidIng,
-                    null, voidIng, elytra, elytra, voidIng, null,
+                    infinite, null, infinite, infinite, null, infinite,
+                    infinite, voidIng, voidIng, voidIng, voidIng, infinite,
+                    voidIng, voidIng, elytra, elytra, voidIng, voidIng,
                     voidIng, voidIng, infinite, infinite, voidIng, voidIng,
-                    voidIng, voidIng, null, null, voidIng, voidIng,
-                    infinite, null, null, null, null, infinite
+                    infinite, voidIng, voidIng, voidIng, voidIng, infinite,
+                    infinite, null, infinite, infinite, null, infinite
             },
             {
                     infinite, infinite, null, null, infinite, infinite,

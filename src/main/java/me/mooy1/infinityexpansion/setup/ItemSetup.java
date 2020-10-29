@@ -112,7 +112,7 @@ public final class ItemSetup {
         for (MainMaterial.Type type : MainMaterial.Type.values()) {
             new MainMaterial(type).register(plugin);
         }
-        //new AdvancedAnvil().register(plugin);
+        new AdvancedAnvil().register(plugin);
         for (MachineMaterial.Type type : MachineMaterial.Type.values()) {
             new MachineMaterial(type).register(plugin);
         }
