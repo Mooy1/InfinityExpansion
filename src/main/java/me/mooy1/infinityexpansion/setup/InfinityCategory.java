@@ -224,6 +224,14 @@ public class InfinityCategory extends FlexCategory {
         menu.open(player);
     }
 
+    /**
+     * This method attempts to move items from the players inventories to the correct spots in the table
+     *
+     * @param player player
+     * @param menu workbench menu
+     * @param id recipe id
+     * @param count times to repeat
+     */
     private static void makeRecipe(@NonNull Player player, @NonNull BlockMenu menu, int id, int count) {
         ItemStack[] recipe = InfinityRecipes.RECIPES[id];
         PlayerInventory inv = player.getInventory();
@@ -231,34 +239,24 @@ public class InfinityCategory extends FlexCategory {
         menu.open(player);
 
         for (int i = 0 ; i < count ; i++) {
-
             int recipeSlot = 0;
             for (ItemStack recipeItem : recipe) { //each item in recipe
-                if (recipeItem != null && menu.fits(recipeItem, InfinityWorkbench.INPUT_SLOTS[recipeSlot])) {
-
-                    int slot = 0;
+                if (recipeItem != null) { //not null
                     for (ItemStack item : inv.getContents()) { //each slot in their inv
-                        if (Objects.equals(StackUtils.getIDFromItem(recipeItem), StackUtils.getIDFromItem(item))) {
-
-                            //remove item
-                            int amount = item.getAmount();
-                            if (amount == 1) {
-                                inv.setItem(slot, null);
-                            } else {
-                                item.setAmount(amount - 1);
-                                inv.setItem(slot, item);
-                            }
-
-                            //add item
-
+                        if (Objects.equals(StackUtils.getIDFromItem(recipeItem), StackUtils.getIDFromItem(item))) { //matches recipe
+                            //get item
                             ItemStack output = item.clone();
                             output.setAmount(1);
 
-                            menu.pushItem(output, InfinityWorkbench.INPUT_SLOTS[recipeSlot]);
-                            break;
-                        }
+                            if (menu.fits(output, InfinityWorkbench.INPUT_SLOTS[recipeSlot])) {//not null and fits
+                                //remove item
+                                ItemUtils.consumeItem(item, 1, false);
 
-                        slot++;
+                                //push item
+                                menu.pushItem(output, InfinityWorkbench.INPUT_SLOTS[recipeSlot]);
+                                break;
+                            }
+                        }
                     }
                 }
 

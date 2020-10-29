@@ -384,7 +384,7 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
             new ItemStack(Material.IRON_INGOT, 9),
             new ItemStack(Material.NETHERITE_INGOT, 9),
             new ItemStack(Material.REDSTONE, 9),
-            new ItemStack(Material.QUARTZ, 9),
+            new ItemStack(Material.QUARTZ, 4),
             new ItemStack(Material.LAPIS_LAZULI, 9),
             new ItemStack(Material.COAL, 9),
             new SlimefunItemStack(Items.COMPRESSED_COBBLESTONE_4, 9),
