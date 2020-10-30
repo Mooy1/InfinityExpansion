@@ -25,30 +25,27 @@ public class InfinityTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, String[] args) {
         if (args.length == 1) {
-            return createReturnList(command.getSubCommandNames(), args[0]);
+            return createReturnList(command.getSubCommandNames());
+        } else if (args.length > 0) {
+            for (SubCommand command : command.commands) {
+                if (args[0].equalsIgnoreCase(command.getName())) {
+                    return createReturnList(command.onTab(sender, args));
+                }
+            }
         }
 
         return null;
     }
 
     @Nonnull
-    private List<String> createReturnList(@Nonnull List<String> list, @Nonnull String string) {
-        if (string.length() == 0) {
-            return list;
-        }
-
-        String input = string.toLowerCase(Locale.ROOT);
+    private List<String> createReturnList(@Nonnull List<String> list) {
         List<String> returnList = new LinkedList<>();
 
         for (String item : list) {
-            if (item.toLowerCase(Locale.ROOT).contains(input)) {
-                returnList.add(item);
+            returnList.add(item.toLowerCase());
 
-                if (returnList.size() >= MAX_SUGGESTIONS) {
-                    break;
-                }
-            } else if (item.equalsIgnoreCase(input)) {
-                return Collections.emptyList();
+            if (returnList.size() >= MAX_SUGGESTIONS) {
+                break;
             }
         }
 

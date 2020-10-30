@@ -39,6 +39,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ConcurrentModificationException;
 import java.util.Objects;
 
 /**
@@ -130,14 +131,16 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
     public void tick(Block b) {
         Location l = b.getLocation();
 
-        if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) {
-            @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-            if (inv == null) return;
+        try {
+            if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) {
+                @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
+                if (inv == null) return;
 
-            if (!inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(4, PresetUtils.connectToEnergyNet);
+                if (!inv.toInventory().getViewers().isEmpty()) {
+                    inv.replaceExistingItem(4, PresetUtils.connectToEnergyNet);
+                }
             }
-        }
+        } catch (ConcurrentModificationException ignored) { }
     }
 
     public int getGeneratedOutput(@Nonnull Location l, @Nonnull Config data) {

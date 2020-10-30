@@ -53,8 +53,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         //commands
         new InfinityCommand(this).register();
 
-
-
         //set enabled infinity recipes
         setupInfinityRecipes();
 

@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import javax.annotation.Nonnull;
 
 public class Help extends SubCommand {
-    protected Help(InfinityExpansion plugin, InfinityCommand cmd) {
+    public Help(InfinityExpansion plugin, InfinityCommand cmd) {
         super(plugin, cmd, "help", "displays this", false);
     }
 

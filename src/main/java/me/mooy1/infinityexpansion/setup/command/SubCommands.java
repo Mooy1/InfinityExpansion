@@ -1,8 +1,10 @@
-package me.mooy1.infinityexpansion.setup.command.subcommands;
+package me.mooy1.infinityexpansion.setup.command;
 
 import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.setup.command.InfinityCommand;
 import me.mooy1.infinityexpansion.setup.command.SubCommand;
+import me.mooy1.infinityexpansion.setup.command.subcommands.Changelog;
+import me.mooy1.infinityexpansion.setup.command.subcommands.Help;
 
 import java.util.Collection;
 import java.util.LinkedList;

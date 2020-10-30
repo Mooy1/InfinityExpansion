@@ -1,7 +1,6 @@
 package me.mooy1.infinityexpansion.setup.command;
 
 import me.mooy1.infinityexpansion.InfinityExpansion;
-import me.mooy1.infinityexpansion.setup.command.subcommands.SubCommands;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.Command;
@@ -27,7 +26,7 @@ public class InfinityCommand implements CommandExecutor, Listener {
 
     private boolean registered = false;
     private final InfinityExpansion plugin;
-    private final List<SubCommand> commands = new LinkedList<>();
+    public final List<SubCommand> commands = new LinkedList<>();
 
     public InfinityCommand(@Nonnull InfinityExpansion plugin) {
         this.plugin = plugin;
@@ -43,10 +42,7 @@ public class InfinityCommand implements CommandExecutor, Listener {
                 }
             }
         }
-
-        sendHelp(sender);
-
-        return !commands.isEmpty();
+        return false;
     }
     @Nonnull
     public InfinityExpansion getPlugin() {
@@ -76,6 +72,8 @@ public class InfinityCommand implements CommandExecutor, Listener {
                 sender.sendMessage(ChatColors.color("&6/ie " + cmd.getName() + " &e- " + cmd.getDescription()));
             }
         }
+
+        sender.sendMessage("");
     }
 
     @EventHandler

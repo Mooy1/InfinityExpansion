@@ -5,7 +5,6 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponen
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.NonNull;
-import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.Items;
 import me.mooy1.infinityexpansion.utils.PresetUtils;
@@ -18,7 +17,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Location;
@@ -36,7 +34,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Level;
 
 /**
  * Combines slimefun items, exceeded vanilla anvil limits
@@ -80,24 +77,6 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
                 Items.MAGNONIUM, new ItemStack(Material.ANVIL), Items.MAGNONIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         });
-
-        InfinityExpansion instance = InfinityExpansion.getInstance();
-        Config config = instance.getMainConfig();
-        List<Integer> levels = new ArrayList<>();
-        levels.add(config.getInt("advanced-anvil-max-enchants.sharpness"));
-        levels.add(config.getInt("advanced-anvil-max-enchants.protection"));
-        levels.add(config.getInt("advanced-anvil-max-enchants.unbreaking"));
-        levels.add(config.getInt("advanced-anvil-max-enchants.fortune"));
-
-        int i = 0;
-        for (int level : levels) {
-            if (level > 0 && level <= 32000) {
-                max_enchant_levels[i] = level;
-            } else {
-                instance.getLogger().log(Level.WARNING, "Max enchant levels must be between 1 and 32000!");
-            }
-            i++;
-        }
 
         new BlockMenuPreset(getId(), Objects.requireNonNull(Items.ADVANCED_ANVIL.getDisplayName())) {
             @Override

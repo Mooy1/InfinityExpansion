@@ -6,9 +6,11 @@ import me.mooy1.infinityexpansion.setup.command.SubCommand;
 import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Changelog extends SubCommand {
-    protected Changelog(InfinityExpansion plugin, InfinityCommand cmd) {
+    public Changelog(InfinityExpansion plugin, InfinityCommand cmd) {
         super(plugin, cmd, "changelog", "displays the update changelog", false);
     }
 
