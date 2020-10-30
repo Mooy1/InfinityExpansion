@@ -2,7 +2,6 @@ package me.mooy1.infinityexpansion;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
-import lombok.NonNull;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.setup.ItemSetup;
 import me.mooy1.infinityexpansion.lists.Events;
@@ -24,13 +23,14 @@ import java.util.logging.Level;
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     private static InfinityExpansion instance;
-    private final Config config = new Config(this);
+    public final Config config = new Config(this);
 
     @Override
     public void onEnable() {
         instance = this;
 
         //stats
+        @SuppressWarnings("unused")
         final Metrics metrics = new Metrics(this, 8991);
 
         PaperLib.suggestPaper(this);
@@ -109,11 +109,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Nonnull
     public static InfinityExpansion getInstance() {
         return instance;
-    }
-
-    @NonNull
-    public Config getMainConfig() {
-        return config;
     }
 
     @Nonnull

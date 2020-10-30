@@ -68,12 +68,12 @@ public class InfinityCommand implements CommandExecutor, Listener {
         sender.sendMessage("");
         sender.sendMessage(ChatColors.color("&7----------&b&l InfinityExpansion &7----------"));
         sender.sendMessage("");
-        sender.sendMessage(ChatColors.color("&6Aliases: &e/ie, /ix, /infinity, /infinityexpansion"));
+        sender.sendMessage(ChatColors.color("&6Aliases: &e/ie, /ix, /infinity"));
         sender.sendMessage("");
 
         for (SubCommand cmd : commands) {
             if (!cmd.isHidden()) {
-                sender.sendMessage(ChatColors.color("&6/ie " + cmd.getName() + " &e- ") + cmd.getDescription());
+                sender.sendMessage(ChatColors.color("&6/ie " + cmd.getName() + " &e- " + cmd.getDescription()));
             }
         }
     }
