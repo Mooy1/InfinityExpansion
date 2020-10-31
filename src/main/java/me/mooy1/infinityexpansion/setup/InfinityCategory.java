@@ -95,8 +95,8 @@ public class InfinityCategory extends FlexCategory {
         });
 
         int i = 9;
-        for (ItemStack items : InfinityRecipes.OUTPUTS) {
-            menu.addItem(i, items, (p, slot, item, action) -> {
+        for (ItemStack output : InfinityRecipes.OUTPUTS) {
+            menu.addItem(i, output, (p, slot, item, action) -> {
                 openInfinityRecipe(p, slot - 9, playerProfile, slimefunGuideLayout);
                 return false;
             });

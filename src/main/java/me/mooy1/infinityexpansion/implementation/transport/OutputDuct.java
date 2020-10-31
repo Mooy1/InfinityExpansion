@@ -65,7 +65,7 @@ public class OutputDuct extends SlimefunItem {
     public OutputDuct() {
         super(Categories.STORAGE_TRANSPORT, Items.OUTPUT_DUCT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.ITEM_DUCT, new ItemStack(Material.HOPPER), Items.ITEM_DUCT,
-                Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE,
+                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.ITEM_DUCT, new ItemStack(Material.HOPPER), Items.ITEM_DUCT
         }, new CustomItem(Items.OUTPUT_DUCT, 2));
 

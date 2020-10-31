@@ -1,5 +1,7 @@
 package me.mooy1.infinityexpansion.implementation.gear;
 
+import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
+import me.mooy1.infinityexpansion.InfinityExpansion;
 import me.mooy1.infinityexpansion.lists.Categories;
 import me.mooy1.infinityexpansion.lists.InfinityRecipes;
 import me.mooy1.infinityexpansion.lists.Items;
@@ -10,6 +12,8 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -17,13 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class InfinityMatrix extends SlimefunItem {
+public class InfinityMatrix extends SlimefunItem implements Listener {
 
-    public InfinityMatrix() {
+    public InfinityMatrix(InfinityExpansion plugin) {
         super(Categories.INFINITY_CHEAT, Items.INFINITY_MATRIX, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_MATRIX));
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    public static void handler(ItemStack item, Player p) {
+    @EventHandler
+    private static void onRightClick(PlayerRightClickEvent e) {
+        ItemStack item = e.getItem();
+        if (!(SlimefunItem.getByItem(item) instanceof InfinityMatrix)) {
+            return;
+        }
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return;
@@ -32,6 +42,8 @@ public class InfinityMatrix extends SlimefunItem {
         if (lore == null) {
             return;
         }
+
+        Player p = e.getPlayer();
 
         for (String line : lore) {
             if (ChatColor.stripColor(line).contains("UUID: ")) {
