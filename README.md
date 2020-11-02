@@ -9,7 +9,7 @@ https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
 # Bugs/Suggestions
 Make a new issue or contact me on discord Riley#5911 
 
-Im also in the slimefun discord @Riley
+I'm also in the slimefun discord @Riley
 
 # Machines
 Advanced Enchanter - a faster auto enchanter
@@ -46,6 +46,6 @@ Ender Essence - geo miner resource from the end or void biome
 
 # Gear
 
-Magnonium Gear - Strong gear crafted with Magnonium ingots
-
 Infinity gear - extremely strong endgame gear crafter with infinity ingots
+
+Infinity Matrix - Flight!
