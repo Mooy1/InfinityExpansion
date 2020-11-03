@@ -110,7 +110,7 @@ public final class StackUtils {
 
         position += offset;
 
-        if (position < 0 || position >= lore.size()) return;
+        if (position < 0) return;
 
         lore = lore.subList(0, position);
 
