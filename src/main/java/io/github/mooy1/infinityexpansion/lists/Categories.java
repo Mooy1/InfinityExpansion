@@ -32,7 +32,7 @@ public final class Categories {
 
     public static final Category STORAGE_TRANSPORT = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "STORAGE_TRANSPORT"),
-            new CustomItem(Material.ENDER_CHEST, "&6Item Storage and Transport"), 2
+            new CustomItem(Material.ENDER_CHEST, "&6Storage and Transport"), 2
     );
 
     public static final Category INFINITY_MATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
