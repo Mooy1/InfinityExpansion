@@ -50,9 +50,9 @@ import java.util.Objects;
  */
 public class SingularityConstructor extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
-    public static final int BASIC_ENERGY = 300;
+    public static final int BASIC_ENERGY = 120;
     public static final int BASIC_SPEED = 1;
-    public static final int INFINITY_ENERGY = 3000;
+    public static final int INFINITY_ENERGY = 1200;
     public static final int INFINITY_SPEED = 10;
 
     private final Type type;

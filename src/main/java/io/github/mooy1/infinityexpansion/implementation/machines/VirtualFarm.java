@@ -48,8 +48,8 @@ import java.util.Objects;
 public class VirtualFarm extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 18;
-    public static final int ENERGY2 = 180;
-    public static final int ENERGY3 = 3600;
+    public static final int ENERGY2 = 90;
+    public static final int ENERGY3 = 900;
     public static final int SPEED1 = 1;
     public static final int SPEED2 = 5;
     public static final int SPEED3 = 25;

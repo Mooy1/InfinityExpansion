@@ -16,9 +16,9 @@ public class EnderFlame extends UnplaceableBlock {
 
     public EnderFlame() {
         super(Categories.INFINITY_MAIN, Items.ENDER_FLAME, RecipeType.MAGIC_WORKBENCH, new ItemStack[]{
-                Items.END_ESSENCE, Items.END_ESSENCE, Items.END_ESSENCE,
-                Items.END_ESSENCE, new ItemStack(Material.BOOK), Items.END_ESSENCE,
-                Items.END_ESSENCE, Items.END_ESSENCE, Items.END_ESSENCE,
+                Items.ENDER_ESSENCE, Items.ENDER_ESSENCE, Items.ENDER_ESSENCE,
+                Items.ENDER_ESSENCE, new ItemStack(Material.BOOK), Items.ENDER_ESSENCE,
+                Items.ENDER_ESSENCE, Items.ENDER_ESSENCE, Items.ENDER_ESSENCE,
         });
     }
 }

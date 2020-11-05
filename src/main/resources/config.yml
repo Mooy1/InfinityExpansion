@@ -1,1 +1,20 @@
-options:
+# -----
+# output-duct-options:
+# You can slightly lower these if output duct timings are too high
+# -----
+# max-duct-length:
+# maximum length of a duct network which is comprised of item ducts and output ducts, minimum 4
+# default: 12
+# -----
+# max-input-inventories:
+# maximum number of input inventories or machine menus to check, minimum 1
+# default: 8
+# -----
+# max-slots-to-check:
+# maximum slots to check in each input inventories (it takes longer to check all 54 slots of a chest for ex), minimum 1
+# default: 9
+# -----
+output-duct-options:
+  max-duct-length: 12
+  max-input-inventories: 8
+  max-slots-to-check: 9

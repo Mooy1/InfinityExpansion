@@ -46,7 +46,7 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
 
     public static final int COBBLE_ENERGY = 24;
     public static final int COBBLE2_ENERGY = 120;
-    public static final int OBSIDIAN_ENERGY = 360;
+    public static final int OBSIDIAN_ENERGY = 240;
 
     public static final int COBBLE_SPEED = 1;
     public static final int COBBLE2_SPEED = 4;

@@ -108,7 +108,7 @@ public class MainMaterial extends SlimefunItem {
         MAGNONIUM(Categories.INFINITY_MAIN, Items.MAGNONIUM, RecipeType.SMELTERY, new ItemStack[] {
                 Items.MAGSTEEL,
                 Items.MAGNESIUM_SINGULARITY,
-                Items.END_ESSENCE,
+                Items.ENDER_ESSENCE,
                 null, null, null, null, null, null
         });
 

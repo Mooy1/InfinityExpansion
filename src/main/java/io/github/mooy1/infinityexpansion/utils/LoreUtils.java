@@ -39,7 +39,7 @@ public final class LoreUtils {
     }
 
     public static String storesInfinity() {
-        return "&6Capacity: &bInfinite &eitems";
+        return "&6Capacity:&e infinite items";
     }
 
     public static String roundHundreds(float number) {

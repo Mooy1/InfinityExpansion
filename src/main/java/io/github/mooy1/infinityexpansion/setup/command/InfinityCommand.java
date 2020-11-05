@@ -3,6 +3,7 @@ package io.github.mooy1.infinityexpansion.setup.command;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.apache.commons.lang.Validate;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,11 @@ public class InfinityCommand implements CommandExecutor, Listener {
         if (args.length > 0) {
             for (SubCommand command : commands) {
                 if (args[0].equalsIgnoreCase(command.getName())) {
-                    command.onExecute(sender, args);
+                    if (!command.isOp() || sender.hasPermission("infinityexpansion.admin")) {
+                        command.onExecute(sender, args);
+                    } else {
+                        sendNoPerm(sender);
+                    }
                     return true;
                 }
             }
@@ -68,12 +73,16 @@ public class InfinityCommand implements CommandExecutor, Listener {
         sender.sendMessage("");
 
         for (SubCommand cmd : commands) {
-            if (!cmd.isHidden()) {
+            if (!cmd.isOp() || sender.hasPermission("infinityexpansion.admin")) {
                 sender.sendMessage(ChatColors.color("&6/ie " + cmd.getName() + " &e- " + cmd.getDescription()));
             }
         }
 
         sender.sendMessage("");
+    }
+
+    public void sendNoPerm(@Nonnull CommandSender sender) {
+        sender.sendMessage(ChatColor.RED + "You do not have permission to run this command!");
     }
 
     @EventHandler

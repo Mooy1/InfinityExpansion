@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.transport;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.LocationUtils;
@@ -58,9 +59,9 @@ public class OutputDuct extends SlimefunItem {
     private static final int[] STATUS_BORDER = PresetUtils.slotChunk3;
 
     private static final int STATUS_SLOT = 16;
-    public static final int DUCT_LENGTH = 12;
-    public static final int MAX_INVS = 8;
-    private static final int MAX_SLOTS = 9;
+    public static int DUCT_LENGTH = 12;
+    public static int MAX_INVS = 8;
+    private static int MAX_SLOTS = 9;
 
     public OutputDuct() {
         super(Categories.STORAGE_TRANSPORT, Items.OUTPUT_DUCT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -68,6 +69,21 @@ public class OutputDuct extends SlimefunItem {
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.ITEM_DUCT, new ItemStack(Material.HOPPER), Items.ITEM_DUCT
         }, new CustomItem(Items.OUTPUT_DUCT, 2));
+
+        int configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-duct-length");
+        if (configMax > 3 && configMax < 21) {
+            DUCT_LENGTH = configMax;
+        }
+
+        configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-input-inventories");
+        if (configMax > 0 && configMax < 21) {
+            MAX_INVS = configMax;
+        }
+
+        configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-slots-to-check");
+        if (configMax > 0 && configMax < 54) {
+            MAX_SLOTS = configMax;
+        }
 
         new BlockMenuPreset(getId(), Objects.requireNonNull(Items.OUTPUT_DUCT.getDisplayName())) {
             @Override
@@ -316,7 +332,7 @@ public class OutputDuct extends SlimefunItem {
                     int minSlot = range[0];
                     int maxSlot = range[1];
 
-                    int count = 1;
+                    int count = 0;
                     for (int slot = minSlot; slot < maxSlot; slot++) {
 
                         ItemStack slotItem = contents[slot];

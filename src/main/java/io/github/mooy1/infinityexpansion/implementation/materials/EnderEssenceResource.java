@@ -51,7 +51,7 @@ public class EnderEssenceResource implements GEOResource {
     @Nonnull
     @Override
     public ItemStack getItem() {
-        return Items.END_ESSENCE.clone();
+        return Items.ENDER_ESSENCE.clone();
     }
 
     @Override

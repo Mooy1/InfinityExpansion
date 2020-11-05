@@ -39,7 +39,7 @@ import java.util.Objects;
  */
 public class GearTransformer extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
-    public static final int ENERGY = 100000;
+    public static final int ENERGY = 12000;
 
     private static final int[] OUTPUT_SLOTS = {
             PresetUtils.slot2 + 27
