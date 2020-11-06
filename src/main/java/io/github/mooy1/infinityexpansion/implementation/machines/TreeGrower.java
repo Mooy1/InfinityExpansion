@@ -42,15 +42,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Grows trees
+ * Grows trees in a virtual interface
  *
  * @author Mooy1
  */
 public class TreeGrower extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 36;
-    public static final int ENERGY2 = 360;
-    public static final int ENERGY3 = 7200;
+    public static final int ENERGY2 = 180;
+    public static final int ENERGY3 = 1800;
     public static final int SPEED1 = 1;
     public static final int SPEED2 = 5;
     public static final int SPEED3 = 25;

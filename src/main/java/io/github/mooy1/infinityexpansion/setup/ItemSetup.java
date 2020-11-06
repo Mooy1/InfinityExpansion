@@ -60,19 +60,19 @@ public final class ItemSetup {
     public static int VOID_CAPACITOR = 16000000;
 
     public static int ADVANCED_EN_SPEED = 5;
-    public static int ADVANCED_EN_ENERGY = 600;
+    public static int ADVANCED_EN_ENERGY = 180;
 
     public static int ADVANCED_DIS_SPEED = 5;
-    public static int ADVANCED_DIS_ENERGY = 600;
+    public static int ADVANCED_DIS_ENERGY = 180;
 
     public static int INFINITY_EN_SPEED = 75;
-    public static int INFINITY_EN_ENERGY = 60000;
+    public static int INFINITY_EN_ENERGY = 12000;
 
     public static int INFINITY_DIS_SPEED = 90;
-    public static int INFINITY_DIS_ENERGY = 60000;
+    public static int INFINITY_DIS_ENERGY = 12000;
 
     public static int ADVANCED_CHARGER_SPEED = 30;
-    public static int ADVANCED_CHARGER_ENERGY = 300;
+    public static int ADVANCED_CHARGER_ENERGY = 180;
 
     public static int INFINITY_CHARGER_SPEED = 6000;
     public static int INFINITY_CHARGER_ENERGY = 60000;

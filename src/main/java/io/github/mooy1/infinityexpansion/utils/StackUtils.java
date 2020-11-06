@@ -39,7 +39,13 @@ public final class StackUtils {
             }
         }
 
-        return item.getType().toString();
+        String id = item.getType().toString();
+
+        if (id.equals("COPPER_INGOT")) {
+            id = "MC_COPPER_INGOT";
+        }
+
+        return id;
     }
 
     @Nullable
@@ -53,7 +59,13 @@ public final class StackUtils {
 
         } else {
 
-            Material material = Material.getMaterial(id);
+            String changedID = id;
+
+            if (id.equals("MC_COPPER_INGOT")) {
+                changedID = "COPPER_INGOT";
+            }
+
+            Material material = Material.getMaterial(changedID);
 
             if (material != null){
 

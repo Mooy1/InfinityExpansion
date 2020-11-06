@@ -5,7 +5,6 @@ import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.mooy1.infinityexpansion.setup.ItemSetup;
 import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
@@ -17,16 +16,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     private static InfinityExpansion instance;
-    public final Config config = new Config(this);
 
     @Override
     public void onEnable() {
         instance = this;
+
+        //config
+        updateConfig();
 
         //stats
         @SuppressWarnings("unused")
@@ -69,9 +71,8 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         int i = 0;
         for (ItemStack output : InfinityRecipes.OUTPUTS) {
             SlimefunItem slimefunItem = SlimefunItem.getByItem(output);
-            assert slimefunItem != null;
 
-            if (!slimefunItem.isDisabled()) {
+            if (!Objects.requireNonNull(slimefunItem).isDisabled()) {
                 enabledOutputs.add(output);
                 enabledRecipes.add(InfinityRecipes.RECIPES[i]);
             } else {
@@ -114,14 +115,20 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 ChatColor.AQUA + "     Infinity Expansion v" + getInstance().getPluginVersion(),
                 ChatColor.GREEN + "     -------------------------    ",
                 ChatColor.AQUA + "              Changelog            ",
-                ChatColor.GRAY + " - Added commands!",
+                ChatColor.GRAY + " - Added output duct config options",
                 ChatColor.GRAY + " - Infinity Matrix added",
                 ChatColor.GRAY + " - Added ItemDucts and OutputDucts,",
                 ChatColor.GRAY + " These may be buggy, make sure to report issues!",
-                ChatColor.GRAY + " -Optimized Output nodes",
+                ChatColor.GRAY + " You can use /ie reloadconfig to get a new config with new options!",
                 ChatColor.GREEN + "",
                 ChatColor.GREEN + "########################################",
                 ChatColor.GREEN + ""
         };
+    }
+
+    private void updateConfig() {
+        getConfig().options().copyDefaults(true);
+        getConfig().options().copyHeader(true);
+        saveConfig();
     }
 }

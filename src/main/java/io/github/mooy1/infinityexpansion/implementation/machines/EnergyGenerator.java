@@ -72,8 +72,8 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
     public static final int CELE_STORAGE = 300_000;
     public static final int VOID_RATE = 5400;
     public static final int VOID_STORAGE = 900_000;
-    public static final int INFINITY_RATE = 120000;
-    public static final int INFINITY_STORAGE = 20_000_000;
+    public static final int INFINITY_RATE = 60000;
+    public static final int INFINITY_STORAGE = 10_000_000;
 
     private final Type type;
 

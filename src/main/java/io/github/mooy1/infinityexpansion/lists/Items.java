@@ -164,7 +164,7 @@ public final class Items {
             "&7Instantly charges items",
             "",
             LoreUtils.speed(ItemSetup.INFINITY_CHARGER_SPEED),
-            LoreUtils.energyPerSecond(ItemSetup.INFINITY_CHARGER_ENERGY)
+            LoreUtils.energyPer(ItemSetup.INFINITY_CHARGER_ENERGY) + "per use"
     );
 
     //conversion machines
@@ -257,7 +257,7 @@ public final class Items {
             "&bInfinity Enchanter",
             "",
             LoreUtils.speed(ItemSetup.INFINITY_EN_SPEED),
-            LoreUtils.energyPerSecond(ItemSetup.INFINITY_EN_ENERGY)
+            LoreUtils.energyPer(ItemSetup.INFINITY_EN_ENERGY) + "per use"
     );
     public static final SlimefunItemStack INFINITY_DISENCHANTER = new SlimefunItemStack(
             "INFINITY_DISENCHANTER",
@@ -265,7 +265,7 @@ public final class Items {
             "&bInfinity Disenchanter",
             "",
             LoreUtils.speed(ItemSetup.INFINITY_DIS_SPEED),
-            LoreUtils.energyPerSecond(ItemSetup.INFINITY_DIS_ENERGY)
+            LoreUtils.energyPer(ItemSetup.INFINITY_DIS_ENERGY) + "per use"
     );
     public static final SlimefunItemStack INFINITY_WORKBENCH = new SlimefunItemStack(
             "INFINITY_FORGE",
@@ -318,7 +318,7 @@ public final class Items {
             HeadTexture.CAPACITOR_25,
             "&8Void Capacitor",
             "",
-            "&8\u21E8 &e\u26A1 " + ItemSetup.VOID_CAPACITOR + " &7J Capacity"
+            "&8\u21E8 &e\u26A1 " + LoreUtils.roundHundreds(ItemSetup.VOID_CAPACITOR) + " &7J Capacity"
     );
     public static final SlimefunItemStack HYDRO_GENERATOR = new SlimefunItemStack(
             "HYDRO_GENERATOR",
@@ -747,7 +747,6 @@ public final class Items {
     /**
      * Thanks to NCBPFluffyBear for the idea
      */
-
     public static final SlimefunItemStack INFINITY_ADDON_INFO = new SlimefunItemStack(
             "INFINITY_ADDON_INFO",
             Material.NETHER_STAR,
@@ -820,7 +819,7 @@ public final class Items {
 
     //Materials
 
-    public static final SlimefunItemStack END_ESSENCE = new SlimefunItemStack(
+    public static final SlimefunItemStack ENDER_ESSENCE = new SlimefunItemStack(
             "END_ESSENCE",
             Material.BLAZE_POWDER,
             "&5Ender Essence",

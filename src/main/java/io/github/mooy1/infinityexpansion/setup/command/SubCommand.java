@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.setup.command;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.command.CommandSender;
 
@@ -13,38 +14,24 @@ public abstract class SubCommand {
 
     protected final InfinityExpansion plugin;
     protected final InfinityCommand cmd;
-
+    @Getter
+    private final boolean op;
+    @Getter
     private final String name;
+    @Getter
     private final String description;
-    private final boolean hidden;
 
     @ParametersAreNonnullByDefault
-    protected SubCommand(InfinityExpansion plugin, InfinityCommand cmd, String name, String description, boolean hidden) {
+    protected SubCommand(InfinityExpansion plugin, InfinityCommand cmd, String name, String description, boolean op) {
         this.plugin = plugin;
         this.cmd = cmd;
         this.name = name;
         this.description = description;
-        this.hidden = hidden;
-    }
-
-    @Nonnull
-    public final String getName() {
-        return name;
-    }
-
-    public final boolean isHidden() {
-        return hidden;
+        this.op = op;
     }
 
     public abstract void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args);
 
     @NonNull
-    public List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
-        return new ArrayList<>();
-    }
-
-    @Nonnull
-    protected String getDescription() {
-        return description;
-    }
+    public abstract List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args);
 }

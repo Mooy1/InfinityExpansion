@@ -51,11 +51,11 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
     public static final int FREEZER_SPEED = 2;
     public static final int FREEZER_ENERGY = 120;
     public static final int URANIUM_SPEED = 1;
-    public static final int URANIUM_ENERGY = 400;
+    public static final int URANIUM_ENERGY = 360;
     public static final int DUST_SPEED = 4;
     public static final int DUST_ENERGY = 300;
     public static final int DECOM_SPEED = 4;
-    public static final int DECOM_ENERGY = 300;
+    public static final int DECOM_ENERGY = 180;
     private static final int[] INPUT_SLOTS = {PresetUtils.slot1};
     private static final int[] OUTPUT_SLOTS = {PresetUtils.slot3};
     private static final int STATUS_SLOT = PresetUtils.slot2;
