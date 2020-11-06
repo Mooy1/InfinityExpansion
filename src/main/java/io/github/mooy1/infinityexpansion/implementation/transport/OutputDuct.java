@@ -266,6 +266,16 @@ public class OutputDuct extends SlimefunItem {
             return;
         }
 
+        if (!isBlacklisted(thisBlock)) {
+            int count = 0;
+            for (int slot : WHITELIST_SLOTS) {
+                if (thisMenu.getItemInSlot(slot) == null) {
+                    count++;
+                }
+            }
+            if (count == WHITELIST_SLOTS.length) return;
+        }
+
         List<Location> checkedLocations = new ArrayList<>();
         checkedLocations.add(targetLocation);
         if (targetInventory != null) { //add double chest to checked
