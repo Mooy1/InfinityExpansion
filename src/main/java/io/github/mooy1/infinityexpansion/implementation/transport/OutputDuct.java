@@ -4,7 +4,6 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.LocationUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -35,6 +34,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNullableByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -49,15 +49,23 @@ import java.util.Objects;
 public class OutputDuct extends SlimefunItem {
 
     private static final int[] WHITELIST_SLOTS = {
-            10, 11, 12, 13
+            10, 11, 12
     };
     private static final int[] BORDER = {
-            0, 1, 2, 3, 4, 5,
-            9, 14,
-            18, 19, 20, 21, 22, 23
+            0, 1, 2, 3, 4,
+            9, 13,
+            18, 19, 20, 21, 22
     };
-    private static final int[] STATUS_BORDER = PresetUtils.slotChunk3;
+    private static final int[] STATUS_BORDER = {
+            5, 6, 7, 8,
+            14, 17,
+            23, 24, 25, 26
+    };
 
+    private static final ItemStack BLACKLIST_ON = new CustomItem(Material.BLACK_STAINED_GLASS_PANE, "&7Blacklist - &aEnabled", "", "&7Click to swap");
+    private static final ItemStack BLACKLIST_OFF = new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "&7Blacklist - &cDisabled", "", "&7Click to swap");
+
+    private static final int BLACKLIST_TOGGLE = 15;
     private static final int STATUS_SLOT = 16;
     public static int DUCT_LENGTH = 12;
     public static int MAX_INVS = 8;
@@ -93,7 +101,18 @@ public class OutputDuct extends SlimefunItem {
 
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+                BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "false");
 
+                menu.addMenuClickHandler(BLACKLIST_TOGGLE, (player, i, itemStack, clickAction) -> {
+                    if (isBlacklisted(b)) {
+                        menu.replaceExistingItem(BLACKLIST_TOGGLE, BLACKLIST_OFF);
+                        BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "false");
+                    } else {
+                        menu.replaceExistingItem(BLACKLIST_TOGGLE, BLACKLIST_ON);
+                        BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "true");
+                    }
+                    return false;
+                });
             }
 
             @Override
@@ -123,7 +142,7 @@ public class OutputDuct extends SlimefunItem {
                 BlockMenu machine = TransferUtils.getMenu(targetLocation);
                 Inventory inventory = TransferUtils.getInventory(targetBlock);
 
-                if (inventory == null && machine == null) {
+                if (inventory == null && (machine == null || machine.getPreset().getID().equals("OUTPUT_DUCT"))) {
                     MessageUtils.message(e.getPlayer(), ChatColor.RED + "Must be placed on a machine or inventory");
 
                 } else {
@@ -175,6 +194,10 @@ public class OutputDuct extends SlimefunItem {
         });
     }
 
+    private static boolean isBlacklisted(Block b) {
+        return BlockStorage.getLocationInfo(b.getLocation(), "blacklist").equals("true");
+    }
+
     private static void onDrop(BlockMenu inv, Block b) {
         if (inv != null) {
             inv.dropItems(b.getLocation(), WHITELIST_SLOTS);
@@ -191,6 +214,8 @@ public class OutputDuct extends SlimefunItem {
             blockMenuPreset.addItem(i, new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&3Connected Block"),
                     ChestMenuUtils.getEmptyClickHandler());
         }
+
+        blockMenuPreset.addItem(BLACKLIST_TOGGLE, BLACKLIST_OFF, ChestMenuUtils.getEmptyClickHandler());
 
         blockMenuPreset.addMenuClickHandler(STATUS_SLOT, ChestMenuUtils.getEmptyClickHandler());
     }
@@ -267,116 +292,144 @@ public class OutputDuct extends SlimefunItem {
 
         if (menuList.isEmpty() && invList.isEmpty()) return;
 
-        for (int whiteListSlot : WHITELIST_SLOTS) {
-            ItemStack whiteListItem = thisMenu.getItemInSlot(whiteListSlot);
-            String whiteListID = StackUtils.getIDFromItem(whiteListItem);
-            if (whiteListID != null) {
+        if (isBlacklisted(thisBlock)) {
 
-                //sf extractions
+            output(null, menuList, invList, targetMachine, targetInventory);
 
-                for (BlockMenu extractionMenu : menuList) {
-                    int[] extractionSlots = TransferUtils.getSlots(extractionMenu, ItemTransportFlow.WITHDRAW, whiteListItem);
+        } else {
 
-                    int count = 1;
-                    if (extractionSlots != null && extractionSlots.length > 0) {
-                        for (int slot : extractionSlots) {
-                            ItemStack outputItem = extractionMenu.getItemInSlot(slot);
-                            String outputID = StackUtils.getIDFromItem(outputItem);
+            for (int whiteListSlot : WHITELIST_SLOTS) {
+                ItemStack whiteListItem = thisMenu.getItemInSlot(whiteListSlot);
+                String whiteListID = StackUtils.getIDFromItem(whiteListItem);
 
-                            if (outputItem != null && outputID != null && outputID.equals(whiteListID)) {
+                if (whiteListID != null) {
+                    output(whiteListID, menuList, invList, targetMachine, targetInventory);
+                }
+            }
+        }
+    }
 
-                                if (targetMachine != null) { //sf insertion
+    /**
+     * This method outputs items to the target inv/menu from a list of inv/menus and will follow a whitelist if not null
+     *
+     * @param whiteListID whitelisted item id if present
+     * @param menuList list of menus to extract from
+     * @param invList list of invs to extract from
+     * @param targetMachine target machine menu if present
+     * @param targetInventory target inventory menu if present
+     */
+    @ParametersAreNullableByDefault
+    private void output(String whiteListID, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList, BlockMenu targetMachine, Inventory targetInventory) {
 
-                                    int[] destinationSlots = TransferUtils.getSlots(targetMachine, ItemTransportFlow.INSERT, outputItem);
+        //sf extractions
+        for (BlockMenu extractionMenu : menuList) {
+            int[] extractionSlots;
 
-                                    if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
-                                        int amount = outputItem.getAmount();
+            if (whiteListID == null) {
+                extractionSlots = extractionMenu.getPreset().getSlotsAccessedByItemTransport(ItemTransportFlow.WITHDRAW);
+            } else {
+                extractionSlots = TransferUtils.getSlots(extractionMenu, ItemTransportFlow.WITHDRAW, StackUtils.getItemFromID(whiteListID, 1));
+            }
 
-                                        try {
-                                            targetMachine.pushItem(outputItem, destinationSlots);
-                                            extractionMenu.consumeItem(slot, amount);
-                                        } catch (NullPointerException ignored) { }
+            int count = 1;
+            if (extractionSlots != null && extractionSlots.length > 0) {
+                for (int slot : extractionSlots) {
+                    ItemStack outputItem = extractionMenu.getItemInSlot(slot);
+                    String outputID = StackUtils.getIDFromItem(outputItem);
 
-                                    }
+                    if (outputItem != null && (whiteListID == null || (outputID != null && outputID.equals(whiteListID)))) {
 
-                                } else { //vanilla insertion
+                        if (targetMachine != null) { //sf insertion
 
-                                    ItemStack remainingItems = TransferUtils.insertToVanillaInventory(outputItem, targetInventory);
+                            int[] destinationSlots = TransferUtils.getSlots(targetMachine, ItemTransportFlow.INSERT, outputItem);
 
-                                    int extractedAmount;
-                                    if (remainingItems == null) {
-                                        extractedAmount = outputItem.getAmount();
-                                    } else {
-                                        extractedAmount = outputItem.getAmount() - remainingItems.getAmount();
-                                    }
+                            if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
+                                int amount = outputItem.getAmount();
 
-                                    extractionMenu.consumeItem(slot, extractedAmount);
-
+                                try {
+                                    targetMachine.pushItem(outputItem, destinationSlots);
+                                    extractionMenu.consumeItem(slot, amount);
+                                } catch (NullPointerException ignored) {
                                 }
 
-                                break;
                             }
-                        }
-                        count++;
 
-                        if (count >= MAX_SLOTS) break;
+                        } else if (targetInventory != null) { //vanilla insertion
+
+                            ItemStack remainingItems = TransferUtils.insertToVanillaInventory(outputItem, targetInventory);
+
+                            int extractedAmount;
+                            if (remainingItems == null) {
+                                extractedAmount = outputItem.getAmount();
+                            } else {
+                                extractedAmount = outputItem.getAmount() - remainingItems.getAmount();
+                            }
+
+                            extractionMenu.consumeItem(slot, extractedAmount);
+
+                        }
+
+                        break;
                     }
                 }
+                count++;
 
-                //vanilla extractions
+                if (count >= MAX_SLOTS) break;
+            }
+        }
 
-                for (Inventory extractionInv : invList) {
+        //vanilla extractions
 
-                    ItemStack[] contents = extractionInv.getContents();
-                    int[] range = TransferUtils.getOutputSlotRange(extractionInv);
-                    int minSlot = range[0];
-                    int maxSlot = range[1];
+        for (Inventory extractionInv : invList) {
 
-                    int count = 0;
-                    for (int slot = minSlot; slot < maxSlot; slot++) {
+            ItemStack[] contents = extractionInv.getContents();
+            int[] range = TransferUtils.getOutputSlotRange(extractionInv);
+            int minSlot = range[0];
+            int maxSlot = range[1];
 
-                        ItemStack slotItem = contents[slot];
+            int count = 0;
+            for (int slot = minSlot; slot < maxSlot; slot++) {
 
-                        if (slotItem != null) {
+                ItemStack slotItem = contents[slot];
 
-                            ItemStack outputItem = slotItem.clone();
-                            String outputID = StackUtils.getIDFromItem(outputItem);
+                if (slotItem != null) {
 
-                            if (outputID != null && outputID.equals(whiteListID)) {
+                    ItemStack outputItem = slotItem.clone();
+                    String outputID = StackUtils.getIDFromItem(outputItem);
 
-                                if (targetMachine != null) { //sf insertion
+                    if (whiteListID == null || (outputID != null && outputID.equals(whiteListID))) {
 
-                                    int[] destinationSlots = TransferUtils.getSlots(targetMachine, ItemTransportFlow.INSERT, outputItem);
+                        if (targetMachine != null) { //sf insertion
 
-                                    if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
+                            int[] destinationSlots = TransferUtils.getSlots(targetMachine, ItemTransportFlow.INSERT, outputItem);
 
-                                        targetMachine.pushItem(outputItem, destinationSlots);
+                            if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
 
-                                        slotItem.setAmount(slotItem.getAmount() - outputItem.getAmount());
-                                    }
+                                targetMachine.pushItem(outputItem, destinationSlots);
 
-                                } else { //vanilla insertion
-
-                                    ItemStack remainingItems = TransferUtils.insertToVanillaInventory(outputItem, targetInventory);
-
-                                    int amount;
-                                    if (remainingItems == null) {
-                                        amount = 0;
-                                    } else {
-                                        amount = remainingItems.getAmount();
-                                    }
-
-                                    slotItem.setAmount(amount);
-                                }
-
-                                break;
+                                slotItem.setAmount(slotItem.getAmount() - outputItem.getAmount());
                             }
-                        }
-                        count++;
 
-                        if (count >= MAX_SLOTS) break;
+                        } else if (targetInventory != null) { //vanilla insertion
+
+                            ItemStack remainingItems = TransferUtils.insertToVanillaInventory(outputItem, targetInventory);
+
+                            int amount;
+                            if (remainingItems == null) {
+                                amount = 0;
+                            } else {
+                                amount = remainingItems.getAmount();
+                            }
+
+                            slotItem.setAmount(amount);
+                        }
+
+                        break;
                     }
                 }
+                count++;
+
+                if (count >= MAX_SLOTS) break;
             }
         }
     }
