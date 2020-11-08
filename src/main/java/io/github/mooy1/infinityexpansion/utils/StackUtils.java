@@ -10,7 +10,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -77,30 +79,38 @@ public final class StackUtils {
         return null;
     }
 
-    public static void addLore(@Nonnull ItemStack item, @Nonnull List<String> lores) {
+    @ParametersAreNonnullByDefault
+    public static void addLore(ItemStack item, List<String> lores) {
         ItemMeta meta = item.getItemMeta();
 
-        if (meta != null) {
-
-            List<String> lore = new ArrayList<>();
-
-            if (meta.getLore() != null) {
-                lore = meta.getLore();
-            }
-
-            for (String line : lores) {
-                if (line != null) {
-                    lore.add(line);
-                }
-            }
-
-            meta.setLore(lore);
-
-            item.setItemMeta(meta);
+        if (meta == null) {
+            return;
         }
+
+        List<String> lore = new ArrayList<>();
+
+        if (meta.getLore() != null) {
+            lore = meta.getLore();
+        }
+
+        for (String line : lores) {
+            if (line != null) {
+                lore.add(line);
+            }
+        }
+
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
     }
 
-    public static void insertLore(@Nonnull ItemStack item, @Nonnull List<String> lores, @Nonnull String find, int offset) {
+    @ParametersAreNonnullByDefault
+    public static void addLore(ItemStack item, String... lores) {
+        addLore(item, Arrays.asList(lores));
+    }
+
+    @ParametersAreNonnullByDefault
+    public static void insertLore(ItemStack item, int offset, String find, List<String> lores) {
         ItemMeta meta = item.getItemMeta();
 
         if (meta == null) return;
@@ -131,6 +141,11 @@ public final class StackUtils {
         meta.setLore(lore);
 
         item.setItemMeta(meta);
+    }
+
+    @ParametersAreNonnullByDefault
+    public static void insertLore(ItemStack item, int offset, String find, String... lores) {
+        insertLore(item, offset, find, Arrays.asList(lores));
     }
 
     /**

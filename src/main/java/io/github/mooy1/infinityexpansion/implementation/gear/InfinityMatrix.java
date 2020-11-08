@@ -57,7 +57,7 @@ public class InfinityMatrix extends SlimefunItem implements Listener {
                     List<String> replaceLore = new ArrayList<>();
                     replaceLore.add(null);
                     replaceLore.add(null);
-                    StackUtils.insertLore(item, replaceLore, "UUID: ", -1);
+                    StackUtils.insertLore(item, -1, "UUID: ", replaceLore);
                     MessageUtils.message(p, ChatColor.GOLD + "Ownership removed!");
                     disableFlight(p);
 

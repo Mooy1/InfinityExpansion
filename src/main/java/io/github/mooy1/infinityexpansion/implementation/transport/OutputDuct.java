@@ -170,13 +170,11 @@ public class OutputDuct extends SlimefunItem {
 
                     List<String> lore = new ArrayList<>();
 
-                    if (targetLocation.getWorld() != null) {
-                        lore.add("");
-                        lore.add(ChatColor.GREEN + "Location: ");
-                        lore.add(ChatColor.GREEN + "X " + targetLocation.getX());
-                        lore.add(ChatColor.GREEN + "Y " + targetLocation.getY());
-                        lore.add(ChatColor.GREEN + "Z " + targetLocation.getZ());
-                    }
+                    lore.add("");
+                    lore.add(ChatColor.GREEN + "Location: ");
+                    lore.add(ChatColor.GREEN + "X " + targetLocation.getX());
+                    lore.add(ChatColor.GREEN + "Y " + targetLocation.getY());
+                    lore.add(ChatColor.GREEN + "Z " + targetLocation.getZ());
 
                     StackUtils.addLore(item, lore);
 
@@ -274,7 +272,13 @@ public class OutputDuct extends SlimefunItem {
                     count++;
                 }
             }
-            if (count == WHITELIST_SLOTS.length) return;
+            if (count == WHITELIST_SLOTS.length) {
+                ItemStack item = thisMenu.getItemInSlot(STATUS_SLOT);
+                StackUtils.insertLore(item, 4, "Location:", "", ChatColors.color("&6Whitelist an item or enable blacklist!"));
+                thisMenu.replaceExistingItem(STATUS_SLOT, item);
+
+                return;
+            }
         }
 
         List<Location> checkedLocations = new ArrayList<>();
@@ -297,8 +301,11 @@ public class OutputDuct extends SlimefunItem {
             lore.add(ChatColors.color("&6Inventories: &e" + found + " / " + MAX_INVS));
             lore.add(ChatColors.color("&6Length: &e" + length + " / " + DUCT_LENGTH));
 
-            StackUtils.insertLore(thisMenu.getItemInSlot(STATUS_SLOT), lore, "Location:", 4);
+            ItemStack item = thisMenu.getItemInSlot(STATUS_SLOT);
 
+            StackUtils.insertLore(item, 4, "Location:", lore);
+
+            thisMenu.replaceExistingItem(STATUS_SLOT, item);
         }
 
         if (menuList.isEmpty() && invList.isEmpty()) return;
@@ -459,55 +466,57 @@ public class OutputDuct extends SlimefunItem {
      * @param prev the previous location, fast way to not check the previous location
      */
     @ParametersAreNonnullByDefault
-    private void inputFlow(Location thisLocation, Location prev, List<Location> checkedLocations, MutableInt length, List<BlockMenu> menuList, List<Inventory> invList) {
+    private boolean inputFlow(Location thisLocation, Location prev, List<Location> checkedLocations, MutableInt length, List<BlockMenu> menuList, List<Inventory> invList) {
         checkedLocations.add(thisLocation);
 
-        if (menuList.size() + invList.size() >= MAX_INVS) {
-            return;
+        if (length.intValue() >= DUCT_LENGTH || menuList.size() + invList.size() >= MAX_INVS) {
+            return true;
         }
 
         Block thisBlock = thisLocation.getBlock();
+        Material thisMaterial = thisBlock.getType();
 
-        if (thisBlock.getType() == Material.AIR) {
-            return;
+        if (thisMaterial == Material.AIR) {
+            return false;
         }
 
-        String thisID = BlockStorage.checkID(thisLocation);
+        if (thisMaterial == Items.OUTPUT_DUCT.getType() || thisMaterial == Items.ITEM_DUCT.getType()) {
+            String thisID = BlockStorage.checkID(thisLocation);
 
-        if (thisID == null) { //try vanilla
+            if (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT")) { //connector
 
-            Inventory inv = TransferUtils.getInventory(thisBlock);
+                length.increment();
 
-            if (inv != null) {
+                for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
 
-                invList.add(inv);
-                addDoubleChest(inv, checkedLocations);
-            }
+                    if (location != prev && !checkedLocations.contains(location)) {
 
-            return;
-        }
-
-        if (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT")) { //connector
-
-            length.increment();
-
-            for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
-
-                if (location != prev && !checkedLocations.contains(location) && length.intValue() < DUCT_LENGTH) {
-
-                    inputFlow(location, thisLocation, checkedLocations, length, menuList, invList);
-
+                        //try input flow on each unless the max length is reached
+                        if (inputFlow(location, thisLocation, checkedLocations, length, menuList, invList)) {
+                            break;
+                        }
+                    }
                 }
-            }
 
-            return;
+                return false;
+            }
         }
 
         if (BlockStorage.hasInventory(thisBlock)) { //machine
 
             menuList.add(BlockStorage.getInventory(thisLocation));
-
+            return false;
         }
+
+        Inventory inv = TransferUtils.getInventory(thisBlock);
+
+        if (inv != null) {
+
+            invList.add(inv);
+            addDoubleChest(inv, checkedLocations);
+        }
+
+        return false;
     }
 
     /**

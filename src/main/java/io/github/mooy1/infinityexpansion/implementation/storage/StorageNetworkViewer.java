@@ -18,6 +18,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.apache.commons.lang.mutable.MutableBoolean;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,10 +40,10 @@ import java.util.Objects;
  */
 public class StorageNetworkViewer extends SlimefunItem {
 
-    public static final int RANGE = 48;
+    public static final int RANGE = 32;
     public static final int MAX = 18;
     private static final int STATUS_SLOT = 4;
-    private static final String[] CONNECTABLE = {
+    private static final String[] CONNECTABLE_IDS = {
             "STORAGE_NETWORK_VIEWER",
             "STORAGE_DUCT",
             "BASIC_STORAGE",
@@ -49,6 +51,15 @@ public class StorageNetworkViewer extends SlimefunItem {
             "REINFORCED_STORAGE",
             "VOID_STORAGE",
             "INFINITY_STORAGE",
+    };
+    private static final Material[] CONNECTABLE_MATS = {
+            Items.STORAGE_NETWORK_VIEWER.getType(),
+            Items.STORAGE_DUCT.getType(),
+            Items.BASIC_STORAGE.getType(),
+            Items.ADVANCED_STORAGE.getType(),
+            Items.REINFORCED_STORAGE.getType(),
+            Items.VOID_STORAGE.getType(),
+            Items.INFINITY_STORAGE.getType(),
     };
     private static final String[] UNITS = {
             "INFINITY_STORAGE",
@@ -133,10 +144,18 @@ public class StorageNetworkViewer extends SlimefunItem {
         List<Location> foundLocations = new ArrayList<>();
         List<String> foundIDs = new ArrayList<>();
         MutableInt length = new MutableInt(0);
-        MutableInt count = new MutableInt(0);
-        inputFlow(count, l, foundLocations, foundIDs, new ArrayList<>(), l);
-        int size = foundIDs.size();
+        MutableBoolean maxSize = new MutableBoolean(false);
+        MutableBoolean maxLength = new MutableBoolean(false);
 
+        inputFlow(length, l, foundLocations, foundIDs, new ArrayList<>(), l);
+
+        int size = foundIDs.size();
+        if (maxSize.booleanValue()) {
+            size = MAX;
+        }
+        if (maxLength.booleanValue()) {
+            length.setValue(RANGE);
+        }
         Material material = Material.ORANGE_STAINED_GLASS_PANE;
         String name = "&6No storage units connected";
 
@@ -169,49 +188,62 @@ public class StorageNetworkViewer extends SlimefunItem {
     /**
      * This method will search for connected storage units
      *
-     * @param count length of network so far
+     * @param length length of network so far
      * @param thisLocation location being checked
      * @param foundLocations list of units
      * @param foundIDs list of found unit ids
      * @param checkedLocations checked locations
      * @param prev previous location
      */
-    private void inputFlow(MutableInt count, @Nonnull Location thisLocation, @Nonnull List<Location> foundLocations, @Nonnull List<String> foundIDs, @Nonnull List<Location> checkedLocations, @Nonnull Location prev) {
+    @ParametersAreNonnullByDefault
+    private boolean inputFlow(MutableInt length, Location thisLocation, List<Location> foundLocations, List<String> foundIDs, List<Location> checkedLocations, Location prev) {
         checkedLocations.add(thisLocation);
 
-        if (foundIDs.size() < MAX) {
+        if (length.intValue() >= RANGE || foundIDs.size() >= MAX) {
+            return true;
+        }
+
+        Material thisMaterial = thisLocation.getBlock().getType();
+
+        if (thisMaterial == Material.AIR) {
+            return false;
+        }
+
+        for (int i = 0 ; i < CONNECTABLE_MATS.length ; i++) {
+            if (thisMaterial != CONNECTABLE_MATS[i]) {
+                continue;
+            }
 
             String thisID = BlockStorage.checkID(thisLocation);
 
-            if (thisID != null) { //try sf
+            if (Objects.equals(thisID, CONNECTABLE_IDS[i])) {
 
-                for (String check : CONNECTABLE) {
-                    if (thisID.equals(check)) { //connector
+                length.increment();
 
-                        for (String unit : UNITS) { //add if unit
-                            if (thisID.equals(unit)) {
-                                foundIDs.add(thisID);
-                                foundLocations.add(thisLocation);
-                                break;
-                            }
-                        }
-
-                        count.increment();
-
-                        for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
-
-                            if (location != prev && !checkedLocations.contains(location) && count.intValue() < RANGE) {
-
-                                inputFlow(count, location, foundLocations, foundIDs, checkedLocations, location);
-
-                            }
-                        }
-
+                for (String unit : UNITS) { //add if unit
+                    if (thisID.equals(unit)) {
+                        foundIDs.add(thisID);
+                        foundLocations.add(thisLocation);
                         break;
                     }
                 }
+
+                for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
+
+                    if (location != prev && !checkedLocations.contains(location)) {
+
+                        //try input flow on each unless the max length is reached
+                        if (inputFlow(length, location, foundLocations, foundIDs, checkedLocations, location)) {
+                            break;
+                        }
+                    }
+                }
             }
+
+            break;
         }
+
+        return false;
     }
 
     /**

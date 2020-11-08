@@ -226,13 +226,13 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
     public enum Type {
 
         BASIC(Categories.ADVANCED_MACHINES, BASIC_ENERGY, Items.BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGSTEEL_PLATE, SlimefunItems.LARGE_CAPACITOR, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MAGSTEEL_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, BASIC_OUTPUTS),
 
         ADVANCED(Categories.ADVANCED_MACHINES, ADVANCED_ENERGY, Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, ADVANCED_OUTPUTS),
