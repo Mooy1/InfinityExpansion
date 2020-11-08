@@ -119,7 +119,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 ChatColor.GRAY + " - Infinity Matrix added",
                 ChatColor.GRAY + " - Added ItemDucts and OutputDucts,",
                 ChatColor.GRAY + " These may be buggy, make sure to report issues!",
-                ChatColor.GRAY + " You can use /ie reloadconfig to get a new config with new options!",
+                ChatColor.GRAY + " Recipe balancing",
                 ChatColor.GREEN + "",
                 ChatColor.GREEN + "########################################",
                 ChatColor.GREEN + ""

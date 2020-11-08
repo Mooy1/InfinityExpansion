@@ -175,7 +175,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
 
                 if (world != null && world.getEnvironment() != World.Environment.NETHER) {
 
-                    outputItem = type.getOutput()[0].clone();
+                    outputItem = type.getOutput()[0];
                 }
             }
 
@@ -226,13 +226,13 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
     public enum Type {
 
         BASIC(Categories.ADVANCED_MACHINES, BASIC_ENERGY, Items.BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
+                Items.MAGSTEEL_PLATE, SlimefunItems.LARGE_CAPACITOR, Items.MAGSTEEL_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, BASIC_OUTPUTS),
 
         ADVANCED(Categories.ADVANCED_MACHINES, ADVANCED_ENERGY, Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, ADVANCED_OUTPUTS),
@@ -263,7 +263,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
             new ItemStack(Material.COBBLESTONE, 1),
             new ItemStack(Material.IRON_ORE, 1),
             new ItemStack(Material.COBBLESTONE, 1),
-            new ItemStack(Material.COBBLESTONE, 1),
+            new ItemStack(Material.COAL, 4),
             new ItemStack(Material.COBBLESTONE, 1),
             new ItemStack(Material.GOLD_ORE, 1),
             new ItemStack(Material.COBBLESTONE, 1),
@@ -291,7 +291,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
             new ItemStack(Material.COBBLESTONE, 2),
             new ItemStack(Material.COBBLESTONE, 2),
             new ItemStack(Material.GOLD_INGOT, 2),
-            new ItemStack(Material.COBBLESTONE, 2),
+            new ItemStack(Material.COAL, 8),
             new ItemStack(Material.COBBLESTONE, 2),
             new ItemStack(Material.LAPIS_LAZULI, 8),
             new ItemStack(Material.COBBLESTONE, 2),
@@ -315,10 +315,10 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
             new ItemStack(Material.NETHERRACK, 4),
             new ItemStack(Material.NETHERRACK, 4),
             new ItemStack(Material.QUARTZ, 16),
-            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.COAL, 16),
             new ItemStack(Material.COBBLESTONE, 4),
             new ItemStack(Material.GOLD_INGOT, 4),
-            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.COAL, 16),
             new SlimefunItemStack(SlimefunItems.SIFTED_ORE, 6),
             new ItemStack(Material.COBBLESTONE, 4),
             new ItemStack(Material.LAPIS_LAZULI, 46),
@@ -343,7 +343,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
             new ItemStack(Material.NETHERRACK, 16),
             new ItemStack(Material.NETHERRACK, 16),
             new ItemStack(Material.QUARTZ, 64),
-            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.COAL, 64),
             new ItemStack(Material.COBBLESTONE, 16),
             new ItemStack(Material.GOLD_INGOT, 16),
             new ItemStack(Material.COBBLESTONE, 16),
@@ -358,7 +358,7 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
             new ItemStack(Material.LAPIS_LAZULI, 68),
             new ItemStack(Material.COBBLESTONE, 16),
             new ItemStack(Material.EMERALD, 16),
-            new ItemStack(Material.COBBLESTONE, 16),
+            new ItemStack(Material.COAL, 64),
             new ItemStack(Material.DIAMOND, 16),
             new ItemStack(Material.REDSTONE, 64),
             new ItemStack(Material.COBBLESTONE, 16),

@@ -472,24 +472,24 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
     };
 
     public static final int[] OUTPUT_TIMES = {
-            1600,
-            1600,
-            1600,
-            1600,
-            1600,
-            3200,
-            1600,
+            1000,
+            1000,
+            1000,
+            1000,
+            1000,
+            2000,
+            1000,
 
-            3200,
-            3200,
-            1600,
-            1600,
+            2000,
+            2000,
+            1000,
+            1000,
             400,
 
-            3200,
-            3200,
-            3200,
-            3200,
+            2000,
+            2000,
+            2000,
+            2000,
 
             400
     };

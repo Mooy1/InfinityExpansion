@@ -33,7 +33,7 @@ public class MainMaterial extends SlimefunItem {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        INFINITY(Categories.INFINITY_MAIN, Items.INFINITE_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        INFINITY(Categories.MAIN, Items.INFINITE_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.EARTH_SINGULARITY,
                 Items.MYTHRIL,
                 Items.FORTUNE_SINGULARITY,
@@ -43,11 +43,11 @@ public class MainMaterial extends SlimefunItem {
                 null, null, null
         }),
 
-        BIT(Categories.INFINITY_MAIN, Items.VOID_BIT, RecipeTypes.VOID_HARVESTER,
+        BIT(Categories.MAIN, Items.VOID_BIT, RecipeTypes.VOID_HARVESTER,
                 RecipeUtils.MiddleItem(new CustomItem(Material.IRON_NUGGET, "Void Bit", "&8Ignore this its for SF Calc"))),
 
-        DUST(Categories.INFINITY_MAIN, Items.VOID_DUST, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_BIT)),
-        INGOT(Categories.INFINITY_MAIN, Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_DUST)),
+        DUST(Categories.MAIN, Items.VOID_DUST, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_BIT)),
+        INGOT(Categories.MAIN, Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_DUST)),
 
         FORTUNE(Categories.INFINITY_MATERIALS, Items.FORTUNE_SINGULARITY, RecipeType.SMELTERY, new ItemStack[] {
                 Items.GOLD_SINGULARITY,
@@ -81,31 +81,31 @@ public class MainMaterial extends SlimefunItem {
                 Items.TITANIUM,
                 null, null, null, null
         }),
-        MAGSTEEL(Categories.INFINITY_MAIN, Items.MAGSTEEL, RecipeType.SMELTERY, new ItemStack[] {
+        MAGSTEEL(Categories.MAIN, Items.MAGSTEEL, RecipeType.SMELTERY, new ItemStack[] {
                 SlimefunItems.MAGNESIUM_INGOT,
                 SlimefunItems.STEEL_INGOT,
                 SlimefunItems.MAGNESIUM_DUST,
                 null, null, null, null, null, null
         }),
-        TITANIUM(Categories.INFINITY_MAIN, Items.TITANIUM, RecipeType.SMELTERY, new ItemStack[] {
+        TITANIUM(Categories.MAIN, Items.TITANIUM, RecipeType.SMELTERY, new ItemStack[] {
                 SlimefunItems.REINFORCED_ALLOY_INGOT,
                 SlimefunItems.DAMASCUS_STEEL_INGOT,
                 SlimefunItems.HARDENED_METAL_INGOT,
                 null, null, null, null, null, null
         }),
-        MYTHRIL(Categories.INFINITY_MAIN, Items.MYTHRIL, RecipeType.SMELTERY, new ItemStack[] {
+        MYTHRIL(Categories.MAIN, Items.MYTHRIL, RecipeType.SMELTERY, new ItemStack[] {
                 SlimefunItems.REINFORCED_ALLOY_INGOT,
                 Items.IRON_SINGULARITY,
                 SlimefunItems.HARDENED_METAL_INGOT,
                 null, null, null, null, null, null
         }),
-        ADAMANTITE(Categories.INFINITY_MAIN, Items.ADAMANTITE, RecipeType.SMELTERY, new ItemStack[] {
+        ADAMANTITE(Categories.MAIN, Items.ADAMANTITE, RecipeType.SMELTERY, new ItemStack[] {
                 SlimefunItems.REDSTONE_ALLOY,
                 Items.DIAMOND_SINGULARITY,
                 Items.MAGSTEEL,
                 null, null, null, null, null, null
         }),
-        MAGNONIUM(Categories.INFINITY_MAIN, Items.MAGNONIUM, RecipeType.SMELTERY, new ItemStack[] {
+        MAGNONIUM(Categories.MAIN, Items.MAGNONIUM, RecipeType.SMELTERY, new ItemStack[] {
                 Items.MAGSTEEL,
                 Items.MAGNESIUM_SINGULARITY,
                 Items.ENDER_ESSENCE,

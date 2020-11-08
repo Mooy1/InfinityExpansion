@@ -34,6 +34,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.util.ArrayList;
 import java.util.List;
@@ -457,7 +458,8 @@ public class OutputDuct extends SlimefunItem {
      * @param checkedLocations list of checked locations so it wont check the same spot twice
      * @param prev the previous location, fast way to not check the previous location
      */
-    private void inputFlow(@Nonnull Location thisLocation, @Nonnull Location prev, @Nonnull List<Location> checkedLocations, MutableInt length, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList) {
+    @ParametersAreNonnullByDefault
+    private void inputFlow(Location thisLocation, Location prev, List<Location> checkedLocations, MutableInt length, List<BlockMenu> menuList, List<Inventory> invList) {
         checkedLocations.add(thisLocation);
 
         if (menuList.size() + invList.size() >= MAX_INVS) {
@@ -540,6 +542,7 @@ public class OutputDuct extends SlimefunItem {
      * @param inv double chest inv
      * @param checkedLocations list
      */
+    @ParametersAreNonnullByDefault
     private static void addDoubleChest(Inventory inv, List<Location> checkedLocations) {
         Pair<Location, Location> doubleChestCheck = TransferUtils.getOtherChest(inv);
         if (doubleChestCheck != null) {

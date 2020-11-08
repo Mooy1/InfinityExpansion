@@ -16,27 +16,27 @@ import org.bukkit.NamespacedKey;
 public final class Categories {
 
     public static final Category BASIC_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
-            "BASIC_MACHINES"),
+            "basic_machines"),
             new CustomItem(Material.LOOM, "&9Basic &7Powered Machines"), 1
     );
 
-    public static final Category INFINITY_MAIN = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
-            "INFINITY_MAIN"),
+    public static final Category MAIN = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
+            "main"),
             new CustomItem(Material.NETHER_STAR, "&bInfinity &7Expansion"), 2
     );
 
     public static final Category ADVANCED_MACHINES = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
-            "ADVANCED_MACHINES"),
+            "advanced_machines"),
             new CustomItem(Material.BLAST_FURNACE, "&cAdvanced &7Powered Machines"), 2
     );
 
     public static final Category STORAGE_TRANSPORT = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
-            "STORAGE_TRANSPORT"),
+            "storage_transport"),
             new CustomItem(Material.ENDER_CHEST, "&6Storage and Transport"), 2
     );
 
     public static final Category INFINITY_MATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
-            "INFINITY_MATERIALS"),
+            "infinity_materials"),
             new CustomItem(Material.NETHERITE_BLOCK, "&bInfinity &aMaterials"), 3
     );
 

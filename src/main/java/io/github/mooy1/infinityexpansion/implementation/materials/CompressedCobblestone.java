@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 public class CompressedCobblestone extends SlimefunItem {
 
     public CompressedCobblestone(Type type) {
-        super(Categories.INFINITY_MAIN, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
+        super(Categories.MAIN, type.getItem(), RecipeType.ENHANCED_CRAFTING_TABLE,
                 type.getRecipe());
     }
 

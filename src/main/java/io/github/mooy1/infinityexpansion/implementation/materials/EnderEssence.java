@@ -16,7 +16,7 @@ import org.bukkit.Material;
 public class EnderEssence extends SlimefunItem {
 
     public EnderEssence() {
-        super(Categories.INFINITY_MAIN, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, RecipeUtils.MiddleItem(
+        super(Categories.MAIN, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, RecipeUtils.MiddleItem(
                 new CustomItem(Material.BLAZE_POWDER, "Ender Essence", "&8Ignore this its for SF Calc")));
     }
 }

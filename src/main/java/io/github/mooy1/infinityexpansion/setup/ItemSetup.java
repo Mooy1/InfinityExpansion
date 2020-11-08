@@ -84,7 +84,7 @@ public final class ItemSetup {
         //categories in order
 
         Categories.BASIC_MACHINES.register();
-        Categories.INFINITY_MAIN.register();
+        Categories.MAIN.register();
         Categories.ADVANCED_MACHINES.register();
         Categories.STORAGE_TRANSPORT.register();
         Categories.INFINITY_RECIPES.register();
@@ -109,7 +109,7 @@ public final class ItemSetup {
 
         //main
 
-        new SlimefunItem(Categories.INFINITY_MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
+        new SlimefunItem(Categories.MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
         new InfinityWorkbench().register(plugin);
 
         //storage and transport

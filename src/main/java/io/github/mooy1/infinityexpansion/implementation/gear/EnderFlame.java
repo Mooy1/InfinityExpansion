@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 public class EnderFlame extends UnplaceableBlock {
 
     public EnderFlame() {
-        super(Categories.INFINITY_MAIN, Items.ENDER_FLAME, RecipeType.MAGIC_WORKBENCH, new ItemStack[]{
+        super(Categories.MAIN, Items.ENDER_FLAME, RecipeType.MAGIC_WORKBENCH, new ItemStack[]{
                 Items.ENDER_ESSENCE, Items.ENDER_ESSENCE, Items.ENDER_ESSENCE,
                 Items.ENDER_ESSENCE, new ItemStack(Material.BOOK), Items.ENDER_ESSENCE,
                 Items.ENDER_ESSENCE, Items.ENDER_ESSENCE, Items.ENDER_ESSENCE,

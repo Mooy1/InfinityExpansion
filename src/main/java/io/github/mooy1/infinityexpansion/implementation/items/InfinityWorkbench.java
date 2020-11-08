@@ -66,7 +66,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
     private static final int RECIPE_SLOT = 7;
 
     public InfinityWorkbench() {
-        super(Categories.INFINITY_MAIN, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.MAIN, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
                 SlimefunItems.ENERGIZED_CAPACITOR, new ItemStack(Material.CRAFTING_TABLE), SlimefunItems.ENERGIZED_CAPACITOR,
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT

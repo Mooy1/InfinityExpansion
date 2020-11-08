@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class ProjectTable extends SlimefunItem {
     public ProjectTable() {
-        super(Categories.INFINITY_MAIN, Items.PROJECT_TABLE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.MAIN, Items.PROJECT_TABLE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
 
         });
 
