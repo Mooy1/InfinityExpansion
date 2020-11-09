@@ -158,6 +158,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                     }
                 }
             }
+
             setProgressID(b, null);
             setProgress(b, 0);
 
@@ -271,7 +272,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
                         }
 
-                        name = "&aContracting...";
+                        name = "&aConstructing...";
                         statusMat = Material.NETHER_STAR;
 
                     } else { //input doesnt match

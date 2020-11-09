@@ -224,9 +224,10 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
 
                 for (int slot : INPUT_SLOTS) {
                     if (inv.getItemInSlot(slot) != null) {
-                        inv.consumeItem(slot);
+                        inv.consumeItem(slot, 1);
                     }
                 }
+
                 MessageUtils.message(p, ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + ItemUtils.getItemName(output));
 
                 inv.pushItem(output, OUTPUT_SLOTS);
@@ -253,10 +254,10 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
             input[i] = StackUtils.getIDFromItem(inputItem);
         }
 
-        for (int ii = 0; ii < InfinityRecipes.RECIPES.length ; ii++) {
+        for (int j = 0; j < InfinityRecipes.RECIPE_IDS.length ; j++) {
             int amount = 0;
             for (int i = 0 ; i < input.length ; i++) {
-                String recipe = StackUtils.getIDFromItem(InfinityRecipes.RECIPES[ii][i]);
+                String recipe = InfinityRecipes.RECIPE_IDS[j][i];
                 if (Objects.equals(input[i], recipe)) {
                     amount++;
                 } else {
@@ -264,7 +265,7 @@ public class InfinityWorkbench extends SlimefunItem implements EnergyNetComponen
                 }
             }
             if (amount == 36) {
-                return InfinityRecipes.OUTPUTS[ii].clone();
+                return InfinityRecipes.OUTPUTS[j].clone();
             }
         }
         return null;

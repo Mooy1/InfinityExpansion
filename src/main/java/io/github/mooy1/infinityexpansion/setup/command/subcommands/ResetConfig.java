@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class ReloadConfig extends SubCommand {
-    public ReloadConfig(InfinityExpansion plugin, InfinityCommand cmd) {
+public class ResetConfig extends SubCommand {
+    public ResetConfig(InfinityExpansion plugin, InfinityCommand cmd) {
         super(plugin, cmd, "resetconfig", "resets the config, all current options will be set to default, this might not work", true);
     }
 

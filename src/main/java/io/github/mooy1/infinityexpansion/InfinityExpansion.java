@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion;
 
 import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
+import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.mooy1.infinityexpansion.setup.ItemSetup;
@@ -69,6 +70,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     private static void setupInfinityRecipes() {
         List<ItemStack> enabledOutputs = new ArrayList<>();
         List<ItemStack[]> enabledRecipes = new ArrayList<>();
+        List<String[]> enabledRecipesIDs = new ArrayList<>();
 
         int i = 0;
         for (ItemStack output : InfinityRecipes.OUTPUTS) {
@@ -77,12 +79,21 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
             if (!Objects.requireNonNull(slimefunItem).isDisabled()) {
                 enabledOutputs.add(output);
                 enabledRecipes.add(InfinityRecipes.RECIPES[i]);
+
+                String[] ids = new String[36];
+
+                for (int j = 0 ; j < 36 ; j++) {
+                    ids[j] = StackUtils.getIDFromItem(InfinityRecipes.RECIPES[i][j]);
+                }
+
+                enabledRecipesIDs.add(ids);
             } else {
                 instance.getLogger().log(Level.INFO, ChatColor.RED + "Infinity Item " + slimefunItem.getId() + " disabled!");
             }
             i++;
         }
 
+        InfinityRecipes.RECIPE_IDS = enabledRecipesIDs.toArray(new String[0][]);
         InfinityRecipes.OUTPUTS = enabledOutputs.toArray(new ItemStack[0]);
         InfinityRecipes.RECIPES = enabledRecipes.toArray(new ItemStack[0][]);
     }

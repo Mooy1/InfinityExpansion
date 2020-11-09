@@ -190,9 +190,9 @@ public class InfinityCategory extends FlexCategory {
                 "&aRight-Click to move as many sets as possible"
         ), (p, slot, item, action) -> {
             if (action.isRightClicked()) {
-                makeRecipe(p, inv, id, 64);
+                moveRecipe(p, inv, id, 64);
             } else {
-                makeRecipe(p, inv, id, 1);
+                moveRecipe(p, inv, id, 1);
             }
             return false;
         });
@@ -232,18 +232,16 @@ public class InfinityCategory extends FlexCategory {
      * @param id recipe id
      * @param count times to repeat
      */
-    private static void makeRecipe(@NonNull Player player, @NonNull BlockMenu menu, int id, int count) {
-        ItemStack[] recipe = InfinityRecipes.RECIPES[id];
-        PlayerInventory inv = player.getInventory();
-
+    private static void moveRecipe(@NonNull Player player, @NonNull BlockMenu menu, int id, int count) {
         menu.open(player);
+        PlayerInventory inv = player.getInventory();
 
         for (int i = 0 ; i < count ; i++) {
             int recipeSlot = 0;
-            for (ItemStack recipeItem : recipe) { //each item in recipe
-                if (recipeItem != null) { //not null
+            for (String recipeID : InfinityRecipes.RECIPE_IDS[id]) { //each item in recipe
+                if (recipeID != null) { //not null
                     for (ItemStack item : inv.getContents()) { //each slot in their inv
-                        if (Objects.equals(StackUtils.getIDFromItem(recipeItem), StackUtils.getIDFromItem(item))) { //matches recipe
+                        if (Objects.equals(recipeID, StackUtils.getIDFromItem(item))) { //matches recipe
                             //get item
                             ItemStack output = item.clone();
                             output.setAmount(1);

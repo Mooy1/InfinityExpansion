@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
  */
 public class InfinityRecipes {
 
-    private InfinityRecipes() {}
+    public static String[][] RECIPE_IDS = null;
 
     public static ItemStack[] OUTPUTS = {
             Items.INFINITE_MACHINE_CORE,

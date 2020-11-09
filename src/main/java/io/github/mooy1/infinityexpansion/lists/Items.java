@@ -582,31 +582,31 @@ public final class Items {
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_1 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_1",
             Material.ANDESITE,
-            "&8Single Compressed Cobblestone",
+            "&7Single Compressed Cobblestone",
             "&89 cobblestone combined"
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_2 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_2",
             Material.ANDESITE,
-            "&8Double Compressed Cobblestone",
+            "&7Double Compressed Cobblestone",
             "&881 cobblestone combined"
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_3 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_3",
             Material.STONE,
-            "&8Triple Compressed Cobblestone",
+            "&7Triple Compressed Cobblestone",
             "&8243 cobblestone combined"
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_4 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_4",
             Material.STONE,
-            "&8Quadruple Compressed Cobblestone",
+            "&7Quadruple Compressed Cobblestone",
             "&86,561 cobblestone combined"
     );
     public static final SlimefunItemStack COMPRESSED_COBBLESTONE_5 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_5",
             Material.POLISHED_ANDESITE,
-            "&8Quintuple Compressed Cobblestone",
+            "&7Quintuple Compressed Cobblestone",
             "&859,049 cobblestone combined"
     );
 
@@ -887,8 +887,8 @@ public final class Items {
             "&bInfinity Chestplate",
             "&aHealth Boost III",
             "&8Resistance II",
-            "&2Fire Resistance",
-            "&cRegeneration",
+            "&cFire Resistance",
+            "&2Regeneration",
             "&7&oStrength of the cosmos"
     );
     public static final SlimefunItemStack INFINITY_LEGGINGS = new SlimefunItemStack(
