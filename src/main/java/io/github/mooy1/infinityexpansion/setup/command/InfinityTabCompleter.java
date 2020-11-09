@@ -6,6 +6,7 @@ import org.bukkit.command.TabCompleter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,8 +24,17 @@ public class InfinityTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, String[] args) {
         if (args.length == 1) {
-            return createReturnList(command.getSubCommandNames());
+
+            List<String> subCommands = new ArrayList<>();
+            for (SubCommand command : command.commands) {
+                if (!command.isOp() || sender.hasPermission("infinityexpansion.admin")) {
+                    subCommands.add(command.getName());
+                }
+            }
+            return createReturnList(subCommands);
+
         } else if (args.length > 0) {
+
             for (SubCommand command : command.commands) {
                 if (args[0].equalsIgnoreCase(command.getName())) {
                     return createReturnList(command.onTab(sender, args));

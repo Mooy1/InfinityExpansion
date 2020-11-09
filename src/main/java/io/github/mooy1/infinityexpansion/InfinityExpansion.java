@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion;
 
+import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
@@ -29,6 +30,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         //config
         updateConfig();
+        setupConfigOptions();
 
         //stats
         @SuppressWarnings("unused")
@@ -125,9 +127,32 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         };
     }
 
+    public static void log(Level level , String... logs) {
+        for (String log : logs) {
+            instance.getLogger().log(level, log);
+        }
+    }
+
     private void updateConfig() {
         getConfig().options().copyDefaults(true);
         getConfig().options().copyHeader(true);
         saveConfig();
+    }
+
+    private void setupConfigOptions() {
+        int configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-duct-length");
+        if (configMax > 3 && configMax < 21) {
+            OutputDuct.DUCT_LENGTH = configMax;
+        }
+
+        configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-input-inventories");
+        if (configMax > 0 && configMax < 21) {
+            OutputDuct.MAX_INVS = configMax;
+        }
+
+        configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-slots-to-check");
+        if (configMax > 0 && configMax < 54) {
+            OutputDuct.MAX_SLOTS = configMax;
+        }
     }
 }

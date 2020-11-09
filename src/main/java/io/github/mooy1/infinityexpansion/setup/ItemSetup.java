@@ -114,14 +114,14 @@ public final class ItemSetup {
 
         //storage and transport
 
+        new ItemDuct().register(plugin);
+        new OutputDuct().register(plugin);
         new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
         }
         new StorageNetworkViewer().register(plugin);
         new StorageDuct().register(plugin);
-        new ItemDuct().register(plugin);
-        new OutputDuct().register(plugin);
 
         //machine
 
