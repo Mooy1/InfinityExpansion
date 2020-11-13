@@ -1,14 +1,17 @@
-package io.github.mooy1.infinityexpansion.implementation.machines;
+package io.github.mooy1.infinityexpansion.implementation.items;
 
+import com.google.common.collect.MapDifference;
+import com.google.common.collect.Maps;
 import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import lombok.NonNull;
 import io.github.mooy1.infinityexpansion.lists.Categories;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
@@ -19,8 +22,10 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -29,31 +34,27 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * Combines slimefun items, exceeded vanilla anvil limits
+ * Combines slimefun items, exceeds vanilla anvil limits, ded
  *
  * @author Mooy1
  */
 public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
 
     public static final int ENERGY = 100_000;
-
-    private static final int[] max_enchant_levels = {
-        9, 10, 13, 6
-    };
-
-    private static final List<Enchantment> UPGRADEABLE_ENCHANTS = Arrays.asList(
-            Enchantment.DAMAGE_ALL,
-            Enchantment.PROTECTION_ENVIRONMENTAL,
-            Enchantment.DURABILITY,
-            Enchantment.LOOT_BONUS_BLOCKS
-    );
+    
+    private static final Map<Enchantment, Integer> UPGRADEABLE = new HashMap<>();
+    
+    static {
+        UPGRADEABLE.put(Enchantment.DAMAGE_ALL, 9);
+        UPGRADEABLE.put(Enchantment.PROTECTION_ENVIRONMENTAL, 10);
+        UPGRADEABLE.put(Enchantment.DURABILITY, 13);
+        UPGRADEABLE.put(Enchantment.LOOT_BONUS_BLOCKS, 6);
+    }
 
     private static final int[] INPUT_SLOTS = {
             PresetUtils.slot1, PresetUtils.slot2
@@ -82,6 +83,14 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
             @Override
             public void init() {
                 setupInv(this);
+            }
+
+            @Override
+            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+                menu.addMenuClickHandler(STATUS_SLOT, (player, i, itemStack, clickAction) -> {
+                    craft(menu, b.getLocation(), player);
+                    return false;
+                });
             }
 
             @Override
@@ -136,31 +145,27 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
         }
         blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
                 ChestMenuUtils.getEmptyClickHandler());
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed,
-                ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
             @Override
-            public void tick(Block b, SlimefunItem item, me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config data) {
+            public void tick(Block b, SlimefunItem item, Config data) {
                 AdvancedAnvil.this.tick(b);
             }
 
             public boolean isSynchronized() {
                 return false;
             }
-
-
+            
         });
     }
 
     public void tick(Block b) {
         Location l = b.getLocation();
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-        if (inv == null) return;
-        if (!inv.hasViewer()) return;
+        if (inv == null || !inv.hasViewer()) return;
 
         if (getCharge(l) < ENERGY) { //not enough energy
             inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
@@ -171,59 +176,97 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
         ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
 
         if (item1 == null || item2 == null || item1.getType() != item2.getType()) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput matching items!"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid items!"));
             return;
         }
 
         ItemStack output = getOutput(item1, item2);
 
         if (output == null) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid items"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNo upgrades!"));
             return;
         }
 
         inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output));
     }
 
+    private void craft(BlockMenu inv, Location l, Player p) {
+        if (getCharge(l) < ENERGY) { //not enough energy
+            MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Not enough energy!", ChatColor.GREEN + "Charge: " + ChatColor.RED + getCharge(l) + ChatColor.GREEN + "/" + ENERGY + " J");
+            return;
+        }
+
+        ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);
+        ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
+
+        if (item1 == null || item2 == null || item1.getType() != item2.getType()) {
+            MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid items!");
+            return;
+        }
+
+        ItemStack output = getOutput(item1, item2);
+
+        if (output == null) {
+            MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "No upgrades!");
+            return;
+        }
+        
+        if (!inv.fits(output, OUTPUT_SLOTS)) {
+            MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
+        }
+
+        p.playSound(l, Sound.BLOCK_ANVIL_USE, 1, 1);
+        inv.consumeItem(INPUT_SLOT1, 1);
+        inv.consumeItem(INPUT_SLOT2, 1);
+        inv.pushItem(output, OUTPUT_SLOTS);
+        tick(l.getBlock()); //update stuff
+    }
+
     @Nullable
-    private static ItemStack getOutput(@NonNull ItemStack item1, @NonNull ItemStack item2) {
+    private static ItemStack getOutput(@Nonnull ItemStack item1, @Nonnull ItemStack item2) {
         ItemMeta meta1 = item1.getItemMeta();
         ItemMeta meta2 = item2.getItemMeta();
         if (meta1 == null || meta2 == null || (!meta1.hasEnchants() && !meta2.hasEnchants())) return null;
 
         ItemStack item = item1.clone();
+        item.setAmount(1);
 
         Map<Enchantment, Integer> map1 = meta1.getEnchants();
-        Map<Enchantment, Integer> map2 = meta1.getEnchants();
-        List<Enchantment> enchants1 = new ArrayList<>(map1.keySet());
-        List<Enchantment> enchants2 = new ArrayList<>(map2.keySet());
-
-        for (Enchantment enchant1 : enchants1) {
-            if (enchants2.contains(enchant1)) {
-                int value1 = map1.get(enchant1);
-                int value2 = map2.get(enchant1);
-
-                if (value1 == value2 && UPGRADEABLE_ENCHANTS.contains(enchant1)) { //try upgrade
-                    int upgrade = value1 + 1;
-
-                    if (upgrade <= max_enchant_levels[UPGRADEABLE_ENCHANTS.indexOf(enchant1)]) {
-                        item.addUnsafeEnchantment(enchant1, upgrade);
-                    }
-
-                } else if (value2 > value1) { //take highest
-
-                    item.addUnsafeEnchantment(enchant1, value2);
-                }
+        Map<Enchantment, Integer> map2 = meta2.getEnchants();
+        
+        MapDifference<Enchantment, Integer> dif = Maps.difference(map1, map2);
+        
+        Map<Enchantment, Integer> common = dif.entriesInCommon();
+        Map<Enchantment, MapDifference.ValueDifference<Integer>> differing = dif.entriesDiffering();
+        Map<Enchantment, Integer> unique = dif.entriesOnlyOnRight();
+        
+        boolean changed = false;
+        
+        for (Enchantment e : common.keySet()) {
+            if (UPGRADEABLE.containsKey(e) && common.get(e) < UPGRADEABLE.get(e)) {
+                item.addUnsafeEnchantment(e, common.get(e) + 1);
+                changed = true;
             }
         }
-
-        for (Enchantment enchant2 : enchants2) {
-            if (!enchants1.contains(enchant2)) {
-                item.addUnsafeEnchantment(enchant2, map2.get(enchant2));
+        
+        for (Enchantment e : differing.keySet()) {
+            MapDifference.ValueDifference<Integer> pair = differing.get(e);
+            if (pair.rightValue() > pair.leftValue()) {
+                item.addUnsafeEnchantment(e, pair.rightValue());
+                changed = true;
             }
         }
+        
+        for (Enchantment e : unique.keySet()) {
+            item.addUnsafeEnchantment(e, unique.get(e));
+            changed = true;
+        }
 
-        return item;
+        if (changed) {
+            return item;
+        } else {
+            return null;
+        }
     }
 
     @Nonnull

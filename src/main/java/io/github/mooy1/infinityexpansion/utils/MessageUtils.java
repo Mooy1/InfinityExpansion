@@ -23,20 +23,25 @@ public class MessageUtils {
     public static final String NAME = ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion";
     public static final String PREFIX = (ChatColor.DARK_GRAY + "[" + NAME + ChatColor.DARK_GRAY + "]" + ChatColor.WHITE + " ");
 
-    public static void message(@Nonnull Player p, @Nonnull String message) {
-        p.sendMessage(PREFIX + message);
+    public static void message(@Nonnull Player p, @Nonnull String... messages) {
+        for (String m : messages) {
+            p.sendMessage(PREFIX + m);
+        }
     }
 
     public static void broadcast(@Nonnull String message) {
         Bukkit.broadcastMessage(PREFIX + message);
     }
 
-    public static void messageWithCD(@Nonnull Player p, @Nonnull String message, long coolDown) {
+    public static void messageWithCD(@Nonnull Player p, long coolDown, @Nonnull String... messages) {
         if (coolDowns.containsKey(p) && System.currentTimeMillis() - coolDowns.get(p) < coolDown) {
             return;
         }
         coolDowns.put(p, System.currentTimeMillis());
-        p.sendMessage(PREFIX + message);
+        
+        for (String m : messages) {
+            p.sendMessage(PREFIX + m);
+        }
     }
 
     public static void messagePlayersInInv(@Nonnull BlockMenu inv, @Nonnull String message) {

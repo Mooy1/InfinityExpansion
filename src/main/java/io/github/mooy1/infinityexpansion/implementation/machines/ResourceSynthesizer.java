@@ -267,7 +267,7 @@ public class ResourceSynthesizer extends SlimefunItem implements EnergyNetCompon
             items.add(RECIPES[i]);
             items.add(RECIPES[i + 2]);
             items.add(RECIPES[i + 1]);
-            items.add(null);
+            items.add(RECIPES[i + 2]);
         }
 
         return items;

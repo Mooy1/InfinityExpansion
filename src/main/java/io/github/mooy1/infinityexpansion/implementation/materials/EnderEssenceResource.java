@@ -9,6 +9,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * ender essence geo-resource
@@ -45,7 +46,7 @@ public class EnderEssenceResource implements GEOResource {
     @Nonnull
     @Override
     public String getName() {
-        return "EndEssence";
+        return Objects.requireNonNull(Items.ENDER_ESSENCE.getDisplayName());
     }
 
     @Nonnull

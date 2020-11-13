@@ -3,6 +3,7 @@ package io.github.mooy1.infinityexpansion.setup;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityArmor;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityMatrix;
+import io.github.mooy1.infinityexpansion.implementation.items.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.items.Strainer;
 import io.github.mooy1.infinityexpansion.implementation.machines.ConversionMachine;
 import io.github.mooy1.infinityexpansion.implementation.machines.EnergyGenerator;
@@ -111,6 +112,7 @@ public final class ItemSetup {
 
         new SlimefunItem(Categories.MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
         new InfinityWorkbench().register(plugin);
+        new AdvancedAnvil().register(plugin);
 
         //storage and transport
 

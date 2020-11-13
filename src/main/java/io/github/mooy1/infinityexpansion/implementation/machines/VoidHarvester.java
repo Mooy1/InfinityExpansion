@@ -219,6 +219,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
+        items.add(null);
         items.add(Items.VOID_BIT);
 
         return items;

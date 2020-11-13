@@ -12,7 +12,7 @@ import io.github.mooy1.infinityexpansion.utils.LoreUtils;
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import io.github.mooy1.infinityexpansion.implementation.items.StrainerBase;
-import io.github.mooy1.infinityexpansion.implementation.machines.AdvancedAnvil;
+import io.github.mooy1.infinityexpansion.implementation.items.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.machines.ConversionMachine;
 import io.github.mooy1.infinityexpansion.implementation.machines.EnergyGenerator;
 import io.github.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
@@ -56,7 +56,7 @@ public final class Items {
     );
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",
-            Material.BEEHIVE,
+            Material.LODESTONE,
             "&6Storage Forge",
             "&7Upgrades the tier of Storage Units",
             "&7Retains stored items"
@@ -288,7 +288,7 @@ public final class Items {
     );
     public static final SlimefunItemStack PROJECT_TABLE = new SlimefunItemStack(
             "PROJECT_TABLE",
-            Material.LODESTONE,
+            Material.BEEHIVE,
             "&6Project Table",
             "&7",
             "",
@@ -575,7 +575,23 @@ public final class Items {
             "&6Connects up to &e" + StorageNetworkViewer.MAX + " &6Inventories",
             "&6Range: &e" + StorageNetworkViewer.RANGE + " &6blocks"
     );
+    
+    //mob stuff
 
+    public static final SlimefunItemStack MOB_SIMULATION_CHAMBER = new SlimefunItemStack(
+            "MOB_SIMULATION_CHAMBER",
+            Material.GILDED_BLACKSTONE,
+            "&8Mob Simulation Chamber",
+            "&7"
+    );
+    public static final SlimefunItemStack MOB_DATA_CARD = new SlimefunItemStack(
+            "MOB_DATA_CARD",
+            Material.IRON_CHESTPLATE,
+            "&8Mob Data Card: &cNone",
+            "&7",
+            "",
+            "energy"
+    );
 
     //Compressed Cobblestones
 

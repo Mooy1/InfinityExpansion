@@ -230,24 +230,20 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack[] input = type.getInput();
-        ItemStack[] output = type.getOutput();
+        ItemStack[] inputs = type.getInput();
+        ItemStack[] outputs = type.getOutput();
 
-
-        int amount = Math.max(input.length, output.length);
-
-        for (int i = 0 ; i < amount ; i++) {
-
-            if (i < input.length) {
-                items.add(input[i]);
-            } else {
-                items.add(null);
+        if (inputs.length == outputs.length) { //1 to 1
+            for (int i = 0 ; i < inputs.length ; i++) {
+                items.add(inputs[i]);
+                items.add(outputs[i]);
             }
-
-            if (i < output.length) {
-                items.add(output[i]);
-            } else {
-                items.add(null);
+        } else { //each input gets each output
+            for (ItemStack input : inputs) {
+                for (ItemStack output : outputs) {
+                    items.add(input);
+                    items.add(output);
+                }
             }
         }
 
@@ -260,7 +256,7 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
         for (ItemStack correctInput : type.getInput()) {
             if (Objects.equals(StackUtils.getIDFromItem(input), StackUtils.getIDFromItem(correctInput))) {
                 if (type.isRandom()) {
-                    return MathUtils.randomOutput(type.getOutput()).clone();
+                    return MathUtils.randomOutput(type.getOutput());
                 } else {
                     return type.output[i].clone();
                 }

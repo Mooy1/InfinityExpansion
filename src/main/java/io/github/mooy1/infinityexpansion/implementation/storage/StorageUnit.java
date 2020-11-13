@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
+import io.github.mooy1.infinityexpansion.implementation.LoreStorage;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.LoreUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
@@ -51,7 +52,7 @@ import java.util.Objects;
  * and code to learn from
  *
  */
-public class StorageUnit extends SlimefunItem {
+public class StorageUnit extends SlimefunItem implements LoreStorage {
 
     public static final int BASIC = 6400;
     public static final int ADVANCED = 25600;
@@ -485,6 +486,23 @@ public class StorageUnit extends SlimefunItem {
         return BlockStorage.getLocationInfo(l, key);
     }
 
+    @Override
+    public int getOffset() {
+        return -1;
+    }
+
+    @Override
+    public int getLines() {
+        return 5;
+    }
+
+    @Nonnull
+    @Override
+    public String getTarget() {
+        return "Stored Item:";
+    }
+
+
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 
@@ -506,4 +524,5 @@ public class StorageUnit extends SlimefunItem {
         private final RecipeType recipeType;
         private final ItemStack[] recipe;
     }
+
 }

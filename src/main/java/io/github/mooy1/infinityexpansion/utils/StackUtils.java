@@ -103,10 +103,43 @@ public final class StackUtils {
 
         item.setItemMeta(meta);
     }
-
+    
     @ParametersAreNonnullByDefault
     public static void addLore(ItemStack item, String... lores) {
         addLore(item, Arrays.asList(lores));
+    }
+
+    public static void removeLore(ItemStack item, int offset, String find, int amount) {
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta == null) return;
+
+        List<String> lore = new ArrayList<>();
+
+        if (meta.getLore() != null) {
+            lore = meta.getLore();
+        }
+
+        int position = lore.size() - 1;
+        int i = 0;
+        for (String line : lore) {
+            if (ChatColor.stripColor(line).contains(ChatColor.stripColor(find))) {
+                position = i;
+            }
+            i++;
+        }
+
+        position += offset;
+
+        if (position < 0) return;
+
+        for (int j = 0 ; j < amount ; j++) {
+            lore.remove(position);
+        }
+
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
     }
 
     @ParametersAreNonnullByDefault

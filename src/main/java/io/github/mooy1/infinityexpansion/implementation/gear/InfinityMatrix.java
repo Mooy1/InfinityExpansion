@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
+import io.github.mooy1.infinityexpansion.implementation.LoreStorage;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
@@ -17,11 +18,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
-public class InfinityMatrix extends SlimefunItem implements Listener {
+public class InfinityMatrix extends SlimefunItem implements Listener, LoreStorage {
 
     public InfinityMatrix(InfinityExpansion plugin) {
         super(Categories.INFINITY_CHEAT, Items.INFINITY_MATRIX, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_MATRIX));
@@ -54,10 +55,7 @@ public class InfinityMatrix extends SlimefunItem implements Listener {
                 }
 
                 if (p.isSneaking()) { //remove owner
-                    List<String> replaceLore = new ArrayList<>();
-                    replaceLore.add(null);
-                    replaceLore.add(null);
-                    StackUtils.insertLore(item, -1, "UUID: ", replaceLore);
+                    StackUtils.removeLore(item, -1, "UUID: ", 2);
                     MessageUtils.message(p, ChatColor.GOLD + "Ownership removed!");
                     disableFlight(p);
 
@@ -70,11 +68,8 @@ public class InfinityMatrix extends SlimefunItem implements Listener {
                 return;
             }
         }
-
-        List<String> addLore = new ArrayList<>();
-        addLore.add("");
-        addLore.add(ChatColor.GREEN + "UUID: " + p.getUniqueId().toString());
-        StackUtils.addLore(item, addLore);
+        
+        StackUtils.addLore(item, "", ChatColor.GREEN + "UUID: " + p.getUniqueId().toString());
         MessageUtils.message(p, ChatColor.GOLD + "Ownership claimed!");
         enableFlight(p);
     }
@@ -87,5 +82,21 @@ public class InfinityMatrix extends SlimefunItem implements Listener {
     private static void enableFlight(Player p) {
         MessageUtils.message(p, ChatColor.GREEN + "Infinity Flight Enabled!");
         p.setAllowFlight(true);
+    }
+
+    @Override
+    public int getOffset() {
+        return -1;
+    }
+
+    @Override
+    public int getLines() {
+        return 2;
+    }
+
+    @Nonnull
+    @Override
+    public String getTarget() {
+        return "UUID:";
     }
 }

@@ -66,7 +66,7 @@ public class EnergyGenerator extends SlimefunItem implements EnergyNetProvider {
 
     public static final int BASIC_RATE = 6;
     public static final int BASIC_STORAGE = 1_000;
-    public static final int ADVANCED_RATE = 300;
+    public static final int ADVANCED_RATE = 180;
     public static final int ADVANCED_STORAGE = 30_000;
     public static final int CELE_RATE = 1800;
     public static final int CELE_STORAGE = 300_000;

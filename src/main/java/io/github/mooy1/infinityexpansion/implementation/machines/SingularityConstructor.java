@@ -14,7 +14,6 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -39,6 +38,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -359,7 +359,8 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
      * @param speed speed of machine
      * @return whether it was successful
      */
-    private boolean checkItemAndSet(@NonNull Block b, @NonNull BlockMenu inv, @NonNull ItemStack item, int speed) {
+    @ParametersAreNonnullByDefault
+    private boolean checkItemAndSet(Block b, BlockMenu inv, ItemStack item, int speed) {
         int itemAmount = item.getAmount();
 
         for (int i = 0; i < INPUT_ITEM_IDS.length ; i++) {
@@ -419,7 +420,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         final List<ItemStack> items = new ArrayList<>();
 
         for (Singularity.Type type : Singularity.Type.values()) {
-            items.add(Singularity.recipeMaker(type.getId()));
+            items.add(type.getRecipe());
             items.add(type.getItem());
         }
 
@@ -474,12 +475,12 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
     public static final int[] OUTPUT_TIMES = {
             1000,
-            1000,
-            1000,
-            1000,
-            1000,
             2000,
-            1000,
+            2000,
+            2000,
+            2000,
+            2000,
+            2000,
 
             2000,
             2000,

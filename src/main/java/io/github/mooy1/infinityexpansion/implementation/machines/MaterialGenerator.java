@@ -80,18 +80,18 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
                 }
+                
+                return new int[0];
             }
 
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
                 }
+                
+                return new int[0];
             }
         };
 
@@ -141,27 +141,27 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             }
+            return;
 
-        } else {
+        }
 
-            ItemStack output = new ItemStack(type.getOutput(), type.getSpeed());
+        ItemStack output = new ItemStack(type.getOutput(), type.getSpeed());
 
-            if (!inv.fits(output, OUTPUT_SLOTS)) {
+        if (!inv.fits(output, OUTPUT_SLOTS)) {
 
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
-                }
-
-            } else {
-
-                inv.pushItem(output, OUTPUT_SLOTS);
-
-                removeCharge(l, energy);
-
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aGenerating..."));
-                }
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
             }
+            return;
+                
+        }
+
+        inv.pushItem(output, OUTPUT_SLOTS);
+
+        removeCharge(l, energy);
+
+        if (playerWatching) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aGenerating..."));
         }
     }
 
@@ -180,6 +180,7 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
     @Override
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
+        items.add(null);
         items.add(new ItemStack(type.getOutput(), type.getSpeed()));
         return items;
     }

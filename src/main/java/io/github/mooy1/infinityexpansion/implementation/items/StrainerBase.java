@@ -306,7 +306,14 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
-        return new ArrayList<>(Arrays.asList(OUTPUTS));
+        List<ItemStack> items = new ArrayList<>();
+        
+        for (ItemStack output : OUTPUTS) {
+            items.add(Items.BASIC_STRAINER);
+            items.add(output);
+        }
+        
+        return items;
     }
 
     @Nonnull

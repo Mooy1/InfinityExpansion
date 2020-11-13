@@ -1,10 +1,8 @@
 package io.github.mooy1.infinityexpansion.utils;
 
-import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -24,7 +22,7 @@ public class MathUtils {
      * @return random int in range
      */
     public static int randomFromRange(int min, int max) {
-        return (int) Math.floor(ThreadLocalRandom.current().nextDouble(min, max + 1));
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
     /**
@@ -34,7 +32,7 @@ public class MathUtils {
      * @return random output
      */
     @Nonnull
-    public static ItemStack randomOutput(@NonNull ItemStack[] array) {
+    public static ItemStack randomOutput(@Nonnull ItemStack[] array) {
         return array[randomFromRange(0, array.length - 1)].clone();
     }
 

@@ -1,10 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
+import io.github.mooy1.infinityexpansion.implementation.LoreStorage;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
-import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.NonNull;
@@ -15,6 +15,7 @@ import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
@@ -30,8 +31,6 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -39,7 +38,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
+public class StorageForge extends SlimefunItem {
     public static final ItemStack[][] RECIPES = {
             {
                     Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
@@ -62,7 +61,7 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
                     Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT
             }
     };
-    public static final ItemStack[] OUTPUTS = {
+    public static final SlimefunItemStack[] OUTPUTS = {
             Items.ADVANCED_STORAGE, Items.REINFORCED_STORAGE, Items.VOID_STORAGE, Items.INFINITY_STORAGE
     };
     public static final int[] INPUT_SLOTS = {
@@ -255,36 +254,14 @@ public class StorageForge extends SlimefunItem implements RecipeDisplayItem {
             }
 
             if (amount == 9) {
-                ItemStack output = StorageForge.OUTPUTS[ii].clone();
-
-                transferItems(output, inv.getItemInSlot(INPUT_SLOTS[4]));
+                SlimefunItemStack output = new SlimefunItemStack(StorageForge.OUTPUTS[ii], 1);
+                
+                ((LoreStorage) Objects.requireNonNull(output.getItem())).transfer(output, inv.getItemInSlot(INPUT_SLOTS[4]));
 
                 return output;
             }
         }
         return null;
     }
-
-    /**
-     * This method transfers the stored item lore from the input to output
-     *
-     * @param output output item being modified
-     * @param input input item
-     */
-    public static void transferItems(ItemStack output, ItemStack input) {
-        StackUtils.transferLore(output, input, "Stored Item:", -1, 5);
-    }
-
-    @Nonnull
-    @Override
-    public List<ItemStack> getDisplayRecipes() {
-        List<ItemStack> items = new ArrayList<>();
-
-        for (ItemStack output : OUTPUTS) {
-            items.add(output);
-            items.add(null);
-        }
-
-        return items;
-    }
+    
 }

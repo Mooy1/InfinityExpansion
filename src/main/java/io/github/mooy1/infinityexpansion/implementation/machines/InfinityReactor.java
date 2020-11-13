@@ -159,7 +159,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
         if (inv == null) return 0;
         Block b = l.getBlock();
 
-        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
+        boolean playerWatching = inv.hasViewer();
 
         int progress = Integer.parseInt(getProgress(b));
 
@@ -172,31 +172,33 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
                 }
                 return 0;
 
-            } else if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            }
+            
+            if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
                 }
                 return 0;
 
-            } else { //correct input
-
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                                    "&aStarting Generation",
-                                    "&aTime until infinity ingot needed: " + INFINITY_INTERVAL,
-                                    "&aTime until void ingot needed: " + VOID_INTERVAL
-                            )
-                    );
-                }
-                inv.consumeItem(INPUT_SLOTS[0]);
-                inv.consumeItem(INPUT_SLOTS[1]);
-                setProgress(b, 1);
-                return ENERGY;
-
+            } 
+            
+            //correct input
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                                "&aStarting Generation",
+                                "&aTime until infinity ingot needed: " + INFINITY_INTERVAL,
+                                "&aTime until void ingot needed: " + VOID_INTERVAL
+                        ));
             }
-
-        } else if (progress == INFINITY_INTERVAL) { //done
+            inv.consumeItem(INPUT_SLOTS[0]);
+            inv.consumeItem(INPUT_SLOTS[1]);
+            setProgress(b, 1);
+            return ENERGY;
+            
+        }
+        
+        if (progress == INFINITY_INTERVAL) { //done
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aFinished Generation"));
@@ -204,7 +206,9 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
             setProgress(b, 0);
             return ENERGY;
 
-        } else if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
+        } 
+        
+        if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
             if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
@@ -213,34 +217,34 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
                 }
                 return 0;
 
-            } else { //right input
-
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                                    "&aGenerating...",
-                                    "&aTime until infinity ingot needed: " + (INFINITY_INTERVAL - progress),
-                                    "&aTime until void ingot needed: " + (VOID_INTERVAL - Math.floorMod(progress, VOID_INTERVAL))
-                            )
-                    );
-                }
-                setProgress(b, progress + 1);
-                inv.consumeItem(INPUT_SLOTS[1]);
-                return ENERGY;
             }
-
-        } else { //generate
-
+            
+            //right input
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                                 "&aGenerating...",
                                 "&aTime until infinity ingot needed: " + (INFINITY_INTERVAL - progress),
                                 "&aTime until void ingot needed: " + (VOID_INTERVAL - Math.floorMod(progress, VOID_INTERVAL))
-                        )
-                );
+                        ));
             }
             setProgress(b, progress + 1);
+            inv.consumeItem(INPUT_SLOTS[1]);
             return ENERGY;
+
+        } 
+        
+        //generate
+
+        if (playerWatching) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                            "&aGenerating...",
+                            "&aTime until infinity ingot needed: " + (INFINITY_INTERVAL - progress),
+                            "&aTime until void ingot needed: " + (VOID_INTERVAL - Math.floorMod(progress, VOID_INTERVAL))
+                    )
+            );
         }
+        setProgress(b, progress + 1);
+        return ENERGY;
     }
 
     @Override

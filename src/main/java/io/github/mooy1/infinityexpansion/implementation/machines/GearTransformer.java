@@ -154,84 +154,83 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
-        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
-
-            if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
-
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
-
-            } else {
-
-                ItemStack inputItem = inv.getItemInSlot(INPUT_SLOT1);
-
-                if (inputItem == null) { //no input
-
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a tool"));
-
-                } else {
-
-                    String inputToolType;
-
-                    if (getToolType(inputItem) != null) {
-                        inputToolType = getToolType(inputItem);
-                    } else {
-                        inputToolType = getArmorType(inputItem);
-                    }
-
-                    if (inputToolType == null) { //invalid input
-
-                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNot a tool or armor!"));
-
-                        /*if (inv.getItemInSlot(OUTPUT_SLOTS[0]) == null) {
-                            inv.pushItem(inputItem, OUTPUT_SLOTS);
-                            inv.consumeItem(INPUT_SLOT1, inputItem.getAmount());
-                        }*/
-
-                    } else { //valid input
-
-                        ItemStack inputMaterial = inv.getItemInSlot(INPUT_SLOT2);
-
-                        if (inputMaterial == null) { //no material
-
-                            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input materials"));
-
-                        } else {
-
-                            Material outputMaterial = getOutput(inputMaterial, inputToolType);
-
-                            if (outputMaterial == null) { //invalid material
-
-                                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
-
-                            /*if (inv.getItemInSlot(OUTPUT_SLOTS[0]) == null) {
-                                inv.pushItem(inputMaterial, OUTPUT_SLOTS);
-                                inv.consumeItem(INPUT_SLOT2, inputMaterial.getAmount());
-                            }*/
-
-                            } else if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null) { //valid material, not enough room
-
-                                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
-
-                            } else { //output
-
-                                removeCharge(b.getLocation(), ENERGY);
-
-                                MessageUtils.messagePlayersInInv(inv, "Transformed into: " + ItemUtils.getItemName(new ItemStack(outputMaterial)));
-
-                                inputItem.setType(outputMaterial);
-                                inv.pushItem(inputItem, OUTPUT_SLOTS);
-
-                                inv.consumeItem(INPUT_SLOT1);
-                                inv.consumeItem(INPUT_SLOT2, getAmount(inputMaterial, inputToolType));
-
-                                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
-
-                            }
-                        }
-                    }
-                }
-            }
+        if (!inv.hasViewer()) {
+            return;
         }
+
+        if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
+
+            inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+            return;
+
+        }
+
+        ItemStack inputItem = inv.getItemInSlot(INPUT_SLOT1);
+
+        if (inputItem == null) { //no input
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a tool"));
+            return;
+
+        }
+
+        String inputToolType;
+
+        if (getToolType(inputItem) != null) {
+            inputToolType = getToolType(inputItem);
+        } else {
+            inputToolType = getArmorType(inputItem);
+        }
+
+        if (inputToolType == null) { //invalid input
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNot a tool or armor!"));
+            return;
+
+            /*if (inv.getItemInSlot(OUTPUT_SLOTS[0]) == null) {
+                inv.pushItem(inputItem, OUTPUT_SLOTS);
+                inv.consumeItem(INPUT_SLOT1, inputItem.getAmount());
+            }*/
+
+        }
+
+        ItemStack inputMaterial = inv.getItemInSlot(INPUT_SLOT2);
+
+        if (inputMaterial == null) { //no material
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input materials"));
+            return;
+            
+        }
+
+        Material outputMaterial = getOutput(inputMaterial, inputToolType);
+
+        if (outputMaterial == null) { //invalid material
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
+            return;
+
+        } 
+        
+        if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null) { //valid material, not enough room
+
+            inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+            return;
+
+        } 
+        
+        //output
+        removeCharge(b.getLocation(), ENERGY);
+
+        MessageUtils.messagePlayersInInv(inv, "Transformed into: " + ItemUtils.getItemName(new ItemStack(outputMaterial)));
+
+        inputItem.setType(outputMaterial);
+        inv.pushItem(inputItem, OUTPUT_SLOTS);
+
+        inv.consumeItem(INPUT_SLOT1);
+        inv.consumeItem(INPUT_SLOT2, getAmount(inputMaterial, inputToolType));
+
+        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
     }
 
     /**

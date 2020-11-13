@@ -38,7 +38,6 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -212,7 +211,16 @@ public class Quarry extends SlimefunItem implements EnergyNetComponent, RecipeDi
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
-        return new ArrayList<>(Arrays.asList(type.getOutput()));
+        List<ItemStack> items = new ArrayList<>();
+        
+        for (ItemStack item : type.getOutput()) {
+            if (!items.contains(item)) {
+                items.add(null);
+                items.add(item);
+            }
+        }
+        
+        return items;
     }
 
     @Nonnull

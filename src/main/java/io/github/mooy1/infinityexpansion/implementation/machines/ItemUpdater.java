@@ -1,10 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.storage.StorageForge;
+import io.github.mooy1.infinityexpansion.implementation.LoreStorage;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -150,85 +149,83 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             }
+            return;
 
-        } else if (input == null) { //check input
+        }
+        
+        if (input == null) { //check input
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.inputAnItem);
             }
+            return;
 
-        } else {
+        }
+        
+        ItemStack output = null;
+        int inputAmount = input.getAmount();
+        if (SlimefunItem.getByItem(input) != null) {
+            SlimefunItem slimefunItem = SlimefunItem.getByItem(input);
+            if (slimefunItem != null) {
+                output = slimefunItem.getItem().clone();
+                output.setAmount(inputAmount);
 
-            ItemStack output = null;
-            int inputAmount = input.getAmount();
-            if (SlimefunItem.getByItem(input) != null) {
-                SlimefunItem slimefunItem = SlimefunItem.getByItem(input);
-                if (slimefunItem != null) {
-                    output = slimefunItem.getItem().clone();
-                    output.setAmount(inputAmount);
-
-                    String id = slimefunItem.getId();
-
-                    if (id.endsWith("_STORAGE") && !Objects.equals(output, input)) {
-
-                        MessageUtils.messagePlayersInInv(inv, ChatColor.GREEN + "Stored items transferred!");
-                        StorageForge.transferItems(output, input);
-
-                    } else if (id.equals("INFINITY_MATRIX") && !Objects.equals(output, input)) {
-
-                        StackUtils.transferLore(output, input, "UUID:", -1, 2);
-
-                    }
+                if (slimefunItem instanceof LoreStorage) {
+                    ((LoreStorage) slimefunItem).transfer(output, input);
                 }
             }
+        }
 
-            if (output == null) { //not sf item
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                            Material.RED_STAINED_GLASS_PANE,
-                            "&9Input a &aSlimefun &9item!")
-                    );
-                }
+        if (output == null) { //not sf item
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                        Material.RED_STAINED_GLASS_PANE,
+                        "&9Input a &aSlimefun &9item!")
+                );
+            }
+            return;
 
-            } else if (!inv.fits(output, OUTPUT_SLOTS)) { //update
+        }
+        
+        if (!inv.fits(output, OUTPUT_SLOTS)) { //update
 
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
-                }
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+            }
+            return;
+        }
+        
+        
+        if (!output.getEnchantments().isEmpty()) {
+            Map<Enchantment, Integer> enchantments = new HashMap<>();
+            int amount = 0;
+            for (Map.Entry<Enchantment, Integer> entry : output.getEnchantments().entrySet()) {
+                enchantments.put(entry.getKey(), entry.getValue());
+                amount++;
+            }
+            if (amount > 0) {
+                for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                    output.removeEnchantment(entry.getKey());
 
-            } else {
-                if (!output.getEnchantments().isEmpty()) {
-                    Map<Enchantment, Integer> enchantments = new HashMap<>();
-                    int amount = 0;
-                    for (Map.Entry<Enchantment, Integer> entry : output.getEnchantments().entrySet()) {
-                        enchantments.put(entry.getKey(), entry.getValue());
-                        amount++;
-                    }
-                    if (amount > 0) {
-                        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-                            output.removeEnchantment(entry.getKey());
-
-                        }
-                    }
-                }
-
-                output.addUnsafeEnchantments(input.getEnchantments());
-
-                if (!output.getEnchantments().isEmpty()) {
-                    MessageUtils.messagePlayersInInv(inv, ChatColor.GREEN + "Enchantments transferred!");
-                }
-
-                removeCharge(b.getLocation(), ENERGY);
-                inv.consumeItem(INPUT_SLOT, inputAmount);
-                inv.pushItem(output, OUTPUT_SLOTS);
-
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                            Material.LIME_STAINED_GLASS_PANE,
-                            "&aItem Updated!")
-                    );
                 }
             }
+        }
+
+        output.addUnsafeEnchantments(input.getEnchantments());
+
+        if (!output.getEnchantments().isEmpty()) {
+            MessageUtils.messagePlayersInInv(inv, ChatColor.GREEN + "Enchantments transferred!");
+        }
+
+        removeCharge(b.getLocation(), ENERGY);
+        inv.consumeItem(INPUT_SLOT, inputAmount);
+        inv.pushItem(output, OUTPUT_SLOTS);
+
+        if (playerWatching) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                    Material.LIME_STAINED_GLASS_PANE,
+                    "&aItem Updated!")
+            );
         }
     }
 

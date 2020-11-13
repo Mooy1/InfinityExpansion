@@ -40,8 +40,15 @@ public final class Categories {
             new CustomItem(Material.NETHERITE_BLOCK, "&bInfinity &aMaterials"), 3
     );
 
-    public static final Category INFINITY_RECIPES = new InfinityCategory();
-    public static final Category INFINITY_CHEAT = new CheatCategory();
+    public static final Category INFINITY_RECIPES = new InfinityCategory(new NamespacedKey(InfinityExpansion.getInstance(),
+            "infinity_recipes"),
+            new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Recipes"), 2
+    );
+    
+    public static final Category INFINITY_CHEAT = new CheatCategory(new NamespacedKey(InfinityExpansion.getInstance(),
+            "infinity_cheat"),
+            new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Recipes"), 2
+    );
 
     private Categories() { }
 }

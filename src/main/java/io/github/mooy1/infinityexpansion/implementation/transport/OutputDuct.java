@@ -257,10 +257,11 @@ public class OutputDuct extends SlimefunItem {
                 }
             }
             if (count == WHITELIST_SLOTS.length) {
-                ItemStack item = thisMenu.getItemInSlot(STATUS_SLOT);
-                StackUtils.insertLore(item, 4, "Location:", "", ChatColors.color("&6Whitelist an item or enable blacklist!"));
-                thisMenu.replaceExistingItem(STATUS_SLOT, item);
-
+                if (thisMenu.hasViewer()) {
+                    ItemStack item = thisMenu.getItemInSlot(STATUS_SLOT);
+                    StackUtils.insertLore(item, 4, "Location:", "", ChatColors.color("&6Whitelist an item or enable blacklist!"));
+                    thisMenu.replaceExistingItem(STATUS_SLOT, item);
+                }
                 return;
             }
         }
@@ -322,6 +323,7 @@ public class OutputDuct extends SlimefunItem {
      */
     @ParametersAreNullableByDefault
     private void output(String whiteListID, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList, BlockMenu targetMachine, Inventory targetInventory) {
+        List<String> stuckIDs = new ArrayList<>();
 
         //sf extractions
         for (BlockMenu extractionMenu : menuList) {
@@ -339,7 +341,7 @@ public class OutputDuct extends SlimefunItem {
                     ItemStack outputItem = extractionMenu.getItemInSlot(slot);
                     String outputID = StackUtils.getIDFromItem(outputItem);
 
-                    if (outputItem != null && (whiteListID == null || (outputID != null && outputID.equals(whiteListID)))) {
+                    if (outputItem != null && !stuckIDs.contains(outputID) && (whiteListID == null || (outputID != null && outputID.equals(whiteListID)))) {
 
                         if (targetMachine != null) { //sf insertion
 
@@ -354,21 +356,21 @@ public class OutputDuct extends SlimefunItem {
                                 } catch (NullPointerException ignored) {
                                 }
 
+                            } else {
+                                stuckIDs.add(outputID);
                             }
 
                         } else if (targetInventory != null) { //vanilla insertion
 
                             ItemStack remainingItems = TransferUtils.insertToVanillaInventory(outputItem, targetInventory);
 
-                            int extractedAmount;
                             if (remainingItems == null) {
-                                extractedAmount = outputItem.getAmount();
+                                extractionMenu.consumeItem(slot, outputItem.getAmount());
+                            } else if (outputItem.getAmount() - remainingItems.getAmount() > 0) {
+                                extractionMenu.consumeItem(slot, outputItem.getAmount() - remainingItems.getAmount());
                             } else {
-                                extractedAmount = outputItem.getAmount() - remainingItems.getAmount();
+                                stuckIDs.add(outputID);
                             }
-
-                            extractionMenu.consumeItem(slot, extractedAmount);
-
                         }
 
                         break;
@@ -399,7 +401,7 @@ public class OutputDuct extends SlimefunItem {
                     ItemStack outputItem = slotItem.clone();
                     String outputID = StackUtils.getIDFromItem(outputItem);
 
-                    if (whiteListID == null || (outputID != null && outputID.equals(whiteListID))) {
+                    if (!stuckIDs.contains(outputID) && (whiteListID == null || (outputID != null && outputID.equals(whiteListID)))) {
 
                         if (targetMachine != null) { //sf insertion
 
@@ -407,23 +409,27 @@ public class OutputDuct extends SlimefunItem {
 
                             if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
 
-                                targetMachine.pushItem(outputItem, destinationSlots);
+                                try {
+                                    targetMachine.pushItem(outputItem, destinationSlots);
+                                    slotItem.setAmount(slotItem.getAmount() - outputItem.getAmount());
+                                } catch (NullPointerException ignored) {
+                                }
 
-                                slotItem.setAmount(slotItem.getAmount() - outputItem.getAmount());
+                            } else {
+                                stuckIDs.add(outputID);
                             }
 
                         } else if (targetInventory != null) { //vanilla insertion
 
                             ItemStack remainingItems = TransferUtils.insertToVanillaInventory(outputItem, targetInventory);
 
-                            int amount;
                             if (remainingItems == null) {
-                                amount = 0;
+                                slotItem.setAmount(0);
+                            } else if (slotItem.getAmount() - remainingItems.getAmount() > 0) {
+                                slotItem.setAmount(remainingItems.getAmount());
                             } else {
-                                amount = remainingItems.getAmount();
+                                stuckIDs.add(outputID);
                             }
-
-                            slotItem.setAmount(amount);
                         }
 
                         break;
