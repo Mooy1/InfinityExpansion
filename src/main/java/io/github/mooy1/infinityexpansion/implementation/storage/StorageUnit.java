@@ -214,7 +214,7 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
 
             BlockStorage.clearBlockInfo(b);
             b.setType(Material.AIR);
-            return false;
+            return true;
         });
     }
 
