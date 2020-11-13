@@ -5,6 +5,7 @@ import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.LoreUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -148,72 +149,53 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
                 }
             }
         });
+        
+        addItemHandler((BlockBreakHandler) (e, item, fortune, drops) -> {
+            Player p = e.getPlayer();
+            Block b = e.getBlock();
 
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
-            if (inv != null) {
-                Location l = b.getLocation();
-                String storedItem = getStoredItem(b);
-                int stored = getStored(b);
+            if (inv == null) return false;
 
-                ItemStack drop = stack.getItem().clone();
+            Location l = b.getLocation();
+            String storedItem = getStoredItem(b);
+            int stored = getStored(b);
 
-                if (stored > 0 && storedItem != null) {
-                    tryToStoreOrDrop(b, inv, INPUT_SLOTS);
-                    tryToStoreOrDrop(b, inv, OUTPUT_SLOTS);
+            e.setDropItems(false);
+            ItemStack drop = type.getItem().clone();
 
-                    stored = getStored(b);
+            if (stored > 0 && storedItem != null) {
+                tryToStoreOrDrop(b, inv, INPUT_SLOTS);
+                tryToStoreOrDrop(b, inv, OUTPUT_SLOTS);
 
-                    ItemMeta meta = drop.getItemMeta();
-                    if (meta != null) {
-                        List<String> lore = meta.getLore();
-                        if (lore != null) {
+                stored = getStored(b);
 
-                            lore.add("");
-                            lore.add(ChatColor.AQUA + "Stored Item:");
-                            lore.add(ChatColor.GREEN + storedItem);
-                            lore.add(ChatColor.AQUA + "Amount:");
-                            lore.add(ChatColor.GREEN + String.valueOf(stored));
+                ItemMeta meta = drop.getItemMeta();
+                if (meta != null) {
+                    List<String> lore = meta.getLore();
+                    if (lore != null) {
 
-                            meta.setLore(lore);
-                            drop.setItemMeta(meta);
+                        lore.add("");
+                        lore.add(ChatColor.AQUA + "Stored Item:");
+                        lore.add(ChatColor.GREEN + storedItem);
+                        lore.add(ChatColor.AQUA + "Amount:");
+                        lore.add(ChatColor.GREEN + String.valueOf(stored));
 
-                            if (p != null) {
-                                MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to dropped item");
-                            }
-                        }
+                        meta.setLore(lore);
+                        drop.setItemMeta(meta);
+                        
+                        MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to dropped item");
                     }
-
-                    /*ItemStack storedItemStack = StackUtils.getItemFromID(storedItem, 1);
-                    if (storedItemStack != null) {
-                        int stackSize = storedItemStack.getMaxStackSize();
-
-                        int stacks = (int) Math.floor((float) stored / stackSize);
-                        storedItemStack.setAmount(stackSize);
-
-                        for (int i = 0; i < stacks; i++) {
-                            b.getWorld().dropItemNaturally(l, storedItemStack);
-                        }
-
-                        int remainder = stored % stackSize;
-                        storedItemStack.setAmount(remainder);
-
-                        if (remainder > 0) {
-                            b.getWorld().dropItemNaturally(l, storedItemStack);
-                        }
-                    }*/
-                } else {
-
-                    inv.dropItems(l, INPUT_SLOTS);
-                    inv.dropItems(l, OUTPUT_SLOTS);
                 }
 
-                b.getWorld().dropItemNaturally(l, drop);
+            } else {
+                inv.dropItems(l, INPUT_SLOTS);
+                inv.dropItems(l, OUTPUT_SLOTS);
             }
 
-            BlockStorage.clearBlockInfo(b);
-            b.setType(Material.AIR);
+            b.getWorld().dropItemNaturally(l, drop);
+
             return true;
         });
     }
