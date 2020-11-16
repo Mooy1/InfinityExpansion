@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
+import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -239,7 +240,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
                 Items.MAGNONIUM, SlimefunItems.GEO_MINER, Items.MAGNONIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
-        INFINITY(Categories.INFINITY_CHEAT, INFINITY_ENERGY, INFINITY_SPEED, Items.INFINITE_VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, InfinityRecipes.getRecipe(Items.INFINITE_VOID_HARVESTER));
+        INFINITY(Categories.INFINITY_CHEAT, INFINITY_ENERGY, INFINITY_SPEED, Items.INFINITE_VOID_HARVESTER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITE_VOID_HARVESTER));
 
         @Nonnull
         private final Category category;
