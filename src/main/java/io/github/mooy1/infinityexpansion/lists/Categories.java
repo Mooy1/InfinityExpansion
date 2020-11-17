@@ -47,7 +47,7 @@ public final class Categories {
     
     public static final Category INFINITY_CHEAT = new CheatCategory(new NamespacedKey(InfinityExpansion.getInstance(),
             "infinity_cheat"),
-            new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Recipes"), 2
+            new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Recipes &c- NOT REAL RECIPE"), 2
     );
 
     private Categories() { }

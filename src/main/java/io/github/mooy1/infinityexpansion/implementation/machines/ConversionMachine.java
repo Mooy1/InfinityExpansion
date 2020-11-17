@@ -14,7 +14,6 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
@@ -251,7 +250,7 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
     }
 
     @Nullable
-    private ItemStack getOutput(@NonNull ItemStack input) {
+    private ItemStack getOutput(@Nonnull ItemStack input) {
         int i = 0;
         for (ItemStack correctInput : type.getInput()) {
             if (Objects.equals(StackUtils.getIDFromItem(input), StackUtils.getIDFromItem(correctInput))) {

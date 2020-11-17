@@ -26,6 +26,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.ChatColor;
@@ -208,13 +209,19 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
      * @param slots slots to perform this on
      */
     private void tryToStoreOrDrop(Block b, @Nonnull BlockMenu inv, @Nonnull int[] slots) {
-        int stored = getStored(b);
-        String storedItem = getStoredItem(b);
+        ItemStack inputSlot = inv.getItemInSlot(slots[0]);
+        
+        if (inputSlot == null) return;
 
         Location l = b.getLocation();
+        
+        if (inputSlot.getEnchantments().size() > 0) {
+            inv.dropItems(l, slots);
+            return;
+        }
 
-        ItemStack inputSlot = inv.getItemInSlot(slots[0]);
-
+        int stored = getStored(b);
+        String storedItem = getStoredItem(b);
         String inputID = StackUtils.getIDFromItem(inputSlot);
 
         if (Objects.equals(inputID, storedItem)) {
@@ -235,12 +242,11 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
                 inv.dropItems(l, slots);
 
             }
-
-        } else {
-
-            inv.dropItems(l, slots);
+            return;
 
         }
+
+        inv.dropItems(l, slots);
     }
 
     private void setupInv(BlockMenuPreset blockMenuPreset) {
@@ -270,16 +276,13 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
 
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
-
+        
+        if (inv.hasViewer()) updateStatus(b);
+        
         int maxStorage = type.getMax();
         String storedItem = getStoredItem(b);
-
-        if (inv.toInventory() != null || !inv.toInventory().getViewers().isEmpty()) {
-            updateStatus(b);
-        }
-
+        
         //input
-
         ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
         if (inputSlotItem != null) { //Check if empty slot
@@ -289,7 +292,7 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
             String inputItemID = StackUtils.getIDFromItem(inputSlotItem);
 
             //Check if non stackable item or another storage unit
-            if (inputSlotItem.getMaxStackSize() != 1 && inputItemID != null && !inputItemID.endsWith("_STORAGE") && !inputItemID.equals("INFINITY_MATRIX")) {
+            if (inputItemID != null && inputSlotItem.getEnchantments().size() == 0 && !(SlimefunItem.getByItem(inputSlotItem) instanceof LoreStorage)) {
 
                 int stored = getStored(b);
 
@@ -331,44 +334,40 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
 
         storedItem = getStoredItem(b);
 
-        if (storedItem != null) {
+        if (storedItem == null) {
+            return;
+        }
 
-            ItemStack storedItemStack = StackUtils.getItemFromID(storedItem, 1);
-            if (storedItemStack == null) {
-                setStoredItem(b, null);
-                return;
-            }
-            int stored = getStored(b);
-            int outputRemaining;
+        ItemStack storedItemStack = StackUtils.getItemFromID(storedItem, 1);
+        if (storedItemStack == null) {
+            setStoredItem(b, null);
+            return;
+        }
+        int stored = getStored(b);
+        int maxOutput;
 
-            if (inv.getItemInSlot(OUTPUT_SLOT) != null) {
-                outputRemaining = storedItemStack.getMaxStackSize()-inv.getItemInSlot(OUTPUT_SLOT).getAmount();
-            } else {
-                outputRemaining = storedItemStack.getMaxStackSize();
-            }
+        if (inv.getItemInSlot(OUTPUT_SLOT) != null) {
+            maxOutput = storedItemStack.getMaxStackSize()-inv.getItemInSlot(OUTPUT_SLOT).getAmount();
+        } else {
+            maxOutput = storedItemStack.getMaxStackSize();
+        }
+        
+        StackUtils.removeEnchants(storedItemStack);
 
-            if (stored > 1) {
+        if (stored > 1) {
 
-                int amount = 0;
-
-                for (int i = 0; i < outputRemaining; i++) {
-
-                    if (stored > 1+i) {
-                        storedItemStack.setAmount(1 + i);
-                        if (inv.fits(storedItemStack, OUTPUT_SLOTS)) {
-                            amount++;
-                        }
-                    }
-                }
-                storedItemStack.setAmount(amount);
+            int amount = Math.min(maxOutput, stored - 1);
+            storedItemStack.setAmount(amount);
+            
+            if (inv.fits(storedItemStack, OUTPUT_SLOT)) {
                 inv.pushItem(storedItemStack, OUTPUT_SLOTS);
-                setStored(b, stored-amount);
-
-            } else if (stored == 1 && inv.getItemInSlot(OUTPUT_SLOT) == null) {
-                inv.pushItem(storedItemStack, OUTPUT_SLOTS);
-                setStoredItem(b, null);
-                setStored(b, 0);
+                setStored(b, stored - amount);
             }
+            
+        } else if (stored == 1 && inv.getItemInSlot(OUTPUT_SLOT) == null) {
+            inv.pushItem(storedItemStack, OUTPUT_SLOTS);
+            setStoredItem(b, null);
+            setStored(b, 0);
         }
     }
 
@@ -380,7 +379,7 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
     private void updateStatus(@Nonnull Block b) {
         BlockMenu inv = BlockStorage.getInventory(b);
 
-        if (inv.toInventory() == null || inv.toInventory().getViewers().isEmpty()) return;
+        if (!inv.hasViewer()) return;
 
         String storedItem = getStoredItem(b);
         int stored = getStored(b);
@@ -415,30 +414,19 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
      */
     @Nonnull
     public static ItemStack makeDisplayItem(int max, @Nonnull ItemStack storedItemStack, int stored, boolean infinity) {
-        ItemStack item;
-
-        String convertedItemName = "";
-        if (storedItemStack.getItemMeta() != null) {
-            convertedItemName = storedItemStack.getItemMeta().getDisplayName();
-        }
-
-        String stacks = "&7Stacks: " + LoreUtils.format(Math.round((float) stored / storedItemStack.getMaxStackSize()));
-
-        if (infinity) {
-            item = new CustomItem(
-                    storedItemStack,
-                    convertedItemName,
-                    "&6Stored: &e" + LoreUtils.format(stored),
-                    stacks
-            );
-        } else {
-            item = new CustomItem(
-                    storedItemStack,
-                    convertedItemName,
-                    "&6Stored: &e" + LoreUtils.format(stored) + "/" + LoreUtils.format(max) + " &7(" + Math.round((float) 100 * stored / max )  + "%)",
-                    stacks
-            );
-        }
+        
+        String stacksLine = "&7Stacks: " + LoreUtils.format(Math.round((float) stored / storedItemStack.getMaxStackSize()));
+        
+        String storedLine = "&6Stored: &e" + LoreUtils.format(stored) + (infinity ? "" : "/" + LoreUtils.format(max) + " &7(" + Math.round((float) 100 * stored / max )  + "%)");
+        
+        ItemStack item = new CustomItem(
+                storedItemStack,
+                ChatColor.WHITE + ItemUtils.getItemName(storedItemStack),
+                storedLine,
+                stacksLine
+        );
+        
+        StackUtils.removeEnchants(item);
 
         return item;
     }
@@ -483,8 +471,7 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
     public String getTarget() {
         return "Stored Item:";
     }
-
-
+    
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
 

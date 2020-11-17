@@ -3,12 +3,15 @@ package io.github.mooy1.infinityexpansion;
 import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.mooy1.infinityexpansion.setup.ItemSetup;
 import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
+import lombok.Getter;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,12 +20,18 @@ import java.util.logging.Level;
 
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
+    @Getter
     private static InfinityExpansion instance;
-
+    @Getter
+    private int tickRate;
+    private static int progressTick = 1;
+    
     @Override
     public void onEnable() {
+        //instance
         instance = this;
-
+        tickRate = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
+        
         //config
         updateConfig();
         setupConfigOptions();
@@ -35,11 +44,11 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         //auto update
         if (getDescription().getVersion().startsWith("DEV - ")) {
-            getLogger().log(Level.INFO, "Starting auto update");
+            log(Level.INFO, "Starting auto update");
             Updater updater = new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master");
             updater.start();
         } else {
-            getLogger().log(Level.WARNING, "You must be on a DEV build to auto update!");
+            log(Level.WARNING, "You must be on a DEV build to auto update!");
         }
 
         //items
@@ -55,6 +64,15 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         for (String line : getChangeLog()) {
             getLogger().log(Level.INFO, line);
         }
+        
+        //progress ticker
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            if (progressTick < 12) {
+                progressTick ++;
+            } else {
+                progressTick = 1;
+            }
+        }, 100L, tickRate);
     }
 
     @Override
@@ -71,11 +89,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Override
     public JavaPlugin getJavaPlugin() {
         return this;
-    }
-
-    @Nonnull
-    public static InfinityExpansion getInstance() {
-        return instance;
     }
 
     @Nonnull
@@ -111,7 +124,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     private void setupConfigOptions() {
         int configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-duct-length");
-        if (configMax > 3 && configMax < 21) {
+        if (configMax > 3 && configMax < 33) {
             OutputDuct.DUCT_LENGTH = configMax;
         }
 
@@ -124,5 +137,9 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         if (configMax > 0 && configMax < 54) {
             OutputDuct.MAX_SLOTS = configMax;
         }
+    }
+    
+    public static boolean progressEvery(int i) {
+        return progressTick % i != 0;
     }
 }

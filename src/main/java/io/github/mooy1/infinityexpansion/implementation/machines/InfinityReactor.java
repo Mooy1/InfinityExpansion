@@ -198,7 +198,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
             
         }
         
-        if (progress == INFINITY_INTERVAL) { //done
+        if (progress >= INFINITY_INTERVAL) { //done
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aFinished Generation"));

@@ -4,6 +4,7 @@ import io.github.mooy1.infinityexpansion.implementation.LoreStorage;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -195,21 +196,7 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
             return;
         }
         
-        
-        if (!output.getEnchantments().isEmpty()) {
-            Map<Enchantment, Integer> enchantments = new HashMap<>();
-            int amount = 0;
-            for (Map.Entry<Enchantment, Integer> entry : output.getEnchantments().entrySet()) {
-                enchantments.put(entry.getKey(), entry.getValue());
-                amount++;
-            }
-            if (amount > 0) {
-                for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-                    output.removeEnchantment(entry.getKey());
-
-                }
-            }
-        }
+        StackUtils.removeEnchants(output);
 
         output.addUnsafeEnchantments(input.getEnchantments());
 

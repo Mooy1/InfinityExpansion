@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.utils;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 
 import java.text.DecimalFormat;
 
@@ -10,15 +10,9 @@ import java.text.DecimalFormat;
  * @author Mooy1
  */
 public final class LoreUtils {
-
-    public static final int SERVER_TICK = 20;
-
-    public static final int CUSTOM_TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
-
-    public static final float SERVER_TICK_RATIO = (float) SERVER_TICK / CUSTOM_TICKER_DELAY;
-
-    private LoreUtils() {}
-
+    
+    public static final float SERVER_TICK_RATIO = (float) 20 / InfinityExpansion.getInstance().getTickRate();
+    
     public static String energyPerSecond(int energy) {
         return "&8\u21E8 &e\u26A1 &7" + format(Math.round(energy * SERVER_TICK_RATIO)) + " J/s";
     }

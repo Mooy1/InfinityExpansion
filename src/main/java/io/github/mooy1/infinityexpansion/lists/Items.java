@@ -4,6 +4,7 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
 import io.github.mooy1.infinityexpansion.implementation.machines.InfinityReactor;
 import io.github.mooy1.infinityexpansion.implementation.machines.ResourceSynthesizer;
+import io.github.mooy1.infinityexpansion.implementation.machines.StoneworksFactory;
 import io.github.mooy1.infinityexpansion.implementation.machines.TreeGrower;
 import io.github.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
@@ -56,7 +57,7 @@ public final class Items {
     );
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",
-            Material.LODESTONE,
+            Material.BEEHIVE,
             "&6Storage Forge",
             "&7Upgrades the tier of Storage Units",
             "&7Retains stored items"
@@ -69,6 +70,15 @@ public final class Items {
     );
 
     //Machines
+    
+    public static final SlimefunItemStack STONEWORKS_FACTORY = new SlimefunItemStack(
+            "STONEWORKS_FACTORY",
+            Material.BLAST_FURNACE,
+            "&8Stoneworks Factory",
+            "Generates cobblestone and processes it into various materials",
+            "",
+            LoreUtils.energyPerSecond(StoneworksFactory.ENERGY)
+    );
 
     public static final SlimefunItemStack ITEM_UPDATER = new SlimefunItemStack(
             "ITEM_UPDATER",
@@ -130,7 +140,7 @@ public final class Items {
 
     public static final SlimefunItemStack RESOURCE_SYNTHESIZER = new SlimefunItemStack(
             "RESOURCE_SYNTHESIZER",
-            Material.BLAST_FURNACE,
+            Material.LODESTONE,
             "&6Resource Synthesizer",
             "&7Creates resources out of singularities",
             "",
@@ -285,14 +295,6 @@ public final class Items {
             "",
             "&cNot yet functional"
 
-    );
-    public static final SlimefunItemStack PROJECT_TABLE = new SlimefunItemStack(
-            "PROJECT_TABLE",
-            Material.BEEHIVE,
-            "&6Project Table",
-            "&7",
-            "",
-            "&cNot yet functional"
     );
     public static final SlimefunItemStack DECOMPRESSOR = new SlimefunItemStack(
             "DECOMPRESSOR",

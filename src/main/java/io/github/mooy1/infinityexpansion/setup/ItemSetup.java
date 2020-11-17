@@ -15,6 +15,7 @@ import io.github.mooy1.infinityexpansion.implementation.machines.PoweredBedrock;
 import io.github.mooy1.infinityexpansion.implementation.machines.Quarry;
 import io.github.mooy1.infinityexpansion.implementation.machines.ResourceSynthesizer;
 import io.github.mooy1.infinityexpansion.implementation.machines.SingularityConstructor;
+import io.github.mooy1.infinityexpansion.implementation.machines.StoneworksFactory;
 import io.github.mooy1.infinityexpansion.implementation.machines.TreeGrower;
 import io.github.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
@@ -126,8 +127,8 @@ public final class ItemSetup {
         new StorageDuct().register(plugin);
 
         //machine
-
-        //new AdvancedAnvil().register(plugin);
+        
+        //new StoneworksFactory().register(plugin);
         for (MainMaterial.Type type : MainMaterial.Type.values()) {
             new MainMaterial(type).register(plugin);
         }
@@ -161,8 +162,8 @@ public final class ItemSetup {
         for (CompressedCobblestone.Type type : CompressedCobblestone.Type.values()) {
             new CompressedCobblestone(type).register(plugin);
         }
-        for (Singularity.Type type : Singularity.Type.values()) {
-            new Singularity(type).register(plugin);
+        for (int i = 0 ; i < SingularityConstructor.RECIPES.size() ; i++) {
+            new Singularity(i).register(plugin);
         }
         new EnderEssence().register(plugin);
         new EnderEssenceResource().register();

@@ -1,11 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinityexpansion.utils.TriList;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -27,7 +27,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Location;
@@ -35,7 +34,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -75,6 +73,31 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
     private static final int[] OUTPUT_BORDER = {
             6, 7, 8, 15, 17, 24, 25, 26
     };
+
+    public static final TriList<SlimefunItemStack, String, Integer> RECIPES = new TriList<>();
+
+    static {
+        RECIPES.add(Items.COPPER_SINGULARITY, "COPPER_INGOT", 2400);
+        RECIPES.add(Items.ZINC_SINGULARITY, "ZINC_INGOT", 4800);
+        RECIPES.add(Items.TIN_SINGULARITY, "TIN_INGOT",4800);
+        RECIPES.add(Items.ALUMINUM_SINGULARITY, "ALUMINUM_INGOT",4800);
+        RECIPES.add(Items.SILVER_SINGULARITY, "SILVER_INGOT",4800);
+        RECIPES.add(Items.MAGNESIUM_SINGULARITY, "MAGNESIUM_INGOT",4800);
+        RECIPES.add(Items.LEAD_SINGULARITY, "LEAD_INGOT",4800);
+
+        RECIPES.add(Items.GOLD_SINGULARITY, "GOLD_INGOT", 2400);
+        RECIPES.add(Items.IRON_SINGULARITY, "IRON_INGOT", 4800);
+        RECIPES.add(Items.DIAMOND_SINGULARITY, "DIAMOND", 800);
+        RECIPES.add(Items.EMERALD_SINGULARITY, "EMERALD", 800);
+        RECIPES.add(Items.NETHERITE_SINGULARITY, "NETHERITE_INGOT", 400);
+
+        RECIPES.add(Items.COAL_SINGULARITY, "COAL", 2400);
+        RECIPES.add(Items.REDSTONE_SINGULARITY, "REDSTONE", 2400);
+        RECIPES.add(Items.LAPIS_SINGULARITY, "LAPIS_LAZULI",2400);
+        RECIPES.add(Items.QUARTZ_SINGULARITY, "QUARTZ",2400);
+
+        RECIPES.add(Items.INFINITY_SINGULARITY, "INFINITE_INGOT",400);
+    }
 
     public SingularityConstructor(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
@@ -136,7 +159,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
                 if (progress > 0 && inputTest != null) {
 
-                    String input = INPUT_ITEM_IDS[Integer.parseInt(getProgressID(b))];
+                    String input = RECIPES.getB().get(Integer.parseInt(inputTest));
 
                     int stackSize = 64;
 
@@ -190,7 +213,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
     }
 
     public void tick(Block b) {
-
+        
         @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
         if (inv == null) return;
 
@@ -207,25 +230,27 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
             name = "&cNot enough energy!";
 
         } else if (inputSlotItem == null) { //no input
+            
+            String progressTest = getProgressID(b);
 
-            if (progress == 0 || getProgressID(b) == null) { //haven't started
+            if (progress == 0 || progressTest == null) { //haven't started
 
                 name = "&9Input a resource!";
                 statusMat = Material.BLUE_STAINED_GLASS_PANE;
 
             } else { //started but wrong input
-
-                ItemStack input = StackUtils.getItemFromID(INPUT_ITEM_IDS[Integer.parseInt(getProgressID(b))], 1);
-
-                name = "&cInput more &f" + ItemUtils.getItemName(input) + "&c!";
+                
+                name = "&cInput more &b" + RECIPES.getB().get(Integer.parseInt(progressTest)) + "&c!";
 
             }
 
         } else { //input
 
             int speed = type.getSpeed();
+            
+            String progressTest = getProgressID(b);
 
-            if (progress == 0 || getProgressID(b) == null) { //no input
+            if (progress == 0 || progressTest == null) { //no input
 
                 if (checkItemAndSet(b, inv, inputSlotItem, speed)) { //try to start construction
 
@@ -245,12 +270,12 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
             } else { //progress
 
-                int progressID = Integer.parseInt(getProgressID(b));
-                int outputTime = OUTPUT_TIMES[progressID];
+                int progressID = Integer.parseInt(progressTest);
+                int outputTime = RECIPES.getC().get(progressID);
 
                 if (progress < outputTime) { //increase progress
 
-                    String input = INPUT_ITEM_IDS[progressID];
+                    String input = RECIPES.getB().get(progressID);
 
                     if (Objects.equals(StackUtils.getIDFromItem(inputSlotItem), input)) { //input matches
 
@@ -289,31 +314,22 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
                 } else { //if construction done
 
-                    ItemStack output = StackUtils.getItemFromID(OUTPUT_ITEM_IDS[progressID], 1);
+                    ItemStack output = RECIPES.getA().get(progressID).clone();
+                    
+                    if (inv.fits(output, OUTPUT_SLOTS)) { //output
 
-                    if (output != null) {
+                        removeCharge(b.getLocation(), energy);
+                        inv.pushItem(output, OUTPUT_SLOTS);
+                        setProgress(b, 0);
+                        setProgressID(b, null);
 
-                        if (inv.fits(output, OUTPUT_SLOTS)) { //output
+                        name = "&aConstruction complete!";
+                        statusMat = Material.NETHER_STAR;
 
-                            removeCharge(b.getLocation(), energy);
-                            inv.pushItem(output, OUTPUT_SLOTS);
-                            setProgress(b, 0);
-                            setProgressID(b, null);
+                    } else { //not enough room
 
-                            name = "&aConstruction complete!";
-                            statusMat = Material.NETHER_STAR;
-
-                        } else { //not enough room
-
-                            name = "&6Not enough room!";
-                            statusMat = Material.ORANGE_STAINED_GLASS_PANE;
-                        }
-
-                    } else {
-
-                        name = "&cError! Report this!";
-                        statusMat = Material.BARRIER;
-
+                        name = "&6Not enough room!";
+                        statusMat = Material.ORANGE_STAINED_GLASS_PANE;
                     }
                 }
             }
@@ -321,7 +337,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
         //update status and finish
 
-        if (inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty()) {
+        if (inv.hasViewer()) {
 
             progress = Integer.parseInt(getProgress(b));
             String lore = "";
@@ -329,17 +345,10 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
 
             if (progress > 0) {
                 int progressID = Integer.parseInt(getProgressID(b));
-                String output = OUTPUT_ITEM_IDS[progressID];
-                int outputTime = OUTPUT_TIMES[progressID];
+                SlimefunItemStack output = RECIPES.getA().get(progressID);
+                int outputTime = RECIPES.getC().get(progressID);
 
-                String displayName = "";
-                ItemMeta displayMeta = Objects.requireNonNull(StackUtils.getItemFromID(output, 1)).getItemMeta();
-
-                if (displayMeta != null) {
-                    displayName = displayMeta.getDisplayName();
-                }
-
-                lore = "&7Constructing: " + displayName;
+                lore = "&7Constructing: " + output.getDisplayName();
                 loree = "&7Progress: (" + progress + "/" + outputTime + ")";
             }
 
@@ -364,8 +373,8 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
     private boolean checkItemAndSet(Block b, BlockMenu inv, ItemStack item, int speed) {
         int itemAmount = item.getAmount();
 
-        for (int i = 0; i < INPUT_ITEM_IDS.length ; i++) {
-            if (Objects.equals(StackUtils.getIDFromItem(item), INPUT_ITEM_IDS[i])) {
+        for (int i = 0; i < RECIPES.size() ; i++) {
+            if (Objects.equals(StackUtils.getIDFromItem(item), RECIPES.getB().get(i))) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
                     inv.consumeItem(INPUT_SLOT, speed);
@@ -420,82 +429,13 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
-        for (Singularity.Type type : Singularity.Type.values()) {
-            items.add(type.getRecipe());
-            items.add(type.getItem());
+        for (int i = 0 ; i < RECIPES.size() ; i++) {
+            items.add(StackUtils.getItemFromID(RECIPES.getB().get(i), 1));
+            items.add(RECIPES.getA().get(i));
         }
 
         return items;
     }
-
-    public static final String[] INPUT_ITEM_IDS = {
-            "COPPER_INGOT",
-            "ZINC_INGOT",
-            "TIN_INGOT",
-            "ALUMINUM_INGOT",
-            "SILVER_INGOT",
-            "MAGNESIUM_INGOT",
-            "LEAD_INGOT",
-
-            "GOLD_INGOT",
-            "IRON_INGOT",
-            "DIAMOND",
-            "EMERALD",
-            "NETHERITE_INGOT",
-
-            "COAL",
-            "REDSTONE",
-            "LAPIS_LAZULI",
-            "QUARTZ",
-
-            "INFINITE_INGOT"
-    };
-
-    public static final String[] OUTPUT_ITEM_IDS = {
-            "COPPER_SINGULARITY",
-            "ZINC_SINGULARITY",
-            "TIN_SINGULARITY",
-            "ALUMINUM_SINGULARITY",
-            "SILVER_SINGULARITY",
-            "MAGNESIUM_SINGULARITY",
-            "LEAD_SINGULARITY",
-
-            "GOLD_SINGULARITY",
-            "IRON_SINGULARITY",
-            "DIAMOND_SINGULARITY",
-            "EMERALD_SINGULARITY",
-            "NETHERITE_SINGULARITY",
-
-            "COAL_SINGULARITY",
-            "REDSTONE_SINGULARITY",
-            "LAPIS_SINGULARITY",
-            "QUARTZ_SINGULARITY",
-
-            "INFINITY_SINGULARITY"
-    };
-
-    public static final int[] OUTPUT_TIMES = {
-            1000,
-            2000,
-            2000,
-            2000,
-            2000,
-            2000,
-            2000,
-
-            2000,
-            2000,
-            1000,
-            1000,
-            400,
-
-            2000,
-            2000,
-            2000,
-            2000,
-
-            400
-    };
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)

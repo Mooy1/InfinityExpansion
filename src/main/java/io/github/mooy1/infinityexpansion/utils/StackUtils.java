@@ -5,6 +5,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -13,7 +14,10 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Collection of utils for modifying ItemStacks and getting their ids
@@ -222,6 +226,12 @@ public final class StackUtils {
 
             }
             i++;
+        }
+    }
+    
+    public static void removeEnchants(@Nonnull ItemStack item) {
+        for (Enchantment e : item.getEnchantments().keySet()) {
+            item.removeEnchantment(e);
         }
     }
 }

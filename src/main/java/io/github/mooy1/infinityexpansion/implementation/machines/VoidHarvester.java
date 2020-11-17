@@ -54,7 +54,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 640;
+    private static final int TIME = 800;
 
     private final Type type;
 
@@ -236,7 +236,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
         BASIC(Categories.ADVANCED_MACHINES, BASIC_ENERGY, BASIC_SPEED, Items.VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
+                Items.TITANIUM, Items.TITANIUM, Items.TITANIUM,
                 Items.MAGNONIUM, SlimefunItems.GEO_MINER, Items.MAGNONIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }),
