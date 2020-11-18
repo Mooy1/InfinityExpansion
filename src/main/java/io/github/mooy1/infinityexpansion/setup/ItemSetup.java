@@ -128,7 +128,7 @@ public final class ItemSetup {
 
         //machine
         
-        //new StoneworksFactory().register(plugin);
+        new StoneworksFactory().register(plugin);
         for (MainMaterial.Type type : MainMaterial.Type.values()) {
             new MainMaterial(type).register(plugin);
         }

@@ -140,6 +140,14 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     }
     
     public static boolean progressEvery(int i) {
-        return progressTick % i != 0;
+        return progressOn(i, 0);
+    }
+    
+    public static boolean progressOn(int i, int pos) {
+        return progressTick % i == pos;
+    }
+    
+    public static int currentTick() {
+        return progressTick;
     }
 }
