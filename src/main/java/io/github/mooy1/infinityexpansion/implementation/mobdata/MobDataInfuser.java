@@ -44,12 +44,12 @@ public class MobDataInfuser extends Crafter implements EnergyNetComponent {
 
     @Override
     public ItemStack[][] getRecipes() {
-        List<ItemStack[]> RECIPES = new ArrayList<>();
+        List<ItemStack[]> recipes = new ArrayList<>();
         for (MobDataCard card : MobDataCard.CARDS) {
-            RECIPES.add(card.getRecipe());
+            recipes.add(card.getRecipe());
         }
         
-        return RECIPES.toArray(new ItemStack[0][]);
+        return recipes.toArray(new ItemStack[0][]);
     }
 
     @Override

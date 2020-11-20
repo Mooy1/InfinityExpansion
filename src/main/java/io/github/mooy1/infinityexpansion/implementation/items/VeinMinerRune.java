@@ -49,6 +49,8 @@ import java.util.Optional;
 /**
  * A VeinMiner rune, most code from {@link SoulboundRune}
  * 
+ * @author Mooy1
+ * 
  */
 public class VeinMinerRune extends SlimefunItem implements Listener {
 
