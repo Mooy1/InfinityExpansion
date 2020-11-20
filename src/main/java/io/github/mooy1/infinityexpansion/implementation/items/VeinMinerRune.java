@@ -63,7 +63,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener {
     private static final List<String> ALLOWED = new ArrayList<>(Arrays.asList(
             "_ORE", "_LOG", "_WOOD", "GILDED", "SOUL", "GRAVEL",
             "MAGMA", "OBSIDIAN", "DIORITE", "ANDESITE", "GRANITE", "_LEAVES",
-            "_GLASS", "DIRT", "GRASS"
+            "GLASS", "DIRT", "GRASS", "DEBRIS"
     ));
     
     public VeinMinerRune(InfinityExpansion plugin) {
@@ -186,7 +186,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener {
         if (isVeinMiner(item)) {
             
             if (p.getFoodLevel() == 0) {
-                MessageUtils.message(p, ChatColor.GOLD + "You are too tired to vein-mine!");
+                MessageUtils.messageWithCD(p, 500, ChatColor.GOLD + "You are too tired to vein-mine!");
                 return;
             }
 
@@ -225,7 +225,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener {
                 }
             }
 
-            p.setFoodLevel(Math.max(p.getFoodLevel() - Math.round(found.size() / 32F), 0));
+            p.setFoodLevel(Math.max(0, p.getFoodLevel() - 1));
         }
     }
     

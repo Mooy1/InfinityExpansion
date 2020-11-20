@@ -31,13 +31,14 @@ import java.util.Map;
 public class MobSimulationChamber extends Machine implements EnergyNetComponent {
 
     private static final int CARD_SLOT = PresetUtils.slot1 + 27;
+    private static final int INTERVAL = 16;
     private static final int STATUS_SLOT = PresetUtils.slot1;
     private static final int[] OUTPUTS_SLOTS = PresetUtils.largeOutput;
-    private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     private static final int XP_Slot = 46;
-    
     public static final int BUFFER = 10000;
     public static final int ENERGY = 120;
+
+    private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     
     public MobSimulationChamber() {
         super(Categories.MOB_SIMULATION, Items.MOB_SIMULATION_CHAMBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -85,7 +86,7 @@ public class MobSimulationChamber extends Machine implements EnergyNetComponent 
             inv.replaceExistingItem(XP_Slot, makeXpItem(getXP(l)));
         }
 
-        if (!InfinityExpansion.progressEvery(12)) return;
+        if (!InfinityExpansion.progressEvery(INTERVAL)) return;
         
         int xp = getXP(l) + card.getXp();
         setXp(l, xp);
@@ -109,7 +110,7 @@ public class MobSimulationChamber extends Machine implements EnergyNetComponent 
     
     @Nonnull
     private ItemStack makeSimulating(int card) {
-        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + ((ENERGY + card) * LoreUtils.SERVER_TICK_RATIO) + " J/s)");
+        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round((ENERGY + card) * LoreUtils.SERVER_TICK_RATIO) + " J/s)");
     }
 
     @Override

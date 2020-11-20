@@ -63,37 +63,37 @@ public class MobDataCard extends SlimefunItem implements RecipeDisplayItem {
                 new ItemStack(Material.IRON_SWORD, 1), new ItemStack(Material.ROTTEN_FLESH, 16), new ItemStack(Material.IRON_SHOVEL, 1),
                 new ItemStack(Material.IRON_INGOT, 1), Items.EMPTY_DATA_CARD, new ItemStack(Material.IRON_INGOT, 1),
                 new ItemStack(Material.CARROT, 1), new ItemStack(Material.ROTTEN_FLESH, 16), new ItemStack(Material.POTATO, 1)
-        }, ImmutableMap.of(1, new ItemStack(Material.ROTTEN_FLESH, 2), 2, new ItemStack(Material.ROTTEN_FLESH), 5, new ItemStack(Material.IRON_INGOT))),
+        }, ImmutableMap.of(1, new ItemStack(Material.ROTTEN_FLESH, 2), 8, new ItemStack(Material.IRON_INGOT))),
         
         SPIDER("Spider", 90, 1, new ItemStack[]{
                 new ItemStack(Material.COBWEB, 1), new ItemStack(Material.STRING, 16), new ItemStack(Material.COBWEB, 1),
                 new ItemStack(Material.SPIDER_EYE, 8), Items.EMPTY_DATA_CARD, new ItemStack(Material.SPIDER_EYE, 8),
                 new ItemStack(Material.COBWEB, 1), new ItemStack(Material.STRING, 16), new ItemStack(Material.COBWEB, 1)
-        }, ImmutableMap.of(1, new ItemStack(Material.STRING, 2), 2, new ItemStack(Material.SPIDER_EYE), 3, new ItemStack(Material.STRING))),
+        }, ImmutableMap.of(1, new ItemStack(Material.STRING, 2), 2, new ItemStack(Material.SPIDER_EYE))),
         
         SKELLY("Skeleton", 90, 1, new ItemStack[]{
                 new ItemStack(Material.LEATHER_HELMET, 1), new ItemStack(Material.BONE, 16), new ItemStack(Material.LEATHER_HELMET, 1),
                 new ItemStack(Material.ARROW, 16), Items.EMPTY_DATA_CARD, new ItemStack(Material.ARROW, 16),
                 new ItemStack(Material.BOW, 1), new ItemStack(Material.BONE, 16), new ItemStack(Material.BOW, 1)
-        }, ImmutableMap.of(1, new ItemStack(Material.BONE, 2), 2, new ItemStack(Material.ARROW, 2), 3, new ItemStack(Material.BONE, 1), 16, new ItemStack(Material.BOW))),
+        }, ImmutableMap.of(1, new ItemStack(Material.BONE, 2), 2, new ItemStack(Material.ARROW, 2), 16, new ItemStack(Material.BOW))),
         
         WITHER_SKELLY("Wither Skeleton", 150, 3, new ItemStack[]{
                 new ItemStack(Material.WITHER_SKELETON_SKULL, 1), new ItemStack(Material.BONE, 16), new ItemStack(Material.WITHER_SKELETON_SKULL, 1),
                 new ItemStack(Material.COAL, 64), Items.EMPTY_DATA_CARD, new ItemStack(Material.COAL, 64),
                 new ItemStack(Material.STONE_SWORD, 1), new ItemStack(Material.BONE, 16), new ItemStack(Material.STONE_SWORD, 1)
-        }, ImmutableMap.of(1, new ItemStack(Material.COAL, 2), 2, new ItemStack(Material.BONE, 2), 3, new ItemStack(Material.COAL, 2), 12, new ItemStack(Material.WITHER_SKELETON_SKULL))),
+        }, ImmutableMap.of(1, new ItemStack(Material.COAL, 1), 2, new ItemStack(Material.BONE, 2), 3, new ItemStack(Material.COAL, 2), 12, new ItemStack(Material.WITHER_SKELETON_SKULL))),
         
         ENDERMEN("Endermen", 240, 5, new ItemStack[]{
                 new ItemStack(Material.ENDER_EYE, 1), new ItemStack(Material.OBSIDIAN, 16), new ItemStack(Material.ENDER_EYE, 1),
                 new ItemStack(Material.ENDER_PEARL, 16), Items.EMPTY_DATA_CARD, new ItemStack(Material.ENDER_PEARL, 16),
                 new ItemStack(Material.ENDER_EYE, 1), new ItemStack(Material.OBSIDIAN, 16), new ItemStack(Material.ENDER_EYE, 1)
-        }, ImmutableMap.of(1, new ItemStack(Material.ENDER_PEARL, 1), 2, new ItemStack(Material.ENDER_PEARL, 1), 3, new ItemStack(Material.ENDER_PEARL, 1))),
+        }, ImmutableMap.of(1, new ItemStack(Material.ENDER_PEARL, 1), 2, new ItemStack(Material.ENDER_PEARL, 1))),
 
         CREEPER("Creeper", 120, 2, new ItemStack[]{
                 new ItemStack(Material.TNT, 1), new ItemStack(Material.GREEN_DYE, 16), new ItemStack(Material.TNT, 1),
                 new ItemStack(Material.GUNPOWDER, 16), Items.EMPTY_DATA_CARD, new ItemStack(Material.GUNPOWDER, 16),
                 new ItemStack(Material.TNT, 1), new ItemStack(Material.GREEN_DYE, 16), new ItemStack(Material.TNT, 1)
-        }, ImmutableMap.of(1, new ItemStack(Material.GUNPOWDER, 1), 2, new ItemStack(Material.GUNPOWDER, 1), 3, new ItemStack(Material.GUNPOWDER, 1))),
+        }, ImmutableMap.of(1, new ItemStack(Material.GUNPOWDER, 1), 2, new ItemStack(Material.GUNPOWDER, 1))),
         
         BLAZE("Blaze", 150, 5, new ItemStack[]{
                 new ItemStack(Material.MAGMA_BLOCK, 64), new ItemStack(Material.BLAZE_ROD, 8), new ItemStack(Material.MAGMA_BLOCK, 64),

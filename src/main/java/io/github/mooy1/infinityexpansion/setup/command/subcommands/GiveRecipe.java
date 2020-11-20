@@ -35,7 +35,7 @@ public class GiveRecipe extends SubCommand {
 
         SlimefunItem sfItem = SlimefunItem.getByID(args[1].toUpperCase());
         
-        if (!(sfItem instanceof MultiBlockMachine) || sfItem.getRecipeType() == RecipeType.GEO_MINER) {
+        if (sfItem == null || sfItem instanceof MultiBlockMachine || sfItem.getRecipeType() == RecipeType.GEO_MINER) {
             sender.sendMessage(ChatColor.RED + "Invalid Slimefun item!");
             return;
         }

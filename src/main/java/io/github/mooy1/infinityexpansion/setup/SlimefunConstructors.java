@@ -14,14 +14,17 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.reactors
 import io.github.thebusybiscuit.slimefun4.utils.holograms.ReactorHologram;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineFuel;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.RayTraceResult;
 
 import javax.annotation.Nonnull;
 
@@ -227,13 +230,35 @@ public class SlimefunConstructors {
 
             @Override
             public void extraTick(@Nonnull Location l) {
+                if (InfinityExpansion.progressEvery(4)) return;
+                
                 InfinityExpansion.runSync(() -> {
                     ArmorStand hologram = ReactorHologram.getArmorStand(l, true);
-                    if (hologram != null) {
-                        for (Entity entity : hologram.getNearbyEntities(5, 5, 5)) {
-                            if (entity instanceof LivingEntity && entity.isValid()) {
-                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 2));
+                    if (hologram == null) return;
+                    
+                    for (Entity entity : hologram.getNearbyEntities(8, 8, 8)) {
+                        if (entity instanceof LivingEntity && entity.isValid()) {
+                            
+                            Location h = hologram.getLocation().clone().add(0, 1, 0);
+                            
+                            if (h.getBlock().getType() == Material.AIR) {
+                                
+                                RayTraceResult result = hologram.getWorld().rayTraceBlocks(h, entity.getLocation().toVector().subtract(h.toVector()), 16);
+
+                                if (result != null) {
+                                    Block hit = result.getHitBlock();
+
+                                    if (hit != null) {
+                                        String id = BlockStorage.getLocationInfo(hit.getLocation(), "id");
+
+                                        if (id != null && id.contains("WITHER_PROOF")) {
+                                            continue;
+                                        }
+                                    }
+                                }
                             }
+                            
+                            ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 1));
                         }
                     }
                 });

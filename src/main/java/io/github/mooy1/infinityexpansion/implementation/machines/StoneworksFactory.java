@@ -44,6 +44,7 @@ public class StoneworksFactory extends Machine implements EnergyNetComponent, Re
     private static final int[] CHOICE_SLOTS = {11, 13, 15};
     private static final int[] PROCESS_SLOTS = {10, 12, 14};
     private static final ItemStack COBBLE_GEN = new CustomItem(Material.GRAY_CONCRETE, "&8Cobblegen");
+    private static final ItemStack PROCESSING = new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "&7Processing");
 
     public StoneworksFactory() {
         super(Categories.ADVANCED_MACHINES, Items.STONEWORKS_FACTORY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -106,7 +107,7 @@ public class StoneworksFactory extends Machine implements EnergyNetComponent, Re
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : PROCESS_BORDER) {
-            blockMenuPreset.addItem(i, new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "Processing"), ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, PROCESSING, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUT_BORDER) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());

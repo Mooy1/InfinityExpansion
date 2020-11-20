@@ -437,7 +437,7 @@ public class OutputDuct extends Machine {
 
                 length.increment();
 
-                for (Location location : LocationUtils.getAdjacentLocations(thisLocation, true)) {
+                for (Location location : LocationUtils.getAdjacentLocations(thisLocation, false)) {
 
                     if (location != prev && !checkedLocations.contains(location)) {
 
