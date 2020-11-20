@@ -1,5 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
@@ -10,33 +12,24 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +40,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class SingularityConstructor extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
+public class SingularityConstructor extends Machine implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 120;
     public static final int BASIC_SPEED = 1;
@@ -103,49 +96,6 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
-        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (getProgress(b) == null) {
-                    setProgress(b, 0);
-                }
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-        };
-
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -190,7 +140,14 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         });
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        if (getProgress(b) == null) {
+            setProgress(b, 0);
+        }
+    }
+
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : STATUS_BORDER) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -204,19 +161,18 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { SingularityConstructor.this.tick(b); }
-
-            public boolean isSynchronized() { return false; }
-        });
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.INSERT) {
+            return INPUT_SLOTS;
+        } else if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        } else {
+            return new int[0];
+        }
     }
 
-    public void tick(Block b) {
-        
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
-        if (inv == null) return;
-
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         String name;
         Material statusMat = Material.BARRIER;
 
@@ -230,7 +186,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
             name = "&cNot enough energy!";
 
         } else if (inputSlotItem == null) { //no input
-            
+
             String progressTest = getProgressID(b);
 
             if (progress == 0 || progressTest == null) { //haven't started
@@ -239,7 +195,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                 statusMat = Material.BLUE_STAINED_GLASS_PANE;
 
             } else { //started but wrong input
-                
+
                 name = "&cInput more &b" + RECIPES.getB().get(Integer.parseInt(progressTest)) + "&c!";
 
             }
@@ -247,7 +203,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
         } else { //input
 
             int speed = type.getSpeed();
-            
+
             String progressTest = getProgressID(b);
 
             if (progress == 0 || progressTest == null) { //no input
@@ -315,7 +271,7 @@ public class SingularityConstructor extends SlimefunItem implements EnergyNetCom
                 } else { //if construction done
 
                     ItemStack output = RECIPES.getA().get(progressID).clone();
-                    
+
                     if (inv.fits(output, OUTPUT_SLOTS)) { //output
 
                         removeCharge(b.getLocation(), energy);

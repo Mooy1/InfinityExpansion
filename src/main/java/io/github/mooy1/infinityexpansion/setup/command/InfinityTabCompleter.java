@@ -7,8 +7,10 @@ import org.bukkit.command.TabCompleter;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class InfinityTabCompleter implements TabCompleter {
 
@@ -31,13 +33,12 @@ public class InfinityTabCompleter implements TabCompleter {
                     subCommands.add(command.getName());
                 }
             }
-            return createReturnList(subCommands);
+            return createReturnList(subCommands, args[0]);
 
-        } else if (args.length > 0) {
-
+        } else if (args.length > 1) {
             for (SubCommand command : command.commands) {
                 if (args[0].equalsIgnoreCase(command.getName())) {
-                    return createReturnList(command.onTab(sender, args));
+                    return createReturnList(command.onTab(sender, args), args[args.length - 1]);
                 }
             }
         }
@@ -46,14 +47,24 @@ public class InfinityTabCompleter implements TabCompleter {
     }
 
     @Nonnull
-    private List<String> createReturnList(@Nonnull List<String> list) {
+    private List<String> createReturnList(@Nonnull List<String> list, @Nonnull String string) {
+        if (string.length() == 0) {
+            return list;
+        }
+
+        String input = string.toLowerCase(Locale.ROOT);
         List<String> returnList = new LinkedList<>();
 
         for (String item : list) {
-            returnList.add(item.toLowerCase());
+            if (item.toLowerCase(Locale.ROOT).contains(input)) {
+                returnList.add(item);
 
-            if (returnList.size() >= MAX_SUGGESTIONS) {
-                break;
+                if (returnList.size() >= MAX_SUGGESTIONS) {
+                    break;
+                }
+
+            } else if (item.equalsIgnoreCase(input)) {
+                return Collections.emptyList();
             }
         }
 

@@ -1,49 +1,43 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
+import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * harvests void bits from... the void
  *
  * @author Mooy1
  */
-public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
+public class VoidHarvester extends Machine implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 120;
     public static final int BASIC_SPEED = 1;
@@ -54,52 +48,13 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 800;
+    private static final int TIME = 1000;
 
     private final Type type;
 
     public VoidHarvester(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
-
-        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (getProgress(b) == null) {
-                    setProgress(b, 0);
-                }
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                }
-
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                }
-
-                return new int[0];
-            }
-        };
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -112,7 +67,7 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
         });
     }
 
-    private void setupInv(BlockMenuPreset  blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset  blockMenuPreset) {
         for (int i = 0; i < 13; i++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -124,21 +79,25 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
                 ChestMenuUtils.getEmptyClickHandler());
     }
 
-    @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { VoidHarvester.this.tick(b); }
 
-            public boolean isSynchronized() { return false; }
-        });
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        if (getProgress(b) == null) {
+            setProgress(b, 0);
+        }
     }
 
-    public void tick(Block b) {
+    @Override
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        }
 
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
-        if (inv == null) return;
+        return new int[0];
+    }
 
-
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
         int energy = type.getEnergy();
@@ -148,51 +107,54 @@ public class VoidHarvester extends SlimefunItem implements EnergyNetComponent, R
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             }
+            return;
 
-        } else {
+        }
 
-            int progress = Integer.parseInt(getProgress(b));
+        int progress = Integer.parseInt(getProgress(b));
 
-            int speed = type.getSpeed();
+        int speed = type.getSpeed();
 
-            if (progress >= TIME) { //reached full progress
+        if (progress >= TIME) { //reached full progress
 
-                ItemStack output = Items.VOID_BIT.clone();
+            ItemStack output = Items.VOID_BIT.clone();
 
-                if (inv.fits(output, OUTPUT_SLOTS)) {
+            if (inv.fits(output, OUTPUT_SLOTS)) {
 
-                    inv.pushItem(output, OUTPUT_SLOTS);
+                inv.pushItem(output, OUTPUT_SLOTS);
 
-                    setProgress(b, speed);
+                setProgress(b, speed);
 
-                    removeCharge(b.getLocation(), energy);
-
-                    if (playerWatching) { //done
-                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                                "&aHarvesting complete! - 100%",
-                                "&7(" + progress + "/" + TIME + ")"
-                        ));
-                    }
-
-                } else { //output slots full
-
-                    if (playerWatching) {
-                        inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
-                    }
-                }
-
-            } else { //increase progress
-
-                setProgress(b, progress+speed);
                 removeCharge(b.getLocation(), energy);
 
-                if (playerWatching) { //update status
+                if (playerWatching) { //done
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                            "&aHarvesting - " + progress * 100 / TIME + "%",
+                            "&aHarvesting complete! - 100%",
                             "&7(" + progress + "/" + TIME + ")"
                     ));
                 }
+
+            } else { //output slots full
+
+                if (playerWatching) {
+                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                }
             }
+            
+            return;
+        }
+        
+        
+        //increase progress
+
+        setProgress(b, progress+speed);
+        removeCharge(b.getLocation(), energy);
+
+        if (playerWatching) { //update status
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+                    "&aHarvesting - " + progress * 100 / TIME + "%",
+                    "&7(" + progress + "/" + TIME + ")"
+            ));
         }
     }
 

@@ -1,19 +1,17 @@
 package io.github.mooy1.infinityexpansion.implementation.items;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MathUtils;
+import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -21,7 +19,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,18 +31,15 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Generates items slowly using up strainers, must be waterlogged
  *
  * @author Mooy1
  */
-public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
+public class StrainerBase extends Machine implements RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
     public static final int ADVANCED_SPEED = 4;
@@ -84,43 +78,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
                 new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
         });
-
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.STRAINER_BASE.getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                }
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                }
-                String id = StackUtils.getIDFromItem(item);
-
-                if (id != null && id.endsWith("_STRAINER")) {
-                    return INPUT_SLOTS;
-                }
-
-                return new int[0];
-            }
-        };
-
+        
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -134,7 +92,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
         });
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : PresetUtils.slotChunk1) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -148,27 +106,32 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                StrainerBase.this.tick(b);
-            }
-
-            public boolean isSynchronized() {
-                return true;
-            }
-        });
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        }
+        return new int[0];
     }
 
-    public void tick(Block b) {
+    @Override
+    public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        }
+        String id = StackUtils.getIDFromItem(item);
 
-        Location l = b.getLocation();
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-        if (inv == null) return;
+        if (id != null && id.endsWith("_STRAINER")) {
+            return INPUT_SLOTS;
+        }
+
+        return new int[0];
+    }
+
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.hasViewer();
 
         //check water
-
         BlockData blockData = b.getBlockData();
         if (blockData instanceof Waterlogged) {
             Waterlogged waterlogged = (Waterlogged) blockData;
@@ -182,9 +145,7 @@ public class StrainerBase extends SlimefunItem implements RecipeDisplayItem {
                 return;
             }
 
-        } else {
-            return;
-        }
+        } else return;
 
         //check input
 

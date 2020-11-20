@@ -34,7 +34,12 @@ public final class Categories {
             "storage_transport"),
             new CustomItem(Material.ENDER_CHEST, "&6Storage and Transport"), 2
     );
-
+    
+    public static final Category MOB_SIMULATION = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
+            "mob_simulation"),
+            new CustomItem(Material.SPAWNER, "&bMob Simulation"), 2
+    );
+    
     public static final Category INFINITY_MATERIALS = new Category(new NamespacedKey(InfinityExpansion.getInstance(),
             "infinity_materials"),
             new CustomItem(Material.NETHERITE_BLOCK, "&bInfinity &aMaterials"), 3

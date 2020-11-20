@@ -17,10 +17,10 @@ public final class LoreUtils {
         return "&8\u21E8 &e\u26A1 &7" + format(Math.round(energy * SERVER_TICK_RATIO)) + " J/s";
     }
     public static String energyBuffer(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + format(energy) + " Buffer";
+        return "&8\u21E8 &e\u26A1 &7" + format(energy) + " J Buffer";
     }
 
-    public static String energyPer(int energy) {
+    public static String energy(int energy) {
         return "&8\u21E8 &e\u26A1 &7" + format(energy) + " J ";
     }
 

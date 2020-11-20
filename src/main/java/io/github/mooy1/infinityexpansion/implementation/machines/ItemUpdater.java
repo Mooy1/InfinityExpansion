@@ -1,39 +1,33 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.LoreStorage;
+import io.github.mooy1.infinityexpansion.implementation.items.VeinMinerRune;
+import io.github.mooy1.infinityexpansion.implementation.template.LoreStorage;
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
+import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * A machine that makes a new slimefun item from the inputted item's id
@@ -41,7 +35,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
+public class ItemUpdater extends Machine implements EnergyNetComponent {
 
     public static final int ENERGY = 200;
 
@@ -61,42 +55,6 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
         });
 
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.ITEM_UPDATER.getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-        };
-
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -110,7 +68,7 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
         });
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : PresetUtils.slotChunk3) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -125,22 +83,18 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                ItemUpdater.this.tick(b);
-            }
-
-            public boolean isSynchronized() {
-                return false;
-            }
-        });
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.INSERT) {
+            return INPUT_SLOTS;
+        } else if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        } else {
+            return new int[0];
+        }
     }
-
-    public void tick(Block b) {
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
-        if (inv == null) return;
-
+    
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.hasViewer();
 
         ItemStack input = inv.getItemInSlot(INPUT_SLOT);
@@ -151,18 +105,16 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             }
             return;
-
         }
-        
+
         if (input == null) { //check input
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.inputAnItem);
             }
             return;
-
         }
-        
+
         ItemStack output = null;
         int inputAmount = input.getAmount();
         if (SlimefunItem.getByItem(input) != null) {
@@ -187,13 +139,37 @@ public class ItemUpdater extends SlimefunItem implements EnergyNetComponent {
             return;
 
         }
-        
+
         if (!inv.fits(output, OUTPUT_SLOTS)) { //update
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
             }
             return;
+        }
+
+        //transfer durability
+        if (input.getItemMeta() instanceof Damageable) {
+            ItemMeta outputMeta = output.getItemMeta();
+            if (outputMeta == null) return;
+            Damageable outputDurability = (Damageable) outputMeta;
+
+            if (input.getItemMeta() instanceof Damageable) {
+                ItemMeta inputMeta = input.getItemMeta();
+                if (inputMeta == null) return;
+                Damageable inputDurability = (Damageable) inputMeta;
+
+                outputDurability.setDamage(inputDurability.getDamage());
+                output.setItemMeta(outputMeta);
+            }
+        }
+        
+        if (VeinMinerRune.isVeinMiner(input)) {
+            VeinMinerRune.setVeinMiner(output, true);
+        }
+        
+        if (SlimefunUtils.isSoulbound(input)) {
+            SlimefunUtils.setSoulbound(output, true);
         }
         
         StackUtils.removeEnchants(output);

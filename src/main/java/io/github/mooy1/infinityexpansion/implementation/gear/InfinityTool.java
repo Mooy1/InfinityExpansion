@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.gear;
 
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,9 +18,9 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class InfinityTools extends SlimefunItem {
+public class InfinityTool extends SlimefunItem implements Soulbound {
 
-    public InfinityTools(@Nonnull Type type) {
+    public InfinityTool(@Nonnull Type type) {
         super(Categories.INFINITY_CHEAT, type.getItem(), RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(type.getItem()));
     }
 

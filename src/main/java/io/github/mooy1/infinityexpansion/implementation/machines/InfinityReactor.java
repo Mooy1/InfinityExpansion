@@ -1,6 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
+import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
@@ -9,26 +13,17 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNet;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,7 +36,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, RecipeDisplayItem {
+public class InfinityReactor extends Machine implements EnergyNetProvider, RecipeDisplayItem {
 
     public static final int ENERGY = 200_000;
     public static final int STORAGE = 40_000_000;
@@ -56,50 +51,9 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
         super(Categories.INFINITY_CHEAT,
                 Items.INFINITY_REACTOR,
                 RecipeTypes.INFINITY_WORKBENCH,
-                InfinityRecipes.getRecipe(Items.INFINITY_REACTOR));
-
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.INFINITY_REACTOR.getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (getProgress(b) == null) {
-                    setProgress(b, 0);
-                }
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                }
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    if (Objects.equals(StackUtils.getIDFromItem(item), "VOID_INGOT")) {
-                        return new int[] {INPUT_SLOTS[1]};
-                    } else if (Objects.equals(StackUtils.getIDFromItem(item), "INFINITE_INGOT")) {
-                        return new int[] {INPUT_SLOTS[0]};
-                    }
-                }
-
-                return new int[0];
-            }
-        };
-
+                InfinityRecipes.getRecipe(Items.INFINITY_REACTOR)
+        );
+        
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -112,7 +66,7 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
         });
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : PresetUtils.slotChunk2) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -128,28 +82,37 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                InfinityReactor.this.tick(b);
-            }
-
-            public boolean isSynchronized() {
-                return true;
-            }
-        });
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        if (getProgress(b) == null) {
+            setProgress(b, 0);
+        }
     }
 
-    public void tick(Block b) {
-        Location l = b.getLocation();
+    @Override
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.INSERT) {
+            return INPUT_SLOTS;
+        }
+        return new int[0];
+    }
 
-        if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) {
-            @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-            if (inv == null) return;
-
-            if (!inv.toInventory().getViewers().isEmpty()) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.connectToEnergyNet);
+    @Override
+    public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
+        if (flow == ItemTransportFlow.INSERT) {
+            if (Objects.equals(StackUtils.getIDFromItem(item), "VOID_INGOT")) {
+                return new int[] {INPUT_SLOTS[1]};
+            } else if (Objects.equals(StackUtils.getIDFromItem(item), "INFINITE_INGOT")) {
+                return new int[] {INPUT_SLOTS[0]};
             }
+        }
+
+        return new int[0];
+    }
+
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+        if (inv.hasViewer() && !SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) {
+            inv.replaceExistingItem(STATUS_SLOT, PresetUtils.connectToEnergyNet);
         }
     }
 
@@ -261,33 +224,17 @@ public class InfinityReactor extends SlimefunItem implements EnergyNetProvider, 
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
-        final List<ItemStack> items = new ArrayList<>();
+        List<ItemStack> items = new ArrayList<>();
 
         ItemStack item = Items.INFINITE_INGOT.clone();
-        ItemMeta meta = item.getItemMeta();
-        assert meta != null;
-        List<String> lore = meta.getLore();
-        assert lore != null;
-        lore.add("");
-        lore.add(ChatColor.GREEN + "Lasts for 1 day");
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-
+        StackUtils.addLore(item, "", "Lasts for 1 day");
         items.add(item);
-
         items.add(null);
 
         item = Items.VOID_INGOT.clone();
-        meta = item.getItemMeta();
-        assert meta != null;
-        lore = meta.getLore();
-        assert lore != null;
-        lore.add("");
-        lore.add(ChatColor.GREEN + "Lasts for 3 hours");
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-
+        StackUtils.addLore(item, "", "Lasts for 3 hours");
         items.add(item);
+        items.add(null);
 
         return items;
     }

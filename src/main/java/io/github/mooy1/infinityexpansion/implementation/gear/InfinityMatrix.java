@@ -1,14 +1,15 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.implementation.LoreStorage;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
-import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.template.LoreStorage;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
+import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
+import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +23,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
-public class InfinityMatrix extends SlimefunItem implements Listener, LoreStorage {
+public class InfinityMatrix extends SlimefunItem implements Listener, LoreStorage, Soulbound {
 
     public InfinityMatrix(InfinityExpansion plugin) {
         super(Categories.INFINITY_CHEAT, Items.INFINITY_MATRIX, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_MATRIX));

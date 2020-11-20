@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MathUtils;
@@ -9,28 +10,21 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -44,7 +38,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem, EnergyNetComponent {
+public class ConversionMachine extends Machine implements RecipeDisplayItem, EnergyNetComponent {
 
     public static final int TIME = 4;
     public static final int FREEZER_SPEED = 2;
@@ -64,49 +58,6 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
-        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (getProgress(b) == null) {
-                    setProgress(b, 0);
-                }
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-        };
-
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -122,7 +73,7 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
         });
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : PresetUtils.slotChunk1) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -136,23 +87,25 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                ConversionMachine.this.tick(b);
-            }
-
-            public boolean isSynchronized() {
-                return false;
-            }
-        });
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        if (getProgress(b) == null) {
+            setProgress(b, 0);
+        }
     }
 
-    public void tick(Block b) {
-        Location l = b.getLocation();
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-        if (inv == null) return;
+    @Override
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.INSERT) {
+            return INPUT_SLOTS;
+        } else if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        } else {
+            return new int[0];
+        }
+    }
 
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         int energy = type.getEnergy();
         int charge = getCharge(l);
         boolean playerWatching = inv.hasViewer();
@@ -329,10 +282,12 @@ public class ConversionMachine extends SlimefunItem implements RecipeDisplayItem
 
     private static final ItemStack[] FREEZER_INPUT = {
             new ItemStack(Material.ICE),
+            new ItemStack(Material.MAGMA_BLOCK)
     };
 
     private static final ItemStack[] FREEZER_OUTPUT = {
-            SlimefunItems.REACTOR_COOLANT_CELL
+            SlimefunItems.REACTOR_COOLANT_CELL,
+            SlimefunItems.NETHER_ICE_COOLANT_CELL
     };
 
     private static final ItemStack[] DUST_INPUT = {

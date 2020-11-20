@@ -2,13 +2,18 @@ package io.github.mooy1.infinityexpansion.lists;
 
 import com.google.common.collect.HashBiMap;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -18,14 +23,13 @@ import java.util.logging.Level;
  * @author Mooy1
  * 
  * Items and recipes can be added by:
- * 
  * - adding the item and recipe to map
  * - setting the Category of the Item to Categories.INFINITY_CHEAT
  * - setting the RecipeType to RecipeTypes.INFINITY_WORKBENCH
  * - setting the Recipe to InfinityRecipes.getRecipe(item)
  */
 public class InfinityRecipes {
-    
+
     private static final ItemStack m_circuit = Items.MACHINE_CIRCUIT;
     private static final ItemStack m_plate = Items.MACHINE_PLATE;
     private static final ItemStack m_core = Items.MACHINE_CORE;
@@ -56,23 +60,84 @@ public class InfinityRecipes {
     public static HashBiMap<ItemStack, ItemStack[]> RECIPES = HashBiMap.create();
     public static final HashBiMap<Integer, ItemStack> IDS = HashBiMap.create();
 
+    /**
+     * This method gets the enabled infinity items and
+     * adds them and their recipe to the machine
+     */
+    public static void setup(@Nonnull InfinityExpansion instance) {
+        instance.getLogger().log(Level.INFO, "Loading Infinity Recipes...");
+
+        HashBiMap<ItemStack, ItemStack[]> enabled = HashBiMap.create();
+        List<ItemStack> disabled = new ArrayList<>();
+
+        //check for disabled items
+        for (ItemStack output : RECIPES.keySet()) {
+            SlimefunItem slimefunItem = SlimefunItem.getByItem(output);
+
+            if (!Objects.requireNonNull(slimefunItem).isDisabled()) {
+                enabled.put(output, RECIPES.get(output));
+            } else {
+                disabled.add(output);
+            }
+        }
+
+        //check for disabled items in recipes
+        Iterator<ItemStack> enabledIterator = enabled.keySet().iterator();
+        while (enabledIterator.hasNext()) {
+            ItemStack output = enabledIterator.next();
+
+            for (ItemStack disable : disabled) {
+                if (ArrayUtils.contains(enabled.get(output), disable)) {
+                    disabled.add(output);
+                    enabledIterator.remove();
+                    break;
+                }
+            }
+        }
+
+        //log
+        for (ItemStack dis : disabled) {
+            instance.getLogger().log(Level.INFO, ChatColor.RED + "Infinity Item " + StackUtils.getIDFromItem(dis) + " disabled!");
+        }
+
+        //ids
+        int i = 0;
+        for (ItemStack output : enabled.keySet()) {
+            IDS.put(i, output);
+            i++;
+        }
+
+        RECIPES = enabled;
+    }
+
+    @Nonnull
+    public static ItemStack[] getRecipe(@Nonnull ItemStack item) {
+        ItemStack[] recipe = RECIPES.get(item);
+
+        if (recipe == null) {
+            recipe = new ItemStack[36];
+        }
+
+        return recipe;
+    }
+
     static {
         RECIPES.put(Items.INFINITE_MACHINE_CORE, new ItemStack[]{
-                        infinite, infinite, infinite, infinite, infinite, infinite,
-                        infinite, voidIng, voidIng, voidIng, voidIng, infinite,
-                        infinite, voidIng, m_circuit, m_circuit, voidIng, infinite,
-                        infinite, voidIng, m_circuit, m_circuit, voidIng, infinite,
-                        infinite, voidIng, voidIng, voidIng, voidIng, infinite,
-                        infinite, infinite, infinite, infinite, infinite, infinite
-                }
-        );
-        RECIPES.put(Items.INFINITE_MACHINE_CIRCUIT, new ItemStack[]{
                         m_plate, infinite, infinite, infinite, infinite, m_plate,
                         infinite, m_plate, m_circuit, m_circuit, m_plate, infinite,
                         infinite, m_circuit, m_core, m_core, m_circuit, infinite,
                         infinite, m_circuit, m_core, m_core, m_circuit, infinite,
                         infinite, m_plate, m_circuit, m_circuit, m_plate, infinite,
                         m_plate, infinite, infinite, infinite, infinite, m_plate
+                }
+        );
+        RECIPES.put(Items.INFINITE_MACHINE_CIRCUIT, new ItemStack[]{
+                        infinite, infinite, infinite, infinite, infinite, infinite,
+                        infinite, voidIng, voidIng, voidIng, voidIng, infinite,
+                        infinite, voidIng, m_circuit, m_circuit, voidIng, infinite,
+                        infinite, voidIng, m_circuit, m_circuit, voidIng, infinite,
+                        infinite, voidIng, voidIng, voidIng, voidIng, infinite,
+                        infinite, infinite, infinite, infinite, infinite, infinite
                 }
         );
         RECIPES.put(Items.INFINITE_PANEL, new ItemStack[]{
@@ -282,40 +347,5 @@ public class InfinityRecipes {
                         null, infinite, voidIng, voidIng, infinite, null
                 }
         );
-    }
-    
-    /**
-     * This method gets the enabled infinity items and
-     * adds them and their recipe to the machine
-     */
-    public static void setup(@Nonnull InfinityExpansion instance) {
-        
-        HashBiMap<ItemStack, ItemStack[]> enabled = HashBiMap.create();
-        
-        int i = 0;
-        for (ItemStack output : RECIPES.keySet()) {
-            SlimefunItem slimefunItem = SlimefunItem.getByItem(output);
-
-            if (!Objects.requireNonNull(slimefunItem).isDisabled()) {
-                enabled.put(output, RECIPES.get(output));
-                IDS.put(i, output);
-                i++;
-            } else {
-                instance.getLogger().log(Level.INFO, ChatColor.RED + "Infinity Item " + slimefunItem.getId() + " disabled!");
-            }
-        }
-        
-        RECIPES = enabled;
-    }
-    
-    @Nonnull
-    public static ItemStack[] getRecipe(@Nonnull ItemStack item) {
-        ItemStack[] recipe = RECIPES.get(item);
-        
-        if (recipe == null) {
-            recipe = new ItemStack[36];
-        }
-        
-        return recipe;
     }
 }

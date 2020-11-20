@@ -1,34 +1,30 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
-import io.github.mooy1.infinityexpansion.implementation.LoreStorage;
+import io.github.mooy1.infinityexpansion.implementation.template.LoreStorage;
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.LoreUtils;
+import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,7 +35,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,7 +49,7 @@ import java.util.Objects;
  * and code to learn from
  *
  */
-public class StorageUnit extends SlimefunItem implements LoreStorage {
+public class StorageUnit extends Machine implements LoreStorage {
 
     public static final int BASIC = 6400;
     public static final int ADVANCED = 25600;
@@ -79,42 +74,6 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
     public StorageUnit(@Nonnull Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
-
-        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-        };
 
         addItemHandler(new BlockPlaceHandler(false) { //transfer stuffs
             @Override
@@ -172,23 +131,9 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
 
                 stored = getStored(b);
 
-                ItemMeta meta = drop.getItemMeta();
-                if (meta != null) {
-                    List<String> lore = meta.getLore();
-                    if (lore != null) {
+                StackUtils.addLore(drop, "", ChatColor.AQUA + "Stored Item:", ChatColor.GREEN + storedItem, ChatColor.AQUA + "Amount:", ChatColor.GREEN + String.valueOf(stored));
 
-                        lore.add("");
-                        lore.add(ChatColor.AQUA + "Stored Item:");
-                        lore.add(ChatColor.GREEN + storedItem);
-                        lore.add(ChatColor.AQUA + "Amount:");
-                        lore.add(ChatColor.GREEN + String.valueOf(stored));
-
-                        meta.setLore(lore);
-                        drop.setItemMeta(meta);
-                        
-                        MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to dropped item");
-                    }
-                }
+                MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to dropped item");
 
             } else {
                 inv.dropItems(l, INPUT_SLOTS);
@@ -249,7 +194,7 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
         inv.dropItems(l, slots);
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : STATUS_BORDER) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -264,24 +209,23 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { StorageUnit.this.tick(b); }
-
-            public boolean isSynchronized() { return false; }
-        });
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.INSERT) {
+            return INPUT_SLOTS;
+        } else if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        } else {
+            return new int[0];
+        }
     }
 
-    protected void tick(@Nonnull Block b) {
-
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
-        if (inv == null) return;
-        
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         if (inv.hasViewer()) updateStatus(b);
-        
+
         int maxStorage = type.getMax();
         String storedItem = getStoredItem(b);
-        
+
         //input
         ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
@@ -351,19 +295,19 @@ public class StorageUnit extends SlimefunItem implements LoreStorage {
         } else {
             maxOutput = storedItemStack.getMaxStackSize();
         }
-        
+
         StackUtils.removeEnchants(storedItemStack);
 
         if (stored > 1) {
 
             int amount = Math.min(maxOutput, stored - 1);
             storedItemStack.setAmount(amount);
-            
+
             if (inv.fits(storedItemStack, OUTPUT_SLOT)) {
                 inv.pushItem(storedItemStack, OUTPUT_SLOTS);
                 setStored(b, stored - amount);
             }
-            
+
         } else if (stored == 1 && inv.getItemInSlot(OUTPUT_SLOT) == null) {
             inv.pushItem(storedItemStack, OUTPUT_SLOTS);
             setStoredItem(b, null);

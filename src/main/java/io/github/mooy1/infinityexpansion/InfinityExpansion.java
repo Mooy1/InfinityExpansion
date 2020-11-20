@@ -2,14 +2,15 @@ package io.github.mooy1.infinityexpansion;
 
 import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
+import io.github.mooy1.infinityexpansion.setup.ItemSetup;
+import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
-import io.github.mooy1.infinityexpansion.setup.ItemSetup;
-import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
+import org.apache.commons.lang.Validate;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -67,7 +68,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         
         //progress ticker
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            if (progressTick < 12) {
+            if (progressTick < 60) {
                 progressTick ++;
             } else {
                 progressTick = 1;
@@ -138,16 +139,46 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
             OutputDuct.MAX_SLOTS = configMax;
         }
     }
-    
-    public static boolean progressEvery(int i) {
-        return progressOn(i, 0);
+
+    /**
+     * @param rate ticks per progress
+     * @return whether the block should progress
+     */
+    public static boolean progressEvery(int rate) {
+        return progressOn(rate, 0);
     }
     
-    public static boolean progressOn(int i, int pos) {
-        return progressTick % i == pos;
+    /**
+     * @param rate ticks per progress
+     * @param pos offset from from other progress at same rate
+     * @return whether the block should progress
+     */
+    public static boolean progressOn(int rate, int pos) {
+        return progressTick % rate == pos;
     }
     
     public static int currentTick() {
         return progressTick;
+    }
+    
+    public static void runSync(@Nonnull Runnable runnable, long delay) {
+        Validate.notNull(runnable, "Cannot run null");
+        Validate.isTrue(delay >= 0, "The delay cannot be negative");
+        
+        if (instance == null || !instance.isEnabled()) {
+            return;
+        }
+
+        instance.getServer().getScheduler().runTaskLater(instance, runnable, delay);
+    }
+
+    public static void runSync(@Nonnull Runnable runnable) {
+        Validate.notNull(runnable, "Cannot run null");
+
+        if (instance == null || !instance.isEnabled()) {
+            return;
+        }
+
+        instance.getServer().getScheduler().runTask(instance, runnable);
     }
 }

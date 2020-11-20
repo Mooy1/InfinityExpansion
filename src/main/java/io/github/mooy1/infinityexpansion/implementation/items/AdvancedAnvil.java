@@ -2,26 +2,21 @@ package io.github.mooy1.infinityexpansion.implementation.items;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,14 +31,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Combines slimefun items, exceeds vanilla anvil limits, ded
  *
  * @author Mooy1
  */
-public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
+public class AdvancedAnvil extends Machine implements EnergyNetComponent {
 
     public static final int ENERGY = 100_000;
     
@@ -79,38 +73,6 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         });
 
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.ADVANCED_ANVIL.getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                menu.addMenuClickHandler(STATUS_SLOT, (player, i, itemStack, clickAction) -> {
-                    craft(menu, b.getLocation(), player);
-                    return false;
-                });
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                return new int[0];
-            }
-        };
-
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -124,7 +86,7 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
         });
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : PresetUtils.slotChunk3) {
             blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -148,25 +110,20 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            @Override
-            public void tick(Block b, SlimefunItem item, Config data) {
-                AdvancedAnvil.this.tick(b);
-            }
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        return new int[0];
+    }
 
-            public boolean isSynchronized() {
-                return false;
-            }
-            
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        menu.addMenuClickHandler(STATUS_SLOT, (player, i, itemStack, clickAction) -> {
+            craft(menu, b.getLocation(), player);
+            return false;
         });
     }
 
-    public void tick(Block b) {
-        Location l = b.getLocation();
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-        if (inv == null || !inv.hasViewer()) return;
-
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         if (getCharge(l) < ENERGY) { //not enough energy
             inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             return;
@@ -210,7 +167,7 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
             MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "No upgrades!");
             return;
         }
-        
+
         if (!inv.fits(output, OUTPUT_SLOTS)) {
             MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
         }
@@ -219,7 +176,7 @@ public class AdvancedAnvil extends SlimefunItem implements EnergyNetComponent {
         inv.consumeItem(INPUT_SLOT1, 1);
         inv.consumeItem(INPUT_SLOT2, 1);
         inv.pushItem(output, OUTPUT_SLOTS);
-        tick(l.getBlock()); //update stuff
+        tick(l.getBlock(), l , inv); //update stuff
     }
 
     @Nullable

@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation;
+package io.github.mooy1.infinityexpansion.implementation.template;
 
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import org.bukkit.inventory.ItemStack;

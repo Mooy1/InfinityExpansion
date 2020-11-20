@@ -1,43 +1,38 @@
 package io.github.mooy1.infinityexpansion.implementation.transport;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.LocationUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
-import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
+import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.mooy1.infinityexpansion.utils.TransferUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
+import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Connects to a machine or inventory and pushes in
@@ -46,7 +41,7 @@ import java.util.Objects;
  * @author Mooy1
  *
  */
-public class OutputDuct extends SlimefunItem {
+public class OutputDuct extends Machine {
 
     private static final int[] WHITELIST_SLOTS = {
             10, 11, 12
@@ -77,46 +72,6 @@ public class OutputDuct extends SlimefunItem {
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.ITEM_DUCT, new ItemStack(Material.HOPPER), Items.ITEM_DUCT
         }, new CustomItem(Items.OUTPUT_DUCT, 2));
-
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.OUTPUT_DUCT.getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "false");
-
-                menu.addMenuClickHandler(BLACKLIST_TOGGLE, (player, i, itemStack, clickAction) -> {
-                    if (isBlacklisted(b)) {
-                        menu.replaceExistingItem(BLACKLIST_TOGGLE, BLACKLIST_OFF);
-                        BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "false");
-                    } else {
-                        menu.replaceExistingItem(BLACKLIST_TOGGLE, BLACKLIST_ON);
-                        BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "true");
-                    }
-                    return false;
-                });
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                return new int[0];
-            }
-        };
 
         addItemHandler(new BlockPlaceHandler(false) {
             @Override
@@ -152,15 +107,11 @@ public class OutputDuct extends SlimefunItem {
                         item = new ItemStack(targetBlock.getType());
                     }
 
-                    List<String> lore = new ArrayList<>();
-
-                    lore.add("");
-                    lore.add(ChatColor.GREEN + "Location: ");
-                    lore.add(ChatColor.GREEN + "X " + targetLocation.getX());
-                    lore.add(ChatColor.GREEN + "Y " + targetLocation.getY());
-                    lore.add(ChatColor.GREEN + "Z " + targetLocation.getZ());
-
-                    StackUtils.addLore(item, lore);
+                    StackUtils.addLore(item, "", ChatColor.GREEN + "Location: ",
+                            ChatColor.GREEN + "X " + targetLocation.getX(),
+                            ChatColor.GREEN + "Y " + targetLocation.getY(),
+                            ChatColor.GREEN + "Z " + targetLocation.getZ()
+                    );
 
                     BlockStorage.getInventory(here).replaceExistingItem(STATUS_SLOT, item);
 
@@ -177,18 +128,33 @@ public class OutputDuct extends SlimefunItem {
         });
     }
 
-    private static boolean isBlacklisted(Block b) {
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "false");
+
+        menu.addMenuClickHandler(BLACKLIST_TOGGLE, (player, i, itemStack, clickAction) -> {
+            if (isBlacklisted(b)) {
+                menu.replaceExistingItem(BLACKLIST_TOGGLE, BLACKLIST_OFF);
+                BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "false");
+            } else {
+                menu.replaceExistingItem(BLACKLIST_TOGGLE, BLACKLIST_ON);
+                BlockStorage.addBlockInfo(b.getLocation(), "blacklist", "true");
+            }
+            return false;
+        });
+    }
+
+    private boolean isBlacklisted(Block b) {
         return BlockStorage.getLocationInfo(b.getLocation(), "blacklist").equals("true");
     }
 
-    private static void onDrop(BlockMenu inv, Block b) {
+    private void onDrop(BlockMenu inv, Block b) {
         if (inv != null) {
             inv.dropItems(b.getLocation(), WHITELIST_SLOTS);
         }
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
-
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : BORDER) {
             blockMenuPreset.addItem(i, new CustomItem(Material.WHITE_STAINED_GLASS_PANE, "&fWhitelist"),
                     ChestMenuUtils.getEmptyClickHandler());
@@ -204,22 +170,12 @@ public class OutputDuct extends SlimefunItem {
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                OutputDuct.this.tick(b);
-            }
-
-            public boolean isSynchronized() {
-                return true;
-            }
-        });
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        return new int[0];
     }
 
-    public void tick(Block thisBlock) {
-        BlockMenu thisMenu = BlockStorage.getInventory(thisBlock);
-        if (thisMenu == null) return;
-
+    @Override
+    public void tick(@Nonnull Block thisBlock, @Nonnull Location l, @Nonnull BlockMenu thisMenu) {
         Location thisLocation = thisBlock.getLocation();
 
         String relative = BlockStorage.getLocationInfo(thisLocation, "connected");
@@ -306,7 +262,9 @@ public class OutputDuct extends SlimefunItem {
                 String whiteListID = StackUtils.getIDFromItem(whiteListItem);
 
                 if (whiteListID != null) {
-                    output(whiteListID, menuList, invList, targetMachine, targetInventory);
+                    if (output(whiteListID, menuList, invList, targetMachine, targetInventory)) {
+                        break;
+                    }
                 }
             }
         }
@@ -320,11 +278,11 @@ public class OutputDuct extends SlimefunItem {
      * @param invList list of invs to extract from
      * @param targetMachine target machine menu if present
      * @param targetInventory target inventory menu if present
+     *                        
+     * @return whether it was successful       
      */
     @ParametersAreNullableByDefault
-    private void output(String whiteListID, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList, BlockMenu targetMachine, Inventory targetInventory) {
-        List<String> stuckIDs = new ArrayList<>();
-
+    private boolean output(@Nullable String whiteListID, @Nonnull List<BlockMenu> menuList, @Nonnull List<Inventory> invList, @Nullable BlockMenu targetMachine, @Nullable Inventory targetInventory) {
         //sf extractions
         for (BlockMenu extractionMenu : menuList) {
             int[] extractionSlots;
@@ -341,7 +299,7 @@ public class OutputDuct extends SlimefunItem {
                     ItemStack outputItem = extractionMenu.getItemInSlot(slot);
                     String outputID = StackUtils.getIDFromItem(outputItem);
 
-                    if (outputItem != null && !stuckIDs.contains(outputID) && (whiteListID == null || (outputID != null && outputID.equals(whiteListID)))) {
+                    if (outputItem != null && (whiteListID == null || (outputID != null && outputID.equals(whiteListID)))) {
 
                         if (targetMachine != null) { //sf insertion
 
@@ -357,7 +315,7 @@ public class OutputDuct extends SlimefunItem {
                                 }
 
                             } else {
-                                stuckIDs.add(outputID);
+                                return false;
                             }
 
                         } else if (targetInventory != null) { //vanilla insertion
@@ -369,7 +327,7 @@ public class OutputDuct extends SlimefunItem {
                             } else if (outputItem.getAmount() - remainingItems.getAmount() > 0) {
                                 extractionMenu.consumeItem(slot, outputItem.getAmount() - remainingItems.getAmount());
                             } else {
-                                stuckIDs.add(outputID);
+                                return false;
                             }
                         }
 
@@ -401,7 +359,7 @@ public class OutputDuct extends SlimefunItem {
                     ItemStack outputItem = slotItem.clone();
                     String outputID = StackUtils.getIDFromItem(outputItem);
 
-                    if (!stuckIDs.contains(outputID) && (whiteListID == null || (outputID != null && outputID.equals(whiteListID)))) {
+                    if (whiteListID == null || (outputID != null && outputID.equals(whiteListID))) {
 
                         if (targetMachine != null) { //sf insertion
 
@@ -416,7 +374,7 @@ public class OutputDuct extends SlimefunItem {
                                 }
 
                             } else {
-                                stuckIDs.add(outputID);
+                                return false;
                             }
 
                         } else if (targetInventory != null) { //vanilla insertion
@@ -428,7 +386,7 @@ public class OutputDuct extends SlimefunItem {
                             } else if (slotItem.getAmount() - remainingItems.getAmount() > 0) {
                                 slotItem.setAmount(remainingItems.getAmount());
                             } else {
-                                stuckIDs.add(outputID);
+                                return false;
                             }
                         }
 
@@ -440,6 +398,8 @@ public class OutputDuct extends SlimefunItem {
                 if (count >= MAX_SLOTS) break;
             }
         }
+        
+        return true;
     }
 
     /**
@@ -477,7 +437,7 @@ public class OutputDuct extends SlimefunItem {
 
                 length.increment();
 
-                for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
+                for (Location location : LocationUtils.getAdjacentLocations(thisLocation, true)) {
 
                     if (location != prev && !checkedLocations.contains(location)) {
 
@@ -514,7 +474,7 @@ public class OutputDuct extends SlimefunItem {
      *
      * @param b block to break
      */
-    private static void breakBlock(@Nonnull Block b) {
+    private void breakBlock(@Nonnull Block b) {
         SlimefunItem sfItem = BlockStorage.check(b);
 
         List<ItemStack> drops = new ArrayList<>();

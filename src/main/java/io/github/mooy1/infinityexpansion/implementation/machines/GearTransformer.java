@@ -1,43 +1,36 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
+import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 /**
  * Machine that changes the material of gear and tools
  *
  * @author Mooy1
  */
-public class GearTransformer extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
+public class GearTransformer extends Machine implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 12000;
 
@@ -66,42 +59,6 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE
         });
 
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.GEAR_TRANSFORMER.getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return INPUT_SLOTS;
-                } else if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                } else {
-                    return new int[0];
-                }
-            }
-        };
-
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -114,49 +71,9 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         });
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
-        for (int i : BACKGROUND) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Tool Input"), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : PresetUtils.slotChunk3) {
-            blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Material Input"), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
-                ChestMenuUtils.getEmptyClickHandler());
-    }
-
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                GearTransformer.this.tick(b);
-            }
-
-            public boolean isSynchronized() {
-                return false;
-            }
-        });
-    }
-
-    public void tick(Block b) {
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(b.getLocation());
-        if (inv == null) return;
-
-        if (!inv.hasViewer()) {
-            return;
-        }
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+        if (!inv.hasViewer()) return;
 
         if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
 
@@ -200,7 +117,7 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
 
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input materials"));
             return;
-            
+
         }
 
         Material outputMaterial = getOutput(inputMaterial, inputToolType);
@@ -210,15 +127,15 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
             return;
 
-        } 
-        
+        }
+
         if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null) { //valid material, not enough room
 
             inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
             return;
 
-        } 
-        
+        }
+
         //output
         removeCharge(b.getLocation(), ENERGY);
 
@@ -233,6 +150,40 @@ public class GearTransformer extends SlimefunItem implements EnergyNetComponent,
         inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
     }
 
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+        for (int i : BACKGROUND) {
+            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk1) {
+            blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Tool Input"), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk3) {
+            blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Material Input"), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : OUTPUT_BORDER) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk2) {
+            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : PresetUtils.slotChunk2) {
+            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
+                ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Override
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.INSERT) {
+            return INPUT_SLOTS;
+        } else if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        } else {
+            return new int[0];
+        }
+    }
+    
     /**
      * This method gets the output from the input material and input tool
      * 

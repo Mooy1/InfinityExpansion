@@ -1,30 +1,25 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -32,17 +27,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Machines that generate materials at the cost of energy
  *
  * @author Mooy1
  */
-public class MaterialGenerator extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
+public class MaterialGenerator extends Machine implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int COBBLE_ENERGY = 24;
     public static final int COBBLE2_ENERGY = 120;
@@ -63,38 +56,6 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
-        new BlockMenuPreset(getId(), Objects.requireNonNull(type.getItem().getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                }
-                
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                }
-                
-                return new int[0];
-            }
-        };
-
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -106,7 +67,7 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
         });
     }
 
-    private void setupInv(BlockMenuPreset  blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset  blockMenuPreset) {
         for (int i = 0; i < 13; i++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -119,19 +80,16 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { MaterialGenerator.this.tick(b); }
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        }
 
-            public boolean isSynchronized() { return true; }
-        });
+        return new int[0];
     }
-
-    public void tick(Block b) {
-        Location l = b.getLocation();
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-        if (inv == null) return;
-
+    
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
         int energy = type.getEnergy();
@@ -153,7 +111,7 @@ public class MaterialGenerator extends SlimefunItem implements EnergyNetComponen
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
             }
             return;
-                
+
         }
 
         inv.pushItem(output, OUTPUT_SLOTS);

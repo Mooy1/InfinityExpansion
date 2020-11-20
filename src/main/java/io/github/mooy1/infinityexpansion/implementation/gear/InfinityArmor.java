@@ -3,6 +3,7 @@ package io.github.mooy1.infinityexpansion.implementation.gear;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.thebusybiscuit.slimefun4.core.attributes.ProtectionType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.ProtectiveArmor;
+import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import io.github.thebusybiscuit.slimefun4.implementation.items.armor.SlimefunArmorPiece;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ import javax.annotation.Nullable;
  *
  * @author Mooy1
  */
-public class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor { //add sf bow too
+public class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor, Soulbound { //add sf bow too
 
     public InfinityArmor(@Nonnull Type type) {
         super(Categories.INFINITY_CHEAT , type.getItem(), RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(type.getItem()), type.getPotionEffect());

@@ -16,10 +16,8 @@ import java.util.Map;
  * @author Mooy1
  */
 public class MessageUtils {
-
-    private MessageUtils() {}
+    
     private static final Map<Player, Long> coolDowns = new HashMap<>();
-
     public static final String NAME = ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion";
     public static final String PREFIX = (ChatColor.DARK_GRAY + "[" + NAME + ChatColor.DARK_GRAY + "]" + ChatColor.WHITE + " ");
 
@@ -45,8 +43,7 @@ public class MessageUtils {
     }
 
     public static void messagePlayersInInv(@Nonnull BlockMenu inv, @Nonnull String message) {
-        if (!inv.toInventory().getViewers().isEmpty()) {
-
+        if (inv.hasViewer()) {
             HumanEntity[] viewers = inv.toInventory().getViewers().toArray(new HumanEntity[0]);
             Player[] players = new Player[viewers.length];
 

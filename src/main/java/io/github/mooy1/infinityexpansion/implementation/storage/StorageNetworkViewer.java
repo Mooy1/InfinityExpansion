@@ -1,33 +1,26 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.lists.Categories;
+import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.utils.LocationUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.utils.LocationUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.apache.commons.lang.mutable.MutableBoolean;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +31,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class StorageNetworkViewer extends SlimefunItem {
+public class StorageNetworkViewer extends Machine {
 
     public static final int RANGE = 32;
     public static final int MAX = 18;
@@ -75,38 +68,9 @@ public class StorageNetworkViewer extends SlimefunItem {
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
                 Items.STORAGE_DUCT, Items.MACHINE_CIRCUIT, Items.STORAGE_DUCT,
         });
-
-        new BlockMenuPreset(getId(), Objects.requireNonNull(Items.STORAGE_NETWORK_VIEWER.getDisplayName())) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow itemTransportFlow) {
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                return new int[0];
-            }
-        };
     }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i = 0 ; i < 9 ; i ++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -120,26 +84,13 @@ public class StorageNetworkViewer extends SlimefunItem {
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                StorageNetworkViewer.this.tick(b);
-            }
-
-            public boolean isSynchronized() {
-                return true;
-            }
-        });
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        return new int[0];
     }
 
-    public void tick(Block b) {
-        Location l = b.getLocation();
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-        if (inv == null) return;
-
-        if (!inv.hasViewer()) {
-            return;
-        }
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+        if (!inv.hasViewer()) return;
 
         List<Location> foundLocations = new ArrayList<>();
         List<String> foundIDs = new ArrayList<>();
@@ -228,7 +179,7 @@ public class StorageNetworkViewer extends SlimefunItem {
                     }
                 }
 
-                for (Location location : LocationUtils.getAdjacentLocations(thisLocation)) {
+                for (Location location : LocationUtils.getAdjacentLocations(thisLocation, false)) {
 
                     if (location != prev && !checkedLocations.contains(location)) {
 

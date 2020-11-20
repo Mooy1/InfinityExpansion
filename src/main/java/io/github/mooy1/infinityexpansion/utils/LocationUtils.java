@@ -4,6 +4,9 @@ import org.bukkit.Location;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Collection of locations utils
@@ -21,16 +24,20 @@ public class LocationUtils {
      * @return adjacent locations
      */
     @Nonnull
-    public static Location[] getAdjacentLocations(@Nonnull Location l) {
-        Location[] locations = new Location[6];
-        locations[0] = l.clone().add(1, 0, 0);
-        locations[1] = l.clone().add(-1, 0, 0);
-        locations[2] = l.clone().add(0, 1, 0);
-        locations[3] = l.clone().add(0, -1, 0);
-        locations[4] = l.clone().add(0, 0, 1);
-        locations[5] = l.clone().add(0, 0, -1);
+    public static Location[] getAdjacentLocations(@Nonnull Location l, boolean random) {
+        List<Location> locations = new ArrayList<>(6);
+        locations.add(l.clone().add(1, 0, 0));
+        locations.add(l.clone().add(-1, 0, 0));
+        locations.add(l.clone().add(0, 1, 0));
+        locations.add(l.clone().add(0, -1, 0));
+        locations.add(l.clone().add(0, 0, 1));
+        locations.add(l.clone().add(0, 0, -1));
+        
+        if (random) {
+            Collections.shuffle(locations);
+        }
 
-        return locations;
+        return locations.toArray(new Location[6]);
     }
 
     /**

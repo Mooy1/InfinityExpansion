@@ -19,5 +19,6 @@ public class RecipeTypes {
 
     public static final RecipeType STORAGE_FORGE = new RecipeType(new NamespacedKey(InfinityExpansion.getInstance(), "storage_forge"), Items.STORAGE_FORGE);
 
-    private RecipeTypes() {}
+    public static final RecipeType DATA_INFUSER = new RecipeType(new NamespacedKey(InfinityExpansion.getInstance(), "data_infuser"), Items.DATA_INFUSER);
+    
 }

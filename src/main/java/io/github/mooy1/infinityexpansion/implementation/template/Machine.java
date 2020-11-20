@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.machines;
+package io.github.mooy1.infinityexpansion.implementation.template;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
  * 
  */
 public abstract class Machine extends SlimefunItem {
+    
     public Machine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
         start();
@@ -37,7 +38,7 @@ public abstract class Machine extends SlimefunItem {
         start();
     }
     
-    private void start() {
+    protected void start() {
         new BlockMenuPreset(getId(), getItemName()) {
             @Override
             public void init() {
@@ -76,22 +77,24 @@ public abstract class Machine extends SlimefunItem {
             }
 
             public boolean isSynchronized() {
-                return false;
+                return true;
             }
         });
     }
 
-    public abstract void tick(Block b, Location l, BlockMenu inv);
+    public abstract void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv);
     
-    public void onNewInstance(BlockMenu menu, Block b) {}
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull  Block b) {}
     
-    public abstract void setupInv(BlockMenuPreset preset);
+    public abstract void setupInv(@Nonnull BlockMenuPreset blockMenuPreset);
     
-    public abstract int[] getTransportSlots(ItemTransportFlow flow);
-
-    public abstract int[] getTransportSlots(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item);
+    public abstract int[] getTransportSlots(@Nonnull ItemTransportFlow flow);
     
-    public boolean hasPermission(Block b, Player p) {
+    public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
+        return getTransportSlots(flow);
+    }
+    
+    public boolean hasPermission(@Nonnull Block b, @Nonnull Player p) {
         return true;
     }
 }

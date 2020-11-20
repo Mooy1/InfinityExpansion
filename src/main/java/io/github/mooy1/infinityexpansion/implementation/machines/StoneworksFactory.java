@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.template.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
@@ -8,30 +9,22 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +33,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class StoneworksFactory extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
+public class StoneworksFactory extends Machine implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 240;
 
@@ -59,70 +52,6 @@ public class StoneworksFactory extends SlimefunItem implements EnergyNetComponen
                 Items.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, Items.MAGSTEEL_PLATE
         });
 
-        new BlockMenuPreset(getId(), getItemName()) {
-            @Override
-            public void init() {
-                setupInv(this);
-            }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                Location l = b.getLocation();
-                setChoice(l, 1, Choice.NONE);
-                setChoice(l, 2, Choice.NONE);
-                setChoice(l, 3, Choice.NONE);
-                
-                for (int i = 0 ; i < 3 ; i++) {
-                    int finalI = i;
-                    menu.addMenuClickHandler(CHOICE_SLOTS[i], (p, slot, item, action) -> {
-                        int current = ArrayUtils.indexOf(Choice.values(), getChoice(b.getLocation(), finalI));
-                        Choice next;
-                        if (action.isRightClicked()) {
-                            if (current > 0) {
-                                next = Choice.values()[current - 1];
-                            } else {
-                                next = Choice.values()[Choice.values().length - 1];
-                            }
-                        } else {
-                            if (current < Choice.values().length - 1) {
-                                next = Choice.values()[current + 1];
-                            } else {
-                                next = Choice.values()[0];
-                            }
-                        }
-                        setChoice(l, finalI, next);
-                        menu.replaceExistingItem(CHOICE_SLOTS[finalI], next.getItem());
-                        return false;
-                    });
-                }
-            }
-
-            @Override
-            public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(
-                        player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES));
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                }
-
-                return new int[0];
-            }
-
-            @Override
-            public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                if (flow == ItemTransportFlow.WITHDRAW) {
-                    return OUTPUT_SLOTS;
-                }
-
-                return new int[0];
-            }
-        };
-
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -134,8 +63,48 @@ public class StoneworksFactory extends SlimefunItem implements EnergyNetComponen
             return true;
         });
     }
+    
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        Location l = b.getLocation();
+        
+        if (BlockStorage.getLocationInfo(l, "choice0") == null) {
+            setChoice(l, 0, Choice.NONE);
+            setChoice(l, 1, Choice.NONE);
+            setChoice(l, 2, Choice.NONE);
+        }
 
-    private void setupInv(BlockMenuPreset blockMenuPreset) {
+        for (int i = 0 ; i < CHOICE_SLOTS.length ; i++) {
+            menu.replaceExistingItem(CHOICE_SLOTS[i], getChoice(l, i).getItem());
+        }
+        
+        for (int i = 0 ; i < 3 ; i++) {
+            int finalI = i;
+            menu.addMenuClickHandler(CHOICE_SLOTS[i], (p, slot, item, action) -> {
+                int current = ArrayUtils.indexOf(Choice.values(), getChoice(b.getLocation(), finalI));
+                Choice next;
+                if (action.isRightClicked()) {
+                    if (current > 0) {
+                        next = Choice.values()[current - 1];
+                    } else {
+                        next = Choice.values()[Choice.values().length - 1];
+                    }
+                } else {
+                    if (current < Choice.values().length - 1) {
+                        next = Choice.values()[current + 1];
+                    } else {
+                        next = Choice.values()[0];
+                    }
+                }
+                setChoice(l, finalI, next);
+                menu.replaceExistingItem(CHOICE_SLOTS[finalI], next.getItem());
+                return false;
+            });
+        }
+    }
+    
+
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : PROCESS_BORDER) {
             blockMenuPreset.addItem(i, new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "Processing"), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -149,23 +118,16 @@ public class StoneworksFactory extends SlimefunItem implements EnergyNetComponen
     }
 
     @Override
-    public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                StoneworksFactory.this.tick(b);
-            }
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        }
 
-            public boolean isSynchronized() {
-                return false;
-            }
-        });
+        return new int[0];
     }
-
-    public void tick(Block b) {
-        Location l = b.getLocation();
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-        if (inv == null) return;
-
+    
+    @Override
+    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         int charge = getCharge(l);
         boolean playerWatching = inv.hasViewer();
 
@@ -175,11 +137,11 @@ public class StoneworksFactory extends SlimefunItem implements EnergyNetComponen
             }
             return;
         }
-        
+
         inv.replaceExistingItem(STATUS_SLOT, COBBLE_GEN);
-        
+
         int tick = InfinityExpansion.currentTick() % 4;
-        
+
         if (tick == 3) {
             ItemStack cobble = new ItemStack(Material.COBBLESTONE);
 
