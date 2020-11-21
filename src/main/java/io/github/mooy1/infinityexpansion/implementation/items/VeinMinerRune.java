@@ -6,6 +6,7 @@ import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.LocationUtils;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.implementation.items.magical.SoulboundRune;
@@ -52,7 +53,7 @@ import java.util.Optional;
  * @author Mooy1
  * 
  */
-public class VeinMinerRune extends SlimefunItem implements Listener {
+public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceable {
 
     private static final double RANGE = 1.5;
     private static final int MAX = 64;

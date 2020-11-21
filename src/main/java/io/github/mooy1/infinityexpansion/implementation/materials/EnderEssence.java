@@ -3,17 +3,18 @@ package io.github.mooy1.infinityexpansion.implementation.materials;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 
 /**
- * Guide item for ender essence geo-resource
+ * Ender essence geo-resource item
  *
  * @author Mooy1
  */
-public class EnderEssence extends SlimefunItem {
+public class EnderEssence extends SlimefunItem implements NotPlaceable {
 
     public EnderEssence() {
         super(Categories.MAIN, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, RecipeUtils.MiddleItem(

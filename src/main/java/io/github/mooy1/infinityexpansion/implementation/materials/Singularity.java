@@ -4,6 +4,7 @@ import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.mooy1.infinityexpansion.implementation.machines.SingularityConstructor;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class Singularity extends SlimefunItem {
+public class Singularity extends SlimefunItem implements NotPlaceable {
 
     public Singularity(int id) {
         super(Categories.INFINITY_MATERIALS, SingularityConstructor.RECIPES.getA().get(id), RecipeTypes.SINGULARITY_CONSTRUCTOR, makeRecipe(id));

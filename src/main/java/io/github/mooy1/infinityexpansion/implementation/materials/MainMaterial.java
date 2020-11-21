@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class MainMaterial extends SlimefunItem {
+public class MainMaterial extends SlimefunItem implements NotPlaceable {
 
     public MainMaterial(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipetype(), type.getRecipe());

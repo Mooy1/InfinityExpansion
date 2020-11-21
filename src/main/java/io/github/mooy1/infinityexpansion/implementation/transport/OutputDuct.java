@@ -368,8 +368,8 @@ public class OutputDuct extends Machine {
                             if (destinationSlots != null && targetMachine.fits(outputItem, destinationSlots)) {
 
                                 try {
-                                    targetMachine.pushItem(outputItem, destinationSlots);
                                     slotItem.setAmount(slotItem.getAmount() - outputItem.getAmount());
+                                    targetMachine.pushItem(outputItem, destinationSlots);
                                 } catch (NullPointerException ignored) {
                                 }
 

@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.items;
 
 import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class Strainer extends SlimefunItem {
+public class Strainer extends SlimefunItem implements NotPlaceable {
 
     private static final ItemStack stick = new ItemStack(Material.STICK);
     private static final ItemStack string = new ItemStack(Material.STRING);

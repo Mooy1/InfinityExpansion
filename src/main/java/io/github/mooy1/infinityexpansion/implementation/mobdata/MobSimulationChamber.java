@@ -42,9 +42,9 @@ public class MobSimulationChamber extends Machine implements EnergyNetComponent 
     
     public MobSimulationChamber() {
         super(Categories.MOB_SIMULATION, Items.MOB_SIMULATION_CHAMBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, SlimefunItems.PROGRAMMABLE_ANDROID_BUTCHER, Items.MACHINE_CIRCUIT,
-                Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
         });
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {

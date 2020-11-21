@@ -29,8 +29,13 @@ import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import javax.annotation.Nullable;
+import java.util.logging.Level;
 
 /**
  * Items for this addon
@@ -38,8 +43,10 @@ import org.bukkit.inventory.meta.ItemMeta;
  * @author Mooy1
  */
 public final class Items {
+    
+    private static final FileConfiguration CONFIG = InfinityExpansion.getInstance().getConfig();
 
-    //ducts
+    //storage & transport
 
     public static final SlimefunItemStack ITEM_DUCT = new SlimefunItemStack(
             "ITEM_DUCT",
@@ -191,8 +198,6 @@ public final class Items {
             LoreUtils.energyPerSecond(SlimefunConstructors.STAR_ENERGY)
     );
     
-    //conversion machines
-
     public static final SlimefunItemStack EXTREME_FREEZER = new SlimefunItemStack(
             "EXTREME_FREEZER",
             Material.LIGHT_BLUE_CONCRETE,
@@ -304,10 +309,10 @@ public final class Items {
             "ADVANCED_ANVIL",
             Material.SMITHING_TABLE,
             "&cAdvanced Anvil",
+            "&7Combines tools and gear enchants and sometimes upgrades them",
+            "&bWorks with Slimefun items",
             "",
-            LoreUtils.energy(AdvancedAnvil.ENERGY) + "per use",
-            "",
-            "&cNot yet functional"
+            LoreUtils.energy(AdvancedAnvil.ENERGY) + "per use"
 
     );
     public static final SlimefunItemStack DECOMPRESSOR = new SlimefunItemStack(
@@ -419,41 +424,7 @@ public final class Items {
             LoreUtils.energyBuffer(EnergyGenerator.INFINITY_STORAGE),
             LoreUtils.energyPerSecond(EnergyGenerator.INFINITY_RATE)
     );
-
-    //strainers
-
-    public static final SlimefunItemStack STRAINER_BASE = new SlimefunItemStack(
-            "STRAINER_BASE",
-            Material.SANDSTONE_WALL,
-            "&7Strainer Base"
-    );
-    public static final SlimefunItemStack BASIC_STRAINER = new SlimefunItemStack(
-            "BASIC_STRAINER",
-            Material.FISHING_ROD,
-            "&9Basic Strainer",
-            "&7Collects materials from flowing water",
-            "",
-            LoreBuilder.speed(StrainerBase.BASIC_SPEED)
-    );
-    public static final SlimefunItemStack ADVANCED_STRAINER = new SlimefunItemStack(
-            "ADVANCED_STRAINER",
-            Material.FISHING_ROD,
-            "&cAdvanced Strainer",
-            "&7Collects materials from flowing water",
-            "",
-            LoreBuilder.speed(StrainerBase.ADVANCED_SPEED)
-    );
-    public static final SlimefunItemStack REINFORCED_STRAINER = new SlimefunItemStack(
-            "REINFORCED_STRAINER",
-            Material.FISHING_ROD,
-            "&fReinforced Strainer",
-            "&7Collects materials from flowing water",
-            "",
-            LoreBuilder.speed(StrainerBase.REINFORCED_SPEED)
-    );
-
-    //tree grower
-
+    
     public static final SlimefunItemStack BASIC_TREE_GROWER = new SlimefunItemStack(
             "BASIC_TREE_GROWER",
             Material.STRIPPED_OAK_WOOD,
@@ -481,8 +452,6 @@ public final class Items {
             LoreUtils.speed(TreeGrower.SPEED3),
             LoreUtils.energyPerSecond(TreeGrower.ENERGY3)
     );
-
-    //virtual farm
 
     public static final SlimefunItemStack BASIC_VIRTUAL_FARM = new SlimefunItemStack(
             "BASIC_VIRTUAL_FARM",
@@ -599,6 +568,48 @@ public final class Items {
             "&7Upgrades a tool to vein-mine certain materials"
     );
     
+    public static final SlimefunItemStack ADVANCED_GEO_MINER = new SlimefunItemStack(
+            "ADVANCED_GEO_MINER",
+            HeadTexture.GEO_MINER,
+            "&cAdvanced &fGeoMiner",
+            "&7A faster geo-miner",
+            "",
+            LoreUtils.speed(SlimefunConstructors.ADVANCED_GEO_SPEED),
+            LoreUtils.energyPerSecond(SlimefunConstructors.ADVANCED_GEO_ENERGY)
+    );
+
+    //strainers
+
+    public static final SlimefunItemStack STRAINER_BASE = new SlimefunItemStack(
+            "STRAINER_BASE",
+            Material.SANDSTONE_WALL,
+            "&7Strainer Base"
+    );
+    public static final SlimefunItemStack BASIC_STRAINER = new SlimefunItemStack(
+            "BASIC_STRAINER",
+            Material.FISHING_ROD,
+            "&9Basic Strainer",
+            "&7Collects materials from flowing water",
+            "",
+            LoreBuilder.speed(StrainerBase.BASIC_SPEED)
+    );
+    public static final SlimefunItemStack ADVANCED_STRAINER = new SlimefunItemStack(
+            "ADVANCED_STRAINER",
+            Material.FISHING_ROD,
+            "&cAdvanced Strainer",
+            "&7Collects materials from flowing water",
+            "",
+            LoreBuilder.speed(StrainerBase.ADVANCED_SPEED)
+    );
+    public static final SlimefunItemStack REINFORCED_STRAINER = new SlimefunItemStack(
+            "REINFORCED_STRAINER",
+            Material.FISHING_ROD,
+            "&fReinforced Strainer",
+            "&7Collects materials from flowing water",
+            "",
+            LoreBuilder.speed(StrainerBase.REINFORCED_SPEED)
+    );
+    
     //mob stuff
 
     public static final SlimefunItemStack DATA_INFUSER = new SlimefunItemStack(
@@ -623,6 +634,124 @@ public final class Items {
             Material.IRON_CHESTPLATE,
             "&8Empty Data Card",
             "&7Infuse with a mob's items to fill"
+    );
+
+    
+    //Info thing
+
+    /**
+     * Thanks to NCBPFluffyBear for the idea
+     */
+    public static final SlimefunItemStack INFINITY_ADDON_INFO = new SlimefunItemStack(
+            "INFINITY_ADDON_INFO",
+            Material.NETHER_STAR,
+            "&bAddon Info",
+            "&fVersion: &7" + InfinityExpansion.getInstance().getPluginVersion(),
+            "",
+            "&fDiscord: &b@&7Riley&8#5911",
+            "&7discord.gg/slimefun",
+            "",
+            "&fGithub: &b@&8&7Mooy1",
+            "&7" + InfinityExpansion.getInstance().getBugTrackerURL()
+    );
+
+    //Materials
+
+    public static final SlimefunItemStack MAGSTEEL = new SlimefunItemStack(
+            "MAGSTEEL",
+            Material.BRICK,
+            "&4MagSteel"
+    );
+    public static final SlimefunItemStack MAGNONIUM = new SlimefunItemStack(
+            "MAGNONIUM",
+            Material.NETHER_BRICK,
+            "&5Magnonium"
+    );
+    public static final SlimefunItemStack TITANIUM = new SlimefunItemStack(
+            "TITANIUM",
+            Material.IRON_INGOT,
+            "&7Titanium"
+    );
+    public static final SlimefunItemStack MYTHRIL = new SlimefunItemStack(
+            "MYTHRIL",
+            Material.IRON_INGOT,
+            "&bMythril"
+    );
+    public static final SlimefunItemStack ADAMANTITE = new SlimefunItemStack(
+            "ADAMANTITE",
+            Material.BRICK,
+            "&dAdamantite"
+    );
+    public static final SlimefunItemStack INFINITE_INGOT = new SlimefunItemStack(
+            "INFINITE_INGOT",
+            Material.IRON_INGOT,
+            "&dI&cn&6f&ei&an&bi&3t&9y &fIngot",
+            "&7&oThe fury of the cosmos",
+            "&7&oin the palm of your hand"
+    );
+    
+    public static final SlimefunItemStack VOID_BIT = new SlimefunItemStack(
+            "VOID_BIT",
+            Material.IRON_NUGGET,
+            "&8Void Bit",
+            "&7&oIt feels... empty"
+    );
+    public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
+            "VOID_DUST",
+            Material.GUNPOWDER,
+            "&8Void Dust",
+            "&7&oIts starting to take form..."
+    );
+    public static final SlimefunItemStack VOID_INGOT = new SlimefunItemStack(
+            "VOID_INGOT",
+            Material.NETHERITE_INGOT,
+            "&8Void Ingot",
+            "&7&oThe emptiness of the cosmos",
+            "&7&oin the palm of your hand"
+    );
+    
+    public static final SlimefunItemStack ENDER_ESSENCE = new SlimefunItemStack(
+            "END_ESSENCE",
+            Material.BLAZE_POWDER,
+            "&5Ender Essence",
+            "&8&oFrom the depths of the end..."
+    );
+
+    public static final SlimefunItemStack MAGSTEEL_PLATE = new SlimefunItemStack(
+            "MAGSTEEL_PLATE",
+            Material.NETHERITE_SCRAP,
+            "&4MagSteel Plate",
+            "&7Machine Component"
+    );
+    public static final SlimefunItemStack MACHINE_PLATE = new SlimefunItemStack(
+            "MACHINE_PLATE",
+            Material.PAPER,
+            "&fMachine Plate",
+            "&7Machine Component"
+    );
+    public static final SlimefunItemStack MACHINE_CIRCUIT = new SlimefunItemStack(
+            "MACHINE_CIRCUIT",
+            Material.GOLD_INGOT,
+            "&6Machine Circuit",
+            "&7Machine Component"
+    );
+    public static final SlimefunItemStack INFINITE_MACHINE_CIRCUIT = new SlimefunItemStack(
+            "INFINITE_MACHINE_CIRCUIT",
+            Material.DIAMOND,
+            "&bInfinite &6Machine Circuit",
+            "&7Machine Component"
+    );
+    public static final SlimefunItemStack MACHINE_CORE = new SlimefunItemStack(
+            "MACHINE_CORE",
+            Material.IRON_BLOCK,
+            "&fMachine Core",
+            "&7Machine Component"
+    );
+    public static final SlimefunItemStack INFINITE_MACHINE_CORE = new SlimefunItemStack(
+            "INFINITE_MACHINE_CORE",
+            Material.DIAMOND_BLOCK,
+            "&bInfinite Machine Core",
+            "&7Machine Component"
     );
 
     //Compressed Cobblestones
@@ -763,153 +892,25 @@ public final class Items {
             "&bInfinity Singularity"
     );
 
-    //Infinity Singularity
-
     public static final SlimefunItemStack FORTUNE_SINGULARITY = new SlimefunItemStack(
             "FORTUNE_SINGULARITY",
             Material.NETHER_STAR,
             "&6Fortune Singularity"
-
     );
     public static final SlimefunItemStack EARTH_SINGULARITY = new SlimefunItemStack(
             "EARTH_SINGULARITY",
             Material.NETHER_STAR,
             "&aEarth Singularity"
-
     );
     public static final SlimefunItemStack METAL_SINGULARITY = new SlimefunItemStack(
             "METAL_SINGULARITY",
             Material.NETHER_STAR,
             "&8Metal Singularity"
-
     );
     public static final SlimefunItemStack MAGIC_SINGULARITY = new SlimefunItemStack(
             "MAGIC_SINGULARITY",
             Material.NETHER_STAR,
             "&dMagic Singularity"
-
-    );
-
-    //Info thingies
-
-    /**
-     * Thanks to NCBPFluffyBear for the idea
-     */
-    public static final SlimefunItemStack INFINITY_ADDON_INFO = new SlimefunItemStack(
-            "INFINITY_ADDON_INFO",
-            Material.NETHER_STAR,
-            "&bAddon Info",
-            "&fVersion: &7" + InfinityExpansion.getInstance().getPluginVersion(),
-            "",
-            "&fDiscord: &b@&7Riley&8#5911",
-            "&7discord.gg/slimefun",
-            "",
-            "&fGithub: &b@&8&7Mooy1",
-            "&7" + InfinityExpansion.getInstance().getBugTrackerURL()
-    );
-
-    //Ingots
-
-    public static final SlimefunItemStack MAGSTEEL = new SlimefunItemStack(
-            "MAGSTEEL",
-            Material.BRICK,
-            "&4MagSteel"
-    );
-    public static final SlimefunItemStack MAGNONIUM = new SlimefunItemStack(
-            "MAGNONIUM",
-            Material.NETHER_BRICK,
-            "&5Magnonium"
-    );
-    public static final SlimefunItemStack TITANIUM = new SlimefunItemStack(
-            "TITANIUM",
-            Material.IRON_INGOT,
-            "&7Titanium"
-    );
-    public static final SlimefunItemStack MYTHRIL = new SlimefunItemStack(
-            "MYTHRIL",
-            Material.IRON_INGOT,
-            "&bMythril"
-    );
-    public static final SlimefunItemStack ADAMANTITE = new SlimefunItemStack(
-            "ADAMANTITE",
-            Material.BRICK,
-            "&dAdamantite"
-    );
-    public static final SlimefunItemStack INFINITE_INGOT = new SlimefunItemStack(
-            "INFINITE_INGOT",
-            Material.IRON_INGOT,
-            "&dI&cn&6f&ei&an&bi&3t&9y &fIngot",
-            "&7&oThe fury of the cosmos",
-            "&7&oin the palm of your hand"
-    );
-
-    //Void ingots
-
-    public static final SlimefunItemStack VOID_BIT = new SlimefunItemStack(
-            "VOID_BIT",
-            Material.IRON_NUGGET,
-            "&8Void Bit",
-            "&7&oIt feels... empty"
-    );
-    public static final SlimefunItemStack VOID_DUST = new SlimefunItemStack(
-            "VOID_DUST",
-            Material.GUNPOWDER,
-            "&8Void Dust",
-            "&7&oIts starting to take form..."
-    );
-    public static final SlimefunItemStack VOID_INGOT = new SlimefunItemStack(
-            "VOID_INGOT",
-            Material.NETHERITE_INGOT,
-            "&8Void Ingot",
-            "&7&oThe emptiness of the cosmos",
-            "&7&oin the palm of your hand"
-    );
-
-    //Materials
-
-    public static final SlimefunItemStack ENDER_ESSENCE = new SlimefunItemStack(
-            "END_ESSENCE",
-            Material.BLAZE_POWDER,
-            "&5Ender Essence",
-            "&8&oFrom the depths of the end..."
-    );
-
-    public static final SlimefunItemStack MAGSTEEL_PLATE = new SlimefunItemStack(
-            "MAGSTEEL_PLATE",
-            Material.NETHERITE_SCRAP,
-            "&4MagSteel Plate",
-            "&7Machine Component"
-    );
-    public static final SlimefunItemStack MACHINE_PLATE = new SlimefunItemStack(
-            "MACHINE_PLATE",
-            Material.PAPER,
-            "&fMachine Plate",
-            "&7Machine Component"
-    );
-    public static final SlimefunItemStack MACHINE_CIRCUIT = new SlimefunItemStack(
-            "MACHINE_CIRCUIT",
-            Material.GOLD_INGOT,
-            "&6Machine Circuit",
-            "&7Machine Component"
-    );
-    public static final SlimefunItemStack INFINITE_MACHINE_CIRCUIT = new SlimefunItemStack(
-            "INFINITE_MACHINE_CIRCUIT",
-            Material.DIAMOND,
-            "&bInfinite &6Machine Circuit",
-            "&7Machine Component"
-    );
-    public static final SlimefunItemStack MACHINE_CORE = new SlimefunItemStack(
-            "MACHINE_CORE",
-            Material.IRON_BLOCK,
-            "&fMachine Core",
-            "&7Machine Component"
-    );
-    public static final SlimefunItemStack INFINITE_MACHINE_CORE = new SlimefunItemStack(
-            "INFINITE_MACHINE_CORE",
-            Material.DIAMOND_BLOCK,
-            "&bInfinite Machine Core",
-            "&7Machine Component"
-
     );
 
     //Gear
@@ -924,37 +925,33 @@ public final class Items {
             "INFINITY_CROWN",
             Material.NETHERITE_HELMET,
             "&bInfinity Crown",
-            "&6Saturation",
-            "&8Night Vision",
-            "&9Water Breathing",
-            "&7&oBreath of the cosmos"
+            "&7Saturation I",
+            "&7Night Vision I",
+            "&7Water Breathing I"
     );
     public static final SlimefunItemStack INFINITY_CHESTPLATE = new SlimefunItemStack(
             "INFINITY_CHESTPLATE",
             Material.NETHERITE_CHESTPLATE,
             "&bInfinity Chestplate",
-            "&aHealth Boost III",
-            "&8Resistance II",
-            "&cFire Resistance",
-            "&2Regeneration",
-            "&7&oStrength of the cosmos"
+            "&7Strength II",
+            "&7Health Boost III",
+            "&7Resistance II"
     );
     public static final SlimefunItemStack INFINITY_LEGGINGS = new SlimefunItemStack(
             "INFINITY_LEGGINGS",
             Material.NETHERITE_LEGGINGS,
             "&bInfinity Leggings",
-            "&cStrength II",
-            "&6Haste III",
-            "&9Conduit Power",
-            "&7&o"
+            "&7Haste III",
+            "&7Conduit Power I",
+            "&7Regeneration I"
     );
     public static final SlimefunItemStack INFINITY_BOOTS = new SlimefunItemStack(
             "INFINITY_BOOTS",
             Material.NETHERITE_BOOTS,
             "&bInfinity Boots",
-            "&bSpeed III",
-            "&3Dolphins Grace",
-            "&7&oAgility of the cosmos"
+            "&7Speed III",
+            "&7Dolphins Grace I",
+            "&7Fire Resistance I"
     );
     public static final SlimefunItemStack INFINITY_BLADE = new SlimefunItemStack(
             "INFINITY_BLADE",
@@ -978,7 +975,7 @@ public final class Items {
             "INFINITY_SHOVEL",
             Material.NETHERITE_SHOVEL,
             "&aMountain Eater",
-            "&2&o"
+            "&2&oYum"
     );
     public static final SlimefunItemStack INFINITY_BOW = new SlimefunItemStack(
             "INFINITY_BOW",
@@ -1000,109 +997,83 @@ public final class Items {
             "&bCosmic Aegis",
             "&7&o"
     );
+    
+    static { //add item meta
+        
+        SlimefunItemStack[] items = new SlimefunItemStack[] {
+                INFINITY_CROWN, INFINITY_CHESTPLATE, INFINITY_LEGGINGS, INFINITY_BOOTS, INFINITY_BLADE,
+                INFINITY_AXE, INFINITY_PICKAXE, INFINITY_SHOVEL, INFINITY_SHIELD, INFINITY_BOW
+        };
 
-    //enchant list
-
-    private static final Enchantment prot = Enchantment.PROTECTION_ENVIRONMENTAL;
-    private static final Enchantment sharp = Enchantment.DAMAGE_ALL;
-    private static final Enchantment eff = Enchantment.DIG_SPEED;
-    private static final Enchantment fire = Enchantment.FIRE_ASPECT;
-    private static final Enchantment fort = Enchantment.LOOT_BONUS_BLOCKS;
-    private static final Enchantment loot = Enchantment.LOOT_BONUS_MOBS;
-    private static final Enchantment silk = Enchantment.SILK_TOUCH;
-    private static final Enchantment thorns = Enchantment.THORNS;
-    private static final Enchantment aqua = Enchantment.WATER_WORKER;
-    private static final Enchantment power = Enchantment.ARROW_DAMAGE;
-    private static final Enchantment flame = Enchantment.ARROW_FIRE;
-    private static final Enchantment infinity = Enchantment.ARROW_INFINITE;
-
-    static { //add enchants
-
-        ENDER_FLAME.addUnsafeEnchantment(fire, 10);
-        INFINITY_CROWN.addUnsafeEnchantment(prot, 40);
-        INFINITY_CROWN.addUnsafeEnchantment(aqua, 10);
-        INFINITY_CHESTPLATE.addUnsafeEnchantment(prot, 40);
-        INFINITY_CHESTPLATE.addUnsafeEnchantment(thorns, 20);
-        INFINITY_SHIELD.addUnsafeEnchantment(prot, 40);
-        INFINITY_SHIELD.addUnsafeEnchantment(thorns, 20);
-        INFINITY_LEGGINGS.addUnsafeEnchantment(prot, 40);
-        INFINITY_BOOTS.addUnsafeEnchantment(prot, 40);
-        INFINITY_PICKAXE.addUnsafeEnchantment(eff, 40);
-        INFINITY_PICKAXE.addUnsafeEnchantment(fort, 20);
-        INFINITY_SHOVEL.addUnsafeEnchantment(eff, 40);
-        INFINITY_SHOVEL.addUnsafeEnchantment(fort, 10);
-        INFINITY_SHOVEL.addUnsafeEnchantment(silk, 1);
-        INFINITY_AXE.addUnsafeEnchantment(eff, 40);
-        INFINITY_AXE.addUnsafeEnchantment(sharp, 20);
-        INFINITY_AXE.addUnsafeEnchantment(fire, 20);
-        INFINITY_BLADE.addUnsafeEnchantment(sharp, 20);
-        INFINITY_BLADE.addUnsafeEnchantment(loot, 10);
-        INFINITY_BOW.addUnsafeEnchantment(power, 20);
-        INFINITY_BOW.addUnsafeEnchantment(flame, 20);
-        INFINITY_BOW.addUnsafeEnchantment(infinity, 10);
-
-        //add unbreakable items
-
-        ItemMeta hat = INFINITY_CROWN.getItemMeta();
-        assert hat != null;
-        hat.setUnbreakable(true);
-
-        INFINITY_CROWN.setItemMeta(hat);
-
-        ItemMeta shirt = INFINITY_CHESTPLATE.getItemMeta();
-        assert shirt != null;
-        shirt.setUnbreakable(true);
-
-        INFINITY_CHESTPLATE.setItemMeta(shirt);
-
-        ItemMeta pants = INFINITY_LEGGINGS.getItemMeta();
-        assert pants != null;
-        pants.setUnbreakable(true);
-
-        INFINITY_LEGGINGS.setItemMeta(pants);
-
-        ItemMeta shoes = INFINITY_BOOTS.getItemMeta();
-        assert shoes != null;
-        shoes.setUnbreakable(true);
-
-        INFINITY_BOOTS.setItemMeta(shoes);
-
-        ItemMeta pick = INFINITY_PICKAXE.getItemMeta();
-        assert pick != null;
-        pick.setUnbreakable(true);
-
-        INFINITY_PICKAXE.setItemMeta(pick);
-
-        ItemMeta blade = INFINITY_BLADE.getItemMeta();
-        assert blade != null;
-        blade.setUnbreakable(true);
-
-        INFINITY_BLADE.setItemMeta(blade);
-
-        ItemMeta axe = INFINITY_AXE.getItemMeta();
-        assert axe != null;
-        axe.setUnbreakable(true);
-
-        INFINITY_AXE.setItemMeta(axe);
-
-        ItemMeta shovel = INFINITY_SHOVEL.getItemMeta();
-        assert shovel != null;
-        shovel.setUnbreakable(true);
-
-        INFINITY_SHOVEL.setItemMeta(shovel);
-
-        ItemMeta shield = INFINITY_SHIELD.getItemMeta();
-        assert shield != null;
-        shield.setUnbreakable(true);
-
-        INFINITY_SHIELD.setItemMeta(shield);
-
-        ItemMeta bow = INFINITY_BOW.getItemMeta();
-        assert bow != null;
-        bow.setUnbreakable(true);
-
-        INFINITY_BOW.setItemMeta(bow);
+        addUnbreakable(items);
+        addEnchants(items, "infinity-enchant-levels", "INFINITY");
+        
+        ENDER_FLAME.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 5);
     }
-
-    private Items() {}
+    
+    private static int getInt(String path) {
+        int found = CONFIG.getInt(path);
+        if (found < 0 || found > Short.MAX_VALUE) return 0;
+        return found;
+    }
+    
+    private static void addEnchants(SlimefunItemStack[] items, String section, String gearType) {
+        ConfigurationSection typeSection = CONFIG.getConfigurationSection(section);
+        
+        if (typeSection == null) {
+            InfinityExpansion.log(Level.SEVERE, "Config section " + section + " missing, Check the config and report this!");
+            return;
+        }
+        
+        for (SlimefunItemStack item : items) {
+            String itemPath = item.getItemId().replace(gearType + "_", "").toLowerCase();
+            ConfigurationSection itemSection = typeSection.getConfigurationSection(itemPath);
+            if (itemSection == null) {
+                InfinityExpansion.log(Level.SEVERE, "Config section " + itemPath + " missing, Check the config and report this!");
+                continue;
+            }
+            
+            for (String path : itemSection.getKeys(false)) {
+                int level = getInt(section + "." + itemPath + "." + path);
+                if (level > 0) {
+                    Enchantment e = getEnchantFromString(path);
+                    if (e == null) {
+                        InfinityExpansion.log(Level.WARNING, "Failed to add enchantment " + path + ", your config may be messed up, report this!");
+                        continue;
+                    }
+                    item.addUnsafeEnchantment(e, level);
+                }
+            }
+        }
+    }
+        
+    private static void addUnbreakable(SlimefunItemStack[] items) {
+        for (SlimefunItemStack item : items) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta == null) continue;
+            meta.setUnbreakable(true);
+            item.setItemMeta(meta);
+        }
+    }
+    
+    @Nullable
+    private static Enchantment getEnchantFromString(String string) {
+        switch (string) {
+            case "sharpness": return Enchantment.DAMAGE_ALL;
+            case "efficiency": return Enchantment.DIG_SPEED;
+            case "protection": return Enchantment.PROTECTION_ENVIRONMENTAL;
+            case "fire-aspect": return Enchantment.FIRE_ASPECT;
+            case "fortune": return Enchantment.LOOT_BONUS_BLOCKS;
+            case "looting": return Enchantment.LOOT_BONUS_MOBS;
+            case "silk-touch": return Enchantment.SILK_TOUCH;
+            case "thorns": return Enchantment.THORNS;
+            case "aqua-affinity": return Enchantment.WATER_WORKER;
+            case "power": return Enchantment.ARROW_DAMAGE;
+            case "flame": return Enchantment.ARROW_FIRE;
+            case "infinity": return Enchantment.ARROW_INFINITE;
+            case "punch": return Enchantment.ARROW_KNOCKBACK;
+            case "feather-falling": return Enchantment.PROTECTION_FALL;
+            default: return null;
+        }
+    }
 }

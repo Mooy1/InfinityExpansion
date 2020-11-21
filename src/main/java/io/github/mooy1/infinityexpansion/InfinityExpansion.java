@@ -101,10 +101,10 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 ChatColor.AQUA + "     Infinity Expansion v" + getInstance().getPluginVersion(),
                 ChatColor.GREEN + "     -------------------------    ",
                 ChatColor.AQUA + "              Changelog            ",
-                ChatColor.GRAY + " - Advanced anvil",
+                ChatColor.GRAY + " - config for enchants",
                 ChatColor.GRAY + " - optimizations",
                 ChatColor.GRAY + " - energy balancing",
-                ChatColor.GRAY + " - Recipe balancing",
+                ChatColor.GRAY + " - fixed exploits",
                 ChatColor.GREEN + "",
                 ChatColor.GREEN + "########################################",
                 ChatColor.GREEN + ""

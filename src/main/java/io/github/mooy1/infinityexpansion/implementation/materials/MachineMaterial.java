@@ -1,19 +1,19 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class MachineMaterial extends SlimefunItem {
+public class MachineMaterial extends SlimefunItem implements NotPlaceable {
 
     public MachineMaterial(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());

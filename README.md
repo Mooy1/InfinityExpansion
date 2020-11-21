@@ -19,7 +19,7 @@ Minecraft Version: 1.16+ (Paper recommended)
 
 https://papermc.io/downloads
 
-Slimefun Version: DEV 721+
+Slimefun Version: DEV 741+
 
 [![Build Status](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/badge.svg)](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/)
 

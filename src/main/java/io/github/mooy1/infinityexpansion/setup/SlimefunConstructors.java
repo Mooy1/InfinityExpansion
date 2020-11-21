@@ -11,6 +11,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ChargingBench;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.reactors.Reactor;
+import io.github.thebusybiscuit.slimefun4.implementation.items.geo.GEOMiner;
 import io.github.thebusybiscuit.slimefun4.utils.holograms.ReactorHologram;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineFuel;
@@ -30,29 +31,32 @@ import javax.annotation.Nonnull;
 
 public class SlimefunConstructors {
 
-    public static int INFINITY_CAPACITOR = 1600000000;
-    public static int VOID_CAPACITOR = 16000000;
-
-    public static int ADVANCED_EN_SPEED = 5;
-    public static int ADVANCED_EN_ENERGY = 180;
-
-    public static int ADVANCED_DIS_SPEED = 5;
-    public static int ADVANCED_DIS_ENERGY = 180;
-
-    public static int INFINITY_EN_SPEED = 75;
-    public static int INFINITY_EN_ENERGY = 12000;
-
-    public static int INFINITY_DIS_SPEED = 90;
-    public static int INFINITY_DIS_ENERGY = 12000;
-
-    public static int ADVANCED_CHARGER_SPEED = 30;
-    public static int ADVANCED_CHARGER_ENERGY = 180;
-
-    public static int INFINITY_CHARGER_SPEED = 6000;
-    public static int INFINITY_CHARGER_ENERGY = 60000;
+    public static final int INFINITY_CAPACITOR = 1600000000;
+    public static final int VOID_CAPACITOR = 16000000;
     
-    public static int STAR_ENERGY = 1800;
-    public static int STAR_BUFFER = 90000;
+    public static final int ADVANCED_GEO_SPEED = 4;
+    public static final int ADVANCED_GEO_ENERGY = 150;
+
+    public static final int ADVANCED_EN_SPEED = 5;
+    public static final int ADVANCED_EN_ENERGY = 180;
+
+    public static final int ADVANCED_DIS_SPEED = 5;
+    public static final int ADVANCED_DIS_ENERGY = 180;
+
+    public static final int INFINITY_EN_SPEED = 75;
+    public static final int INFINITY_EN_ENERGY = 12000;
+
+    public static final int INFINITY_DIS_SPEED = 90;
+    public static final int INFINITY_DIS_ENERGY = 12000;
+
+    public static final int ADVANCED_CHARGER_SPEED = 30;
+    public static final int ADVANCED_CHARGER_ENERGY = 180;
+
+    public static final int INFINITY_CHARGER_SPEED = 6000;
+    public static final int INFINITY_CHARGER_ENERGY = 60000;
+    
+    public static final int STAR_ENERGY = 1800;
+    public static final int STAR_BUFFER = 90000;
     
     public static void setup(InfinityExpansion plugin) {
         
@@ -75,23 +79,7 @@ public class SlimefunConstructors {
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.NETHERITE_CHESTPLATE);
             }
-
-            @Override
-            public int getEnergyConsumption() {
-                return ADVANCED_EN_ENERGY;
-            }
-
-            @Override
-            public int getCapacity() {
-                return ADVANCED_EN_ENERGY;
-            }
-
-            @Override
-            public int getSpeed() {
-                return ADVANCED_EN_SPEED;
-            }
-
-        }.register(plugin);
+        }.setCapacity(ADVANCED_EN_ENERGY).setEnergyConsumption(ADVANCED_EN_ENERGY).setProcessingSpeed(ADVANCED_EN_SPEED).register(plugin);
 
         new AutoDisenchanter(Categories.ADVANCED_MACHINES, Items.ADVANCED_DISENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
@@ -102,117 +90,37 @@ public class SlimefunConstructors {
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.ENCHANTED_BOOK);
             }
-
-            @Override
-            public int getEnergyConsumption() {
-                return ADVANCED_DIS_ENERGY;
-            }
-
-            @Override
-            public int getCapacity() {
-                return ADVANCED_DIS_ENERGY;
-            }
-
-            @Override
-            public int getSpeed() {
-                return ADVANCED_DIS_SPEED;
-            }
-
-
-        }.register(plugin);
+        }.setCapacity(ADVANCED_DIS_ENERGY).setEnergyConsumption(ADVANCED_DIS_ENERGY).setProcessingSpeed(ADVANCED_DIS_SPEED).register(plugin);
 
         new AutoEnchanter(Categories.INFINITY_CHEAT, Items.INFINITY_ENCHANTER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_ENCHANTER)) {
             @Override
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.NETHERITE_CHESTPLATE);
             }
-
-            @Override
-            public int getEnergyConsumption() {
-                return INFINITY_EN_ENERGY;
-            }
-
-            @Override
-            public int getCapacity() {
-                return INFINITY_EN_ENERGY;
-            }
-
-            @Override
-            public int getSpeed() {
-                return INFINITY_EN_SPEED;
-            }
-
-        }.register(plugin);
+        }.setCapacity(INFINITY_EN_ENERGY).setEnergyConsumption(INFINITY_EN_ENERGY).setProcessingSpeed(INFINITY_EN_SPEED).register(plugin);
 
         new AutoDisenchanter(Categories.INFINITY_CHEAT, Items.INFINITY_DISENCHANTER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_DISENCHANTER)) {
             @Override
             public ItemStack getProgressBar() {
                 return new ItemStack(Material.ENCHANTED_BOOK);
             }
-
-            @Override
-            public int getEnergyConsumption() {
-                return INFINITY_DIS_ENERGY;
-            }
-
-            @Override
-            public int getCapacity() {
-                return INFINITY_DIS_ENERGY;
-            }
-
-            @Override
-            public int getSpeed() {
-                return INFINITY_DIS_SPEED;
-            }
-
-        }.register(plugin);
+        }.setCapacity(INFINITY_DIS_ENERGY).setEnergyConsumption(INFINITY_DIS_ENERGY).setProcessingSpeed(INFINITY_DIS_SPEED).register(plugin);
 
         new ChargingBench(Categories.ADVANCED_MACHINES, Items.ADVANCED_CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, SlimefunItems.CHARGING_BENCH, Items.MACHINE_CIRCUIT,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE,
-        }) {
-            @Override
-            public int getEnergyConsumption() {
-                return ADVANCED_CHARGER_ENERGY;
-            }
+        }).setCapacity(ADVANCED_CHARGER_ENERGY).setEnergyConsumption(ADVANCED_CHARGER_ENERGY).setProcessingSpeed(ADVANCED_CHARGER_SPEED).register(plugin);
 
-            @Override
-            public int getCapacity() {
-                return ADVANCED_CHARGER_ENERGY;
-            }
-
-            @Override
-            public int getSpeed() {
-                return ADVANCED_CHARGER_SPEED;
-            }
-
-        }.register(plugin);
-
-        new ChargingBench(Categories.INFINITY_CHEAT, Items.INFINITY_CHARGER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_CHARGER)) {
-            @Override
-            public int getEnergyConsumption() {
-                return INFINITY_CHARGER_ENERGY;
-            }
-
-            @Override
-            public int getCapacity() {
-                return INFINITY_CHARGER_ENERGY;
-            }
-
-            @Override
-            public int getSpeed() {
-                return INFINITY_CHARGER_SPEED;
-            }
-
-        }.register(plugin);
+        new ChargingBench(Categories.INFINITY_CHEAT, Items.INFINITY_CHARGER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_CHARGER)
+        ).setCapacity(INFINITY_CHARGER_ENERGY).setEnergyConsumption(INFINITY_CHARGER_ENERGY).setProcessingSpeed(INFINITY_CHARGER_SPEED).register(plugin);
         
         new Reactor(Categories.ADVANCED_MACHINES, Items.ADVANCED_NETHER_STAR_REACTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.WITHER_PROOF_GLASS, SlimefunItems.WITHER_PROOF_GLASS, SlimefunItems.WITHER_PROOF_GLASS,
                 Items.MACHINE_CIRCUIT, SlimefunItems.NETHER_STAR_REACTOR, Items.MACHINE_CIRCUIT,
                 SlimefunItems.WITHER_PROOF_OBSIDIAN, SlimefunItems.WITHER_PROOF_OBSIDIAN, SlimefunItems.WITHER_PROOF_OBSIDIAN,
         }){
-            
+
             @Override
             public int getCapacity() {
                 return STAR_BUFFER;
@@ -282,5 +190,11 @@ public class SlimefunConstructors {
             }
 
         }.register(plugin);
+        
+        new GEOMiner(Categories.ADVANCED_MACHINES, Items.ADVANCED_GEO_MINER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
+                SlimefunItems.COBALT_PICKAXE, SlimefunItems.GEO_MINER, SlimefunItems.COBALT_PICKAXE,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
+        }).setCapacity(ADVANCED_GEO_ENERGY).setProcessingSpeed(ADVANCED_GEO_SPEED).setEnergyConsumption(ADVANCED_GEO_ENERGY).register(plugin);
     }
 }
