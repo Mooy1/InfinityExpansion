@@ -917,7 +917,7 @@ public final class Items {
 
     public static final SlimefunItemStack ENDER_FLAME = new SlimefunItemStack(
             "ENDER_FLAME",
-            Material.BUBBLE_CORAL_FAN,
+            Material.ENCHANTED_BOOK,
             "&cEnder Flame"
     );
 

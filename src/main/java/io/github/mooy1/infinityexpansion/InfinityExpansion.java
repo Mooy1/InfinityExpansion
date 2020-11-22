@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion;
 
+import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.setup.ItemSetup;
@@ -9,11 +10,11 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
-import me.mrCookieSlime.Slimefun.cscorelib2.updater.Updater;
 import org.apache.commons.lang.Validate;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -32,10 +33,10 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         //instance
         instance = this;
         tickRate = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
-        
+
         //config
         updateConfig();
-        setupConfigOptions();
+        setupConfigOptions(getConfig());
 
         //stats
         @SuppressWarnings("unused")
@@ -46,8 +47,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         //auto update
         if (getDescription().getVersion().startsWith("DEV - ")) {
             log(Level.INFO, "Starting auto update");
-            Updater updater = new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master");
-            updater.start();
+            new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master").start();
         } else {
             log(Level.WARNING, "You must be on a DEV build to auto update!");
         }
@@ -98,9 +98,10 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 ChatColor.GREEN + "",
                 ChatColor.GREEN + "########################################",
                 ChatColor.GREEN + "",
-                ChatColor.AQUA + "     Infinity Expansion v" + getInstance().getPluginVersion(),
+                ChatColor.AQUA + " Infinity Expansion v" + getInstance().getPluginVersion() + " Changelog",
                 ChatColor.GREEN + "     -------------------------    ",
-                ChatColor.AQUA + "              Changelog            ",
+                ChatColor.GREEN + "",
+                ChatColor.GRAY + " - signs on storage units display info",
                 ChatColor.GRAY + " - config for enchants",
                 ChatColor.GRAY + " - optimizations",
                 ChatColor.GRAY + " - energy balancing",
@@ -123,21 +124,37 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         saveConfig();
     }
 
-    private void setupConfigOptions() {
-        int configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-duct-length");
+    private void setupConfigOptions(FileConfiguration config) {
+        int configMax = config.getInt("output-duct-options.max-duct-length");
         if (configMax > 3 && configMax < 33) {
             OutputDuct.DUCT_LENGTH = configMax;
+        } else {
+            config.set("output-duct-options.max-duct-length", 12);
         }
 
-        configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-input-inventories");
+        configMax = config.getInt("output-duct-options.max-input-inventories");
         if (configMax > 0 && configMax < 21) {
             OutputDuct.MAX_INVS = configMax;
+        } else {
+            config.set("output-duct-options.max-input-inventories", 8);
         }
 
-        configMax = InfinityExpansion.getInstance().getConfig().getInt("output-duct-options.max-slots-to-check");
+        configMax = config.getInt("output-duct-options.max-slots-to-check");
         if (configMax > 0 && configMax < 54) {
             OutputDuct.MAX_SLOTS = configMax;
+        } else {
+            config.set("output-duct-options.max-slots-to-check", 9);
         }
+
+        configMax = config.getInt("storage-unit-options.sign-refresh-ticks");
+        if (configMax > 0 && configMax <= 20) {
+            StorageUnit.SIGN_REFRESH = configMax;
+        } else {
+            config.set("storage-unit-options.sign-refresh-ticks", 5);
+        }
+        StorageUnit.DISPLAY_SIGNS = config.getBoolean("storage-unit-options.display-signs");
+        
+        saveConfig();
     }
 
     /**

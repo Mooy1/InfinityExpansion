@@ -3,7 +3,6 @@ package io.github.mooy1.infinityexpansion.setup.command.subcommands;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
 import io.github.mooy1.infinityexpansion.setup.command.SubCommand;
-import lombok.NonNull;
 import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
@@ -21,7 +20,8 @@ public class Help extends SubCommand {
     }
 
     @Override
-    public @NonNull List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    @Nonnull
+    public List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
         return new ArrayList<>();
     }
 }

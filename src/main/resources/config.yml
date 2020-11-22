@@ -1,23 +1,35 @@
 # -----
+# storage-unit-options: 
+# display-signs:
+# if true, signs connected to storage units will update wither the stored item and amount, this may increase timings
+# 
+# sign-refresh-ticks: (default 5)
+# ticks before refreshing signs, bigger number decreases timings, max 20.
+# 
+# -----
 # output-duct-options:
 # You can slightly lower these if output duct timings are too high
-# -----
+# 
 # max-duct-length:
 # maximum length of a duct network which is comprised of item ducts and output ducts, minimum 4
 # default: 12
-# -----
+# 
 # max-input-inventories:
 # maximum number of input inventories or machine menus to check, minimum 1
 # default: 8
-# -----
+# 
 # max-slots-to-check:
 # maximum slots to check in each input inventories (it takes longer to check all 54 slots of a chest for ex), minimum 1
 # default: 9
+# 
 # -----
 # infinity-enchant-levels:
 # levels of infinity gear. this will not affect existing items. adding more enchants wont have any effect, only change levels. 
 # keep in mind protection levels past 5 are purely visual.
 # -----
+storage-unit-options:
+  display-signs: true
+  sign-refresh-ticks: 5
 output-duct-options:
   max-duct-length: 12
   max-input-inventories: 8

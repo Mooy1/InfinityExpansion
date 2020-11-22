@@ -26,7 +26,6 @@ import io.github.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
 import io.github.mooy1.infinityexpansion.implementation.materials.CompressedCobblestone;
 import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
-import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssenceResource;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineMaterial;
 import io.github.mooy1.infinityexpansion.implementation.materials.MainMaterial;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
@@ -96,7 +95,7 @@ public final class ItemSetup {
         new OutputDuct().register(plugin);
         new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
-            new StorageUnit(type).register(plugin);
+            new StorageUnit(type, plugin).register(plugin);
         }
         new StorageNetworkViewer().register(plugin);
         new StorageDuct().register(plugin);
@@ -149,8 +148,7 @@ public final class ItemSetup {
         for (int i = 0 ; i < SingularityConstructor.RECIPES.size() ; i++) {
             new Singularity(i).register(plugin);
         }
-        new EnderEssence().register(plugin);
-        new EnderEssenceResource().register();
+        new EnderEssence(plugin).register(plugin);
 
         //gear
 

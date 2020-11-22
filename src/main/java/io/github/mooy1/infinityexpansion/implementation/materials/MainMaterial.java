@@ -1,20 +1,18 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
+import io.github.mooy1.infinityexpansion.lists.Categories;
+import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
+import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -43,10 +41,8 @@ public class MainMaterial extends SlimefunItem implements NotPlaceable {
                 Items.METAL_SINGULARITY,
                 null, null, null
         }),
-
-        BIT(Categories.MAIN, Items.VOID_BIT, RecipeTypes.VOID_HARVESTER,
-                RecipeUtils.MiddleItem(new CustomItem(Material.IRON_NUGGET, "Void Bit", "&8Ignore this its for SF Calc"))),
-
+        
+        BIT(Categories.MAIN, Items.VOID_BIT, RecipeTypes.VOID_HARVESTER, null),
         DUST(Categories.MAIN, Items.VOID_DUST, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_BIT)),
         INGOT(Categories.MAIN, Items.VOID_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.VOID_DUST)),
 

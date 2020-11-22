@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.template.LoreStorage;
 import io.github.mooy1.infinityexpansion.implementation.template.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
@@ -12,6 +13,7 @@ import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,13 +31,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -45,33 +52,34 @@ import java.util.Objects;
  *
  * Thanks to
  * @author NCBPFluffyBear
- * for idea, a few bits of code,
- * and code to learn from
+ * for idea, a few bits of code, and code to learn from
  *
  */
 public class StorageUnit extends Machine implements LoreStorage {
+    
+    public static boolean DISPLAY_SIGNS = false;
+    public static int SIGN_REFRESH = 8;
+
+    private static final Map<Block, List<Block>> SIGNS = new HashMap<>();
 
     public static final int BASIC = 6400;
     public static final int ADVANCED = 25600;
     public static final int REINFORCED = 102400;
     public static final int VOID = 409600;
     public static final int INFINITY = 1_600_000_000;
-
+    
     private final Type type;
+    
     private static final int STATUS_SLOT = PresetUtils.slot2;
-    private static final int[] INPUT_SLOTS = {
-            PresetUtils.slot1
-    };
+    private static final int[] INPUT_SLOTS = {PresetUtils.slot1};
     private static final int INPUT_SLOT = INPUT_SLOTS[0];
-    private static final int[] OUTPUT_SLOTS = {
-            PresetUtils.slot3
-    };
+    private static final int[] OUTPUT_SLOTS = {PresetUtils.slot3};
     private static final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
     private static final int[] INPUT_BORDER = PresetUtils.slotChunk1;
     private static final int[] STATUS_BORDER = PresetUtils.slotChunk2;
     private static final int[] OUTPUT_BORDER = PresetUtils.slotChunk3;
 
-    public StorageUnit(@Nonnull Type type) {
+    public StorageUnit(@Nonnull Type type, @Nonnull InfinityExpansion instance) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 
@@ -221,23 +229,18 @@ public class StorageUnit extends Machine implements LoreStorage {
 
     @Override
     public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
-        if (inv.hasViewer()) updateStatus(b);
-
-        int maxStorage = type.getMax();
-        String storedItem = getStoredItem(b);
-
         //input
         ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
         if (inputSlotItem != null) { //Check if empty slot
-
-            int slotAmount = inputSlotItem.getAmount();
-
+            
             String inputItemID = StackUtils.getIDFromItem(inputSlotItem);
+            String storedItem = getStoredItem(b);
 
             //Check if non stackable item or another storage unit
             if (inputItemID != null && inputSlotItem.getEnchantments().size() == 0 && !(SlimefunItem.getByItem(inputSlotItem) instanceof LoreStorage)) {
-
+                
+                int slotAmount = inputSlotItem.getAmount();
                 int stored = getStored(b);
 
                 if (stored == 0 && storedItem == null) { //store new item
@@ -248,7 +251,7 @@ public class StorageUnit extends Machine implements LoreStorage {
 
                 } else {
 
-                    int maxInput = maxStorage-stored;
+                    int maxInput = type.getMax() - stored;
                     storedItem = getStoredItem(b);
 
                     if (storedItem.equals(inputItemID)) { //deposit item
@@ -274,9 +277,10 @@ public class StorageUnit extends Machine implements LoreStorage {
             }
         }
 
-        //output
+        updateStatus(b, inv, false);
 
-        storedItem = getStoredItem(b);
+        //output
+        String storedItem = getStoredItem(b);
 
         if (storedItem == null) {
             return;
@@ -313,6 +317,8 @@ public class StorageUnit extends Machine implements LoreStorage {
             setStoredItem(b, null);
             setStored(b, 0);
         }
+
+        updateStatus(b, inv, true);
     }
 
     /**
@@ -320,13 +326,41 @@ public class StorageUnit extends Machine implements LoreStorage {
      *
      * @param b block of storage unit
      */
-    private void updateStatus(@Nonnull Block b) {
-        BlockMenu inv = BlockStorage.getInventory(b);
-
-        if (!inv.hasViewer()) return;
-
+    private void updateStatus(@Nonnull Block b, @Nonnull BlockMenu inv, boolean updateSign) {
         String storedItem = getStoredItem(b);
         int stored = getStored(b);
+        
+        if (DISPLAY_SIGNS && updateSign && InfinityExpansion.progressEvery(SIGN_REFRESH)) {
+            List<Block> cached = SIGNS.get(b);
+            
+            if (cached == null) {
+                cached = addToCache(b);
+            }
+            
+            for (Block sign : cached) {
+                
+                if (SlimefunTag.WALL_SIGNS.isTagged(sign.getType())) {
+                    
+                    WallSign wall = (WallSign) sign.getBlockData();
+                    
+                    if (sign.getRelative(wall.getFacing().getOppositeFace()).equals(b)) {
+                        
+                        Sign lines = (Sign) sign.getState();
+                        
+                        lines.setLine(0, "------------");
+                        lines.setLine(1, storedItem != null ? storedItem : "none");
+                        lines.setLine(2, "Stored: " + stored);
+                        lines.setLine(3, "------------");
+                        
+                        lines.update();
+                        
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (!inv.hasViewer()) return;
 
         if (storedItem == null || stored == 0) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
@@ -345,6 +379,24 @@ public class StorageUnit extends Machine implements LoreStorage {
 
             inv.replaceExistingItem(STATUS_SLOT, item);
         }
+    }
+    
+    private List<Block> addToCache(@Nonnull Block b) {
+        List<Block> cached = new ArrayList<>();
+
+        List<Location> spots = new ArrayList<>(4);
+
+        Location l = b.getLocation();
+        spots.add(l.clone().add(1, 0, 0));
+        spots.add(l.clone().add(-1, 0, 0));
+        spots.add(l.clone().add(0, 0, 1));
+        spots.add(l.clone().add(0, 0, -1));
+
+        for (Location spot : spots) {
+            cached.add(spot.getBlock());
+        }
+        SIGNS.put(b, cached);
+        return cached;
     }
 
     /**
@@ -376,28 +428,19 @@ public class StorageUnit extends Machine implements LoreStorage {
     }
 
     private void setStored(Block b, int stored) {
-        setBlockData(b, "stored", String.valueOf(stored));
-        updateStatus(b);
+       BlockStorage.addBlockInfo(b, "stored", String.valueOf(stored));
     }
 
     private void setStoredItem(Block b, String storedItem) {
-        setBlockData(b, "storeditem", storedItem);
+        BlockStorage.addBlockInfo(b, "storeditem", storedItem);
     }
 
     public int getStored(@Nonnull Block b) {
-        return Integer.parseInt(getBlockData(b.getLocation(), "stored"));
+        return Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "stored"));
     }
 
     public String getStoredItem(@Nonnull Block b) {
-        return getBlockData(b.getLocation(), "storeditem");
-    }
-
-    private void setBlockData(Block b, String key, String data) {
-        BlockStorage.addBlockInfo(b, key, data);
-    }
-
-    private String getBlockData(Location l, String key) {
-        return BlockStorage.getLocationInfo(l, key);
+        return BlockStorage.getLocationInfo(b.getLocation(), "storeditem");
     }
 
     @Override
@@ -437,5 +480,4 @@ public class StorageUnit extends Machine implements LoreStorage {
         private final RecipeType recipeType;
         private final ItemStack[] recipe;
     }
-
 }

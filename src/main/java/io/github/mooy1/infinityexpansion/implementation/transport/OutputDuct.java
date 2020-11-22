@@ -309,8 +309,8 @@ public class OutputDuct extends Machine {
                                 int amount = outputItem.getAmount();
 
                                 try {
-                                    targetMachine.pushItem(outputItem, destinationSlots);
                                     extractionMenu.consumeItem(slot, amount);
+                                    targetMachine.pushItem(outputItem, destinationSlots);
                                 } catch (NullPointerException ignored) {
                                 }
 

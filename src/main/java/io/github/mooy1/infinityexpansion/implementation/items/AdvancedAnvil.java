@@ -25,6 +25,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
@@ -33,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Combines slimefun items, exceeds vanilla anvil limits, ded
+ * Combines slimefun items, exceeds vanilla anvil limits
  *
  * @author Mooy1
  */
@@ -45,8 +46,11 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
     
     static {
         UPGRADEABLE.put(Enchantment.DAMAGE_ALL, 9);
+        UPGRADEABLE.put(Enchantment.DAMAGE_ARTHROPODS, 9);
+        UPGRADEABLE.put(Enchantment.DAMAGE_UNDEAD, 9);
         UPGRADEABLE.put(Enchantment.PROTECTION_ENVIRONMENTAL, 10);
         UPGRADEABLE.put(Enchantment.DURABILITY, 13);
+        UPGRADEABLE.put(Enchantment.LOOT_BONUS_MOBS, 6);
         UPGRADEABLE.put(Enchantment.LOOT_BONUS_BLOCKS, 6);
     }
 
@@ -132,7 +136,7 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
         ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);
         ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
 
-        if (item1 == null || item2 == null || item1.getType() != item2.getType()) {
+        if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid items!"));
             return;
         }
@@ -156,7 +160,7 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
         ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);
         ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
 
-        if (item1 == null || item2 == null || item1.getType() != item2.getType()) {
+        if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
             MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid items!");
             return;
         }
@@ -170,6 +174,7 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
 
         if (!inv.fits(output, OUTPUT_SLOTS)) {
             MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
+            return;
         }
 
         p.playSound(l, Sound.BLOCK_ANVIL_USE, 1, 1);
@@ -180,46 +185,82 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
     }
 
     @Nullable
-    private static ItemStack getOutput(@Nonnull ItemStack item1, @Nonnull ItemStack item2) {
+    private ItemStack getOutput(@Nonnull ItemStack item1, @Nonnull ItemStack item2) {
         ItemMeta meta1 = item1.getItemMeta();
         ItemMeta meta2 = item2.getItemMeta();
-        if (meta1 == null || meta2 == null || (!meta1.hasEnchants() && !meta2.hasEnchants())) return null;
-
+        
+        if (meta1 == null || meta2 == null) {
+            return null;
+        }
+        
+        Map<Enchantment, Integer> enchants1 = getEnchants(meta1);
+        Map<Enchantment, Integer> enchants2 = getEnchants(meta2);
+        
+        if (enchants1.size() == 0 && enchants2.size() == 0) return null;
+            
+        return combineEnchants(Maps.difference(enchants1, enchants2), item1, item2);
+    }
+    
+    @Nonnull
+    private Map<Enchantment, Integer> getEnchants(ItemMeta meta) {
+        if (meta.hasEnchants()) {
+            return meta.getEnchants();
+        } else if (meta instanceof EnchantmentStorageMeta) {
+            EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
+            return book.getEnchants();
+        }
+        
+        return new HashMap<>();
+    }
+    
+    private void setEnchants(@Nonnull ItemMeta meta, @Nonnull Map<Enchantment, Integer> enchants) {
+        
+    }
+    
+    private ItemStack combineEnchants(MapDifference<Enchantment, Integer> dif, @Nonnull ItemStack item1, @Nonnull ItemStack item2) {
         ItemStack item = item1.clone();
         item.setAmount(1);
-
-        Map<Enchantment, Integer> map1 = meta1.getEnchants();
-        Map<Enchantment, Integer> map2 = meta2.getEnchants();
+        ItemMeta meta = item.getItemMeta();
         
-        MapDifference<Enchantment, Integer> dif = Maps.difference(map1, map2);
+        if (meta == null) return null;
         
+        Map<Enchantment, Integer> enchants = meta.getEnchants();
         Map<Enchantment, Integer> common = dif.entriesInCommon();
         Map<Enchantment, MapDifference.ValueDifference<Integer>> differing = dif.entriesDiffering();
         Map<Enchantment, Integer> unique = dif.entriesOnlyOnRight();
-        
+
         boolean changed = false;
-        
-        for (Enchantment e : common.keySet()) {
-            if (UPGRADEABLE.containsKey(e) && common.get(e) < UPGRADEABLE.get(e)) {
-                item.addUnsafeEnchantment(e, common.get(e) + 1);
+
+        //upgrades (same enchant and level)
+        for (Map.Entry<Enchantment, Integer> e : common.entrySet()) {
+            if (UPGRADEABLE.containsKey(e.getKey()) && e.getValue() < UPGRADEABLE.get(e.getKey())) {
+                enchants.put(e.getKey(), e.getValue() + 1);
                 changed = true;
             }
         }
-        
-        for (Enchantment e : differing.keySet()) {
-            MapDifference.ValueDifference<Integer> pair = differing.get(e);
-            if (pair.rightValue() > pair.leftValue()) {
-                item.addUnsafeEnchantment(e, pair.rightValue());
+
+        //override (same enchant different level)
+        for (Map.Entry<Enchantment, MapDifference.ValueDifference<Integer>> e : differing.entrySet()) {
+            if (e.getValue().rightValue() > e.getValue().leftValue()) {
+                enchants.put(e.getKey(), e.getValue().rightValue());
                 changed = true;
             }
         }
-        
-        for (Enchantment e : unique.keySet()) {
-            item.addUnsafeEnchantment(e, unique.get(e));
+
+        boolean book = item2.getType() == Material.ENCHANTED_BOOK;
+
+        //unique (different enchants from 2nd item)
+        for (Map.Entry<Enchantment, Integer> e : unique.entrySet()) {
+            if (book) {
+                if (!e.getKey().canEnchantItem(item)) continue;
+            }
+            enchants.put(e.getKey(), e.getValue());
             changed = true;
         }
 
         if (changed) {
+            setEnchants(meta, enchants);
+            item.setItemMeta(meta);
             return item;
         } else {
             return null;
