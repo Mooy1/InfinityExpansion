@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.template.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
@@ -70,26 +71,26 @@ public class SingularityConstructor extends Machine implements EnergyNetComponen
     public static final TriList<SlimefunItemStack, String, Integer> RECIPES = new TriList<>();
 
     static {
-        RECIPES.add(Items.COPPER_SINGULARITY, "COPPER_INGOT", 2000);
-        RECIPES.add(Items.ZINC_SINGULARITY, "ZINC_INGOT", 4000);
-        RECIPES.add(Items.TIN_SINGULARITY, "TIN_INGOT",4000);
-        RECIPES.add(Items.ALUMINUM_SINGULARITY, "ALUMINUM_INGOT",4000);
-        RECIPES.add(Items.SILVER_SINGULARITY, "SILVER_INGOT",4000);
-        RECIPES.add(Items.MAGNESIUM_SINGULARITY, "MAGNESIUM_INGOT",4000);
-        RECIPES.add(Items.LEAD_SINGULARITY, "LEAD_INGOT",4000);
+        RECIPES.add(Items.COPPER_SINGULARITY, "COPPER_INGOT", 1280);
+        RECIPES.add(Items.ZINC_SINGULARITY, "ZINC_INGOT", 1280);
+        RECIPES.add(Items.TIN_SINGULARITY, "TIN_INGOT",1280);
+        RECIPES.add(Items.ALUMINUM_SINGULARITY, "ALUMINUM_INGOT",1280);
+        RECIPES.add(Items.SILVER_SINGULARITY, "SILVER_INGOT",1280);
+        RECIPES.add(Items.MAGNESIUM_SINGULARITY, "MAGNESIUM_INGOT",1280);
+        RECIPES.add(Items.LEAD_SINGULARITY, "LEAD_INGOT",1280);
 
-        RECIPES.add(Items.GOLD_SINGULARITY, "GOLD_INGOT", 2000);
-        RECIPES.add(Items.IRON_SINGULARITY, "IRON_INGOT", 4000);
-        RECIPES.add(Items.DIAMOND_SINGULARITY, "DIAMOND", 500);
-        RECIPES.add(Items.EMERALD_SINGULARITY, "EMERALD", 500);
-        RECIPES.add(Items.NETHERITE_SINGULARITY, "NETHERITE_INGOT", 200);
+        RECIPES.add(Items.GOLD_SINGULARITY, "GOLD_INGOT", (int) (640 * InfinityExpansion.SCALE));
+        RECIPES.add(Items.IRON_SINGULARITY, "IRON_INGOT", (int) (1280 * InfinityExpansion.SCALE));
+        RECIPES.add(Items.DIAMOND_SINGULARITY, "DIAMOND", (int) (320 * InfinityExpansion.SCALE));
+        RECIPES.add(Items.EMERALD_SINGULARITY, "EMERALD", (int) (320 * InfinityExpansion.SCALE));
+        RECIPES.add(Items.NETHERITE_SINGULARITY, "NETHERITE_INGOT", (int) (160 * InfinityExpansion.SCALE));
 
-        RECIPES.add(Items.COAL_SINGULARITY, "COAL", 2000);
-        RECIPES.add(Items.REDSTONE_SINGULARITY, "REDSTONE", 1000);
-        RECIPES.add(Items.LAPIS_SINGULARITY, "LAPIS_LAZULI",1000);
-        RECIPES.add(Items.QUARTZ_SINGULARITY, "QUARTZ",1000);
+        RECIPES.add(Items.COAL_SINGULARITY, "COAL", (int) (960 * InfinityExpansion.SCALE));
+        RECIPES.add(Items.REDSTONE_SINGULARITY, "REDSTONE", (int) (320 * InfinityExpansion.SCALE));
+        RECIPES.add(Items.LAPIS_SINGULARITY, "LAPIS_LAZULI",(int) (320 * InfinityExpansion.SCALE));
+        RECIPES.add(Items.QUARTZ_SINGULARITY, "QUARTZ", (int) (320 * InfinityExpansion.SCALE));
 
-        RECIPES.add(Items.INFINITY_SINGULARITY, "INFINITE_INGOT",200);
+        RECIPES.add(Items.INFINITY_SINGULARITY, "INFINITE_INGOT",160);
     }
 
     public SingularityConstructor(Type type) {

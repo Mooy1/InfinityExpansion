@@ -32,9 +32,11 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.logging.Level;
 
 /**
@@ -1008,13 +1010,9 @@ public final class Items {
         addUnbreakable(items);
         addEnchants(items, "infinity-enchant-levels", "INFINITY");
         
-        ENDER_FLAME.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 5);
-    }
-    
-    private static int getInt(String path) {
-        int found = CONFIG.getInt(path);
-        if (found < 0 || found > Short.MAX_VALUE) return 0;
-        return found;
+        EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) ENDER_FLAME.getItemMeta();
+        Objects.requireNonNull(storageMeta).addStoredEnchant(Enchantment.FIRE_ASPECT, 5, true);
+        ENDER_FLAME.setItemMeta(storageMeta);
     }
     
     private static void addEnchants(SlimefunItemStack[] items, String section, String gearType) {
@@ -1034,17 +1032,22 @@ public final class Items {
             }
             
             for (String path : itemSection.getKeys(false)) {
-                int level = getInt(section + "." + itemPath + "." + path);
-                if (level > 0) {
+                int level = CONFIG.getInt(section + "." + itemPath + "." + path);
+                if (level > 0 && level <= Short.MAX_VALUE) {
                     Enchantment e = getEnchantFromString(path);
                     if (e == null) {
                         InfinityExpansion.log(Level.WARNING, "Failed to add enchantment " + path + ", your config may be messed up, report this!");
                         continue;
                     }
                     item.addUnsafeEnchantment(e, level);
+                } else if (level != 0) {
+                    CONFIG.set(section + "." + itemPath + "." + path, 1);
+                    InfinityExpansion.log(Level.WARNING, "Enchantment level " + level + " for enchantment " + path + " is not allowed, resetting to 1, please check your config and update it with a correct value"); 
                 }
             }
         }
+        
+        InfinityExpansion.getInstance().saveConfig();
     }
         
     private static void addUnbreakable(SlimefunItemStack[] items) {

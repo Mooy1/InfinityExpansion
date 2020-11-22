@@ -22,13 +22,13 @@ import java.util.List;
 
 public class MobDataInfuser extends Crafter implements EnergyNetComponent {
     
-    public static final int ENERGY = 100000;
+    public static final int ENERGY = 20000;
 
     public MobDataInfuser() {
         super(Categories.MOB_SIMULATION, Items.DATA_INFUSER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CIRCUIT,
                 SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CORE, SlimefunItems.REINFORCED_ALLOY_INGOT,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT
+                Items.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CIRCUIT
         });
     }
 

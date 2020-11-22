@@ -1,6 +1,8 @@
 package io.github.mooy1.infinityexpansion;
 
+import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
+import io.github.mooy1.infinityexpansion.implementation.transport.DuctNetworkManager;
 import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.setup.ItemSetup;
@@ -18,6 +20,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
@@ -25,14 +28,16 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Getter
     private static InfinityExpansion instance;
     @Getter
-    private int tickRate;
-    private static int progressTick = 1;
+    private static int RATE;
+    private static int TICK = 1;
+    @Getter
+    public static double SCALE = 1;
     
     @Override
     public void onEnable() {
         //instance
         instance = this;
-        tickRate = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
+        RATE = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
 
         //config
         updateConfig();
@@ -66,14 +71,15 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
             getLogger().log(Level.INFO, line);
         }
         
-        //progress ticker
+        //ticker
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            if (progressTick < 60) {
-                progressTick ++;
+            if (TICK < 60) {
+                TICK++;
             } else {
-                progressTick = 1;
+                TICK = 1;
             }
-        }, 100L, tickRate);
+            DuctNetworkManager.tick();
+        }, 100L, RATE);
     }
 
     @Override
@@ -125,36 +131,76 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     }
 
     private void setupConfigOptions(FileConfiguration config) {
-        int configMax = config.getInt("output-duct-options.max-duct-length");
-        if (configMax > 3 && configMax < 33) {
-            OutputDuct.DUCT_LENGTH = configMax;
-        } else {
-            config.set("output-duct-options.max-duct-length", 12);
-        }
-
-        configMax = config.getInt("output-duct-options.max-input-inventories");
-        if (configMax > 0 && configMax < 21) {
-            OutputDuct.MAX_INVS = configMax;
-        } else {
-            config.set("output-duct-options.max-input-inventories", 8);
-        }
-
-        configMax = config.getInt("output-duct-options.max-slots-to-check");
-        if (configMax > 0 && configMax < 54) {
-            OutputDuct.MAX_SLOTS = configMax;
-        } else {
-            config.set("output-duct-options.max-slots-to-check", 9);
-        }
-
-        configMax = config.getInt("storage-unit-options.sign-refresh-ticks");
-        if (configMax > 0 && configMax <= 20) {
-            StorageUnit.SIGN_REFRESH = configMax;
-        } else {
-            config.set("storage-unit-options.sign-refresh-ticks", 5);
-        }
-        StorageUnit.DISPLAY_SIGNS = config.getBoolean("storage-unit-options.display-signs");
+        OutputDuct.DUCT_LENGTH = getOrDefault("output-duct-options.max-duct-length", 4, 32, 12, config);
+        OutputDuct.MAX_INVS = getOrDefault("output-duct-options.max-input-inventories", 1, 20, 8, config);
+        OutputDuct.MAX_SLOTS = getOrDefault("output-duct-options.max-slots-to-check", 1, 54, 9, config);
+        StorageUnit.SIGN_REFRESH = getOrDefault("storage-unit-options.sign-refresh-ticks", 1, 10, 5, config);
+        StorageUnit.DISPLAY_SIGNS = getOrDefault("storage-unit-options.display-signs", true, config);
+        MobSimulationChamber.CHANCE = getOrDefault("balance-options.mob-simulation-xp-chance", 1, 10, 2, config);
+        SCALE = getOrDefault("balance-options.vanilla-economy-scale", .1, 10, 1, config);
         
         saveConfig();
+    }
+    
+    private int getOrDefault(String path, int min, int max, int def, FileConfiguration config) {
+        if (hasPath(path, config)) {
+            int value = config.getInt(path);
+            if (value >= min && value <= max) {
+                return value;
+            } else {
+                configWarnValue(path);
+                config.set(path, def);
+                return def;
+            }
+        }
+        return def;
+    }
+
+    private boolean getOrDefault(String path, boolean def, FileConfiguration config) {
+        if (hasPath(path, config)) {
+            String value = config.getString(path);
+            if (Objects.equals(value, "true")) {
+                return true;
+            } else if (Objects.equals(value, "false")) {
+                return false;
+            } else {
+                configWarnValue(path);
+                config.set(path, def);
+                return def;
+            }
+        }
+        return def;
+    }
+
+    private double getOrDefault(String path, double min, double max, double def, FileConfiguration config) {
+        if (hasPath(path, config)) {
+            double value = config.getDouble(path);
+            if (value >= min && value <= max) {
+                return value;
+            } else {
+                configWarnValue(path);
+                config.set(path, def);
+                return def;
+            }
+        }
+        return def;
+    }
+    
+     private boolean hasPath(String path, FileConfiguration config) {
+         if (config.contains(path)) {
+             return true;
+         } else {
+             configWarnPath(path);
+             return false;
+         }
+     }
+    
+    private void configWarnValue(String path) {
+        log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting it to default");
+    }
+
+    private void configWarnPath(String path) {
+        log(Level.SEVERE, "Config was missing path " + path + ", please add this path or reset your config!");
     }
 
     /**
@@ -171,11 +217,11 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
      * @return whether the block should progress
      */
     public static boolean progressOn(int rate, int pos) {
-        return progressTick % rate == pos;
+        return TICK % rate == pos;
     }
     
     public static int currentTick() {
-        return progressTick;
+        return TICK;
     }
     
     public static void runSync(@Nonnull Runnable runnable, long delay) {

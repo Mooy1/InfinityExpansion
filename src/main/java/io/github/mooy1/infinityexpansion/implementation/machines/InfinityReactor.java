@@ -38,7 +38,7 @@ import java.util.Objects;
  */
 public class InfinityReactor extends Machine implements EnergyNetProvider, RecipeDisplayItem {
 
-    public static final int ENERGY = 200_000;
+    public static final int ENERGY = 180_000;
     public static final int STORAGE = 40_000_000;
     public static final int INFINITY_INTERVAL = 72000;
     public static final int VOID_INTERVAL = 12000;

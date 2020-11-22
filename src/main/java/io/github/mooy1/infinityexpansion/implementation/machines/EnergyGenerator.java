@@ -130,7 +130,7 @@ public class EnergyGenerator extends Machine implements EnergyNetProvider {
                 inv.replaceExistingItem(4, new CustomItem(
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&cNot generating",
-                        "&7Stored: &6" + LoreUtils.format(stored + rate) + " J"
+                        "&7Stored: &6" + LoreUtils.format(stored) + " J"
                 ));
 
             } else {
@@ -142,7 +142,7 @@ public class EnergyGenerator extends Machine implements EnergyNetProvider {
                         "&aGeneration",
                         "&7Type: &6" + (canGenerate ? pair.getSecondValue() : "Full"),
                         "&7Generating: &6" + (canGenerate ? LoreUtils.roundHundreds(rate * LoreUtils.SERVER_TICK_RATIO) : 0) + " J/s ",
-                        "&7Stored: &6" + LoreUtils.format(stored + rate) + " J"
+                        "&7Stored: &6" + LoreUtils.format(stored) + " J"
                 ));
             }
         }

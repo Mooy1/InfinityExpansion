@@ -196,35 +196,49 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
         Map<Enchantment, Integer> enchants1 = getEnchants(meta1);
         Map<Enchantment, Integer> enchants2 = getEnchants(meta2);
         
-        if (enchants1.size() == 0 && enchants2.size() == 0) return null;
+        if (enchants1.size() == 0 && enchants2.size() == 0) {
+            return null;
+        }
             
         return combineEnchants(Maps.difference(enchants1, enchants2), item1, item2);
     }
     
     @Nonnull
-    private Map<Enchantment, Integer> getEnchants(ItemMeta meta) {
-        if (meta.hasEnchants()) {
-            return meta.getEnchants();
-        } else if (meta instanceof EnchantmentStorageMeta) {
+    private Map<Enchantment, Integer> getEnchants(@Nonnull ItemMeta meta) {
+        if (meta instanceof EnchantmentStorageMeta) {
             EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
-            return book.getEnchants();
-        }
+            if (book.hasStoredEnchants()) {
+                return book.getStoredEnchants();
+            }
+        } else if (meta.hasEnchants()) {
+             return meta.getEnchants();
+         }
         
         return new HashMap<>();
     }
     
-    private void setEnchants(@Nonnull ItemMeta meta, @Nonnull Map<Enchantment, Integer> enchants) {
-        
+    private void setEnchants(@Nonnull ItemStack item, @Nonnull ItemMeta meta, @Nonnull Map<Enchantment, Integer> enchants) {
+        if (meta instanceof EnchantmentStorageMeta) {
+            EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
+            for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+                book.addStoredEnchant(entry.getKey(), entry.getValue(), true);
+            }
+            item.setItemMeta(book);
+        } else {
+            for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+                item.addUnsafeEnchantment(entry.getKey(), entry.getValue());
+            }
+        }
     }
     
-    private ItemStack combineEnchants(MapDifference<Enchantment, Integer> dif, @Nonnull ItemStack item1, @Nonnull ItemStack item2) {
+    private ItemStack combineEnchants(@Nonnull MapDifference<Enchantment, Integer> dif, @Nonnull ItemStack item1, @Nonnull ItemStack item2) {
         ItemStack item = item1.clone();
         item.setAmount(1);
         ItemMeta meta = item.getItemMeta();
         
         if (meta == null) return null;
         
-        Map<Enchantment, Integer> enchants = meta.getEnchants();
+        Map<Enchantment, Integer> enchants = new HashMap<>();
         Map<Enchantment, Integer> common = dif.entriesInCommon();
         Map<Enchantment, MapDifference.ValueDifference<Integer>> differing = dif.entriesDiffering();
         Map<Enchantment, Integer> unique = dif.entriesOnlyOnRight();
@@ -247,11 +261,11 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
             }
         }
 
-        boolean book = item2.getType() == Material.ENCHANTED_BOOK;
+        boolean bookOntoTool = item2.getType() == Material.ENCHANTED_BOOK && item1.getType() != Material.ENCHANTED_BOOK;
 
         //unique (different enchants from 2nd item)
         for (Map.Entry<Enchantment, Integer> e : unique.entrySet()) {
-            if (book) {
+            if (bookOntoTool) {
                 if (!e.getKey().canEnchantItem(item)) continue;
             }
             enchants.put(e.getKey(), e.getValue());
@@ -259,8 +273,7 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
         }
 
         if (changed) {
-            setEnchants(meta, enchants);
-            item.setItemMeta(meta);
+            setEnchants(item, meta, enchants);
             return item;
         } else {
             return null;

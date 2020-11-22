@@ -79,7 +79,7 @@ public class StorageUnit extends Machine implements LoreStorage {
     private static final int[] STATUS_BORDER = PresetUtils.slotChunk2;
     private static final int[] OUTPUT_BORDER = PresetUtils.slotChunk3;
 
-    public StorageUnit(@Nonnull Type type, @Nonnull InfinityExpansion instance) {
+    public StorageUnit(@Nonnull Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
 

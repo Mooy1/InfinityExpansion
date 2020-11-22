@@ -37,6 +37,7 @@ public class MobSimulationChamber extends Machine implements EnergyNetComponent 
     private static final int XP_Slot = 46;
     public static final int BUFFER = 10000;
     public static final int ENERGY = 120;
+    public static int CHANCE = 2;
 
     private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     
@@ -67,14 +68,16 @@ public class MobSimulationChamber extends Machine implements EnergyNetComponent 
     public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         MobDataCard.Type card = getCard(inv.getItemInSlot(CARD_SLOT));
         
-        if (card == null || card.getEnergy() == 0) {
+        if (card == null) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, NO_CARD);
             }
             return;
         }
         
-        if (getCharge(l) < card.getEnergy()) {
+        int energy = card.getEnergy() + ENERGY;
+        
+        if (getCharge(l) < energy) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             }
@@ -82,15 +85,17 @@ public class MobSimulationChamber extends Machine implements EnergyNetComponent 
         }
 
         if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS_SLOT, makeSimulating(card.getEnergy()));
+            inv.replaceExistingItem(STATUS_SLOT, makeSimulating(energy));
             inv.replaceExistingItem(XP_Slot, makeXpItem(getXP(l)));
         }
 
         if (!InfinityExpansion.progressEvery(INTERVAL)) return;
         
-        int xp = getXP(l) + card.getXp();
-        setXp(l, xp);
-
+        if (MathUtils.chanceIn(CHANCE)) {
+            int xp = getXP(l) + card.getXp();
+            setXp(l, xp);
+        }
+        
         for (Map.Entry<Integer, ItemStack> entry : card.getDrops().entrySet()) {
             if (MathUtils.chanceIn(entry.getKey())) {
                 ItemStack output = entry.getValue().clone();
@@ -105,12 +110,12 @@ public class MobSimulationChamber extends Machine implements EnergyNetComponent 
             }
         }
         
-        removeCharge(l, card.getEnergy());
+        removeCharge(l, energy);
     }
     
     @Nonnull
-    private ItemStack makeSimulating(int card) {
-        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round((ENERGY + card) * LoreUtils.SERVER_TICK_RATIO) + " J/s)");
+    private ItemStack makeSimulating(int energy) {
+        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round(energy * LoreUtils.SERVER_TICK_RATIO) + " J/s)");
     }
 
     @Override

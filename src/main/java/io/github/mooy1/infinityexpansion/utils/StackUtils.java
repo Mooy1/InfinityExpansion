@@ -14,10 +14,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Collection of utils for modifying ItemStacks and getting their ids
@@ -25,9 +22,7 @@ import java.util.Map;
  * @author Mooy1
  */
 public final class StackUtils {
-
-    private StackUtils() {}
-
+    
     @Nullable
     public static String getIDFromItem(@Nullable ItemStack item) {
         if (item == null) {

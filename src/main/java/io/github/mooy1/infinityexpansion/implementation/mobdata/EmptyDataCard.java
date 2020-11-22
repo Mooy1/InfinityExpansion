@@ -6,7 +6,6 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.inventory.ItemStack;
 
 public class EmptyDataCard extends SlimefunItem implements NotPlaceable {
@@ -15,6 +14,6 @@ public class EmptyDataCard extends SlimefunItem implements NotPlaceable {
                 SlimefunItems.MAGNESIUM_INGOT, Items.MACHINE_CIRCUIT, SlimefunItems.MAGNESIUM_INGOT,
                 SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.SYNTHETIC_DIAMOND, SlimefunItems.SYNTHETIC_EMERALD,
                 SlimefunItems.MAGNESIUM_INGOT, Items.MACHINE_CIRCUIT, SlimefunItems.MAGNESIUM_INGOT
-        }, new SlimefunItemStack(Items.EMPTY_DATA_CARD, 3));
+        });
     }
 }

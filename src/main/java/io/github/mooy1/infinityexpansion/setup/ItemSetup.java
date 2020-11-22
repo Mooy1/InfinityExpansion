@@ -95,7 +95,7 @@ public final class ItemSetup {
         new OutputDuct().register(plugin);
         new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
-            new StorageUnit(type, plugin).register(plugin);
+            new StorageUnit(type).register(plugin);
         }
         new StorageNetworkViewer().register(plugin);
         new StorageDuct().register(plugin);

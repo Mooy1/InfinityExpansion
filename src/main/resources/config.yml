@@ -1,32 +1,50 @@
 # -----
-# storage-unit-options: 
-# display-signs:
-# if true, signs connected to storage units will update wither the stored item and amount, this may increase timings
 # 
-# sign-refresh-ticks: (default 5)
-# ticks before refreshing signs, bigger number decreases timings, max 20.
+# balance-options:
+# 
+# vanilla-economy-scale: (default 1) (range .1 - 10)
+# Decrease or increase this depending on the scale of your economy.
+# By default, this value is perfect for a server with some slimefun addons, some other plugins, spawners, and kits
+# RECOMMENDED NOT TO CHANGE THIS
+# If it is super easy to get lots of items, slightly increase this.
+# If it is super hard to get lots of items, slightly decrease this.
+# 
+# mob-simulation-xp-chance: (default 2 (50%)) (range 1-10)
+# amount of ticks average for a simulation chamber to output xp, higher number is lower change, at default its 1/2 or 50%
 # 
 # -----
+# 
+# storage-unit-options: 
+# display-signs: (default true)
+# if true, signs connected to storage units will update wither the stored item and amount, this may increase timings
+# 
+# sign-refresh-ticks: (default 5) (range 1-10)
+# ticks before refreshing signs, bigger number decreases timings.
+# 
+# -----
+# 
 # output-duct-options:
 # You can slightly lower these if output duct timings are too high
 # 
-# max-duct-length:
+# max-duct-length: (default 12)
 # maximum length of a duct network which is comprised of item ducts and output ducts, minimum 4
-# default: 12
 # 
-# max-input-inventories:
+# max-input-inventories: (default 8)
 # maximum number of input inventories or machine menus to check, minimum 1
-# default: 8
 # 
-# max-slots-to-check:
+# max-slots-to-check: (default 9)
 # maximum slots to check in each input inventories (it takes longer to check all 54 slots of a chest for ex), minimum 1
-# default: 9
 # 
 # -----
+# 
 # infinity-enchant-levels:
 # levels of infinity gear. this will not affect existing items. adding more enchants wont have any effect, only change levels. 
-# keep in mind protection levels past 5 are purely visual.
+# KEEP IN MIND PROTECTION LEVELS PAST 5 ARE PURELY COSMETIC AND ARE THE SAME AS 5.
+# 
 # -----
+balance-options:
+  vanilla-economy-scale: 1.0
+  mob-simulation-xp-chance: 2
 storage-unit-options:
   display-signs: true
   sign-refresh-ticks: 5
@@ -57,18 +75,18 @@ infinity-enchant-levels:
     infinity: 10
     punch: 0
   crown:
-    protection: 40
+    protection: 20
     aqua-affinity: 10
   chestplate:
-    protection: 40
+    protection: 20
     thorns: 10
   leggings:
-    protection: 40
+    protection: 20
     thorns: 10
   boots:
-    protection: 40
+    protection: 20
     feather-falling: 0
     thorns: 0
   shield:
-    protection: 40
+    protection: 20
     thorns: 10
