@@ -311,7 +311,7 @@ public class OutputDuct extends Machine {
                                 try {
                                     extractionMenu.consumeItem(slot, amount);
                                     targetMachine.pushItem(outputItem, destinationSlots);
-                                } catch (NullPointerException ignored) {
+                                } catch (Exception ignored) {
                                 }
 
                             } else {
@@ -370,7 +370,7 @@ public class OutputDuct extends Machine {
                                 try {
                                     slotItem.setAmount(slotItem.getAmount() - outputItem.getAmount());
                                     targetMachine.pushItem(outputItem, destinationSlots);
-                                } catch (NullPointerException ignored) {
+                                } catch (Exception ignored) {
                                 }
 
                             } else {

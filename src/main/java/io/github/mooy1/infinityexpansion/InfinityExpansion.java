@@ -35,7 +35,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     
     @Override
     public void onEnable() {
-        //instance
         instance = this;
         RATE = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
 
