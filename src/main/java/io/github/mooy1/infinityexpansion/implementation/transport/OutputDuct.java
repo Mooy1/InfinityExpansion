@@ -433,7 +433,7 @@ public class OutputDuct extends Machine {
         if (thisMaterial == Items.OUTPUT_DUCT.getType() || thisMaterial == Items.ITEM_DUCT.getType()) {
             String thisID = BlockStorage.checkID(thisLocation);
 
-            if (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT")) { //connector
+            if (thisID != null && (thisID.equals("OUTPUT_DUCT") || thisID.equals("ITEM_DUCT"))) { //connector
 
                 length.increment();
 
