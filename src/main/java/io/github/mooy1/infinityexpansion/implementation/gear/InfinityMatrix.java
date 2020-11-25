@@ -24,6 +24,10 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Flight
+ * 
+ */
 public class InfinityMatrix extends SlimefunItem implements Listener, LoreStorage, Soulbound, NotPlaceable {
 
     public InfinityMatrix(InfinityExpansion plugin) {

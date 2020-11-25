@@ -283,7 +283,7 @@ public class TreeGrower extends Machine implements EnergyNetComponent, RecipeDis
 
     @Override
     public int getCapacity() {
-        return type.getEnergy();
+        return type.getEnergy() * 2;
     }
 
     @Nonnull

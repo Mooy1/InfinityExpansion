@@ -378,7 +378,7 @@ public class SingularityConstructor extends Machine implements EnergyNetComponen
 
     @Override
     public int getCapacity() {
-        return type.getEnergy();
+        return type.getEnergy() * 2;
     }
 
     @Nonnull

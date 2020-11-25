@@ -15,7 +15,7 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import javax.annotation.Nonnull;
 
 /**
- * String tools lul
+ * tools
  *
  * @author Mooy1
  */

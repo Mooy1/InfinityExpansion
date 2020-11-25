@@ -288,6 +288,6 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
 
     @Override
     public int getCapacity() {
-        return ENERGY;
+        return ENERGY * 2;
     }
 }

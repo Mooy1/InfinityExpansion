@@ -201,7 +201,7 @@ public class StoneworksFactory extends Machine implements EnergyNetComponent, Re
 
     @Override
     public int getCapacity() {
-        return ENERGY;
+        return ENERGY * 2;
     }
 
     @Nonnull

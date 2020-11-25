@@ -131,7 +131,7 @@ public class MaterialGenerator extends Machine implements EnergyNetComponent, Re
 
     @Override
     public int getCapacity() {
-        return type.getEnergy();
+        return type.getEnergy() * 2;
     }
 
     @Nonnull

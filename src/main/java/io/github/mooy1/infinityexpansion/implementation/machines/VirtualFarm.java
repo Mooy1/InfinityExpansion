@@ -255,7 +255,7 @@ public class VirtualFarm extends Machine implements EnergyNetComponent, RecipeDi
 
     @Override
     public int getCapacity() {
-        return type.getEnergy();
+        return type.getEnergy() * 2;
     }
 
     @Nonnull

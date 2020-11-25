@@ -35,8 +35,8 @@ public class MobSimulationChamber extends Machine implements EnergyNetComponent 
     private static final int STATUS_SLOT = PresetUtils.slot1;
     private static final int[] OUTPUTS_SLOTS = PresetUtils.largeOutput;
     private static final int XP_Slot = 46;
-    public static final int BUFFER = 10000;
-    public static final int ENERGY = 120;
+    public static final int BUFFER = 16000;
+    public static final int ENERGY = 240;
     public static int CHANCE = 2;
 
     private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");

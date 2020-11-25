@@ -342,7 +342,7 @@ public class GearTransformer extends Machine implements EnergyNetComponent, Reci
 
     @Override
     public int getCapacity() {
-        return ENERGY;
+        return ENERGY * 2;
     }
 
     @Nonnull

@@ -330,43 +330,20 @@ public class StorageUnit extends Machine implements LoreStorage {
         String storedItem = getStoredItem(b);
         int stored = getStored(b);
         
-        if (DISPLAY_SIGNS && updateSign && InfinityExpansion.progressEvery(SIGN_REFRESH)) {
-            List<Block> cached = SIGNS.get(b);
-            
-            if (cached == null) {
-                cached = addToCache(b);
-            }
-            
-            for (Block sign : cached) {
-                
-                if (SlimefunTag.WALL_SIGNS.isTagged(sign.getType())) {
-                    
-                    WallSign wall = (WallSign) sign.getBlockData();
-                    
-                    if (sign.getRelative(wall.getFacing().getOppositeFace()).equals(b)) {
-                        
-                        Sign lines = (Sign) sign.getState();
-                        
-                        lines.setLine(0, "------------");
-                        lines.setLine(1, storedItem != null ? storedItem : "none");
-                        lines.setLine(2, "Stored: " + stored);
-                        lines.setLine(3, "------------");
-                        
-                        lines.update();
-                        
-                        break;
-                    }
-                }
-            }
-        }
+        String name;
         
-        if (!inv.hasViewer()) return;
-
+        if (!inv.hasViewer() && (!updateSign || !InfinityExpansion.progressEvery(SIGN_REFRESH))) return;
+        
         if (storedItem == null || stored == 0) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                    new ItemStack(Material.BARRIER),
-                    "&cInput an Item!"
-            ));
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                        new ItemStack(Material.BARRIER),
+                        "&cInput an Item!"
+                ));
+            }
+            
+            name = "None";
+            
         } else {
 
             ItemStack storedItemStack = StackUtils.getItemFromID(storedItem, 1);
@@ -376,8 +353,43 @@ public class StorageUnit extends Machine implements LoreStorage {
             }
 
             ItemStack item = makeDisplayItem(type.getMax(), storedItemStack, stored, type == Type.INFINITIES);
+            
+            name = ItemUtils.getItemName(item);
+            
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, item);
+            }
+            
+        }
 
-            inv.replaceExistingItem(STATUS_SLOT, item);
+        if (DISPLAY_SIGNS && updateSign) {
+            List<Block> cached = SIGNS.get(b);
+
+            if (cached == null) {
+                cached = addToCache(b);
+            }
+
+            for (Block sign : cached) {
+
+                if (SlimefunTag.WALL_SIGNS.isTagged(sign.getType())) {
+
+                    WallSign wall = (WallSign) sign.getBlockData();
+
+                    if (sign.getRelative(wall.getFacing().getOppositeFace()).equals(b)) {
+                        
+                        Sign lines = (Sign) sign.getState();
+
+                        lines.setLine(0, ChatColor.AQUA + "------------");
+                        lines.setLine(1, ChatColor.WHITE + name);
+                        lines.setLine(2, ChatColor.GRAY + "Stored: " + stored);
+                        lines.setLine(3, ChatColor.AQUA + "------------");
+
+                        lines.update();
+
+                        break;
+                    }
+                }
+            }
         }
     }
     

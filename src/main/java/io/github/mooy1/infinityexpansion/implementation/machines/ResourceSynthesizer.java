@@ -210,7 +210,7 @@ public class ResourceSynthesizer extends Machine implements EnergyNetComponent, 
 
     @Override
     public int getCapacity() {
-        return ENERGY;
+        return ENERGY * 2;
     }
 
     @Nonnull

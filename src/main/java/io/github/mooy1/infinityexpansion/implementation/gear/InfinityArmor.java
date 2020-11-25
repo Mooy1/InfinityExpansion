@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Strong armor... maybe give flight at some point
+ * armor
  *
  * @author Mooy1
  */

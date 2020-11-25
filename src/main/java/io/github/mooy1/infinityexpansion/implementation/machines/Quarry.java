@@ -81,9 +81,8 @@ public class Quarry extends Machine implements EnergyNetComponent, RecipeDisplay
     public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
         if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
-        } else {
-            return new int[0];
         }
+        return new int[0];
     }
 
     @Override
@@ -153,7 +152,7 @@ public class Quarry extends Machine implements EnergyNetComponent, RecipeDisplay
 
     @Override
     public int getCapacity() {
-        return type.getEnergy();
+        return type.getEnergy() * 2;
     }
 
     @Nonnull
@@ -336,4 +335,5 @@ public class Quarry extends Machine implements EnergyNetComponent, RecipeDisplay
     private static ItemStack makeOutput(SlimefunItemStack stack, int amount) {
         return new SlimefunItemStack(stack, amount);
     }
+    
 }

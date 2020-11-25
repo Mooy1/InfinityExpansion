@@ -84,8 +84,8 @@ public class InfinityCategory extends FlexCategory {
         ChestMenu menu = new ChestMenu("&bInfinity Recipes");
 
         setupMain(menu, player);
-        menu.addItem(1, new CustomItem(ChestMenuUtils.getBackButton(player, "",
-                ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(player, "guide.back.guide")))
+        menu.addItem(1, ChestMenuUtils.getBackButton(player, "", 
+                ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(player, "guide.back.guide"))
         );
         menu.addMenuClickHandler(1, (p, slot, item, action) -> {
             SlimefunPlugin.getRegistry().getGuideLayout(slimefunGuideLayout).openMainMenu(playerProfile, 1);
