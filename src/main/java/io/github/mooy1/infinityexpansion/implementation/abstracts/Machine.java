@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.template;
+package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;

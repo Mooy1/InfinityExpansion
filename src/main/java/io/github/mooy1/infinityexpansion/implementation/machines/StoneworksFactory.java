@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
@@ -141,7 +141,7 @@ public class StoneworksFactory extends Machine implements EnergyNetComponent, Re
 
         inv.replaceExistingItem(STATUS_SLOT, COBBLE_GEN);
 
-        int tick = InfinityExpansion.currentTick() % 4;
+        int tick = InfinityExpansion.getCurrentTick() % 4;
 
         if (tick == 3) {
             ItemStack cobble = new ItemStack(Material.COBBLESTONE);

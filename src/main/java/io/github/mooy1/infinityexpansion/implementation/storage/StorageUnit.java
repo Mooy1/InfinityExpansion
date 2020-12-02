@@ -1,8 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.template.LoreStorage;
-import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
@@ -12,6 +12,7 @@ import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
+import io.github.thebusybiscuit.slimefun4.implementation.items.backpacks.SlimefunBackpack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import lombok.AccessLevel;
@@ -238,7 +239,7 @@ public class StorageUnit extends Machine implements LoreStorage {
             String storedItem = getStoredItem(b);
 
             //Check if non stackable item or another storage unit
-            if (inputItemID != null && inputSlotItem.getEnchantments().size() == 0 && !(SlimefunItem.getByItem(inputSlotItem) instanceof LoreStorage)) {
+            if (inputItemID != null && inputSlotItem.getEnchantments().size() == 0 && checkItem(inputSlotItem)) {
                 
                 int slotAmount = inputSlotItem.getAmount();
                 int stored = getStored(b);
@@ -319,6 +320,15 @@ public class StorageUnit extends Machine implements LoreStorage {
         }
 
         updateStatus(b, inv, true);
+        
+    }
+    
+    private static boolean checkItem(ItemStack stack) {
+        SlimefunItem item = SlimefunItem.getByItem(stack);
+        
+        if (item instanceof LoreStorage) return false;
+
+        return !(item instanceof SlimefunBackpack);
     }
 
     /**

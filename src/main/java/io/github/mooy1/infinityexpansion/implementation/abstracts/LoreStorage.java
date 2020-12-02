@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.template;
+package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import org.bukkit.inventory.ItemStack;
@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 
 public interface LoreStorage {
+    
     int getOffset();
     int getLines();
     @Nonnull
@@ -14,4 +15,5 @@ public interface LoreStorage {
     default void transfer(ItemStack output, ItemStack input) {
         StackUtils.transferLore(output, input, getTarget(), getOffset(), getLines());
     }
+    
 }

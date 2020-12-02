@@ -70,7 +70,7 @@ public class LocationUtils {
     }
 
     /**
-     * This method gets the direction integer from 2 locations
+     * This method gets the direction number from 2 locations
      *
      * @param next the next location
      * @param current the current location

@@ -687,7 +687,7 @@ public final class Items {
     public static final SlimefunItemStack INFINITE_INGOT = new SlimefunItemStack(
             "INFINITE_INGOT",
             Material.IRON_INGOT,
-            "&dI&cn&6f&ei&an&bi&3t&9y &fIngot",
+            "&bInfinity Ingot", // &dI&cn&6f&ei&an&bi&3t&9y &fIngot
             "&7&oThe fury of the cosmos",
             "&7&oin the palm of your hand"
     );
@@ -1011,7 +1011,7 @@ public final class Items {
         addEnchants(items, "infinity-enchant-levels", "INFINITY");
         
         EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) ENDER_FLAME.getItemMeta();
-        Objects.requireNonNull(storageMeta).addStoredEnchant(Enchantment.FIRE_ASPECT, 5, true);
+        Objects.requireNonNull(storageMeta).addStoredEnchant(Enchantment.FIRE_ASPECT, 10, true);
         ENDER_FLAME.setItemMeta(storageMeta);
     }
     

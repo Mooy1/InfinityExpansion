@@ -11,9 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Mooy1
  */
 public class MathUtils {
-
-    private MathUtils() {}
-
+    
     /**
      * This method returns a random int from the given range, inclusive
      *
@@ -45,4 +43,5 @@ public class MathUtils {
     public static boolean chanceIn(int chance) {
         return randomFromRange(1, chance) == chance;
     }
+    
 }

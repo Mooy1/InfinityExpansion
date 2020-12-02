@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.items;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
-import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;

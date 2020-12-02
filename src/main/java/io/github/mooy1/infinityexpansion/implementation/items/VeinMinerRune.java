@@ -58,13 +58,13 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
     private static final double RANGE = 1.5;
     private static final int MAX = 64;
     private static final long CD = 1000;
-    private static NamespacedKey KEY = null;
+    private static NamespacedKey key = null;
     private static final Map<Player, Long> CDS = new HashMap<>();
     private static final String[] LORE = {"", ChatColor.AQUA + "Veinminer - Crouch to use"};
     private static final List<String> ALLOWED = new ArrayList<>(Arrays.asList(
             "_ORE", "_LOG", "_WOOD", "GILDED", "SOUL", "GRAVEL",
             "MAGMA", "OBSIDIAN", "DIORITE", "ANDESITE", "GRANITE", "_LEAVES",
-            "GLASS", "DIRT", "GRASS", "DEBRIS"
+            "GLASS", "DIRT", "GRASS", "DEBRIS", "GLOWSTONE"
     ));
     
     public VeinMinerRune(InfinityExpansion plugin) {
@@ -75,7 +75,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
         });
         
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        KEY = new NamespacedKey(plugin, "vein_miner");
+        key = new NamespacedKey(plugin, "vein_miner");
     }
     
     @EventHandler
@@ -103,7 +103,6 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
             if (itemStack.getAmount() == 1) {
                 // This lightning is just an effect, it deals no damage.
                 l.getWorld().strikeLightningEffect(l);
-                
                 
                 InfinityExpansion.runSync(() -> {
                     // Being sure entities are still valid and not picked up or whatsoever.
@@ -146,7 +145,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
         if (meta != null) {
             PersistentDataContainer container = meta.getPersistentDataContainer();
 
-            return container.has(KEY, PersistentDataType.BYTE);
+            return container.has(key, PersistentDataType.BYTE);
         }
 
         return false;
@@ -164,13 +163,13 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         if (makeVeinMiner && !isVeinMiner) {
-            container.set(KEY, PersistentDataType.BYTE, (byte) 1);
+            container.set(key, PersistentDataType.BYTE, (byte) 1);
             item.setItemMeta(meta);
             StackUtils.addLore(item, LORE);
         }
 
         if (!makeVeinMiner && isVeinMiner) {
-            container.remove(KEY);
+            container.remove(key);
             item.setItemMeta(meta);
             StackUtils.removeLore(item, -1, LORE[1], 2);
         }

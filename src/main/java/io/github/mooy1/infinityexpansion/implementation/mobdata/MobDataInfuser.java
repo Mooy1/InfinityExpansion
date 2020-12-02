@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
-import io.github.mooy1.infinityexpansion.implementation.template.Crafter;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Crafter;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;

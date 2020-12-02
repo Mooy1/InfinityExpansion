@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  */
 public final class LoreUtils {
     
-    public static final float SERVER_TICK_RATIO = (float) 20 / InfinityExpansion.getRATE();
+    public static final float SERVER_TICK_RATIO = (float) 20 / InfinityExpansion.getTickRate();
     
     public static String energyPerSecond(int energy) {
         return "&8\u21E8 &e\u26A1 &7" + format(Math.round(energy * SERVER_TICK_RATIO)) + " J/s";

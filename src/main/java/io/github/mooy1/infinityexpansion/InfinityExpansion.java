@@ -2,7 +2,6 @@ package io.github.mooy1.infinityexpansion;
 
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
-import io.github.mooy1.infinityexpansion.implementation.transport.DuctNetworkManager;
 import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.setup.ItemSetup;
@@ -28,15 +27,16 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Getter
     private static InfinityExpansion instance;
     @Getter
-    private static int RATE;
-    private static int TICK = 1;
+    private static int tickRate;
     @Getter
-    public static double SCALE = 1;
+    private static int currentTick = 1;
+    @Getter
+    public static double vanillaScale = 1;
     
     @Override
     public void onEnable() {
         instance = this;
-        RATE = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
+        tickRate = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
 
         //config
         updateConfig();
@@ -72,13 +72,12 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         
         //ticker
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            if (TICK < 60) {
-                TICK++;
+            if (currentTick < 60) {
+                currentTick++;
             } else {
-                TICK = 1;
+                currentTick = 1;
             }
-            DuctNetworkManager.tick();
-        }, 100L, RATE);
+        }, 100L, tickRate);
     }
 
     @Override
@@ -136,7 +135,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         StorageUnit.SIGN_REFRESH = getOrDefault("storage-unit-options.sign-refresh-ticks", 1, 10, 5, config);
         StorageUnit.DISPLAY_SIGNS = getOrDefault("storage-unit-options.display-signs", true, config);
         MobSimulationChamber.CHANCE = getOrDefault("balance-options.mob-simulation-xp-chance", 1, 10, 2, config);
-        SCALE = getOrDefault("balance-options.vanilla-economy-scale", .1, 10, 1, config);
+        vanillaScale = getOrDefault("balance-options.vanilla-economy-scale", .1, 10, 1, config);
         
         saveConfig();
     }
@@ -216,11 +215,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
      * @return whether the block should progress
      */
     public static boolean progressOn(int rate, int pos) {
-        return TICK % rate == pos;
-    }
-    
-    public static int currentTick() {
-        return TICK;
+        return currentTick % rate == pos;
     }
     
     public static void runSync(@Nonnull Runnable runnable, long delay) {

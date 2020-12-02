@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.template;
+package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;

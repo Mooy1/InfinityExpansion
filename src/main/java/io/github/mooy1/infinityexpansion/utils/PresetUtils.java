@@ -10,9 +10,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Mooy1
  */
 public final class PresetUtils {
-
-    private PresetUtils() {}
-
+    
     public static final int[] slotChunk1 = {0, 1, 2, 9, 11, 18, 19, 20};
     public static final int slot1 = 10;
 

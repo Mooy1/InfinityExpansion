@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.template.LoreStorage;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;

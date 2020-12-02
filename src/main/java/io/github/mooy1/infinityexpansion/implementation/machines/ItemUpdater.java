@@ -1,8 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.implementation.items.VeinMinerRune;
-import io.github.mooy1.infinityexpansion.implementation.template.LoreStorage;
-import io.github.mooy1.infinityexpansion.implementation.template.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
@@ -10,6 +10,7 @@ import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
+import io.github.thebusybiscuit.slimefun4.implementation.items.backpacks.SlimefunBackpack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -114,32 +115,37 @@ public class ItemUpdater extends Machine implements EnergyNetComponent {
             }
             return;
         }
-
-        ItemStack output = null;
+        
         int inputAmount = input.getAmount();
-        if (SlimefunItem.getByItem(input) != null) {
-            SlimefunItem slimefunItem = SlimefunItem.getByItem(input);
-            if (slimefunItem != null) {
-                output = slimefunItem.getItem().clone();
-                output.setAmount(inputAmount);
-
-                if (slimefunItem instanceof LoreStorage) {
-                    ((LoreStorage) slimefunItem).transfer(output, input);
-                }
-            }
-        }
-
-        if (output == null) { //not sf item
+        SlimefunItem item = SlimefunItem.getByItem(input);
+        
+        if (item == null) {
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         Material.RED_STAINED_GLASS_PANE,
-                        "&9Input a &aSlimefun &9item!")
+                        "&cInput a Slimefun item!")
                 );
             }
             return;
-
         }
+        
+        if (item instanceof SlimefunBackpack) {
+            if (playerWatching) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                        Material.RED_STAINED_GLASS_PANE,
+                        "&cBackpacks cannot be reset!")
+                );
+            }
+            return;
+        }
+        
+        ItemStack output = item.getItem().clone();
+        output.setAmount(inputAmount);
 
+        if (item instanceof LoreStorage) {
+            ((LoreStorage) item).transfer(output, input);
+        }
+        
         if (!inv.fits(output, OUTPUT_SLOTS)) { //update
 
             if (playerWatching) {
@@ -187,7 +193,7 @@ public class ItemUpdater extends Machine implements EnergyNetComponent {
         if (playerWatching) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                     Material.LIME_STAINED_GLASS_PANE,
-                    "&aItem Updated!")
+                    "&aItem Reset and Updated!")
             );
         }
     }
