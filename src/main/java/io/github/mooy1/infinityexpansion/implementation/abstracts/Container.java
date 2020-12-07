@@ -26,14 +26,14 @@ import javax.annotation.Nonnull;
  * @author Mooy1
  * 
  */
-public abstract class Machine extends SlimefunItem {
+public abstract class Container extends SlimefunItem {
     
-    public Machine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+    public Container(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
         start();
     }
 
-    public Machine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, ItemStack recipeOutput) {
+    public Container(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, ItemStack recipeOutput) {
         super(category, item, recipeType, recipe, recipeOutput);
         start();
     }
@@ -73,7 +73,7 @@ public abstract class Machine extends SlimefunItem {
             public void tick(Block b, SlimefunItem sf, Config data) {
                 BlockMenu menu = BlockStorage.getInventory(b);
                 if (menu == null) return;
-                Machine.this.tick(b, b.getLocation(), menu);
+                Container.this.tick(b, b.getLocation(), menu);
             }
 
             public boolean isSynchronized() {

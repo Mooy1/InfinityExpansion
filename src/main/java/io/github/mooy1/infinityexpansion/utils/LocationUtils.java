@@ -14,9 +14,7 @@ import java.util.List;
  * @author Mooy1
  */
 public class LocationUtils {
-
-    private LocationUtils() {}
-
+    
     /**
      * This method returns an array of all adjacent locations from a location
      *
@@ -49,55 +47,48 @@ public class LocationUtils {
      */
     @Nullable
     public static Location getRelativeLocation(@Nonnull Location l, int direction) {
-        Location location = null;
         Location clone = l.clone();
-
-        if (direction == 0) {
-            location = clone.add(1, 0, 0);
-        } else if (direction == 1) {
-            location = clone.add(-1, 0, 0);
-        } else if (direction == 2) {
-            location = clone.add(0, 1, 0);
-        } else if (direction == 3) {
-            location = clone.add(0, -1, 0);
-        } else if (direction == 4) {
-            location = clone.add(0, 0, 1);
-        } else if (direction == 5) {
-            location = clone.add(0, 0, -1);
+        switch (direction) {
+            case 0: return clone.add(1, 0, 0);
+            case 1: return clone.add(-1, 0, 0);
+            case 2: return clone.add(0, 1, 0);
+            case 3: return clone.add(0, -1, 0);
+            case 4: return clone.add(0, 0, 1);
+            case 5: return clone.add(0, 0, -1);
+            default: return null;
         }
-
-        return location;
     }
 
     /**
      * This method gets the direction number from 2 locations
      *
-     * @param next the next location
      * @param current the current location
-     * @return the direction int to go from the current to the next
+     * @param target the target location
+     * @return the direction int to go from the current to the target
      */
-    public static int getDirectionInt(@Nonnull Location next, @Nonnull Location current) {
-        int a = next.getBlockX();
-        int b = next.getBlockY();
-        int c = next.getBlockZ();
-        int x = current.getBlockX();
-        int y = current.getBlockY();
-        int z = current.getBlockZ();
+    public static int getDirectionInt(@Nonnull Location current, @Nonnull Location target) {
+        int currentX = current.getBlockX();
+        int currentY = current.getBlockY();
+        int currentZ = current.getBlockZ();
+        int targetX = target.getBlockX();
+        int targetY = target.getBlockY();
+        int targetZ = target.getBlockZ();
 
-        if (a - x == 1) {
+        if (targetX - currentX == 1) {
             return 0;
-        } else if (a - x == -1) {
+        } else if (targetX - currentX == -1) {
             return 1;
-        } else if (b - y == 1) {
+        } else if (targetY - currentY == 1) {
             return 2;
-        } else if (b - y == -1) {
+        } else if (targetY - currentY == -1) {
             return 3;
-        } else if (c - z == 1) {
+        } else if (targetZ - currentZ == 1) {
             return 4;
-        } else if (c - z == -1) {
+        } else if (targetZ - currentZ == -1) {
             return 5;
         } else {
-            return 0;
+            return -1;
         }
     }
+    
 }

@@ -1,8 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.items.VeinMinerRune;
+import io.github.mooy1.infinityexpansion.implementation.gear.VeinMinerRune;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
@@ -36,7 +36,7 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class ItemUpdater extends Machine implements EnergyNetComponent {
+public class ItemUpdater extends Container implements EnergyNetComponent {
 
     public static final int ENERGY = 200;
 

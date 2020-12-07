@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
@@ -38,7 +38,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class VirtualFarm extends Machine implements EnergyNetComponent, RecipeDisplayItem {
+public class VirtualFarm extends Container implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 18;
     public static final int ENERGY2 = 90;

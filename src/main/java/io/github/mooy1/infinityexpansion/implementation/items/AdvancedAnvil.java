@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.items;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * @author Mooy1
  */
-public class AdvancedAnvil extends Machine implements EnergyNetComponent {
+public class AdvancedAnvil extends Container implements EnergyNetComponent {
 
     public static final int ENERGY = 100_000;
     
@@ -71,7 +71,7 @@ public class AdvancedAnvil extends Machine implements EnergyNetComponent {
     };
 
     public AdvancedAnvil() {
-        super(Categories.MAIN, Items.ADVANCED_ANVIL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        super(Categories.MAIN_MATERIALS, Items.ADVANCED_ANVIL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.ADAMANTITE, Items.ADAMANTITE, Items.ADAMANTITE,
                 Items.MAGNONIUM, new ItemStack(Material.ANVIL), Items.MAGNONIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT

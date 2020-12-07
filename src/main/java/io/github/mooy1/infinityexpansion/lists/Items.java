@@ -22,12 +22,12 @@ import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataInfuser;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
-import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.setup.SlimefunConstructors;
 import io.github.mooy1.infinityexpansion.utils.LoreUtils;
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,37 +35,42 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.logging.Level;
 
 /**
- * Items for this addon
+ * List of items
  *
  * @author Mooy1
  */
 public final class Items {
     
-    private static final FileConfiguration CONFIG = InfinityExpansion.getInstance().getConfig();
-
     //storage & transport
 
-    public static final SlimefunItemStack ITEM_DUCT = new SlimefunItemStack(
-            "ITEM_DUCT",
-            Material.WHITE_STAINED_GLASS,
-            "&fItem Duct",
-            "&7Connects machines, inventories, and output ducts"
+    public static final SlimefunItemStack WIRELESS_INPUT_NODE = new SlimefunItemStack(
+            "WIRELESS_INPUT_NODE",
+            Material.END_ROD,
+            "&9Wireless input node",
+            "&7Transfers items from the connected inventory to wireless output nodes",
+            "&7Right-Click to get info and mark a path to the connected output node"
     );
-    public static final SlimefunItemStack OUTPUT_DUCT = new SlimefunItemStack(
-            "OUTPUT_DUCT",
-            Material.ORANGE_STAINED_GLASS,
-            "&6Output Duct",
-            "&7Pushes items into machines and inventories",
-            "&7Also serves as an Item Duct",
-            "",
-            "&6Connects up to &e" + OutputDuct.MAX_INVS + " &6Inventories",
-            "&6Range: &e" + OutputDuct.DUCT_LENGTH + " &6blocks"
+    public static final SlimefunItemStack WIRELESS_OUTPUT_NODE = new SlimefunItemStack(
+            "WIRELESS_OUTPUT_NODE",
+            Material.END_ROD,
+            "&9Wireless output node",
+            "&7Transfers items from wireless input nodes to the connected inventory"
     );
+    public static final SlimefunItemStack WIRELESS_CONFIGURATOR = new SlimefunItemStack(
+            "WIRELESS_CONFIGURATOR",
+            Material.BLAZE_ROD,
+            "&9Wireless configurator",
+            "&eRight-Click &7an input node then an output node to connect them",
+            "&eCrouch + Right-Click &7an input node to remove connected output node",
+            "&eCrouch + Left-Click &7to clear the input node currently being configured"
+    );
+
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",
             Material.BEEHIVE,
@@ -1000,7 +1005,8 @@ public final class Items {
             "&7&o"
     );
     
-    static { //add item meta
+    public static void setup(@Nonnull FileConfiguration config) { //add item meta
+        Validate.notNull(config, "Config cannot be null!");
         
         SlimefunItemStack[] items = new SlimefunItemStack[] {
                 INFINITY_CROWN, INFINITY_CHESTPLATE, INFINITY_LEGGINGS, INFINITY_BOOTS, INFINITY_BLADE,
@@ -1008,15 +1014,15 @@ public final class Items {
         };
 
         addUnbreakable(items);
-        addEnchants(items, "infinity-enchant-levels", "INFINITY");
+        addEnchants(items, "infinity-enchant-levels", "INFINITY", config);
         
         EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) ENDER_FLAME.getItemMeta();
         Objects.requireNonNull(storageMeta).addStoredEnchant(Enchantment.FIRE_ASPECT, 10, true);
         ENDER_FLAME.setItemMeta(storageMeta);
     }
     
-    private static void addEnchants(SlimefunItemStack[] items, String section, String gearType) {
-        ConfigurationSection typeSection = CONFIG.getConfigurationSection(section);
+    private static void addEnchants(SlimefunItemStack[] items, String section, String gearType, FileConfiguration config) {
+        ConfigurationSection typeSection = config.getConfigurationSection(section);
         
         if (typeSection == null) {
             InfinityExpansion.log(Level.SEVERE, "Config section " + section + " missing, Check the config and report this!");
@@ -1032,7 +1038,7 @@ public final class Items {
             }
             
             for (String path : itemSection.getKeys(false)) {
-                int level = CONFIG.getInt(section + "." + itemPath + "." + path);
+                int level = config.getInt(section + "." + itemPath + "." + path);
                 if (level > 0 && level <= Short.MAX_VALUE) {
                     Enchantment e = getEnchantFromString(path);
                     if (e == null) {
@@ -1041,7 +1047,7 @@ public final class Items {
                     }
                     item.addUnsafeEnchantment(e, level);
                 } else if (level != 0) {
-                    CONFIG.set(section + "." + itemPath + "." + path, 1);
+                    config.set(section + "." + itemPath + "." + path, 1);
                     InfinityExpansion.log(Level.WARNING, "Enchantment level " + level + " for enchantment " + path + " is not allowed, resetting to 1, please check your config and update it with a correct value"); 
                 }
             }

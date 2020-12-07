@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class MaterialGenerator extends Machine implements EnergyNetComponent, RecipeDisplayItem {
+public class MaterialGenerator extends Container implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int COBBLE_ENERGY = 24;
     public static final int COBBLE2_ENERGY = 120;

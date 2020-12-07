@@ -7,7 +7,6 @@ import io.github.thebusybiscuit.slimefun4.utils.itemstack.ItemStackWrapper;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import org.bukkit.Location;
@@ -28,13 +27,12 @@ import javax.annotation.Nullable;
 
 /**
  * Collection of item transfer utils
+ * Some are modified methods from CargoUtils
  *
  * @author Mooy1
  */
 public class TransferUtils {
-
-    private TransferUtils() {}
-
+    
     /**
      * This method gets the BlockMenu of a location
      *
@@ -43,18 +41,7 @@ public class TransferUtils {
      */
     @Nullable
     public static BlockMenu getMenu(@Nonnull Location location) {
-        String id = BlockStorage.checkID(location);
-
-        if (id != null) {
-            BlockMenuPreset preset = BlockMenuPreset.getPreset(id);
-
-            if (preset != null) {
-
-                return BlockStorage.getInventory(location);
-
-            }
-        }
-        return null;
+        return BlockStorage.getInventory(location);
     }
 
     /**
@@ -66,7 +53,7 @@ public class TransferUtils {
     @Nullable
     public static Inventory getInventory(@Nonnull Block b) {
         if (hasInventory(b)) {
-
+            
             BlockState state = PaperLib.getBlockState(b, false).getState();
 
             if (state instanceof InventoryHolder) {
@@ -74,7 +61,6 @@ public class TransferUtils {
                 return ((InventoryHolder) state).getInventory();
             }
         }
-
         return null;
     }
 
@@ -84,8 +70,8 @@ public class TransferUtils {
      * @param inventory inventory of chest
      * @return both locations
      */
-    @Nullable
-    public static Pair<Location, Location> getOtherChest(@Nonnull Inventory inventory) {
+    @Nonnull
+    public static Pair<Location, Location> getBothChests(@Nonnull Inventory inventory) {
         InventoryHolder holder = inventory.getHolder();
 
         if (holder instanceof DoubleChest) {
@@ -99,7 +85,15 @@ public class TransferUtils {
             }
         }
 
-        return null;
+        return new Pair<>(null, null);
+    }
+    
+    public static boolean testDoubleChest(@Nullable Inventory inv, @Nonnull Location a, @Nonnull Location b) {
+        if (inv != null) {
+            Pair<Location, Location> pair = getBothChests(inv);
+            return pair.getFirstValue().equals(a) && pair.getSecondValue().equals(b) || pair.getSecondValue().equals(a) && pair.getFirstValue().equals(b);
+        }
+        return false;
     }
 
     /**
@@ -110,35 +104,10 @@ public class TransferUtils {
      * @param item item being inputted
      * @return slots
      */
-    @Nullable
-    public static int[] getSlots(@Nullable BlockMenu menu, @Nonnull ItemTransportFlow itemTransportFlow, @Nullable ItemStack item) {
-        if (menu != null) {
-
-            BlockMenuPreset preset = menu.getPreset();
-
-            int[] slots = preset.getSlotsAccessedByItemTransport(menu, itemTransportFlow, item);
-
-            if (slots != null && slots.length > 0) {
-                return slots;
-            } else {
-                slots = preset.getSlotsAccessedByItemTransport(itemTransportFlow);
-
-                if (slots != null && slots.length > 0) {
-                    return slots;
-                }
-            }
-        }
-
-        return null;
+    public static int[] getSlots(@Nonnull BlockMenu menu, @Nonnull ItemTransportFlow itemTransportFlow, @Nullable ItemStack item) {
+        return menu.getPreset().getSlotsAccessedByItemTransport(menu, itemTransportFlow, item);
     }
-
-    /**
-     * The following methods are from CargoUtils
-     * (Some slightly modified)
-     *
-     * @author TheBusyBiscuit
-     *
-     */
+    
     public static boolean hasInventory(@Nonnull Block block) {
 
         Material type = block.getType();
@@ -170,16 +139,17 @@ public class TransferUtils {
      * @param inv inventory
      * @return slot range
      */
-    public static int[] getOutputSlotRange(Inventory inv) {
+    public static int[] getOutputSlots(Inventory inv) {
         if (inv instanceof FurnaceInventory) {
-            // Slot 2-3
-            return new int[]{2, 3};
+            return new int[]{2};
         } else if (inv instanceof BrewerInventory) {
-            // Slot 0-3
-            return new int[]{0, 3};
+            return new int[]{0, 1, 2};
         } else {
-            // Slot 0-size
-            return new int[]{0, inv.getSize()};
+            int[] array = new int[inv.getSize()];
+            for (int i = 0 ; i < inv.getSize() ; i++) {
+                array[i] = i;
+            }
+            return array;
         }
     }
 
@@ -190,32 +160,32 @@ public class TransferUtils {
      * @param item item being inserted
      * @return slot range
      */
-    public static int[] getInputSlotRange(@Nonnull Inventory inv, @Nullable ItemStack item) {
+    public static int[] getInputSlots(@Nonnull Inventory inv, @Nullable ItemStack item) {
         if (inv instanceof FurnaceInventory) {
             if (item != null && item.getType().isFuel()) {
                 if (isSmeltable(item)) {
                     // Any non-smeltable items should not land in the upper slot
-                    return new int[]{0, 2};
+                    return new int[]{0};
                 } else {
-                    return new int[]{1, 2};
+                    return new int[]{1};
                 }
             } else {
-                return new int[]{0, 1};
+                return new int[]{0};
             }
         } else if (inv instanceof BrewerInventory) {
             if (isPotion(item)) {
-                // Slots for potions
-                return new int[]{0, 3};
+                return new int[]{0, 1, 2};
             } else if (item != null && item.getType() == Material.BLAZE_POWDER) {
-                // Blaze Powder slot
-                return new int[]{4, 5};
+                return new int[]{4};
             } else {
-                // Input slot
-                return new int[]{3, 4};
+                return new int[]{3};
             }
         } else {
-            // Slot 0-size
-            return new int[]{0, inv.getSize()};
+            int[] array = new int[inv.getSize()];
+            for (int i = 0 ; i < inv.getSize() ; i++) {
+                array[i] = i;
+            }
+            return array;
         }
     }
 
@@ -237,13 +207,10 @@ public class TransferUtils {
     @Nullable
     public static ItemStack insertToVanillaInventory(@Nonnull ItemStack stack, @Nonnull Inventory inv) {
         ItemStack[] contents = inv.getContents();
-        int[] range = getInputSlotRange(inv, stack);
-        int minSlot = range[0];
-        int maxSlot = range[1];
 
         ItemStackWrapper wrapper = new ItemStackWrapper(stack);
 
-        for (int slot = minSlot; slot < maxSlot; slot++) {
+        for (int slot : getInputSlots(inv, stack)) {
             // Changes to this ItemStack are synchronized with the Item in the Inventory
             ItemStack itemInSlot = contents[slot];
 
@@ -270,4 +237,9 @@ public class TransferUtils {
 
         return stack;
     }
+
+    public static ItemStack insertToBlockMenu(@Nonnull BlockMenu menu, @Nonnull ItemStack item) {
+        return menu.pushItem(item, TransferUtils.getSlots(menu, ItemTransportFlow.INSERT, item));
+    }
+    
 }

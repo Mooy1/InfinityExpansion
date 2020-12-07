@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.LocationUtils;
@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class StorageNetworkViewer extends Machine {
+public class StorageNetworkViewer extends Container {
 
     public static final int RANGE = 32;
     public static final int MAX = 18;

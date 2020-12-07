@@ -2,9 +2,8 @@ package io.github.mooy1.infinityexpansion;
 
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
-import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
-import io.github.mooy1.infinityexpansion.setup.ItemSetup;
+import io.github.mooy1.infinityexpansion.setup.Setup;
 import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -31,7 +30,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Getter
     private static int currentTick = 1;
     @Getter
-    public static double vanillaScale = 1;
+    private static double vanillaScale = 1;
     
     @Override
     public void onEnable() {
@@ -55,9 +54,9 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         } else {
             log(Level.WARNING, "You must be on a DEV build to auto update!");
         }
-
+        
         //items
-        ItemSetup.setup(this);
+        Setup.setup(this);
 
         //commands
         new InfinityCommand(this).register();
@@ -69,6 +68,8 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         for (String line : getChangeLog()) {
             getLogger().log(Level.INFO, line);
         }
+        
+        runSync(() -> log(Level.INFO, "Infinity Expansion will soon be moving some content to another addon! keep an eye out for its release!"), 300);
         
         //ticker
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
@@ -106,10 +107,10 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 ChatColor.GREEN + "     -------------------------    ",
                 ChatColor.GREEN + "",
                 ChatColor.GRAY + " - signs on storage units display info",
-                ChatColor.GRAY + " - config for enchants",
+                ChatColor.GRAY + " - config for scaling",
                 ChatColor.GRAY + " - optimizations",
                 ChatColor.GRAY + " - energy balancing",
-                ChatColor.GRAY + " - fixed exploits",
+                ChatColor.GRAY + " - wireless item ducts",
                 ChatColor.GREEN + "",
                 ChatColor.GREEN + "########################################",
                 ChatColor.GREEN + ""
@@ -129,9 +130,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     }
 
     private void setupConfigOptions(FileConfiguration config) {
-        OutputDuct.DUCT_LENGTH = getOrDefault("output-duct-options.max-duct-length", 4, 32, 12, config);
-        OutputDuct.MAX_INVS = getOrDefault("output-duct-options.max-input-inventories", 1, 20, 8, config);
-        OutputDuct.MAX_SLOTS = getOrDefault("output-duct-options.max-slots-to-check", 1, 54, 9, config);
         StorageUnit.SIGN_REFRESH = getOrDefault("storage-unit-options.sign-refresh-ticks", 1, 10, 5, config);
         StorageUnit.DISPLAY_SIGNS = getOrDefault("storage-unit-options.display-signs", true, config);
         MobSimulationChamber.CHANCE = getOrDefault("balance-options.mob-simulation-xp-chance", 1, 10, 2, config);

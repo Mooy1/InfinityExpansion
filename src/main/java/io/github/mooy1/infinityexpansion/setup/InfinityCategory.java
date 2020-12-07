@@ -1,7 +1,11 @@
 package io.github.mooy1.infinityexpansion.setup;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
+import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -9,9 +13,6 @@ import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -76,7 +77,7 @@ public class InfinityCategory extends FlexCategory {
 
     @Override
     public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
-        return !slimefunGuideLayout.equals(SlimefunGuideLayout.CHEAT_SHEET);
+        return slimefunGuideLayout != SlimefunGuideLayout.CHEAT_SHEET;
     }
 
     @Override
@@ -88,7 +89,7 @@ public class InfinityCategory extends FlexCategory {
                 ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(player, "guide.back.guide"))
         );
         menu.addMenuClickHandler(1, (p, slot, item, action) -> {
-            SlimefunPlugin.getRegistry().getGuideLayout(slimefunGuideLayout).openMainMenu(playerProfile, 1);
+            Categories.MAIN.open(p, playerProfile, slimefunGuideLayout);
             return false;
         });
 

@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
@@ -49,7 +49,7 @@ import java.util.Objects;
  * for some stuff to work off of
  *
  */
-public class EnergyGenerator extends Machine implements EnergyNetProvider {
+public class EnergyGenerator extends Container implements EnergyNetProvider {
 
     public static final int WATER_RATE = 9;
     public static final int WATER_STORAGE = 900;
@@ -66,7 +66,7 @@ public class EnergyGenerator extends Machine implements EnergyNetProvider {
     public static final int BASIC_RATE = 15;
     public static final int BASIC_STORAGE = 1500;
     
-    public static final int ADVANCED_RATE = 150;
+    public static final int ADVANCED_RATE = 180;
     public static final int ADVANCED_STORAGE = 15000;
     
     public static final int CELE_RATE = 600;
@@ -151,9 +151,9 @@ public class EnergyGenerator extends Machine implements EnergyNetProvider {
     }
     
     private Pair<Integer, String> getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
-        int generation = type.getGeneration();
+        int generation = this.type.getGeneration();
 
-        if (type.isWater()) {
+        if (this.type.isWater()) {
             BlockData blockData = block.getBlockData();
 
             if (blockData instanceof Waterlogged) {
@@ -163,39 +163,39 @@ public class EnergyGenerator extends Machine implements EnergyNetProvider {
                 }
             }
             
-        } else if (type == Type.INFINITY) {
+        } else if (this.type == Type.INFINITY) {
             
             return new Pair<>(generation, "Infinity");
             
         } else if (world.getEnvironment() == World.Environment.NETHER) {
             
-            if (type.isOverworld()) {
+            if (this.type.isOverworld()) {
                 return new Pair<>(generation * 2, "Geothermal - Nether");
             }
 
-            if (type.isNight() || type.isNether()) {
+            if (this.type.isNight() || this.type.isNether()) {
                 return new Pair<>(generation, "Nether");
             }
             
         } else if (world.getEnvironment() == World.Environment.THE_END) {
             
-            if (type.isEnd() || type.isNight()) {
+            if (this.type.isEnd() || this.type.isNight()) {
                 return new Pair<>(generation, "End");
             }
             
         } else if (world.getEnvironment() == World.Environment.NORMAL) {
 
-            if (type.isOverworld()) {
+            if (this.type.isOverworld()) {
                 return new Pair<>(generation, "Geothermal");
             }
 
             if (world.getTime() >= 13000 || block.getLocation().add(0, 1, 0).getBlock().getLightFromSky() != 15) {
 
-                if (type.isNight()) {
+                if (this.type.isNight()) {
                     return new Pair<>(generation, "Night");
                 }
 
-            } else if (type.isDay()) {
+            } else if (this.type.isDay()) {
 
                 return new Pair<>(generation, "Day");
             }
@@ -206,7 +206,7 @@ public class EnergyGenerator extends Machine implements EnergyNetProvider {
 
     @Override
     public int getCapacity() {
-        return type.getStorage();
+        return this.type.getStorage();
     }
 
     @Nonnull

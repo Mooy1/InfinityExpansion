@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MathUtils;
@@ -38,7 +38,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class ConversionMachine extends Machine implements RecipeDisplayItem, EnergyNetComponent {
+public class ConversionMachine extends Container implements RecipeDisplayItem, EnergyNetComponent {
 
     public static final int TIME = 4;
     public static final int FREEZER_SPEED = 2;
@@ -106,7 +106,7 @@ public class ConversionMachine extends Machine implements RecipeDisplayItem, Ene
 
     @Override
     public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
-        int energy = type.getEnergy();
+        int energy = this.type.getEnergy();
         int charge = getCharge(l);
         boolean playerWatching = inv.hasViewer();
 
@@ -138,7 +138,7 @@ public class ConversionMachine extends Machine implements RecipeDisplayItem, Ene
         if (progress < TIME) {
 
             inv.consumeItem(INPUT_SLOTS[0], 1);
-            setProgress(b, progress + type.getSpeed());
+            setProgress(b, progress + this.type.getSpeed());
             removeCharge(l, energy);
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverting..."));
@@ -151,7 +151,7 @@ public class ConversionMachine extends Machine implements RecipeDisplayItem, Ene
                 inv.consumeItem(INPUT_SLOTS[0], 1);
                 inv.pushItem(output, OUTPUT_SLOTS);
                 removeCharge(l, energy);
-                setProgress(b, type.getSpeed());
+                setProgress(b, this.type.getSpeed());
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverted!"));
                 }
@@ -174,7 +174,7 @@ public class ConversionMachine extends Machine implements RecipeDisplayItem, Ene
 
     @Override
     public int getCapacity() {
-        return type.getEnergy() * 2;
+        return this.type.getEnergy() * 2;
     }
 
     @Nonnull
@@ -182,8 +182,8 @@ public class ConversionMachine extends Machine implements RecipeDisplayItem, Ene
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack[] inputs = type.getInput();
-        ItemStack[] outputs = type.getOutput();
+        ItemStack[] inputs = this.type.getInput();
+        ItemStack[] outputs = this.type.getOutput();
 
         if (inputs.length == outputs.length) { //1 to 1
             for (int i = 0 ; i < inputs.length ; i++) {
@@ -205,12 +205,12 @@ public class ConversionMachine extends Machine implements RecipeDisplayItem, Ene
     @Nullable
     private ItemStack getOutput(@Nonnull ItemStack input) {
         int i = 0;
-        for (ItemStack correctInput : type.getInput()) {
+        for (ItemStack correctInput : this.type.getInput()) {
             if (Objects.equals(StackUtils.getIDFromItem(input), StackUtils.getIDFromItem(correctInput))) {
-                if (type.isRandom()) {
-                    return MathUtils.randomOutput(type.getOutput());
+                if (this.type.isRandom()) {
+                    return MathUtils.randomOutput(this.type.getOutput());
                 } else {
-                    return type.output[i].clone();
+                    return this.type.output[i].clone();
                 }
 
             }

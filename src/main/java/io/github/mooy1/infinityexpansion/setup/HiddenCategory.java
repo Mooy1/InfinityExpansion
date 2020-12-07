@@ -12,8 +12,9 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class CheatCategory extends Category {
-    public CheatCategory(NamespacedKey key, ItemStack item, int tier) {
+public class HiddenCategory extends Category {
+    
+    public HiddenCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
     }
 
@@ -21,4 +22,5 @@ public class CheatCategory extends Category {
     public boolean isHidden(@Nonnull Player p) {
         return true;
     }
+    
 }

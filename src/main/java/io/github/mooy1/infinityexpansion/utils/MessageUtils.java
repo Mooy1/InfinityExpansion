@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.utils;
 
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
@@ -14,6 +15,7 @@ import java.util.Map;
  * Collection of utils for sending messages to players and broadcasting
  *
  * @author Mooy1
+ * 
  */
 public class MessageUtils {
     
@@ -23,7 +25,7 @@ public class MessageUtils {
 
     public static void message(@Nonnull Player p, @Nonnull String... messages) {
         for (String m : messages) {
-            p.sendMessage(PREFIX + m);
+            p.sendMessage(PREFIX + ChatColors.color(m));
         }
     }
 
@@ -37,24 +39,13 @@ public class MessageUtils {
         }
         coolDowns.put(p, System.currentTimeMillis());
         
-        for (String m : messages) {
-            p.sendMessage(PREFIX + m);
-        }
+        message(p, messages);
     }
 
-    public static void messagePlayersInInv(@Nonnull BlockMenu inv, @Nonnull String message) {
+    public static void messagePlayersInInv(@Nonnull BlockMenu inv, @Nonnull String... messages) {
         if (inv.hasViewer()) {
-            HumanEntity[] viewers = inv.toInventory().getViewers().toArray(new HumanEntity[0]);
-            Player[] players = new Player[viewers.length];
-
-            int i = 0;
-            for (HumanEntity viewer : viewers) {
-                players[i] = (Player) viewer;
-                i++;
-            }
-
-            for (Player player : players) {
-                MessageUtils.message(player, message);
+            for (HumanEntity viewer : inv.toInventory().getViewers().toArray(new HumanEntity[1])) {
+                message((Player) viewer, messages);
             }
         }
     }

@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
@@ -36,7 +36,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class InfinityReactor extends Machine implements EnergyNetProvider, RecipeDisplayItem {
+public class InfinityReactor extends Container implements EnergyNetProvider, RecipeDisplayItem {
 
     public static final int ENERGY = 180_000;
     public static final int STORAGE = 40_000_000;

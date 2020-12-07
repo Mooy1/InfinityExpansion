@@ -5,11 +5,11 @@ import io.github.mooy1.infinityexpansion.implementation.gear.EnderFlame;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityArmor;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityMatrix;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityTool;
+import io.github.mooy1.infinityexpansion.implementation.gear.VeinMinerRune;
 import io.github.mooy1.infinityexpansion.implementation.items.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.items.Strainer;
 import io.github.mooy1.infinityexpansion.implementation.items.StrainerBase;
-import io.github.mooy1.infinityexpansion.implementation.items.VeinMinerRune;
 import io.github.mooy1.infinityexpansion.implementation.machines.ConversionMachine;
 import io.github.mooy1.infinityexpansion.implementation.machines.EnergyGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
@@ -37,11 +37,13 @@ import io.github.mooy1.infinityexpansion.implementation.storage.StorageDuct;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageForge;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
-import io.github.mooy1.infinityexpansion.implementation.transport.ItemDuct;
-import io.github.mooy1.infinityexpansion.implementation.transport.OutputDuct;
+import io.github.mooy1.infinityexpansion.implementation.storage.WirelessConfigurator;
+import io.github.mooy1.infinityexpansion.implementation.storage.WirelessInputNode;
+import io.github.mooy1.infinityexpansion.implementation.storage.WirelessOutputNode;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 
 import javax.annotation.Nonnull;
@@ -51,20 +53,29 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public final class ItemSetup {
+public final class Setup {
 
     public static void setup(@Nonnull InfinityExpansion plugin) {
 
+        //slimefun item stacks
+
+        Items.setup(plugin.getConfig());
+
         //categories in order
 
-        Categories.BASIC_MACHINES.register();
         Categories.MAIN.register();
-        Categories.ADVANCED_MACHINES.register();
-        Categories.STORAGE_TRANSPORT.register();
-        Categories.MOB_SIMULATION.register();
-        Categories.INFINITY_RECIPES.register();
+
+        registerCategories(
+                Categories.MAIN_MATERIALS,
+                Categories.BASIC_MACHINES,
+                Categories.ADVANCED_MACHINES,
+                Categories.STORAGE_TRANSPORT,
+                Categories.MOB_SIMULATION,
+                Categories.INFINITY_RECIPES,
+                Categories.INFINITY_MATERIALS
+        );
+
         Categories.INFINITY_CHEAT.register();
-        Categories.INFINITY_MATERIALS.register();
 
         //basic
 
@@ -84,24 +95,25 @@ public final class ItemSetup {
 
         //main
 
-        new SlimefunItem(Categories.MAIN, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
+        new SlimefunItem(Categories.MAIN_MATERIALS, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
         new InfinityWorkbench().register(plugin);
         new AdvancedAnvil().register(plugin);
         new VeinMinerRune(plugin).register(plugin);
-        
+
         //storage and transport
 
-        new ItemDuct().register(plugin);
-        new OutputDuct().register(plugin);
+        new WirelessInputNode().register(plugin);
+        new WirelessOutputNode().register(plugin);
+        new WirelessConfigurator(plugin).register(plugin);
         new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
         }
         new StorageNetworkViewer().register(plugin);
         new StorageDuct().register(plugin);
-        
+
         //mob simulation
-        
+
         new MobSimulationChamber().register(plugin);
         new EmptyDataCard().register(plugin);
         for (MobDataCard.Type type : MobDataCard.Type.values()) {
@@ -110,7 +122,7 @@ public final class ItemSetup {
         new MobDataInfuser().register(plugin);
 
         //machine
-        
+
         new StoneworksFactory().register(plugin);
         for (MainMaterial.Type type : MainMaterial.Type.values()) {
             new MainMaterial(type).register(plugin);
@@ -164,4 +176,12 @@ public final class ItemSetup {
         //sf constructors
         SlimefunConstructors.setup(plugin);
     }
+
+    private static void registerCategories(Category... categories) {
+        for (Category category : categories) {
+            MainCategory.categories.add(category);
+            category.register();
+        }
+    }
+
 }

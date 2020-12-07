@@ -23,20 +23,6 @@
 # 
 # -----
 # 
-# output-duct-options:
-# You can slightly lower these if output duct timings are too high
-# 
-# max-duct-length: (default 12)
-# maximum length of a duct network which is comprised of item ducts and output ducts, minimum 4
-# 
-# max-input-inventories: (default 8)
-# maximum number of input inventories or machine menus to check, minimum 1
-# 
-# max-slots-to-check: (default 9)
-# maximum slots to check in each input inventories (it takes longer to check all 54 slots of a chest for ex), minimum 1
-# 
-# -----
-# 
 # infinity-enchant-levels:
 # levels of infinity gear. this will not affect existing items. adding more enchants wont have any effect, only change levels. 
 # KEEP IN MIND PROTECTION LEVELS PAST 5 ARE PURELY COSMETIC AND ARE THE SAME AS 5.
@@ -48,10 +34,6 @@ balance-options:
 storage-unit-options:
   display-signs: true
   sign-refresh-ticks: 5
-output-duct-options:
-  max-duct-length: 12
-  max-input-inventories: 8
-  max-slots-to-check: 9
 infinity-enchant-levels:
   blade:
     sharpness: 20

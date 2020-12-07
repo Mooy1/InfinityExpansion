@@ -33,19 +33,19 @@ public class MachineMaterial extends SlimefunItem implements NotPlaceable {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
-        MAGSTEEL_PLATE(Categories.MAIN, Items.MAGSTEEL_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.MAGSTEEL)
+        MAGSTEEL_PLATE(Categories.MAIN_MATERIALS, Items.MAGSTEEL_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, RecipeUtils.Compress(Items.MAGSTEEL)
         ),
-        PLATE(Categories.MAIN, Items.MACHINE_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        PLATE(Categories.MAIN_MATERIALS, Items.MACHINE_PLATE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_PLATE, SlimefunItems.REINFORCED_ALLOY_INGOT,
                 Items.MAGSTEEL_PLATE, Items.TITANIUM, Items.MAGSTEEL_PLATE,
                 SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_PLATE, SlimefunItems.REINFORCED_ALLOY_INGOT
         }),
-        CIRCUIT(Categories.MAIN, Items.MACHINE_CIRCUIT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        CIRCUIT(Categories.MAIN_MATERIALS, Items.MACHINE_CIRCUIT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 SlimefunItems.COPPER_INGOT, SlimefunItems.ELECTRO_MAGNET, SlimefunItems.COPPER_INGOT,
                 SlimefunItems.COPPER_INGOT, SlimefunItems.SILICON, SlimefunItems.COPPER_INGOT,
                 SlimefunItems.COPPER_INGOT, SlimefunItems.ELECTRO_MAGNET, SlimefunItems.COPPER_INGOT
         }),
-        CORE(Categories.MAIN, Items.MACHINE_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        CORE(Categories.MAIN_MATERIALS, Items.MACHINE_CORE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.TITANIUM, Items.MACHINE_CIRCUIT, Items.TITANIUM,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_PLATE, Items.MACHINE_CIRCUIT,
                 Items.TITANIUM, Items.MACHINE_CIRCUIT, Items.TITANIUM,

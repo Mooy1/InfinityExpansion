@@ -25,7 +25,7 @@ public class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResou
     private final NamespacedKey key;
      
     public EnderEssence(InfinityExpansion plugin) {
-        super(Categories.MAIN, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, null);
+        super(Categories.MAIN_MATERIALS, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, null);
         this.key = new NamespacedKey(plugin, "ender_essence");
         register();
     }

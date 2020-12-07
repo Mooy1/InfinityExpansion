@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.storage;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
@@ -56,7 +56,7 @@ import java.util.Objects;
  * for idea, a few bits of code, and code to learn from
  *
  */
-public class StorageUnit extends Machine implements LoreStorage {
+public class StorageUnit extends Container implements LoreStorage {
     
     public static boolean DISPLAY_SIGNS = false;
     public static int SIGN_REFRESH = 8;

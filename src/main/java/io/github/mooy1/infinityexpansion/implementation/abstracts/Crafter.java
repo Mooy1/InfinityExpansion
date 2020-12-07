@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public abstract class Crafter extends Machine {
+public abstract class Crafter extends Container {
     
     private final SlimefunItemStack[] OUTPUTS;
     private final ItemStack[][] RECIPES;

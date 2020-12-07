@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
@@ -39,7 +40,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class Quarry extends Machine implements EnergyNetComponent, RecipeDisplayItem {
+public class Quarry extends Container implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
     public static final int ADVANCED_SPEED = 2;
@@ -50,6 +51,8 @@ public class Quarry extends Machine implements EnergyNetComponent, RecipeDisplay
     public static final int ADVANCED_ENERGY = 1440;
     public static final int VOID_ENERGY = 5760;
     public static final int INFINITY_ENERGY = 23040;
+    
+    private static final double SCALE = InfinityExpansion.getVanillaScale();
 
     private final Type type;
 
@@ -282,7 +285,7 @@ public class Quarry extends Machine implements EnergyNetComponent, RecipeDisplay
             makeOutput(Material.COAL, 16),
             makeOutput(SlimefunItems.SIFTED_ORE, 6),
             makeOutput(Material.COBBLESTONE, 4),
-            makeOutput(Material.LAPIS_LAZULI, 46),
+            makeOutput(Material.LAPIS_LAZULI, 16),
             makeOutput(Material.COBBLESTONE, 4),
             makeOutput(Material.EMERALD, 4),
             makeOutput(Material.COBBLESTONE, 4),
@@ -316,7 +319,7 @@ public class Quarry extends Machine implements EnergyNetComponent, RecipeDisplay
             makeOutput(SlimefunItems.SILVER_INGOT, 16),
             makeOutput(SlimefunItems.LEAD_INGOT, 16),
             makeOutput(Material.COBBLESTONE, 16),
-            makeOutput(Material.LAPIS_LAZULI, 68),
+            makeOutput(Material.LAPIS_LAZULI, 64),
             makeOutput(Material.COBBLESTONE, 16),
             makeOutput(Material.EMERALD, 16),
             makeOutput(Material.COAL, 64),
@@ -329,7 +332,7 @@ public class Quarry extends Machine implements EnergyNetComponent, RecipeDisplay
     };
     
     private static ItemStack makeOutput(Material material, int amount) {
-        return new ItemStack(material, amount);
+        return new ItemStack(material, (int) (SCALE * Math.ceil((float) amount / 2)));
     }
 
     private static ItemStack makeOutput(SlimefunItemStack stack, int amount) {

@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.PresetUtils;
@@ -32,7 +32,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class ResourceSynthesizer extends Machine implements EnergyNetComponent, RecipeDisplayItem {
+public class ResourceSynthesizer extends Container implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 1_000_000;
 

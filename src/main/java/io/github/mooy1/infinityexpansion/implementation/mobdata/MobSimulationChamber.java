@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.LoreUtils;
@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class MobSimulationChamber extends Machine implements EnergyNetComponent {
+public class MobSimulationChamber extends Container implements EnergyNetComponent {
 
     private static final int CARD_SLOT = PresetUtils.slot1 + 27;
     private static final int INTERVAL = 16;

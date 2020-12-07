@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.items;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MathUtils;
@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class StrainerBase extends Machine implements RecipeDisplayItem {
+public class StrainerBase extends Container implements RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
     public static final int ADVANCED_SPEED = 4;

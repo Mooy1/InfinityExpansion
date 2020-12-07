@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.items;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Machine;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
@@ -36,7 +36,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class InfinityWorkbench extends Machine implements EnergyNetComponent {
+public class InfinityWorkbench extends Container implements EnergyNetComponent {
 
     public static final int ENERGY = 10_000_000;
 
@@ -60,7 +60,7 @@ public class InfinityWorkbench extends Machine implements EnergyNetComponent {
     private static final int RECIPE_SLOT = 7;
 
     public InfinityWorkbench() {
-        super(Categories.MAIN, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.MAIN_MATERIALS, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
             Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
                 SlimefunItems.ENERGIZED_CAPACITOR, new ItemStack(Material.CRAFTING_TABLE), SlimefunItems.ENERGIZED_CAPACITOR,
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT
