@@ -9,7 +9,6 @@ import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.items.magical.SoulboundRune;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -25,9 +24,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.SoulboundRune;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -38,12 +39,10 @@ import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -203,8 +202,6 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
         
         if (!isAllowed(type)) return;
         
-        boolean ore = type.endsWith("ORE");
-
         Location l = b.getLocation();
 
         if (BlockStorage.hasBlockInfo(l)) return;
@@ -215,7 +212,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
         }
         CDS.put(p, System.currentTimeMillis());
         
-        List<Block> found = new ArrayList<>();
+        Set<Block> found = new HashSet<>();
         Set<Location> checked = new HashSet<>();
         checked.add(l);
         getVein(checked, found, l, b);
@@ -235,12 +232,16 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
             }
         }
         
-        if (ore) {
+        if (type.endsWith("ORE")) {
             w.spawn(b.getLocation(), ExperienceOrb.class).setExperience(found.size() * 2);
         }
         
         if (MathUtils.chanceIn(2)) {
-            p.setFoodLevel(Math.max(0, p.getFoodLevel() - 1));
+            FoodLevelChangeEvent event = new FoodLevelChangeEvent(p, p.getFoodLevel() - 1);
+            Bukkit.getPluginManager().callEvent(event);
+            if (!event.isCancelled()) {
+                p.setFoodLevel(event.getFoodLevel());
+            }
         }
     }
     
@@ -255,7 +256,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
         return false;
     }
     
-    private void getVein(Set<Location> checked, List<Block> found, Location l, Block b) {
+    private void getVein(Set<Location> checked, Set<Block> found, Location l, Block b) {
         if (found.size() >= MAX) return;
         
         found.add(b);
@@ -275,4 +276,5 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
     private void onPlayerLeave(PlayerQuitEvent e) {
         CDS.remove(e.getPlayer());
     }
+    
 }

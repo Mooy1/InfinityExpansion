@@ -25,6 +25,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -33,6 +34,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Generates items slowly using up strainers, must be waterlogged
@@ -42,8 +44,8 @@ import java.util.List;
 public class StrainerBase extends Container implements RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
-    public static final int ADVANCED_SPEED = 4;
-    public static final int REINFORCED_SPEED = 12;
+    public static final int ADVANCED_SPEED = 5;
+    public static final int REINFORCED_SPEED = 20;
     private static final int TIME = 48;
 
     private static final int STATUS_SLOT = PresetUtils.slot1;
@@ -213,12 +215,11 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
 
         //reduce durability
 
-        if (MathUtils.chanceIn(speed == 1 ? 2 : speed == 4 ? 4 : 8)) {
+        if (MathUtils.chanceIn(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + (3 * strainer.getEnchantmentLevel(Enchantment.MENDING)) + 1)) {
             ItemMeta itemMeta = strainer.getItemMeta();
             Damageable durability = (Damageable) itemMeta;
-
-            assert durability != null;
-            int current = durability.getDamage();
+            
+            int current = Objects.requireNonNull(durability).getDamage();
 
             if (current + 1 == Material.FISHING_ROD.getMaxDurability()) {
 

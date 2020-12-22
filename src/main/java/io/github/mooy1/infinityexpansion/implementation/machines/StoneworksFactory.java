@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class StoneworksFactory extends Container implements EnergyNetComponent, RecipeDisplayItem {
 
-    public static final int ENERGY = 240;
+    public static final int ENERGY = 180;
 
     private static final int[] PROCESS_BORDER = {0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23};
     private static final int[] OUT_BORDER = {6, 7, 8, 17, 24, 25, 26};
@@ -49,7 +49,7 @@ public class StoneworksFactory extends Container implements EnergyNetComponent, 
     public StoneworksFactory() {
         super(Categories.ADVANCED_MACHINES, Items.STONEWORKS_FACTORY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.MAGSTEEL_PLATE, Items.BASIC_COBBLE_GEN, Items.MAGSTEEL_PLATE,
-                SlimefunItems.ELECTRIC_FURNACE, Items.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
+                SlimefunItems.ELECTRIC_FURNACE_3, Items.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
                 Items.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, Items.MAGSTEEL_PLATE
         });
 
@@ -132,7 +132,7 @@ public class StoneworksFactory extends Container implements EnergyNetComponent, 
         int charge = getCharge(l);
         boolean playerWatching = inv.hasViewer();
 
-        if (charge < ENERGY) { //not enough energy
+        if (charge < ENERGY) {
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
             }

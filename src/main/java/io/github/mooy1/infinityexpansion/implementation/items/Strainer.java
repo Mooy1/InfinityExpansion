@@ -38,14 +38,14 @@ public class Strainer extends SlimefunItem implements NotPlaceable {
                 stick, string, stick
         }),
         ADVANCED(Items.ADVANCED_STRAINER, StrainerBase.ADVANCED_SPEED, new ItemStack[]{
-                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-                Items.MAGSTEEL, Items.STRAINER_BASE, Items.MAGSTEEL,
-                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL
+                Items.MAGSTEEL, string, Items.MAGSTEEL,
+                string, Items.BASIC_STRAINER, string,
+                Items.MAGSTEEL, string, Items.MAGSTEEL
         }),
         REINFORCED(Items.REINFORCED_STRAINER, StrainerBase.REINFORCED_SPEED, new ItemStack[]{
-                SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_ALLOY_INGOT,
-                SlimefunItems.REINFORCED_ALLOY_INGOT, Items.ADVANCED_STRAINER, SlimefunItems.REINFORCED_ALLOY_INGOT,
-                SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_ALLOY_INGOT
+                SlimefunItems.REINFORCED_ALLOY_INGOT, string, SlimefunItems.REINFORCED_ALLOY_INGOT,
+                string, Items.ADVANCED_STRAINER, string,
+                SlimefunItems.REINFORCED_ALLOY_INGOT, string, SlimefunItems.REINFORCED_ALLOY_INGOT
         });
 
         @Nonnull

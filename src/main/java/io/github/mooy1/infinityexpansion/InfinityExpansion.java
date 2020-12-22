@@ -124,8 +124,8 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     }
 
     private void updateConfig() {
-        getConfig().options().copyDefaults(true);
-        getConfig().options().copyHeader(true);
+        saveDefaultConfig();
+        getConfig().options().copyDefaults(true).copyHeader(true);
         saveConfig();
     }
 

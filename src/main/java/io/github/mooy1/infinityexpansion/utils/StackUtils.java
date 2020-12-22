@@ -1,7 +1,10 @@
 package io.github.mooy1.infinityexpansion.utils;
 
+import io.github.thebusybiscuit.slimefun4.core.services.CustomItemDataService;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.NonNull;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,6 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Collection of utils for modifying ItemStacks and getting their ids
@@ -47,6 +51,31 @@ public final class StackUtils {
         }
 
         return id;
+    }
+    
+    private static final CustomItemDataService service = SlimefunPlugin.getItemDataService();
+
+    /**
+     * Gets the slimefun item id of an item, otherwise if vanilla true returns the material id
+     */
+    @Nullable
+    public static String getItemID(ItemStack item, boolean vanilla) {
+
+        if (item instanceof SlimefunItemStack) {
+            return ((SlimefunItemStack) item).getItemId();
+        }
+
+        Optional<String> itemID = service.getItemData(item);
+
+        if (itemID.isPresent()) {
+            return itemID.get();
+        }
+
+        if (vanilla) {
+            return item.getType().toString();
+        }
+
+        return null;
     }
 
     @Nullable

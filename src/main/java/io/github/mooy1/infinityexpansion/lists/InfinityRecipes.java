@@ -2,9 +2,9 @@ package io.github.mooy1.infinityexpansion.lists;
 
 import com.google.common.collect.HashBiMap;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,12 +21,15 @@ import java.util.logging.Level;
  * The recipes for the Infinity Workbench
  *
  * @author Mooy1
- * 
+ *
  * Items and recipes can be added by:
  * - adding the item and recipe to map
  * - setting the Category of the Item to Categories.INFINITY_CHEAT
  * - setting the RecipeType to RecipeTypes.INFINITY_WORKBENCH
  * - setting the Recipe to InfinityRecipes.getRecipe(item)
+ * 
+ * TODO: big redo of recipe system with item filters
+ * 
  */
 public class InfinityRecipes {
 
@@ -97,7 +100,7 @@ public class InfinityRecipes {
 
         //log
         for (ItemStack dis : disabled) {
-            instance.getLogger().log(Level.INFO, ChatColor.RED + "Infinity Item " + StackUtils.getIDFromItem(dis) + " disabled!");
+            instance.getLogger().log(Level.INFO, ChatColor.RED + "Infinity Item " + ItemUtils.getItemName(dis) + " disabled!");
         }
 
         //ids
@@ -122,25 +125,25 @@ public class InfinityRecipes {
     }
 
     static {
-        RECIPES.put(Items.INFINITE_MACHINE_CORE, new ItemStack[]{
-                        m_plate, infinite, infinite, infinite, infinite, m_plate,
-                        infinite, m_plate, m_circuit, m_circuit, m_plate, infinite,
-                        infinite, m_circuit, m_core, m_core, m_circuit, infinite,
-                        infinite, m_circuit, m_core, m_core, m_circuit, infinite,
-                        infinite, m_plate, m_circuit, m_circuit, m_plate, infinite,
-                        m_plate, infinite, infinite, infinite, infinite, m_plate
+        RECIPES.put(Items.INFINITE_MACHINE_CORE, new ItemStack[] {
+                        m_plate, m_core, infinite, infinite, m_core, m_plate,
+                        m_core, m_plate, m_circuit, m_circuit, m_plate, m_core,
+                        infinite, m_circuit, infinite, infinite, m_circuit, infinite,
+                        infinite, m_circuit, infinite, infinite, m_circuit, infinite,
+                        m_core, m_plate, m_circuit, m_circuit, m_plate, m_core,
+                        m_plate, m_core, infinite, infinite, m_core, m_plate
                 }
         );
-        RECIPES.put(Items.INFINITE_MACHINE_CIRCUIT, new ItemStack[]{
-                        infinite, infinite, infinite, infinite, infinite, infinite,
-                        infinite, voidIng, voidIng, voidIng, voidIng, infinite,
+        RECIPES.put(Items.INFINITE_MACHINE_CIRCUIT, new ItemStack[] {
+                        m_circuit, infinite, m_circuit, m_circuit, infinite, m_circuit,
+                        voidIng, m_circuit, voidIng, voidIng, m_circuit, voidIng,
                         infinite, voidIng, m_circuit, m_circuit, voidIng, infinite,
                         infinite, voidIng, m_circuit, m_circuit, voidIng, infinite,
-                        infinite, voidIng, voidIng, voidIng, voidIng, infinite,
-                        infinite, infinite, infinite, infinite, infinite, infinite
+                        voidIng, m_circuit, voidIng, voidIng, m_circuit, voidIng,
+                        m_circuit, infinite, m_circuit, m_circuit, infinite, m_circuit
                 }
         );
-        RECIPES.put(Items.INFINITE_PANEL, new ItemStack[]{
+        RECIPES.put(Items.INFINITE_PANEL, new ItemStack[] {
                         c_panel, c_panel, c_panel, c_panel, c_panel, c_panel,
                         c_panel, c_panel, c_panel, c_panel, c_panel, c_panel,
                         infinite, infinite, infinite, infinite, infinite, infinite,
@@ -149,7 +152,7 @@ public class InfinityRecipes {
                         v_panel, v_panel, v_panel, v_panel, v_panel, v_panel
                 }
         );
-        RECIPES.put(Items.POWERED_BEDROCK, new ItemStack[]{
+        RECIPES.put(Items.POWERED_BEDROCK, new ItemStack[] {
                         c_5, c_5, c_5, c_5, c_5, c_5,
                         c_5, m_plate, voidIng, voidIng, m_plate, c_5,
                         c_5, voidIng, e_c, e_c, voidIng, c_5,
@@ -158,7 +161,7 @@ public class InfinityRecipes {
                         c_5, c_5, c_5, c_5, c_5, c_5,
                 }
         );
-        RECIPES.put(Items.INFINITY_REACTOR, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_REACTOR, new ItemStack[] {
                         null, infinite, infinite, infinite, infinite, null,
                         infinite, infinite, voidIng, voidIng, infinite, infinite,
                         infinite, m_plate, m_plate, m_plate, m_plate, infinite,
@@ -167,7 +170,7 @@ public class InfinityRecipes {
                         infinite, i_circuit, i_core, i_core, i_circuit, infinite
                 }
         );
-        RECIPES.put(Items.INFINITY_QUARRY, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_QUARRY, new ItemStack[] {
                         null, m_plate, m_plate, m_plate, m_plate, null,
                         m_plate, i_pick, i_circuit, i_circuit, i_pick, m_plate,
                         m_plate, voidIng, i_core, i_core, voidIng, m_plate,
@@ -176,7 +179,7 @@ public class InfinityRecipes {
                         voidIng, null, infinite, infinite, null, voidIng
                 }
         );
-        RECIPES.put(Items.INFINITY_CONSTRUCTOR, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_CONSTRUCTOR, new ItemStack[] {
                         null, m_plate, m_plate, m_plate, m_plate, null,
                         null, voidIng, i_circuit, i_circuit, voidIng, null,
                         null, voidIng, s_c, s_c, voidIng, null,
@@ -185,7 +188,7 @@ public class InfinityRecipes {
                         infinite, infinite, infinite, infinite, infinite, infinite
                 }
         );
-        RECIPES.put(Items.INFINITY_TREE_GROWER, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_TREE_GROWER, new ItemStack[] {
                         glass, glass, glass, glass, glass, glass,
                         glass, tree, null, null, tree, glass,
                         glass, grower, null, null, grower, glass,
@@ -194,7 +197,7 @@ public class InfinityRecipes {
                         m_plate, i_circuit, i_core, i_core, i_circuit, m_plate
                 }
         );
-        RECIPES.put(Items.INFINITY_VIRTUAL_FARM, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_VIRTUAL_FARM, new ItemStack[] {
                         glass, glass, glass, glass, glass, glass,
                         glass, null, null, null, null, glass,
                         glass, null, null, null, null, glass,
@@ -203,7 +206,7 @@ public class InfinityRecipes {
                         m_plate, i_circuit, i_core, i_core, i_circuit, m_plate
                 }
         );
-        RECIPES.put(Items.INFINITE_VOID_HARVESTER, new ItemStack[]{
+        RECIPES.put(Items.INFINITE_VOID_HARVESTER, new ItemStack[] {
                         m_plate, m_plate, m_plate, m_plate, m_plate, m_plate,
                         mag, voidIng, voidIng, voidIng, voidIng, mag,
                         mag, voidIng, i_circuit, i_circuit, voidIng, mag,
@@ -212,7 +215,7 @@ public class InfinityRecipes {
                         m_plate, m_plate, m_plate, m_plate, m_plate, m_plate
                 }
         );
-        RECIPES.put(Items.INFINITY_CAPACITOR, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_CAPACITOR, new ItemStack[] {
                         null, infinite, voidIng, voidIng, infinite, null,
                         null, infinite, i_circuit, i_circuit, infinite, null,
                         null, infinite, e_c, e_c, infinite, null,
@@ -221,7 +224,7 @@ public class InfinityRecipes {
                         null, infinite, voidIng, voidIng, infinite, null
                 }
         );
-        RECIPES.put(Items.INFINITY_ENCHANTER, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_ENCHANTER, new ItemStack[] {
                         null, null, null, null, null, null,
                         voidIng, null, null, null, null, voidIng,
                         voidIng, voidIng, en, en, voidIng, voidIng,
@@ -230,7 +233,7 @@ public class InfinityRecipes {
                         m_plate, infinite, infinite, infinite, infinite, m_plate
                 }
         );
-        RECIPES.put(Items.INFINITY_DISENCHANTER, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_DISENCHANTER, new ItemStack[] {
                         null, null, null, null, null, null,
                         voidIng, null, null, null, null, voidIng,
                         voidIng, voidIng, dis, dis, voidIng, voidIng,
@@ -239,7 +242,7 @@ public class InfinityRecipes {
                         m_plate, infinite, infinite, infinite, infinite, m_plate
                 }
         );
-        RECIPES.put(Items.INFINITY_CHARGER, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_CHARGER, new ItemStack[] {
                         null, null, null, null, null, null,
                         voidIng, m_circuit, m_circuit, m_circuit, m_circuit, voidIng,
                         voidIng, m_circuit, charger, charger, m_circuit, voidIng,
@@ -248,7 +251,7 @@ public class InfinityRecipes {
                         infinite, infinite, infinite, infinite, infinite, infinite
                 }
         );
-        RECIPES.put(Items.INFINITY_BLADE, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_BLADE, new ItemStack[] {
                         null, null, null, null, infinite, infinite,
                         null, null, null, infinite, voidIng, infinite,
                         null, null, infinite, voidIng, infinite, null,
@@ -257,7 +260,7 @@ public class InfinityRecipes {
                         voidIng, null, infinite, null, null, null
                 }
         );
-        RECIPES.put(Items.INFINITY_BOW, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_BOW, new ItemStack[] {
                         null, infinite, infinite, voidIng, null, null,
                         infinite, null, infinite, infinite, voidIng, null,
                         voidIng, null, null, Items.ENDER_FLAME, infinite, voidIng,
@@ -266,7 +269,7 @@ public class InfinityRecipes {
                         null, null, null, voidIng, infinite, null
                 }
         );
-        RECIPES.put(Items.INFINITY_PICKAXE, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_PICKAXE, new ItemStack[] {
                         null, voidIng, infinite, infinite, infinite, null,
                         null, null, null, infinite, voidIng, infinite,
                         null, null, null, voidIng, infinite, infinite,
@@ -275,7 +278,7 @@ public class InfinityRecipes {
                         voidIng, null, null, null, null, null
                 }
         );
-        RECIPES.put(Items.INFINITY_AXE, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_AXE, new ItemStack[] {
                         null, voidIng, infinite, infinite, null, null,
                         voidIng, infinite, infinite, infinite, voidIng, null,
                         null, infinite, infinite, voidIng, infinite, infinite,
@@ -284,7 +287,7 @@ public class InfinityRecipes {
                         voidIng, null, null, null, voidIng, null
                 }
         );
-        RECIPES.put(Items.INFINITY_SHOVEL, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_SHOVEL, new ItemStack[] {
                         null, null, null, infinite, infinite, infinite,
                         null, null, infinite, infinite, infinite, infinite,
                         null, null, infinite, voidIng, infinite, infinite,
@@ -293,7 +296,7 @@ public class InfinityRecipes {
                         voidIng, null, null, null, null, null
                 }
         );
-        RECIPES.put(Items.INFINITY_CROWN, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_CROWN, new ItemStack[] {
                         null, infinite, infinite, infinite, infinite, null,
                         infinite, infinite, infinite, infinite, infinite, infinite,
                         infinite, voidIng, infinite, infinite, voidIng, infinite,
@@ -302,7 +305,7 @@ public class InfinityRecipes {
                         null, null, null, null, null, null
                 }
         );
-        RECIPES.put(Items.INFINITY_CHESTPLATE, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_CHESTPLATE, new ItemStack[] {
                         null, infinite, null, null, infinite, null,
                         infinite, voidIng, infinite, infinite, voidIng, infinite,
                         voidIng, infinite, infinite, infinite, infinite, voidIng,
@@ -311,7 +314,7 @@ public class InfinityRecipes {
                         null, infinite, infinite, infinite, infinite, null
                 }
         );
-        RECIPES.put(Items.INFINITY_LEGGINGS, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_LEGGINGS, new ItemStack[] {
                         null, infinite, infinite, infinite, infinite, null,
                         infinite, infinite, infinite, infinite, infinite, infinite,
                         voidIng, infinite, null, null, infinite, voidIng,
@@ -320,7 +323,7 @@ public class InfinityRecipes {
                         null, infinite, null, null, infinite, null
                 }
         );
-        RECIPES.put(Items.INFINITY_BOOTS, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_BOOTS, new ItemStack[] {
                         null, null, null, null, null, null,
                         infinite, infinite, null, null, infinite, infinite,
                         infinite, infinite, null, null, infinite, infinite,
@@ -329,7 +332,7 @@ public class InfinityRecipes {
                         infinite, infinite, null, null, infinite, infinite
                 }
         );
-        RECIPES.put(Items.INFINITY_MATRIX, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_MATRIX, new ItemStack[] {
                         infinite, null, infinite, infinite, null, infinite,
                         infinite, voidIng, voidIng, voidIng, voidIng, infinite,
                         voidIng, voidIng, elytra, elytra, voidIng, voidIng,
@@ -338,7 +341,7 @@ public class InfinityRecipes {
                         infinite, null, infinite, infinite, null, infinite
                 }
         );
-        RECIPES.put(Items.INFINITY_SHIELD, new ItemStack[]{
+        RECIPES.put(Items.INFINITY_SHIELD, new ItemStack[] {
                         infinite, infinite, null, null, infinite, infinite,
                         infinite, voidIng, infinite, infinite, voidIng, infinite,
                         infinite, voidIng, infinite, infinite, voidIng, infinite,

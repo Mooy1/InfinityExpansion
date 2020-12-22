@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.utils;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 
+import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 
 /**
@@ -11,11 +12,13 @@ import java.text.DecimalFormat;
  */
 public final class LoreUtils {
     
-    public static final float SERVER_TICK_RATIO = (float) 20 / InfinityExpansion.getTickRate();
+    public static final float SERVER_TICK_RATIO = 20F / InfinityExpansion.getTickRate();
     
     public static String energyPerSecond(int energy) {
         return "&8\u21E8 &e\u26A1 &7" + format(Math.round(energy * SERVER_TICK_RATIO)) + " J/s";
     }
+    
+    @Nonnull
     public static String energyBuffer(int energy) {
         return "&8\u21E8 &e\u26A1 &7" + format(energy) + " J Buffer";
     }
@@ -45,4 +48,5 @@ public final class LoreUtils {
     public static String format(int number) {
         return decimalFormat.format(number);
     }
+    
 }

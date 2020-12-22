@@ -100,7 +100,7 @@ public class VoidHarvester extends Container implements EnergyNetComponent, Reci
     public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
-        int energy = type.getEnergy();
+        int energy = this.type.getEnergy();
 
         if (getCharge(b.getLocation()) < energy) { //not enough energy
 
@@ -113,7 +113,7 @@ public class VoidHarvester extends Container implements EnergyNetComponent, Reci
 
         int progress = Integer.parseInt(getProgress(b));
 
-        int speed = type.getSpeed();
+        int speed = this.type.getSpeed();
 
         if (progress >= TIME) { //reached full progress
 
@@ -174,7 +174,7 @@ public class VoidHarvester extends Container implements EnergyNetComponent, Reci
 
     @Override
     public int getCapacity() {
-        return type.getEnergy() * 2;
+        return this.type.getEnergy() * 2;
     }
 
     @Nonnull

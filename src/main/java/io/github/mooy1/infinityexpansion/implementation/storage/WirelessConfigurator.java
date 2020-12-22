@@ -6,6 +6,7 @@ import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.MessageUtils;
 import io.github.mooy1.infinityexpansion.utils.TransferUtils;
 import io.github.mooy1.infinityexpansion.utils.WirelessUtils;
+import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -20,10 +21,9 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -40,6 +40,8 @@ import java.util.Objects;
 /**
  * A tool for configuring wireless input/output nodes
  *
+ * @author Mooy1
+ * 
  */
 public class WirelessConfigurator extends SlimefunItem implements NotPlaceable, Listener {
 
@@ -53,33 +55,36 @@ public class WirelessConfigurator extends SlimefunItem implements NotPlaceable, 
         Bukkit.getPluginManager().registerEvents(this, plugin);
         this.key = new NamespacedKey(plugin, "wireless");
     }
-
+    
     @EventHandler
-    public void onInteract(@Nonnull PlayerInteractEvent e) {
-
+    public void onRightClick(@Nonnull PlayerRightClickEvent e) {
         if (e.getHand() == EquipmentSlot.OFF_HAND) return;
 
         if (SlimefunItem.getByItem(e.getItem()) instanceof WirelessConfigurator) {
 
-            if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock() != null) {
+            if (e.getClickedBlock().isPresent()) {
 
-                if (SlimefunPlugin.getProtectionManager().hasPermission(e.getPlayer(), e.getClickedBlock(), ProtectableAction.PLACE_BLOCK)) {
+                if (SlimefunPlugin.getProtectionManager().hasPermission(e.getPlayer(), e.getClickedBlock().get(), ProtectableAction.PLACE_BLOCK)) {
 
                     if (e.getPlayer().isSneaking()) {
-                        clearHandler(e.getClickedBlock(), e.getPlayer());
+                        clearHandler(e.getClickedBlock().get(), e.getPlayer());
                     } else {
-                        connectHandler(e.getClickedBlock(), e.getPlayer(), e.getItem());
+                        connectHandler(e.getClickedBlock().get(), e.getPlayer(), e.getItem());
                     }
+                    
+                    e.setUseBlock(Event.Result.DENY);
                 }
-
-            } else if (e.getAction() == Action.LEFT_CLICK_AIR) {
+                
+            } else if (e.getPlayer().isSneaking()) {
                 resetHandler(e.getItem(), e.getPlayer());
             }
 
-        } else if (e.getClickedBlock() != null && e.getAction() == Action.RIGHT_CLICK_BLOCK &&
-                SlimefunPlugin.getProtectionManager().hasPermission(e.getPlayer(), e.getClickedBlock(), ProtectableAction.ACCESS_INVENTORIES)
-                && Objects.equals(BlockStorage.checkID(e.getClickedBlock()), Items.WIRELESS_INPUT_NODE.getItemId())) {
-            infoHandler(e.getClickedBlock(), e.getClickedBlock().getLocation(), e.getPlayer(), false);
+        } else if (e.getPlayer().isSneaking() && e.getClickedBlock().isPresent()
+                && Objects.equals(BlockStorage.checkID(e.getClickedBlock().get()), Items.WIRELESS_INPUT_NODE.getItemId())
+                && SlimefunPlugin.getProtectionManager().hasPermission(e.getPlayer(), e.getClickedBlock().get(), ProtectableAction.ACCESS_INVENTORIES)
+        ) {
+            infoHandler(e.getClickedBlock().get(), e.getClickedBlock().get().getLocation(), e.getPlayer(), false);
+            e.setUseBlock(Event.Result.DENY);
         }
     }
 
@@ -135,7 +140,7 @@ public class WirelessConfigurator extends SlimefunItem implements NotPlaceable, 
 
     private void infoHandler(@Nonnull Block b, @Nonnull Location l, @Nonnull Player p, boolean force) {
 
-        if (this.coolDowns.containsKey(p) && System.currentTimeMillis() - this.coolDowns.get(p) < 2000) {
+        if (!force && this.coolDowns.containsKey(p) && System.currentTimeMillis() - this.coolDowns.get(p) < 2000) {
             return;
         }
         this.coolDowns.put(p, System.currentTimeMillis());

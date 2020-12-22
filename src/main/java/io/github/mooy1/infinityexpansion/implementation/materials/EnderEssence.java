@@ -33,10 +33,13 @@ public class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResou
     @Override
     public int getDefaultSupply(@Nonnull World.Environment environment, @Nonnull Biome biome) {
         if (environment == World.Environment.THE_END) {
-            return 3;
+            return 16;
         }
         if (biome == Biome.THE_VOID) {
-            return 3;
+            return 16;
+        }
+        if (environment == World.Environment.NETHER) {
+            return 8;
         }
         return 0;
     }
@@ -44,12 +47,12 @@ public class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResou
     @Nonnull
     @Override
     public NamespacedKey getKey() {
-        return key;
+        return this.key;
     }
 
     @Override
     public int getMaxDeviation() {
-        return 2;
+        return 4;
     }
 
     @Nonnull

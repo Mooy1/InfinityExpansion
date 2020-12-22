@@ -52,7 +52,9 @@ public abstract class Container extends SlimefunItem {
 
             @Override
             public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return (player.hasPermission("slimefun.inventory.bypass") || (SlimefunPlugin.getProtectionManager().hasPermission(player, block.getLocation(), ProtectableAction.ACCESS_INVENTORIES) && hasPermission(block, player)));
+                return hasPermission(block, player) && (player.hasPermission("slimefun.inventory.bypass")
+                        || SlimefunPlugin.getProtectionManager().hasPermission(player, block.getLocation(), ProtectableAction.INTERACT_BLOCK)
+                );
             }
 
             @Override
@@ -97,4 +99,5 @@ public abstract class Container extends SlimefunItem {
     public boolean hasPermission(@Nonnull Block b, @Nonnull Player p) {
         return true;
     }
+    
 }

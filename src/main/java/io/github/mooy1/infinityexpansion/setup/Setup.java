@@ -95,7 +95,7 @@ public final class Setup {
 
         //main
 
-        new SlimefunItem(Categories.MAIN_MATERIALS, Items.INFINITY_ADDON_INFO, RecipeType.NULL, null).register(plugin);
+        new SlimefunItem(Categories.MAIN_MATERIALS, Items.ADDON_INFO, RecipeType.NULL, null).register(plugin);
         new InfinityWorkbench().register(plugin);
         new AdvancedAnvil().register(plugin);
         new VeinMinerRune(plugin).register(plugin);
@@ -179,7 +179,7 @@ public final class Setup {
 
     private static void registerCategories(Category... categories) {
         for (Category category : categories) {
-            MainCategory.categories.add(category);
+            Categories.MAIN.categories.add(category);
             category.register();
         }
     }

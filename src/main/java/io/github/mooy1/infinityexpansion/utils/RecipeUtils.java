@@ -13,9 +13,7 @@ import java.util.List;
  * @author Mooy1
  */
 public final class RecipeUtils {
-
-    private RecipeUtils() {}
-
+    
     @Nonnull
     public static ItemStack[] Compress(@Nonnull ItemStack item) {
         return new ItemStack[]{

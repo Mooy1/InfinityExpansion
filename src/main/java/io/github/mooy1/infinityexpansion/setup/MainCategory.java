@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class MainCategory extends FlexCategory {
     
-    public static final List<Category> categories = new ArrayList<>();
+    public final List<Category> categories = new ArrayList<>();
 
     public MainCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
@@ -52,8 +52,8 @@ public class MainCategory extends FlexCategory {
             return false;
         });
         
-        for (int i = 0 ; i < categories.size() ; i++) {
-            Category category = categories.get(i);
+        for (int i = 0 ; i < this.categories.size() ; i++) {
+            Category category = this.categories.get(i);
             menu.addItem(i + 9, category.getItem(p), (pl, s, is, action) -> {
                 SlimefunGuide.openCategory(profile, category, layout, 1);
                 return false;

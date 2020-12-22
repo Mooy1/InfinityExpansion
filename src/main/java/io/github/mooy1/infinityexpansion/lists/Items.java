@@ -37,6 +37,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -54,7 +55,7 @@ public final class Items {
             Material.END_ROD,
             "&9Wireless input node",
             "&7Transfers items from the connected inventory to wireless output nodes",
-            "&7Right-Click to get info and mark a path to the connected output node"
+            "&7Crouch + Right-Click to get info and mark a path to the connected output node"
     );
     public static final SlimefunItemStack WIRELESS_OUTPUT_NODE = new SlimefunItemStack(
             "WIRELESS_OUTPUT_NODE",
@@ -68,7 +69,7 @@ public final class Items {
             "&9Wireless configurator",
             "&eRight-Click &7an input node then an output node to connect them",
             "&eCrouch + Right-Click &7an input node to remove connected output node",
-            "&eCrouch + Left-Click &7to clear the input node currently being configured"
+            "&eCrouch + Right-Click &7the air to clear the input node currently being configured"
     );
 
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
@@ -649,8 +650,8 @@ public final class Items {
     /**
      * Thanks to NCBPFluffyBear for the idea
      */
-    public static final SlimefunItemStack INFINITY_ADDON_INFO = new SlimefunItemStack(
-            "INFINITY_ADDON_INFO",
+    public static final SlimefunItemStack ADDON_INFO = new SlimefunItemStack(
+            InfinityExpansion.getInstance().getName().toUpperCase(Locale.ROOT) + "_ADDON_INFO",
             Material.NETHER_STAR,
             "&bAddon Info",
             "&fVersion: &7" + InfinityExpansion.getInstance().getPluginVersion(),

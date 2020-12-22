@@ -86,9 +86,9 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
         RECIPES.add(Items.EMERALD_SINGULARITY, "EMERALD", (int) (640 * SCALE));
         RECIPES.add(Items.NETHERITE_SINGULARITY, "NETHERITE_INGOT", (int) (160 * SCALE));
 
-        RECIPES.add(Items.COAL_SINGULARITY, "COAL", (int) (1280 * SCALE));
-        RECIPES.add(Items.REDSTONE_SINGULARITY, "REDSTONE", (int) (640 * SCALE));
-        RECIPES.add(Items.LAPIS_SINGULARITY, "LAPIS_LAZULI",(int) (640 * SCALE));
+        RECIPES.add(Items.COAL_SINGULARITY, "COAL", (int) (640 * SCALE));
+        RECIPES.add(Items.REDSTONE_SINGULARITY, "REDSTONE", (int) (1280 * SCALE));
+        RECIPES.add(Items.LAPIS_SINGULARITY, "LAPIS_LAZULI",(int) (1280 * SCALE));
         RECIPES.add(Items.QUARTZ_SINGULARITY, "QUARTZ", (int) (640 * SCALE));
 
         RECIPES.add(Items.INFINITY_SINGULARITY, "INFINITE_INGOT",160);

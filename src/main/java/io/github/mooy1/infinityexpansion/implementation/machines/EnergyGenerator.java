@@ -67,16 +67,16 @@ public class EnergyGenerator extends Container implements EnergyNetProvider {
     public static final int BASIC_STORAGE = 1500;
     
     public static final int ADVANCED_RATE = 180;
-    public static final int ADVANCED_STORAGE = 15000;
+    public static final int ADVANCED_STORAGE = 18000;
     
-    public static final int CELE_RATE = 600;
-    public static final int CELE_STORAGE = 60000;
+    public static final int CELE_RATE = 750;
+    public static final int CELE_STORAGE = 75000;
     
-    public static final int VOID_RATE = 3000;
-    public static final int VOID_STORAGE = 300000;
+    public static final int VOID_RATE = 3600;
+    public static final int VOID_STORAGE = 360000;
     
-    public static final int INFINITY_RATE = 30000;
-    public static final int INFINITY_STORAGE = 3000000;
+    public static final int INFINITY_RATE = 90;
+    public static final int INFINITY_STORAGE = 9000000;
 
     private final Type type;
 
@@ -201,7 +201,7 @@ public class EnergyGenerator extends Container implements EnergyNetProvider {
             }
         }
 
-        return new Pair<>(0, "");
+        return new Pair<>(0, null);
     }
 
     @Override
@@ -259,8 +259,8 @@ public class EnergyGenerator extends Container implements EnergyNetProvider {
         }, true, false, false, false, false, false),
         VOID(VOID_RATE, VOID_STORAGE, Categories.ADVANCED_MACHINES, Items.VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT,
-                Items.MAGNONIUM, Items.CELESTIAL_PANEL, Items.MAGNONIUM,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
+                Items.CELESTIAL_PANEL, Items.CELESTIAL_PANEL, Items.CELESTIAL_PANEL,
+                Items.MAGNONIUM, Items.MAGNONIUM, Items.MAGNONIUM
         }, false, true, true, true, false, false),
         
         INFINITY(INFINITY_RATE, INFINITY_STORAGE, Categories.INFINITY_CHEAT, Items.INFINITE_PANEL, RecipeTypes.INFINITY_WORKBENCH,

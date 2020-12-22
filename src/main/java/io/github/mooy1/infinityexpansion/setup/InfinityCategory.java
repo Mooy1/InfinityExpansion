@@ -77,7 +77,7 @@ public class InfinityCategory extends FlexCategory {
 
     @Override
     public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
-        return slimefunGuideLayout != SlimefunGuideLayout.CHEAT_SHEET;
+        return false;
     }
 
     @Override

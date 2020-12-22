@@ -90,7 +90,7 @@ public class MobDataCard extends SlimefunItem implements RecipeDisplayItem, NotP
                 new ItemStack(Material.ENDER_EYE, 1), new ItemStack(Material.OBSIDIAN, 16), new ItemStack(Material.ENDER_EYE, 1),
                 new ItemStack(Material.ENDER_PEARL, 16), Items.EMPTY_DATA_CARD, new ItemStack(Material.ENDER_PEARL, 16),
                 new ItemStack(Material.ENDER_EYE, 1), new ItemStack(Material.OBSIDIAN, 16), new ItemStack(Material.ENDER_EYE, 1)
-        }, ImmutableMap.of(1, new ItemStack(Material.ENDER_PEARL, 1), 2, new ItemStack(Material.ENDER_PEARL, 1))),
+        }, ImmutableMap.of(1, new ItemStack(Material.ENDER_PEARL, 1), 2, new ItemStack(Material.ENDER_PEARL, 1), 3, Items.ENDER_ESSENCE)),
 
         CREEPER("Creeper", 120, 2, false, new ItemStack[]{
                 new ItemStack(Material.TNT, 1), new ItemStack(Material.GREEN_DYE, 16), new ItemStack(Material.TNT, 1),

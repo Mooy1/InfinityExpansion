@@ -169,7 +169,7 @@ public class Quarry extends Container implements EnergyNetComponent, RecipeDispl
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
         
-        for (ItemStack item : type.getOutput()) {
+        for (ItemStack item : this.type.getOutput()) {
             if (!items.contains(item)) {
                 items.add(null);
                 items.add(item);

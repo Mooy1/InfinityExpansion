@@ -24,6 +24,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+/**
+ * An abstract crafter
+ * 
+ * TODO: redo using item filter
+ * 
+ */
 public abstract class Crafter extends Container {
     
     private final SlimefunItemStack[] OUTPUTS;
@@ -56,9 +62,9 @@ public abstract class Crafter extends Container {
     
     public Crafter(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
-        
-        OUTPUTS = getOutputs();
-        RECIPES = getRecipes();
+
+        this.OUTPUTS = getOutputs();
+        this.RECIPES = getRecipes();
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -189,11 +195,11 @@ public abstract class Crafter extends Container {
             inputIDS[i] = StackUtils.getIDFromItem(inputItem);
         }
 
-        for (int recipesI = 0; recipesI < RECIPES.length ; recipesI++) {
+        for (int recipesI = 0 ; recipesI < this.RECIPES.length ; recipesI++) {
             boolean match = false;
 
             for (int inputsI = 0 ; inputsI < inputIDS.length; inputsI++) {
-                ItemStack recipe = RECIPES[recipesI][inputsI];
+                ItemStack recipe = this.RECIPES[recipesI][inputsI];
                 String recipeID = StackUtils.getIDFromItem(recipe);
 
                 if (Objects.equals(inputIDS[inputsI], recipeID)) {
@@ -214,7 +220,7 @@ public abstract class Crafter extends Container {
             }
 
             if (match) {
-                SlimefunItemStack output = new SlimefunItemStack(OUTPUTS[recipesI], 1);
+                SlimefunItemStack output = new SlimefunItemStack(this.OUTPUTS[recipesI], 1);
 
                 if (output.getItem() instanceof LoreStorage) {
                     ((LoreStorage) output.getItem()).transfer(output, inv.getItemInSlot(INPUT_SLOTS[4]));
