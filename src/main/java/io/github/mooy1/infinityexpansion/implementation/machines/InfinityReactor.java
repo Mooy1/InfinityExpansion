@@ -4,6 +4,7 @@ import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
@@ -41,8 +42,8 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
 
     public static final int ENERGY = 180_000;
     public static final int STORAGE = 40_000_000;
-    public static final int INFINITY_INTERVAL = 72000;
-    public static final int VOID_INTERVAL = 12000;
+    public static final int INFINITY_INTERVAL = (int) (86400 * PluginUtils.TICK_RATIO); 
+    public static final int VOID_INTERVAL = (int) (14400 * PluginUtils.TICK_RATIO);
     public static final int[] INPUT_SLOTS = {
             MenuPreset.slot1, MenuPreset.slot3
     };
@@ -235,7 +236,7 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
         items.add(null);
 
         item = Items.VOID_INGOT.clone();
-        LoreUtils.addLore(item, "", "Lasts for 3 hours");
+        LoreUtils.addLore(item, "", "Lasts for 4 hours");
         items.add(item);
         items.add(null);
 
