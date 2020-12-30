@@ -1,18 +1,19 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.LoreUtils;
-import io.github.mooy1.infinityexpansion.utils.MathUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinityexpansion.utils.Utils;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.math.RandomUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -25,15 +26,14 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Map;
 
-public class MobSimulationChamber extends Container implements EnergyNetComponent {
+public class MobSimulationChamber extends AbstractContainer implements EnergyNetComponent {
 
-    private static final int CARD_SLOT = PresetUtils.slot1 + 27;
+    private static final int CARD_SLOT = MenuPreset.slot1 + 27;
     private static final int INTERVAL = 16;
-    private static final int STATUS_SLOT = PresetUtils.slot1;
-    private static final int[] OUTPUTS_SLOTS = PresetUtils.largeOutput;
+    private static final int STATUS_SLOT = MenuPreset.slot1;
+    private static final int[] OUTPUT_SLOTS = Utils.largeOutput;
     private static final int XP_Slot = 46;
     public static final int BUFFER = 16000;
     public static final int ENERGY = 240;
@@ -53,7 +53,7 @@ public class MobSimulationChamber extends Container implements EnergyNetComponen
             Location l = b.getLocation();
             
             if (inv != null) {
-                inv.dropItems(l, OUTPUTS_SLOTS);
+                inv.dropItems(l, OUTPUT_SLOTS);
                 inv.dropItems(l, CARD_SLOT);
             }
             
@@ -65,9 +65,10 @@ public class MobSimulationChamber extends Container implements EnergyNetComponen
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
-        MobDataCard.Type card = getCard(inv.getItemInSlot(CARD_SLOT));
-        
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
+
+        MobDataCard.Type card = MobDataCard.CARDS.get(StackUtils.getItemID(inv.getItemInSlot(CARD_SLOT), false));
+
         if (card == null) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, NO_CARD);
@@ -77,79 +78,68 @@ public class MobSimulationChamber extends Container implements EnergyNetComponen
         
         int energy = card.getEnergy() + ENERGY;
         
-        if (getCharge(l) < energy) {
+        if (getCharge(b.getLocation()) < energy) {
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
             return;
         }
 
         if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, makeSimulating(energy));
-            inv.replaceExistingItem(XP_Slot, makeXpItem(getXP(l)));
+            inv.replaceExistingItem(XP_Slot, makeXpItem(getXP(b.getLocation())));
         }
 
         if (!InfinityExpansion.progressEvery(INTERVAL)) return;
         
-        if (MathUtils.chanceIn(CHANCE)) {
-            int xp = getXP(l) + card.getXp();
-            setXp(l, xp);
+        if (RandomUtils.chanceIn(CHANCE)) {
+            int xp = getXP(b.getLocation()) + card.getXp();
+            setXp(b.getLocation(), xp);
         }
         
         for (Map.Entry<Integer, ItemStack> entry : card.getDrops().entrySet()) {
-            if (MathUtils.chanceIn(entry.getKey())) {
-                ItemStack output = entry.getValue().clone();
-                if (inv.fits(output, OUTPUTS_SLOTS)) {
-                    inv.pushItem(output, OUTPUTS_SLOTS);
-                } else {
-                    if (inv.hasViewer()) {
-                        inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
-                    }
-                    return;
+            if (RandomUtils.chanceIn(entry.getKey())) {
+                ItemStack output = entry.getValue();
+                if (inv.fits(output, OUTPUT_SLOTS)) {
+                    output = output.clone();
+                    inv.pushItem(output, OUTPUT_SLOTS);
+                } else if (inv.hasViewer()) {
+                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
                 }
             }
         }
         
-        removeCharge(l, energy);
+        removeCharge(b.getLocation(), energy);
     }
     
     @Nonnull
     private ItemStack makeSimulating(int energy) {
-        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round(energy * LoreUtils.SERVER_TICK_RATIO) + " J/s)");
+        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round(energy * PluginUtils.TICK_RATIO) + " J/s)");
     }
 
     @Override
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : PresetUtils.largeOutputBorder) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : Utils.largeOutputBorder) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
-        blockMenuPreset.addItem(XP_Slot, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(XP_Slot, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
     public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
         if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUTS_SLOTS;
+            return OUTPUT_SLOTS;
         }
         return new int[0];
     }
     
-    @Nullable
-    private MobDataCard.Type getCard(ItemStack item) {
-        SlimefunItem sfItem = SlimefunItem.getByItem(item);
-        
-        if (!(sfItem instanceof MobDataCard)) return null;
-        
-        return ((MobDataCard) sfItem).getType();
-    }
-
     @Nonnull
     @Override
     public EnergyNetComponentType getEnergyComponentType() {
@@ -196,4 +186,5 @@ public class MobSimulationChamber extends Container implements EnergyNetComponen
             return 0;
         }
     }
+    
 }

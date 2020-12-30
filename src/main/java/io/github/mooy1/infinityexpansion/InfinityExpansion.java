@@ -4,13 +4,14 @@ import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationCha
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.setup.Setup;
-import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
+import io.github.mooy1.infinityexpansion.setup.commands.Changelog;
+import io.github.mooy1.infinityexpansion.setup.commands.GiveRecipe;
+import io.github.mooy1.infinityexpansion.setup.commands.ResetConfig;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.command.CommandLib;
+import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import lombok.Getter;
-import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
-import org.apache.commons.lang.Validate;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,8 +27,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Getter
     private static InfinityExpansion instance;
     @Getter
-    private static int tickRate;
-    @Getter
     private static int currentTick = 1;
     @Getter
     private static double vanillaScale = 1;
@@ -35,31 +34,20 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Override
     public void onEnable() {
         instance = this;
-        tickRate = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
 
         //config
-        updateConfig();
+        PluginUtils.setup(this, "Mooy1/InfinityExpansion/master", getFile());
+        MessageUtils.setPrefix(ChatColor.DARK_GRAY + "[" + ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion" + ChatColor.DARK_GRAY + "]" + ChatColor.WHITE + " ");
+        new CommandLib(this, "infinityexpansion", "infinityexpansion.admin", "/ie, /ix, /infinity");
+        CommandLib.addCommands(new Changelog(), new GiveRecipe(), new ResetConfig());
         setupConfigOptions(getConfig());
-
+        
         //stats
         @SuppressWarnings("unused")
         final Metrics metrics = new Metrics(this, 8991);
-
-        PaperLib.suggestPaper(this);
-
-        //auto update
-        if (getDescription().getVersion().startsWith("DEV - ")) {
-            log(Level.INFO, "Starting auto update");
-            new GitHubBuildsUpdater(this, this.getFile(), "Mooy1/InfinityExpansion/master").start();
-        } else {
-            log(Level.WARNING, "You must be on a DEV build to auto update!");
-        }
         
         //items
         Setup.setup(this);
-
-        //commands
-        new InfinityCommand(this).register();
 
         //set enabled infinity recipes
         InfinityRecipes.setup(this);
@@ -69,7 +57,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
             getLogger().log(Level.INFO, line);
         }
         
-        runSync(() -> log(Level.INFO, "Infinity Expansion will soon be moving some content to another addon! keep an eye out for its release!"), 300);
+        PluginUtils.runSync(() -> PluginUtils.log("Infinity Expansion will soon be moving some content to another addon! keep an eye out for its release!"), 300);
         
         //ticker
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
@@ -78,7 +66,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
             } else {
                 currentTick = 1;
             }
-        }, 100L, tickRate);
+        }, 100L, PluginUtils.TICKER_DELAY);
     }
 
     @Override
@@ -115,18 +103,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 ChatColor.GREEN + "########################################",
                 ChatColor.GREEN + ""
         };
-    }
-
-    public static void log(@Nonnull Level level , @Nonnull String... logs) {
-        for (String log : logs) {
-            instance.getLogger().log(level, log);
-        }
-    }
-
-    private void updateConfig() {
-        saveDefaultConfig();
-        getConfig().options().copyDefaults(true).copyHeader(true);
-        saveConfig();
     }
 
     private void setupConfigOptions(FileConfiguration config) {
@@ -192,11 +168,11 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
      }
     
     private void configWarnValue(String path) {
-        log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting it to default");
+        PluginUtils.log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting it to default");
     }
 
     private void configWarnPath(String path) {
-        log(Level.SEVERE, "Config was missing path " + path + ", please add this path or reset your config!");
+        PluginUtils.log(Level.SEVERE, "Config was missing path " + path + ", please add this path or reset your config!");
     }
 
     /**
@@ -216,24 +192,4 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         return currentTick % rate == pos;
     }
     
-    public static void runSync(@Nonnull Runnable runnable, long delay) {
-        Validate.notNull(runnable, "Cannot run null");
-        Validate.isTrue(delay >= 0, "The delay cannot be negative");
-        
-        if (instance == null || !instance.isEnabled()) {
-            return;
-        }
-
-        instance.getServer().getScheduler().runTaskLater(instance, runnable, delay);
-    }
-
-    public static void runSync(@Nonnull Runnable runnable) {
-        Validate.notNull(runnable, "Cannot run null");
-
-        if (instance == null || !instance.isEnabled()) {
-            return;
-        }
-
-        instance.getServer().getScheduler().runTask(instance, runnable);
-    }
 }

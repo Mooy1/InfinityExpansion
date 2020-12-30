@@ -3,12 +3,14 @@ package io.github.mooy1.infinityexpansion.implementation.gear;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.LocationUtils;
-import io.github.mooy1.infinityexpansion.utils.MathUtils;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.general.LocationUtils;
+import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.math.RandomUtils;
+import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.SoulboundRune;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -24,7 +26,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.SoulboundRune;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -83,7 +84,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
         if (isItem(e.getItemDrop().getItemStack()) && e.getItemDrop().getItemStack().getAmount() == 1) {
-            InfinityExpansion.runSync(() -> activate(e.getPlayer(), e.getItemDrop()), 20L);
+            PluginUtils.runSync(() -> activate(e.getPlayer(), e.getItemDrop()), 20L);
         }
     }
 
@@ -105,8 +106,8 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
             if (itemStack.getAmount() == 1) {
                 // This lightning is just an effect, it deals no damage.
                 l.getWorld().strikeLightningEffect(l);
-                
-                InfinityExpansion.runSync(() -> {
+
+                PluginUtils.runSync(() -> {
                     // Being sure entities are still valid and not picked up or whatsoever.
                     if (rune.isValid() && item.isValid() && rune.getItemStack().getAmount() == 1) {
 
@@ -167,13 +168,13 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
         if (makeVeinMiner && !isVeinMiner) {
             container.set(key, PersistentDataType.BYTE, (byte) 1);
             item.setItemMeta(meta);
-            StackUtils.addLore(item, LORE);
+            LoreUtils.addLore(item, LORE);
         }
 
         if (!makeVeinMiner && isVeinMiner) {
             container.remove(key);
             item.setItemMeta(meta);
-            StackUtils.removeLore(item, -1, LORE[1], 2);
+            LoreUtils.removeLore(item, -1, LORE[1], 2);
         }
     }
     
@@ -236,7 +237,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
             w.spawn(b.getLocation(), ExperienceOrb.class).setExperience(found.size() * 2);
         }
         
-        if (MathUtils.chanceIn(2)) {
+        if (RandomUtils.chanceIn(2)) {
             FoodLevelChangeEvent event = new FoodLevelChangeEvent(p, p.getFoodLevel() - 1);
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {

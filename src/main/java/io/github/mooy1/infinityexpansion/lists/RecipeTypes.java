@@ -9,7 +9,7 @@ import org.bukkit.NamespacedKey;
  *
  * @author Mooy1
  */
-public class RecipeTypes {
+public final class RecipeTypes {
 
     public static final RecipeType INFINITY_WORKBENCH = new RecipeType(new NamespacedKey(InfinityExpansion.getInstance(), "infinity_workbench"), Items.INFINITY_WORKBENCH, "", "&cUse the infinity recipes category to see the correct recipe!");
 

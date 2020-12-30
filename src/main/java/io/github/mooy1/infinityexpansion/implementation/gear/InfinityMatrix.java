@@ -6,8 +6,8 @@ import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
@@ -61,7 +61,7 @@ public class InfinityMatrix extends SlimefunItem implements Listener, LoreStorag
                 }
 
                 if (p.isSneaking()) { //remove owner
-                    StackUtils.removeLore(item, -1, "UUID: ", 2);
+                    LoreUtils.removeLore(item, -1, "UUID: ", 2);
                     MessageUtils.message(p, ChatColor.GOLD + "Ownership removed!");
                     disableFlight(p);
 
@@ -75,7 +75,7 @@ public class InfinityMatrix extends SlimefunItem implements Listener, LoreStorag
             }
         }
         
-        StackUtils.addLore(item, "", ChatColor.GREEN + "UUID: " + p.getUniqueId().toString());
+        LoreUtils.addLore(item, "", ChatColor.GREEN + "UUID: " + p.getUniqueId().toString());
         MessageUtils.message(p, ChatColor.GOLD + "Ownership claimed!");
         enableFlight(p);
     }

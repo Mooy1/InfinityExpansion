@@ -1,10 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class StoneworksFactory extends Container implements EnergyNetComponent, RecipeDisplayItem {
+public class StoneworksFactory extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 180;
 
@@ -110,7 +110,7 @@ public class StoneworksFactory extends Container implements EnergyNetComponent, 
             blockMenuPreset.addItem(i, PROCESSING, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : CHOICE_SLOTS) {
             blockMenuPreset.addItem(i, Choice.NONE.getItem(), ChestMenuUtils.getEmptyClickHandler());
@@ -128,13 +128,13 @@ public class StoneworksFactory extends Container implements EnergyNetComponent, 
     }
     
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
-        int charge = getCharge(l);
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
+        int charge = getCharge(b.getLocation());
         boolean playerWatching = inv.hasViewer();
 
         if (charge < ENERGY) {
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
             return;
         }
@@ -150,10 +150,10 @@ public class StoneworksFactory extends Container implements EnergyNetComponent, 
                 inv.pushItem(cobble, PROCESS_SLOTS[0]);
             }
         } else {
-            process(tick, inv, l);
+            process(tick, inv, b.getLocation());
         }
 
-        removeCharge(l, ENERGY);
+        removeCharge(b.getLocation(), ENERGY);
     }
     
     private void process(int i, BlockMenu inv, Location l) {

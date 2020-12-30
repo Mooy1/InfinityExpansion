@@ -1,9 +1,8 @@
-package io.github.mooy1.infinityexpansion.setup.command.subcommands;
+package io.github.mooy1.infinityexpansion.setup.commands;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
-import io.github.mooy1.infinityexpansion.setup.command.SubCommand;
-import lombok.NonNull;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.command.LibCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class ResetConfig extends SubCommand {
-    public ResetConfig(InfinityExpansion plugin, InfinityCommand cmd) {
-        super(plugin, cmd, "resetconfig", "resets the config, all current options will be set to default, this might not work", true);
+public class ResetConfig extends LibCommand {
+    public ResetConfig() {
+        super("resetconfig", "resets the config, all current options will be set to default, this might not work", true);
     }
 
     @Override
@@ -32,7 +31,7 @@ public class ResetConfig extends SubCommand {
         FileConfiguration config = InfinityExpansion.getInstance().getConfig();
         InputStream resource = InfinityExpansion.getInstance().getResource("config.yml");
         if (resource == null) {
-            InfinityExpansion.log(Level.WARNING, "&cError reading default config, report this bug!");
+            PluginUtils.log(Level.WARNING, "&cError reading default config, report this bug!");
             return;
         }
         FileConfiguration defaults = YamlConfiguration.loadConfiguration(new InputStreamReader(resource));
@@ -43,8 +42,9 @@ public class ResetConfig extends SubCommand {
         sender.sendMessage(ChatColor.GREEN + "Config reset, restart server to apply defaults!");
     }
 
+    @Nonnull
     @Override
-    public @NonNull List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    public List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
         List<String> tabs = new ArrayList<>();
 
         if (args.length == 2) {

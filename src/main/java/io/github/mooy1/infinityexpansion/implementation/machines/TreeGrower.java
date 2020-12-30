@@ -1,17 +1,19 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.MathUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinityexpansion.utils.Utils;
+import io.github.mooy1.infinitylib.math.RandomUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,7 +43,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class TreeGrower extends Container implements EnergyNetComponent, RecipeDisplayItem {
+public class TreeGrower extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY1 = 36;
     public static final int ENERGY2 = 180;
@@ -52,11 +54,11 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
     public static final int TIME = 600;
     private final Type type;
 
-    private static final int[] OUTPUT_SLOTS = PresetUtils.largeOutput;
+    private static final int[] OUTPUT_SLOTS = Utils.largeOutput;
     private static final int[] INPUT_SLOTS = {
-            PresetUtils.slot1 + 27
+            MenuPreset.slot1 + 27
     };
-    private static final int STATUS_SLOT = PresetUtils.slot1;
+    private static final int STATUS_SLOT = MenuPreset.slot1;
 
     public TreeGrower(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
@@ -84,16 +86,16 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
     }
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.largeOutputBorder) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : Utils.largeOutputBorder) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -122,7 +124,7 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
             return OUTPUT_SLOTS;
         }
 
-        if (flow == ItemTransportFlow.INSERT && item.getType().toString().endsWith("SAPLING")) {
+        if (flow == ItemTransportFlow.INSERT && SlimefunTag.SAPLINGS.isTagged(item.getType())) {
             return INPUT_SLOTS;
         }
 
@@ -130,15 +132,15 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
-        int energy = type.getEnergy();
-        int charge = getCharge(l);
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
+        int energy = this.type.getEnergy();
+        int charge = getCharge(b.getLocation());
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
         if (charge < energy) { //not enough energy
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
 
             return;
@@ -176,14 +178,14 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
 
                 } else { //start
 
-                    setProgress(b, type.getSpeed());
+                    setProgress(b, this.type.getSpeed());
                     setType(b, inputType);
                     inv.consumeItem(INPUT_SLOTS[0], 1);
-                    setCharge(l, charge - energy);
+                    setCharge(b.getLocation(), charge - energy);
 
                     if (playerWatching) {
                         inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                                "&aPlanting... (" + type.getSpeed() + "/" + TIME + ")"));
+                                "&aPlanting... (" + this.type.getSpeed() + "/" + TIME + ")"));
                     }
 
                 }
@@ -193,12 +195,12 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
 
         if (progress < TIME) { //progress
 
-            setProgress(b, progress + type.getSpeed());
-            setCharge(l, charge - energy);
+            setProgress(b, progress + this.type.getSpeed());
+            setCharge(b.getLocation(), charge - energy);
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                        "&aGrowing... (" + (progress + type.getSpeed()) + "/" + TIME + ")"));
+                        "&aGrowing... (" + (progress + this.type.getSpeed()) + "/" + TIME + ")"));
             }
             return;
         }
@@ -206,14 +208,14 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
         //done
         String type = getType(b);
 
-        ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), MathUtils.randomFromRange(6, 12));
-        ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), MathUtils.randomFromRange(8, 16));
-        ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), MathUtils.randomFromRange(1, 2));
+        ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), RandomUtils.randomFromRange(6, 12));
+        ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), RandomUtils.randomFromRange(8, 16));
+        ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), RandomUtils.randomFromRange(1, 2));
 
         if (!inv.fits(output1, OUTPUT_SLOTS)) {
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
 
         } else {
@@ -232,7 +234,7 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
 
             setProgress(b, 0);
             setType(b, null);
-            setCharge(l, charge - energy);
+            setCharge(b.getLocation(), charge - energy);
 
         }
     }
@@ -283,7 +285,7 @@ public class TreeGrower extends Container implements EnergyNetComponent, RecipeD
 
     @Override
     public int getCapacity() {
-        return type.getEnergy() * 2;
+        return this.type.getEnergy() * 2;
     }
 
     @Nonnull

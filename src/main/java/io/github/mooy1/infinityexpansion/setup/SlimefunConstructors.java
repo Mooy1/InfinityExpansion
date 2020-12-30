@@ -5,6 +5,7 @@ import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoDisenchanter;
@@ -140,7 +141,7 @@ public class SlimefunConstructors {
             public void extraTick(@Nonnull Location l) {
                 if (InfinityExpansion.progressEvery(4)) return;
                 
-                InfinityExpansion.runSync(() -> {
+                PluginUtils.runSync(() -> {
                     ArmorStand hologram = ReactorHologram.getArmorStand(l, true);
                     if (hologram == null) return;
                     

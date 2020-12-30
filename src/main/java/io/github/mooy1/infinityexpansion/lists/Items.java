@@ -3,7 +3,7 @@ package io.github.mooy1.infinityexpansion.lists;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.items.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.items.StrainerBase;
+import io.github.mooy1.infinityexpansion.implementation.items.Strainer;
 import io.github.mooy1.infinityexpansion.implementation.machines.ConversionMachine;
 import io.github.mooy1.infinityexpansion.implementation.machines.EnergyGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
@@ -20,10 +20,10 @@ import io.github.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataInfuser;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
-import io.github.mooy1.infinityexpansion.implementation.storage.StorageNetworkViewer;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinityexpansion.setup.SlimefunConstructors;
-import io.github.mooy1.infinityexpansion.utils.LoreUtils;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -34,6 +34,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,41 +50,13 @@ import java.util.logging.Level;
 public final class Items {
     
     //storage & transport
-
-    public static final SlimefunItemStack WIRELESS_INPUT_NODE = new SlimefunItemStack(
-            "WIRELESS_INPUT_NODE",
-            Material.END_ROD,
-            "&9Wireless input node",
-            "&7Transfers items from the connected inventory to wireless output nodes",
-            "&7Crouch + Right-Click to get info and mark a path to the connected output node"
-    );
-    public static final SlimefunItemStack WIRELESS_OUTPUT_NODE = new SlimefunItemStack(
-            "WIRELESS_OUTPUT_NODE",
-            Material.END_ROD,
-            "&9Wireless output node",
-            "&7Transfers items from wireless input nodes to the connected inventory"
-    );
-    public static final SlimefunItemStack WIRELESS_CONFIGURATOR = new SlimefunItemStack(
-            "WIRELESS_CONFIGURATOR",
-            Material.BLAZE_ROD,
-            "&9Wireless configurator",
-            "&eRight-Click &7an input node then an output node to connect them",
-            "&eCrouch + Right-Click &7an input node to remove connected output node",
-            "&eCrouch + Right-Click &7the air to clear the input node currently being configured"
-    );
-
+    
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",
             Material.BEEHIVE,
             "&6Storage Forge",
             "&7Upgrades the tier of Storage Units",
             "&7Retains stored items"
-    );
-    public static final SlimefunItemStack STORAGE_DUCT = new SlimefunItemStack(
-            "STORAGE_DUCT",
-            Material.GRAY_STAINED_GLASS,
-            "&7Storage Duct",
-            "&7Extends the reach of your storage network viewer"
     );
 
     //Machines
@@ -94,7 +67,7 @@ public final class Items {
             "&8Stoneworks Factory",
             "&7Generates cobblestone and processes it into various materials",
             "",
-            LoreUtils.energyPerSecond(StoneworksFactory.ENERGY)
+            LorePreset.energyPerSecond(StoneworksFactory.ENERGY)
     );
 
     public static final SlimefunItemStack ITEM_UPDATER = new SlimefunItemStack(
@@ -105,7 +78,7 @@ public final class Items {
             "&7slimefun items if they are outdated or broken",
             "&cChargeable and upgradeable items will be reset!",
             "",
-            LoreUtils.energy(ItemUpdater.ENERGY) + "per item"
+            LorePreset.energy(ItemUpdater.ENERGY) + "per item"
     );
     public static final SlimefunItemStack POWERED_BEDROCK = new SlimefunItemStack(
             "POWERED_BEDROCK",
@@ -114,7 +87,7 @@ public final class Items {
             "&7When powered, transforms into a bedrock",
             "&7Will revert once unpowered or broken",
             "",
-            LoreUtils.energyPerSecond(PoweredBedrock.ENERGY)
+            LorePreset.energyPerSecond(PoweredBedrock.ENERGY)
     );
 
     public static final SlimefunItemStack VOID_HARVESTER = new SlimefunItemStack(
@@ -123,8 +96,8 @@ public final class Items {
             "&8Void Harvester",
             "&7Slowly harvests &8Void &7Bits from nothing...",
             "",
-            LoreUtils.speed(VoidHarvester.BASIC_SPEED),
-            LoreUtils.energyPerSecond(VoidHarvester.BASIC_ENERGY)
+            LorePreset.speed(VoidHarvester.BASIC_SPEED),
+            LorePreset.energyPerSecond(VoidHarvester.BASIC_ENERGY)
     );
     public static final SlimefunItemStack INFINITE_VOID_HARVESTER = new SlimefunItemStack(
             "INFINITE_VOID_HARVESTER",
@@ -132,8 +105,8 @@ public final class Items {
             "&bInfinite &8Void Harvester",
             "&7Harvests &8Void &7Bits from nothing...",
             "",
-            LoreUtils.speed(VoidHarvester.INFINITY_SPEED),
-            LoreUtils.energyPerSecond(VoidHarvester.INFINITY_ENERGY)
+            LorePreset.speed(VoidHarvester.INFINITY_SPEED),
+            LorePreset.energyPerSecond(VoidHarvester.INFINITY_ENERGY)
     );
 
     public static final SlimefunItemStack SINGULARITY_CONSTRUCTOR = new SlimefunItemStack(
@@ -142,8 +115,8 @@ public final class Items {
             "&fSingularity Constructor",
             "&7Condenses large amounts of resources",
             "",
-            LoreUtils.speed(SingularityConstructor.BASIC_SPEED),
-            LoreUtils.energyPerSecond(SingularityConstructor.BASIC_ENERGY)
+            LorePreset.speed(SingularityConstructor.BASIC_SPEED),
+            LorePreset.energyPerSecond(SingularityConstructor.BASIC_ENERGY)
     );
     public static final SlimefunItemStack INFINITY_CONSTRUCTOR = new SlimefunItemStack(
             "INFINITY_CONSTRUCTOR",
@@ -151,8 +124,8 @@ public final class Items {
             "&bInfinity &fConstructor",
             "&7Quickly condenses large amounts of resources",
             "",
-            LoreUtils.speed(SingularityConstructor.INFINITY_SPEED),
-            LoreUtils.energyPerSecond(SingularityConstructor.INFINITY_ENERGY)
+            LorePreset.speed(SingularityConstructor.INFINITY_SPEED),
+            LorePreset.energyPerSecond(SingularityConstructor.INFINITY_ENERGY)
     );
 
     public static final SlimefunItemStack RESOURCE_SYNTHESIZER = new SlimefunItemStack(
@@ -161,7 +134,7 @@ public final class Items {
             "&6Resource Synthesizer",
             "&7Creates resources out of singularities",
             "",
-            LoreUtils.energy(ResourceSynthesizer.ENERGY) + "per use"
+            LorePreset.energy(ResourceSynthesizer.ENERGY) + "per use"
     );
 
     public static final SlimefunItemStack INFINITY_REACTOR = new SlimefunItemStack(
@@ -171,8 +144,8 @@ public final class Items {
             "&7Generates power through the compression",
             "&7of &8Void &7and &bInfinity &7Ingots",
             "",
-            LoreUtils.energyBuffer(InfinityReactor.STORAGE),
-            LoreUtils.energyPerSecond(InfinityReactor.ENERGY)
+            LorePreset.energyBuffer(InfinityReactor.STORAGE),
+            LorePreset.energyPerSecond(InfinityReactor.ENERGY)
     );
 
     public static final SlimefunItemStack ADVANCED_CHARGER = new SlimefunItemStack(
@@ -181,8 +154,8 @@ public final class Items {
             "&cAdvanced Charger",
             "&7Quickly charges items",
             "",
-            LoreUtils.speed(SlimefunConstructors.ADVANCED_CHARGER_SPEED),
-            LoreUtils.energyPerSecond(SlimefunConstructors.ADVANCED_CHARGER_ENERGY)
+            LorePreset.speed(SlimefunConstructors.ADVANCED_CHARGER_SPEED),
+            LorePreset.energyPerSecond(SlimefunConstructors.ADVANCED_CHARGER_ENERGY)
     );
     public static final SlimefunItemStack INFINITY_CHARGER = new SlimefunItemStack(
             "INFINITY_CHARGER",
@@ -190,8 +163,8 @@ public final class Items {
             "&bInfinity Charger",
             "&7Instantly charges items",
             "",
-            LoreUtils.speed(SlimefunConstructors.INFINITY_CHARGER_SPEED),
-            LoreUtils.energy(SlimefunConstructors.INFINITY_CHARGER_ENERGY) + "per use"
+            LorePreset.speed(SlimefunConstructors.INFINITY_CHARGER_SPEED),
+            LorePreset.energy(SlimefunConstructors.INFINITY_CHARGER_ENERGY) + "per use"
     );
     public static final SlimefunItemStack ADVANCED_NETHER_STAR_REACTOR = new SlimefunItemStack(
             "ADVANCED_NETHER_STAR_REACTOR",
@@ -202,8 +175,8 @@ public final class Items {
             "&bMust be supplied with Nether Ice Coolant Cells",
             "&4Causes nearby Entities to get Withered",
             "",
-            LoreUtils.energyBuffer(SlimefunConstructors.STAR_BUFFER),
-            LoreUtils.energyPerSecond(SlimefunConstructors.STAR_ENERGY)
+            LorePreset.energyBuffer(SlimefunConstructors.STAR_BUFFER),
+            LorePreset.energyPerSecond(SlimefunConstructors.STAR_ENERGY)
     );
     
     public static final SlimefunItemStack EXTREME_FREEZER = new SlimefunItemStack(
@@ -212,8 +185,8 @@ public final class Items {
             "&bExtreme Freezer",
             "&7Converts ice into coolant",
             "",
-            LoreUtils.speed(ConversionMachine.FREEZER_SPEED),
-            LoreUtils.energyPerSecond(ConversionMachine.FREEZER_ENERGY)
+            LorePreset.speed(ConversionMachine.FREEZER_SPEED),
+            LorePreset.energyPerSecond(ConversionMachine.FREEZER_ENERGY)
     );
     public static final SlimefunItemStack DUST_EXTRACTOR = new SlimefunItemStack(
             "DUST_EXTRACTOR",
@@ -221,8 +194,8 @@ public final class Items {
             "&8Dust Extractor",
             "&7Converts cobble into dusts",
             "",
-            LoreUtils.speed(ConversionMachine.DUST_SPEED),
-            LoreUtils.energyPerSecond(ConversionMachine.DUST_ENERGY)
+            LorePreset.speed(ConversionMachine.DUST_SPEED),
+            LorePreset.energyPerSecond(ConversionMachine.DUST_ENERGY)
     );
 
     public static final SlimefunItemStack URANIUM_EXTRACTOR = new SlimefunItemStack(
@@ -231,8 +204,8 @@ public final class Items {
             "&aUranium Extractor",
             "&7Converts cobble into uranium",
             "",
-            LoreUtils.speed(ConversionMachine.URANIUM_SPEED),
-            LoreUtils.energyPerSecond(ConversionMachine.URANIUM_ENERGY)
+            LorePreset.speed(ConversionMachine.URANIUM_SPEED),
+            LorePreset.energyPerSecond(ConversionMachine.URANIUM_ENERGY)
     );
 
 
@@ -242,8 +215,8 @@ public final class Items {
             "&9Basic Quarry",
             "&7Automatically mines vanilla overworld ores",
             "",
-            LoreUtils.speed(Quarry.BASIC_SPEED),
-            LoreUtils.energyPerSecond(Quarry.BASIC_ENERGY)
+            LorePreset.speed(Quarry.BASIC_SPEED),
+            LorePreset.energyPerSecond(Quarry.BASIC_ENERGY)
     );
     public static final SlimefunItemStack ADVANCED_QUARRY = new SlimefunItemStack(
             "ADVANCED_QUARRY",
@@ -251,8 +224,8 @@ public final class Items {
             "&cAdvanced Quarry",
             "&7Smelts vanilla ores and can mine nether ores",
             "",
-            LoreUtils.speed(Quarry.ADVANCED_SPEED),
-            LoreUtils.energyPerSecond(Quarry.ADVANCED_ENERGY)
+            LorePreset.speed(Quarry.ADVANCED_SPEED),
+            LorePreset.energyPerSecond(Quarry.ADVANCED_ENERGY)
     );
     public static final SlimefunItemStack VOID_QUARRY = new SlimefunItemStack(
             "VOID_QUARRY",
@@ -260,8 +233,8 @@ public final class Items {
             "&8Void Quarry",
             "&7Can mine sifted ores or 24 karat gold occasionally",
             "",
-            LoreUtils.speed(Quarry.VOID_SPEED),
-            LoreUtils.energyPerSecond(Quarry.VOID_ENERGY)
+            LorePreset.speed(Quarry.VOID_SPEED),
+            LorePreset.energyPerSecond(Quarry.VOID_ENERGY)
     );
     public static final SlimefunItemStack INFINITY_QUARRY = new SlimefunItemStack(
             "INFINITY_QUARRY",
@@ -269,40 +242,40 @@ public final class Items {
             "&bInfinity Quarry",
             "&7Can mine and smelt Slimefun ingots",
             "",
-            LoreUtils.speed(Quarry.INFINITY_SPEED),
-            LoreUtils.energyPerSecond(Quarry.INFINITY_ENERGY)
+            LorePreset.speed(Quarry.INFINITY_SPEED),
+            LorePreset.energyPerSecond(Quarry.INFINITY_ENERGY)
     );
     public static final SlimefunItemStack ADVANCED_ENCHANTER = new SlimefunItemStack(
             "ADVANCED_ENCHANTER",
             Material.ENCHANTING_TABLE,
             "&cAdvanced Enchanter",
             "",
-            LoreUtils.speed(SlimefunConstructors.ADVANCED_EN_SPEED),
-            LoreUtils.energyPerSecond(SlimefunConstructors.ADVANCED_EN_ENERGY)
+            LorePreset.speed(SlimefunConstructors.ADVANCED_EN_SPEED),
+            LorePreset.energyPerSecond(SlimefunConstructors.ADVANCED_EN_ENERGY)
     );
     public static final SlimefunItemStack ADVANCED_DISENCHANTER = new SlimefunItemStack(
             "ADVANCED_DISENCHANTER",
             Material.ENCHANTING_TABLE,
             "&cAdvanced Disenchanter",
             "",
-            LoreUtils.speed(SlimefunConstructors.ADVANCED_DIS_SPEED),
-            LoreUtils.energyPerSecond(SlimefunConstructors.ADVANCED_DIS_ENERGY)
+            LorePreset.speed(SlimefunConstructors.ADVANCED_DIS_SPEED),
+            LorePreset.energyPerSecond(SlimefunConstructors.ADVANCED_DIS_ENERGY)
     );
     public static final SlimefunItemStack INFINITY_ENCHANTER = new SlimefunItemStack(
             "INFINITY_ENCHANTER",
             Material.ENCHANTING_TABLE,
             "&bInfinity Enchanter",
             "",
-            LoreUtils.speed(SlimefunConstructors.INFINITY_EN_SPEED),
-            LoreUtils.energy(SlimefunConstructors.INFINITY_EN_ENERGY) + "per use"
+            LorePreset.speed(SlimefunConstructors.INFINITY_EN_SPEED),
+            LorePreset.energy(SlimefunConstructors.INFINITY_EN_ENERGY) + "per use"
     );
     public static final SlimefunItemStack INFINITY_DISENCHANTER = new SlimefunItemStack(
             "INFINITY_DISENCHANTER",
             Material.ENCHANTING_TABLE,
             "&bInfinity Disenchanter",
             "",
-            LoreUtils.speed(SlimefunConstructors.INFINITY_DIS_SPEED),
-            LoreUtils.energy(SlimefunConstructors.INFINITY_DIS_ENERGY) + "per use"
+            LorePreset.speed(SlimefunConstructors.INFINITY_DIS_SPEED),
+            LorePreset.energy(SlimefunConstructors.INFINITY_DIS_ENERGY) + "per use"
     );
     public static final SlimefunItemStack INFINITY_WORKBENCH = new SlimefunItemStack(
             "INFINITY_FORGE",
@@ -310,7 +283,7 @@ public final class Items {
             "&6Infinity Workbench",
             "&7Used to craft infinity items",
             "",
-            LoreUtils.energy(InfinityWorkbench.ENERGY) + "per item"
+            LorePreset.energy(InfinityWorkbench.ENERGY) + "per item"
     );
 
     public static final SlimefunItemStack ADVANCED_ANVIL = new SlimefunItemStack(
@@ -320,7 +293,7 @@ public final class Items {
             "&7Combines tools and gear enchants and sometimes upgrades them",
             "&bWorks with Slimefun items",
             "",
-            LoreUtils.energy(AdvancedAnvil.ENERGY) + "per use"
+            LorePreset.energy(AdvancedAnvil.ENERGY) + "per use"
 
     );
     public static final SlimefunItemStack DECOMPRESSOR = new SlimefunItemStack(
@@ -329,8 +302,8 @@ public final class Items {
             "&7Decompressor",
             "&7Reduces blocks to their base material",
             "",
-            LoreUtils.speed(ConversionMachine.DECOM_SPEED),
-            LoreUtils.energyPerSecond(ConversionMachine.DECOM_ENERGY)
+            LorePreset.speed(ConversionMachine.DECOM_SPEED),
+            LorePreset.energyPerSecond(ConversionMachine.DECOM_ENERGY)
     );
 
     public static final SlimefunItemStack INFINITY_CAPACITOR = new SlimefunItemStack(
@@ -347,7 +320,7 @@ public final class Items {
             HeadTexture.CAPACITOR_25,
             "&8Void Capacitor",
             "",
-            "&8\u21E8 &e\u26A1 " + LoreUtils.roundHundreds(SlimefunConstructors.VOID_CAPACITOR) + " &7J Capacity"
+            "&8\u21E8 &e\u26A1 " + LorePreset.roundHundreds(SlimefunConstructors.VOID_CAPACITOR) + " &7J Capacity"
     );
     public static final SlimefunItemStack HYDRO_GENERATOR = new SlimefunItemStack(
             "HYDRO_GENERATOR",
@@ -355,8 +328,8 @@ public final class Items {
             "&9Hydro Generator",
             "&7Generates energy from the movement of water",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.WATER_STORAGE),
-            LoreUtils.energyPerSecond(EnergyGenerator.WATER_RATE)
+            LorePreset.energyBuffer(EnergyGenerator.WATER_STORAGE),
+            LorePreset.energyPerSecond(EnergyGenerator.WATER_RATE)
     );
     public static final SlimefunItemStack REINFORCED_HYDRO_GENERATOR = new SlimefunItemStack(
             "REINFORCED_HYDRO_GENERATOR",
@@ -365,8 +338,8 @@ public final class Items {
             "&7Generates large amounts of energy",
             "&7from the movement of water",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.WATER_STORAGE2),
-            LoreUtils.energyPerSecond(EnergyGenerator.WATER_RATE2)
+            LorePreset.energyBuffer(EnergyGenerator.WATER_STORAGE2),
+            LorePreset.energyPerSecond(EnergyGenerator.WATER_RATE2)
     );
     public static final SlimefunItemStack GEOTHERMAL_GENERATOR = new SlimefunItemStack(
             "GEOTHERMAL_GENERATOR",
@@ -374,8 +347,8 @@ public final class Items {
             "&cGeothermal Generator",
             "&7Generates energy from the heat of the world",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.GEO_STORAGE),
-            LoreUtils.energyPerSecond(EnergyGenerator.GEO_RATE)
+            LorePreset.energyBuffer(EnergyGenerator.GEO_STORAGE),
+            LorePreset.energyPerSecond(EnergyGenerator.GEO_RATE)
     );
     public static final SlimefunItemStack REINFORCED_GEOTHERMAL_GENERATOR = new SlimefunItemStack(
             "REINFORCED_GEOTHERMAL_GENERATOR",
@@ -384,8 +357,8 @@ public final class Items {
             "&7Generates large amounts of energy",
             "&7from the heat of the world",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.GEO_STORAGE2),
-            LoreUtils.energyPerSecond(EnergyGenerator.GEO_RATE2)
+            LorePreset.energyBuffer(EnergyGenerator.GEO_STORAGE2),
+            LorePreset.energyPerSecond(EnergyGenerator.GEO_RATE2)
     );
     public static final SlimefunItemStack BASIC_PANEL = new SlimefunItemStack(
             "BASIC_PANEL",
@@ -393,8 +366,8 @@ public final class Items {
             "&9Basic Solar Panel",
             "&7Generates energy from the sun",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.BASIC_STORAGE),
-            LoreUtils.energyPerSecond(EnergyGenerator.BASIC_RATE)
+            LorePreset.energyBuffer(EnergyGenerator.BASIC_STORAGE),
+            LorePreset.energyPerSecond(EnergyGenerator.BASIC_RATE)
     );
     public static final SlimefunItemStack ADVANCED_PANEL = new SlimefunItemStack(
             "ADVANCED_PANEL",
@@ -402,8 +375,8 @@ public final class Items {
             "&cAdvanced Solar Panel",
             "&7Generates energy from the sun",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.ADVANCED_STORAGE),
-            LoreUtils.energyPerSecond(EnergyGenerator.ADVANCED_RATE)
+            LorePreset.energyBuffer(EnergyGenerator.ADVANCED_STORAGE),
+            LorePreset.energyPerSecond(EnergyGenerator.ADVANCED_RATE)
     );
     public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
             "CELESTIAL_PANEL",
@@ -411,8 +384,8 @@ public final class Items {
             "&eCelestial Panel",
             "&7Generates energy from the sun",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.CELE_STORAGE),
-            LoreUtils.energyPerSecond(EnergyGenerator.CELE_RATE)
+            LorePreset.energyBuffer(EnergyGenerator.CELE_STORAGE),
+            LorePreset.energyPerSecond(EnergyGenerator.CELE_RATE)
     );
     public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
             "VOID_PANEL",
@@ -420,8 +393,8 @@ public final class Items {
             "&8Void Panel",
             "&7Generates energy from darkness",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.VOID_STORAGE),
-            LoreUtils.energyPerSecond(EnergyGenerator.VOID_RATE)
+            LorePreset.energyBuffer(EnergyGenerator.VOID_STORAGE),
+            LorePreset.energyPerSecond(EnergyGenerator.VOID_RATE)
     );
     public static final SlimefunItemStack INFINITE_PANEL = new SlimefunItemStack(
             "INFINITE_PANEL",
@@ -429,8 +402,8 @@ public final class Items {
             "&bInfinity Panel",
             "&7Generates energy from the cosmos",
             "",
-            LoreUtils.energyBuffer(EnergyGenerator.INFINITY_STORAGE),
-            LoreUtils.energyPerSecond(EnergyGenerator.INFINITY_RATE)
+            LorePreset.energyBuffer(EnergyGenerator.INFINITY_STORAGE),
+            LorePreset.energyPerSecond(EnergyGenerator.INFINITY_RATE)
     );
     
     public static final SlimefunItemStack BASIC_TREE_GROWER = new SlimefunItemStack(
@@ -439,8 +412,8 @@ public final class Items {
             "&9Basic &2Tree Grower",
             "&7Automatically grows, harvests, and replants trees",
             "",
-            LoreUtils.speed(TreeGrower.SPEED1),
-            LoreUtils.energyPerSecond(TreeGrower.ENERGY1)
+            LorePreset.speed(TreeGrower.SPEED1),
+            LorePreset.energyPerSecond(TreeGrower.ENERGY1)
     );
     public static final SlimefunItemStack ADVANCED_TREE_GROWER = new SlimefunItemStack(
             "ADVANCED_TREE_GROWER",
@@ -448,8 +421,8 @@ public final class Items {
             "&cAdvanced &2Tree Grower",
             "&7Automatically grows, harvests, and replants trees",
             "",
-            LoreUtils.speed(TreeGrower.SPEED2),
-            LoreUtils.energyPerSecond(TreeGrower.ENERGY2)
+            LorePreset.speed(TreeGrower.SPEED2),
+            LorePreset.energyPerSecond(TreeGrower.ENERGY2)
     );
     public static final SlimefunItemStack INFINITY_TREE_GROWER = new SlimefunItemStack(
             "INFINITY_TREE_GROWER",
@@ -457,8 +430,8 @@ public final class Items {
             "&bInfinity &2Tree Grower",
             "&7Automatically grows, harvests, and replants trees",
             "",
-            LoreUtils.speed(TreeGrower.SPEED3),
-            LoreUtils.energyPerSecond(TreeGrower.ENERGY3)
+            LorePreset.speed(TreeGrower.SPEED3),
+            LorePreset.energyPerSecond(TreeGrower.ENERGY3)
     );
 
     public static final SlimefunItemStack BASIC_VIRTUAL_FARM = new SlimefunItemStack(
@@ -467,8 +440,8 @@ public final class Items {
             "&9Basic &aVirtual Farm",
             "&7Automatically grows, harvests, and replants crops",
             "",
-            LoreUtils.speed(VirtualFarm.SPEED1),
-            LoreUtils.energyPerSecond(VirtualFarm.ENERGY1)
+            LorePreset.speed(VirtualFarm.SPEED1),
+            LorePreset.energyPerSecond(VirtualFarm.ENERGY1)
     );
     public static final SlimefunItemStack ADVANCED_VIRTUAL_FARM = new SlimefunItemStack(
             "ADVANCED_VIRTUAL_FARM",
@@ -476,8 +449,8 @@ public final class Items {
             "&cAdvanced &aVirtual Farm",
             "&7Automatically grows, harvests, and replants crops",
             "",
-            LoreUtils.speed(VirtualFarm.SPEED2),
-            LoreUtils.energyPerSecond(VirtualFarm.ENERGY2)
+            LorePreset.speed(VirtualFarm.SPEED2),
+            LorePreset.energyPerSecond(VirtualFarm.ENERGY2)
     );
     public static final SlimefunItemStack INFINITY_VIRTUAL_FARM = new SlimefunItemStack(
             "INFINITY_VIRTUAL_FARM",
@@ -485,8 +458,8 @@ public final class Items {
             "&bInfinity &aVirtual Farm",
             "&7Automatically grows, harvests, and replants crops",
             "",
-            LoreUtils.speed(VirtualFarm.SPEED3),
-            LoreUtils.energyPerSecond(VirtualFarm.ENERGY3)
+            LorePreset.speed(VirtualFarm.SPEED3),
+            LorePreset.energyPerSecond(VirtualFarm.ENERGY3)
     );
 
     public static final SlimefunItemStack GEAR_TRANSFORMER = new SlimefunItemStack(
@@ -495,7 +468,7 @@ public final class Items {
             "&7Gear Transformer",
             "&7Changes the material of tools and gear",
             "",
-            LoreUtils.energy(GearTransformer.ENERGY) + "Per Use"
+            LorePreset.energy(GearTransformer.ENERGY) + "Per Use"
     );
 
     //generators
@@ -505,24 +478,24 @@ public final class Items {
             Material.LIGHT_GRAY_CONCRETE,
             "&9Basic &8Cobble Generator",
             "",
-            LoreUtils.speed(MaterialGenerator.COBBLE_SPEED),
-            LoreUtils.energyPerSecond(MaterialGenerator.COBBLE_ENERGY)
+            LorePreset.speed(MaterialGenerator.COBBLE_SPEED),
+            LorePreset.energyPerSecond(MaterialGenerator.COBBLE_ENERGY)
     );
     public static final SlimefunItemStack ADVANCED_COBBLE_GEN = new SlimefunItemStack(
             "ADVANCED_COBBLE_GEN",
             Material.GRAY_CONCRETE,
             "&cAdvanced &8Cobble Generator",
             "",
-            LoreUtils.speed(MaterialGenerator.COBBLE2_SPEED),
-            LoreUtils.energyPerSecond(MaterialGenerator.COBBLE2_ENERGY)
+            LorePreset.speed(MaterialGenerator.COBBLE2_SPEED),
+            LorePreset.energyPerSecond(MaterialGenerator.COBBLE2_ENERGY)
     );
     public static final SlimefunItemStack BASIC_OBSIDIAN_GEN = new SlimefunItemStack(
             "BASIC_OBSIDIAN_GEN",
             Material.BLACK_CONCRETE,
             "&8Obsidian Generator",
             "",
-            LoreUtils.speed(MaterialGenerator.OBSIDIAN_SPEED),
-            LoreUtils.energyPerSecond(MaterialGenerator.OBSIDIAN_ENERGY)
+            LorePreset.speed(MaterialGenerator.OBSIDIAN_SPEED),
+            LorePreset.energyPerSecond(MaterialGenerator.OBSIDIAN_ENERGY)
     );
 
     //Deep storage units
@@ -531,42 +504,31 @@ public final class Items {
             "BASIC_STORAGE",
             Material.OAK_WOOD,
             "&9Basic &8Storage Unit",
-            LoreUtils.storesItem(StorageUnit.BASIC)
+            LorePreset.storesItem(StorageUnit.BASIC)
     );
     public static final SlimefunItemStack ADVANCED_STORAGE = new SlimefunItemStack(
             "ADVANCED_STORAGE",
             Material.DARK_OAK_WOOD,
             "&cAdvanced &8Storage Unit",
-            LoreUtils.storesItem(StorageUnit.ADVANCED)
+            LorePreset.storesItem(StorageUnit.ADVANCED)
     );
     public static final SlimefunItemStack REINFORCED_STORAGE = new SlimefunItemStack(
             "REINFORCED_STORAGE",
             Material.ACACIA_WOOD,
             "&fReinforced &8Storage Unit",
-            LoreUtils.storesItem(StorageUnit.REINFORCED)
+            LorePreset.storesItem(StorageUnit.REINFORCED)
     );
     public static final SlimefunItemStack VOID_STORAGE = new SlimefunItemStack(
             "VOID_STORAGE",
             Material.CRIMSON_HYPHAE,
             "&8Void &8Storage Unit",
-            LoreUtils.storesItem(StorageUnit.VOID)
+            LorePreset.storesItem(StorageUnit.VOID)
     );
     public static final SlimefunItemStack INFINITY_STORAGE = new SlimefunItemStack(
             "INFINITY_STORAGE",
             Material.WARPED_HYPHAE,
             "&bInfinity &8Storage Unit",
-            LoreUtils.storesInfinity()
-    );
-
-    public static final SlimefunItemStack STORAGE_NETWORK_VIEWER = new SlimefunItemStack(
-            "STORAGE_NETWORK_VIEWER",
-            Material.CHISELED_STONE_BRICKS,
-            "&6Storage Network Viewer",
-            "&7Shows status of any Storage Units",
-            "&7connected through storage ducts or other storage units",
-            "",
-            "&6Connects up to &e" + StorageNetworkViewer.MAX + " &6Inventories",
-            "&6Range: &e" + StorageNetworkViewer.RANGE + " &6blocks"
+            "&6Capacity: &eInfinite items"
     );
 
     public static final SlimefunItemStack VEIN_MINER_RUNE = new SlimefunItemStack(
@@ -582,8 +544,8 @@ public final class Items {
             "&cAdvanced &fGeoMiner",
             "&7A faster geo-miner",
             "",
-            LoreUtils.speed(SlimefunConstructors.ADVANCED_GEO_SPEED),
-            LoreUtils.energyPerSecond(SlimefunConstructors.ADVANCED_GEO_ENERGY)
+            LorePreset.speed(SlimefunConstructors.ADVANCED_GEO_SPEED),
+            LorePreset.energyPerSecond(SlimefunConstructors.ADVANCED_GEO_ENERGY)
     );
 
     //strainers
@@ -599,7 +561,7 @@ public final class Items {
             "&9Basic Strainer",
             "&7Collects materials from flowing water",
             "",
-            LoreBuilder.speed(StrainerBase.BASIC_SPEED)
+            LoreBuilder.speed(Strainer.BASIC)
     );
     public static final SlimefunItemStack ADVANCED_STRAINER = new SlimefunItemStack(
             "ADVANCED_STRAINER",
@@ -607,7 +569,7 @@ public final class Items {
             "&cAdvanced Strainer",
             "&7Collects materials from flowing water",
             "",
-            LoreBuilder.speed(StrainerBase.ADVANCED_SPEED)
+            LoreBuilder.speed(Strainer.ADVANCED)
     );
     public static final SlimefunItemStack REINFORCED_STRAINER = new SlimefunItemStack(
             "REINFORCED_STRAINER",
@@ -615,9 +577,9 @@ public final class Items {
             "&fReinforced Strainer",
             "&7Collects materials from flowing water",
             "",
-            LoreBuilder.speed(StrainerBase.REINFORCED_SPEED)
+            LoreBuilder.speed(Strainer.REINFORCED)
     );
-    
+
     //mob stuff
 
     public static final SlimefunItemStack DATA_INFUSER = new SlimefunItemStack(
@@ -626,7 +588,7 @@ public final class Items {
             "&8Mob Data Infuser",
             "&7Infused empty data cards with mob items",
             "",
-            LoreUtils.energy(MobDataInfuser.ENERGY) + "per use"
+            LorePreset.energy(MobDataInfuser.ENERGY) + "per use"
     );
     public static final SlimefunItemStack MOB_SIMULATION_CHAMBER = new SlimefunItemStack(
             "MOB_SIMULATION_CHAMBER",
@@ -634,8 +596,8 @@ public final class Items {
             "&8Mob Simulation Chamber",
             "&7Use mob data cards to activate",
             "",
-            LoreUtils.energyBuffer(MobSimulationChamber.BUFFER),
-            LoreUtils.energyPerSecond(MobSimulationChamber.ENERGY)
+            LorePreset.energyBuffer(MobSimulationChamber.BUFFER),
+            LorePreset.energyPerSecond(MobSimulationChamber.ENERGY)
     );
     public static final SlimefunItemStack EMPTY_DATA_CARD = new SlimefunItemStack(
             "EMPTY_DATA_CARD",
@@ -1008,6 +970,22 @@ public final class Items {
     
     public static void setup(@Nonnull FileConfiguration config) { //add item meta
         Validate.notNull(config, "Config cannot be null!");
+
+        ItemMeta meta = BASIC_STRAINER.getItemMeta();
+        if (meta != null) {
+            meta.getPersistentDataContainer().set(Strainer.KEY, PersistentDataType.INTEGER, Strainer.BASIC);
+            BASIC_STRAINER.setItemMeta(meta);
+        }
+        meta = ADVANCED_STRAINER.getItemMeta();
+        if (meta != null) {
+            meta.getPersistentDataContainer().set(Strainer.KEY, PersistentDataType.INTEGER, Strainer.ADVANCED);
+            ADVANCED_STRAINER.setItemMeta(meta);
+        }
+        meta = REINFORCED_STRAINER.getItemMeta();
+        if (meta != null) {
+            meta.getPersistentDataContainer().set(Strainer.KEY, PersistentDataType.INTEGER, Strainer.REINFORCED);
+            REINFORCED_STRAINER.setItemMeta(meta);
+        }
         
         SlimefunItemStack[] items = new SlimefunItemStack[] {
                 INFINITY_CROWN, INFINITY_CHESTPLATE, INFINITY_LEGGINGS, INFINITY_BOOTS, INFINITY_BLADE,
@@ -1020,13 +998,14 @@ public final class Items {
         EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) ENDER_FLAME.getItemMeta();
         Objects.requireNonNull(storageMeta).addStoredEnchant(Enchantment.FIRE_ASPECT, 10, true);
         ENDER_FLAME.setItemMeta(storageMeta);
+        
     }
     
     private static void addEnchants(SlimefunItemStack[] items, String section, String gearType, FileConfiguration config) {
         ConfigurationSection typeSection = config.getConfigurationSection(section);
         
         if (typeSection == null) {
-            InfinityExpansion.log(Level.SEVERE, "Config section " + section + " missing, Check the config and report this!");
+            PluginUtils.log(Level.SEVERE, "Config section " + section + " missing, Check the config and report this!");
             return;
         }
         
@@ -1034,7 +1013,7 @@ public final class Items {
             String itemPath = item.getItemId().replace(gearType + "_", "").toLowerCase();
             ConfigurationSection itemSection = typeSection.getConfigurationSection(itemPath);
             if (itemSection == null) {
-                InfinityExpansion.log(Level.SEVERE, "Config section " + itemPath + " missing, Check the config and report this!");
+                PluginUtils.log(Level.SEVERE, "Config section " + itemPath + " missing, Check the config and report this!");
                 continue;
             }
             
@@ -1043,13 +1022,13 @@ public final class Items {
                 if (level > 0 && level <= Short.MAX_VALUE) {
                     Enchantment e = getEnchantFromString(path);
                     if (e == null) {
-                        InfinityExpansion.log(Level.WARNING, "Failed to add enchantment " + path + ", your config may be messed up, report this!");
+                        PluginUtils.log(Level.WARNING, "Failed to add enchantment " + path + ", your config may be messed up, report this!");
                         continue;
                     }
                     item.addUnsafeEnchantment(e, level);
                 } else if (level != 0) {
                     config.set(section + "." + itemPath + "." + path, 1);
-                    InfinityExpansion.log(Level.WARNING, "Enchantment level " + level + " for enchantment " + path + " is not allowed, resetting to 1, please check your config and update it with a correct value"); 
+                    PluginUtils.log(Level.WARNING, "Enchantment level " + level + " for enchantment " + path + " is not allowed, resetting to 1, please check your config and update it with a correct value"); 
                 }
             }
         }

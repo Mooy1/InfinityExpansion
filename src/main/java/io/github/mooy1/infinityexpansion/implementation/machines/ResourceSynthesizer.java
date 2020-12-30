@@ -1,10 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -17,7 +17,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -25,21 +24,19 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Creates special resources from the combination of singularities
  *
  * @author Mooy1
  */
-public class ResourceSynthesizer extends Container implements EnergyNetComponent, RecipeDisplayItem {
+public class ResourceSynthesizer extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 1_000_000;
 
     private static final int[] OUTPUT_SLOTS = {
-            PresetUtils.slot2 + 27
+            MenuPreset.slot2 + 27
     };
-    private static final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
     private static final int[] BACKGROUND = {
             27, 29, 33, 35,
             36, 44,
@@ -49,13 +46,13 @@ public class ResourceSynthesizer extends Container implements EnergyNetComponent
             28, 34, 37, 38, 42, 43
     };
     private static final int[] INPUT_SLOTS = {
-            PresetUtils.slot1, PresetUtils.slot3
+            MenuPreset.slot1, MenuPreset.slot3
     };
     private static final int INPUT_SLOT1 = INPUT_SLOTS[0];
     private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
-    private static final int STATUS_SLOT = PresetUtils.slot2;
+    private static final int STATUS_SLOT = MenuPreset.slot2;
 
-    private static final ItemStack[] RECIPES = {
+    private static final SlimefunItemStack[] RECIPES = {
             Items.IRON_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
             Items.IRON_SINGULARITY, Items.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
             Items.DIAMOND_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.COMPRESSED_CARBON, 16),
@@ -88,22 +85,22 @@ public class ResourceSynthesizer extends Container implements EnergyNetComponent
         for (int i : BACKGROUND) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk3) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk3) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk2) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk2) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier,
                 ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -119,13 +116,11 @@ public class ResourceSynthesizer extends Container implements EnergyNetComponent
     }
     
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
-        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
-
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
 
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
 
         } else {
@@ -134,66 +129,53 @@ public class ResourceSynthesizer extends Container implements EnergyNetComponent
 
             if (input1 == null || input2 == null) { //no input
 
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.inputAnItem);
+                if (inv.hasViewer()) {
+                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.inputAnItem);
                 }
 
             } else { //start
-                String id1 = StackUtils.getIDFromItem(input1);
-                String id2 = StackUtils.getIDFromItem(input2);
+                String id1 = StackUtils.getItemID(input1, false);
+                
+                if (id1 == null) return;
+                
+                String id2 = StackUtils.getItemID(input2, false);
 
+                if (id2 == null) return;
+                
                 ItemStack recipe = null;
 
                 for (int i = 0; i < RECIPES.length; i += 3) {
-                    if (((Objects.equals(id1, StackUtils.getIDFromItem(RECIPES[i])))
-                            && (Objects.equals(id2, StackUtils.getIDFromItem(RECIPES[i + 1]))))
-                            ||
-                            ((Objects.equals(id1, StackUtils.getIDFromItem(RECIPES[i + 1])))
-                                    && (Objects.equals(id2, StackUtils.getIDFromItem(RECIPES[i]))))) {
+                    if ((id1.equals(RECIPES[i].getItemId()) && id2.equals(RECIPES[i + 1].getItemId()) || (id2.equals(RECIPES[i].getItemId()) && id1.equals(RECIPES[i + 1].getItemId())))) {
                         recipe = RECIPES[i + 2];
                     }
                 }
 
                 if (recipe == null) { //invalid recipe
 
-                    if (playerWatching) {
-                        inv.replaceExistingItem(STATUS_SLOT, PresetUtils.invalidRecipe);
+                    if (inv.hasViewer()) {
+                        inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
                     }
 
                 } else { //start
+                    
+                    recipe = recipe.clone();
+                    
+                    if (inv.fits(recipe, OUTPUT_SLOTS)) { //no item
 
-                    ItemStack outputSlot = inv.getItemInSlot(OUTPUT_SLOT);
-
-                    if (outputSlot == null) { //no item
-
+                        inv.pushItem(recipe, OUTPUT_SLOTS);
                         inv.consumeItem(INPUT_SLOT1, 1);
                         inv.consumeItem(INPUT_SLOT2, 1);
-                        inv.replaceExistingItem(OUTPUT_SLOT, recipe);
                         removeCharge(b.getLocation(), ENERGY);
 
-                        if (playerWatching) {
+                        if (inv.hasViewer()) {
                             inv.replaceExistingItem(STATUS_SLOT,
                                     new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
                         }
-                    } else if ((Objects.equals(StackUtils.getIDFromItem(outputSlot), StackUtils.getIDFromItem(recipe))
-                            && outputSlot.getAmount() + recipe.getAmount() <= recipe.getMaxStackSize())) { //already an item
-
-                        outputSlot.setAmount(recipe.getAmount() + outputSlot.getAmount());
-
-                        inv.consumeItem(INPUT_SLOT1, 1);
-                        inv.consumeItem(INPUT_SLOT2, 1);
-                        inv.replaceExistingItem(OUTPUT_SLOT, outputSlot);
-                        removeCharge(b.getLocation(), ENERGY);
-
-                        if (playerWatching) {
-                            inv.replaceExistingItem(STATUS_SLOT,
-                                    new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
-                        }
-
+                        
                     } else { //not enough room
 
-                        if (playerWatching) {
-                            inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                        if (inv.hasViewer()) {
+                            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
                         }
 
                     }

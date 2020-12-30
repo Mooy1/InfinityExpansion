@@ -2,14 +2,15 @@ package io.github.mooy1.infinityexpansion.implementation.storage;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.LoreUtils;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.items.backpacks.SlimefunBackpack;
@@ -40,11 +41,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Basically just barrels...
@@ -56,12 +58,12 @@ import java.util.Objects;
  * for idea, a few bits of code, and code to learn from
  *
  */
-public class StorageUnit extends Container implements LoreStorage {
+public class StorageUnit extends AbstractContainer implements LoreStorage {
     
     public static boolean DISPLAY_SIGNS = false;
     public static int SIGN_REFRESH = 8;
 
-    private static final Map<Block, List<Block>> SIGNS = new HashMap<>();
+    private static final Map<Block, Set<Block>> SIGNS = new HashMap<>();
 
     public static final int BASIC = 6400;
     public static final int ADVANCED = 25600;
@@ -71,14 +73,14 @@ public class StorageUnit extends Container implements LoreStorage {
     
     private final Type type;
     
-    private static final int STATUS_SLOT = PresetUtils.slot2;
-    private static final int[] INPUT_SLOTS = {PresetUtils.slot1};
+    private static final int STATUS_SLOT = MenuPreset.slot2;
+    private static final int[] INPUT_SLOTS = {MenuPreset.slot1};
     private static final int INPUT_SLOT = INPUT_SLOTS[0];
-    private static final int[] OUTPUT_SLOTS = {PresetUtils.slot3};
+    private static final int[] OUTPUT_SLOTS = {MenuPreset.slot3};
     private static final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
-    private static final int[] INPUT_BORDER = PresetUtils.slotChunk1;
-    private static final int[] STATUS_BORDER = PresetUtils.slotChunk2;
-    private static final int[] OUTPUT_BORDER = PresetUtils.slotChunk3;
+    private static final int[] INPUT_BORDER = MenuPreset.slotChunk1;
+    private static final int[] STATUS_BORDER = MenuPreset.slotChunk2;
+    private static final int[] OUTPUT_BORDER = MenuPreset.slotChunk3;
 
     public StorageUnit(@Nonnull Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
@@ -140,7 +142,7 @@ public class StorageUnit extends Container implements LoreStorage {
 
                 stored = getStored(b);
 
-                StackUtils.addLore(drop, "", ChatColor.AQUA + "Stored Item:", ChatColor.GREEN + storedItem, ChatColor.AQUA + "Amount:", ChatColor.GREEN + String.valueOf(stored));
+                LoreUtils.addLore(drop, "", ChatColor.AQUA + "Stored Item:", ChatColor.GREEN + storedItem, ChatColor.AQUA + "Amount:", ChatColor.GREEN + String.valueOf(stored));
 
                 MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to dropped item");
 
@@ -176,21 +178,21 @@ public class StorageUnit extends Container implements LoreStorage {
 
         int stored = getStored(b);
         String storedItem = getStoredItem(b);
-        String inputID = StackUtils.getIDFromItem(inputSlot);
+        String inputID = StackUtils.getItemID(inputSlot, true);
 
         if (Objects.equals(inputID, storedItem)) {
 
             int inputAmount = inputSlot.getAmount();
-            if (type.getMax() >= stored + inputAmount) {
+            if (this.type.getMax() >= stored + inputAmount) {
 
                 setStored(b, stored + inputAmount);
                 inv.replaceExistingItem(slots[0], null);
 
             } else {
 
-                int amount = type.getMax() - stored;
+                int amount = this.type.getMax() - stored;
 
-                setStored(b, type.getMax());
+                setStored(b, this.type.getMax());
                 inputSlot.setAmount(inputAmount - amount);
                 inv.replaceExistingItem(slots[0], inputSlot);
                 inv.dropItems(l, slots);
@@ -208,13 +210,13 @@ public class StorageUnit extends Container implements LoreStorage {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -229,13 +231,13 @@ public class StorageUnit extends Container implements LoreStorage {
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         //input
         ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
         if (inputSlotItem != null) { //Check if empty slot
             
-            String inputItemID = StackUtils.getIDFromItem(inputSlotItem);
+            String inputItemID = StackUtils.getItemID(inputSlotItem, true);
             String storedItem = getStoredItem(b);
 
             //Check if non stackable item or another storage unit
@@ -246,13 +248,13 @@ public class StorageUnit extends Container implements LoreStorage {
 
                 if (stored == 0 && storedItem == null) { //store new item
 
-                    setStoredItem(b, StackUtils.getIDFromItem(inputSlotItem));
+                    setStoredItem(b, inputItemID);
                     setStored(b, slotAmount);
                     inv.consumeItem(INPUT_SLOT, slotAmount);
 
                 } else {
 
-                    int maxInput = type.getMax() - stored;
+                    int maxInput = this.type.getMax() - stored;
                     storedItem = getStoredItem(b);
 
                     if (storedItem.equals(inputItemID)) { //deposit item
@@ -325,10 +327,7 @@ public class StorageUnit extends Container implements LoreStorage {
     
     private static boolean checkItem(ItemStack stack) {
         SlimefunItem item = SlimefunItem.getByItem(stack);
-        
-        if (item instanceof LoreStorage) return false;
-
-        return !(item instanceof SlimefunBackpack);
+        return !(item instanceof SlimefunBackpack) && !(item instanceof LoreStorage) && !SlimefunTag.SHULKER_BOXES.isTagged(stack.getType());
     }
 
     /**
@@ -362,7 +361,7 @@ public class StorageUnit extends Container implements LoreStorage {
                 return;
             }
 
-            ItemStack item = makeDisplayItem(type.getMax(), storedItemStack, stored, type == Type.INFINITIES);
+            ItemStack item = makeDisplayItem(this.type.getMax(), storedItemStack, stored, this.type == Type.INFINITIES);
             
             name = ItemUtils.getItemName(item);
             
@@ -373,7 +372,7 @@ public class StorageUnit extends Container implements LoreStorage {
         }
 
         if (DISPLAY_SIGNS && updateSign) {
-            List<Block> cached = SIGNS.get(b);
+            Set<Block> cached = SIGNS.get(b);
 
             if (cached == null) {
                 cached = addToCache(b);
@@ -403,20 +402,15 @@ public class StorageUnit extends Container implements LoreStorage {
         }
     }
     
-    private List<Block> addToCache(@Nonnull Block b) {
-        List<Block> cached = new ArrayList<>();
-
-        List<Location> spots = new ArrayList<>(4);
+    private Set<Block> addToCache(@Nonnull Block b) {
+        Set<Block> cached = new HashSet<>();
 
         Location l = b.getLocation();
-        spots.add(l.clone().add(1, 0, 0));
-        spots.add(l.clone().add(-1, 0, 0));
-        spots.add(l.clone().add(0, 0, 1));
-        spots.add(l.clone().add(0, 0, -1));
-
-        for (Location spot : spots) {
-            cached.add(spot.getBlock());
-        }
+        cached.add(l.clone().add(1, 0, 0).getBlock());
+        cached.add(l.clone().add(-1, 0, 0).getBlock());
+        cached.add(l.clone().add(0, 0, 1).getBlock());
+        cached.add(l.clone().add(0, 0, -1).getBlock());
+        
         SIGNS.put(b, cached);
         return cached;
     }
@@ -433,9 +427,9 @@ public class StorageUnit extends Container implements LoreStorage {
     @Nonnull
     public static ItemStack makeDisplayItem(int max, @Nonnull ItemStack storedItemStack, int stored, boolean infinity) {
         
-        String stacksLine = "&7Stacks: " + LoreUtils.format(Math.round((float) stored / storedItemStack.getMaxStackSize()));
+        String stacksLine = "&7Stacks: " + LorePreset.format(Math.round((float) stored / storedItemStack.getMaxStackSize()));
         
-        String storedLine = "&6Stored: &e" + LoreUtils.format(stored) + (infinity ? "" : "/" + LoreUtils.format(max) + " &7(" + Math.round((float) 100 * stored / max )  + "%)");
+        String storedLine = "&6Stored: &e" + LorePreset.format(stored) + (infinity ? "" : "/" + LorePreset.format(max) + " &7(" + Math.round((float) 100 * stored / max )  + "%)");
         
         ItemStack item = new CustomItem(
                 storedItemStack,

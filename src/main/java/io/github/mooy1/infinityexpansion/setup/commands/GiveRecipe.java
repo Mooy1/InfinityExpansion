@@ -1,8 +1,6 @@
-package io.github.mooy1.infinityexpansion.setup.command.subcommands;
+package io.github.mooy1.infinityexpansion.setup.commands;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.setup.command.InfinityCommand;
-import io.github.mooy1.infinityexpansion.setup.command.SubCommand;
+import io.github.mooy1.infinitylib.command.LibCommand;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -16,9 +14,9 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiveRecipe extends SubCommand {
-    public GiveRecipe(InfinityExpansion plugin, InfinityCommand cmd) {
-        super(plugin, cmd, "giverecipe", "gives all the items in a Slimefun item recipe", true);
+public class GiveRecipe extends LibCommand {
+    public GiveRecipe() {
+        super("giverecipe", "gives all the items in a Slimefun item recipe", true);
     }
 
     @Override
@@ -53,8 +51,9 @@ public class GiveRecipe extends SubCommand {
         p.getInventory().addItem(recipe.toArray(new ItemStack[0]));
     }
 
+    @Nonnull
     @Override
-    public @Nonnull List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    public List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
         List<String> tabs = new ArrayList<>();
         if (args.length == 2) {
             for (SlimefunItem i : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {

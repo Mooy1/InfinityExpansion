@@ -1,11 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -22,7 +22,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -37,7 +36,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class VoidHarvester extends Container implements EnergyNetComponent, RecipeDisplayItem {
+public class VoidHarvester extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 120;
     public static final int BASIC_SPEED = 1;
@@ -75,7 +74,7 @@ public class VoidHarvester extends Container implements EnergyNetComponent, Reci
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed,
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed,
                 ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -97,7 +96,7 @@ public class VoidHarvester extends Container implements EnergyNetComponent, Reci
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
         int energy = this.type.getEnergy();
@@ -105,7 +104,7 @@ public class VoidHarvester extends Container implements EnergyNetComponent, Reci
         if (getCharge(b.getLocation()) < energy) { //not enough energy
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
             return;
 
@@ -137,7 +136,7 @@ public class VoidHarvester extends Container implements EnergyNetComponent, Reci
             } else { //output slots full
 
                 if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
                 }
             }
             

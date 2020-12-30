@@ -1,12 +1,13 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNet;
@@ -36,16 +37,16 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class InfinityReactor extends Container implements EnergyNetProvider, RecipeDisplayItem {
+public class InfinityReactor extends AbstractContainer implements EnergyNetProvider, RecipeDisplayItem {
 
     public static final int ENERGY = 180_000;
     public static final int STORAGE = 40_000_000;
     public static final int INFINITY_INTERVAL = 72000;
     public static final int VOID_INTERVAL = 12000;
     public static final int[] INPUT_SLOTS = {
-            PresetUtils.slot1, PresetUtils.slot3
+            MenuPreset.slot1, MenuPreset.slot3
     };
-    public static final int STATUS_SLOT = PresetUtils.slot2;
+    public static final int STATUS_SLOT = MenuPreset.slot2;
 
     public InfinityReactor() {
         super(Categories.INFINITY_CHEAT,
@@ -67,20 +68,20 @@ public class InfinityReactor extends Container implements EnergyNetProvider, Rec
     }
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk2) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk3) {
+        for (int i : MenuPreset.slotChunk3) {
             blockMenuPreset.addItem(i, new CustomItem(
                     Material.BLACK_STAINED_GLASS_PANE, "&8Void Ingot Input"), ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk1) {
+        for (int i : MenuPreset.slotChunk1) {
             blockMenuPreset.addItem(i, new CustomItem(
                     Material.WHITE_STAINED_GLASS_PANE, "&fInfinity Ingot Input"), ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
-
+    
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         if (getProgress(b) == null) {
@@ -99,9 +100,11 @@ public class InfinityReactor extends Container implements EnergyNetProvider, Rec
     @Override
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
-            if (Objects.equals(StackUtils.getIDFromItem(item), "VOID_INGOT")) {
+            String input = StackUtils.getItemID(item, false);
+            
+            if (Objects.equals(input, "VOID_INGOT")) {
                 return new int[] {INPUT_SLOTS[1]};
-            } else if (Objects.equals(StackUtils.getIDFromItem(item), "INFINITE_INGOT")) {
+            } else if (Objects.equals(input, "INFINITE_INGOT")) {
                 return new int[] {INPUT_SLOTS[0]};
             }
         }
@@ -110,9 +113,9 @@ public class InfinityReactor extends Container implements EnergyNetProvider, Rec
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
-        if (inv.hasViewer() && !SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) {
-            inv.replaceExistingItem(STATUS_SLOT, PresetUtils.connectToEnergyNet);
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
+        if (inv.hasViewer() && !SlimefunPlugin.getNetworkManager().getNetworkFromLocation(b.getLocation(), EnergyNet.class).isPresent()) {
+            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.connectToEnergyNet);
         }
     }
 
@@ -128,7 +131,7 @@ public class InfinityReactor extends Container implements EnergyNetProvider, Rec
 
         if (progress == 0) { //need infinity + void
 
-            if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getItemID(inv.getItemInSlot(INPUT_SLOTS[0]), false), "INFINITE_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
@@ -137,7 +140,7 @@ public class InfinityReactor extends Container implements EnergyNetProvider, Rec
 
             }
             
-            if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getItemID(inv.getItemInSlot(INPUT_SLOTS[1]), false), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -173,7 +176,7 @@ public class InfinityReactor extends Container implements EnergyNetProvider, Rec
         
         if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
-            if (!Objects.equals(StackUtils.getIDFromItem(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getItemID(inv.getItemInSlot(INPUT_SLOTS[1]), false), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -227,12 +230,12 @@ public class InfinityReactor extends Container implements EnergyNetProvider, Rec
         List<ItemStack> items = new ArrayList<>();
 
         ItemStack item = Items.INFINITE_INGOT.clone();
-        StackUtils.addLore(item, "", "Lasts for 1 day");
+        LoreUtils.addLore(item, "", "Lasts for 1 day");
         items.add(item);
         items.add(null);
 
         item = Items.VOID_INGOT.clone();
-        StackUtils.addLore(item, "", "Lasts for 3 hours");
+        LoreUtils.addLore(item, "", "Lasts for 3 hours");
         items.add(item);
         items.add(null);
 

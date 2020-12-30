@@ -4,12 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.LoreUtils;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -17,31 +15,23 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MobDataCard extends SlimefunItem implements RecipeDisplayItem, NotPlaceable {
 
     @Getter
     private final Type type;
-    public static final List<MobDataCard> CARDS = new ArrayList<>();
+    public static final Map<String, Type> CARDS = new HashMap<>();
 
     public MobDataCard(Type type) {
-        super(Categories.MOB_SIMULATION, makeCard(type), RecipeTypes.DATA_INFUSER, type.getRecipe());
+        super(Categories.MOB_SIMULATION, type.getItem(), RecipeTypes.DATA_INFUSER, type.getRecipe());
         this.type = type;
-        CARDS.add(this);
-    }
-
-    private static SlimefunItemStack makeCard(Type type) {
-        return new SlimefunItemStack(
-                type.getName().toUpperCase().replace(" ", "_") + "_DATA_CARD",
-                type.isUpgraded() ? Material.NETHERITE_CHESTPLATE : Material.DIAMOND_CHESTPLATE,
-                "&b" + type.getName() + " Data Card",
-                "&7Place in a mob simulation chamber to activate",
-                "",
-                LoreUtils.energyPerSecond(type.getEnergy())
-        );
+        CARDS.put(type.getItem().getItemId(), type);
     }
 
     @Nonnull
@@ -49,16 +39,15 @@ public class MobDataCard extends SlimefunItem implements RecipeDisplayItem, NotP
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        for (int i : type.getDrops().keySet()) {
+        for (int i : this.type.getDrops().keySet()) {
             items.add(null);
-            items.add(type.getDrops().get(i));
+            items.add(this.type.getDrops().get(i));
         }
 
         return items;
     }
 
     @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
 
         ZOMBIE("Zombie", 60, 1, false, new ItemStack[]{
@@ -139,6 +128,26 @@ public class MobDataCard extends SlimefunItem implements RecipeDisplayItem, NotP
         private final ItemStack[] recipe;
         @Nonnull
         private final Map<Integer, ItemStack> drops;
-
+        @Nonnull
+        private final SlimefunItemStack item;
+        
+        @ParametersAreNonnullByDefault
+        Type(String name, int energy, int xp, boolean upgraded, ItemStack[] recipe, Map<Integer, ItemStack> drops) {
+            this.name = name;
+            this.energy = energy;
+            this.xp = xp;
+            this.upgraded = upgraded;
+            this.recipe = recipe;
+            this.drops = drops;
+            this.item = new SlimefunItemStack(
+                    name.toUpperCase(Locale.ROOT).replace(" ", "_") + "_DATA_CARD",
+                    upgraded ? Material.NETHERITE_CHESTPLATE : Material.DIAMOND_CHESTPLATE,
+                    "&b" + name + " Data Card",
+                    "&7Place in a mob simulation chamber to activate",
+                    "",
+                    LorePreset.energyPerSecond(energy)
+            );
+        }
+        
     }
 }

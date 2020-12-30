@@ -1,9 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -20,7 +20,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -35,7 +34,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class MaterialGenerator extends Container implements EnergyNetComponent, RecipeDisplayItem {
+public class MaterialGenerator extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int COBBLE_ENERGY = 24;
     public static final int COBBLE2_ENERGY = 120;
@@ -75,7 +74,7 @@ public class MaterialGenerator extends Container implements EnergyNetComponent, 
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed,
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed,
                 ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -89,26 +88,26 @@ public class MaterialGenerator extends Container implements EnergyNetComponent, 
     }
     
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
 
-        int energy = type.getEnergy();
+        int energy = this.type.getEnergy();
 
-        if (getCharge(l) < energy) { //not enough energy
+        if (getCharge(b.getLocation()) < energy) { //not enough energy
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
             return;
 
         }
 
-        ItemStack output = new ItemStack(type.getOutput(), type.getSpeed());
+        ItemStack output = new ItemStack(this.type.getOutput(), this.type.getSpeed());
 
         if (!inv.fits(output, OUTPUT_SLOTS)) {
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
             return;
 
@@ -116,7 +115,7 @@ public class MaterialGenerator extends Container implements EnergyNetComponent, 
 
         inv.pushItem(output, OUTPUT_SLOTS);
 
-        removeCharge(l, energy);
+        removeCharge(b.getLocation(), energy);
 
         if (playerWatching) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aGenerating..."));
@@ -131,7 +130,7 @@ public class MaterialGenerator extends Container implements EnergyNetComponent, 
 
     @Override
     public int getCapacity() {
-        return type.getEnergy() * 2;
+        return this.type.getEnergy() * 2;
     }
 
     @Nonnull
@@ -139,7 +138,7 @@ public class MaterialGenerator extends Container implements EnergyNetComponent, 
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
         items.add(null);
-        items.add(new ItemStack(type.getOutput(), type.getSpeed()));
+        items.add(new ItemStack(this.type.getOutput(), this.type.getSpeed()));
         return items;
     }
 

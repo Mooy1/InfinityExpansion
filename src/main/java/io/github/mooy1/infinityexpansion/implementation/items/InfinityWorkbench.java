@@ -1,14 +1,15 @@
 package io.github.mooy1.infinityexpansion.implementation.items;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.setup.InfinityCategory;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.filter.FilterType;
+import io.github.mooy1.infinitylib.filter.MultiFilter;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -29,14 +30,13 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 /**
  * A 6x6 crafting table O.o
  *
  * @author Mooy1
  */
-public class InfinityWorkbench extends Container implements EnergyNetComponent {
+public class InfinityWorkbench extends AbstractContainer implements EnergyNetComponent {
 
     public static final int ENERGY = 10_000_000;
 
@@ -49,9 +49,9 @@ public class InfinityWorkbench extends Container implements EnergyNetComponent {
         45, 46, 47, 48, 49, 50
     };
     private static final int[] OUTPUT_SLOTS = {
-        PresetUtils.slot3 + 27
+            MenuPreset.slot3 + 27
     };
-    private static final int STATUS_SLOT = PresetUtils.slot3;
+    private static final int STATUS_SLOT = MenuPreset.slot3;
     private static final int[] STATUS_BORDER = {
             6, 8,
             15, 17,
@@ -80,16 +80,14 @@ public class InfinityWorkbench extends Container implements EnergyNetComponent {
     }
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : PresetUtils.slotChunk3) {
-            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk3) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : STATUS_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(RECIPE_SLOT, new CustomItem(Material.BOOK, "&6Recipes"),
-                ChestMenuUtils.getEmptyClickHandler());
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
-                ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(RECIPE_SLOT, new CustomItem(Material.BOOK, "&6Recipes"), ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -110,7 +108,7 @@ public class InfinityWorkbench extends Container implements EnergyNetComponent {
     }
     
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         if (inv.hasViewer()) { //only active when player watching
             int charge = getCharge(b.getLocation());
 
@@ -130,11 +128,11 @@ public class InfinityWorkbench extends Container implements EnergyNetComponent {
 
                 if (output == null) { //invalid
 
-                    inv.replaceExistingItem(STATUS_SLOT, PresetUtils.invalidRecipe);
+                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
 
                 } else { //correct recipe
 
-                    inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output));
+                    inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output.clone()));
 
                 }
             }
@@ -188,30 +186,7 @@ public class InfinityWorkbench extends Container implements EnergyNetComponent {
      */
     @Nullable
     public ItemStack getOutput(@Nonnull BlockMenu inv) {
-
-        String[] input = new String[36];
-
-        for (int i = 0 ; i < 36 ; i++) {
-            ItemStack inputItem = inv.getItemInSlot(INPUT_SLOTS[i]);
-
-            input[i] = StackUtils.getIDFromItem(inputItem);
-        }
-        
-        for (ItemStack[] recipe : InfinityRecipes.RECIPES.values()) {
-            int amount = 0;
-            for (int i = 0 ; i < input.length ; i++) {
-                String item = StackUtils.getIDFromItem(recipe[i]);
-                if (Objects.equals(input[i], item)) {
-                    amount++;
-                } else {
-                    break;
-                }
-            }
-            if (amount == 36) {
-                return InfinityRecipes.RECIPES.inverse().get(recipe).clone();
-            }
-        }
-        return null;
+        return InfinityRecipes.RECIPES.inverse().get(MultiFilter.fromMenu(FilterType.MIN_AMOUNT, inv, INPUT_SLOTS));
     }
 
     @Nonnull

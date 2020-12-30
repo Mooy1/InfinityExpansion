@@ -1,12 +1,13 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.LoreUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNet;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -49,7 +50,7 @@ import java.util.Objects;
  * for some stuff to work off of
  *
  */
-public class EnergyGenerator extends Container implements EnergyNetProvider {
+public class EnergyGenerator extends AbstractContainer implements EnergyNetProvider {
 
     public static final int WATER_RATE = 9;
     public static final int WATER_STORAGE = 900;
@@ -75,7 +76,7 @@ public class EnergyGenerator extends Container implements EnergyNetProvider {
     public static final int VOID_RATE = 3600;
     public static final int VOID_STORAGE = 360000;
     
-    public static final int INFINITY_RATE = 90;
+    public static final int INFINITY_RATE = 90000;
     public static final int INFINITY_STORAGE = 9000000;
 
     private final Type type;
@@ -87,10 +88,10 @@ public class EnergyGenerator extends Container implements EnergyNetProvider {
     
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
             for (int i = 0; i < 9; i++)
-                blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+                blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
 
             blockMenuPreset.addItem(4,
-                    PresetUtils.loadingItemRed,
+                    MenuPreset.loadingItemRed,
                     ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -100,11 +101,11 @@ public class EnergyGenerator extends Container implements EnergyNetProvider {
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         try {
-            if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) {
-                if (!inv.toInventory().getViewers().isEmpty()) {
-                    inv.replaceExistingItem(4, PresetUtils.connectToEnergyNet);
+            if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(b.getLocation(), EnergyNet.class).isPresent()) {
+                if (inv.hasViewer()) {
+                    inv.replaceExistingItem(4, MenuPreset.connectToEnergyNet);
                 }
             }
         } catch (ConcurrentModificationException ignored) { }
@@ -123,31 +124,30 @@ public class EnergyGenerator extends Container implements EnergyNetProvider {
 
             if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) { //not connected
 
-                inv.replaceExistingItem(4, PresetUtils.connectToEnergyNet);
+                inv.replaceExistingItem(4, MenuPreset.connectToEnergyNet);
 
             } else if (rate == 0) {
 
                 inv.replaceExistingItem(4, new CustomItem(
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&cNot generating",
-                        "&7Stored: &6" + LoreUtils.format(stored) + " J"
+                        "&7Stored: &6" + LorePreset.format(stored) + " J"
                 ));
 
             } else {
-
-                final boolean canGenerate = stored < getCapacity();
-
+                
                 inv.replaceExistingItem(4, new CustomItem(
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&aGeneration",
-                        "&7Type: &6" + (canGenerate ? pair.getSecondValue() : "Full"),
-                        "&7Generating: &6" + (canGenerate ? LoreUtils.roundHundreds(rate * LoreUtils.SERVER_TICK_RATIO) : 0) + " J/s ",
-                        "&7Stored: &6" + LoreUtils.format(stored) + " J"
+                        "&7Type: &6" + pair.getSecondValue(),
+                        "&7Generating: &6" + LorePreset.roundHundreds(rate * PluginUtils.TICK_RATIO) + " J/s ",
+                        "&7Stored: &6" + LorePreset.format(stored) + " J"
                 ));
             }
         }
 
         return rate;
+        
     }
     
     private Pair<Integer, String> getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {

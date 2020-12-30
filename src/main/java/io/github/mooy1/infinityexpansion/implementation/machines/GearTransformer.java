@@ -1,10 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -16,7 +16,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -30,12 +29,12 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class GearTransformer extends Container implements EnergyNetComponent, RecipeDisplayItem {
+public class GearTransformer extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 12000;
 
     private static final int[] OUTPUT_SLOTS = {
-            PresetUtils.slot2 + 27
+            MenuPreset.slot2 + 27
     };
     private static final int[] BACKGROUND = {
             27, 29, 33, 35,
@@ -46,11 +45,11 @@ public class GearTransformer extends Container implements EnergyNetComponent, Re
             28, 34, 37, 38, 42, 43
     };
     private static final int[] INPUT_SLOTS = {
-            PresetUtils.slot1, PresetUtils.slot3
+            MenuPreset.slot1, MenuPreset.slot3
     };
     private static final int INPUT_SLOT1 = INPUT_SLOTS[0];
     private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
-    private static final int STATUS_SLOT = PresetUtils.slot2;
+    private static final int STATUS_SLOT = MenuPreset.slot2;
 
     public GearTransformer() {
         super(Categories.ADVANCED_MACHINES, Items.GEAR_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -72,12 +71,12 @@ public class GearTransformer extends Container implements EnergyNetComponent, Re
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         if (!inv.hasViewer()) return;
 
         if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
 
-            inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             return;
 
         }
@@ -131,7 +130,7 @@ public class GearTransformer extends Container implements EnergyNetComponent, Re
 
         if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null) { //valid material, not enough room
 
-            inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             return;
 
         }
@@ -154,23 +153,22 @@ public class GearTransformer extends Container implements EnergyNetComponent, Re
         for (int i : BACKGROUND) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk1) {
+        for (int i : MenuPreset.slotChunk1) {
             blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Tool Input"), ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk3) {
+        for (int i : MenuPreset.slotChunk3) {
             blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Material Input"), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk2) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk2) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier,
-                ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override

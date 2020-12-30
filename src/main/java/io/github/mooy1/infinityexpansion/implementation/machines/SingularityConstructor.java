@@ -1,14 +1,13 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
+import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
-import io.github.mooy1.infinityexpansion.utils.TriList;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -41,7 +40,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class SingularityConstructor extends Container implements EnergyNetComponent, RecipeDisplayItem {
+public class SingularityConstructor extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 120;
     public static final int BASIC_SPEED = 1;
@@ -67,33 +66,7 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
     private static final int[] OUTPUT_BORDER = {
             6, 7, 8, 15, 17, 24, 25, 26
     };
-
-    public static final TriList<SlimefunItemStack, String, Integer> RECIPES = new TriList<>();
-    private static final double SCALE = InfinityExpansion.getVanillaScale();
-
-    static {
-        RECIPES.add(Items.COPPER_SINGULARITY, "COPPER_INGOT", 2400);
-        RECIPES.add(Items.ZINC_SINGULARITY, "ZINC_INGOT", 2400);
-        RECIPES.add(Items.TIN_SINGULARITY, "TIN_INGOT", 2400);
-        RECIPES.add(Items.ALUMINUM_SINGULARITY, "ALUMINUM_INGOT", 2400);
-        RECIPES.add(Items.SILVER_SINGULARITY, "SILVER_INGOT", 2400);
-        RECIPES.add(Items.MAGNESIUM_SINGULARITY, "MAGNESIUM_INGOT", 2400);
-        RECIPES.add(Items.LEAD_SINGULARITY, "LEAD_INGOT", 2400);
-
-        RECIPES.add(Items.GOLD_SINGULARITY, "GOLD_INGOT", (int) (1280 * SCALE));
-        RECIPES.add(Items.IRON_SINGULARITY, "IRON_INGOT", (int) (1280 * SCALE));
-        RECIPES.add(Items.DIAMOND_SINGULARITY, "DIAMOND", (int) (640 * SCALE));
-        RECIPES.add(Items.EMERALD_SINGULARITY, "EMERALD", (int) (640 * SCALE));
-        RECIPES.add(Items.NETHERITE_SINGULARITY, "NETHERITE_INGOT", (int) (160 * SCALE));
-
-        RECIPES.add(Items.COAL_SINGULARITY, "COAL", (int) (640 * SCALE));
-        RECIPES.add(Items.REDSTONE_SINGULARITY, "REDSTONE", (int) (1280 * SCALE));
-        RECIPES.add(Items.LAPIS_SINGULARITY, "LAPIS_LAZULI",(int) (1280 * SCALE));
-        RECIPES.add(Items.QUARTZ_SINGULARITY, "QUARTZ", (int) (640 * SCALE));
-
-        RECIPES.add(Items.INFINITY_SINGULARITY, "INFINITE_INGOT",160);
-    }
-
+    
     public SingularityConstructor(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
         this.type = type;
@@ -111,7 +84,7 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
 
                 if (progress > 0 && inputTest != null) {
 
-                    String input = RECIPES.getB().get(Integer.parseInt(inputTest));
+                    String input = Singularity.RECIPES.get(Integer.parseInt(inputTest)).getB();
 
                     int stackSize = 64;
 
@@ -154,12 +127,12 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -174,14 +147,14 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         String name;
         Material statusMat = Material.BARRIER;
 
         int progress = Integer.parseInt(getProgress(b));
         ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
 
-        int energy = type.getEnergy();
+        int energy = this.type.getEnergy();
 
         if (getCharge(b.getLocation()) < energy) { //when not enough power
 
@@ -198,13 +171,13 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
 
             } else { //started but wrong input
 
-                name = "&cInput more &b" + RECIPES.getB().get(Integer.parseInt(progressTest)) + "&c!";
+                name = "&cInput more &b" + Singularity.RECIPES.get(Integer.parseInt(progressTest)).getB() + "&c!";
 
             }
 
         } else { //input
 
-            int speed = type.getSpeed();
+            int speed = this.type.getSpeed();
 
             String progressTest = getProgressID(b);
 
@@ -229,13 +202,13 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
             } else { //progress
 
                 int progressID = Integer.parseInt(progressTest);
-                int outputTime = RECIPES.getC().get(progressID);
+                int outputTime = Singularity.RECIPES.get(progressID).getC();
 
                 if (progress < outputTime) { //increase progress
 
-                    String input = RECIPES.getB().get(progressID);
+                    String input = Singularity.RECIPES.get(progressID).getB();
 
-                    if (Objects.equals(StackUtils.getIDFromItem(inputSlotItem), input)) { //input matches
+                    if (Objects.equals(StackUtils.getItemID(inputSlotItem, true), input)) { //input matches
 
                         int inputSlotAmount = inputSlotItem.getAmount();
                         removeCharge(b.getLocation(), energy);
@@ -272,9 +245,11 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
 
                 } else { //if construction done
 
-                    ItemStack output = RECIPES.getA().get(progressID).clone();
+                    ItemStack output = Singularity.RECIPES.get(progressID).getA();
 
                     if (inv.fits(output, OUTPUT_SLOTS)) { //output
+                        
+                        output = output.clone();
 
                         removeCharge(b.getLocation(), energy);
                         inv.pushItem(output, OUTPUT_SLOTS);
@@ -303,8 +278,8 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
 
             if (progress > 0) {
                 int progressID = Integer.parseInt(getProgressID(b));
-                SlimefunItemStack output = RECIPES.getA().get(progressID);
-                int outputTime = RECIPES.getC().get(progressID);
+                SlimefunItemStack output = Singularity.RECIPES.get(progressID).getA();
+                int outputTime = Singularity.RECIPES.get(progressID).getC();
 
                 lore = "&7Constructing: " + output.getDisplayName();
                 loree = "&7Progress: (" + progress + "/" + outputTime + ")";
@@ -331,8 +306,8 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
     private boolean checkItemAndSet(Block b, BlockMenu inv, ItemStack item, int speed) {
         int itemAmount = item.getAmount();
 
-        for (int i = 0; i < RECIPES.size() ; i++) {
-            if (Objects.equals(StackUtils.getIDFromItem(item), RECIPES.getB().get(i))) {
+        for (int i = 0; i < Singularity.RECIPES.size() ; i++) {
+            if (Objects.equals(StackUtils.getItemID(item, true), Singularity.RECIPES.get(i).getB())) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
                     inv.consumeItem(INPUT_SLOT, speed);
@@ -379,7 +354,7 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
 
     @Override
     public int getCapacity() {
-        return type.getEnergy() * 2;
+        return this.type.getEnergy() * 2;
     }
 
     @Nonnull
@@ -387,9 +362,9 @@ public class SingularityConstructor extends Container implements EnergyNetCompon
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
-        for (int i = 0 ; i < RECIPES.size() ; i++) {
-            items.add(StackUtils.getItemFromID(RECIPES.getB().get(i), 1));
-            items.add(RECIPES.getA().get(i));
+        for (int i = 0 ; i < Singularity.RECIPES.size() ; i++) {
+            items.add(StackUtils.getItemFromID(Singularity.RECIPES.get(i).getB(), 1));
+            items.add(Singularity.RECIPES.get(i).getA());
         }
 
         return items;

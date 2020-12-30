@@ -1,13 +1,15 @@
 package io.github.mooy1.infinityexpansion.setup;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.filter.FilterType;
+import io.github.mooy1.infinitylib.filter.ItemFilter;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
@@ -15,7 +17,9 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
@@ -161,13 +165,14 @@ public class InfinityCategory extends FlexCategory {
     }
 
     private static void openRecipeFromWorkBench(@Nonnull Player player, @Nonnull BlockMenu inv, int id) {
-        ItemStack output = InfinityRecipes.IDS.get(id);
-        if (output == null) {
-            InfinityExpansion.log(Level.WARNING, "Error opening recipe for Infinity Item id: " + id, "Report this on Discord or Github!");
+        Pair<SlimefunItemStack, ItemStack[]> pair = InfinityRecipes.IDS.get(id);
+        if (pair == null) {
+            PluginUtils.log(Level.WARNING, "Error opening recipe for Infinity Item id: " + id + " Report this on Discord or Github!");
             return;
         }
-        
-        ChestMenu menu = new ChestMenu(Objects.requireNonNull(output.getItemMeta()).getDisplayName());
+        SlimefunItemStack output = pair.getFirstValue();
+
+        ChestMenu menu = new ChestMenu(Objects.requireNonNull(output.getDisplayName()));
         menu.setEmptySlotsClickable(false);
 
         menu.addItem(BACK, ChestMenuUtils.getBackButton(player, ""), (p, slot, item, action) -> {
@@ -193,28 +198,21 @@ public class InfinityCategory extends FlexCategory {
                 "&aLeft-Click to move 1 set",
                 "&aRight-Click to move as many sets as possible"
         ), (p, slot, item, action) -> {
-            if (action.isRightClicked()) {
-                makeRecipe(p, inv, id, 64);
-            } else {
-                makeRecipe(p, inv, id, 1);
-            }
+            makeRecipe(p, inv, pair, action.isRightClicked());
             return false;
         });
 
         int i = 0;
-        ItemStack[] recipe = InfinityRecipes.RECIPES.get(output);
-        if (recipe == null) return;
+        ItemStack[] recipe = pair.getSecondValue();
         for (int recipeSlot : RECIPE_SLOTS) {
             ItemStack recipeItem = recipe[i];
-
             if (recipeItem != null) {
-
                 menu.addItem(recipeSlot, recipeItem, (p, slot, item, action) -> {
                     SlimefunItem slimefunItem = SlimefunItem.getByItem(recipeItem);
 
                     if (slimefunItem != null ) {
                         if (slimefunItem.getRecipeType() == RecipeTypes.INFINITY_WORKBENCH) {
-                            openRecipeFromWorkBench(player, inv, InfinityRecipes.IDS.inverse().get(recipeItem));
+                            openRecipeFromWorkBench(player, inv, InfinityRecipes.STRINGS.get(slimefunItem.getId()));
                         }
                     }
                     return false;
@@ -235,56 +233,52 @@ public class InfinityCategory extends FlexCategory {
      *
      * @param player player
      * @param menu workbench menu
-     * @param id recipe id
-     * @param count times to repeat
      */
 
-    private static void makeRecipe(@Nonnull Player player, @Nonnull BlockMenu menu, int id, int count) {
-        ItemStack[] recipes = InfinityRecipes.RECIPES.get(InfinityRecipes.IDS.get(id));
-        if (recipes == null) {
-            InfinityExpansion.log(Level.WARNING, "Error getting recipe for Infinity Item: " + ItemUtils.getItemName(InfinityRecipes.IDS.get(id)), "Report this on Discord or Github!");
-            return;
-        }
-
-        menu.open(player);
+    private static void makeRecipe(@Nonnull Player player, @Nonnull BlockMenu menu, Pair<SlimefunItemStack, ItemStack[]> pair, boolean max) {
+        ItemStack[] recipe = pair.getSecondValue();
         PlayerInventory inv = player.getInventory();
 
-        for (int i = 0 ; i < count ; i++) {
-            int recipeSlot = 0;
-            for (ItemStack recipe : recipes) { //each item in recipe
-                String recipeID = StackUtils.getIDFromItem(recipe);
-                if (recipeID != null) { //not null
-                    for (ItemStack item : inv.getContents()) { //each slot in their inv
-                        if (Objects.equals(recipeID, StackUtils.getIDFromItem(item))) { //matches recipe
-                            //get item
-                            ItemStack output = item.clone();
-                            output.setAmount(1);
+        for (int i = 0 ; i < (max ? 64 : 1) ; i++) {
+            for (int slot = 0 ; slot < recipe.length ; slot++) { //each item in recipe
+                ItemStack recipeItem = recipe[slot];
 
-                            if (menu.fits(output, InfinityWorkbench.INPUT_SLOTS[recipeSlot])) {//not null and fits
-                                //remove item
-                                ItemUtils.consumeItem(item, 1, false);
+                if (recipeItem == null) {
+                    continue;
+                }
 
-                                //push item
-                                menu.pushItem(output, InfinityWorkbench.INPUT_SLOTS[recipeSlot]);
-                                break;
-                            }
+                ItemFilter filter = new ItemFilter(recipe[slot], FilterType.IGNORE_AMOUNT);
+
+                for (ItemStack item : inv.getContents()) { //each slot in their inv
+                    if (item != null && filter.matches(new ItemFilter(item, FilterType.IGNORE_AMOUNT), FilterType.IGNORE_AMOUNT)) { //matches recipe
+                        //get item
+                        ItemStack output = item.clone();
+                        output.setAmount(1);
+
+                        if (menu.fits(output, InfinityWorkbench.INPUT_SLOTS[slot])) {//not null and fits
+                            //remove item
+                            ItemUtils.consumeItem(item, 1, false);
+                            //push item
+                            menu.pushItem(output, InfinityWorkbench.INPUT_SLOTS[slot]);
+                            break;
                         }
                     }
                 }
-
-                recipeSlot++;
             }
         }
+        
+        menu.open(player);
+
     }
 
     private void openInfinityRecipe(@Nonnull Player player, int id, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
-        ItemStack output = InfinityRecipes.IDS.get(id);
-        if (output == null) {
-            InfinityExpansion.log(Level.WARNING, "Error opening recipe for Infinity Item id: " + id, "Report this on Discord or Github!");
+        Pair<SlimefunItemStack, ItemStack[]> pair = InfinityRecipes.IDS.get(id);
+        if (pair == null) {
+            PluginUtils.log(Level.WARNING, "Error opening recipe for Infinity Item id: " + id, "Report this on Discord or Github!");
             return;
         }
 
-        ChestMenu menu = new ChestMenu(ItemUtils.getItemName(output));
+        ChestMenu menu = new ChestMenu(Objects.requireNonNull(pair.getFirstValue().getDisplayName()));
         menu.setEmptySlotsClickable(false);
 
         menu.addItem(BACK, ChestMenuUtils.getBackButton(player, ""), (p, slot, item, action) -> {
@@ -305,16 +299,9 @@ public class InfinityCategory extends FlexCategory {
             return false;
         });
         
-        ItemStack[] recipe = InfinityRecipes.RECIPES.get(output);
-        
-        if (recipe == null) {
-            InfinityExpansion.log(Level.WARNING, "Error getting recipe for Infinity Item: " + ItemUtils.getItemName(output), "Report this on Discord or Github!");
-            return;
-        }
-
         int i = 0;
         for (int recipeSlot : RECIPE_SLOTS) {
-            ItemStack recipeItem = recipe[i];
+            ItemStack recipeItem = pair.getSecondValue()[i];
 
             if (recipeItem != null) {
 
@@ -323,7 +310,7 @@ public class InfinityCategory extends FlexCategory {
 
                     if (slimefunItem != null ) {
                         if (slimefunItem.getRecipeType() == RecipeTypes.INFINITY_WORKBENCH) {
-                            openInfinityRecipe(player, InfinityRecipes.IDS.inverse().get(recipeItem), playerProfile, slimefunGuideLayout);
+                            openInfinityRecipe(player, InfinityRecipes.STRINGS.get(StackUtils.getItemID(recipeItem, false)), playerProfile, slimefunGuideLayout);
                         } else {
                             openSlimefunRecipe(player, id, new SlimefunItem[] {slimefunItem}, playerProfile, slimefunGuideLayout);
                         }
@@ -339,10 +326,11 @@ public class InfinityCategory extends FlexCategory {
             return false;
         });
 
-        setupInfinityRecipeMenu(menu, output);
+        setupInfinityRecipeMenu(menu, pair.getFirstValue());
 
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
         menu.open(player);
+        
     }
 
     private void openSlimefunRecipe(@Nonnull Player player, int backID, @Nonnull SlimefunItem[] slimefunHistory, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
@@ -393,17 +381,19 @@ public class InfinityCategory extends FlexCategory {
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
         menu.open(player);
     }
+    
+    private static final ItemStack recipe = new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&aRecipe Type");
 
     private static void setupInfinityRecipeMenu(@Nonnull ChestMenu menu, @Nonnull ItemStack output) {
         for (int slot : BACKGROUND) {
             menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int slot : OUTPUT_BORDER) {
-            menu.addItem(slot, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            menu.addItem(slot, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         menu.addItem(OUTPUT, output, ChestMenuUtils.getEmptyClickHandler());
         for (int slot : WORKBENCH_BORDER) {
-            menu.addItem(slot, PresetUtils.craftedIn, ChestMenuUtils.getEmptyClickHandler());
+            menu.addItem(slot, recipe, ChestMenuUtils.getEmptyClickHandler());
         }
     }
 

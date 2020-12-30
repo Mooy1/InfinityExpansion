@@ -1,13 +1,13 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.gear.VeinMinerRune;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
+import io.github.mooy1.infinityexpansion.implementation.gear.VeinMinerRune;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.items.backpacks.SlimefunBackpack;
@@ -36,18 +36,18 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class ItemUpdater extends Container implements EnergyNetComponent {
+public class ItemUpdater extends AbstractContainer implements EnergyNetComponent {
 
     public static final int ENERGY = 200;
 
     private static final int[] OUTPUT_SLOTS = {
-            PresetUtils.slot3
+            MenuPreset.slot3
     };
     private static final int[] INPUT_SLOTS = {
-            PresetUtils.slot1
+            MenuPreset.slot1
     };
     private static final int INPUT_SLOT = INPUT_SLOTS[0];
-    private static final int STATUS_SLOT = PresetUtils.slot2;
+    private static final int STATUS_SLOT = MenuPreset.slot2;
 
     public ItemUpdater() {
         super(Categories.BASIC_MACHINES, Items.ITEM_UPDATER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -70,16 +70,16 @@ public class ItemUpdater extends Container implements EnergyNetComponent {
     }
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : PresetUtils.slotChunk3) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk3) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk2) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed,
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed,
                 ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -95,7 +95,7 @@ public class ItemUpdater extends Container implements EnergyNetComponent {
     }
     
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.hasViewer();
 
         ItemStack input = inv.getItemInSlot(INPUT_SLOT);
@@ -103,7 +103,7 @@ public class ItemUpdater extends Container implements EnergyNetComponent {
         if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
             return;
         }
@@ -111,7 +111,7 @@ public class ItemUpdater extends Container implements EnergyNetComponent {
         if (input == null) { //check input
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.inputAnItem);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.inputAnItem);
             }
             return;
         }
@@ -149,7 +149,7 @@ public class ItemUpdater extends Container implements EnergyNetComponent {
         if (!inv.fits(output, OUTPUT_SLOTS)) { //update
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
             return;
         }

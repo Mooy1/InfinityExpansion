@@ -1,17 +1,16 @@
 package io.github.mooy1.infinityexpansion.implementation.items;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.MathUtils;
-import io.github.mooy1.infinityexpansion.utils.MessageUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinityexpansion.utils.Utils;
+import io.github.mooy1.infinitylib.math.RandomUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -30,8 +29,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,18 +42,14 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class StrainerBase extends Container implements RecipeDisplayItem {
-
-    public static final int BASIC_SPEED = 1;
-    public static final int ADVANCED_SPEED = 5;
-    public static final int REINFORCED_SPEED = 20;
+public class StrainerBase extends AbstractContainer implements RecipeDisplayItem {
+    
     private static final int TIME = 48;
 
-    private static final int STATUS_SLOT = PresetUtils.slot1;
-    private static final int[] OUTPUT_SLOTS = PresetUtils.largeOutput;
-
+    private static final int STATUS_SLOT = MenuPreset.slot1;
+    private static final int[] OUTPUT_SLOTS = Utils.largeOutput;
     private static final int[] INPUT_SLOTS = {
-            PresetUtils.slot1 + 27
+            MenuPreset.slot1 + 27
     };
 
     private static final ItemStack[] OUTPUTS = {
@@ -95,16 +92,16 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
     }
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i + 27, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.largeOutputBorder) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : Utils.largeOutputBorder) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -120,9 +117,8 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
         if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
         }
-        String id = StackUtils.getIDFromItem(item);
-
-        if (id != null && id.endsWith("_STRAINER")) {
+        
+        if (getStrainer(item) > 0) {
             return INPUT_SLOTS;
         }
 
@@ -130,11 +126,12 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         boolean playerWatching = inv.hasViewer();
 
         //check water
         BlockData blockData = b.getBlockData();
+        
         if (blockData instanceof Waterlogged) {
             Waterlogged waterlogged = (Waterlogged) blockData;
 
@@ -152,19 +149,8 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
         //check input
 
         ItemStack strainer = inv.getItemInSlot(INPUT_SLOTS[0]);
-        SlimefunItem slimefunItem = SlimefunItem.getByItem(strainer);
-
-        if (slimefunItem == null) {
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a Strainer!"));
-            }
-
-            return;
-        }
-
-        int speed = getStrainer(slimefunItem.getId());
-
+        int speed = getStrainer(strainer);
+        
         if (speed == 0) {
 
             if (playerWatching) {
@@ -176,7 +162,7 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
 
         //progress
 
-        if (!MathUtils.chanceIn(TIME / speed)) {
+        if (!RandomUtils.chanceIn(TIME / speed)) {
 
             if (playerWatching) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
@@ -187,19 +173,18 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
 
         //fish
 
-        if (MathUtils.chanceIn(10000)) {
+        if (RandomUtils.chanceIn(10000)) {
             fish(inv);
         }
-
-
-        ItemStack output = MathUtils.randomOutput(OUTPUTS);
+        
+        ItemStack output = RandomUtils.randomOutput(OUTPUTS);
 
         //check fits
 
         if (!inv.fits(output, OUTPUT_SLOTS)) {
 
             if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
 
             return;
@@ -215,7 +200,7 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
 
         //reduce durability
 
-        if (MathUtils.chanceIn(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + (3 * strainer.getEnchantmentLevel(Enchantment.MENDING)) + 1)) {
+        if (RandomUtils.chanceIn(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + (3 * strainer.getEnchantmentLevel(Enchantment.MENDING)) + 1)) {
             ItemMeta itemMeta = strainer.getItemMeta();
             Damageable durability = (Damageable) itemMeta;
             
@@ -240,13 +225,20 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
     /**
      * This method gets the speed of strainer from its id
      *
-     * @param id id of strainer
      * @return speed
      */
-    private static int getStrainer(@Nonnull String id) {
-        if (id.equals("BASIC_STRAINER")) return BASIC_SPEED;
-        if (id.equals("ADVANCED_STRAINER")) return ADVANCED_SPEED;
-        if (id.equals("REINFORCED_STRAINER")) return REINFORCED_SPEED;
+    private static int getStrainer(@Nullable ItemStack item) {
+        if (item != null) {
+            ItemMeta meta = item.getItemMeta();
+
+            if (meta != null) {
+                Integer speed = meta.getPersistentDataContainer().get(Strainer.KEY, PersistentDataType.INTEGER);
+                if (speed != null) {
+                    return speed;
+                }
+            }
+        }
+        
         return 0;
     }
 
@@ -260,7 +252,6 @@ public class StrainerBase extends Container implements RecipeDisplayItem {
     private static void fish(BlockMenu inv) {
         if (inv.fits(potato, OUTPUT_SLOTS)) {
             inv.pushItem(potato, OUTPUT_SLOTS);
-
             MessageUtils.messagePlayersInInv(inv, ChatColor.YELLOW + "You caught a lucky fish! ... potato?");
         }
     }

@@ -3,7 +3,7 @@ package io.github.mooy1.infinityexpansion.implementation.mobdata;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.Crafter;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -35,20 +35,18 @@ public class MobDataInfuser extends Crafter implements EnergyNetComponent {
     @Override
     public SlimefunItemStack[] getOutputs() {
         List<SlimefunItemStack> OUTPUTS = new ArrayList<>();
-        for (MobDataCard card : MobDataCard.CARDS) {
-            OUTPUTS.add((SlimefunItemStack) card.getItem());
+        for (MobDataCard.Type card : MobDataCard.CARDS.values()) {
+            OUTPUTS.add(card.getItem());
         }
-        
         return OUTPUTS.toArray(new SlimefunItemStack[0]);
     }
 
     @Override
     public ItemStack[][] getRecipes() {
         List<ItemStack[]> recipes = new ArrayList<>();
-        for (MobDataCard card : MobDataCard.CARDS) {
+        for (MobDataCard.Type card : MobDataCard.CARDS.values()) {
             recipes.add(card.getRecipe());
         }
-        
         return recipes.toArray(new ItemStack[0][]);
     }
 
@@ -66,7 +64,7 @@ public class MobDataInfuser extends Crafter implements EnergyNetComponent {
     @Nullable
     @Override
     public ItemStack preCraftItem(@Nonnull Location l, @Nonnull BlockMenu inv) {
-        return PresetUtils.notEnoughEnergy;
+        return MenuPreset.notEnoughEnergy;
     }
 
     @Override
@@ -84,4 +82,5 @@ public class MobDataInfuser extends Crafter implements EnergyNetComponent {
     public int getCapacity() {
         return ENERGY;
     }
+    
 }

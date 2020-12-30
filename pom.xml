@@ -90,6 +90,12 @@
             <version>1.7</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.mooy1</groupId>
+            <artifactId>InfinityLib</artifactId>
+            <version>4c37d7b</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -123,6 +129,10 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>io.github.mooy1.infinityexpansion.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.github.mooy1.infinitylib</pattern>
+                            <shadedPattern>io.github.mooy1.slimegrid.infinitylib</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

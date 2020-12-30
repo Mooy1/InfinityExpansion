@@ -1,11 +1,12 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Container;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.MathUtils;
-import io.github.mooy1.infinityexpansion.utils.PresetUtils;
-import io.github.mooy1.infinityexpansion.utils.StackUtils;
+import io.github.mooy1.infinitylib.filter.FilterType;
+import io.github.mooy1.infinitylib.filter.ItemFilter;
+import io.github.mooy1.infinitylib.math.RandomUtils;
+import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -30,15 +31,15 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Machines that convert 1 item to another with energy
  *
  * @author Mooy1
  */
-public class ConversionMachine extends Container implements RecipeDisplayItem, EnergyNetComponent {
+public class ConversionMachine extends AbstractContainer implements RecipeDisplayItem, EnergyNetComponent {
 
     public static final int TIME = 4;
     public static final int FREEZER_SPEED = 2;
@@ -49,10 +50,12 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
     public static final int DUST_ENERGY = 300;
     public static final int DECOM_SPEED = 4;
     public static final int DECOM_ENERGY = 180;
-    private static final int[] INPUT_SLOTS = {PresetUtils.slot1};
-    private static final int[] OUTPUT_SLOTS = {PresetUtils.slot3};
-    private static final int STATUS_SLOT = PresetUtils.slot2;
+    private static final int[] INPUT_SLOTS = {MenuPreset.slot1};
+    private static final int[] OUTPUT_SLOTS = {MenuPreset.slot3};
+    private static final int STATUS_SLOT = MenuPreset.slot2;
     private final Type type;
+    
+    private final HashMap<Location, Integer> progress = new HashMap<>();
 
     public ConversionMachine(Type type) {
         super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
@@ -61,36 +64,36 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
+            this.progress.remove(b.getLocation());
+
             if (inv != null) {
                 Location l = b.getLocation();
                 inv.dropItems(l, OUTPUT_SLOTS);
                 inv.dropItems(l, INPUT_SLOTS);
             }
 
-            setProgress(b, 0);
+            this.progress.remove(b.getLocation());
 
             return true;
         });
     }
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : PresetUtils.slotChunk1) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk2) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk2) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : PresetUtils.slotChunk3) {
-            blockMenuPreset.addItem(i, PresetUtils.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.slotChunk3) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, PresetUtils.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        if (getProgress(b) == null) {
-            setProgress(b, 0);
-        }
+        this.progress.put(b.getLocation(), 0);
     }
 
     @Override
@@ -105,22 +108,22 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull Location l, @Nonnull BlockMenu inv) {
+    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         int energy = this.type.getEnergy();
-        int charge = getCharge(l);
-        boolean playerWatching = inv.hasViewer();
+        int charge = getCharge(b.getLocation());
 
         if (charge < energy) { //not enough energy
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughEnergy);
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
             return;
         }
+        
         ItemStack input = inv.getItemInSlot(INPUT_SLOTS[0]);
 
         if (input == null) {
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.inputAnItem);
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.inputAnItem);
             }
             return;
         }
@@ -128,41 +131,35 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
         ItemStack output = getOutput(input);
 
         if (output == null) {
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.invalidInput);
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidInput);
             }
             return;
         }
 
-        int progress = Integer.parseInt(getProgress(b));
+        int progress = this.progress.computeIfAbsent(b.getLocation(), k -> 0);
+        
         if (progress < TIME) {
-
             inv.consumeItem(INPUT_SLOTS[0], 1);
-            setProgress(b, progress + this.type.getSpeed());
-            removeCharge(l, energy);
-            if (playerWatching) {
+            this.progress.put(b.getLocation(), progress + this.type.getSpeed());
+            removeCharge(b.getLocation(), energy);
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverting..."));
             }
             return;
         }
 
         if (inv.fits(output, OUTPUT_SLOTS)) {
-            try {
-                inv.consumeItem(INPUT_SLOTS[0], 1);
-                inv.pushItem(output, OUTPUT_SLOTS);
-                removeCharge(l, energy);
-                setProgress(b, this.type.getSpeed());
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverted!"));
-                }
-
-            } catch (NullPointerException ignored) { }
-
-        } else {
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, PresetUtils.notEnoughRoom);
+            inv.pushItem(output, OUTPUT_SLOTS);
+            removeCharge(b.getLocation(), energy);
+            inv.consumeItem(INPUT_SLOTS[0], 1);
+            this.progress.put(b.getLocation(), this.type.getSpeed());
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverted!"));
             }
+
+        } else if (inv.hasViewer()) {
+            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
         }
     }
 
@@ -182,18 +179,18 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack[] inputs = this.type.getInput();
+        ItemFilter[] inputs = this.type.getInput();
         ItemStack[] outputs = this.type.getOutput();
 
         if (inputs.length == outputs.length) { //1 to 1
             for (int i = 0 ; i < inputs.length ; i++) {
-                items.add(inputs[i]);
+                items.add(inputs[i].getItem());
                 items.add(outputs[i]);
             }
         } else { //each input gets each output
-            for (ItemStack input : inputs) {
+            for (ItemFilter input : inputs) {
                 for (ItemStack output : outputs) {
-                    items.add(input);
+                    items.add(input.getItem());
                     items.add(output);
                 }
             }
@@ -205,10 +202,10 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
     @Nullable
     private ItemStack getOutput(@Nonnull ItemStack input) {
         int i = 0;
-        for (ItemStack correctInput : this.type.getInput()) {
-            if (Objects.equals(StackUtils.getIDFromItem(input), StackUtils.getIDFromItem(correctInput))) {
+        for (ItemFilter filter : this.type.getInput()) {
+            if (filter.matches(new ItemFilter(input, FilterType.MIN_AMOUNT), FilterType.MIN_AMOUNT)) {
                 if (this.type.isRandom()) {
-                    return MathUtils.randomOutput(this.type.getOutput());
+                    return RandomUtils.randomOutput(this.type.getOutput());
                 } else {
                     return this.type.output[i].clone();
                 }
@@ -217,14 +214,6 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
             i++;
         }
         return null;
-    }
-
-    private void setProgress(Block b, int progress) {
-        BlockStorage.addBlockInfo(b.getLocation(), "progress", String.valueOf(progress));
-    }
-
-    private String getProgress(Block b) {
-        return BlockStorage.getLocationInfo(b.getLocation(), "progress");
     }
 
     @Getter
@@ -261,28 +250,28 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
         private final SlimefunItemStack item;
         private final int energy;
         private final int speed;
-        private final ItemStack[] input;
+        private final ItemFilter[] input;
         private final ItemStack[] output;
         private final RecipeType recipeType;
         private final ItemStack[] recipe;
         private final boolean random;
     }
 
-    private static final ItemStack[] URANIUM_INPUT = {
-            new ItemStack(Material.COBBLESTONE),
-            new ItemStack(Material.ANDESITE),
-            new ItemStack(Material.STONE),
-            new ItemStack(Material.DIORITE),
-            new ItemStack(Material.GRANITE)
+    private static final ItemFilter[] URANIUM_INPUT = {
+            new ItemFilter(Material.COBBLESTONE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.ANDESITE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.STONE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.DIORITE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.GRANITE, 1, FilterType.MIN_AMOUNT)
     };
 
     private static final ItemStack[] URANIUM_OUTPUT = {
             SlimefunItems.SMALL_URANIUM
     };
 
-    private static final ItemStack[] FREEZER_INPUT = {
-            new ItemStack(Material.ICE),
-            new ItemStack(Material.MAGMA_BLOCK)
+    private static final ItemFilter[] FREEZER_INPUT = {
+            new ItemFilter(Material.ICE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.MAGMA_BLOCK, 1, FilterType.MIN_AMOUNT)
     };
 
     private static final ItemStack[] FREEZER_OUTPUT = {
@@ -290,12 +279,12 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
             SlimefunItems.NETHER_ICE_COOLANT_CELL
     };
 
-    private static final ItemStack[] DUST_INPUT = {
-            new ItemStack(Material.COBBLESTONE),
-            new ItemStack(Material.ANDESITE),
-            new ItemStack(Material.STONE),
-            new ItemStack(Material.DIORITE),
-            new ItemStack(Material.GRANITE)
+    private static final ItemFilter[] DUST_INPUT = {
+            new ItemFilter(Material.COBBLESTONE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.ANDESITE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.STONE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.DIORITE, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.GRANITE, 1, FilterType.MIN_AMOUNT)
     };
 
     private static final ItemStack[] DUST_OUTPUT = {
@@ -307,24 +296,24 @@ public class ConversionMachine extends Container implements RecipeDisplayItem, E
             new SlimefunItemStack(SlimefunItems.SILVER_DUST, 2),
             new SlimefunItemStack(SlimefunItems.GOLD_DUST, 2),
             new SlimefunItemStack(SlimefunItems.IRON_DUST, 2),
-            new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 2),
+            new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 2)
     };
 
-    private static final ItemStack[] DECOM_INPUT = {
-            new ItemStack(Material.EMERALD_BLOCK),
-            new ItemStack(Material.DIAMOND_BLOCK),
-            new ItemStack(Material.GOLD_BLOCK),
-            new ItemStack(Material.IRON_BLOCK),
-            new ItemStack(Material.NETHERITE_BLOCK),
-            new ItemStack(Material.REDSTONE_BLOCK),
-            new ItemStack(Material.QUARTZ_BLOCK),
-            new ItemStack(Material.LAPIS_BLOCK),
-            new ItemStack(Material.COAL_BLOCK),
-            Items.COMPRESSED_COBBLESTONE_5,
-            Items.COMPRESSED_COBBLESTONE_4,
-            Items.COMPRESSED_COBBLESTONE_3,
-            Items.COMPRESSED_COBBLESTONE_2,
-            Items.COMPRESSED_COBBLESTONE_1,
+    private static final ItemFilter[] DECOM_INPUT = {
+            new ItemFilter(Material.EMERALD_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.DIAMOND_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.GOLD_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.IRON_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.NETHERITE_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.REDSTONE_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.QUARTZ_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.LAPIS_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.COAL_BLOCK, 1, FilterType.MIN_AMOUNT),
+            new ItemFilter(Items.COMPRESSED_COBBLESTONE_5, FilterType.MIN_AMOUNT),
+            new ItemFilter(Items.COMPRESSED_COBBLESTONE_4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Items.COMPRESSED_COBBLESTONE_3, FilterType.MIN_AMOUNT),
+            new ItemFilter(Items.COMPRESSED_COBBLESTONE_2, FilterType.MIN_AMOUNT),
+            new ItemFilter(Items.COMPRESSED_COBBLESTONE_1, FilterType.MIN_AMOUNT)
     };
 
     private static final ItemStack[] DECOM_OUTPUT = {

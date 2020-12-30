@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.utils;
 
+import io.github.mooy1.infinitylib.items.LoreUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,8 +36,8 @@ public final class RecipeUtils {
         lore.add(ChatColor.GREEN + "-------------------");
         lore.add(ChatColor.GREEN + "\u21E8 Click to craft");
         lore.add(ChatColor.GREEN + "-------------------");
-
-        StackUtils.addLore(output, lore);
+        
+        LoreUtils.addLore(output, lore);
 
         return output;
     }
