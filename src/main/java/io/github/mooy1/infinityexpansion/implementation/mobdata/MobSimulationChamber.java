@@ -76,7 +76,7 @@ public class MobSimulationChamber extends AbstractContainer implements EnergyNet
             return;
         }
         
-        int energy = card.getEnergy() + ENERGY;
+        int energy = card.energy + ENERGY;
         
         if (getCharge(b.getLocation()) < energy) {
             if (inv.hasViewer()) {
@@ -93,16 +93,15 @@ public class MobSimulationChamber extends AbstractContainer implements EnergyNet
         if (!InfinityExpansion.progressEvery(INTERVAL)) return;
         
         if (RandomUtils.chanceIn(CHANCE)) {
-            int xp = getXP(b.getLocation()) + card.getXp();
+            int xp = getXP(b.getLocation()) + card.xp;
             setXp(b.getLocation(), xp);
         }
         
-        for (Map.Entry<Integer, ItemStack> entry : card.getDrops().entrySet()) {
+        for (Map.Entry<Integer, ItemStack> entry : card.drops.entrySet()) {
             if (RandomUtils.chanceIn(entry.getKey())) {
                 ItemStack output = entry.getValue();
                 if (inv.fits(output, OUTPUT_SLOTS)) {
-                    output = output.clone();
-                    inv.pushItem(output, OUTPUT_SLOTS);
+                    inv.pushItem(output.clone(), OUTPUT_SLOTS);
                 } else if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
                 }

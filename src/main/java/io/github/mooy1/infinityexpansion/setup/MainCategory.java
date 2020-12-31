@@ -24,10 +24,10 @@ import java.util.List;
  * @author Mooy1
  * 
  */
-public class MainCategory extends FlexCategory {
+public final class MainCategory extends FlexCategory {
     
     public final List<Category> categories = new ArrayList<>();
-
+    
     public MainCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
     }

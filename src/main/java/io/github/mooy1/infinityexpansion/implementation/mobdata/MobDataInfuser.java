@@ -36,7 +36,7 @@ public class MobDataInfuser extends Crafter implements EnergyNetComponent {
     public SlimefunItemStack[] getOutputs() {
         List<SlimefunItemStack> OUTPUTS = new ArrayList<>();
         for (MobDataCard.Type card : MobDataCard.CARDS.values()) {
-            OUTPUTS.add(card.getItem());
+            OUTPUTS.add(card.item);
         }
         return OUTPUTS.toArray(new SlimefunItemStack[0]);
     }
@@ -45,7 +45,7 @@ public class MobDataInfuser extends Crafter implements EnergyNetComponent {
     public ItemStack[][] getRecipes() {
         List<ItemStack[]> recipes = new ArrayList<>();
         for (MobDataCard.Type card : MobDataCard.CARDS.values()) {
-            recipes.add(card.getRecipe());
+            recipes.add(card.recipe);
         }
         return recipes.toArray(new ItemStack[0][]);
     }

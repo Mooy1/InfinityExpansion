@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion;
 
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
-import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
+import io.github.mooy1.infinityexpansion.implementation.blocks.StorageUnit;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.setup.Setup;
 import io.github.mooy1.infinityexpansion.setup.commands.Changelog;
@@ -34,32 +34,26 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Override
     public void onEnable() {
         instance = this;
-
-        //config
+        
         PluginUtils.setup(this, "Mooy1/InfinityExpansion/master", getFile());
         MessageUtils.setPrefix(ChatColor.DARK_GRAY + "[" + ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion" + ChatColor.DARK_GRAY + "]" + ChatColor.WHITE + " ");
         new CommandLib(this, "infinityexpansion", "infinityexpansion.admin", "/ie, /ix, /infinity");
         CommandLib.addCommands(new Changelog(), new GiveRecipe(), new ResetConfig());
         setupConfigOptions(getConfig());
         
-        //stats
         @SuppressWarnings("unused")
         final Metrics metrics = new Metrics(this, 8991);
         
-        //items
+        InfinityRecipes.preItems();
+        
         Setup.setup(this);
-
-        //set enabled infinity recipes
-        InfinityRecipes.setup(this);
-
-        //spam console
+        
+        InfinityRecipes.postItems(this);
+        
         for (String line : getChangeLog()) {
             getLogger().log(Level.INFO, line);
         }
         
-        PluginUtils.runSync(() -> PluginUtils.log("Infinity Expansion will soon be moving some content to another addon! keep an eye out for its release!"), 300);
-        
-        //ticker
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             if (currentTick < 60) {
                 currentTick++;

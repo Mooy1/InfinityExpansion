@@ -12,9 +12,9 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class HiddenCategory extends Category {
+public class SubCategory extends Category {
     
-    public HiddenCategory(NamespacedKey key, ItemStack item, int tier) {
+    public SubCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
     }
 

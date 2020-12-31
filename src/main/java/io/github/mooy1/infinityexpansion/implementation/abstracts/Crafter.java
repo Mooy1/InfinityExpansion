@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
 import io.github.mooy1.infinitylib.filter.FilterType;
+import io.github.mooy1.infinitylib.filter.ItemFilter;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
@@ -61,6 +62,8 @@ public abstract class Crafter extends AbstractContainer {
             14, 32
     };
     private static final int STATUS_SLOT = 23;
+    
+    private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemFilter[9]).hashCode();
     
     public Crafter(Category category, SlimefunItemStack stack, RecipeType recipeType, ItemStack[] recipe) {
         super(category, stack, recipeType, recipe);
@@ -189,6 +192,10 @@ public abstract class Crafter extends AbstractContainer {
     private Pair<SlimefunItemStack, int[]> getOutput(@Nonnull BlockMenu inv) {
         
         MultiFilter input = MultiFilter.fromMenu(FilterType.MIN_AMOUNT, inv, INPUT_SLOTS);
+        
+        if (input.hashCode() == EMPTY) {
+            return null;
+        }
 
         SlimefunItemStack output = this.recipes.get(input);
         

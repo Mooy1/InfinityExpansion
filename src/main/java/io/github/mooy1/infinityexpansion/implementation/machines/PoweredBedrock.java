@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
  */
 public class PoweredBedrock extends SlimefunItem implements EnergyNetComponent {
 
-    public static final int ENERGY = 30_000;
+    public static final int ENERGY = 10_000;
 
     public PoweredBedrock() {
         super (Categories.INFINITY_CHEAT, Items.POWERED_BEDROCK, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.POWERED_BEDROCK));

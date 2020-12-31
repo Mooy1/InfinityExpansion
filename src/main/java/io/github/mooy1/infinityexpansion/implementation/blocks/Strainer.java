@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.items;
+package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.lists.Items;

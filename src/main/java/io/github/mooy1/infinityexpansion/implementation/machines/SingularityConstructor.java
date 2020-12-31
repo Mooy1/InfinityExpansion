@@ -45,7 +45,7 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
     public static final int BASIC_ENERGY = 120;
     public static final int BASIC_SPEED = 1;
     public static final int INFINITY_ENERGY = 1200;
-    public static final int INFINITY_SPEED = 10;
+    public static final int INFINITY_SPEED = 32;
 
     private final Type type;
     private static final int STATUS_SLOT = 13;

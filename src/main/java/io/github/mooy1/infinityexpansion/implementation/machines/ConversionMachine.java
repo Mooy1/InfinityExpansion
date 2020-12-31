@@ -14,7 +14,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -22,6 +21,7 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -40,8 +39,7 @@ import java.util.List;
  * @author Mooy1
  */
 public class ConversionMachine extends AbstractContainer implements RecipeDisplayItem, EnergyNetComponent {
-
-    public static final int TIME = 4;
+    
     public static final int FREEZER_SPEED = 2;
     public static final int FREEZER_ENERGY = 120;
     public static final int URANIUM_SPEED = 1;
@@ -49,30 +47,24 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
     public static final int DUST_SPEED = 4;
     public static final int DUST_ENERGY = 300;
     public static final int DECOM_SPEED = 4;
-    public static final int DECOM_ENERGY = 180;
+    public static final int DECOM_ENERGY = 90;
     private static final int[] INPUT_SLOTS = {MenuPreset.slot1};
     private static final int[] OUTPUT_SLOTS = {MenuPreset.slot3};
     private static final int STATUS_SLOT = MenuPreset.slot2;
     private final Type type;
-    
-    private final HashMap<Location, Integer> progress = new HashMap<>();
 
     public ConversionMachine(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
+        super(type.category, type.item, type.recipeType, type.recipe);
         this.type = type;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
-
-            this.progress.remove(b.getLocation());
-
+            
             if (inv != null) {
                 Location l = b.getLocation();
                 inv.dropItems(l, OUTPUT_SLOTS);
                 inv.dropItems(l, INPUT_SLOTS);
             }
-
-            this.progress.remove(b.getLocation());
 
             return true;
         });
@@ -92,11 +84,6 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
     }
 
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        this.progress.put(b.getLocation(), 0);
-    }
-
-    @Override
     public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
         if (flow == ItemTransportFlow.INSERT) {
             return INPUT_SLOTS;
@@ -109,10 +96,9 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
 
     @Override
     public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        int energy = this.type.getEnergy();
-        int charge = getCharge(b.getLocation());
+        int energy = this.type.energy;
 
-        if (charge < energy) { //not enough energy
+        if (getCharge(b.getLocation()) < energy) { //not enough energy
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
@@ -128,34 +114,21 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
             return;
         }
 
-        ItemStack output = getOutput(input);
+        Pair<ItemStack, Integer> pair = getOutput(input);
 
-        if (output == null) {
+        if (pair == null) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidInput);
             }
             return;
         }
-
-        int progress = this.progress.computeIfAbsent(b.getLocation(), k -> 0);
         
-        if (progress < TIME) {
-            inv.consumeItem(INPUT_SLOTS[0], 1);
-            this.progress.put(b.getLocation(), progress + this.type.getSpeed());
+        if (inv.fits(pair.getFirstValue(), OUTPUT_SLOTS)) {
+            inv.consumeItem(INPUT_SLOTS[0], pair.getSecondValue());
+            inv.pushItem(pair.getFirstValue(), OUTPUT_SLOTS);
             removeCharge(b.getLocation(), energy);
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverting..."));
-            }
-            return;
-        }
-
-        if (inv.fits(output, OUTPUT_SLOTS)) {
-            inv.pushItem(output, OUTPUT_SLOTS);
-            removeCharge(b.getLocation(), energy);
-            inv.consumeItem(INPUT_SLOTS[0], 1);
-            this.progress.put(b.getLocation(), this.type.getSpeed());
-            if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverted!"));
             }
 
         } else if (inv.hasViewer()) {
@@ -171,7 +144,7 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
 
     @Override
     public int getCapacity() {
-        return this.type.getEnergy() * 2;
+        return this.type.energy;
     }
 
     @Nonnull
@@ -179,8 +152,8 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemFilter[] inputs = this.type.getInput();
-        ItemStack[] outputs = this.type.getOutput();
+        ItemFilter[] inputs = this.type.input;
+        ItemStack[] outputs = this.type.output;
 
         if (inputs.length == outputs.length) { //1 to 1
             for (int i = 0 ; i < inputs.length ; i++) {
@@ -200,69 +173,66 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
     }
 
     @Nullable
-    private ItemStack getOutput(@Nonnull ItemStack input) {
-        int i = 0;
-        for (ItemFilter filter : this.type.getInput()) {
-            if (filter.matches(new ItemFilter(input, FilterType.MIN_AMOUNT), FilterType.MIN_AMOUNT)) {
-                if (this.type.isRandom()) {
-                    return RandomUtils.randomOutput(this.type.getOutput());
+    private Pair<ItemStack, Integer> getOutput(@Nonnull ItemStack input) {
+        for (int i = 0 ; i < this.type.input.length ; i ++) {
+            ItemFilter filter = this.type.input[i];
+            if (filter.fits(new ItemFilter(input, FilterType.MIN_AMOUNT), FilterType.MIN_AMOUNT)) {
+                if (this.type.random) {
+                    return new Pair<>(RandomUtils.randomOutput(this.type.output), filter.getAmount());
                 } else {
-                    return this.type.output[i].clone();
+                    return new Pair<>(this.type.output[i].clone(), filter.getAmount());
                 }
 
             }
-            i++;
         }
         return null;
     }
-
-    @Getter
+    
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Type {
-        FREEZER(Categories.ADVANCED_MACHINES, Items.EXTREME_FREEZER, FREEZER_ENERGY, FREEZER_SPEED, FREEZER_INPUT, FREEZER_OUTPUT,
+        FREEZER(Categories.ADVANCED_MACHINES, Items.EXTREME_FREEZER, FREEZER_ENERGY, FREEZER_INPUT, FREEZER_OUTPUT,
                 RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                         SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2,
                         new ItemStack(Material.WATER_BUCKET), SlimefunItems.FLUID_PUMP, new ItemStack(Material.WATER_BUCKET),
                         Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
                 }, false),
-        DECOM(Categories.ADVANCED_MACHINES, Items.DECOMPRESSOR, DECOM_ENERGY, DECOM_SPEED, DECOM_INPUT, DECOM_OUTPUT,
+        DECOM(Categories.ADVANCED_MACHINES, Items.DECOMPRESSOR, DECOM_ENERGY, DECOM_INPUT, DECOM_OUTPUT,
                 RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                         Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
                         new ItemStack(Material.STICKY_PISTON), SlimefunItems.ELECTRIC_PRESS_2, new ItemStack(Material.STICKY_PISTON),
                         Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
                 }, false),
-        DUST(Categories.ADVANCED_MACHINES, Items.DUST_EXTRACTOR, DUST_ENERGY, DUST_SPEED, DUST_INPUT, DUST_OUTPUT,
+        DUST(Categories.ADVANCED_MACHINES, Items.DUST_EXTRACTOR, DUST_ENERGY, DUST_INPUT, DUST_OUTPUT,
                 RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
         }, true),
-        URANIUM(Categories.ADVANCED_MACHINES, Items.URANIUM_EXTRACTOR, URANIUM_ENERGY, URANIUM_SPEED, URANIUM_INPUT, URANIUM_OUTPUT,
+        URANIUM(Categories.ADVANCED_MACHINES, Items.URANIUM_EXTRACTOR, URANIUM_ENERGY, URANIUM_INPUT, URANIUM_OUTPUT,
                 RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                         SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2,
                         SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3, SlimefunItems.AUTOMATED_CRAFTING_CHAMBER,
                         Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
                 }, false);
 
-
-        @Nonnull
+        
         private final Category category;
         private final SlimefunItemStack item;
         private final int energy;
-        private final int speed;
         private final ItemFilter[] input;
         private final ItemStack[] output;
         private final RecipeType recipeType;
         private final ItemStack[] recipe;
         private final boolean random;
+        
     }
 
     private static final ItemFilter[] URANIUM_INPUT = {
-            new ItemFilter(Material.COBBLESTONE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.ANDESITE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.STONE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.DIORITE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.GRANITE, 1, FilterType.MIN_AMOUNT)
+            new ItemFilter(Material.COBBLESTONE, 4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.ANDESITE, 4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.STONE, 4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.DIORITE, 4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.GRANITE, 4, FilterType.MIN_AMOUNT)
     };
 
     private static final ItemStack[] URANIUM_OUTPUT = {
@@ -270,8 +240,8 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
     };
 
     private static final ItemFilter[] FREEZER_INPUT = {
-            new ItemFilter(Material.ICE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.MAGMA_BLOCK, 1, FilterType.MIN_AMOUNT)
+            new ItemFilter(Material.ICE, 2, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.MAGMA_BLOCK, 2, FilterType.MIN_AMOUNT)
     };
 
     private static final ItemStack[] FREEZER_OUTPUT = {
@@ -280,11 +250,11 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
     };
 
     private static final ItemFilter[] DUST_INPUT = {
-            new ItemFilter(Material.COBBLESTONE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.ANDESITE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.STONE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.DIORITE, 1, FilterType.MIN_AMOUNT),
-            new ItemFilter(Material.GRANITE, 1, FilterType.MIN_AMOUNT)
+            new ItemFilter(Material.COBBLESTONE, 4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.ANDESITE, 4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.STONE, 4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.DIORITE, 4, FilterType.MIN_AMOUNT),
+            new ItemFilter(Material.GRANITE, 4, FilterType.MIN_AMOUNT)
     };
 
     private static final ItemStack[] DUST_OUTPUT = {

@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.machines;
+package io.github.mooy1.infinityexpansion.implementation.generators;
 
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;

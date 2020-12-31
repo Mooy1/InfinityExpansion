@@ -7,6 +7,7 @@ import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.general.LocationUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.math.RandomUtils;
+import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -31,7 +32,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A VeinMiner rune, most code from {@link SoulboundRune}
@@ -61,7 +62,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
     private static final int MAX = 64;
     private static final long CD = 1000;
     private static NamespacedKey key = null;
-    private static final Map<Player, Long> CDS = new HashMap<>();
+    private static final Map<UUID, Long> CDS = new HashMap<>();
     private static final String[] LORE = {"", ChatColor.AQUA + "Veinminer - Crouch to use"};
     private static final Set<String> ALLOWED = new HashSet<>(Arrays.asList(
             "_ORE", "_LOG", "_WOOD", "GILDED", "SOUL", "GRAVEL",
@@ -76,7 +77,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
                 new ItemStack(Material.REDSTONE_ORE), SlimefunItems.BLANK_RUNE, new ItemStack(Material.LAPIS_ORE),
                 Items.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, Items.MAGSTEEL,
         });
-        
+        new LeaveListener(CDS);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         key = new NamespacedKey(plugin, "vein_miner");
     }
@@ -207,11 +208,12 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
 
         if (BlockStorage.hasBlockInfo(l)) return;
 
-        if (CDS.containsKey(p) && System.currentTimeMillis() - CDS.get(p) < CD) {
-            MessageUtils.messageWithCD(p, 500, ChatColor.GOLD + "Wait " + ChatColor.YELLOW + (CD - (System.currentTimeMillis() - CDS.get(p))) + ChatColor.GOLD + " ms before using again!");
+        Long prev = CDS.get(p.getUniqueId());
+        if (prev != null && System.currentTimeMillis() - prev < CD) {
+            MessageUtils.messageWithCD(p, 500, ChatColor.GOLD + "Wait " + ChatColor.YELLOW + (CD - (System.currentTimeMillis() - prev)) + ChatColor.GOLD + " ms before using again!");
             return;
         }
-        CDS.put(p, System.currentTimeMillis());
+        CDS.put(p.getUniqueId(), System.currentTimeMillis());
         
         Set<Block> found = new HashSet<>();
         Set<Location> checked = new HashSet<>();
@@ -271,11 +273,6 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
                 getVein(checked, found, check, check.getBlock());
             }
         }
-    }
-    
-    @EventHandler
-    private void onPlayerLeave(PlayerQuitEvent e) {
-        CDS.remove(e.getPlayer());
     }
     
 }

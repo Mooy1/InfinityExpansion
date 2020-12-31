@@ -41,13 +41,13 @@ public class VoidHarvester extends AbstractContainer implements EnergyNetCompone
     public static final int BASIC_ENERGY = 120;
     public static final int BASIC_SPEED = 1;
     public static final int INFINITY_ENERGY = 1200;
-    public static final int INFINITY_SPEED = 10;
+    public static final int INFINITY_SPEED = 32;
 
     private static final int[] OUTPUT_SLOTS = {
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 1000;
+    private static final int TIME = 960;
 
     private final Type type;
 

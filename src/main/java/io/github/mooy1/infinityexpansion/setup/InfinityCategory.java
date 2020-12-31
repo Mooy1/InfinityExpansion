@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.setup;
 
-import io.github.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
@@ -8,13 +8,14 @@ import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.filter.FilterType;
 import io.github.mooy1.infinitylib.filter.ItemFilter;
-import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import lombok.AllArgsConstructor;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -27,11 +28,17 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -39,9 +46,9 @@ import java.util.logging.Level;
  *
  * @author Mooy1
  */
-public class InfinityCategory extends FlexCategory {
+public class InfinityCategory extends FlexCategory implements Listener {
 
-    private static final int[] RECIPE_SLOTS = {
+    private static final int[] INFINITY_RECIPE_SLOTS = {
             1, 2, 3, 4, 5, 6,
             10, 11, 12, 13, 14, 15,
             19, 20, 21, 22, 23, 24,
@@ -58,25 +65,34 @@ public class InfinityCategory extends FlexCategory {
     private static final int NORMAL_RECIPE_OUTPUT = 25;
     private static final int[] NORMAL_RECIPE_BACKGROUND = {
             1, 2, 3, 4, 5, 6, 7, 8,
-            36, 37, 38 ,39 ,40, 41 ,42 ,43, 44
+            36, 37, 38, 39, 40, 41, 42, 43, 44
     };
-    private static final int[] OUTPUT_BORDER = {
+    private static final int[] INFINITY_OUTPUT_BORDER = {
             25, 26, 34, 43, 44
     };
-    private static final int[] BACKGROUND = {
-            9, 18, 27, 36, 52
+    private static final int[] INFINITY_BACKGROUND = {
+            9, 18, 27, 36, 53
     };
-    private static final int OUTPUT = 35;
+    private static final int INFINITY_OUTPUT = 35;
     private static final int BACK = 0;
-    private static final int PREVIOUS = 45;
-    private static final int NEXT = 53;
-    private static final int WORKBENCH = 8;
+    private static final int NEXT = 52;
+    private static final int PREV = 45;
+    private static final int INFINITY_BENCH = 8;
     private static final int[] WORKBENCH_BORDER = {
             7, 16, 17
     };
+    private static final ItemStack BENCH = new CustomItem(Material.NETHER_STAR,
+            "&bCreate the recipe from items in your inventory: ",
+            "&aLeft-Click to move 1 set",
+            "&aRight-Click to move as many sets as possible"
+    );
+    private static final ItemStack INFO = new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&3Info");
+    
+    private static final HashMap<UUID, String> history = new HashMap<>();
 
     public InfinityCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
+        new LeaveListener(history);
     }
 
     @Override
@@ -86,156 +102,168 @@ public class InfinityCategory extends FlexCategory {
 
     @Override
     public void open(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
-        ChestMenu menu = new ChestMenu("&bInfinity Recipes");
-
-        setupMain(menu, player);
-        menu.addItem(1, ChestMenuUtils.getBackButton(player, "", 
-                ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(player, "guide.back.guide"))
-        );
-        menu.addMenuClickHandler(1, (p, slot, item, action) -> {
-            Categories.MAIN.open(p, playerProfile, slimefunGuideLayout);
-            return false;
-        });
-
-        int i = 9;
-        for (ItemStack output : InfinityRecipes.RECIPES.keySet()) {
-            menu.addItem(i, output, (p, slot, item, action) -> {
-                openInfinityRecipe(p, slot - 9, playerProfile, slimefunGuideLayout);
-                return false;
-            });
-
-            i++;
-            if (i == 45) break;
-        }
-
-        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
+        open(player, new BackEntry(null, playerProfile, slimefunGuideLayout), true);
         playerProfile.getGuideHistory().add(this, 1);
-
-        menu.open(player);
     }
+    
+    public static void open(@Nonnull Player player, @Nonnull BackEntry entry, boolean useHistory) {
+        
+        if (useHistory) {
+            String id = history.get(player.getUniqueId());
 
-    private static void setupMain(@Nonnull ChestMenu menu, @Nonnull Player player) {
-        int i;
-        menu.addItem(0, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        menu.setEmptySlotsClickable(false);
-
-        for (i = 2 ; i < 9 ; i++) {
-            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+            if (id != null) {
+                openInfinityRecipe(player, id, entry);
+                return;
+            }
         }
-
-        menu.addItem(45, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-
-        menu.addItem(46, ChestMenuUtils.getPreviousButton(player,1, 1), ChestMenuUtils.getEmptyClickHandler());
-
-        for (i = 47 ; i < 52 ; i++) {
-            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-
-        menu.addItem(52, ChestMenuUtils.getNextButton(player,1, 1), ChestMenuUtils.getEmptyClickHandler());
-
-        menu.addItem(53, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-    }
-
-    public static void openFromWorkBench(@Nonnull Player player, @Nonnull BlockMenu inv) {
+        
         ChestMenu menu = new ChestMenu("&bInfinity Recipes");
 
-        setupMain(menu, player);
-        menu.addItem(1, new CustomItem(ChestMenuUtils.getBackButton(player, "",
-                ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(player, "guide.back.guide")))
-        );
-        menu.addMenuClickHandler(1, (p, slot, item, action) -> {
-            inv.open(player);
-            return false;
-        });
-
-        int i = 9;
-        for (ItemStack items : InfinityRecipes.RECIPES.keySet()) {
-            menu.addItem(i, items, (p, slot, item, action) -> {
-                openRecipeFromWorkBench(player, inv, slot - 9);
+        if (entry.layout != null && entry.profile != null) {
+            menu.addMenuClickHandler(1, (player1, i, itemStack, clickAction) -> {
+                Categories.MAIN.open(player1, entry.profile, entry.layout);
                 return false;
             });
-
-            i++;
-            if (i == 45) break;
-        }
-
-        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
-
-        menu.open(player);
-    }
-
-    private static void openRecipeFromWorkBench(@Nonnull Player player, @Nonnull BlockMenu inv, int id) {
-        Pair<SlimefunItemStack, ItemStack[]> pair = InfinityRecipes.IDS.get(id);
-        if (pair == null) {
-            PluginUtils.log(Level.WARNING, "Error opening recipe for Infinity Item id: " + id + " Report this on Discord or Github!");
+        } else if (entry.workBench != null) {
+            menu.addMenuClickHandler(1, (player1, i, itemStack, clickAction) -> {
+                entry.workBench.open(player1);
+                return false;
+            });
+        } else {
+            error("MAIN");
             return;
         }
-        SlimefunItemStack output = pair.getFirstValue();
 
-        ChestMenu menu = new ChestMenu(Objects.requireNonNull(output.getDisplayName()));
+        menu.addItem(0, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         menu.setEmptySlotsClickable(false);
+        for (int i = 2 ; i < 9 ; i++) {
+            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        menu.addItem(45, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        menu.addItem(46, ChestMenuUtils.getPreviousButton(player, 1, 1), ChestMenuUtils.getEmptyClickHandler());
+        for (int i = 47 ; i < 52 ; i++) {
+            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        menu.addItem(52, ChestMenuUtils.getNextButton(player, 1, 1), ChestMenuUtils.getEmptyClickHandler());
+        menu.addItem(53, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
 
-        menu.addItem(BACK, ChestMenuUtils.getBackButton(player, ""), (p, slot, item, action) -> {
-            openFromWorkBench(player, inv);
+        menu.addItem(1, new CustomItem(ChestMenuUtils.getBackButton(player, "", ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(player, "guide.back.guide"))));
+
+        int i = 9;
+        for (SlimefunItemStack item : InfinityRecipes.RECIPES.values()) {
+            if (i == 45) break;
+
+            menu.addItem(i, item, (p, slot, item1, action) -> {
+                openInfinityRecipe(p, item.getItemId(), entry);
+                return false;
+            });
+
+            i++;
+        }
+
+        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
+
+        history.put(player.getUniqueId(), null);
+        
+        menu.open(player);
+    }
+
+    @ParametersAreNonnullByDefault
+    private static void openInfinityRecipe(Player player, String id, BackEntry entry) {
+        Pair<SlimefunItemStack, ItemStack[]> pair = InfinityRecipes.ITEMS.get(id);
+
+        if (pair == null) {
+            error("ID NOT FOUND");
+            return;
+        }
+
+        ChestMenu menu = new ChestMenu(Objects.requireNonNull(pair.getFirstValue().getDisplayName()));
+        menu.setEmptySlotsClickable(false);
+        
+        menu.addItem(BACK, ChestMenuUtils.getBackButton(player, ""), (player12, i, itemStack, clickAction) -> {
+            open(player12, entry, false);
             return false;
         });
-
-        menu.addItem(PREVIOUS, ChestMenuUtils.getPreviousButton(player, id + 1, InfinityRecipes.RECIPES.size()), (p, slot, item, action) -> {
-            if (id > 0) {
-                openRecipeFromWorkBench(p, inv, id - 1);
-            }
-            return false;
-        });
-        menu.addItem(NEXT, ChestMenuUtils.getNextButton(player, id + 1, InfinityRecipes.RECIPES.size()), (p, slot, item, action) -> {
-            if (id + 1< InfinityRecipes.RECIPES.size()) {
-                openRecipeFromWorkBench(p, inv, id + 1);
-            }
-            return false;
-        });
-
-        menu.addItem(WORKBENCH, new CustomItem(Material.NETHER_STAR,
-                "&bCreate the recipe from items in your inventory: ",
-                "&aLeft-Click to move 1 set",
-                "&aRight-Click to move as many sets as possible"
-        ), (p, slot, item, action) -> {
-            makeRecipe(p, inv, pair, action.isRightClicked());
-            return false;
-        });
-
-        int i = 0;
-        ItemStack[] recipe = pair.getSecondValue();
-        for (int recipeSlot : RECIPE_SLOTS) {
-            ItemStack recipeItem = recipe[i];
+        
+        for (int i = 0 ; i < INFINITY_RECIPE_SLOTS.length ; i++) {
+            ItemStack recipeItem = pair.getSecondValue()[i];
             if (recipeItem != null) {
-                menu.addItem(recipeSlot, recipeItem, (p, slot, item, action) -> {
+                menu.addItem(INFINITY_RECIPE_SLOTS[i], recipeItem, (p, slot, item, action) -> {
                     SlimefunItem slimefunItem = SlimefunItem.getByItem(recipeItem);
-
-                    if (slimefunItem != null ) {
+                    if (slimefunItem != null && !slimefunItem.isDisabled()) {
                         if (slimefunItem.getRecipeType() == RecipeTypes.INFINITY_WORKBENCH) {
-                            openRecipeFromWorkBench(player, inv, InfinityRecipes.STRINGS.get(slimefunItem.getId()));
+                            openInfinityRecipe(p, slimefunItem.getId(), entry);
+                        } else {
+                            LinkedList<SlimefunItem> list = new LinkedList<>();
+                            list.add(slimefunItem);
+                            openSlimefunRecipe(p, entry, id, list);
                         }
                     }
                     return false;
                 });
             }
-            i++;
         }
 
-        setupInfinityRecipeMenu(menu, output);
+        if (entry.workBench == null) {
+            menu.addItem(INFINITY_BENCH, Items.INFINITY_WORKBENCH, (p, slot, item, action) -> {
+                SlimefunItem slimefunItem = Items.INFINITY_WORKBENCH.getItem();
+                if (slimefunItem != null) {
+                    LinkedList<SlimefunItem> list = new LinkedList<>();
+                    list.add(slimefunItem);
+                    openSlimefunRecipe(p, entry, id, list);
+                }
+                return false;
+            });
+        } else {
+            menu.addItem(INFINITY_BENCH, BENCH, (p, slot, item, action) -> {
+                moveRecipe(p, entry.workBench, pair, action.isRightClicked());
+                return false;
+            });
+        }
+        
+        int page = InfinityRecipes.IDS.indexOf(id);
+        
+        menu.addItem(PREV, ChestMenuUtils.getPreviousButton(player, page + 1, InfinityRecipes.IDS.size()), (player1, i, itemStack, clickAction) -> {
+            if (page > 0) {
+                openInfinityRecipe(player1, InfinityRecipes.IDS.get(page - 1), entry);
+            }
+            return false;
+        });
+
+        menu.addItem(NEXT, ChestMenuUtils.getNextButton(player, page + 1, InfinityRecipes.IDS.size()), (player1, i, itemStack, clickAction) -> {
+            if (page < InfinityRecipes.IDS.size() - 1) {
+                openInfinityRecipe(player1, InfinityRecipes.IDS.get(page + 1), entry);
+            }
+            return false;
+        });
+        
+        for (int slot : INFINITY_BACKGROUND) {
+            menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int slot : INFINITY_OUTPUT_BORDER) {
+            menu.addItem(slot, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        menu.addItem(INFINITY_OUTPUT, pair.getFirstValue(), ChestMenuUtils.getEmptyClickHandler());
+        for (int slot : WORKBENCH_BORDER) {
+            menu.addItem(slot, INFO, ChestMenuUtils.getEmptyClickHandler());
+        }
 
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 
+        history.put(player.getUniqueId(), id);
+        
         menu.open(player);
+
     }
 
+    
     /**
      * This method attempts to move items from the players inventories to the correct spots in the table
      *
      * @param player player
-     * @param menu workbench menu
+     * @param menu   workbench menu
      */
-
-    private static void makeRecipe(@Nonnull Player player, @Nonnull BlockMenu menu, Pair<SlimefunItemStack, ItemStack[]> pair, boolean max) {
+    private static void moveRecipe(@Nonnull Player player, @Nonnull BlockMenu menu, Pair<SlimefunItemStack, ItemStack[]> pair, boolean max) {
         ItemStack[] recipe = pair.getSecondValue();
         PlayerInventory inv = player.getInventory();
 
@@ -250,7 +278,7 @@ public class InfinityCategory extends FlexCategory {
                 ItemFilter filter = new ItemFilter(recipe[slot], FilterType.IGNORE_AMOUNT);
 
                 for (ItemStack item : inv.getContents()) { //each slot in their inv
-                    if (item != null && filter.matches(new ItemFilter(item, FilterType.IGNORE_AMOUNT), FilterType.IGNORE_AMOUNT)) { //matches recipe
+                    if (item != null && filter.fits(new ItemFilter(item, FilterType.IGNORE_AMOUNT), FilterType.IGNORE_AMOUNT)) { //matches recipe
                         //get item
                         ItemStack output = item.clone();
                         output.setAmount(1);
@@ -266,144 +294,80 @@ public class InfinityCategory extends FlexCategory {
                 }
             }
         }
-        
+
         menu.open(player);
 
     }
 
-    private void openInfinityRecipe(@Nonnull Player player, int id, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
-        Pair<SlimefunItemStack, ItemStack[]> pair = InfinityRecipes.IDS.get(id);
-        if (pair == null) {
-            PluginUtils.log(Level.WARNING, "Error opening recipe for Infinity Item id: " + id, "Report this on Discord or Github!");
+    @ParametersAreNonnullByDefault
+    private static void openSlimefunRecipe(Player player, BackEntry entry, String backID, LinkedList<SlimefunItem> slimefunHistory) {
+        SlimefunItem slimefunItem = slimefunHistory.peekLast();
+        
+        if (slimefunItem == null) {
+            error("NULL SF ITEM");
             return;
         }
-
-        ChestMenu menu = new ChestMenu(Objects.requireNonNull(pair.getFirstValue().getDisplayName()));
-        menu.setEmptySlotsClickable(false);
-
-        menu.addItem(BACK, ChestMenuUtils.getBackButton(player, ""), (p, slot, item, action) -> {
-            open(player, playerProfile, slimefunGuideLayout);
-            return false;
-        });
-
-        menu.addItem(PREVIOUS, ChestMenuUtils.getPreviousButton(player, id + 1, InfinityRecipes.RECIPES.size()), (p, slot, item, action) -> {
-            if (id > 0) {
-                openInfinityRecipe(p, id - 1, playerProfile, slimefunGuideLayout);
-            }
-            return false;
-        });
-        menu.addItem(NEXT, ChestMenuUtils.getNextButton(player, id + 1, InfinityRecipes.RECIPES.size()), (p, slot, item, action) -> {
-            if (id + 1< InfinityRecipes.RECIPES.size()) {
-                openInfinityRecipe(p, id + 1, playerProfile, slimefunGuideLayout);
-            }
-            return false;
-        });
         
-        int i = 0;
-        for (int recipeSlot : RECIPE_SLOTS) {
-            ItemStack recipeItem = pair.getSecondValue()[i];
-
-            if (recipeItem != null) {
-
-                menu.addItem(recipeSlot, recipeItem, (p, slot, item, action) -> {
-                    SlimefunItem slimefunItem = SlimefunItem.getByItem(recipeItem);
-
-                    if (slimefunItem != null ) {
-                        if (slimefunItem.getRecipeType() == RecipeTypes.INFINITY_WORKBENCH) {
-                            openInfinityRecipe(player, InfinityRecipes.STRINGS.get(StackUtils.getItemID(recipeItem, false)), playerProfile, slimefunGuideLayout);
-                        } else {
-                            openSlimefunRecipe(player, id, new SlimefunItem[] {slimefunItem}, playerProfile, slimefunGuideLayout);
-                        }
-                    }
-                    return false;
-                });
-            }
-            i++;
-        }
-
-        menu.addItem(WORKBENCH, Items.INFINITY_WORKBENCH, (p, slot, item, action) -> {
-            openSlimefunRecipe(player, id, new SlimefunItem[]{SlimefunItem.getByItem(Items.INFINITY_WORKBENCH)}, playerProfile, slimefunGuideLayout);
-            return false;
-        });
-
-        setupInfinityRecipeMenu(menu, pair.getFirstValue());
-
-        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
-        menu.open(player);
-        
-    }
-
-    private void openSlimefunRecipe(@Nonnull Player player, int backID, @Nonnull SlimefunItem[] slimefunHistory, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
-        int length = slimefunHistory.length;
-
-        SlimefunItem slimefunItem = slimefunHistory[length - 1];
         ItemStack output = slimefunItem.getRecipeOutput().clone();
 
         ChestMenu menu = new ChestMenu(ItemUtils.getItemName(output));
         menu.setEmptySlotsClickable(false);
 
+        int length = slimefunHistory.size();
+
         menu.addItem(0, ChestMenuUtils.getBackButton(player, ""), (p, slot, item, action) -> {
             if (length == 1) {
-                openInfinityRecipe(player, backID, playerProfile, slimefunGuideLayout);
+                openInfinityRecipe(player, backID, entry);
             } else {
-                SlimefunItem[] backHistory = new SlimefunItem[length - 1];
-                System.arraycopy(slimefunHistory, 0, backHistory, 0, length - 1);
-                openSlimefunRecipe(player, backID, backHistory, playerProfile, slimefunGuideLayout);
+                slimefunHistory.removeLast();
+                openSlimefunRecipe(player, entry, backID, slimefunHistory);
             }
             return false;
         });
-
-        int i = 0;
-        for (int recipeSlot : NORMAL_RECIPE_SLOTS) {
+        
+        for (int i = 0 ; i < NORMAL_RECIPE_SLOTS.length ; i++) {
             ItemStack recipeItem = slimefunItem.getRecipe()[i];
 
             if (recipeItem != null) {
-
-                menu.addItem(recipeSlot, recipeItem, (p, slot, item, action) -> {
+                menu.addItem(NORMAL_RECIPE_SLOTS[i], recipeItem, (p, slot, item, action) -> {
                     SlimefunItem recipeSlimefunItem = SlimefunItem.getByItem(recipeItem);
 
                     if (recipeSlimefunItem != null) {
-                        SlimefunItem[] newHistory = new SlimefunItem[length + 1];
-                        System.arraycopy(slimefunHistory, 0, newHistory, 0, length);
-                        newHistory[length] = recipeSlimefunItem;
-
-                        openSlimefunRecipe(player, backID, newHistory, playerProfile, slimefunGuideLayout);
+                        slimefunHistory.add(recipeSlimefunItem);
+                        openSlimefunRecipe(player, entry, backID, slimefunHistory);
                     }
                     return false;
                 });
             }
-
-            i++;
+            
         }
 
-        setupNormalRecipeMenu(menu, output, slimefunItem.getRecipeType().toItem());
-
-        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
-        menu.open(player);
-    }
-    
-    private static final ItemStack recipe = new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&aRecipe Type");
-
-    private static void setupInfinityRecipeMenu(@Nonnull ChestMenu menu, @Nonnull ItemStack output) {
-        for (int slot : BACKGROUND) {
-            menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int slot : OUTPUT_BORDER) {
-            menu.addItem(slot, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        menu.addItem(OUTPUT, output, ChestMenuUtils.getEmptyClickHandler());
-        for (int slot : WORKBENCH_BORDER) {
-            menu.addItem(slot, recipe, ChestMenuUtils.getEmptyClickHandler());
-        }
-    }
-
-    private static void setupNormalRecipeMenu(@Nonnull ChestMenu menu, @Nonnull ItemStack output, @Nonnull ItemStack recipeType) {
-        menu.addItem(NORMAL_RECIPE_TYPE, recipeType, ChestMenuUtils.getEmptyClickHandler());
+        menu.addItem(NORMAL_RECIPE_TYPE, slimefunItem.getRecipeType().toItem(), ChestMenuUtils.getEmptyClickHandler());
 
         for (int slot : NORMAL_RECIPE_BACKGROUND) {
             menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
 
         menu.addItem(NORMAL_RECIPE_OUTPUT, output, ChestMenuUtils.getEmptyClickHandler());
+
+        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
+        menu.open(player);
     }
+
+    private static void error(String msg) {
+        PluginUtils.log(Level.WARNING, "Error opening infinity category: " + msg + " Report this on Discord or Github!");
+    }
+    
+    @AllArgsConstructor
+    public static class BackEntry {
+
+        @Nullable
+        private final BlockMenu workBench;
+        @Nullable
+        private final PlayerProfile profile;
+        @Nullable
+        private final SlimefunGuideLayout layout;
+        
+    }
+
 }

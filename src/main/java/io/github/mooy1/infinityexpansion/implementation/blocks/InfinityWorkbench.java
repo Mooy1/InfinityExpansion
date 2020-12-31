@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.items;
+package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
@@ -6,6 +6,7 @@ import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.setup.InfinityCategory;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
 import io.github.mooy1.infinitylib.filter.FilterType;
+import io.github.mooy1.infinitylib.filter.ItemFilter;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
@@ -16,10 +17,10 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -58,6 +59,7 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
             24, 25, 26
     };
     private static final int RECIPE_SLOT = 7;
+    private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemFilter[36]).hashCode();
 
     public InfinityWorkbench() {
         super(Categories.MAIN_MATERIALS, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -102,7 +104,7 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
             return false;
         });
         menu.addMenuClickHandler(RECIPE_SLOT, (p, slot, item, action) -> {
-            InfinityCategory.openFromWorkBench(p, menu);
+            InfinityCategory.open(p, new InfinityCategory.BackEntry(menu, null, null), true);
             return false;
         });
     }
@@ -154,7 +156,7 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
             return;
         }
         
-        ItemStack output = getOutput(inv);
+        SlimefunItemStack output = getOutput(inv);
         
         if (output == null) { //invalid
             MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid Recipe!");
@@ -171,9 +173,10 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
                 inv.consumeItem(slot);
             }
         }
-        MessageUtils.message(p, ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + ItemUtils.getItemName(output));
+        
+        MessageUtils.message(p, ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + output.getDisplayName());
 
-        inv.pushItem(output, OUTPUT_SLOTS);
+        inv.pushItem(output.clone(), OUTPUT_SLOTS);
         setCharge(b.getLocation(), 0);
             
     }
@@ -185,8 +188,12 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
      * @return output if any
      */
     @Nullable
-    public ItemStack getOutput(@Nonnull BlockMenu inv) {
-        return InfinityRecipes.RECIPES.inverse().get(MultiFilter.fromMenu(FilterType.MIN_AMOUNT, inv, INPUT_SLOTS));
+    public SlimefunItemStack getOutput(@Nonnull BlockMenu inv) {
+        MultiFilter filter = MultiFilter.fromMenu(FilterType.MIN_AMOUNT, inv, INPUT_SLOTS);
+        if (filter.hashCode() == EMPTY) {
+            return null;
+        }
+        return InfinityRecipes.RECIPES.get(filter);
     }
 
     @Nonnull

@@ -1,13 +1,13 @@
 package io.github.mooy1.infinityexpansion.lists;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.items.AdvancedAnvil;
-import io.github.mooy1.infinityexpansion.implementation.items.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.items.Strainer;
+import io.github.mooy1.infinityexpansion.implementation.blocks.AdvancedAnvil;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.blocks.Strainer;
 import io.github.mooy1.infinityexpansion.implementation.machines.ConversionMachine;
-import io.github.mooy1.infinityexpansion.implementation.machines.EnergyGenerator;
+import io.github.mooy1.infinityexpansion.implementation.generators.EnergyGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
-import io.github.mooy1.infinityexpansion.implementation.machines.InfinityReactor;
+import io.github.mooy1.infinityexpansion.implementation.generators.InfinityReactor;
 import io.github.mooy1.infinityexpansion.implementation.machines.ItemUpdater;
 import io.github.mooy1.infinityexpansion.implementation.machines.MaterialGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.PoweredBedrock;
@@ -20,7 +20,7 @@ import io.github.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataInfuser;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
-import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
+import io.github.mooy1.infinityexpansion.implementation.blocks.StorageUnit;
 import io.github.mooy1.infinityexpansion.setup.SlimefunConstructors;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -601,7 +601,7 @@ public final class Items {
     );
     public static final SlimefunItemStack EMPTY_DATA_CARD = new SlimefunItemStack(
             "EMPTY_DATA_CARD",
-            Material.IRON_CHESTPLATE,
+            Material.CHAINMAIL_CHESTPLATE,
             "&8Empty Data Card",
             "&7Infuse with a mob's items to fill"
     );
