@@ -3,7 +3,7 @@ This addon aims to add a larger endgame to slimefun by adding 'Infinity Ingots' 
 
 # Features
 
-Wiki: (WIP) https://github.com/Mooy1/InfinityExpansion/wiki
+Adds lots of endgame items and grind aswell as some methods for reaching that point.
 
 # Download
 https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
@@ -13,6 +13,10 @@ https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
 If you would like your own local server, check out my guide here:
 
 https://github.com/Mooy1/InfinityExpansion/wiki/How-to-make-a-Slimefun-Server
+
+# Texture Pack
+
+Texture Pack that adds texture for most items in this addon, requires optifine: https://github.com/Mooy1/InfinityExpansion/releases/tag/v1
 
 # Requirements
 Minecraft Version: 1.16+ (Paper recommended)
