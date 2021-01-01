@@ -16,7 +16,9 @@ https://github.com/Mooy1/InfinityExpansion/wiki/How-to-make-a-Slimefun-Server
 
 # Texture Pack
 
-Texture Pack that adds texture for most items in this addon, requires optifine: https://github.com/Mooy1/InfinityExpansion/releases/tag/v1
+Texture Pack that adds texture for most items in this addon, requires optifine:
+
+https://github.com/Mooy1/InfinityExpansion/releases/tag/v1
 
 # Requirements
 Minecraft Version: 1.16+ (Paper recommended)
