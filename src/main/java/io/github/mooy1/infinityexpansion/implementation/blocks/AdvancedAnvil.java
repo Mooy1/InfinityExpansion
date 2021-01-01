@@ -72,8 +72,8 @@ public class AdvancedAnvil extends AbstractContainer implements EnergyNetCompone
 
     public AdvancedAnvil() {
         super(Categories.MAIN_MATERIALS, Items.ADVANCED_ANVIL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.ADAMANTITE, Items.ADAMANTITE, Items.ADAMANTITE,
-                Items.MAGNONIUM, new ItemStack(Material.ANVIL), Items.MAGNONIUM,
+                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, new ItemStack(Material.ANVIL), Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         });
 

@@ -27,19 +27,19 @@ public final class Categories {
     );
 
     public static final Category BASIC_MACHINES = new SubCategory(new NamespacedKey(instance, "basic_machines"),
-            new CustomItem(Material.LOOM, "&9Basic &7Powered Machines"), 2
+            new CustomItem(Material.LOOM, "&9Basic &7Machines"), 2
     );
 
     public static final Category ADVANCED_MACHINES = new SubCategory(new NamespacedKey(instance, "advanced_machines"),
-            new CustomItem(Material.BLAST_FURNACE, "&cAdvanced &7Powered Machines"), 2
+            new CustomItem(Material.BLAST_FURNACE, "&cAdvanced &7Machines"), 2
     );
 
     public static final Category STORAGE_TRANSPORT = new SubCategory(new NamespacedKey(instance, "storage_transport"),
-            new CustomItem(Material.ENDER_CHEST, "&6Storage and Transport"), 2
+            new CustomItem(Material.BEEHIVE, "&6Storage"), 2
     );
     
     public static final Category MOB_SIMULATION = new SubCategory(new NamespacedKey(instance, "mob_simulation"),
-            new CustomItem(Material.SPAWNER, "&bMob Simulation"), 2
+            new CustomItem(Material.BEACON, "&bMob Simulation"), 2
     );
     
     public static final Category INFINITY_MATERIALS = new SubCategory(new NamespacedKey(instance, "infinity_materials"),
@@ -47,11 +47,11 @@ public final class Categories {
     );
 
     public static final Category INFINITY_RECIPES = new InfinityCategory(new NamespacedKey(instance, "infinity_recipes"),
-            new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Recipes"), 2
+            new CustomItem(Material.RESPAWN_ANCHOR, "&bInfinity &7Recipes"), 2
     );
     
     public static final Category INFINITY_CHEAT = new SubCategory(new NamespacedKey(instance, "infinity_cheat"),
-            new CustomItem(Material.SMITHING_TABLE, "&bInfinity &7Recipes &c- NOT REAL RECIPES"), 2
+            new CustomItem(Material.RESPAWN_ANCHOR, "&bInfinity &7Recipes &c- INCORRECT RECIPE"), 2
     );
     
 }

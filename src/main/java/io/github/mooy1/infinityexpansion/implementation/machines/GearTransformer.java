@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
@@ -14,7 +15,7 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -24,6 +25,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 /**
  * Machine that changes the material of gear and tools
  *
@@ -52,7 +55,7 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
     public GearTransformer() {
-        super(Categories.ADVANCED_MACHINES, Items.GEAR_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        super(Categories.ADVANCED_MACHINES, Items.GEAR_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_CIRCUIT, new ItemStack(Material.SMITHING_TABLE), Items.MACHINE_CIRCUIT,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE
@@ -85,28 +88,22 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
 
         if (inputItem == null) { //no input
 
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a tool"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a tool or piece of gear"));
             return;
 
         }
-
-        String inputToolType;
-
-        if (getToolType(inputItem) != null) {
-            inputToolType = getToolType(inputItem);
-        } else {
-            inputToolType = getArmorType(inputItem);
+        
+        if (StackUtils.getItemID(inputItem, false) != null) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cSlimefun items may not have their material changed!"));
+            return;
         }
+
+        String inputToolType = getType(inputItem);
 
         if (inputToolType == null) { //invalid input
 
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNot a tool or armor!"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNot a tool or piece of gear!"));
             return;
-
-            /*if (inv.getItemInSlot(OUTPUT_SLOTS[0]) == null) {
-                inv.pushItem(inputItem, OUTPUT_SLOTS);
-                inv.consumeItem(INPUT_SLOT1, inputItem.getAmount());
-            }*/
 
         }
 
@@ -119,9 +116,9 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
 
         }
 
-        Material outputMaterial = getOutput(inputMaterial, inputToolType);
+        Pair<Material, Integer> pair = getOutput(inputMaterial, inputToolType);
 
-        if (outputMaterial == null) { //invalid material
+        if (pair == null) { //invalid material
 
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
             return;
@@ -138,13 +135,13 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
         //output
         removeCharge(b.getLocation(), ENERGY);
 
-        MessageUtils.messagePlayersInInv(inv, "Transformed into: " + ItemUtils.getItemName(new ItemStack(outputMaterial)));
+        MessageUtils.messagePlayersInInv(inv, "Transformed into: " + pair.getFirstValue().toString().toUpperCase(Locale.ROOT));
 
-        inputItem.setType(outputMaterial);
+        inputItem.setType(pair.getFirstValue());
         inv.pushItem(inputItem, OUTPUT_SLOTS);
 
-        inv.consumeItem(INPUT_SLOT1);
-        inv.consumeItem(INPUT_SLOT2, getAmount(inputMaterial, inputToolType));
+        inv.replaceExistingItem(INPUT_SLOT1, null);
+        inv.consumeItem(INPUT_SLOT2, pair.getSecondValue());
 
         inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
     }
@@ -181,115 +178,55 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
             return new int[0];
         }
     }
-    
+
     /**
      * This method gets the output from the input material and input tool
-     * 
+     *
      * @param inputMaterial material
      * @param inputToolType tools type
+     *
      * @return output if any
      */
     @Nullable
-    private Material getOutput(ItemStack inputMaterial, String inputToolType) {
+    private Pair<Material, Integer> getOutput(ItemStack inputMaterial, String inputToolType) {
 
         for (String toolType : TOOL_TYPES) {
             if (inputToolType.equals(toolType)) { //make sure its a tool
 
-                for (int i = 0; i < TOOL_RECIPE.length; i++) { //compare to each recipe
+                for (int i = 0 ; i < TOOL_RECIPE.length ; i++) { //compare to each recipe
                     ItemStack recipe = TOOL_RECIPE[i];
 
                     if (inputMaterial.getType() == recipe.getType() && inputMaterial.getAmount() >= recipe.getAmount()) {
-                        return Material.getMaterial(TOOL_MATERIALS[i] + toolType);
+
+                        return new Pair<>(Material.getMaterial(TOOL_MATERIALS[i] + toolType), recipe.getAmount());
                     }
                 }
+
+                break;
             }
         }
 
         for (String armorType : ARMOR_TYPES) {
             if (inputToolType.equals(armorType)) { //make sure its a armor
 
-                for (int i = 0; i < ARMOR_RECIPE.length; i++) { //compare to each recipe
+                for (int i = 0 ; i < ARMOR_RECIPE.length ; i++) { //compare to each recipe
                     ItemStack recipe = ARMOR_RECIPE[i];
 
                     if (inputMaterial.getType() == recipe.getType() && inputMaterial.getAmount() >= recipe.getAmount()) {
 
-                        return Material.getMaterial(ARMOR_MATERIALS[i] + armorType);
+                        return new Pair<>(Material.getMaterial(ARMOR_MATERIALS[i] + armorType), recipe.getAmount());
                     }
                 }
+
+                break;
             }
         }
 
         return null;
     }
 
-    /**
-     * This method gets the amount of material required to transform and item
-     * 
-     * @param inputMaterial material input type
-     * @param inputToolType tool input type
-     * @return amount needed
-     */
-    private int getAmount(ItemStack inputMaterial, String inputToolType) {
-
-        for (String toolType : TOOL_TYPES) {
-
-            if (inputToolType.equals(toolType)) {
-
-                for (ItemStack input : TOOL_RECIPE) {
-
-                    if (inputMaterial.getType() == input.getType() && inputMaterial.getAmount() >= input.getAmount()) {
-
-                        return input.getAmount();
-                    }
-                }
-            }
-        }
-
-        for (String armorType : ARMOR_TYPES) {
-
-            if (inputToolType.equals(armorType)) {
-
-                for (ItemStack input : ARMOR_RECIPE) {
-
-                    if (inputMaterial.getType() == input.getType() && inputMaterial.getAmount() >= input.getAmount()) {
-
-                        return input.getAmount();
-                    }
-                }
-            }
-        }
-
-        return 0;
-    }
-
-    /**
-     * This method gets the type of tool that an item is
-     * 
-     * @param item item to check
-     * @return type of tool if any
-     */
     @Nullable
-    private String getToolType(ItemStack item) {
-        Material material = item.getType();
-
-        for (String toolType : TOOL_TYPES) {
-
-            for (String toolMaterial : TOOL_MATERIALS) {
-
-                if (material == Material.getMaterial(toolMaterial + toolType)) return toolType;
-            }
-        }
-        return null;
-    }
-    
-    /**
-     * This method gets the type of armor that an item is
-     *
-     * @param item item to check
-     * @return type of armor if any
-     */
-    @Nullable
-    private String getArmorType(ItemStack item) {
+    private String getType(ItemStack item) {
         Material material = item.getType();
 
         for (String armorType : ARMOR_TYPES) {
@@ -299,7 +236,16 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
                 if (material == Material.getMaterial(armorMaterial + armorType)) return armorType;
             }
         }
+
+        for (String toolType : TOOL_TYPES) {
+
+            for (String toolMaterial : TOOL_MATERIALS) {
+
+                if (material == Material.getMaterial(toolMaterial + toolType)) return toolType;
+            }
+        }
         return null;
+
     }
 
     private static final String[] ARMOR_TYPES = {
@@ -348,10 +294,7 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        items.add(new CustomItem(Material.DIAMOND_PICKAXE, "&7For Tools >>>"));
-        items.add(new CustomItem(Material.DIAMOND_CHESTPLATE, "&7For Armor >>>"));
-
-        for (int i = 0; i < TOOL_RECIPE.length; i++) {
+        for (int i = 0 ; i < TOOL_RECIPE.length ; i++) {
             items.add(TOOL_RECIPE[i]);
             items.add(ARMOR_RECIPE[i]);
         }
@@ -376,4 +319,5 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
             new ItemStack(Material.DIAMOND, 9),
             new ItemStack(Material.NETHERITE_INGOT, 2)
     };
+
 }

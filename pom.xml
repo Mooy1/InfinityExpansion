@@ -132,7 +132,7 @@
                         </relocation>
                         <relocation>
                             <pattern>io.github.mooy1.infinitylib</pattern>
-                            <shadedPattern>io.github.mooy1.slimegrid.infinitylib</shadedPattern>
+                            <shadedPattern>io.github.mooy1.infinityexpansion.infinitylib</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

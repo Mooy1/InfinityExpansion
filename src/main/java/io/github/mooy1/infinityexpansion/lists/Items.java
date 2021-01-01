@@ -466,7 +466,7 @@ public final class Items {
             "GEAR_TRANSFORMER",
             Material.EMERALD_BLOCK,
             "&7Gear Transformer",
-            "&7Changes the material of tools and gear",
+            "&7Changes the material of vanilla tools and gear",
             "",
             LorePreset.energy(GearTransformer.ENERGY) + "Per Use"
     );
