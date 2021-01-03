@@ -35,7 +35,7 @@ import java.util.Locale;
 public class GearTransformer extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
 
     public static final int ENERGY = 12000;
-
+    public static boolean sf = false;
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
     };
@@ -93,7 +93,7 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
 
         }
         
-        if (StackUtils.getItemID(inputItem, false) != null) {
+        if (!sf && StackUtils.getItemID(inputItem, false) != null) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cSlimefun items may not have their material changed!"));
             return;
         }

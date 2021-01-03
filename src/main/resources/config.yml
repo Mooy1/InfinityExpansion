@@ -11,6 +11,10 @@
 # 
 # mob-simulation-xp-chance: (default 2 (50%)) (range 1-10)
 # amount of ticks average for a simulation chamber to output xp, higher number is lower change, at default its 1/2 or 50%
+#
+# allow-sf-item-transform: (default false)
+# Will allow the gear transformer to change slimefun gear's material. Diamond tools can already be upgraded to netherite, 
+# but some addon developers do not want there gear to be transformable so change this at your own risk...
 # 
 # -----
 # 
@@ -31,6 +35,7 @@
 balance-options:
   vanilla-economy-scale: 1.0
   mob-simulation-xp-chance: 2
+  allow-sf-item-transform: false
 storage-unit-options:
   display-signs: true
   sign-refresh-ticks: 5

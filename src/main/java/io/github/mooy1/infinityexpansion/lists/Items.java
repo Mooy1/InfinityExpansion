@@ -475,7 +475,7 @@ public final class Items {
 
     public static final SlimefunItemStack BASIC_COBBLE_GEN = new SlimefunItemStack(
             "BASIC_COBBLE_GEN",
-            Material.LIGHT_GRAY_CONCRETE,
+            Material.SMOOTH_STONE,
             "&9Basic &8Cobble Generator",
             "",
             LorePreset.speed(MaterialGenerator.COBBLE_SPEED),
@@ -483,7 +483,7 @@ public final class Items {
     );
     public static final SlimefunItemStack ADVANCED_COBBLE_GEN = new SlimefunItemStack(
             "ADVANCED_COBBLE_GEN",
-            Material.GRAY_CONCRETE,
+            Material.SMOOTH_STONE,
             "&cAdvanced &8Cobble Generator",
             "",
             LorePreset.speed(MaterialGenerator.COBBLE2_SPEED),
@@ -491,7 +491,7 @@ public final class Items {
     );
     public static final SlimefunItemStack BASIC_OBSIDIAN_GEN = new SlimefunItemStack(
             "BASIC_OBSIDIAN_GEN",
-            Material.BLACK_CONCRETE,
+            Material.SMOOTH_STONE,
             "&8Obsidian Generator",
             "",
             LorePreset.speed(MaterialGenerator.OBSIDIAN_SPEED),

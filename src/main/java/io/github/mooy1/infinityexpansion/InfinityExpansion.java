@@ -1,10 +1,10 @@
 package io.github.mooy1.infinityexpansion;
 
+import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
 import io.github.mooy1.infinityexpansion.implementation.blocks.StorageUnit;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.setup.Setup;
-import io.github.mooy1.infinityexpansion.setup.commands.Changelog;
 import io.github.mooy1.infinityexpansion.setup.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.setup.commands.ResetConfig;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -22,14 +22,16 @@ import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.logging.Level;
 
-public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
+public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
+    
     @Getter
     private static InfinityExpansion instance;
     @Getter
     private static int currentTick = 1;
     @Getter
     private static double vanillaScale = 1;
+    private final FileConfiguration config = getConfig();
     
     @Override
     public void onEnable() {
@@ -38,8 +40,8 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         PluginUtils.setup(this, "Mooy1/InfinityExpansion/master", getFile());
         MessageUtils.setPrefix(ChatColor.DARK_GRAY + "[" + ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion" + ChatColor.DARK_GRAY + "]" + ChatColor.WHITE + " ");
         new CommandLib(this, "infinityexpansion", "infinityexpansion.admin", "/ie, /ix, /infinity");
-        CommandLib.addCommands(new Changelog(), new GiveRecipe(), new ResetConfig());
-        setupConfigOptions(getConfig());
+        CommandLib.addCommands(new GiveRecipe(), new ResetConfig());
+        setupConfigOptions();
         
         @SuppressWarnings("unused")
         final Metrics metrics = new Metrics(this, 8991);
@@ -49,11 +51,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         Setup.setup(this);
         
         InfinityRecipes.postItems(this);
-        
-        for (String line : getChangeLog()) {
-            getLogger().log(Level.INFO, line);
-        }
-        
+
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             if (currentTick < 60) {
                 currentTick++;
@@ -78,74 +76,54 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     public JavaPlugin getJavaPlugin() {
         return this;
     }
-
-    @Nonnull
-    public static String[] getChangeLog() {
-        return new  String[] {
-                ChatColor.GREEN + "",
-                ChatColor.GREEN + "########################################",
-                ChatColor.GREEN + "",
-                ChatColor.AQUA + " Infinity Expansion v" + getInstance().getPluginVersion() + " Changelog",
-                ChatColor.GREEN + "     -------------------------    ",
-                ChatColor.GREEN + "",
-                ChatColor.GRAY + " - signs on storage units display info",
-                ChatColor.GRAY + " - config for scaling",
-                ChatColor.GRAY + " - optimizations",
-                ChatColor.GRAY + " - energy balancing",
-                ChatColor.GRAY + " - wireless item ducts",
-                ChatColor.GREEN + "",
-                ChatColor.GREEN + "########################################",
-                ChatColor.GREEN + ""
-        };
-    }
-
-    private void setupConfigOptions(FileConfiguration config) {
-        StorageUnit.SIGN_REFRESH = getOrDefault("storage-unit-options.sign-refresh-ticks", 1, 10, 5, config);
-        StorageUnit.DISPLAY_SIGNS = getOrDefault("storage-unit-options.display-signs", true, config);
-        MobSimulationChamber.CHANCE = getOrDefault("balance-options.mob-simulation-xp-chance", 1, 10, 2, config);
-        vanillaScale = getOrDefault("balance-options.vanilla-economy-scale", .1, 10, 1, config);
-        
+    
+    private void setupConfigOptions() {
+        StorageUnit.SIGN_REFRESH = getOrDefault("storage-unit-options.sign-refresh-ticks", 1, 10, 5);
+        StorageUnit.DISPLAY_SIGNS = getOrDefault("storage-unit-options.display-signs", true);
+        MobSimulationChamber.CHANCE = getOrDefault("balance-options.mob-simulation-xp-chance", 1, 10, 2);
+        GearTransformer.sf = getOrDefault("balance-options.allow-sf-item-transform", false);
+        vanillaScale = getOrDefault("balance-options.vanilla-economy-scale", .1, 10, 1);
         saveConfig();
     }
     
-    private int getOrDefault(String path, int min, int max, int def, FileConfiguration config) {
-        if (hasPath(path, config)) {
-            int value = config.getInt(path);
+    private int getOrDefault(String path, int min, int max, int def) {
+        if (hasPath(path, this.config)) {
+            int value = this.config.getInt(path);
             if (value >= min && value <= max) {
                 return value;
             } else {
                 configWarnValue(path);
-                config.set(path, def);
+                this.config.set(path, def);
                 return def;
             }
         }
         return def;
     }
 
-    private boolean getOrDefault(String path, boolean def, FileConfiguration config) {
-        if (hasPath(path, config)) {
-            String value = config.getString(path);
+    private boolean getOrDefault(String path, boolean def) {
+        if (hasPath(path, this.config)) {
+            String value = this.config.getString(path);
             if (Objects.equals(value, "true")) {
                 return true;
             } else if (Objects.equals(value, "false")) {
                 return false;
             } else {
                 configWarnValue(path);
-                config.set(path, def);
+                this.config.set(path, def);
                 return def;
             }
         }
         return def;
     }
 
-    private double getOrDefault(String path, double min, double max, double def, FileConfiguration config) {
-        if (hasPath(path, config)) {
-            double value = config.getDouble(path);
+    private double getOrDefault(String path, double min, double max, double def) {
+        if (hasPath(path, this.config)) {
+            double value = this.config.getDouble(path);
             if (value >= min && value <= max) {
                 return value;
             } else {
                 configWarnValue(path);
-                config.set(path, def);
+                this.config.set(path, def);
                 return def;
             }
         }
