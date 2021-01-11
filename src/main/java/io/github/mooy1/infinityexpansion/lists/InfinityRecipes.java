@@ -291,7 +291,7 @@ public final class InfinityRecipes {
     }
     
     private static void addRecipe(ItemStack[] recipe, SlimefunItemStack stack) {
-        RECIPES.put(MultiFilter.fromStacks(FilterType.MIN_AMOUNT , recipe), stack);
+        RECIPES.put(new MultiFilter(FilterType.IGNORE_AMOUNT , recipe), stack);
         ITEMS.put(stack.getItemId(), new Pair<>(stack, recipe));
         IDS.add(stack.getItemId()); 
     }

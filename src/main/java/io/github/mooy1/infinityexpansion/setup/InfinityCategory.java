@@ -12,7 +12,7 @@ import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
-import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AllArgsConstructor;
@@ -92,17 +92,17 @@ public class InfinityCategory extends FlexCategory implements Listener {
 
     public InfinityCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
-        new LeaveListener(history);
+        LeaveListener.add(history);
     }
 
     @Override
-    public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
+    public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
     @Override
-    public void open(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideLayout slimefunGuideLayout) {
-        open(player, new BackEntry(null, playerProfile, slimefunGuideLayout), true);
+    public void open(Player player, PlayerProfile playerProfile, SlimefunGuideMode slimefunGuideMode) {
+        open(player, new BackEntry(null, playerProfile, slimefunGuideMode), true);
         playerProfile.getGuideHistory().add(this, 1);
     }
     
@@ -119,9 +119,9 @@ public class InfinityCategory extends FlexCategory implements Listener {
         
         ChestMenu menu = new ChestMenu("&bInfinity Recipes");
 
-        if (entry.layout != null && entry.profile != null) {
+        if (entry.mode != null && entry.profile != null) {
             menu.addMenuClickHandler(1, (player1, i, itemStack, clickAction) -> {
-                Categories.MAIN.open(player1, entry.profile, entry.layout);
+                Categories.MAIN.open(player1, entry.profile, entry.mode);
                 return false;
             });
         } else if (entry.workBench != null) {
@@ -366,7 +366,7 @@ public class InfinityCategory extends FlexCategory implements Listener {
         @Nullable
         private final PlayerProfile profile;
         @Nullable
-        private final SlimefunGuideLayout layout;
+        private final SlimefunGuideMode mode;
         
     }
 

@@ -5,11 +5,9 @@ import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinitylib.filter.FilterType;
 import io.github.mooy1.infinitylib.filter.ItemFilter;
 import io.github.mooy1.infinitylib.math.RandomUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
@@ -38,7 +36,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class ConversionMachine extends AbstractContainer implements RecipeDisplayItem, EnergyNetComponent {
+public class ConversionMachine extends AbstractMachine implements RecipeDisplayItem {
     
     public static final int FREEZER_SPEED = 2;
     public static final int FREEZER_ENERGY = 120;
@@ -54,7 +52,7 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
     private final Type type;
 
     public ConversionMachine(Type type) {
-        super(type.category, type.item, type.recipeType, type.recipe);
+        super(type.category, type.item, type.recipeType, type.recipe, STATUS_SLOT, type.energy);
         this.type = type;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -93,25 +91,16 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
             return new int[0];
         }
     }
-
+    
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        int energy = this.type.energy;
-
-        if (getCharge(b.getLocation()) < energy) { //not enough energy
-            if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            }
-            return;
-        }
-        
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         ItemStack input = inv.getItemInSlot(INPUT_SLOTS[0]);
 
         if (input == null) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.inputAnItem);
             }
-            return;
+            return false;
         }
 
         Pair<ItemStack, Integer> pair = getOutput(input);
@@ -120,28 +109,27 @@ public class ConversionMachine extends AbstractContainer implements RecipeDispla
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidInput);
             }
-            return;
+            return false;
         }
-        
+
         if (inv.fits(pair.getFirstValue(), OUTPUT_SLOTS)) {
             inv.consumeItem(INPUT_SLOTS[0], pair.getSecondValue());
             inv.pushItem(pair.getFirstValue(), OUTPUT_SLOTS);
-            removeCharge(b.getLocation(), energy);
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverting..."));
             }
-
+            return true;
         } else if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
         }
+        return false;
     }
 
-    @Nonnull
     @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        
     }
-
+    
     @Override
     public int getCapacity() {
         return this.type.energy;

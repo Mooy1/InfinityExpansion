@@ -146,6 +146,11 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
         inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
     }
 
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        
+    }
+
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : BACKGROUND) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());

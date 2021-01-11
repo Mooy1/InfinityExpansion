@@ -6,7 +6,6 @@ import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.setup.InfinityCategory;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
 import io.github.mooy1.infinitylib.filter.FilterType;
-import io.github.mooy1.infinitylib.filter.ItemFilter;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
@@ -59,7 +58,7 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
             24, 25, 26
     };
     private static final int RECIPE_SLOT = 7;
-    private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemFilter[36]).hashCode();
+    private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemStack[36]).hashCode();
 
     public InfinityWorkbench() {
         super(Categories.MAIN_MATERIALS, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -189,7 +188,7 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
      */
     @Nullable
     public SlimefunItemStack getOutput(@Nonnull BlockMenu inv) {
-        MultiFilter filter = MultiFilter.fromMenu(FilterType.MIN_AMOUNT, inv, INPUT_SLOTS);
+        MultiFilter filter = MultiFilter.fromMenu(FilterType.IGNORE_AMOUNT, inv, INPUT_SLOTS);
         if (filter.hashCode() == EMPTY) {
             return null;
         }

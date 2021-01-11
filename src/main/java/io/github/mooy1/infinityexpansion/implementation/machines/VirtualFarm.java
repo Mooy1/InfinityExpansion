@@ -6,11 +6,9 @@ import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinityexpansion.utils.Utils;
 import io.github.mooy1.infinitylib.math.RandomUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
@@ -39,7 +37,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class VirtualFarm extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
 
     public static final int ENERGY1 = 18;
     public static final int ENERGY2 = 90;
@@ -57,7 +55,7 @@ public class VirtualFarm extends AbstractContainer implements EnergyNetComponent
     private static final int STATUS_SLOT = MenuPreset.slot1;
 
     public VirtualFarm(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
+        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe(), STATUS_SLOT, type.energy);
         this.type = type;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -105,23 +103,9 @@ public class VirtualFarm extends AbstractContainer implements EnergyNetComponent
             return new int[0];
         }
     }
-
+    
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        int energy = this.type.getEnergy();
-        int charge = getCharge(b.getLocation());
-        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
-
-        if (charge < energy) { //not enough energy
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            }
-            
-            return;
-
-        }
-
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         int progress = Integer.parseInt(getProgress(b));
 
         if (progress == 0) { //try to start
@@ -129,7 +113,7 @@ public class VirtualFarm extends AbstractContainer implements EnergyNetComponent
 
             if (input == null) {
 
-                if (playerWatching) {
+                if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a seed"));
                 }
 
@@ -139,7 +123,7 @@ public class VirtualFarm extends AbstractContainer implements EnergyNetComponent
 
                 if (inputType == null) {
 
-                    if (playerWatching) {
+                    if (inv.hasViewer()) {
                         inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a seed!"));
                     }
 
@@ -156,32 +140,30 @@ public class VirtualFarm extends AbstractContainer implements EnergyNetComponent
                     setProgress(b, this.type.getSpeed());
                     setType(b, inputType);
                     inv.consumeItem(INPUT_SLOTS[0], 1);
-                    setCharge(b.getLocation(), charge - energy);
 
-                    if (playerWatching) {
-                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                                "&aPlanting... (" + this.type.getSpeed() + "/" + TIME + ")"));
+                    if (inv.hasViewer()) {
+                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aPlanting... (" + this.type.getSpeed() + "/" + TIME + ")"));
                     }
 
+                    return true;
                 }
             }
             
-            return;
+            return false;
         }
-        
+
         if (progress < TIME) { //progress
 
             setProgress(b, progress + this.type.getSpeed());
-            setCharge(b.getLocation(), charge - energy);
 
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                         "&aGrowing... (" + (progress + this.type.getSpeed()) + "/" + TIME + ")"));
             }
-            
-            return;
+
+            return true;
         }
-        
+
         //done
         int type = Integer.parseInt(getType(b));
 
@@ -190,7 +172,7 @@ public class VirtualFarm extends AbstractContainer implements EnergyNetComponent
 
         if (!inv.fits(output1, OUTPUT_SLOTS)) {
 
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
 
@@ -198,15 +180,17 @@ public class VirtualFarm extends AbstractContainer implements EnergyNetComponent
             inv.pushItem(output1, OUTPUT_SLOTS);
             if (inv.fits(output2, INPUT_SLOTS)) inv.pushItem(output2, INPUT_SLOTS);
 
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aHarvesting..."));
             }
 
             setProgress(b, 0);
             setType(b, null);
-            setCharge(b.getLocation(), charge - energy);
+            removeCharge(b.getLocation(), this.type.energy);
 
         }
+        
+        return true;
     }
 
     /**
@@ -247,13 +231,7 @@ public class VirtualFarm extends AbstractContainer implements EnergyNetComponent
     private String getBlockData(Location l, String key) {
         return BlockStorage.getLocationInfo(l, key);
     }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
-    }
-
+    
     @Override
     public int getCapacity() {
         return this.type.getEnergy() * 2;

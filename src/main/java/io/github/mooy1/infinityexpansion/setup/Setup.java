@@ -58,9 +58,9 @@ public final class Setup {
         
         Items.setup(plugin.getConfig());
         
-        Categories.MAIN.register();
+        Categories.MAIN.register(plugin);
 
-        registerCategories(
+        registerCategories(plugin,
                 Categories.MAIN_MATERIALS,
                 Categories.BASIC_MACHINES,
                 Categories.ADVANCED_MACHINES,
@@ -70,7 +70,7 @@ public final class Setup {
                 Categories.INFINITY_MATERIALS
         );
 
-        Categories.INFINITY_CHEAT.register();
+        Categories.INFINITY_CHEAT.register(plugin);
 
 
         new StrainerBase().register(plugin);
@@ -107,7 +107,7 @@ public final class Setup {
 
         new StoneworksFactory().register(plugin);
         
-        new SlimefunItem(Categories.MAIN_MATERIALS, Items.INFINITE_INGOT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new SlimefunItem(Categories.MAIN_MATERIALS, Items.INFINITE_INGOT, RecipeType.SMELTERY, new ItemStack[] {
                 Items.EARTH_SINGULARITY, Items.MYTHRIL, Items.FORTUNE_SINGULARITY, Items.MAGIC_SINGULARITY, Items.VOID_INGOT, Items.METAL_SINGULARITY,
                 null, null, null
         }).register(plugin);
@@ -215,10 +215,10 @@ public final class Setup {
         SlimefunConstructors.setup(plugin);
     }
 
-    private static void registerCategories(Category... categories) {
+    private static void registerCategories(InfinityExpansion plugin, Category... categories) {
         for (Category category : categories) {
             Categories.MAIN.categories.add(category);
-            category.register();
+            category.register(plugin);
         }
     }
 

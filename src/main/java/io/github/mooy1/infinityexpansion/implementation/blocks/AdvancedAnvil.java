@@ -5,11 +5,9 @@ import com.google.common.collect.Maps;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -38,7 +36,7 @@ import java.util.Map;
  *
  * @author Mooy1
  */
-public class AdvancedAnvil extends AbstractContainer implements EnergyNetComponent {
+public class AdvancedAnvil extends AbstractMachine {
 
     public static final int ENERGY = 100_000;
     
@@ -75,7 +73,7 @@ public class AdvancedAnvil extends AbstractContainer implements EnergyNetCompone
                 Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
                 Items.MACHINE_PLATE, new ItemStack(Material.ANVIL), Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        });
+        }, STATUS_SLOT, ENERGY);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -118,28 +116,25 @@ public class AdvancedAnvil extends AbstractContainer implements EnergyNetCompone
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
-            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            return;
-        }
-
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);
         ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
 
         if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid items!"));
-            return;
+            return false;
         }
 
         ItemStack output = getOutput(item1, item2);
 
         if (output == null) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNo upgrades!"));
-            return;
+            return false;
         }
 
         inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output));
+        
+        return false;
     }
 
     @Override
@@ -180,6 +175,7 @@ public class AdvancedAnvil extends AbstractContainer implements EnergyNetCompone
         inv.consumeItem(INPUT_SLOT1, 1);
         inv.consumeItem(INPUT_SLOT2, 1);
         inv.pushItem(output, OUTPUT_SLOTS);
+        removeCharge(l, ENERGY);
         tick(l.getBlock() , inv); //update stuff
     }
 
@@ -278,13 +274,7 @@ public class AdvancedAnvil extends AbstractContainer implements EnergyNetCompone
             return null;
         }
     }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
-    }
-
+    
     @Override
     public int getCapacity() {
         return ENERGY * 2;

@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.utils;
 
 import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.presets.RecipePreset;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 

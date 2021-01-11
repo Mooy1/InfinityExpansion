@@ -2,9 +2,8 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -34,7 +33,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class MaterialGenerator extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+public class MaterialGenerator extends AbstractMachine implements RecipeDisplayItem {
 
     public static final int COBBLE_ENERGY = 24;
     public static final int COBBLE2_ENERGY = 120;
@@ -52,7 +51,7 @@ public class MaterialGenerator extends AbstractContainer implements EnergyNetCom
     private final Type type;
 
     public MaterialGenerator(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
+        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe(), STATUS_SLOT, type.energy);
         this.type = type;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -88,38 +87,30 @@ public class MaterialGenerator extends AbstractContainer implements EnergyNetCom
     }
     
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
-        int energy = this.type.getEnergy();
+    }
 
-        if (getCharge(b.getLocation()) < energy) { //not enough energy
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            }
-            return;
-
-        }
-
+    @Override
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         ItemStack output = new ItemStack(this.type.getOutput(), this.type.getSpeed());
 
         if (!inv.fits(output, OUTPUT_SLOTS)) {
 
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
-            return;
+            return false;
 
         }
 
         inv.pushItem(output, OUTPUT_SLOTS);
 
-        removeCharge(b.getLocation(), energy);
-
-        if (playerWatching) {
+        if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aGenerating..."));
         }
+
+        return true;
     }
 
     @Nonnull

@@ -5,11 +5,9 @@ import io.github.mooy1.infinityexpansion.implementation.gear.VeinMinerRune;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.items.backpacks.SlimefunBackpack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
@@ -36,7 +34,7 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class ItemUpdater extends AbstractContainer implements EnergyNetComponent {
+public class ItemUpdater extends AbstractMachine {
 
     public static final int ENERGY = 200;
 
@@ -54,7 +52,7 @@ public class ItemUpdater extends AbstractContainer implements EnergyNetComponent
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-        });
+        }, STATUS_SLOT, ENERGY);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -95,89 +93,84 @@ public class ItemUpdater extends AbstractContainer implements EnergyNetComponent
     }
     
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        boolean playerWatching = inv.hasViewer();
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
+    }
+
+    @Override
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         ItemStack input = inv.getItemInSlot(INPUT_SLOT);
-
-        if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            }
-            return;
-        }
 
         if (input == null) { //check input
 
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.inputAnItem);
             }
-            return;
+            return false;
         }
-        
+
         int inputAmount = input.getAmount();
         SlimefunItem item = SlimefunItem.getByItem(input);
-        
+
         if (item == null) {
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         Material.RED_STAINED_GLASS_PANE,
                         "&cInput a Slimefun item!")
                 );
             }
-            return;
+            return false;
         }
-        
+
         if (item instanceof SlimefunBackpack) {
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         Material.RED_STAINED_GLASS_PANE,
                         "&cBackpacks cannot be reset!")
                 );
             }
-            return;
+            return false;
         }
-        
+
         ItemStack output = item.getItem().clone();
         output.setAmount(inputAmount);
 
         if (item instanceof LoreStorage) {
             ((LoreStorage) item).transfer(output, input);
         }
-        
+
         if (!inv.fits(output, OUTPUT_SLOTS)) { //update
 
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
-            return;
+            return false;
         }
 
         //transfer durability
         if (input.getItemMeta() instanceof Damageable) {
             ItemMeta outputMeta = output.getItemMeta();
-            if (outputMeta == null) return;
+            if (outputMeta == null) return false;
             Damageable outputDurability = (Damageable) outputMeta;
 
             if (input.getItemMeta() instanceof Damageable) {
                 ItemMeta inputMeta = input.getItemMeta();
-                if (inputMeta == null) return;
+                if (inputMeta == null) return false;
                 Damageable inputDurability = (Damageable) inputMeta;
 
                 outputDurability.setDamage(inputDurability.getDamage());
                 output.setItemMeta(outputMeta);
             }
         }
-        
+
         if (VeinMinerRune.isVeinMiner(input)) {
             VeinMinerRune.setVeinMiner(output, true);
         }
-        
+
         if (SlimefunUtils.isSoulbound(input)) {
             SlimefunUtils.setSoulbound(output, true);
         }
-        
+
         StackUtils.removeEnchants(output);
 
         output.addUnsafeEnchantments(input.getEnchantments());
@@ -190,20 +183,16 @@ public class ItemUpdater extends AbstractContainer implements EnergyNetComponent
         inv.consumeItem(INPUT_SLOT, inputAmount);
         inv.pushItem(output, OUTPUT_SLOTS);
 
-        if (playerWatching) {
+        if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(
                     Material.LIME_STAINED_GLASS_PANE,
                     "&aItem Reset and Updated!")
             );
         }
+        
+        return true;
     }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
-    }
-
+    
     @Override
     public int getCapacity() {
         return ENERGY * 2;

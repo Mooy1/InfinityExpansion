@@ -222,6 +222,11 @@ public class StrainerBase extends AbstractContainer implements RecipeDisplayItem
         //b.setBlockData(blockData);
     }
 
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        
+    }
+
     /**
      * This method gets the speed of strainer from its id
      *

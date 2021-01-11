@@ -132,7 +132,7 @@ public final class Items {
             "RESOURCE_SYNTHESIZER",
             Material.LODESTONE,
             "&6Resource Synthesizer",
-            "&7Creates resources out of singularities",
+            "&7Creates resources by combining 2 Singularities",
             "",
             LorePreset.energy(ResourceSynthesizer.ENERGY) + "per use"
     );

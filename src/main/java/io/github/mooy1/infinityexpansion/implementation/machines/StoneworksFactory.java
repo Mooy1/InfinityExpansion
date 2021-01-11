@@ -3,11 +3,9 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AllArgsConstructor;
@@ -33,7 +31,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class StoneworksFactory extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+public class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem {
 
     public static final int ENERGY = 180;
 
@@ -51,7 +49,7 @@ public class StoneworksFactory extends AbstractContainer implements EnergyNetCom
                 Items.MAGSTEEL_PLATE, Items.BASIC_COBBLE_GEN, Items.MAGSTEEL_PLATE,
                 SlimefunItems.ELECTRIC_FURNACE_3, Items.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
                 Items.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, Items.MAGSTEEL_PLATE
-        });
+        }, STATUS_SLOT, ENERGY);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -123,22 +121,11 @@ public class StoneworksFactory extends AbstractContainer implements EnergyNetCom
         if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
         }
-
         return new int[0];
     }
-    
+
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        int charge = getCharge(b.getLocation());
-        boolean playerWatching = inv.hasViewer();
-
-        if (charge < ENERGY) {
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            }
-            return;
-        }
-
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         inv.replaceExistingItem(STATUS_SLOT, COBBLE_GEN);
 
         int tick = InfinityExpansion.getCurrentTick() % 4;
@@ -153,9 +140,9 @@ public class StoneworksFactory extends AbstractContainer implements EnergyNetCom
             process(tick, inv, b.getLocation());
         }
 
-        removeCharge(b.getLocation(), ENERGY);
+        return true;
     }
-    
+
     private void process(int i, BlockMenu inv, Location l) {
         int slot = PROCESS_SLOTS[i];
 
@@ -191,12 +178,6 @@ public class StoneworksFactory extends AbstractContainer implements EnergyNetCom
                 break;
             }
         }
-    }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
     }
 
     @Override

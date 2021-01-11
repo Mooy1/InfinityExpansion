@@ -4,11 +4,9 @@ import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
@@ -36,7 +34,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class VoidHarvester extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+public class VoidHarvester extends AbstractMachine implements RecipeDisplayItem {
 
     public static final int BASIC_ENERGY = 120;
     public static final int BASIC_SPEED = 1;
@@ -52,7 +50,7 @@ public class VoidHarvester extends AbstractContainer implements EnergyNetCompone
     private final Type type;
 
     public VoidHarvester(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
+        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe(), STATUS_SLOT, type.energy);
         this.type = type;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -96,20 +94,7 @@ public class VoidHarvester extends AbstractContainer implements EnergyNetCompone
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        boolean playerWatching = inv.toInventory() != null && !inv.toInventory().getViewers().isEmpty();
-
-        int energy = this.type.getEnergy();
-
-        if (getCharge(b.getLocation()) < energy) { //not enough energy
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            }
-            return;
-
-        }
-
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         int progress = Integer.parseInt(getProgress(b));
 
         int speed = this.type.getSpeed();
@@ -124,9 +109,9 @@ public class VoidHarvester extends AbstractContainer implements EnergyNetCompone
 
                 setProgress(b, speed);
 
-                removeCharge(b.getLocation(), energy);
+                removeCharge(b.getLocation(), this.type.energy);
 
-                if (playerWatching) { //done
+                if (inv.hasViewer()) { //done
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                             "&aHarvesting complete! - 100%",
                             "&7(" + progress + "/" + TIME + ")"
@@ -135,26 +120,26 @@ public class VoidHarvester extends AbstractContainer implements EnergyNetCompone
 
             } else { //output slots full
 
-                if (playerWatching) {
+                if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
                 }
+                return false;
             }
-            
-            return;
         }
-        
-        
+
+
         //increase progress
 
         setProgress(b, progress+speed);
-        removeCharge(b.getLocation(), energy);
+        removeCharge(b.getLocation(), this.type.energy);
 
-        if (playerWatching) { //update status
+        if (inv.hasViewer()) { //update status
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                     "&aHarvesting - " + progress * 100 / TIME + "%",
                     "&7(" + progress + "/" + TIME + ")"
             ));
         }
+        return true;
     }
 
     private void setProgress(Block b, int progress) {
@@ -163,12 +148,6 @@ public class VoidHarvester extends AbstractContainer implements EnergyNetCompone
 
     private String getProgress(Block b) {
         return BlockStorage.getLocationInfo(b.getLocation(), "progress");
-    }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
     }
 
     @Override

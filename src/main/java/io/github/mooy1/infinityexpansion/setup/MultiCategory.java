@@ -3,7 +3,7 @@ package io.github.mooy1.infinityexpansion.setup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
-import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -24,21 +24,21 @@ import java.util.List;
  * @author Mooy1
  * 
  */
-public final class MainCategory extends FlexCategory {
+public final class MultiCategory extends FlexCategory {
     
     public final List<Category> categories = new ArrayList<>();
     
-    public MainCategory(NamespacedKey key, ItemStack item, int tier) {
+    public MultiCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
     }
     
     @Override
-    public boolean isVisible(@Nonnull Player p, @Nonnull PlayerProfile profile, @Nonnull SlimefunGuideLayout layout) {
-        return layout == SlimefunGuideLayout.CHEST;
+    public boolean isVisible(@Nonnull Player p, @Nonnull PlayerProfile profile, @Nonnull SlimefunGuideMode layout) {
+        return true;
     }
 
     @Override
-    public void open(Player p, PlayerProfile profile, SlimefunGuideLayout layout) {
+    public void open(Player p, PlayerProfile profile, SlimefunGuideMode mode) {
         ChestMenu menu = new ChestMenu(getUnlocalizedName());
         menu.setEmptySlotsClickable(false);
         
@@ -48,14 +48,14 @@ public final class MainCategory extends FlexCategory {
         
         menu.addItem(1, ChestMenuUtils.getBackButton(p, "", ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(p, "guide.back.guide")));
         menu.addMenuClickHandler(1, (pl, s, is, action) -> {
-            SlimefunGuide.openMainMenu(profile, layout, 1);
+            SlimefunGuide.openMainMenu(profile, mode, 1);
             return false;
         });
         
         for (int i = 0 ; i < this.categories.size() ; i++) {
             Category category = this.categories.get(i);
             menu.addItem(i + 9, category.getItem(p), (pl, s, is, action) -> {
-                SlimefunGuide.openCategory(profile, category, layout, 1);
+                SlimefunGuide.openCategory(profile, category, mode, 1);
                 return false;
             });
         }

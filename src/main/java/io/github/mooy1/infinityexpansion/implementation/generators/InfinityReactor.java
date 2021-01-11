@@ -22,6 +22,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -231,12 +232,12 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
         List<ItemStack> items = new ArrayList<>();
 
         ItemStack item = Items.INFINITE_INGOT.clone();
-        LoreUtils.addLore(item, "", "Lasts for 1 day");
+        LoreUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 1 day");
         items.add(item);
         items.add(null);
 
         item = Items.VOID_INGOT.clone();
-        LoreUtils.addLore(item, "", "Lasts for 4 hours");
+        LoreUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 4 hours");
         items.add(item);
         items.add(null);
 

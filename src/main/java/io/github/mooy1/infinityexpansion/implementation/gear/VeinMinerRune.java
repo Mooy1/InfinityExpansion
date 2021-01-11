@@ -4,9 +4,9 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.general.LocationUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.math.RandomUtils;
+import io.github.mooy1.infinitylib.menus.LocationUtils;
 import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
@@ -77,7 +77,7 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
                 new ItemStack(Material.REDSTONE_ORE), SlimefunItems.BLANK_RUNE, new ItemStack(Material.LAPIS_ORE),
                 Items.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, Items.MAGSTEEL,
         });
-        new LeaveListener(CDS);
+        LeaveListener.add(CDS);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         key = new NamespacedKey(plugin, "vein_miner");
     }

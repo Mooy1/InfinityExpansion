@@ -36,7 +36,7 @@ public class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResou
             return 16;
         }
         if (biome == Biome.THE_VOID) {
-            return 16;
+            return 12;
         }
         if (environment == World.Environment.NETHER) {
             return 8;

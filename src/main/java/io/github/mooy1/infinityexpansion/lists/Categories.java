@@ -3,7 +3,7 @@ package io.github.mooy1.infinityexpansion.lists;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.setup.SubCategory;
 import io.github.mooy1.infinityexpansion.setup.InfinityCategory;
-import io.github.mooy1.infinityexpansion.setup.MainCategory;
+import io.github.mooy1.infinityexpansion.setup.MultiCategory;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -18,7 +18,7 @@ public final class Categories {
     
     private static final InfinityExpansion instance = InfinityExpansion.getInstance();
     
-    public static final MainCategory MAIN = new MainCategory(new NamespacedKey(instance, "main"), 
+    public static final MultiCategory MAIN = new MultiCategory(new NamespacedKey(instance, "main"), 
             new CustomItem(Material.NETHER_STAR, "&bInfinity &7Expansion"), -1
     );
 

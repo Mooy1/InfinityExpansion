@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
@@ -111,6 +112,11 @@ public class EnergyGenerator extends AbstractContainer implements EnergyNetProvi
         } catch (ConcurrentModificationException ignored) { }
     }
 
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        
+    }
+
     public int getGeneratedOutput(@Nonnull Location l, @Nonnull Config data) {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return 0;
@@ -154,13 +160,23 @@ public class EnergyGenerator extends AbstractContainer implements EnergyNetProvi
         int generation = this.type.getGeneration();
 
         if (this.type.isWater()) {
-            BlockData blockData = block.getBlockData();
+            
+            // don't check water log every tick
+            if (InfinityExpansion.progressEvery(8)) {
+                BlockData blockData = block.getBlockData();
 
-            if (blockData instanceof Waterlogged) {
-                Waterlogged waterLogged = (Waterlogged) blockData;
-                if (waterLogged.isWaterlogged()) {
-                    return new Pair<>(generation, "Hydroelectric");
+                if (blockData instanceof Waterlogged) {
+                    Waterlogged waterLogged = (Waterlogged) blockData;
+                    if (waterLogged.isWaterlogged()) {
+                        BlockStorage.addBlockInfo(block.getLocation(), "water_logged", "true");
+                        return new Pair<>(generation, "Hydroelectric");
+                    } else {
+                        BlockStorage.addBlockInfo(block.getLocation(), "water_logged", "false");
+                    }
                 }
+                
+            } else if (Objects.equals(BlockStorage.getLocationInfo(block.getLocation(), "water_logged"), "true")) {
+                return new Pair<>(generation, "Hydroelectric");
             }
             
         } else if (this.type == Type.INFINITY) {

@@ -324,7 +324,12 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
         updateStatus(b, inv, true);
         
     }
-    
+
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        
+    }
+
     private static boolean checkItem(ItemStack stack) {
         SlimefunItem item = SlimefunItem.getByItem(stack);
         return !(item instanceof SlimefunBackpack) && !(item instanceof LoreStorage) && !SlimefunTag.SHULKER_BOXES.isTagged(stack.getType());

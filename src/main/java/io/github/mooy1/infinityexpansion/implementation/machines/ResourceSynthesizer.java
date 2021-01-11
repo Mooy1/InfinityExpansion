@@ -3,11 +3,9 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 import io.github.mooy1.infinityexpansion.lists.Categories;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -30,7 +28,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class ResourceSynthesizer extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+public class ResourceSynthesizer extends AbstractMachine implements RecipeDisplayItem {
 
     public static final int ENERGY = 1_000_000;
 
@@ -66,7 +64,7 @@ public class ResourceSynthesizer extends AbstractContainer implements EnergyNetC
                 Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
                 Items.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        });
+        }, STATUS_SLOT, ENERGY);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -116,78 +114,71 @@ public class ResourceSynthesizer extends AbstractContainer implements EnergyNetC
     }
     
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
-            if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            }
-
-        } else {
-            ItemStack input1 = inv.getItemInSlot(INPUT_SLOT1);
-            ItemStack input2 = inv.getItemInSlot(INPUT_SLOT2);
-
-            if (input1 == null || input2 == null) { //no input
-
-                if (inv.hasViewer()) {
-                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.inputAnItem);
-                }
-
-            } else { //start
-                String id1 = StackUtils.getItemID(input1, false);
-                
-                if (id1 == null) return;
-                
-                String id2 = StackUtils.getItemID(input2, false);
-
-                if (id2 == null) return;
-                
-                ItemStack recipe = null;
-
-                for (int i = 0; i < RECIPES.length; i += 3) {
-                    if ((id1.equals(RECIPES[i].getItemId()) && id2.equals(RECIPES[i + 1].getItemId()) || (id2.equals(RECIPES[i].getItemId()) && id1.equals(RECIPES[i + 1].getItemId())))) {
-                        recipe = RECIPES[i + 2];
-                    }
-                }
-
-                if (recipe == null) { //invalid recipe
-
-                    if (inv.hasViewer()) {
-                        inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
-                    }
-
-                } else { //start
-                    
-                    recipe = recipe.clone();
-                    
-                    if (inv.fits(recipe, OUTPUT_SLOTS)) { //no item
-
-                        inv.pushItem(recipe, OUTPUT_SLOTS);
-                        inv.consumeItem(INPUT_SLOT1, 1);
-                        inv.consumeItem(INPUT_SLOT2, 1);
-                        removeCharge(b.getLocation(), ENERGY);
-
-                        if (inv.hasViewer()) {
-                            inv.replaceExistingItem(STATUS_SLOT,
-                                    new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
-                        }
-                        
-                    } else { //not enough room
-
-                        if (inv.hasViewer()) {
-                            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
-                        }
-
-                    }
-                }
-            }
-        }
     }
 
-    @Nonnull
     @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
+
+        ItemStack input1 = inv.getItemInSlot(INPUT_SLOT1);
+        ItemStack input2 = inv.getItemInSlot(INPUT_SLOT2);
+
+        if (input1 == null || input2 == null) { //no input
+
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.inputAnItem);
+            }
+            return false;
+
+        }
+        
+        String id1 = StackUtils.getItemID(input1, false);
+
+        if (id1 == null) return false;
+
+        String id2 = StackUtils.getItemID(input2, false);
+
+        if (id2 == null) return false;
+
+        ItemStack recipe = null;
+
+        for (int i = 0; i < RECIPES.length; i += 3) {
+            if ((id1.equals(RECIPES[i].getItemId()) && id2.equals(RECIPES[i + 1].getItemId()) || (id2.equals(RECIPES[i].getItemId()) && id1.equals(RECIPES[i + 1].getItemId())))) {
+                recipe = RECIPES[i + 2];
+            }
+        }
+
+        if (recipe == null) { //invalid recipe
+
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
+            }
+            return false;
+
+        }
+
+        recipe = recipe.clone();
+
+        if (inv.fits(recipe, OUTPUT_SLOTS)) { //no item
+
+            inv.pushItem(recipe, OUTPUT_SLOTS);
+            inv.consumeItem(INPUT_SLOT1, 1);
+            inv.consumeItem(INPUT_SLOT2, 1);
+
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
+            }
+            return true;
+
+        } else { //not enough room
+
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
+            }
+            return false;
+
+        }
     }
 
     @Override

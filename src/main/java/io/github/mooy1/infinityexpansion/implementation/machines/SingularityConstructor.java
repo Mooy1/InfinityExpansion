@@ -146,9 +146,9 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
         }
     }
 
-    @Override
+    @Override //TODO REDO THIS 
     public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        String name;
+        String name = "";
         Material statusMat = Material.BARRIER;
 
         int progress = Integer.parseInt(getProgress(b));
@@ -242,16 +242,18 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
 
                         }
                     }
-
-                } else { //if construction done
-
+                }
+                
+                progress = Integer.parseInt(getProgress(b));
+                
+                if (progress >= outputTime) {
                     ItemStack output = Singularity.RECIPES.get(progressID).getA();
 
                     if (inv.fits(output, OUTPUT_SLOTS)) { //output
-                        
+
                         output = output.clone();
 
-                        removeCharge(b.getLocation(), energy);
+                        removeCharge(b.getLocation(), this.type.getEnergy());
                         inv.pushItem(output, OUTPUT_SLOTS);
                         setProgress(b, 0);
                         setProgressID(b, null);

@@ -1,15 +1,14 @@
 package io.github.mooy1.infinityexpansion;
 
+import io.github.mooy1.infinityexpansion.implementation.blocks.StorageUnit;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
-import io.github.mooy1.infinityexpansion.implementation.blocks.StorageUnit;
 import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.setup.Setup;
 import io.github.mooy1.infinityexpansion.setup.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.setup.commands.ResetConfig;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.command.CommandLib;
-import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import lombok.Getter;
 import org.bstats.bukkit.Metrics;
@@ -37,8 +36,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     public void onEnable() {
         instance = this;
         
-        PluginUtils.setup(this, "Mooy1/InfinityExpansion/master", getFile());
-        MessageUtils.setPrefix(ChatColor.DARK_GRAY + "[" + ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion" + ChatColor.DARK_GRAY + "]" + ChatColor.WHITE + " ");
+        PluginUtils.setup(ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion", this, "Mooy1/InfinityExpansion/master", getFile());
         new CommandLib(this, "infinityexpansion", "infinityexpansion.admin", "/ie, /ix, /infinity");
         CommandLib.addCommands(new GiveRecipe(), new ResetConfig());
         setupConfigOptions();

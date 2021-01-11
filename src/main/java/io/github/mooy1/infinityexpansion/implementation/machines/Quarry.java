@@ -6,9 +6,8 @@ import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
 import io.github.mooy1.infinitylib.math.RandomUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -38,17 +37,17 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class Quarry extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+public class Quarry extends AbstractMachine implements RecipeDisplayItem {
 
     public static final int BASIC_SPEED = 1;
     public static final int ADVANCED_SPEED = 2;
     public static final int VOID_SPEED = 4;
     public static final int INFINITY_SPEED = 16;
 
-    public static final int BASIC_ENERGY = 360;
-    public static final int ADVANCED_ENERGY = 1440;
-    public static final int VOID_ENERGY = 5760;
-    public static final int INFINITY_ENERGY = 23040;
+    public static final int BASIC_ENERGY = 300;
+    public static final int ADVANCED_ENERGY = 900;
+    public static final int VOID_ENERGY = 3600;
+    public static final int INFINITY_ENERGY = 18000;
 
     private final Type type;
 
@@ -62,7 +61,7 @@ public class Quarry extends AbstractContainer implements EnergyNetComponent, Rec
     private static final int STATUS_SLOT = 4;
 
     public Quarry(Type type) {
-        super(type.category, type.item, type.recipeType, type.recipe);
+        super(type.category, type.item, type.recipeType, type.recipe, STATUS_SLOT, type.energy);
         this.type = type;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -85,17 +84,22 @@ public class Quarry extends AbstractContainer implements EnergyNetComponent, Rec
     }
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+
+    }
+
+    @Override
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
+
         if (getCharge(b.getLocation()) < this.type.energy) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
             }
-            return;
+            return false;
         }
-        
-        ItemStack outputItem; 
-        
+
+        ItemStack outputItem;
+
         if (RandomUtils.chanceIn(this.type.chance)) {
             outputItem = RandomUtils.randomOutput(this.type.output);
             Material outputType = outputItem.getType();
@@ -105,20 +109,19 @@ public class Quarry extends AbstractContainer implements EnergyNetComponent, Rec
         } else {
             outputItem = this.type.cobble;
         }
-        
+
         if (!inv.fits(outputItem, OUTPUT_SLOTS)) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
-            return;
+            return false;
         }
 
         if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMining..."));
         }
-        removeCharge(b.getLocation(), this.type.energy);
         inv.pushItem(outputItem, OUTPUT_SLOTS);
-            
+        return true;
     }
 
     @Override
@@ -151,11 +154,10 @@ public class Quarry extends AbstractContainer implements EnergyNetComponent, Rec
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
+        items.add(this.type.cobble);
         for (ItemStack item : this.type.output) {
-            if (!items.contains(item)) {
-                items.add(null);
-                items.add(item);
-            }
+            items.add(null);
+            items.add(item);
         }
 
         return items;
@@ -172,20 +174,20 @@ public class Quarry extends AbstractContainer implements EnergyNetComponent, Rec
         BASIC(Categories.ADVANCED_MACHINES, BASIC_ENERGY, Items.BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MAGSTEEL_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT}, BASIC_OUTPUTS, 5, makeOutput(Material.COBBLESTONE, 1)
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT}, BASIC_OUTPUTS, 10, makeOutput(Material.COBBLESTONE, 1)
         ),
         ADVANCED(Categories.ADVANCED_MACHINES, ADVANCED_ENERGY, Items.ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), Items.BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT}, ADVANCED_OUTPUTS, 4, makeOutput(Material.COBBLESTONE, 12)
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT}, ADVANCED_OUTPUTS, 8, makeOutput(Material.COBBLESTONE, 2)
         ),
         VOID(Categories.ADVANCED_MACHINES, VOID_ENERGY, Items.VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.VOID_INGOT, Items.VOID_CAPACITOR, Items.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), Items.ADVANCED_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT}, VOID_OUTPUTS, 3, makeOutput(Material.COBBLESTONE, 4)
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT}, VOID_OUTPUTS, 6, makeOutput(Material.COBBLESTONE, 4)
         ),
         INFINITY(Categories.INFINITY_CHEAT, INFINITY_ENERGY, Items.INFINITY_QUARRY, RecipeTypes.INFINITY_WORKBENCH,
-                InfinityRecipes.getRecipe(Items.INFINITY_QUARRY), INFINITY_OUTPUTS, 2, makeOutput(Material.COBBLESTONE, 16)
+                InfinityRecipes.getRecipe(Items.INFINITY_QUARRY), INFINITY_OUTPUTS, 4, makeOutput(Material.COBBLESTONE, 16)
         );
         
         private final Category category;
