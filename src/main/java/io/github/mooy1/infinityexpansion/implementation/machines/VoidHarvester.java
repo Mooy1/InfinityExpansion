@@ -96,43 +96,26 @@ public class VoidHarvester extends AbstractMachine implements RecipeDisplayItem 
     @Override
     public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         int progress = Integer.parseInt(getProgress(b));
-
-        int speed = this.type.getSpeed();
-
+        
         if (progress >= TIME) { //reached full progress
 
-            ItemStack output = Items.VOID_BIT.clone();
+            ItemStack output = Items.VOID_BIT;
 
             if (inv.fits(output, OUTPUT_SLOTS)) {
 
-                inv.pushItem(output, OUTPUT_SLOTS);
+                inv.pushItem(output.clone(), OUTPUT_SLOTS);
 
-                setProgress(b, speed);
+                progress = 0;
 
-                removeCharge(b.getLocation(), this.type.energy);
-
-                if (inv.hasViewer()) { //done
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                            "&aHarvesting complete! - 100%",
-                            "&7(" + progress + "/" + TIME + ")"
-                    ));
-                }
-
-            } else { //output slots full
-
-                if (inv.hasViewer()) {
-                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
-                }
+            } else if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
                 return false;
             }
+        } else {
+            progress+= this.type.speed;
         }
-
-
-        //increase progress
-
-        setProgress(b, progress+speed);
-        removeCharge(b.getLocation(), this.type.energy);
-
+        
+        setProgress(b, progress);
         if (inv.hasViewer()) { //update status
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                     "&aHarvesting - " + progress * 100 / TIME + "%",
