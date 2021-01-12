@@ -246,7 +246,7 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
                 int slotAmount = inputSlotItem.getAmount();
                 int stored = getStored(b);
 
-                if (stored == 0 && storedItem == null) { //store new item
+                if (stored == 0 || storedItem == null) { //store new item
 
                     setStoredItem(b, inputItemID);
                     setStored(b, slotAmount);
@@ -255,7 +255,6 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
                 } else {
 
                     int maxInput = this.type.getMax() - stored;
-                    storedItem = getStoredItem(b);
 
                     if (storedItem.equals(inputItemID)) { //deposit item
 
