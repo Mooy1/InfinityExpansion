@@ -1,21 +1,23 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -40,14 +42,44 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class SingularityConstructor extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
-
-    public static final int BASIC_ENERGY = 120;
-    public static final int BASIC_SPEED = 1;
-    public static final int INFINITY_ENERGY = 1200;
-    public static final int INFINITY_SPEED = 32;
-
-    private final Type type;
+public final class SingularityConstructor extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+    
+    public static void setup(InfinityExpansion plugin) {
+        new SingularityConstructor(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL,
+                MachineItem.MACHINE_PLATE, SlimefunItems.CARBON_PRESS_3, MachineItem.MACHINE_PLATE,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+        }, 120, 1).register(plugin);
+        new SingularityConstructor(Categories.INFINITY_CHEAT, INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
+                null, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, null,
+                null, CompressedItem.VOID_INGOT, InfinityItem.CIRCUIT, InfinityItem.CIRCUIT, CompressedItem.VOID_INGOT, null,
+                null, CompressedItem.VOID_INGOT, BASIC, BASIC, CompressedItem.VOID_INGOT, null,
+                null, CompressedItem.VOID_INGOT, BASIC, BASIC, CompressedItem.VOID_INGOT, null,
+                null, SmelteryItem.INFINITY, InfinityItem.CORE, InfinityItem.CORE, SmelteryItem.INFINITY, null,
+                SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY
+        }, 1200, 32).register(plugin);
+    }
+    
+    public static final SlimefunItemStack BASIC = new SlimefunItemStack(
+            "SINGULARITY_CONSTRUCTOR",
+            Material.QUARTZ_BRICKS,
+            "&fSingularity Constructor",
+            "&7Condenses large amounts of resources",
+            "",
+            LorePreset.speed(1),
+            LorePreset.energyPerSecond(120)
+    );
+    public static final SlimefunItemStack INFINITY = new SlimefunItemStack(
+            "INFINITY_CONSTRUCTOR",
+            Material.CHISELED_QUARTZ_BLOCK,
+            "&bInfinity &fConstructor",
+            "&7Quickly condenses large amounts of resources",
+            "",
+            LorePreset.speed(32),
+            LorePreset.energyPerSecond(1200)
+    );
+    public static final RecipeType TYPE = new RecipeType(PluginUtils.getKey("singularity_constructor"), BASIC);
+    
     private static final int STATUS_SLOT = 13;
     private static final int[] INPUT_SLOTS = {
             10
@@ -67,15 +99,19 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
             6, 7, 8, 15, 17, 24, 25, 26
     };
     
-    public SingularityConstructor(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
-        this.type = type;
+    private final int speed;
+    private final int energy;
+    
+    private SingularityConstructor(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
+        super(category, item, type, recipe);
+        this.speed = speed;
+        this.energy = energy;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                int progress = Integer.parseInt(getBlockData(b.getLocation(), "progress"));
+                int progress = Integer.parseInt(getProgress(b));
                 String inputTest = getProgressID(b);
                 Location l = b.getLocation();
 
@@ -155,10 +191,8 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
 
         int progress = Integer.parseInt(getProgress(b));
         ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
-
-        int energy = this.type.getEnergy();
-
-        if (getCharge(b.getLocation()) < energy) { //when not enough power
+        
+        if (getCharge(b.getLocation()) < this.energy) { //when not enough power
 
             name = "&cNot enough energy!";
 
@@ -178,16 +212,14 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
             }
 
         } else { //input
-
-            int speed = this.type.getSpeed();
-
+            
             String progressTest = getProgressID(b);
 
             if (progress == 0 || progressTest == null) { //no input
 
-                if (checkItemAndSet(b, inv, inputSlotItem, speed)) { //try to start construction
+                if (checkItemAndSet(b, inv, inputSlotItem, this.speed)) { //try to start construction
 
-                    removeCharge(b.getLocation(), energy);
+                    removeCharge(b.getLocation(), this.energy);
                     name = "&aBeginning construction!";
                     statusMat = Material.NETHER_STAR;
 
@@ -213,16 +245,16 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
                     if (Objects.equals(StackUtils.getIDorElse(inputSlotItem, inputSlotItem.getType().toString()), input)) { //input matches
 
                         int inputSlotAmount = inputSlotItem.getAmount();
-                        removeCharge(b.getLocation(), energy);
+                        removeCharge(b.getLocation(), this.energy);
 
                         if (inputSlotAmount + progress > outputTime) {
                             inputSlotAmount = outputTime - progress;
                         }
 
-                        if (inputSlotAmount >= speed) { //speed
+                        if (inputSlotAmount >= this.speed) { //speed
 
-                            setProgress(b, progress + speed);
-                            inv.consumeItem(INPUT_SLOT, speed);
+                            setProgress(b, progress + this.speed);
+                            inv.consumeItem(INPUT_SLOT, this.speed);
 
                         } else { //less than speed
 
@@ -255,7 +287,7 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
 
                         output = output.clone();
 
-                        removeCharge(b.getLocation(), this.type.getEnergy());
+                        removeCharge(b.getLocation(), this.energy);
                         inv.pushItem(output, OUTPUT_SLOTS);
                         setProgress(b, 0);
                         setProgressID(b, null);
@@ -328,27 +360,19 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
     }
 
     private void setProgress(Block b, int progress) {
-        setBlockData(b, "progress", String.valueOf(progress));
+        BlockStorage.addBlockInfo(b, "progress", String.valueOf(progress));
     }
 
     private void setProgressID(Block b, String progressID) {
-        setBlockData(b, "progressid", progressID);
+        BlockStorage.addBlockInfo(b, "progressid", progressID);
     }
 
     private String getProgress(Block b) {
-        return getBlockData(b.getLocation(), "progress");
+        return BlockStorage.getLocationInfo(b.getLocation(), "progress");
     }
 
     private String getProgressID(Block b) {
-        return getBlockData(b.getLocation(), "progressid");
-    }
-
-    private void setBlockData(Block b, String key, String data) {
-        BlockStorage.addBlockInfo(b, key, data);
-    }
-
-    private String getBlockData(Location l, String key) {
-        return BlockStorage.getLocationInfo(l, key);
+        return BlockStorage.getLocationInfo(b.getLocation(), "progressid");
     }
 
     @Nonnull
@@ -359,7 +383,7 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
 
     @Override
     public int getCapacity() {
-        return this.type.getEnergy() * 2;
+        return this.energy * 2;
     }
 
     @Nonnull
@@ -375,26 +399,4 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
         return items;
     }
 
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-
-    public enum Type {
-        BASIC(Categories.ADVANCED_MACHINES, BASIC_SPEED, BASIC_ENERGY, Items.SINGULARITY_CONSTRUCTOR,
-                RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-                Items.MACHINE_PLATE, SlimefunItems.CARBON_PRESS_3, Items.MACHINE_PLATE,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }),
-        INFINITY(Categories.INFINITY_CHEAT, INFINITY_SPEED, INFINITY_ENERGY,Items.INFINITY_CONSTRUCTOR,
-                RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_CONSTRUCTOR));
-
-        @Nonnull
-        private final Category category;
-        private final int speed;
-        private final int energy;
-        private final SlimefunItemStack item;
-        private final RecipeType recipeType;
-        private final ItemStack[] recipe;
-    }
 }

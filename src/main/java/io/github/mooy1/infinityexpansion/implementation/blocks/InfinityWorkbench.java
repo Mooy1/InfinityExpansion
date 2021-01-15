@@ -1,14 +1,16 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.setup.InfinityCategory;
-import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
+import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.setup.categories.InfinityCategory;
+import io.github.mooy1.infinityexpansion.utils.Util;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.filter.FilterType;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -20,6 +22,7 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -30,16 +33,29 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A 6x6 crafting table O.o
  *
  * @author Mooy1
  */
-public class InfinityWorkbench extends AbstractContainer implements EnergyNetComponent {
+public final class InfinityWorkbench extends AbstractContainer implements EnergyNetComponent {
 
-    public static final int ENERGY = 10_000_000;
-
+    private static final int ENERGY = 10_000_000;
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "INFINITY_FORGE",
+            Material.RESPAWN_ANCHOR,
+            "&6Infinity Workbench",
+            "&7Used to craft infinity items",
+            "",
+            LorePreset.energy(InfinityWorkbench.ENERGY) + "per item"
+    );
+    
     public static final int[] INPUT_SLOTS = {
         0, 1, 2, 3, 4, 5,
         9, 10, 11, 12, 13, 14,
@@ -48,23 +64,30 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
         36, 37, 38, 39, 40, 41,
         45, 46, 47, 48, 49, 50
     };
-    private static final int[] OUTPUT_SLOTS = {
-            MenuPreset.slot3 + 27
-    };
+    private static final int[] OUTPUT_SLOTS = {MenuPreset.slot3 + 27};
     private static final int STATUS_SLOT = MenuPreset.slot3;
-    private static final int[] STATUS_BORDER = {
-            6, 8,
-            15, 17,
-            24, 25, 26
-    };
+    private static final int[] STATUS_BORDER = {6, 8, 15, 17, 24, 25, 26};
     private static final int RECIPE_SLOT = 7;
     private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemStack[36]).hashCode();
-
+    
+    public static final Map<MultiFilter, SlimefunItemStack> RECIPES = new HashMap<>();
+    public static final LinkedHashMap<String, Pair<SlimefunItemStack, ItemStack[]>> ITEMS = new LinkedHashMap<>();
+    public static final List<String> IDS = new ArrayList<>();
+    
+    public static final RecipeType TYPE = new RecipeType(PluginUtils.getKey("infinity_forge"), ITEM, (stacks, stack) -> {
+        if (stacks.length == 36 && stack instanceof SlimefunItemStack) {
+            SlimefunItemStack item = (SlimefunItemStack) stack;
+            RECIPES.put(new MultiFilter(FilterType.IGNORE_AMOUNT, stacks), item);
+            ITEMS.put(item.getItemId(), new Pair<>(item, stacks));
+            IDS.add(item.getItemId());
+        }
+    }, "", "&cUse the infinity recipes category to see the correct recipe!");
+    
     public InfinityWorkbench() {
-        super(Categories.MAIN_MATERIALS, Items.INFINITY_WORKBENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
+        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+            CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT,
                 SlimefunItems.ENERGIZED_CAPACITOR, new ItemStack(Material.CRAFTING_TABLE), SlimefunItems.ENERGIZED_CAPACITOR,
-                Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT
+                CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT
         });
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -133,7 +156,7 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
 
                 } else { //correct recipe
 
-                    inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output.clone()));
+                    inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.clone()));
 
                 }
             }
@@ -192,7 +215,7 @@ public class InfinityWorkbench extends AbstractContainer implements EnergyNetCom
         if (filter.hashCode() == EMPTY) {
             return null;
         }
-        return InfinityRecipes.RECIPES.get(filter);
+        return RECIPES.get(filter);
     }
 
     @Nonnull

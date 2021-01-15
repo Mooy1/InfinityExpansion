@@ -1,19 +1,19 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.Utils;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -37,26 +37,69 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
-
-    public static final int ENERGY1 = 18;
-    public static final int ENERGY2 = 90;
-    public static final int ENERGY3 = 900;
-    public static final int SPEED1 = 1;
-    public static final int SPEED2 = 5;
-    public static final int SPEED3 = 25;
-    public static final int TIME = 300;
-    private final Type type;
+public final class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
     
-    private static final int[] OUTPUT_SLOTS = Utils.largeOutput;
+    public static void setup(InfinityExpansion plugin) {
+        new VirtualFarm(Categories.BASIC_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
+                SmelteryItem.MAGSTEEL, new ItemStack(Material.DIAMOND_HOE), SmelteryItem.MAGSTEEL,
+                MachineItem.MACHINE_CIRCUIT, new ItemStack(Material.GRASS_BLOCK), MachineItem.MACHINE_CIRCUIT
+        }, 18, 1).register(plugin);
+        new VirtualFarm(Categories.ADVANCED_MACHINES, ADVANCED, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
+                SmelteryItem.MAGSTEEL, new ItemStack(Material.DIAMOND_HOE), SmelteryItem.MAGSTEEL,
+                MachineItem.MACHINE_CIRCUIT, new ItemStack(Material.GRASS_BLOCK), MachineItem.MACHINE_CIRCUIT
+        }, 90, 5).register(plugin);
+        new VirtualFarm(Categories.INFINITY_CHEAT, INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
+                new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
+                new ItemStack(Material.GLASS), null, null, null, null, new ItemStack(Material.GLASS),
+                new ItemStack(Material.GLASS), null, null, null, null, new ItemStack(Material.GLASS),
+                new ItemStack(Material.GLASS), new ItemStack(Material.GRASS_BLOCK), new ItemStack(Material.GRASS_BLOCK), new ItemStack(Material.GRASS_BLOCK), new ItemStack(Material.GRASS_BLOCK), new ItemStack(Material.GLASS),
+                MachineItem.MACHINE_PLATE, SlimefunItems.CROP_GROWTH_ACCELERATOR_2, ADVANCED, ADVANCED, SlimefunItems.CROP_GROWTH_ACCELERATOR_2, MachineItem.MACHINE_PLATE,
+                MachineItem.MACHINE_PLATE, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, MachineItem.MACHINE_PLATE
+        }, 900, 25).register(plugin);
+    }
+    
+    public static final SlimefunItemStack BASIC = new SlimefunItemStack(
+            "BASIC_VIRTUAL_FARM",
+            Material.GRASS_BLOCK,
+            "&9Basic &aVirtual Farm",
+            "&7Automatically grows, harvests, and replants crops",
+            "",
+            LorePreset.speed(1),
+            LorePreset.energyPerSecond(18)
+    );
+    public static final SlimefunItemStack ADVANCED = new SlimefunItemStack(
+            "ADVANCED_VIRTUAL_FARM",
+            Material.CRIMSON_NYLIUM,
+            "&cAdvanced &aVirtual Farm",
+            "&7Automatically grows, harvests, and replants crops",
+            "",
+            LorePreset.speed(5),
+            LorePreset.energyPerSecond(90)
+    );
+    public static final SlimefunItemStack INFINITY = new SlimefunItemStack(
+            "INFINITY_VIRTUAL_FARM",
+            Material.WARPED_NYLIUM,
+            "&bInfinity &aVirtual Farm",
+            "&7Automatically grows, harvests, and replants crops",
+            "",
+            LorePreset.speed(25),
+            LorePreset.energyPerSecond(900)
+    );
+    
+    private static final int TIME = 150;
+    private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int[] INPUT_SLOTS = {
             MenuPreset.slot1 + 27
     };
     private static final int STATUS_SLOT = MenuPreset.slot1;
 
-    public VirtualFarm(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe(), STATUS_SLOT, type.energy);
-        this.type = type;
+    private final int speed;
+    
+    private VirtualFarm(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy, int speed) {
+        super(category, item, recipeType, recipe, STATUS_SLOT, energy);
+        this.speed = speed;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -80,7 +123,7 @@ public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
         for (int i : MenuPreset.slotChunk1) {
             blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : Utils.largeOutputBorder) {
+        for (int i : Util.largeOutputBorder) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
@@ -137,12 +180,12 @@ public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
 
                 } else { //start
 
-                    setProgress(b, this.type.getSpeed());
+                    setProgress(b, this.speed);
                     setType(b, inputType);
                     inv.consumeItem(INPUT_SLOTS[0], 1);
 
                     if (inv.hasViewer()) {
-                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aPlanting... (" + this.type.getSpeed() + "/" + TIME + ")"));
+                        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aPlanting... (" + this.speed + "/" + TIME + ")"));
                     }
 
                     return true;
@@ -154,11 +197,11 @@ public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
 
         if (progress < TIME) { //progress
 
-            setProgress(b, progress + this.type.getSpeed());
+            setProgress(b, progress + this.speed);
 
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                        "&aGrowing... (" + (progress + this.type.getSpeed()) + "/" + TIME + ")"));
+                        "&aGrowing... (" + (progress + this.speed) + "/" + TIME + ")"));
             }
 
             return true;
@@ -175,6 +218,7 @@ public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
             }
+            return false;
 
         } else {
             inv.pushItem(output1, OUTPUT_SLOTS);
@@ -186,11 +230,9 @@ public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
 
             setProgress(b, 0);
             setType(b, null);
-            removeCharge(b.getLocation(), this.type.energy);
+            return true;
 
         }
-        
-        return true;
     }
 
     /**
@@ -234,7 +276,7 @@ public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
     
     @Override
     public int getCapacity() {
-        return this.type.getEnergy() * 2;
+        return this.energy * 2;
     }
 
     @Nonnull
@@ -283,28 +325,5 @@ public class VirtualFarm extends AbstractMachine implements RecipeDisplayItem {
     private static final int[] OUTPUT_AMOUNTS = {
             2, 3, 4, 2, 1, 6, 2, 3, 2, 4, 4, 2
     };
-
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum Type {
-        BASIC(ENERGY1, SPEED1, Categories.BASIC_MACHINES, Items.BASIC_VIRTUAL_FARM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
-                Items.MAGSTEEL, new ItemStack(Material.DIAMOND_HOE), Items.MAGSTEEL,
-                Items.MACHINE_CIRCUIT, new ItemStack(Material.GRASS_BLOCK), Items.MACHINE_CIRCUIT
-        }),
-        ADVANCED(ENERGY2, SPEED2, Categories.ADVANCED_MACHINES, Items.ADVANCED_VIRTUAL_FARM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS,
-                Items.MAGNONIUM, Items.BASIC_VIRTUAL_FARM, Items.MAGNONIUM,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }),
-        INFINITY(ENERGY3, SPEED3, Categories.INFINITY_CHEAT, Items.INFINITY_VIRTUAL_FARM, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_VIRTUAL_FARM));
-
-        private final int energy;
-        private final int speed;
-        @Nonnull
-        private final Category category;
-        private final SlimefunItemStack item;
-        private final RecipeType recipeType;
-        private final ItemStack[] recipe;
-    }
+    
 }

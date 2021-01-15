@@ -1,13 +1,17 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.SlimefunConstructors;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -17,6 +21,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
@@ -39,8 +44,19 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class InfinityReactor extends AbstractContainer implements EnergyNetProvider, RecipeDisplayItem {
-
+public final class InfinityReactor extends AbstractContainer implements EnergyNetProvider, RecipeDisplayItem {
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "INFINITY_REACTOR",
+            Material.BEACON,
+            "&bInfinity Reactor",
+            "&7Generates power through the compression",
+            "&7of &8Void &7and &bInfinity &7Ingots",
+            "",
+            LorePreset.energyBuffer(InfinityReactor.STORAGE),
+            LorePreset.energyPerSecond(InfinityReactor.ENERGY)
+    );
+    
     public static final int ENERGY = 180_000;
     public static final int STORAGE = 40_000_000;
     public static final int INFINITY_INTERVAL = (int) (86400 * PluginUtils.TICK_RATIO); 
@@ -51,11 +67,14 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
     public static final int STATUS_SLOT = MenuPreset.slot2;
 
     public InfinityReactor() {
-        super(Categories.INFINITY_CHEAT,
-                Items.INFINITY_REACTOR,
-                RecipeTypes.INFINITY_WORKBENCH,
-                InfinityRecipes.getRecipe(Items.INFINITY_REACTOR)
-        );
+        super(Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[]  {
+                null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null,
+                SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, SlimefunConstructors.ADVANCED_NETHER_STAR_REACTOR, SlimefunConstructors.ADVANCED_NETHER_STAR_REACTOR, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, SmelteryItem.INFINITY
+        });
         
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -230,12 +249,12 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack item = Items.INFINITE_INGOT.clone();
+        ItemStack item = SmelteryItem.INFINITY.clone();
         LoreUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 1 day");
         items.add(item);
         items.add(null);
 
-        item = Items.VOID_INGOT.clone();
+        item = CompressedItem.VOID_INGOT.clone();
         LoreUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 4 hours");
         items.add(item);
         items.add(null);

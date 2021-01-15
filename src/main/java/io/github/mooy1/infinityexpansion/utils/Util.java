@@ -1,7 +1,6 @@
 package io.github.mooy1.infinityexpansion.utils;
 
 import io.github.mooy1.infinitylib.items.LoreUtils;
-import io.github.mooy1.infinitylib.presets.RecipePreset;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,27 +8,25 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Collection of utils for making recipes
- *
- * @author Mooy1
- */
-public final class RecipeUtils {
+public final class Util {
+
+    public static final int[] largeOutput = {
+            13, 14, 15, 16,
+            22, 23, 24, 25,
+            31, 32, 33, 34,
+            40, 41, 42, 43
+    };
     
-    @Nonnull
-    public static ItemStack[] Compress(@Nonnull ItemStack item) {
-        return new ItemStack[]{
-                item, item, item, item, item, item, item, item, item,
-        };
-    }
-
-    @Nonnull
-    public static ItemStack[] MiddleItem(@Nonnull ItemStack item) {
-        return new ItemStack[] {
-                null, null, null, null , item, null, null, null, null
-        };
-    }
-
+    public static final int[] largeOutputBorder = {
+            3, 4, 5, 6, 7, 8,
+            12, 17,
+            21, 26,
+            30, 35,
+            39, 44,
+            48, 49, 50, 51, 52, 53
+            
+    };
+    
     @Nonnull
     public static ItemStack getDisplayItem(@Nonnull ItemStack output) {
         List<String> lore = new ArrayList<>();
@@ -37,9 +34,10 @@ public final class RecipeUtils {
         lore.add(ChatColor.GREEN + "-------------------");
         lore.add(ChatColor.GREEN + "\u21E8 Click to craft");
         lore.add(ChatColor.GREEN + "-------------------");
-        
+
         LoreUtils.addLore(output, lore);
 
         return output;
     }
+    
 }

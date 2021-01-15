@@ -38,7 +38,6 @@ balance-options:
   allow-sf-item-transform: false
 storage-unit-options:
   display-signs: true
-  sign-refresh-ticks: 16
 infinity-enchant-levels:
   blade:
     sharpness: 20

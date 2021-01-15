@@ -3,7 +3,6 @@ package io.github.mooy1.infinityexpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.StorageUnit;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
-import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
 import io.github.mooy1.infinityexpansion.setup.Setup;
 import io.github.mooy1.infinityexpansion.setup.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.setup.commands.ResetConfig;
@@ -44,11 +43,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         @SuppressWarnings("unused")
         final Metrics metrics = new Metrics(this, 8991);
         
-        InfinityRecipes.preItems();
-        
         Setup.setup(this);
-        
-        InfinityRecipes.postItems(this);
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             if (currentTick < 60) {
@@ -76,7 +71,6 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     }
     
     private void setupConfigOptions() {
-        StorageUnit.SIGN_REFRESH = getOrDefault("storage-unit-options.sign-refresh-ticks", 4, 32, 16);
         StorageUnit.DISPLAY_SIGNS = getOrDefault("storage-unit-options.display-signs", true);
         MobSimulationChamber.CHANCE = getOrDefault("balance-options.mob-simulation-xp-chance", 1, 10, 2);
         GearTransformer.sf = getOrDefault("balance-options.allow-sf-item-transform", false);

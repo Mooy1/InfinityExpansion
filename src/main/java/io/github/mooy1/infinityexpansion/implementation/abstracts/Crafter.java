@@ -1,8 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
-import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
+import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.filter.FilterType;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
+import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
@@ -10,7 +11,6 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -36,65 +36,41 @@ import java.util.Map;
  */
 public abstract class Crafter extends AbstractContainer {
     
+    private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemStack[9]).hashCode();
+    protected static final int[] INPUT_SLOTS = MenuPreset.craftingInput;
+    private static final int[] OUTPUT_SLOT = MenuPreset.craftingOutput;
+    private static final int[] BACKGROUND = {5, 6, 7, 8, 41, 42, 43, 44};
+    private static final int[] STATUS_BORDER = {14, 32};
+    private static final int STATUS_SLOT = 23;
+
     private final Map<MultiFilter, Pair<SlimefunItemStack, int[]>> recipes = new HashMap<>();
     
-    private static final int[] INPUT_SLOTS = {
-            10, 11, 12,
-            19, 20, 21,
-            28, 29, 30
-    };
-    private static final int[] INPUT_BORDER = {
-            0, 1, 2, 3, 4,
-            9, 13,
-            18, 22,
-            27, 31,
-            36, 37, 38, 39, 40
-    };
-    private static final int[] OUTPUT_SLOTS = {
-            MenuPreset.slot3 + 9
-    };
-    private static final int[] OUTPUT_BORDER = MenuPreset.slotChunk3;
-    private static final int[] BACKGROUND = {
-            5, 6, 7, 8,
-            41, 42, 43, 44
-    };
-    private static final int[] STATUS_BORDER = {
-            14, 32
-    };
-    private static final int STATUS_SLOT = 23;
-    
-    private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemStack[9]).hashCode();
-    
-    public Crafter(Category category, SlimefunItemStack stack, RecipeType recipeType, ItemStack[] recipe) {
-        super(category, stack, recipeType, recipe);
+    public Crafter(Category category, SlimefunItemStack stack, DelayedRecipeType recipeType, RecipeType type, ItemStack[] recipe) {
+        super(category, stack, type, recipe);
 
-        SlimefunItemStack[] outputs = getOutputs();
-        ItemStack[][] items = getRecipes();
-        
-        for (int i = 0 ; i < items.length ; i++) {
-            MultiFilter filter = new MultiFilter(FilterType.MIN_AMOUNT, items[i]);
-            this.recipes.put(filter, new Pair<>(outputs[i], filter.getAmounts()));
-        }
+        recipeType.acceptEach((stacks, stack1) -> {
+            if (stacks.length == 9 && stack1 instanceof SlimefunItemStack) {
+                MultiFilter filter = new MultiFilter(FilterType.IGNORE_AMOUNT, stacks);
+                this.recipes.put(filter, new Pair<>((SlimefunItemStack) stack1, filter.getAmounts()));
+            }
+        });
 
         registerBlockHandler(getId(), (p, b, slimefunItem, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
             if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
+                inv.dropItems(b.getLocation(), OUTPUT_SLOT);
                 inv.dropItems(b.getLocation(), INPUT_SLOTS);
             }
             return true;
         });
     }
 
-    public abstract SlimefunItemStack[] getOutputs();
-    public abstract ItemStack[][] getRecipes();
-
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int slot : INPUT_BORDER) {
+    public final void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+        for (int slot : MenuPreset.craftingInputBorder) {
             blockMenuPreset.addItem(slot, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int slot : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(slot + 9, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int slot : MenuPreset.craftingOutputBorder) {
+            blockMenuPreset.addItem(slot, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int slot : BACKGROUND) {
             blockMenuPreset.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
@@ -115,19 +91,21 @@ public abstract class Crafter extends AbstractContainer {
     }
     
     @Nullable
-    public String preCraftMessage(@Nonnull Location l, @Nonnull BlockMenu inv) {return null;}
+    public String preCraftMessage(@Nonnull Location l, @Nonnull BlockMenu inv) {
+        return null;
+    }
     
     public abstract void postCraft(@Nonnull Location l, @Nonnull BlockMenu inv, @Nonnull Player p);
 
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
+    public final void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         if (inv.hasViewer()) {
             if (preCraftFail(b.getLocation(), inv)) {
                 inv.replaceExistingItem(STATUS_SLOT, preCraftItem(b.getLocation(), inv));
                 return;
             }
 
-            Pair<SlimefunItemStack, int[]> output = getOutput(inv);
+            Pair<ItemStack, int[]> output = getOutput(inv);
 
             if (output == null) {
 
@@ -135,7 +113,7 @@ public abstract class Crafter extends AbstractContainer {
 
             } else {
 
-                inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output.getFirstValue().clone()));
+                inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.getFirstValue().clone()));
 
             }
         }
@@ -155,32 +133,46 @@ public abstract class Crafter extends AbstractContainer {
             return;
         }
         
-        Pair<SlimefunItemStack, int[]> output = getOutput(inv);
-
+        Pair<ItemStack, int[]> output = getOutput(inv);
+        
         if (output == null) { //invalid
 
             inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
             MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid Recipe!");
 
-        } else if (!inv.fits(output.getFirstValue(), OUTPUT_SLOTS)) { //not enough room
-
-            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
-            MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
-
-        } else { //enough room
+        } else {
             
-            for (int i = 0 ; i < INPUT_SLOTS.length ; i++) {
-                int amount = output.getSecondValue()[i];
-                if (amount > 0) {
-                    inv.consumeItem(INPUT_SLOTS[i], amount);
+            // check for correct amounts
+            for (int slot = 0 ; slot < output.getSecondValue().length ; slot++) {
+                ItemStack input = inv.getItemInSlot(INPUT_SLOTS[slot]);
+                int required = output.getSecondValue()[slot];
+                if (required == 0 ? input != null : input.getAmount() < required) {
+                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
+                    MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid input amounts!");
+                    return;
                 }
             }
-            MessageUtils.messageWithCD(p, 1000, ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getFirstValue()));
             
-            postCraft(inv.getLocation(), inv, p);
+            if (!inv.fits(output.getFirstValue(), OUTPUT_SLOT)) { //not enough room
 
-            inv.pushItem(output.getFirstValue(), OUTPUT_SLOTS);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
+                MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
 
+            } else { //enough room
+
+                for (int i = 0 ; i < INPUT_SLOTS.length ; i++) {
+                    int amount = output.getSecondValue()[i];
+                    if (amount > 0) {
+                        inv.consumeItem(INPUT_SLOTS[i], amount);
+                    }
+                }
+                MessageUtils.messageWithCD(p, 1000, ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getFirstValue()));
+
+                postCraft(inv.getLocation(), inv, p);
+
+                inv.pushItem(output.getFirstValue(), OUTPUT_SLOT);
+
+            }
         }
     }
 
@@ -191,31 +183,31 @@ public abstract class Crafter extends AbstractContainer {
      * @return the output if any
      */
     @Nullable
-    private Pair<SlimefunItemStack, int[]> getOutput(@Nonnull BlockMenu inv) {
+    private Pair<ItemStack, int[]> getOutput(@Nonnull BlockMenu inv) {
         
-        MultiFilter input = MultiFilter.fromMenu(FilterType.MIN_AMOUNT, inv, INPUT_SLOTS);
+        MultiFilter input = MultiFilter.fromMenu(FilterType.IGNORE_AMOUNT, inv, INPUT_SLOTS);
         
         if (input.hashCode() == EMPTY) {
             return null;
         }
 
         Pair<SlimefunItemStack, int[]> pair = this.recipes.get(input);
-        SlimefunItemStack output = pair.getFirstValue();
         
-        if (output != null) {
-            output = new SlimefunItemStack(output, output.getAmount());
-            SlimefunItem item = output.getItem();
-            if (item instanceof LoreStorage) {
-                ((LoreStorage) item).transfer(output, inv.getItemInSlot(INPUT_SLOTS[4]));
-            }
+        if (pair != null) {
+            ItemStack output = pair.getFirstValue().clone();
+            modifyOutput(inv, output);
             return new Pair<>(output, pair.getSecondValue());
         }
         
         return null;
     }
+    
+    protected void modifyOutput(@Nonnull BlockMenu inv, @Nonnull ItemStack output) {
+        
+    }
 
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+    public final void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         menu.addMenuClickHandler(STATUS_SLOT, (p, slot, item, action) -> {
             craft(menu, p);
             return false;
@@ -223,7 +215,7 @@ public abstract class Crafter extends AbstractContainer {
     }
 
     @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+    public final int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
         return new int[0];
     }
 }

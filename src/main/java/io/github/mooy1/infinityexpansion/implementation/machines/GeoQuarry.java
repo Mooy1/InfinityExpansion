@@ -1,10 +1,12 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.setup.SlimefunConstructors;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.misc.Pair;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -13,6 +15,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
@@ -29,8 +32,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class GeoQuarry extends AbstractMachine implements RecipeDisplayItem {
-
+public final class GeoQuarry extends AbstractMachine implements RecipeDisplayItem {
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "GEO_QUARRY",
+            Material.QUARTZ_BRICKS,
+            "&fGeo Quarry",
+            "&7Slowly harvests geo resources using power",
+            "",
+            LorePreset.energyPerSecond(GeoQuarry.ENERGY)
+    );
+    
     public static final int ENERGY = 180;
     private static final int STATUS = 4;
     private static final int[] BORDER = { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 44, 45, 53 };
@@ -39,10 +51,10 @@ public class GeoQuarry extends AbstractMachine implements RecipeDisplayItem {
     private static final Map<Pair<Biome, World.Environment>, RandomizedSet<ItemStack>> recipes = new HashMap<>();
     
     public GeoQuarry() {
-        super(Categories.ADVANCED_MACHINES, Items.GEO_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MACHINE_PLATE, SlimefunItems.COBALT_PICKAXE, Items.MACHINE_PLATE,
-                Items.MACHINE_CIRCUIT, Items.ADVANCED_GEO_MINER, Items.MACHINE_CIRCUIT,
-                Items.MACHINE_PLATE, SlimefunItems.COBALT_PICKAXE, Items.MACHINE_PLATE,
+        super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                MachineItem.MACHINE_PLATE, SlimefunItems.COBALT_PICKAXE, MachineItem.MACHINE_PLATE,
+                MachineItem.MACHINE_CIRCUIT, SlimefunConstructors.ADVANCED_GEO_MINER, MachineItem.MACHINE_CIRCUIT,
+                MachineItem.MACHINE_PLATE, SlimefunItems.COBALT_PICKAXE, MachineItem.MACHINE_PLATE,
         }, STATUS, ENERGY);
         
         registerBlockHandler(getId(), (p, b, item, reason) -> {

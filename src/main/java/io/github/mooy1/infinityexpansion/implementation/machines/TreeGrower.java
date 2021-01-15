@@ -1,20 +1,20 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinityexpansion.utils.Utils;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
@@ -41,26 +41,70 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
+public final class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
 
-    public static final int ENERGY1 = 36;
-    public static final int ENERGY2 = 180;
-    public static final int ENERGY3 = 1800;
-    public static final int SPEED1 = 1;
-    public static final int SPEED2 = 5;
-    public static final int SPEED3 = 25;
+    public static void setup(InfinityExpansion plugin) {
+        new TreeGrower(Categories.BASIC_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
+                SmelteryItem.MAGSTEEL, new ItemStack(Material.PODZOL), SmelteryItem.MAGSTEEL,
+                MachineItem.MACHINE_CIRCUIT, VirtualFarm.BASIC, MachineItem.MACHINE_CIRCUIT
+        }, 36, 1).register(plugin);
+        new TreeGrower(Categories.ADVANCED_MACHINES, ADVANCED, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS,
+                SmelteryItem.MAGNONIUM, BASIC,SmelteryItem.MAGNONIUM,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+        }, 180, 5).register(plugin);
+        new TreeGrower(Categories.INFINITY_CHEAT, INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
+                new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
+                new ItemStack(Material.GLASS), SlimefunItems.TREE_GROWTH_ACCELERATOR, null, null, SlimefunItems.TREE_GROWTH_ACCELERATOR, new ItemStack(Material.GLASS),
+                new ItemStack(Material.GLASS), ADVANCED, null, null, ADVANCED, new ItemStack(Material.GLASS),
+                new ItemStack(Material.GLASS), SlimefunItems.TREE_GROWTH_ACCELERATOR, null, null, SlimefunItems.TREE_GROWTH_ACCELERATOR, new ItemStack(Material.GLASS),
+                MachineItem.MACHINE_PLATE, new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), MachineItem.MACHINE_PLATE,
+                MachineItem.MACHINE_PLATE, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, MachineItem.MACHINE_PLATE
+        }, 1800, 25).register(plugin);
+    }
+
+    public static final SlimefunItemStack BASIC = new SlimefunItemStack(
+            "BASIC_TREE_GROWER",
+            Material.STRIPPED_OAK_WOOD,
+            "&9Basic &2Tree Grower",
+            "&7Automatically grows, harvests, and replants trees",
+            "",
+            LorePreset.speed(1),
+            LorePreset.energyPerSecond(36)
+    );
+    public static final SlimefunItemStack ADVANCED = new SlimefunItemStack(
+            "ADVANCED_TREE_GROWER",
+            Material.STRIPPED_ACACIA_WOOD,
+            "&cAdvanced &2Tree Grower",
+            "&7Automatically grows, harvests, and replants trees",
+            "",
+            LorePreset.speed(5),
+            LorePreset.energyPerSecond(180)
+    );
+    public static final SlimefunItemStack INFINITY = new SlimefunItemStack(
+            "INFINITY_TREE_GROWER",
+            Material.STRIPPED_WARPED_HYPHAE,
+            "&bInfinity &2Tree Grower",
+            "&7Automatically grows, harvests, and replants trees",
+            "",
+            LorePreset.speed(25),
+            LorePreset.energyPerSecond(1800)
+    );
+
     public static final int TIME = 600;
-    private final Type type;
 
-    private static final int[] OUTPUT_SLOTS = Utils.largeOutput;
+    private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int[] INPUT_SLOTS = {
             MenuPreset.slot1 + 27
     };
     private static final int STATUS_SLOT = MenuPreset.slot1;
 
-    public TreeGrower(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe(), STATUS_SLOT, type.energy);
-        this.type = type;
+    private final int speed;
+
+    private TreeGrower(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy, int speed) {
+        super(category, item, recipeType, recipe, STATUS_SLOT, energy);
+        this.speed = speed;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -77,7 +121,7 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
             }
 
             setProgress(b, 0);
-            setBlockData(b, "type", null);
+            setType(b, null);
 
             return true;
         });
@@ -90,7 +134,7 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
         for (int i : MenuPreset.slotChunk1) {
             blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : Utils.largeOutputBorder) {
+        for (int i : Util.largeOutputBorder) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
@@ -102,7 +146,7 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
             setProgress(b, 0);
         }
     }
-    
+
     @Override
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
         if (flow == ItemTransportFlow.WITHDRAW) {
@@ -149,13 +193,13 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
 
                 } else { //start
 
-                    setProgress(b, this.type.getSpeed());
+                    setProgress(b, this.speed);
                     setType(b, inputType);
                     inv.consumeItem(INPUT_SLOTS[0], 1);
 
                     if (inv.hasViewer()) {
                         inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                                "&aPlanting... (" + this.type.getSpeed() + "/" + TIME + ")"));
+                                "&aPlanting... (" + this.speed + "/" + TIME + ")"));
                     }
 
                     return true;
@@ -166,10 +210,10 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
 
         if (progress < TIME) { //progress
 
-            setProgress(b, progress + this.type.getSpeed());
+            setProgress(b, progress + this.speed);
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aGrowing... (" + (progress + this.type.getSpeed()) + "/" + TIME + ")"));
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aGrowing... (" + (progress + this.speed) + "/" + TIME + ")"));
             }
             return true;
         }
@@ -204,7 +248,7 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
 
             setProgress(b, 0);
             setType(b, null);
-            
+
             return true;
 
         }
@@ -214,6 +258,7 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
      * This method gets the type of input
      *
      * @param input input item
+     *
      * @return type of input
      */
     @Nullable
@@ -225,32 +270,24 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
     }
 
     private void setType(Block b, String type) {
-        setBlockData(b, "type", type);
+        BlockStorage.addBlockInfo(b, "type", type);
     }
 
     private String getType(Block b) {
-        return getBlockData(b.getLocation(), "type");
+        return BlockStorage.getLocationInfo(b.getLocation(), "type");
     }
 
     private void setProgress(Block b, int progress) {
-        setBlockData(b, "progress", String.valueOf(progress));
+        BlockStorage.addBlockInfo(b, "progress", String.valueOf(progress));
     }
 
     private String getProgress(Block b) {
-        return getBlockData(b.getLocation(), "progress");
-    }
-
-    private void setBlockData(Block b, String key, String data) {
-        BlockStorage.addBlockInfo(b, key, data);
-    }
-
-    private String getBlockData(Location l, String key) {
-        return BlockStorage.getLocationInfo(l, key);
+        return BlockStorage.getLocationInfo(b.getLocation(), "progress");
     }
 
     @Override
     public int getCapacity() {
-        return this.type.getEnergy() * 2;
+        return this.energy * 2;
     }
 
     @Nonnull
@@ -274,27 +311,4 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
             "JUNGLE"
     };
 
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum Type {
-        BASIC(ENERGY1, SPEED1, Categories.BASIC_MACHINES, Items.BASIC_TREE_GROWER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
-                Items.MAGSTEEL, new ItemStack(Material.PODZOL), Items.MAGSTEEL,
-                Items.MACHINE_CIRCUIT, Items.BASIC_VIRTUAL_FARM, Items.MACHINE_CIRCUIT
-        }),
-        ADVANCED(ENERGY2, SPEED2, Categories.ADVANCED_MACHINES, Items.ADVANCED_TREE_GROWER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS,
-                Items.MAGNONIUM, Items.BASIC_TREE_GROWER, Items.MAGNONIUM,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }),
-        INFINITY(ENERGY3, SPEED3, Categories.INFINITY_CHEAT, Items.INFINITY_TREE_GROWER, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_TREE_GROWER));
-
-        private final int energy;
-        private final int speed;
-        @Nonnull
-        private final Category category;
-        private final SlimefunItemStack item;
-        private final RecipeType recipeType;
-        private final ItemStack[] recipe;
-    }
 }

@@ -1,5 +1,7 @@
-package io.github.mooy1.infinityexpansion.setup;
+package io.github.mooy1.infinityexpansion.setup.categories;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
@@ -8,7 +10,9 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -26,9 +30,21 @@ import java.util.List;
  */
 public final class MultiCategory extends FlexCategory {
     
-    public final List<Category> categories = new ArrayList<>();
+    public static final MultiCategory CATEGORY = new MultiCategory(PluginUtils.getKey("main"),
+            new CustomItem(Material.NETHER_STAR, "&bInfinity &7Expansion"), -1
+    );
     
-    public MultiCategory(NamespacedKey key, ItemStack item, int tier) {
+    private final List<Category> categories = new ArrayList<>();
+    
+    public void register(InfinityExpansion plugin, Category... add) {
+        for (Category category : add) {
+            this.categories.add(category);
+            category.register(plugin);
+        }
+        register(plugin);
+    }
+    
+    private MultiCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
     }
     

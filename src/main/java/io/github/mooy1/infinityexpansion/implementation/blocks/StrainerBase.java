@@ -1,8 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.Utils;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
@@ -29,10 +29,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,12 +40,17 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public class StrainerBase extends AbstractContainer implements RecipeDisplayItem {
+public final class StrainerBase extends AbstractContainer implements RecipeDisplayItem {
     
     private static final int TIME = 48;
-
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "STRAINER_BASE",
+            Material.SANDSTONE_WALL,
+            "&7Strainer Base"
+    );
+    
     private static final int STATUS_SLOT = MenuPreset.slot1;
-    private static final int[] OUTPUT_SLOTS = Utils.largeOutput;
+    private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int[] INPUT_SLOTS = {
             MenuPreset.slot1 + 27
     };
@@ -72,10 +75,10 @@ public class StrainerBase extends AbstractContainer implements RecipeDisplayItem
     };
 
     public StrainerBase() {
-        super(Categories.BASIC_MACHINES, Items.STRAINER_BASE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        super(Categories.BASIC_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
                 new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
-                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
+                SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL,
         });
         
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -98,7 +101,7 @@ public class StrainerBase extends AbstractContainer implements RecipeDisplayItem
         for (int i : MenuPreset.slotChunk1) {
             blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : Utils.largeOutputBorder) {
+        for (int i : Util.largeOutputBorder) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
@@ -118,7 +121,7 @@ public class StrainerBase extends AbstractContainer implements RecipeDisplayItem
             return OUTPUT_SLOTS;
         }
         
-        if (getStrainer(item) > 0) {
+        if (Strainer.getStrainer(item) > 0) {
             return INPUT_SLOTS;
         }
 
@@ -149,7 +152,7 @@ public class StrainerBase extends AbstractContainer implements RecipeDisplayItem
         //check input
 
         ItemStack strainer = inv.getItemInSlot(INPUT_SLOTS[0]);
-        int speed = getStrainer(strainer);
+        int speed = Strainer.getStrainer(strainer);
         
         if (speed == 0) {
 
@@ -227,25 +230,7 @@ public class StrainerBase extends AbstractContainer implements RecipeDisplayItem
         
     }
 
-    /**
-     * This method gets the speed of strainer from its id
-     *
-     * @return speed
-     */
-    private static int getStrainer(@Nullable ItemStack item) {
-        if (item != null) {
-            ItemMeta meta = item.getItemMeta();
 
-            if (meta != null) {
-                Integer speed = meta.getPersistentDataContainer().get(Strainer.KEY, PersistentDataType.INTEGER);
-                if (speed != null) {
-                    return speed;
-                }
-            }
-        }
-        
-        return 0;
-    }
 
     private static final ItemStack potato = new CustomItem(Material.POTATO, "&7:&6Potatofish&7:", "&eLucky");
 
@@ -267,7 +252,7 @@ public class StrainerBase extends AbstractContainer implements RecipeDisplayItem
         List<ItemStack> items = new ArrayList<>();
         
         for (ItemStack output : OUTPUTS) {
-            items.add(Items.BASIC_STRAINER);
+            items.add(Strainer.BASIC);
             items.add(output);
         }
         

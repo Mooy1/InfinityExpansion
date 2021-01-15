@@ -1,26 +1,26 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,15 +28,31 @@ import java.util.UUID;
  * Flight
  * 
  */
-public class InfinityMatrix extends SlimefunItem implements Listener, LoreStorage, Soulbound, NotPlaceable {
-
-    public InfinityMatrix(InfinityExpansion plugin) {
-        super(Categories.INFINITY_CHEAT, Items.INFINITY_MATRIX, RecipeTypes.INFINITY_WORKBENCH, InfinityRecipes.getRecipe(Items.INFINITY_MATRIX));
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+public final class InfinityMatrix extends SlimefunItem implements Listener, Soulbound, NotPlaceable {
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "INFINITY_MATRIX",
+            Material.NETHER_STAR,
+            "&fInfinity Matrix",
+            "&6Gives Unlimited Flight",
+            "&7Right-Click to enable/disable and claim",
+            "&7Crouch and Right-Click to remove ownership"
+    );
+    
+    public InfinityMatrix() { // TODO switch to PDCs
+        super(Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[] {
+                SmelteryItem.INFINITY, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
+                CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, new ItemStack(Material.ELYTRA), new ItemStack(Material.ELYTRA), CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
+                CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
+                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, SmelteryItem.INFINITY
+        });
+        PluginUtils.registerEvents(this);
     }
 
     @EventHandler
-    private static void onRightClick(PlayerRightClickEvent e) {
+    private void onRightClick(PlayerRightClickEvent e) {
         ItemStack item = e.getItem();
         if (!(SlimefunItem.getByItem(item) instanceof InfinityMatrix)) {
             return;
@@ -89,20 +105,5 @@ public class InfinityMatrix extends SlimefunItem implements Listener, LoreStorag
         MessageUtils.message(p, ChatColor.GREEN + "Infinity Flight Enabled!");
         p.setAllowFlight(true);
     }
-
-    @Override
-    public int getOffset() {
-        return -1;
-    }
-
-    @Override
-    public int getLines() {
-        return 2;
-    }
-
-    @Nonnull
-    @Override
-    public String getTarget() {
-        return "UUID:";
-    }
+    
 }

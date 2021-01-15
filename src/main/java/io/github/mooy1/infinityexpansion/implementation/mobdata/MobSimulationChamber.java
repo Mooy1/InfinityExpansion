@@ -1,13 +1,14 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.Utils;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -15,6 +16,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
@@ -28,12 +30,22 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.Map;
 
-public class MobSimulationChamber extends AbstractContainer implements EnergyNetComponent {
-
+public final class MobSimulationChamber extends AbstractContainer implements EnergyNetComponent {
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "MOB_SIMULATION_CHAMBER",
+            Material.GILDED_BLACKSTONE,
+            "&8Mob Simulation Chamber",
+            "&7Use mob data cards to activate",
+            "",
+            LorePreset.energyBuffer(MobSimulationChamber.BUFFER),
+            LorePreset.energyPerSecond(MobSimulationChamber.ENERGY)
+    );
+    
     private static final int CARD_SLOT = MenuPreset.slot1 + 27;
     private static final int INTERVAL = 16;
     private static final int STATUS_SLOT = MenuPreset.slot1;
-    private static final int[] OUTPUT_SLOTS = Utils.largeOutput;
+    private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int XP_Slot = 46;
     public static final int BUFFER = 16000;
     public static final int ENERGY = 240;
@@ -42,10 +54,10 @@ public class MobSimulationChamber extends AbstractContainer implements EnergyNet
     private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     
     public MobSimulationChamber() {
-        super(Categories.MOB_SIMULATION, Items.MOB_SIMULATION_CHAMBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
-                Items.MACHINE_CIRCUIT, SlimefunItems.PROGRAMMABLE_ANDROID_BUTCHER, Items.MACHINE_CIRCUIT,
-                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
+        super(Categories.MOB_SIMULATION, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MAGSTEEL_PLATE,
+                MachineItem.MACHINE_CIRCUIT, SlimefunItems.PROGRAMMABLE_ANDROID_BUTCHER, MachineItem.MACHINE_CIRCUIT,
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MAGSTEEL_PLATE,
         });
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -118,7 +130,7 @@ public class MobSimulationChamber extends AbstractContainer implements EnergyNet
 
     @Override
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : Utils.largeOutputBorder) {
+        for (int i : Util.largeOutputBorder) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : MenuPreset.slotChunk1) {

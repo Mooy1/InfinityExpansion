@@ -1,8 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.implementation.abstracts.Crafter;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -20,56 +21,34 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public class StorageForge extends Crafter {
+public final class StorageForge extends Crafter {
     
-    public static final ItemStack[][] RECIPES = new ItemStack[][] {
-            {
-                    new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
-                    new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
-                    new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
-            },
-            {
-                    Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
-                    Items.MAGSTEEL, Items.BASIC_STORAGE, Items.MAGSTEEL,
-                    Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
-            },
-            {
-                    Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
-                    Items.MAGSTEEL_PLATE, Items.ADVANCED_STORAGE, Items.MAGSTEEL_PLATE,
-                    Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE
-            },
-            {
-                    Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
-                    Items.MAGNONIUM, Items.REINFORCED_STORAGE, Items.MAGNONIUM,
-                    Items.VOID_INGOT, Items.MACHINE_CORE, Items.VOID_INGOT
-            },
-            {
-                    Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT,
-                    Items.INFINITE_INGOT, Items.VOID_STORAGE, Items.INFINITE_INGOT,
-                    Items.INFINITE_INGOT, Items.VOID_INGOT, Items.INFINITE_INGOT
-            }
-    };
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "STORAGE_FORGE",
+            Material.BEEHIVE,
+            "&6Storage Forge",
+            "&7Upgrades the tier of Storage Units",
+            "&7Retains stored items"
+    );
+    
+    public static final DelayedRecipeType TYPE = new DelayedRecipeType(ITEM);
     
     public StorageForge() {
-        super(Categories.STORAGE_TRANSPORT, Items.STORAGE_FORGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGSTEEL, new ItemStack(Material.ANVIL), Items.MAGSTEEL,
-                Items.MAGSTEEL, new ItemStack(Material.CRAFTING_TABLE), Items.MAGSTEEL,
-                Items.MAGSTEEL, new ItemStack(Material.BARREL), Items.MAGSTEEL,
+        super(Categories.STORAGE_TRANSPORT, ITEM, TYPE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                SmelteryItem.MAGSTEEL, new ItemStack(Material.ANVIL), SmelteryItem.MAGSTEEL,
+                SmelteryItem.MAGSTEEL, new ItemStack(Material.CRAFTING_TABLE), SmelteryItem.MAGSTEEL,
+                SmelteryItem.MAGSTEEL, new ItemStack(Material.BARREL), SmelteryItem.MAGSTEEL,
         });
     }
-
+    
     @Override
-    public SlimefunItemStack[] getOutputs() {
-        return new SlimefunItemStack[] {Items.BASIC_STORAGE, Items.ADVANCED_STORAGE, Items.REINFORCED_STORAGE, Items.VOID_STORAGE, Items.INFINITY_STORAGE};
-    }
-
-    @Override
-    public ItemStack[][] getRecipes() {
-        return RECIPES;
+    protected void modifyOutput(@Nonnull BlockMenu inv, @Nonnull ItemStack output) {
+        output.setItemMeta(StorageUnit.transferMeta(inv.getItemInSlot(INPUT_SLOTS[4]), output.getItemMeta()));
     }
 
     @Override
     public void postCraft(@Nonnull Location l, @Nonnull BlockMenu inv, @Nonnull Player p) {
         MessageUtils.message(p, ChatColor.GREEN + "Transferred items to upgraded unit");
     }
+    
 }

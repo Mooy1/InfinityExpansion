@@ -1,15 +1,16 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -32,26 +33,63 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class MaterialGenerator extends AbstractMachine implements RecipeDisplayItem {
+public final class MaterialGenerator extends AbstractMachine implements RecipeDisplayItem {
 
-    public static final int COBBLE_ENERGY = 24;
-    public static final int COBBLE2_ENERGY = 120;
-    public static final int OBSIDIAN_ENERGY = 240;
-
-    public static final int COBBLE_SPEED = 1;
-    public static final int COBBLE2_SPEED = 4;
-    public static final int OBSIDIAN_SPEED = 1;
+    public static void setup(InfinityExpansion plugin) {
+        new MaterialGenerator(Categories.BASIC_MACHINES, BASIC_COBBLE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                SmelteryItem.MAGSTEEL, new ItemStack(Material.DIAMOND_PICKAXE), SmelteryItem.MAGSTEEL,
+                new ItemStack(Material.WATER_BUCKET), CompressedItem.COBBLE_2, new ItemStack(Material.LAVA_BUCKET),
+                SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL
+        }, 24, 1, Material.COBBLESTONE).register(plugin);
+        new MaterialGenerator(Categories.ADVANCED_MACHINES, ADVANCED_COBBLE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                MachineItem.MAGSTEEL_PLATE, SlimefunItems.PROGRAMMABLE_ANDROID_MINER, MachineItem.MAGSTEEL_PLATE,
+                new ItemStack(Material.WATER_BUCKET), CompressedItem.COBBLE_4, new ItemStack(Material.LAVA_BUCKET),
+                MachineItem.MACHINE_CIRCUIT, BASIC_COBBLE, MachineItem.MACHINE_CIRCUIT
+        }, 120, 4, Material.COBBLESTONE).register(plugin);
+        new MaterialGenerator(Categories.ADVANCED_MACHINES, BASIC_OBSIDIAN, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                SlimefunItems.FLUID_PUMP, SlimefunItems.PROGRAMMABLE_ANDROID_MINER, SlimefunItems.FLUID_PUMP,
+                new ItemStack(Material.DISPENSER), CompressedItem.VOID_INGOT, new ItemStack(Material.DISPENSER),
+                MachineItem.MACHINE_CIRCUIT, ADVANCED_COBBLE, MachineItem.MACHINE_CIRCUIT
+        }, 240, 1, Material.OBSIDIAN).register(plugin);
+    }
+    
+    public static final SlimefunItemStack BASIC_COBBLE = new SlimefunItemStack(
+            "BASIC_COBBLE_GEN",
+            Material.SMOOTH_STONE,
+            "&9Basic &8Cobble Generator",
+            "",
+            LorePreset.speed(1),
+            LorePreset.energyPerSecond(24)
+    );
+    public static final SlimefunItemStack ADVANCED_COBBLE = new SlimefunItemStack(
+            "ADVANCED_COBBLE_GEN",
+            Material.SMOOTH_STONE,
+            "&cAdvanced &8Cobble Generator",
+            "",
+            LorePreset.speed(4),
+            LorePreset.energyPerSecond(120)
+    );
+    public static final SlimefunItemStack BASIC_OBSIDIAN = new SlimefunItemStack(
+            "BASIC_OBSIDIAN_GEN",
+            Material.SMOOTH_STONE,
+            "&8Obsidian Generator",
+            "",
+            LorePreset.speed(1),
+            LorePreset.energyPerSecond(240)
+    );
 
     private static final int[] OUTPUT_SLOTS = {
             13
     };
     private static final int STATUS_SLOT = 4;
 
-    private final Type type;
+    private final int speed;
+    private final Material material;
 
-    public MaterialGenerator(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe(), STATUS_SLOT, type.energy);
-        this.type = type;
+    private MaterialGenerator(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed, Material material) {
+        super(category, item, type, recipe, STATUS_SLOT, energy);
+        this.speed = speed;
+        this.material = material;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -64,11 +102,11 @@ public class MaterialGenerator extends AbstractMachine implements RecipeDisplayI
         });
     }
 
-    public void setupInv(@Nonnull BlockMenuPreset  blockMenuPreset) {
-        for (int i = 0; i < 13; i++) {
+    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+        for (int i = 0 ; i < 13 ; i++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i = 14; i < 18; i++) {
+        for (int i = 14 ; i < 18 ; i++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
 
@@ -84,7 +122,7 @@ public class MaterialGenerator extends AbstractMachine implements RecipeDisplayI
 
         return new int[0];
     }
-    
+
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
@@ -92,7 +130,7 @@ public class MaterialGenerator extends AbstractMachine implements RecipeDisplayI
 
     @Override
     public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        ItemStack output = new ItemStack(this.type.getOutput(), this.type.getSpeed());
+        ItemStack output = new ItemStack(this.material, this.speed);
 
         if (!inv.fits(output, OUTPUT_SLOTS)) {
 
@@ -111,10 +149,10 @@ public class MaterialGenerator extends AbstractMachine implements RecipeDisplayI
 
         return true;
     }
-    
+
     @Override
     public int getCapacity() {
-        return this.type.getEnergy() * 2;
+        return this.energy * 2;
     }
 
     @Nonnull
@@ -122,7 +160,7 @@ public class MaterialGenerator extends AbstractMachine implements RecipeDisplayI
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
         items.add(null);
-        items.add(new ItemStack(this.type.getOutput(), this.type.getSpeed()));
+        items.add(new ItemStack(this.material, this.speed));
         return items;
     }
 
@@ -132,38 +170,4 @@ public class MaterialGenerator extends AbstractMachine implements RecipeDisplayI
         return "&7Generates";
     }
 
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum Type {
-        COBBLE_(Categories.BASIC_MACHINES, COBBLE_ENERGY, Material.COBBLESTONE, COBBLE_SPEED,
-                Items.BASIC_COBBLE_GEN, RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                        Items.MAGSTEEL, new ItemStack(Material.DIAMOND_PICKAXE), Items.MAGSTEEL,
-                        new ItemStack(Material.WATER_BUCKET), Items.COMPRESSED_COBBLESTONE_2, new ItemStack(Material.LAVA_BUCKET),
-                        Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
-                }),
-        COBBLE_2(Categories.ADVANCED_MACHINES, COBBLE2_ENERGY, Material.COBBLESTONE, COBBLE2_SPEED,
-                Items.ADVANCED_COBBLE_GEN, RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                        Items.MAGSTEEL_PLATE, SlimefunItems.PROGRAMMABLE_ANDROID_MINER, Items.MAGSTEEL_PLATE,
-                        new ItemStack(Material.WATER_BUCKET), Items.COMPRESSED_COBBLESTONE_4, new ItemStack(Material.LAVA_BUCKET),
-                        Items.MACHINE_CIRCUIT, Items.BASIC_COBBLE_GEN, Items.MACHINE_CIRCUIT
-                }),
-        OBSIDIAN_(Categories.ADVANCED_MACHINES, OBSIDIAN_ENERGY, Material.OBSIDIAN, OBSIDIAN_SPEED,
-                Items.BASIC_OBSIDIAN_GEN, RecipeType.ENHANCED_CRAFTING_TABLE,
-                new ItemStack[] {
-                        SlimefunItems.FLUID_PUMP, SlimefunItems.PROGRAMMABLE_ANDROID_MINER, SlimefunItems.FLUID_PUMP,
-                        new ItemStack(Material.DISPENSER), Items.VOID_INGOT, new ItemStack(Material.DISPENSER),
-                        Items.MACHINE_CIRCUIT, Items.ADVANCED_COBBLE_GEN, Items.MACHINE_CIRCUIT
-                });
-
-        @Nonnull
-        private final Category category;
-        private final int energy;
-        private final Material output;
-        private final int speed;
-        private final SlimefunItemStack item;
-        private final RecipeType recipeType;
-        private final ItemStack[] recipe;
-    }
 }

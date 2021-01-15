@@ -1,8 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import io.github.mooy1.infinityexpansion.implementation.abstracts.Crafter;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -12,42 +14,32 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
-public class MobDataInfuser extends Crafter implements EnergyNetComponent {
+public final class MobDataInfuser extends Crafter implements EnergyNetComponent {
     
-    public static final int ENERGY = 20000;
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "DATA_INFUSER",
+            Material.LODESTONE,
+            "&8Mob Data Infuser",
+            "&7Infused empty data cards with mob items",
+            "",
+            LorePreset.energy(MobDataInfuser.ENERGY) + "per use"
+    );
+    private static final int ENERGY = 20000;
+    public static final DelayedRecipeType TYPE = new DelayedRecipeType(ITEM);
 
     public MobDataInfuser() {
-        super(Categories.MOB_SIMULATION, Items.DATA_INFUSER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CIRCUIT,
-                SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CORE, SlimefunItems.REINFORCED_ALLOY_INGOT,
-                Items.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CIRCUIT
+        super(Categories.MOB_SIMULATION, ITEM, TYPE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                MachineItem.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, MachineItem.MACHINE_CIRCUIT,
+                SlimefunItems.REINFORCED_ALLOY_INGOT, MachineItem.MACHINE_CORE, SlimefunItems.REINFORCED_ALLOY_INGOT,
+                MachineItem.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, MachineItem.MACHINE_CIRCUIT
         });
-    }
-
-    @Override
-    public SlimefunItemStack[] getOutputs() {
-        List<SlimefunItemStack> OUTPUTS = new ArrayList<>();
-        for (MobDataCard.Type card : MobDataCard.CARDS.values()) {
-            OUTPUTS.add(card.item);
-        }
-        return OUTPUTS.toArray(new SlimefunItemStack[0]);
-    }
-
-    @Override
-    public ItemStack[][] getRecipes() {
-        List<ItemStack[]> recipes = new ArrayList<>();
-        for (MobDataCard.Type card : MobDataCard.CARDS.values()) {
-            recipes.add(card.recipe);
-        }
-        return recipes.toArray(new ItemStack[0][]);
     }
 
     @Override

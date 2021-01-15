@@ -1,17 +1,18 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
@@ -31,8 +32,17 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem {
-
+public final class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem {
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "STONEWORKS_FACTORY",
+            Material.BLAST_FURNACE,
+            "&8Stoneworks Factory",
+            "&7Generates cobblestone and processes it into various materials",
+            "",
+            LorePreset.energyPerSecond(StoneworksFactory.ENERGY)
+    );
+    
     public static final int ENERGY = 180;
 
     private static final int[] PROCESS_BORDER = {0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23};
@@ -45,10 +55,10 @@ public class StoneworksFactory extends AbstractMachine implements RecipeDisplayI
     private static final ItemStack PROCESSING = new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "&7Processing");
 
     public StoneworksFactory() {
-        super(Categories.ADVANCED_MACHINES, Items.STONEWORKS_FACTORY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGSTEEL_PLATE, Items.BASIC_COBBLE_GEN, Items.MAGSTEEL_PLATE,
-                SlimefunItems.ELECTRIC_FURNACE_3, Items.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
-                Items.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, Items.MAGSTEEL_PLATE
+        super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                MachineItem.MAGSTEEL_PLATE, MaterialGenerator.BASIC_COBBLE, MachineItem.MAGSTEEL_PLATE,
+                SlimefunItems.ELECTRIC_FURNACE_3, MachineItem.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
+                MachineItem.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, MachineItem.MAGSTEEL_PLATE
         }, STATUS_SLOT, ENERGY);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -74,7 +84,7 @@ public class StoneworksFactory extends AbstractMachine implements RecipeDisplayI
         }
 
         for (int i = 0 ; i < CHOICE_SLOTS.length ; i++) {
-            menu.replaceExistingItem(CHOICE_SLOTS[i], getChoice(l, i).getItem());
+            menu.replaceExistingItem(CHOICE_SLOTS[i], getChoice(l, i).item);
         }
         
         for (int i = 0 ; i < 3 ; i++) {
@@ -96,7 +106,7 @@ public class StoneworksFactory extends AbstractMachine implements RecipeDisplayI
                     }
                 }
                 setChoice(l, finalI, next);
-                menu.replaceExistingItem(CHOICE_SLOTS[finalI], next.getItem());
+                menu.replaceExistingItem(CHOICE_SLOTS[finalI], next.item);
                 return false;
             });
         }
@@ -111,7 +121,7 @@ public class StoneworksFactory extends AbstractMachine implements RecipeDisplayI
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : CHOICE_SLOTS) {
-            blockMenuPreset.addItem(i, Choice.NONE.getItem(), ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, Choice.NONE.item, ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(STATUS_SLOT, COBBLE_GEN, ChestMenuUtils.getEmptyClickHandler());
     }
@@ -164,11 +174,11 @@ public class StoneworksFactory extends AbstractMachine implements RecipeDisplayI
             return;
         }
 
-        for (int check = 0 ; check < c.getInputs().length ; check++) {
+        for (int check = 0 ; check < c.inputs.length ; check++) {
 
-            if (item.getType() == c.getInputs()[check]) {
+            if (item.getType() == c.inputs[check]) {
 
-                ItemStack output = new ItemStack(c.getOutputs()[check]);
+                ItemStack output = new ItemStack(c.outputs[check]);
 
                 if (inv.fits(output, nextSlot)) {
                     inv.consumeItem(slot, 1);
@@ -190,9 +200,9 @@ public class StoneworksFactory extends AbstractMachine implements RecipeDisplayI
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
         for (Choice option : Choice.values()) {
-            for (int i = 0 ; i < option.getInputs().length ; i++) {
-                items.add(new ItemStack(option.getInputs()[i]));
-                items.add(new ItemStack(option.getOutputs()[i]));
+            for (int i = 0 ; i < option.inputs.length ; i++) {
+                items.add(new ItemStack(option.inputs[i]));
+                items.add(new ItemStack(option.outputs[i]));
             }
         }
         
@@ -213,7 +223,6 @@ public class StoneworksFactory extends AbstractMachine implements RecipeDisplayI
         BlockStorage.addBlockInfo(l, "choice" + i, o.toString());
     }
 
-    @Getter
     @AllArgsConstructor
     private enum Choice {
         NONE(new CustomItem(Material.BARRIER, "&cNone", "", "&7 > Click to cycle"),
@@ -237,11 +246,8 @@ public class StoneworksFactory extends AbstractMachine implements RecipeDisplayI
                 new Material[]{Material.ANDESITE, Material.DIORITE, Material.GRANITE}
         );
 
-        @Nonnull
         private final ItemStack item;
-        @Nonnull
         private final Material[] inputs;
-        @Nonnull
         private final Material[] outputs;
     }
 }

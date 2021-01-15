@@ -2,15 +2,17 @@ package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.utils.RecipeUtils;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
@@ -36,9 +38,20 @@ import java.util.Map;
  *
  * @author Mooy1
  */
-public class AdvancedAnvil extends AbstractMachine {
+public final class AdvancedAnvil extends AbstractMachine {
 
     public static final int ENERGY = 100_000;
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "ADVANCED_ANVIL",
+            Material.SMITHING_TABLE,
+            "&cAdvanced Anvil",
+            "&7Combines tools and gear enchants and sometimes upgrades them",
+            "&bWorks with Slimefun items",
+            "",
+            LorePreset.energy(AdvancedAnvil.ENERGY) + "per use"
+
+    );
     
     private static final Map<Enchantment, Integer> UPGRADEABLE = new HashMap<>();
     
@@ -69,10 +82,10 @@ public class AdvancedAnvil extends AbstractMachine {
     };
 
     public AdvancedAnvil() {
-        super(Categories.MAIN_MATERIALS, Items.ADVANCED_ANVIL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
-                Items.MACHINE_PLATE, new ItemStack(Material.ANVIL), Items.MACHINE_PLATE,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
+        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE,
+                MachineItem.MACHINE_PLATE, new ItemStack(Material.ANVIL), MachineItem.MACHINE_PLATE,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
         }, STATUS_SLOT, ENERGY);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -132,7 +145,7 @@ public class AdvancedAnvil extends AbstractMachine {
             return false;
         }
 
-        inv.replaceExistingItem(STATUS_SLOT, RecipeUtils.getDisplayItem(output));
+        inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output));
         
         return false;
     }

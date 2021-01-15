@@ -1,10 +1,12 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.InfinityRecipes;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -15,11 +17,7 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponen
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -51,49 +49,164 @@ import java.util.Objects;
  * for some stuff to work off of
  *
  */
-public class EnergyGenerator extends AbstractContainer implements EnergyNetProvider {
+public final class EnergyGenerator extends AbstractContainer implements EnergyNetProvider {
 
-    public static final int WATER_RATE = 9;
-    public static final int WATER_STORAGE = 900;
-    
-    public static final int WATER_RATE2 = 45;
-    public static final int WATER_STORAGE2 = 4500;
+    public static void setup(InfinityExpansion plugin) {
+        new EnergyGenerator(Categories.BASIC_MACHINES, HYDRO, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL,
+                new ItemStack(Material.BUCKET), SlimefunItems.ELECTRO_MAGNET, new ItemStack(Material.BUCKET),
+                SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL
+        }, 9, Type.WATER).register(plugin);
+        new EnergyGenerator(Categories.ADVANCED_MACHINES, REINFORCED_HYDRO, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                HYDRO, MachineItem.MACHINE_CIRCUIT, HYDRO,
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CORE, MachineItem.MAGSTEEL_PLATE,
+                HYDRO, MachineItem.MACHINE_CIRCUIT, HYDRO
+        }, 45, Type.WATER).register(plugin);
+        
+        new EnergyGenerator(Categories.ADVANCED_MACHINES, GEOTHERMAL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE,
+                SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+        }, 90, Type.GEOTHERMAL).register(plugin);
+        new EnergyGenerator(Categories.ADVANCED_MACHINES, REINFORCED_GEOTHERMAL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                GEOTHERMAL, MachineItem.MACHINE_CIRCUIT, GEOTHERMAL,
+                MachineItem.MACHINE_PLATE, MachineItem.MACHINE_CORE, MachineItem.MACHINE_PLATE,
+                GEOTHERMAL, MachineItem.MACHINE_CIRCUIT, GEOTHERMAL
+        }, 450, Type.GEOTHERMAL).register(plugin);
+        
+        new EnergyGenerator(Categories.BASIC_MACHINES, BASIC_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                SmelteryItem.MAGSTEEL, MachineItem.MAGSTEEL_PLATE, SmelteryItem.MAGSTEEL,
+                SlimefunItems.SOLAR_PANEL, SlimefunItems.SOLAR_PANEL, SlimefunItems.SOLAR_PANEL,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT
+        }, 15, Type.SOLAR).register(plugin);
+        new EnergyGenerator(Categories.ADVANCED_MACHINES, ADVANCED_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    SmelteryItem.TITANIUM, MachineItem.MACHINE_PLATE, SmelteryItem.TITANIUM,
+                BASIC_PANEL, SlimefunItems.SOLAR_GENERATOR_4, BASIC_PANEL,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT
+        }, 180, Type.SOLAR).register(plugin);
+        new EnergyGenerator(Categories.ADVANCED_MACHINES, CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE,
+                ADVANCED_PANEL, ADVANCED_PANEL, ADVANCED_PANEL,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+        }, 750, Type.SOLAR).register(plugin);
+    new EnergyGenerator(Categories.ADVANCED_MACHINES, VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
+                CELESTIAL_PANEL, CELESTIAL_PANEL, CELESTIAL_PANEL,
+                SmelteryItem.MAGNONIUM, SmelteryItem.MAGNONIUM, SmelteryItem.MAGNONIUM
+        }, 3600, Type.LUNAR).register(plugin);
+        new EnergyGenerator(Categories.INFINITY_CHEAT, INFINITE_PANEL, InfinityWorkbench.TYPE, new ItemStack[] {
+                EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL,
+                EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL,
+                SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
+                EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL
 
-    public static final int GEO_RATE = 90;
-    public static final int GEO_STORAGE = 9000;
+        }, 90000, Type.INFINITY).register(plugin);
+    }
     
-    public static final int GEO_RATE2 = 450;
-    public static final int GEO_STORAGE2 = 45000;
-
-    public static final int BASIC_RATE = 15;
-    public static final int BASIC_STORAGE = 1500;
+    public static final SlimefunItemStack HYDRO = new SlimefunItemStack(
+            "HYDRO_GENERATOR",
+            Material.PRISMARINE_WALL,
+            "&9Hydro Generator",
+            "&7Generates energy from the movement of water",
+            "",
+            LorePreset.energyBuffer(900),
+            LorePreset.energyPerSecond(9)
+    );
+    public static final SlimefunItemStack REINFORCED_HYDRO = new SlimefunItemStack(
+            "REINFORCED_HYDRO_GENERATOR",
+            Material.END_STONE_BRICK_WALL,
+            "&fReinforced &9Hydro Gen",
+            "&7Generates large amounts of energy",
+            "&7from the movement of water",
+            "",
+            LorePreset.energyBuffer(4500),
+            LorePreset.energyPerSecond(45)
+    );
+    public static final SlimefunItemStack GEOTHERMAL = new SlimefunItemStack(
+            "GEOTHERMAL_GENERATOR",
+            Material.MAGMA_BLOCK,
+            "&cGeothermal Generator",
+            "&7Generates energy from the heat of the world",
+            "",
+            LorePreset.energyBuffer(9000),
+            LorePreset.energyPerSecond(90)
+    );
+    public static final SlimefunItemStack REINFORCED_GEOTHERMAL = new SlimefunItemStack(
+            "REINFORCED_GEOTHERMAL_GENERATOR",
+            Material.SHROOMLIGHT,
+            "&fReinforced &cGeothermal Gen",
+            "&7Generates large amounts of energy",
+            "&7from the heat of the world",
+            "",
+            LorePreset.energyBuffer(45000),
+            LorePreset.energyPerSecond(450)
+    );
+    public static final SlimefunItemStack BASIC_PANEL = new SlimefunItemStack(
+            "BASIC_PANEL",
+            Material.BLUE_GLAZED_TERRACOTTA,
+            "&9Basic Solar Panel",
+            "&7Generates energy from the sun",
+            "",
+            LorePreset.energyBuffer(1500),
+            LorePreset.energyPerSecond(15)
+    );
+    public static final SlimefunItemStack ADVANCED_PANEL = new SlimefunItemStack(
+            "ADVANCED_PANEL",
+            Material.RED_GLAZED_TERRACOTTA,
+            "&cAdvanced Solar Panel",
+            "&7Generates energy from the sun",
+            "",
+            LorePreset.energyBuffer(18000),
+            LorePreset.energyPerSecond(180)
+    );
+    public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
+            "CELESTIAL_PANEL",
+            Material.YELLOW_GLAZED_TERRACOTTA,
+            "&eCelestial Panel",
+            "&7Generates energy from the sun",
+            "",
+            LorePreset.energyBuffer(75000),
+            LorePreset.energyPerSecond(750)
+    );
+    public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
+            "VOID_PANEL",
+            Material.LIGHT_GRAY_GLAZED_TERRACOTTA,
+            "&8Void Panel",
+            "&7Generates energy from darkness",
+            "",
+            LorePreset.energyBuffer(360000),
+            LorePreset.energyPerSecond(3600)
+    );
+    public static final SlimefunItemStack INFINITE_PANEL = new SlimefunItemStack(
+            "INFINITE_PANEL",
+            Material.LIGHT_BLUE_GLAZED_TERRACOTTA,
+            "&bInfinity Panel",
+            "&7Generates energy from the cosmos",
+            "",
+            LorePreset.energyBuffer(9000000),
+            LorePreset.energyPerSecond(90000)
+    );
     
-    public static final int ADVANCED_RATE = 180;
-    public static final int ADVANCED_STORAGE = 18000;
-    
-    public static final int CELE_RATE = 750;
-    public static final int CELE_STORAGE = 75000;
-    
-    public static final int VOID_RATE = 3600;
-    public static final int VOID_STORAGE = 360000;
-    
-    public static final int INFINITY_RATE = 90000;
-    public static final int INFINITY_STORAGE = 9000000;
-
     private final Type type;
-
-    public EnergyGenerator(Type type) {
-        super(type.getCategory(), type.getItem(), type.getRecipeType(), type.getRecipe());
+    private final int generation;
+    private final String display;
+    private final int storage;
+    
+    private EnergyGenerator(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int generation, Type type) {
+        super(category, item, recipeType, recipe);
         this.type = type;
+        this.generation = generation;
+        this.storage = generation * 100;
+        this.display = LorePreset.roundHundreds(this.generation * PluginUtils.TICK_RATIO);
     }
     
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-            for (int i = 0; i < 9; i++)
-                blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-
-            blockMenuPreset.addItem(4,
-                    MenuPreset.loadingItemRed,
-                    ChestMenuUtils.getEmptyClickHandler());
+        for (int i = 0; i < 9; i++) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(4, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -121,45 +234,43 @@ public class EnergyGenerator extends AbstractContainer implements EnergyNetProvi
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return 0;
         
-        Pair<Integer, String> pair = getGeneratingAmount(l.getBlock(), Objects.requireNonNull(l.getWorld()));
-        final int rate = pair.getFirstValue();
+        String gen = getGenerationType(l.getBlock(), Objects.requireNonNull(l.getWorld()));
                 
         if (inv.hasViewer()) {
-
-            final int stored = getCharge(l);
-
             if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(l, EnergyNet.class).isPresent()) { //not connected
 
                 inv.replaceExistingItem(4, MenuPreset.connectToEnergyNet);
 
-            } else if (rate == 0) {
-
-                inv.replaceExistingItem(4, new CustomItem(
-                        Material.GREEN_STAINED_GLASS_PANE,
-                        "&cNot generating",
-                        "&7Stored: &6" + LorePreset.format(stored) + " J"
-                ));
-
             } else {
-                
-                inv.replaceExistingItem(4, new CustomItem(
-                        Material.GREEN_STAINED_GLASS_PANE,
-                        "&aGeneration",
-                        "&7Type: &6" + pair.getSecondValue(),
-                        "&7Generating: &6" + LorePreset.roundHundreds(rate * PluginUtils.TICK_RATIO) + " J/s ",
-                        "&7Stored: &6" + LorePreset.format(stored) + " J"
-                ));
+                final int stored = getCharge(l);
+
+                if (gen == null) {
+
+                    inv.replaceExistingItem(4, new CustomItem(
+                            Material.GREEN_STAINED_GLASS_PANE,
+                            "&cNot generating",
+                            "&7Stored: &6" + LorePreset.format(stored) + " J"
+                    ));
+
+                } else {
+
+                    inv.replaceExistingItem(4, new CustomItem(
+                                    Material.GREEN_STAINED_GLASS_PANE,
+                                    "&aGeneration",
+                                    "&7Type: &6" + gen,
+                            "&7Generating: &6" + this.display + " J/s ",
+                            "&7Stored: &6" + LorePreset.format(stored) + " J"
+                    ));
+                }
             }
         }
 
-        return rate;
+        return gen == null ? 0 : this.generation;
         
     }
     
-    private Pair<Integer, String> getGeneratingAmount(@Nonnull Block block, @Nonnull World world) {
-        int generation = this.type.getGeneration();
-
-        if (this.type.isWater()) {
+    private String getGenerationType(@Nonnull Block block, @Nonnull World world) {
+        if (this.type == Type.WATER) {
             
             // don't check water log every tick
             if (InfinityExpansion.progressEvery(8)) {
@@ -169,60 +280,59 @@ public class EnergyGenerator extends AbstractContainer implements EnergyNetProvi
                     Waterlogged waterLogged = (Waterlogged) blockData;
                     if (waterLogged.isWaterlogged()) {
                         BlockStorage.addBlockInfo(block.getLocation(), "water_logged", "true");
-                        return new Pair<>(generation, "Hydroelectric");
+                        return "Hydroelectric";
                     } else {
                         BlockStorage.addBlockInfo(block.getLocation(), "water_logged", "false");
                     }
                 }
                 
             } else if (Objects.equals(BlockStorage.getLocationInfo(block.getLocation(), "water_logged"), "true")) {
-                return new Pair<>(generation, "Hydroelectric");
+                return "Hydroelectric";
             }
             
         } else if (this.type == Type.INFINITY) {
             
-            return new Pair<>(generation, "Infinity");
+            return "Infinity";
             
         } else if (world.getEnvironment() == World.Environment.NETHER) {
             
-            if (this.type.isOverworld()) {
-                return new Pair<>(generation * 2, "Geothermal - Nether");
+            if (this.type == Type.GEOTHERMAL) {
+                return "Geothermal - Nether";
             }
 
-            if (this.type.isNight() || this.type.isNether()) {
-                return new Pair<>(generation, "Nether");
+            if (this.type == Type.LUNAR) {
+                return "Nether";
             }
             
         } else if (world.getEnvironment() == World.Environment.THE_END) {
             
-            if (this.type.isEnd() || this.type.isNight()) {
-                return new Pair<>(generation, "End");
+            if (this.type == Type.LUNAR) {
+                return "End";
             }
             
         } else if (world.getEnvironment() == World.Environment.NORMAL) {
 
-            if (this.type.isOverworld()) {
-                return new Pair<>(generation, "Geothermal");
+            if (this.type == Type.GEOTHERMAL) {
+                return "Geothermal";
             }
 
             if (world.getTime() >= 13000 || block.getLocation().add(0, 1, 0).getBlock().getLightFromSky() != 15) {
 
-                if (this.type.isNight()) {
-                    return new Pair<>(generation, "Night");
+                if (this.type == Type.LUNAR) {
+                    return "Night";
                 }
 
-            } else if (this.type.isDay()) {
-
-                return new Pair<>(generation, "Day");
+            } else if (this.type == Type.SOLAR) {
+                return "Day";
             }
         }
 
-        return new Pair<>(0, null);
+        return null;
     }
 
     @Override
     public int getCapacity() {
-        return this.type.getStorage();
+        return this.storage;
     }
 
     @Nonnull
@@ -230,73 +340,13 @@ public class EnergyGenerator extends AbstractContainer implements EnergyNetProvi
     public EnergyNetComponentType getEnergyComponentType() {
         return EnergyNetComponentType.GENERATOR;
     }
-
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum Type {
-
-        WATER(WATER_RATE, WATER_STORAGE, Categories.BASIC_MACHINES, Items.HYDRO_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
-                new ItemStack(Material.BUCKET), SlimefunItems.ELECTRO_MAGNET, new ItemStack(Material.BUCKET),
-                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
-        }, false, false, false, false, true, false),
-        WATER2(WATER_RATE2, WATER_STORAGE2, Categories.ADVANCED_MACHINES, Items.REINFORCED_HYDRO_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.HYDRO_GENERATOR, Items.MACHINE_CIRCUIT, Items.HYDRO_GENERATOR,
-                Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE,
-                Items.HYDRO_GENERATOR, Items.MACHINE_CIRCUIT, Items.HYDRO_GENERATOR
-        }, false, false, false, false, true, false),
-        
-        GEOTHERMAL(GEO_RATE, GEO_STORAGE, Categories.ADVANCED_MACHINES, Items.GEOTHERMAL_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
-                SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, false, false, true, false, false, true),
-        GEOTHERMAL2(GEO_RATE2, GEO_STORAGE2, Categories.ADVANCED_MACHINES, Items.REINFORCED_GEOTHERMAL_GENERATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.GEOTHERMAL_GENERATOR, Items.MACHINE_CIRCUIT, Items.GEOTHERMAL_GENERATOR,
-                Items.MACHINE_PLATE, Items.MACHINE_CORE, Items.MACHINE_PLATE,
-                Items.GEOTHERMAL_GENERATOR, Items.MACHINE_CIRCUIT, Items.GEOTHERMAL_GENERATOR
-        }, false, false, true, false, false, true),
-        
-        BASIC(BASIC_RATE, BASIC_STORAGE, Categories.BASIC_MACHINES, Items.BASIC_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGSTEEL, Items.MAGSTEEL_PLATE, Items.MAGSTEEL,
-                SlimefunItems.SOLAR_PANEL, SlimefunItems.SOLAR_PANEL, SlimefunItems.SOLAR_PANEL,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT
-        }, true, false, false, false, false, false),
-        ADVANCED(ADVANCED_RATE, ADVANCED_STORAGE, Categories.ADVANCED_MACHINES, Items.ADVANCED_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.TITANIUM, Items.MACHINE_PLATE, Items.TITANIUM,
-                Items.BASIC_PANEL, SlimefunItems.SOLAR_GENERATOR_4, Items.BASIC_PANEL,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT
-        }, true, false, false, false, false, false),
-        
-        CELESTIAL(CELE_RATE, CELE_STORAGE, Categories.ADVANCED_MACHINES, Items.CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
-                Items.ADVANCED_PANEL, Items.ADVANCED_PANEL, Items.ADVANCED_PANEL,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, true, false, false, false, false, false),
-        VOID(VOID_RATE, VOID_STORAGE, Categories.ADVANCED_MACHINES, Items.VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT,
-                Items.CELESTIAL_PANEL, Items.CELESTIAL_PANEL, Items.CELESTIAL_PANEL,
-                Items.MAGNONIUM, Items.MAGNONIUM, Items.MAGNONIUM
-        }, false, true, true, true, false, false),
-        
-        INFINITY(INFINITY_RATE, INFINITY_STORAGE, Categories.INFINITY_CHEAT, Items.INFINITE_PANEL, RecipeTypes.INFINITY_WORKBENCH,
-                InfinityRecipes.getRecipe(Items.INFINITE_PANEL), true, true, true, true, false, false);
-
-        private final int generation;
-        private final int storage;
-        @Nonnull
-        private final Category category;
-        @Nonnull
-        private final SlimefunItemStack item;
-        @Nonnull
-        private final RecipeType recipeType;
-        @Nonnull
-        private final ItemStack[] recipe;
-        boolean day;
-        boolean night;
-        boolean nether;
-        boolean end;
-        boolean water;
-        boolean overworld;
+    
+    private enum Type {
+        WATER,
+        GEOTHERMAL,
+        SOLAR,
+        LUNAR,
+        INFINITY
     }
+    
 }

@@ -1,12 +1,13 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.LoreStorage;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
-import io.github.mooy1.infinityexpansion.lists.RecipeTypes;
-import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.misc.Pair;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -16,9 +17,6 @@ import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.items.backpacks.SlimefunBackpack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -30,15 +28,18 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.WallSign;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,172 +56,164 @@ import java.util.Objects;
  * for idea, a few bits of code, and code to learn from
  *
  */
-public class StorageUnit extends AbstractContainer implements LoreStorage {
+public final class StorageUnit extends AbstractContainer {
+    
+    public static void setup(InfinityExpansion plugin) {
+        new StorageUnit(BASIC, BASIC_STORAGE, new ItemStack[] {
+                new ItemStack(Material.OAK_LOG), SmelteryItem.MAGSTEEL, new ItemStack(Material.OAK_LOG),
+                new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
+                new ItemStack(Material.OAK_LOG), SmelteryItem.MAGSTEEL, new ItemStack(Material.OAK_LOG)
+        }).register(plugin);
+        new StorageUnit(ADVANCED, ADVANCED_STORAGE,  new ItemStack[] {
+                SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL,
+                SmelteryItem.MAGSTEEL, StorageUnit.BASIC, SmelteryItem.MAGSTEEL,
+                SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL
+        }).register(plugin);
+        new StorageUnit(REINFORCED, REINFORCED_STORAGE,  new ItemStack[] {
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CIRCUIT, MachineItem.MAGSTEEL_PLATE,
+                MachineItem.MAGSTEEL_PLATE, StorageUnit.ADVANCED, MachineItem.MAGSTEEL_PLATE,
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MAGSTEEL_PLATE
+        }).register(plugin);
+        new StorageUnit(VOID, VOID_STORAGE,  new ItemStack[] {
+                CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT,
+                SmelteryItem.MAGNONIUM, StorageUnit.REINFORCED, SmelteryItem.MAGNONIUM,
+                CompressedItem.VOID_INGOT, MachineItem.MACHINE_CORE, CompressedItem.VOID_INGOT
+        }).register(plugin);
+        new StorageUnit(INFINITY, INFINITY_STORAGE,  new ItemStack[] {
+                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, StorageUnit.VOID, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY
+        }).register(plugin);
+    }
     
     public static boolean DISPLAY_SIGNS = false;
-    public static int SIGN_REFRESH = 16;
-
-    private static final Map<Block, List<Block>> SIGNS = new HashMap<>();
-
-    public static final int BASIC = 6400;
-    public static final int ADVANCED = 25600;
-    public static final int REINFORCED = 102400;
-    public static final int VOID = 409600;
-    public static final int INFINITY = 1_600_000_000;
     
-    private final Type type;
+    public static final int BASIC_STORAGE = 6400;
+    public static final int ADVANCED_STORAGE = 25600;
+    public static final int REINFORCED_STORAGE = 102400;
+    public static final int VOID_STORAGE = 409600;
+    public static final int INFINITY_STORAGE = 1_600_000_000;
+    
+    public static final SlimefunItemStack BASIC = new SlimefunItemStack(
+            "BASIC_STORAGE",
+            Material.OAK_WOOD,
+            "&9Basic &8Storage Unit",
+            LorePreset.storesItem(StorageUnit.BASIC_STORAGE)
+    );
+    public static final SlimefunItemStack ADVANCED = new SlimefunItemStack(
+            "ADVANCED_STORAGE",
+            Material.DARK_OAK_WOOD,
+            "&cAdvanced &8Storage Unit",
+            LorePreset.storesItem(StorageUnit.ADVANCED_STORAGE)
+    );
+    public static final SlimefunItemStack REINFORCED = new SlimefunItemStack(
+            "REINFORCED_STORAGE",
+            Material.ACACIA_WOOD,
+            "&fReinforced &8Storage Unit",
+            LorePreset.storesItem(StorageUnit.REINFORCED_STORAGE)
+    );
+    public static final SlimefunItemStack VOID = new SlimefunItemStack(
+            "VOID_STORAGE",
+            Material.CRIMSON_HYPHAE,
+            "&8Void &8Storage Unit",
+            LorePreset.storesItem(StorageUnit.VOID_STORAGE)
+    );
+    public static final SlimefunItemStack INFINITY = new SlimefunItemStack(
+            "INFINITY_STORAGE",
+            Material.WARPED_HYPHAE,
+            "&bInfinity &8Storage Unit",
+            "&6Capacity: &eInfinite items"
+    );
     
     private static final int STATUS_SLOT = MenuPreset.slot2;
     private static final int[] INPUT_SLOTS = {MenuPreset.slot1};
     private static final int INPUT_SLOT = INPUT_SLOTS[0];
-    private static final int[] OUTPUT_SLOTS = {MenuPreset.slot3};
-    private static final int[] INPUT_BORDER = MenuPreset.slotChunk1;
-    private static final int[] STATUS_BORDER = MenuPreset.slotChunk2;
-    private static final int[] OUTPUT_BORDER = MenuPreset.slotChunk3;
+    private static final int OUTPUT_SLOT = MenuPreset.slot3;
+    
+    private static final Map<Block, List<Block>> SIGNS = new HashMap<>();
+    
+    private final int max;
+    
+    private StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
+        super(Categories.STORAGE_TRANSPORT, item, StorageForge.TYPE, recipe);
+        this.max = max;
 
-    public StorageUnit(@Nonnull Type type) {
-        super(Categories.STORAGE_TRANSPORT, type.getItem(), RecipeTypes.STORAGE_FORGE, StorageForge.RECIPES[type.ordinal()]);
-        this.type = type;
-
-        addItemHandler(new BlockPlaceHandler(false) { //transfer stuffs
+        addItemHandler(new BlockPlaceHandler(false) { 
             @Override
             public void onPlayerPlace(BlockPlaceEvent e) {
-                Block b = e.getBlock();
-                setAmount(b, 0);
-                ItemStack placedItem = e.getItemInHand();
+                Pair<String, Integer> data = getData(e.getItemInHand().getItemMeta());
+                setStored(e.getBlock(), data.getA());
+                setAmount(e.getBlock(), data.getB());
+                if (data.getA() != null) {
+                    MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to block");
 
-                ItemMeta meta = placedItem.getItemMeta();
-                if (meta != null) {
-
-                    List<String> lore = meta.getLore();
-                    if (lore != null) {
-
-                        int i = 0;
-                        for (String line : lore) {
-                            if (ChatColor.stripColor(line).equals("Stored Item:")) {
-                                Player p = e.getPlayer();
-
-                                String storedItem = ChatColor.stripColor(lore.get(i + 1));
-                                setStored(b, storedItem);
-
-                                String stored = ChatColor.stripColor(lore.get(i + 3));
-                                setAmount(b, Integer.parseInt(stored));
-
-                                MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to placed item");
-
-                                break;
-                            }
-                            i++;
-                        }
-                    }
                 }
             }
         });
         
-        addItemHandler((BlockBreakHandler) (e, item, fortune, drops) -> {
-            Player p = e.getPlayer();
-            Block b = e.getBlock();
-
+        addItemHandler((BlockBreakHandler) (e, item1, fortune, drops) -> { Block b = e.getBlock();
             BlockMenu inv = BlockStorage.getInventory(b);
-
             if (inv == null) return false;
-
-            Location l = b.getLocation();
-            String storedItem = setStored(b);
+            String storedItem = getStored(b);
             int stored = getAmount(b);
-
             e.setDropItems(false);
-            ItemStack drop = type.getItem().clone();
-
+            ItemStack drop = getItem().clone();
             if (stored > 0 && storedItem != null) {
-                tryToStoreOrDrop(b, inv, INPUT_SLOTS);
-                tryToStoreOrDrop(b, inv, OUTPUT_SLOTS);
-
-                stored = getAmount(b);
-
-                LoreUtils.addLore(drop, "", ChatColor.AQUA + "Stored Item:", ChatColor.GREEN + storedItem, ChatColor.AQUA + "Amount:", ChatColor.GREEN + String.valueOf(stored));
-
-                MessageUtils.message(p, ChatColor.GREEN + "Stored items transferred to dropped item");
-
-            } else {
-                inv.dropItems(l, INPUT_SLOTS);
-                inv.dropItems(l, OUTPUT_SLOTS);
+                stored = tryToStoreOrDrop(inv, stored, storedItem, INPUT_SLOT, OUTPUT_SLOT);
+                drop.setItemMeta(saveData(drop.getItemMeta(), storedItem, stored));
+                MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to dropped item");
             }
-
-            b.getWorld().dropItemNaturally(l, drop);
-
+            inv.dropItems(b.getLocation(), INPUT_SLOT, OUTPUT_SLOT);
+            b.getWorld().dropItemNaturally(b.getLocation(), drop);
             return true;
         });
     }
+    
+    private int tryToStoreOrDrop(@Nonnull BlockMenu inv, int stored, String storedItem, int... slots) {
+        for (int slot : slots) {
+            ItemStack item = inv.getItemInSlot(slot);
 
-    /**
-     * This method will attempt to store an item before the unit is broken, otherwise drop it
-     *
-     * @param b block broken
-     * @param inv BlockMenu of block
-     * @param slots slots to perform this on
-     */
-    private void tryToStoreOrDrop(Block b, @Nonnull BlockMenu inv, @Nonnull int[] slots) {
-        ItemStack inputSlot = inv.getItemInSlot(slots[0]);
-        
-        if (inputSlot == null) return;
-
-        Location l = b.getLocation();
-        
-        if (inputSlot.getEnchantments().size() > 0) {
-            inv.dropItems(l, slots);
-            return;
-        }
-
-        int stored = getAmount(b);
-        String storedItem = setStored(b);
-        String inputID = StackUtils.getIDorElse(inputSlot, inputSlot.getType().toString());
-
-        if (Objects.equals(inputID, storedItem)) {
-
-            int inputAmount = inputSlot.getAmount();
-            if (this.type.getMax() >= stored + inputAmount) {
-
-                setAmount(b, stored + inputAmount);
-                inv.replaceExistingItem(slots[0], null);
-
-            } else {
-
-                int amount = this.type.getMax() - stored;
-
-                setAmount(b, this.type.getMax());
-                inputSlot.setAmount(inputAmount - amount);
-                inv.replaceExistingItem(slots[0], inputSlot);
-                inv.dropItems(l, slots);
-
+            if (item == null) {
+                continue;
             }
-            return;
+            
+            if (canBeAdded(item)) {
+                String inputID = StackUtils.getIDorElse(item, item.getType().toString());
 
+                if (Objects.equals(inputID, storedItem)) {
+
+                    int inputAmount = item.getAmount();
+                    if (this.max >= stored + inputAmount) {
+
+                        stored = stored + inputAmount;
+                        inv.replaceExistingItem(slots[0], null);
+
+                    } else {
+
+                        int amount = this.max - stored;
+
+                        stored = this.max;
+                        item.setAmount(inputAmount - amount);
+                        inv.replaceExistingItem(slots[0], item);
+                    }
+                }
+            }
         }
-
-        inv.dropItems(l, slots);
+        
+        return stored;
     }
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : STATUS_BORDER) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-        }
-
+        MenuPreset.setupBasicMenu(blockMenuPreset);
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
     public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
         if (flow == ItemTransportFlow.INSERT) {
-            return INPUT_SLOTS;
+            return new int[] {INPUT_SLOT};
         } else if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
+            return new int[] {OUTPUT_SLOT};
         } else {
             return new int[0];
         }
@@ -233,7 +226,7 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
     
     @Override
     public void tick(@Nonnull Block b, @Nonnull BlockMenu menu) {
-        String stored = setStored(b);
+        String stored = getStored(b);
         int amount = getAmount(b);
 
         // input
@@ -248,7 +241,7 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
                 }  // else cant be stored
             } else if (id.equals(stored)) {
                 if (canBeAdded(input)) {
-                    int max = this.type.max - amount;
+                    int max = this.max - amount;
                     if (max > 0) {
                         int add = input.getAmount();
                         int dif = add - max;
@@ -274,13 +267,15 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
                 int remove = Math.min(64, amount - 1);
                 // last item
                 if (remove == 0) {
-                    menu.replaceExistingItem(OUTPUT_SLOTS[0], output, false);
-                    amount = 0;
-                    stored = null;
-                    output = null;
+                    if (menu.getItemInSlot(OUTPUT_SLOT) == null) {
+                        menu.replaceExistingItem(OUTPUT_SLOT, output, false);
+                        amount = 0;
+                        stored = null;
+                        output = null;
+                    }
                 } else {
                     output.setAmount(remove);
-                    ItemStack remaining = menu.pushItem(output, OUTPUT_SLOTS);
+                    ItemStack remaining = menu.pushItem(output, OUTPUT_SLOT);
                     if (remaining != null) {
                         remove -= remaining.getAmount();
                     }
@@ -300,7 +295,7 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
                 ItemStack status = new CustomItem(
                         output,
                         ChatColor.WHITE + ItemUtils.getItemName(output),
-                        "&6Stored: &e" + LorePreset.format(amount) + (this.type == Type.INFINITE_ ? "" : "/" + LorePreset.format(this.type.max) + " &7(" + Math.round((float) 100 * amount / this.type.max)  + "%)"),
+                        "&6Stored: &e" + LorePreset.format(amount) + (this.max == INFINITY_STORAGE ? "" : "/" + LorePreset.format(this.max) + " &7(" + Math.round((float) 100 * amount / this.max)  + "%)"),
                         "&7Stacks: " + LorePreset.format(Math.round((float) amount / output.getMaxStackSize()))
                 );
                 status.setAmount(1);
@@ -309,7 +304,7 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
         }
         
         // update signs
-        if (DISPLAY_SIGNS && InfinityExpansion.progressEvery(SIGN_REFRESH)) {
+        if (DISPLAY_SIGNS && InfinityExpansion.progressEvery(16)) {
             for (Block sign : SIGNS.computeIfAbsent(b, k -> {
                 List<Block> list = new ArrayList<>();
                 Location l = b.getLocation();
@@ -345,7 +340,7 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
             return false;
         }
         SlimefunItem item = SlimefunItem.getByItem(stack);
-        return !(item instanceof SlimefunBackpack) || !(item instanceof LoreStorage);
+        return !(item instanceof SlimefunBackpack || item instanceof StorageUnit);
     }
 
     private static boolean canBeAdded(ItemStack stack) {
@@ -369,38 +364,45 @@ public class StorageUnit extends AbstractContainer implements LoreStorage {
         }
     }
 
-    public String setStored(@Nonnull Block b) {
+    public String getStored(@Nonnull Block b) {
         return BlockStorage.getLocationInfo(b.getLocation(), "storeditem");
     }
 
-    @Override
-    public int getOffset() {
-        return -1;
-    }
-
-    @Override
-    public int getLines() {
-        return 5;
-    }
-
-    @Nonnull
-    @Override
-    public String getTarget() {
-        return "Stored Item:";
+    private static final NamespacedKey STORED_ITEM = PluginUtils.getKey("stored_item");
+    private static final NamespacedKey STORED = PluginUtils.getKey("stored");
+    
+    @Nullable
+    @Contract("!null, _, _ -> !null")
+    private static  ItemMeta saveData(@Nullable ItemMeta meta, @Nonnull String item, int amount) {
+        if (meta != null) {
+            meta.getPersistentDataContainer().set(STORED_ITEM, PersistentDataType.STRING, item);
+            meta.getPersistentDataContainer().set(STORED, PersistentDataType.INTEGER, amount);
+        }
+        return null;
     }
     
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-
-    public enum Type {
-        BASIC_(Items.BASIC_STORAGE, BASIC),
-        ADVANCED_(Items.ADVANCED_STORAGE, ADVANCED),
-        REINFORCED_(Items.REINFORCED_STORAGE, REINFORCED),
-        VOID_(Items.VOID_STORAGE, VOID),
-        INFINITE_(Items.INFINITY_STORAGE, INFINITY);
-
-        @Nonnull
-        private final SlimefunItemStack item;
-        private final int max;
+    @Nonnull
+    private static  Pair<String, Integer> getData(@Nullable ItemMeta meta) {
+        if (meta != null) {
+            String item = meta.getPersistentDataContainer().get(STORED_ITEM, PersistentDataType.STRING);
+            Integer amount = meta.getPersistentDataContainer().get(STORED, PersistentDataType.INTEGER);
+            if (amount != null && item != null) {
+                return new Pair<>(item, amount);
+            }
+        }
+        return new Pair<>(null, 0);
     }
+    
+    @Nullable
+    @Contract("_, !null -> !null")
+    static ItemMeta transferMeta(@Nullable ItemStack input, @Nullable ItemMeta output) {
+        if (input != null) {
+            Pair<String, Integer> data = getData(input.getItemMeta());
+            if (data.getA() != null) {
+                saveData(output, data.getA(), data.getB());
+            }
+        }
+        return output;
+    }
+    
 }

@@ -1,32 +1,37 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
 
 /**
  * Ender essence geo-resource item
  *
  * @author Mooy1
  */
-public class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResource {
+public final class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResource {
     
-    private final NamespacedKey key;
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "END_ESSENCE",
+            Material.BLAZE_POWDER,
+            "&5Ender Essence",
+            "&8&oFrom the depths of the end..."
+    );
+    private static final NamespacedKey key = PluginUtils.getKey("ender_essence");
      
-    public EnderEssence(InfinityExpansion plugin) {
-        super(Categories.MAIN_MATERIALS, Items.ENDER_ESSENCE, RecipeType.GEO_MINER, null);
-        this.key = new NamespacedKey(plugin, "ender_essence");
+    public EnderEssence() {
+        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.GEO_MINER, null);
         register();
     }
     
@@ -47,7 +52,7 @@ public class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResou
     @Nonnull
     @Override
     public NamespacedKey getKey() {
-        return this.key;
+        return key;
     }
 
     @Override
@@ -58,13 +63,13 @@ public class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResou
     @Nonnull
     @Override
     public String getName() {
-        return Objects.requireNonNull(Items.ENDER_ESSENCE.getDisplayName());
+        return getItemName();
     }
 
     @Nonnull
     @Override
     public ItemStack getItem() {
-        return Items.ENDER_ESSENCE.clone();
+        return ITEM;
     }
 
     @Override

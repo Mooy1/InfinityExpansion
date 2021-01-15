@@ -1,8 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.math.RandomUtils;
@@ -15,6 +14,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.Sou
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -56,12 +56,18 @@ import java.util.UUID;
  * @author Mooy1
  * 
  */
-public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceable {
-
+public final class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceable {
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "VEIN_MINER_RUNE",
+            Material.DIAMOND,
+            "&bVein Miner Rune",
+            "&7Upgrades a tool to vein-mine certain materials"
+    );
     private static final double RANGE = 1.5;
     private static final int MAX = 64;
     private static final long CD = 1000;
-    private static NamespacedKey key = null;
+    private static final NamespacedKey key = PluginUtils.getKey("vein_miner");
     private static final Map<UUID, Long> CDS = new HashMap<>();
     private static final String[] LORE = {"", ChatColor.AQUA + "Veinminer - Crouch to use"};
     private static final Set<String> ALLOWED = new HashSet<>(Arrays.asList(
@@ -71,15 +77,14 @@ public class VeinMinerRune extends SlimefunItem implements Listener, NotPlaceabl
     ));
     private static final Set<Block> PROCESSING = new HashSet<>();
     
-    public VeinMinerRune(InfinityExpansion plugin) {
-        super(Categories.MAIN_MATERIALS, Items.VEIN_MINER_RUNE, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
-                Items.MAGSTEEL, SlimefunItems.PICKAXE_OF_VEIN_MINING, Items.MAGSTEEL,
+    public VeinMinerRune() {
+        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
+                SmelteryItem.MAGSTEEL, SlimefunItems.PICKAXE_OF_VEIN_MINING, SmelteryItem.MAGSTEEL,
                 new ItemStack(Material.REDSTONE_ORE), SlimefunItems.BLANK_RUNE, new ItemStack(Material.LAPIS_ORE),
-                Items.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, Items.MAGSTEEL,
+                SmelteryItem.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, SmelteryItem.MAGSTEEL,
         });
         LeaveListener.add(CDS);
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        key = new NamespacedKey(plugin, "vein_miner");
+        PluginUtils.registerEvents(this);
     }
     
     @EventHandler

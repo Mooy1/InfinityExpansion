@@ -1,9 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -28,10 +30,19 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public class ResourceSynthesizer extends AbstractMachine implements RecipeDisplayItem {
+public final class ResourceSynthesizer extends AbstractMachine implements RecipeDisplayItem {
 
     public static final int ENERGY = 1_000_000;
-
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "RESOURCE_SYNTHESIZER",
+            Material.LODESTONE,
+            "&6Resource Synthesizer",
+            "&7Creates resources by combining 2 Singularities",
+            "",
+            LorePreset.energy(ResourceSynthesizer.ENERGY) + "per use"
+    );
+    
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
     };
@@ -51,19 +62,19 @@ public class ResourceSynthesizer extends AbstractMachine implements RecipeDispla
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
     private static final SlimefunItemStack[] RECIPES = {
-            Items.IRON_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
-            Items.IRON_SINGULARITY, Items.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
-            Items.DIAMOND_SINGULARITY, Items.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.COMPRESSED_CARBON, 16),
-            Items.GOLD_SINGULARITY, Items.EMERALD_SINGULARITY, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 4),
-            Items.COPPER_SINGULARITY, Items.IRON_SINGULARITY, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 32),
-            Items.IRON_SINGULARITY, Items.QUARTZ_SINGULARITY, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
+            Singularity.IRON, Singularity.COAL, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
+            Singularity.IRON, Singularity.REDSTONE, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
+            Singularity.DIAMOND, Singularity.COAL, new SlimefunItemStack(SlimefunItems.COMPRESSED_CARBON, 16),
+            Singularity.GOLD, Singularity.EMERALD, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 4),
+            Singularity.COPPER, Singularity.IRON, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 32),
+            Singularity.IRON, Singularity.QUARTZ, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
     };
 
     public ResourceSynthesizer() {
-        super(Categories.ADVANCED_MACHINES, Items.RESOURCE_SYNTHESIZER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
-                Items.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Items.MACHINE_PLATE,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
+        super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE,
+                MachineItem.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, MachineItem.MACHINE_PLATE,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
         }, STATUS_SLOT, ENERGY);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {

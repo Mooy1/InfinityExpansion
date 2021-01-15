@@ -1,10 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.lists.Categories;
-import io.github.mooy1.infinityexpansion.lists.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -12,6 +13,7 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponen
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
@@ -32,7 +34,16 @@ import java.util.Locale;
  *
  * @author Mooy1
  */
-public class GearTransformer extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+public final class GearTransformer extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+    
+    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
+            "GEAR_TRANSFORMER",
+            Material.EMERALD_BLOCK,
+            "&7Gear Transformer",
+            "&7Changes the material of vanilla tools and gear",
+            "",
+            LorePreset.energy(GearTransformer.ENERGY) + "Per Use"
+    );
 
     public static final int ENERGY = 12000;
     public static boolean sf = false;
@@ -55,10 +66,10 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
     public GearTransformer() {
-        super(Categories.ADVANCED_MACHINES, Items.GEAR_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
-                Items.MACHINE_CIRCUIT, new ItemStack(Material.SMITHING_TABLE), Items.MACHINE_CIRCUIT,
-                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE
+        super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CIRCUIT, MachineItem.MAGSTEEL_PLATE,
+                MachineItem.MACHINE_CIRCUIT, new ItemStack(Material.SMITHING_TABLE), MachineItem.MACHINE_CIRCUIT,
+                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CIRCUIT, MachineItem.MAGSTEEL_PLATE
         });
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
