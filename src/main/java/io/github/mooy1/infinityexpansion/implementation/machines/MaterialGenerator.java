@@ -5,7 +5,6 @@ import io.github.mooy1.infinityexpansion.lists.Items;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.AccessLevel;
@@ -112,13 +111,7 @@ public class MaterialGenerator extends AbstractMachine implements RecipeDisplayI
 
         return true;
     }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
-    }
-
+    
     @Override
     public int getCapacity() {
         return this.type.getEnergy() * 2;

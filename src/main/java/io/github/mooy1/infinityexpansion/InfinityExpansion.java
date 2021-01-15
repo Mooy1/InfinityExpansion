@@ -76,7 +76,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     }
     
     private void setupConfigOptions() {
-        StorageUnit.SIGN_REFRESH = getOrDefault("storage-unit-options.sign-refresh-ticks", 1, 10, 5);
+        StorageUnit.SIGN_REFRESH = getOrDefault("storage-unit-options.sign-refresh-ticks", 4, 32, 16);
         StorageUnit.DISPLAY_SIGNS = getOrDefault("storage-unit-options.display-signs", true);
         MobSimulationChamber.CHANCE = getOrDefault("balance-options.mob-simulation-xp-chance", 1, 10, 2);
         GearTransformer.sf = getOrDefault("balance-options.allow-sf-item-transform", false);

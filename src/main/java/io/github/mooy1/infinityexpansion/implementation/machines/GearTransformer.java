@@ -93,7 +93,7 @@ public class GearTransformer extends AbstractContainer implements EnergyNetCompo
 
         }
         
-        if (!sf && StackUtils.getItemID(inputItem, false) != null) {
+        if (!sf && StackUtils.getID(inputItem) != null) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cSlimefun items may not have their material changed!"));
             return;
         }

@@ -8,6 +8,7 @@ import io.github.mooy1.infinityexpansion.implementation.machines.ConversionMachi
 import io.github.mooy1.infinityexpansion.implementation.generators.EnergyGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
 import io.github.mooy1.infinityexpansion.implementation.generators.InfinityReactor;
+import io.github.mooy1.infinityexpansion.implementation.machines.GeoQuarry;
 import io.github.mooy1.infinityexpansion.implementation.machines.ItemUpdater;
 import io.github.mooy1.infinityexpansion.implementation.machines.MaterialGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.PoweredBedrock;
@@ -135,6 +136,15 @@ public final class Items {
             "&7Creates resources by combining 2 Singularities",
             "",
             LorePreset.energy(ResourceSynthesizer.ENERGY) + "per use"
+    );
+
+    public static final SlimefunItemStack GEO_QUARRY = new SlimefunItemStack(
+            "GEO_QUARRY",
+            Material.QUARTZ_BRICKS,
+            "&fGeo Quarry",
+            "&7Slowly harvests geo resources using power",
+            "",
+            LorePreset.energyPerSecond(GeoQuarry.ENERGY)
     );
 
     public static final SlimefunItemStack INFINITY_REACTOR = new SlimefunItemStack(

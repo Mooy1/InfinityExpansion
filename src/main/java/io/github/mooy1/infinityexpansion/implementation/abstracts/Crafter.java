@@ -10,6 +10,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -35,7 +36,7 @@ import java.util.Map;
  */
 public abstract class Crafter extends AbstractContainer {
     
-    private final Map<MultiFilter, SlimefunItemStack> recipes = new HashMap<>();
+    private final Map<MultiFilter, Pair<SlimefunItemStack, int[]>> recipes = new HashMap<>();
     
     private static final int[] INPUT_SLOTS = {
             10, 11, 12,
@@ -71,7 +72,8 @@ public abstract class Crafter extends AbstractContainer {
         ItemStack[][] items = getRecipes();
         
         for (int i = 0 ; i < items.length ; i++) {
-            this.recipes.put(new MultiFilter(FilterType.MIN_AMOUNT, items[i]), outputs[i]);
+            MultiFilter filter = new MultiFilter(FilterType.MIN_AMOUNT, items[i]);
+            this.recipes.put(filter, new Pair<>(outputs[i], filter.getAmounts()));
         }
 
         registerBlockHandler(getId(), (p, b, slimefunItem, reason) -> {
@@ -168,8 +170,9 @@ public abstract class Crafter extends AbstractContainer {
         } else { //enough room
             
             for (int i = 0 ; i < INPUT_SLOTS.length ; i++) {
-                if (inv.getItemInSlot(INPUT_SLOTS[i]) != null ) {
-                    inv.consumeItem(INPUT_SLOTS[i], output.getSecondValue()[i]);
+                int amount = output.getSecondValue()[i];
+                if (amount > 0) {
+                    inv.consumeItem(INPUT_SLOTS[i], amount);
                 }
             }
             MessageUtils.messageWithCD(p, 1000, ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getFirstValue()));
@@ -196,14 +199,16 @@ public abstract class Crafter extends AbstractContainer {
             return null;
         }
 
-        SlimefunItemStack output = this.recipes.get(input);
+        Pair<SlimefunItemStack, int[]> pair = this.recipes.get(input);
+        SlimefunItemStack output = pair.getFirstValue();
         
         if (output != null) {
             output = new SlimefunItemStack(output, output.getAmount());
-            if (output.getItem() instanceof LoreStorage) {
-                ((LoreStorage) output.getItem()).transfer(output, inv.getItemInSlot(INPUT_SLOTS[4]));
+            SlimefunItem item = output.getItem();
+            if (item instanceof LoreStorage) {
+                ((LoreStorage) item).transfer(output, inv.getItemInSlot(INPUT_SLOTS[4]));
             }
-            return new Pair<>(output, input.getAmounts());
+            return new Pair<>(output, pair.getSecondValue());
         }
         
         return null;

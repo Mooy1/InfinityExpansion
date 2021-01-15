@@ -36,7 +36,7 @@ public class SlimefunConstructors {
     public static final int VOID_CAPACITOR = 16000000;
     
     public static final int ADVANCED_GEO_SPEED = 4;
-    public static final int ADVANCED_GEO_ENERGY = 150;
+    public static final int ADVANCED_GEO_ENERGY = 120;
 
     public static final int ADVANCED_EN_SPEED = 5;
     public static final int ADVANCED_EN_ENERGY = 180;

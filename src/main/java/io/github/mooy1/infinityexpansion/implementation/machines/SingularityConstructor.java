@@ -86,23 +86,25 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
 
                     String input = Singularity.RECIPES.get(Integer.parseInt(inputTest)).getB();
 
-                    int stackSize = 64;
+                    if (input != null) {
+                        int stackSize = 64;
 
-                    int stacks = (int) Math.floor((float) progress / stackSize);
-                    int remainder = progress % stackSize;
+                        int stacks = (int) Math.floor((float) progress / stackSize);
+                        int remainder = progress % stackSize;
 
-                    ItemStack drops = StackUtils.getItemFromID(input, stackSize);
+                        ItemStack drops = StackUtils.getItemFromID(input, stackSize);
 
-                    if (drops != null) {
-                        for (int i = 0; i < stacks; i++) {
-                            b.getWorld().dropItemNaturally(l, drops);
+                        if (drops != null) {
+                            for (int i = 0; i < stacks; i++) {
+                                b.getWorld().dropItemNaturally(l, drops);
+                            }
                         }
-                    }
-
-                    if (remainder > 0) {
-                        ItemStack drop = StackUtils.getItemFromID(input, remainder);
-                        if (drop != null) {
-                            b.getWorld().dropItemNaturally(l, drop);
+                        
+                        if (remainder > 0) {
+                            ItemStack drop = StackUtils.getItemFromID(input, remainder);
+                            if (drop != null) {
+                                b.getWorld().dropItemNaturally(l, drop);
+                            }
                         }
                     }
                 }
@@ -208,7 +210,7 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
 
                     String input = Singularity.RECIPES.get(progressID).getB();
 
-                    if (Objects.equals(StackUtils.getItemID(inputSlotItem, true), input)) { //input matches
+                    if (Objects.equals(StackUtils.getIDorElse(inputSlotItem, inputSlotItem.getType().toString()), input)) { //input matches
 
                         int inputSlotAmount = inputSlotItem.getAmount();
                         removeCharge(b.getLocation(), energy);
@@ -249,7 +251,7 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
                 if (progress >= outputTime) {
                     ItemStack output = Singularity.RECIPES.get(progressID).getA();
 
-                    if (inv.fits(output, OUTPUT_SLOTS)) { //output
+                    if (output != null && inv.fits(output, OUTPUT_SLOTS)) { //output
 
                         output = output.clone();
 
@@ -308,8 +310,9 @@ public class SingularityConstructor extends AbstractContainer implements EnergyN
     private boolean checkItemAndSet(Block b, BlockMenu inv, ItemStack item, int speed) {
         int itemAmount = item.getAmount();
 
+        String id = StackUtils.getIDorElse(item, item.getType().toString());
         for (int i = 0; i < Singularity.RECIPES.size() ; i++) {
-            if (Objects.equals(StackUtils.getItemID(item, true), Singularity.RECIPES.get(i).getB())) {
+            if (Objects.equals(id, Singularity.RECIPES.get(i).getB())) {
                 if (itemAmount >= speed) {
                     setProgress(b, speed);
                     inv.consumeItem(INPUT_SLOT, speed);

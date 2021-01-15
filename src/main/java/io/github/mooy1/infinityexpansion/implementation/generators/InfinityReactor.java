@@ -102,8 +102,7 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
     @Override
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
-            String input = StackUtils.getItemID(item, false);
-            
+            String input = StackUtils.getID(item);
             if (Objects.equals(input, "VOID_INGOT")) {
                 return new int[] {INPUT_SLOTS[1]};
             } else if (Objects.equals(input, "INFINITE_INGOT")) {
@@ -133,7 +132,7 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
 
         if (progress == 0) { //need infinity + void
 
-            if (!Objects.equals(StackUtils.getItemID(inv.getItemInSlot(INPUT_SLOTS[0]), false), "INFINITE_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getID(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
@@ -142,7 +141,7 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
 
             }
             
-            if (!Objects.equals(StackUtils.getItemID(inv.getItemInSlot(INPUT_SLOTS[1]), false), "VOID_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getID(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -178,7 +177,7 @@ public class InfinityReactor extends AbstractContainer implements EnergyNetProvi
         
         if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
-            if (!Objects.equals(StackUtils.getItemID(inv.getItemInSlot(INPUT_SLOTS[1]), false), "VOID_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getID(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));

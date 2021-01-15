@@ -67,7 +67,7 @@ public class MobSimulationChamber extends AbstractContainer implements EnergyNet
     @Override
     public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
 
-        MobDataCard.Type card = MobDataCard.CARDS.get(StackUtils.getItemID(inv.getItemInSlot(CARD_SLOT), false));
+        MobDataCard.Type card = MobDataCard.CARDS.get(StackUtils.getID(inv.getItemInSlot(CARD_SLOT)));
 
         if (card == null) {
             if (inv.hasViewer()) {

@@ -24,6 +24,11 @@ public class StorageForge extends Crafter {
     
     public static final ItemStack[][] RECIPES = new ItemStack[][] {
             {
+                    new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
+                    new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
+                    new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
+            },
+            {
                     Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                     Items.MAGSTEEL, Items.BASIC_STORAGE, Items.MAGSTEEL,
                     Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
@@ -55,7 +60,7 @@ public class StorageForge extends Crafter {
 
     @Override
     public SlimefunItemStack[] getOutputs() {
-        return new SlimefunItemStack[] {Items.ADVANCED_STORAGE, Items.REINFORCED_STORAGE, Items.VOID_STORAGE, Items.INFINITY_STORAGE};
+        return new SlimefunItemStack[] {Items.BASIC_STORAGE, Items.ADVANCED_STORAGE, Items.REINFORCED_STORAGE, Items.VOID_STORAGE, Items.INFINITY_STORAGE};
     }
 
     @Override

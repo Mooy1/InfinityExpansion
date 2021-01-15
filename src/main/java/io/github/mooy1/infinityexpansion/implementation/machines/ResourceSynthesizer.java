@@ -133,11 +133,11 @@ public class ResourceSynthesizer extends AbstractMachine implements RecipeDispla
 
         }
         
-        String id1 = StackUtils.getItemID(input1, false);
+        String id1 = StackUtils.getID(input1);
 
         if (id1 == null) return false;
 
-        String id2 = StackUtils.getItemID(input2, false);
+        String id2 = StackUtils.getID(input2);
 
         if (id2 == null) return false;
 

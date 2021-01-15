@@ -22,8 +22,8 @@
 # display-signs: (default true)
 # if true, signs connected to storage units will update wither the stored item and amount, this may increase timings
 # 
-# sign-refresh-ticks: (default 5) (range 1-10)
-# ticks before refreshing signs, bigger number decreases timings.
+# sign-refresh-ticks: (default 16) (range 4-32)
+# ticks before refreshing signs, smaller number increases timings.
 # 
 # -----
 # 
@@ -38,7 +38,7 @@ balance-options:
   allow-sf-item-transform: false
 storage-unit-options:
   display-signs: true
-  sign-refresh-ticks: 5
+  sign-refresh-ticks: 16
 infinity-enchant-levels:
   blade:
     sharpness: 20

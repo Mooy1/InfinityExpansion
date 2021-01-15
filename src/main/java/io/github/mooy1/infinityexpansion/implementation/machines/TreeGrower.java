@@ -9,7 +9,6 @@ import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
@@ -247,12 +246,6 @@ public class TreeGrower extends AbstractMachine implements RecipeDisplayItem {
 
     private String getBlockData(Location l, String key) {
         return BlockStorage.getLocationInfo(l, key);
-    }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
     }
 
     @Override

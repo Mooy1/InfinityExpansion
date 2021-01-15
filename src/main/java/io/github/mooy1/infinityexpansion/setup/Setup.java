@@ -14,6 +14,7 @@ import io.github.mooy1.infinityexpansion.implementation.machines.ConversionMachi
 import io.github.mooy1.infinityexpansion.implementation.generators.EnergyGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
 import io.github.mooy1.infinityexpansion.implementation.generators.InfinityReactor;
+import io.github.mooy1.infinityexpansion.implementation.machines.GeoQuarry;
 import io.github.mooy1.infinityexpansion.implementation.machines.ItemUpdater;
 import io.github.mooy1.infinityexpansion.implementation.machines.MaterialGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.PoweredBedrock;
@@ -71,8 +72,7 @@ public final class Setup {
         );
 
         Categories.INFINITY_CHEAT.register(plugin);
-
-
+        
         new StrainerBase().register(plugin);
         for (Strainer.Type type : Strainer.Type.values()) {
             new Strainer(type).register(plugin);
@@ -91,8 +91,7 @@ public final class Setup {
         new InfinityWorkbench().register(plugin);
         new AdvancedAnvil().register(plugin);
         new VeinMinerRune(plugin).register(plugin);
-
-
+        
         new StorageForge().register(plugin);
         for (StorageUnit.Type type : StorageUnit.Type.values()) {
             new StorageUnit(type).register(plugin);
@@ -104,9 +103,8 @@ public final class Setup {
             new MobDataCard(type).register(plugin);
         }
         new MobDataInfuser().register(plugin);
-
         new StoneworksFactory().register(plugin);
-        
+        new GeoQuarry().register(plugin);
         new SlimefunItem(Categories.MAIN_MATERIALS, Items.INFINITE_INGOT, RecipeType.SMELTERY, new ItemStack[] {
                 Items.EARTH_SINGULARITY, Items.MYTHRIL, Items.FORTUNE_SINGULARITY, Items.MAGIC_SINGULARITY, Items.VOID_INGOT, Items.METAL_SINGULARITY,
                 null, null, null
