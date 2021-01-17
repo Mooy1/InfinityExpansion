@@ -55,7 +55,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT,
-        }, 180,  false, new ItemStack[] {
+        }, 180,  true, new ItemStack[] {
                 new SlimefunItemStack(SlimefunItems.COPPER_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.ZINC_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.TIN_DUST, 2),
