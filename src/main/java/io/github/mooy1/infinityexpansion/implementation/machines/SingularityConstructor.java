@@ -10,12 +10,13 @@ import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
+import io.github.mooy1.infinitylib.math.MathUtils;
+import io.github.mooy1.infinitylib.misc.Pair;
+import io.github.mooy1.infinitylib.misc.Triplet;
+import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -32,18 +33,17 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Constructs singularities form many items
  *
  * @author Mooy1
  */
-public final class SingularityConstructor extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
-    
+public final class SingularityConstructor extends AbstractMachine implements RecipeDisplayItem {
+
     public static void setup(InfinityExpansion plugin) {
         new SingularityConstructor(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL,
@@ -59,7 +59,7 @@ public final class SingularityConstructor extends AbstractContainer implements E
                 SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY
         }, 1200, 32).register(plugin);
     }
-    
+
     public static final SlimefunItemStack BASIC = new SlimefunItemStack(
             "SINGULARITY_CONSTRUCTOR",
             Material.QUARTZ_BRICKS,
@@ -79,31 +79,16 @@ public final class SingularityConstructor extends AbstractContainer implements E
             LorePreset.energyPerSecond(1200)
     );
     public static final RecipeType TYPE = new RecipeType(PluginUtils.getKey("singularity_constructor"), BASIC);
-    
+
     private static final int STATUS_SLOT = 13;
-    private static final int[] INPUT_SLOTS = {
-            10
-    };
-    private static final int INPUT_SLOT = INPUT_SLOTS[0];
-    private static final int[] OUTPUT_SLOTS = {
-            16
-    };
-    private static final int OUTPUT_SLOT = OUTPUT_SLOTS[0];
-    private static final int[] INPUT_BORDER = {
-            0, 1, 2, 9, 11, 18, 19, 20
-    };
-    private static final int[] STATUS_BORDER = {
-            3, 4, 5, 12, 14, 21, 22, 23
-    };
-    private static final int[] OUTPUT_BORDER = {
-            6, 7, 8, 15, 17, 24, 25, 26
-    };
-    
+    private static final int INPUT_SLOT = 10;
+    private static final int OUTPUT_SLOT = 16;
+
     private final int speed;
     private final int energy;
-    
+
     private SingularityConstructor(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
-        super(category, item, type, recipe);
+        super(category, item, type, recipe, STATUS_SLOT, energy);
         this.speed = speed;
         this.energy = energy;
 
@@ -111,36 +96,32 @@ public final class SingularityConstructor extends AbstractContainer implements E
             BlockMenu inv = BlockStorage.getInventory(b);
 
             if (inv != null) {
-                int progress = Integer.parseInt(getProgress(b));
-                String inputTest = getProgressID(b);
+                int progress = getProgress(b);
+                Integer progressID = getProgressID(b);
                 Location l = b.getLocation();
 
-                inv.dropItems(l, OUTPUT_SLOTS);
-                inv.dropItems(l, INPUT_SLOTS);
+                inv.dropItems(l, OUTPUT_SLOT, INPUT_SLOT);
 
-                if (progress > 0 && inputTest != null) {
+                if (progress > 0 && progressID != null) {
 
-                    String input = Singularity.RECIPES.get(Integer.parseInt(inputTest)).getB();
+                    Triplet<SlimefunItemStack, String, Integer> triplet = Singularity.getRecipes().get(progressID);
 
-                    if (input != null) {
-                        int stackSize = 64;
-
-                        int stacks = (int) Math.floor((float) progress / stackSize);
-                        int remainder = progress % stackSize;
-
-                        ItemStack drops = StackUtils.getItemFromID(input, stackSize);
-
-                        if (drops != null) {
-                            for (int i = 0; i < stacks; i++) {
-                                b.getWorld().dropItemNaturally(l, drops);
-                            }
-                        }
+                    if (triplet != null) {
+                        ItemStack drop = StackUtils.getItemByIDorType(triplet.getB(), 64);
                         
-                        if (remainder > 0) {
-                            ItemStack drop = StackUtils.getItemFromID(input, remainder);
-                            if (drop != null) {
+                        int stacks = MathUtils.divPow2(progress, 64);
+
+                        if (stacks > 0) {
+                            for (int i = 0 ; i < stacks ; i++) {
                                 b.getWorld().dropItemNaturally(l, drop);
                             }
+                        }
+
+                        int remainder = MathUtils.modPow2(progress, 64);
+
+                        if (remainder > 0) {
+                            drop.setAmount(remainder);
+                            b.getWorld().dropItemNaturally(l, drop);
                         }
                     }
                 }
@@ -154,231 +135,137 @@ public final class SingularityConstructor extends AbstractContainer implements E
     }
 
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        if (getProgress(b) == null) {
-            setProgress(b, 0);
-        }
+    public void onNewInstance(@Nonnull BlockMenu blockMenu, @Nonnull Block block) {
+        invalidInput(blockMenu);
     }
 
     public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : STATUS_BORDER) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : INPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-        }
+        MenuPreset.setupBasicMenu(blockMenuPreset);
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
     public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
         if (flow == ItemTransportFlow.INSERT) {
-            return INPUT_SLOTS;
+            return new int[] {INPUT_SLOT};
         } else if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
+            return new int[] {OUTPUT_SLOT};
         } else {
             return new int[0];
         }
     }
 
-    @Override //TODO REDO THIS 
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        String name = "";
-        Material statusMat = Material.BARRIER;
+    @Override
+    public boolean process(@Nonnull Block b, @Nonnull BlockMenu menu) {
+        ItemStack input = menu.getItemInSlot(INPUT_SLOT);
+        if (input == null) {
+            return false;
+        }
+        String inputID = StackUtils.getIDorType(input);
 
-        int progress = Integer.parseInt(getProgress(b));
-        ItemStack inputSlotItem = inv.getItemInSlot(INPUT_SLOT);
-        
-        if (getCharge(b.getLocation()) < this.energy) { //when not enough power
+        // load data
+        Integer progressID = getProgressID(b);
+        int progress = getProgress(b);
 
-            name = "&cNot enough energy!";
+        Triplet<SlimefunItemStack, String, Integer> triplet;
+        boolean takeCharge = false;
 
-        } else if (inputSlotItem == null) { //no input
-
-            String progressTest = getProgressID(b);
-
-            if (progress == 0 || progressTest == null) { //haven't started
-
-                name = "&9Input a resource!";
-                statusMat = Material.BLUE_STAINED_GLASS_PANE;
-
-            } else { //started but wrong input
-
-                name = "&cInput more &b" + Singularity.RECIPES.get(Integer.parseInt(progressTest)).getB() + "&c!";
-
+        if (progressID == null || progress == 0) {
+            // not started
+            Pair<Integer, Triplet<SlimefunItemStack, String, Integer>> pair = Singularity.getRecipeByID(inputID);
+            if (pair != null) {
+                progress = Math.min(this.speed, input.getAmount());
+                input.setAmount(input.getAmount() - progress);
+                progressID = pair.getA();
+                triplet = pair.getB();
+                takeCharge = true;
+            } else {
+                // invalid input
+                triplet = null;
             }
-
-        } else { //input
-            
-            String progressTest = getProgressID(b);
-
-            if (progress == 0 || progressTest == null) { //no input
-
-                if (checkItemAndSet(b, inv, inputSlotItem, this.speed)) { //try to start construction
-
-                    removeCharge(b.getLocation(), this.energy);
-                    name = "&aBeginning construction!";
-                    statusMat = Material.NETHER_STAR;
-
-                } else { //failed to start construction
-
-                    name = "&cA singularity can't be constructed from this!";
-
-                    if (inv.getItemInSlot(OUTPUT_SLOT) == null) {
-                        inv.pushItem(inputSlotItem, OUTPUT_SLOTS);
-                        inv.consumeItem(INPUT_SLOT, inputSlotItem.getAmount());
-                    }
-                }
-
-            } else { //progress
-
-                int progressID = Integer.parseInt(progressTest);
-                int outputTime = Singularity.RECIPES.get(progressID).getC();
-
-                if (progress < outputTime) { //increase progress
-
-                    String input = Singularity.RECIPES.get(progressID).getB();
-
-                    if (Objects.equals(StackUtils.getIDorElse(inputSlotItem, inputSlotItem.getType().toString()), input)) { //input matches
-
-                        int inputSlotAmount = inputSlotItem.getAmount();
-                        removeCharge(b.getLocation(), this.energy);
-
-                        if (inputSlotAmount + progress > outputTime) {
-                            inputSlotAmount = outputTime - progress;
-                        }
-
-                        if (inputSlotAmount >= this.speed) { //speed
-
-                            setProgress(b, progress + this.speed);
-                            inv.consumeItem(INPUT_SLOT, this.speed);
-
-                        } else { //less than speed
-
-                            setProgress(b, progress + inputSlotAmount);
-                            inv.consumeItem(INPUT_SLOT, inputSlotAmount);
-
-                        }
-
-                        name = "&aConstructing...";
-                        statusMat = Material.NETHER_STAR;
-
-                    } else { //input doesnt match
-
-                        name = "&cWrong resource input!";
-
-                        if (inv.getItemInSlot(OUTPUT_SLOT) == null) {
-                            inv.pushItem(inputSlotItem, OUTPUT_SLOTS);
-                            inv.consumeItem(INPUT_SLOT, inputSlotItem.getAmount());
-
-                        }
-                    }
-                }
-                
-                progress = Integer.parseInt(getProgress(b));
-                
-                if (progress >= outputTime) {
-                    ItemStack output = Singularity.RECIPES.get(progressID).getA();
-
-                    if (output != null && inv.fits(output, OUTPUT_SLOTS)) { //output
-
-                        output = output.clone();
-
-                        removeCharge(b.getLocation(), this.energy);
-                        inv.pushItem(output, OUTPUT_SLOTS);
-                        setProgress(b, 0);
-                        setProgressID(b, null);
-
-                        name = "&aConstruction complete!";
-                        statusMat = Material.NETHER_STAR;
-
-                    } else { //not enough room
-
-                        name = "&6Not enough room!";
-                        statusMat = Material.ORANGE_STAINED_GLASS_PANE;
-                    }
-                }
-            }
+        } else {
+            // started
+            triplet = Singularity.getRecipeByIndex(progressID);
+            int max = Math.min(triplet.getC() - progress, Math.min(this.speed, input.getAmount()));
+            if (max > 0) {
+                if (triplet.getB().equals(inputID)) {
+                    progress += max;
+                    input.setAmount(input.getAmount() - max);
+                    takeCharge = true;
+                } // invalid input
+            } // already done
         }
 
-        //update status and finish
-
-        if (inv.hasViewer()) {
-
-            progress = Integer.parseInt(getProgress(b));
-            String lore = "";
-            String loree = "";
-
-            if (progress > 0) {
-                int progressID = Integer.parseInt(getProgressID(b));
-                SlimefunItemStack output = Singularity.RECIPES.get(progressID).getA();
-                int outputTime = Singularity.RECIPES.get(progressID).getC();
-
-                lore = "&7Constructing: " + output.getDisplayName();
-                loree = "&7Progress: (" + progress + "/" + outputTime + ")";
+        // show status and output if done
+        if (triplet != null) {
+            if (progress >= triplet.getC() && menu.fits(triplet.getA(), OUTPUT_SLOT)) {
+                menu.pushItem(triplet.getA().clone(), OUTPUT_SLOT);
+                progress = 0;
+                progressID = null;
+                
+                if (menu.hasViewer()) {
+                    menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                            Material.LIME_STAINED_GLASS_PANE,
+                            "&aConstructing " + triplet.getA().getDisplayName() + "...",
+                            "&7Complete"
+                    ));
+                }
+            } else if (menu.hasViewer()) {
+                menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                        Material.LIME_STAINED_GLASS_PANE,
+                        "&aConstructing " + triplet.getA().getDisplayName() + "...",
+                        "&7" + progress + " / " + triplet.getC()
+                ));
             }
-
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(statusMat,
-                    name,
-                    lore,
-                    loree
-            ));
+        } else if (menu.hasViewer()) {
+            invalidInput(menu);
         }
+
+        // save data
+        setProgressID(b, progressID);
+        setProgress(b, progress);
+
+        return takeCharge;
     }
 
-    /**
-     * This method will check the input and add location data if it is valid
-     *
-     * @param b block
-     * @param inv BlockMenu
-     * @param item item input
-     * @param speed speed of machine
-     * @return whether it was successful
-     */
-    @ParametersAreNonnullByDefault
-    private boolean checkItemAndSet(Block b, BlockMenu inv, ItemStack item, int speed) {
-        int itemAmount = item.getAmount();
-
-        String id = StackUtils.getIDorElse(item, item.getType().toString());
-        for (int i = 0; i < Singularity.RECIPES.size() ; i++) {
-            if (Objects.equals(id, Singularity.RECIPES.get(i).getB())) {
-                if (itemAmount >= speed) {
-                    setProgress(b, speed);
-                    inv.consumeItem(INPUT_SLOT, speed);
-                } else {
-                    setProgress(b, itemAmount);
-                    inv.consumeItem(INPUT_SLOT, itemAmount);
-                }
-                setProgressID(b, String.valueOf(i));
-                return true;
-            }
-        }
-        return false;
+    private void invalidInput(BlockMenu menu) {
+        menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                Material.RED_STAINED_GLASS_PANE,
+                "&cInput a valid material to start"
+        ));
     }
-
+    
     private void setProgress(Block b, int progress) {
         BlockStorage.addBlockInfo(b, "progress", String.valueOf(progress));
     }
 
-    private void setProgressID(Block b, String progressID) {
-        BlockStorage.addBlockInfo(b, "progressid", progressID);
+    private void setProgressID(Block b, @Nullable Integer progressID) {
+        if (progressID == null) {
+            BlockStorage.addBlockInfo(b, "progressid", null);
+        } else {
+            BlockStorage.addBlockInfo(b, "progressid", String.valueOf(progressID));
+        }
     }
 
-    private String getProgress(Block b) {
-        return BlockStorage.getLocationInfo(b.getLocation(), "progress");
+    private int getProgress(Block b) {
+        try {
+            return Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "progress"));
+        } catch (NumberFormatException e) {
+            setProgress(b, 0);
+            return 0;
+        }
     }
 
-    private String getProgressID(Block b) {
-        return BlockStorage.getLocationInfo(b.getLocation(), "progressid");
-    }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
+    private Integer getProgressID(Block b) {
+        String id = BlockStorage.getLocationInfo(b.getLocation(), "progressid");
+        if (id == null) {
+            return null;
+        } else try {
+            return Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            setProgressID(b, null);
+            return null;
+        }
     }
 
     @Override
@@ -391,9 +278,10 @@ public final class SingularityConstructor extends AbstractContainer implements E
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
-        for (int i = 0 ; i < Singularity.RECIPES.size() ; i++) {
-            items.add(StackUtils.getItemFromID(Singularity.RECIPES.get(i).getB(), 1));
-            items.add(Singularity.RECIPES.get(i).getA());
+        for (int i = 0 ; i < Singularity.getRecipes().size() ; i++) {
+            Triplet<SlimefunItemStack, String, Integer> triplet = Singularity.getRecipes().get(i);
+            items.add(StackUtils.getItemByIDorType(triplet.getB(), 1));
+            items.add(triplet.getA());
         }
 
         return items;

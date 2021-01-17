@@ -14,10 +14,8 @@ import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
-import io.github.thebusybiscuit.slimefun4.implementation.items.backpacks.SlimefunBackpack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -35,8 +33,8 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,7 +42,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Basically just barrels...
@@ -146,56 +143,54 @@ public final class StorageUnit extends AbstractContainer {
                 setAmount(e.getBlock(), data.getB());
                 if (data.getA() != null) {
                     MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to block");
-
                 }
             }
         });
         
         addItemHandler((BlockBreakHandler) (e, item1, fortune, drops) -> { Block b = e.getBlock();
             BlockMenu inv = BlockStorage.getInventory(b);
-            if (inv == null) return false;
-            String storedItem = getStored(b);
-            int stored = getAmount(b);
-            e.setDropItems(false);
-            ItemStack drop = getItem().clone();
-            if (stored > 0 && storedItem != null) {
-                stored = tryToStoreOrDrop(inv, stored, storedItem, INPUT_SLOT, OUTPUT_SLOT);
-                drop.setItemMeta(saveData(drop.getItemMeta(), storedItem, stored));
-                MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to dropped item");
+            
+            if (inv == null) {
+                return true;
             }
+
+            int stored = getAmount(b);
+            
+            if (stored > 0) {
+                String id = getStored(b);
+
+                ItemStack storedItem = StackUtils.getItemByNullableIDorType(id);
+
+                if (storedItem != null) {
+                    e.setDropItems(false);
+
+                    ItemStack drop = getItem().clone();
+                    
+                    drop.setItemMeta(saveData(drop.getItemMeta(), id, storedItem, tryToStoreOrDrop(inv, stored, storedItem, INPUT_SLOT, OUTPUT_SLOT)));
+                    
+                    MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to dropped item");
+                    
+                    b.getWorld().dropItemNaturally(b.getLocation(), drop);
+                }
+            }
+            
             inv.dropItems(b.getLocation(), INPUT_SLOT, OUTPUT_SLOT);
-            b.getWorld().dropItemNaturally(b.getLocation(), drop);
+            
             return true;
         });
     }
     
-    private int tryToStoreOrDrop(@Nonnull BlockMenu inv, int stored, String storedItem, int... slots) {
+    private int tryToStoreOrDrop(@Nonnull BlockMenu inv, int stored, ItemStack storedItem, int... slots) {
         for (int slot : slots) {
             ItemStack item = inv.getItemInSlot(slot);
-
             if (item == null) {
                 continue;
             }
-            
-            if (canBeAdded(item)) {
-                String inputID = StackUtils.getIDorElse(item, item.getType().toString());
-
-                if (Objects.equals(inputID, storedItem)) {
-
-                    int inputAmount = item.getAmount();
-                    if (this.max >= stored + inputAmount) {
-
-                        stored = stored + inputAmount;
-                        inv.replaceExistingItem(slots[0], null);
-
-                    } else {
-
-                        int amount = this.max - stored;
-
-                        stored = this.max;
-                        item.setAmount(inputAmount - amount);
-                        inv.replaceExistingItem(slots[0], item);
-                    }
+            if (canBeAdded(item, item.getItemMeta().getPersistentDataContainer(), storedItem)) {
+                int amount = Math.min(this.max - stored, item.getAmount());
+                if (amount > 0) {
+                    stored += amount;
+                    item.setAmount(item.getAmount() - amount);
                 }
             }
         }
@@ -226,21 +221,45 @@ public final class StorageUnit extends AbstractContainer {
     
     @Override
     public void tick(@Nonnull Block b, @Nonnull BlockMenu menu) {
-        String stored = getStored(b);
+        String id = getStored(b);
         int amount = getAmount(b);
-
+        ItemStack stored;
+        
         // input
         ItemStack input = menu.getItemInSlot(INPUT_SLOT);
         if (input != null) {
-            String id = StackUtils.getIDorElse(input, input.getType().toString());
-            if (stored == null || amount <= 0) {
-                if (canBeStored(input)) {
-                    stored = id;
-                    amount = input.getAmount();
-                    input.setAmount(0);
-                }  // else cant be stored
-            } else if (id.equals(stored)) {
-                if (canBeAdded(input)) {
+            if (id == null || amount <= 0) {
+                
+                // try to start storing input
+                if (!SlimefunTag.SHULKER_BOXES.isTagged(input.getType())) {
+                    
+                    PersistentDataContainer container = input.getItemMeta().getPersistentDataContainer();
+                    String inputID = StackUtils.getIDorType(container, input);
+                    
+                    if (!inputID.contains("BACKPACK")) {
+                        
+                        ItemStack inputDefault = StackUtils.getItemByIDorType(inputID);
+                        
+                        if (canBeAdded(input, container, inputDefault)) {
+                            
+                            id = inputID;
+                            amount = input.getAmount();
+                            input.setAmount(0);
+                            stored = inputDefault;
+                            
+                        } else {
+                            stored = null;
+                        }
+                    } else {
+                        stored = null;
+                    }
+                } else {
+                    stored = null;
+                }
+            } else {
+                // try to add input to storage
+                stored = StackUtils.getItemByIDorType(id);
+                if (canBeAdded(input, input.getItemMeta().getPersistentDataContainer(), stored)) {
                     int max = this.max - amount;
                     if (max > 0) {
                         int add = input.getAmount();
@@ -254,28 +273,28 @@ public final class StorageUnit extends AbstractContainer {
                         }
                     }  // else full
                 }  // else cant be added
-            }  // else doesn't match
+            }
+        } else {
+            stored = StackUtils.getItemByNullableIDorType(id);
         }
         
-        ItemStack output = StackUtils.getItemFromID(stored, 1);
-        
-        if (output != null) {
-            StackUtils.removeEnchants(output);
+        if (stored != null) {
+            StackUtils.removeEnchants(stored);
             
             // output
             if (amount > 0) {
-                int remove = Math.min(64, amount - 1);
+                int remove = Math.min(stored.getMaxStackSize(), amount - 1);
                 // last item
                 if (remove == 0) {
                     if (menu.getItemInSlot(OUTPUT_SLOT) == null) {
-                        menu.replaceExistingItem(OUTPUT_SLOT, output, false);
+                        menu.replaceExistingItem(OUTPUT_SLOT, stored, false);
                         amount = 0;
+                        id = null;
                         stored = null;
-                        output = null;
                     }
                 } else {
-                    output.setAmount(remove);
-                    ItemStack remaining = menu.pushItem(output, OUTPUT_SLOT);
+                    stored.setAmount(remove);
+                    ItemStack remaining = menu.pushItem(stored, OUTPUT_SLOT);
                     if (remaining != null) {
                         remove -= remaining.getAmount();
                     }
@@ -286,17 +305,17 @@ public final class StorageUnit extends AbstractContainer {
         
         // update status
         if (menu.hasViewer()) {
-            if (output == null) {
+            if (stored == null) {
                 menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         new ItemStack(Material.BARRIER),
                         "&cEmpty"
                 ));
             } else {
                 ItemStack status = new CustomItem(
-                        output,
-                        ChatColor.WHITE + ItemUtils.getItemName(output),
+                        stored,
+                        ChatColor.WHITE + ItemUtils.getItemName(stored),
                         "&6Stored: &e" + LorePreset.format(amount) + (this.max == INFINITY_STORAGE ? "" : "/" + LorePreset.format(this.max) + " &7(" + Math.round((float) 100 * amount / this.max)  + "%)"),
-                        "&7Stacks: " + LorePreset.format(Math.round((float) amount / output.getMaxStackSize()))
+                        "&7Stacks: " + LorePreset.format(Math.round((float) amount / stored.getMaxStackSize()))
                 );
                 status.setAmount(1);
                 menu.replaceExistingItem(STATUS_SLOT, status);
@@ -319,7 +338,7 @@ public final class StorageUnit extends AbstractContainer {
                     if (sign.getRelative(wall.getFacing().getOppositeFace()).equals(b)) {
                         Sign lines = (Sign) sign.getState();
                         lines.setLine(0, ChatColor.AQUA + "------------");
-                        lines.setLine(1, ChatColor.WHITE + (output != null ? ItemUtils.getItemName(output) : "EMPTY"));
+                        lines.setLine(1, ChatColor.WHITE + (stored != null ? ItemUtils.getItemName(stored) : "None"));
                         lines.setLine(2, ChatColor.GRAY + "Stored: " + amount);
                         lines.setLine(3, ChatColor.AQUA + "------------");
                         lines.update();
@@ -331,20 +350,14 @@ public final class StorageUnit extends AbstractContainer {
         
         // set data
         setAmount(b, amount);
-        setStored(b, stored);
+        setStored(b, id);
     }
-
     
-    private static boolean canBeStored(@Nonnull ItemStack stack) {
-        if (stack.getEnchantments().size() != 0 || SlimefunTag.SHULKER_BOXES.isTagged(stack.getType())) {
+    private static boolean canBeAdded(ItemStack stack, PersistentDataContainer container, ItemStack stored) {
+        if (stack.getEnchantments().size() != 0) {
             return false;
         }
-        SlimefunItem item = SlimefunItem.getByItem(stack);
-        return !(item instanceof SlimefunBackpack || item instanceof StorageUnit);
-    }
-
-    private static boolean canBeAdded(ItemStack stack) {
-        return stack.getEnchantments().size() == 0;
+        return container.equals(stored.getItemMeta().getPersistentDataContainer());
     }
 
     private void setAmount(Block b, int amount) {
@@ -363,7 +376,8 @@ public final class StorageUnit extends AbstractContainer {
             return 0;
         }
     }
-
+    
+    @Nullable
     public String getStored(@Nonnull Block b) {
         return BlockStorage.getLocationInfo(b.getLocation(), "storeditem");
     }
@@ -371,18 +385,21 @@ public final class StorageUnit extends AbstractContainer {
     private static final NamespacedKey STORED_ITEM = PluginUtils.getKey("stored_item");
     private static final NamespacedKey STORED = PluginUtils.getKey("stored");
     
-    @Nullable
-    @Contract("!null, _, _ -> !null")
-    private static  ItemMeta saveData(@Nullable ItemMeta meta, @Nonnull String item, int amount) {
+    private static ItemMeta saveData(@Nullable ItemMeta meta, @Nonnull String id, @Nullable ItemStack display, int amount) {
         if (meta != null) {
-            meta.getPersistentDataContainer().set(STORED_ITEM, PersistentDataType.STRING, item);
+            List<String> lore = meta.getLore();
+            if (lore != null) {
+                lore.add(ChatColor.GOLD + "Stored: " + ChatColor.WHITE + ItemUtils.getItemName(display) + ChatColor.YELLOW + " x " + amount);
+                meta.setLore(lore);
+            }
+            meta.getPersistentDataContainer().set(STORED_ITEM, PersistentDataType.STRING, id);
             meta.getPersistentDataContainer().set(STORED, PersistentDataType.INTEGER, amount);
         }
-        return null;
+        return meta;
     }
     
     @Nonnull
-    private static  Pair<String, Integer> getData(@Nullable ItemMeta meta) {
+    private static Pair<String, Integer> getData(@Nullable ItemMeta meta) {
         if (meta != null) {
             String item = meta.getPersistentDataContainer().get(STORED_ITEM, PersistentDataType.STRING);
             Integer amount = meta.getPersistentDataContainer().get(STORED, PersistentDataType.INTEGER);
@@ -393,14 +410,10 @@ public final class StorageUnit extends AbstractContainer {
         return new Pair<>(null, 0);
     }
     
-    @Nullable
-    @Contract("_, !null -> !null")
-    static ItemMeta transferMeta(@Nullable ItemStack input, @Nullable ItemMeta output) {
-        if (input != null) {
-            Pair<String, Integer> data = getData(input.getItemMeta());
-            if (data.getA() != null) {
-                saveData(output, data.getA(), data.getB());
-            }
+    static ItemMeta transferData(@Nullable ItemMeta input, @Nullable ItemMeta output) {
+        Pair<String, Integer> data = getData(input);
+        if (data.getA() != null) {
+            saveData(output, data.getA(), StackUtils.getItemByID(data.getA()), data.getB());
         }
         return output;
     }

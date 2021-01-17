@@ -7,7 +7,7 @@ import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem
 import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
-import io.github.mooy1.infinityexpansion.setup.SlimefunConstructors;
+import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -77,7 +78,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         }).register(plugin);
         
         new Quarry(Categories.ADVANCED_MACHINES, VOID, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                CompressedItem.VOID_INGOT, SlimefunConstructors.VOID_CAPACITOR, CompressedItem.VOID_INGOT,
+                CompressedItem.VOID_INGOT, SlimefunExtension.VOID_CAPACITOR, CompressedItem.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), ADVANCED, new ItemStack(Material.NETHERITE_PICKAXE),
                 MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE,MachineItem.MACHINE_CIRCUIT
         }, 3600, 4, 6, new ItemStack[] {
@@ -272,10 +273,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         List<ItemStack> items = new ArrayList<>();
 
         items.add(this.cobble);
-        for (ItemStack item : this.outputs) {
-            items.add(null);
-            items.add(item);
-        }
+        items.addAll(Arrays.asList(this.outputs));
 
         return items;
     }

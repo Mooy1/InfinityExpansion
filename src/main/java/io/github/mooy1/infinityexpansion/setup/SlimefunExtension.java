@@ -36,7 +36,7 @@ import org.bukkit.util.RayTraceResult;
 
 import javax.annotation.Nonnull;
 
-public class SlimefunConstructors {
+public class SlimefunExtension {
     
     public static final int INFINITY_CAPACITY = 1600000000;
     public static final int VOID_CAPACITY = 16000000;
@@ -71,8 +71,8 @@ public class SlimefunConstructors {
             "&cAdvanced &fGeoMiner",
             "&7A faster geo-miner",
             "",
-            LorePreset.speed(SlimefunConstructors.ADVANCED_GEO_SPEED),
-            LorePreset.energyPerSecond(SlimefunConstructors.ADVANCED_GEO_ENERGY)
+            LorePreset.speed(SlimefunExtension.ADVANCED_GEO_SPEED),
+            LorePreset.energyPerSecond(SlimefunExtension.ADVANCED_GEO_ENERGY)
     );
 
     public static final SlimefunItemStack ADVANCED_CHARGER = new SlimefunItemStack(
@@ -81,8 +81,8 @@ public class SlimefunConstructors {
             "&cAdvanced Charger",
             "&7Quickly charges items",
             "",
-            LorePreset.speed(SlimefunConstructors.ADVANCED_CHARGER_SPEED),
-            LorePreset.energyPerSecond(SlimefunConstructors.ADVANCED_CHARGER_ENERGY)
+            LorePreset.speed(SlimefunExtension.ADVANCED_CHARGER_SPEED),
+            LorePreset.energyPerSecond(SlimefunExtension.ADVANCED_CHARGER_ENERGY)
     );
     public static final SlimefunItemStack INFINITY_CHARGER = new SlimefunItemStack(
             "INFINITY_CHARGER",
@@ -90,8 +90,8 @@ public class SlimefunConstructors {
             "&bInfinity Charger",
             "&7Instantly charges items",
             "",
-            LorePreset.speed(SlimefunConstructors.INFINITY_CHARGER_SPEED),
-            LorePreset.energy(SlimefunConstructors.INFINITY_CHARGER_ENERGY) + "per use"
+            LorePreset.speed(SlimefunExtension.INFINITY_CHARGER_SPEED),
+            LorePreset.energy(SlimefunExtension.INFINITY_CHARGER_ENERGY) + "per use"
     );
     public static final SlimefunItemStack ADVANCED_NETHER_STAR_REACTOR = new SlimefunItemStack(
             "ADVANCED_NETHER_STAR_REACTOR",
@@ -102,40 +102,40 @@ public class SlimefunConstructors {
             "&bMust be supplied with Nether Ice Coolant Cells",
             "&4Causes nearby Entities to get Withered",
             "",
-            LorePreset.energyBuffer(SlimefunConstructors.STAR_BUFFER),
-            LorePreset.energyPerSecond(SlimefunConstructors.STAR_ENERGY)
+            LorePreset.energyBuffer(SlimefunExtension.STAR_BUFFER),
+            LorePreset.energyPerSecond(SlimefunExtension.STAR_ENERGY)
     );
     public static final SlimefunItemStack ADVANCED_ENCHANTER = new SlimefunItemStack(
             "ADVANCED_ENCHANTER",
             Material.ENCHANTING_TABLE,
             "&cAdvanced Enchanter",
             "",
-            LorePreset.speed(SlimefunConstructors.ADVANCED_EN_SPEED),
-            LorePreset.energyPerSecond(SlimefunConstructors.ADVANCED_EN_ENERGY)
+            LorePreset.speed(SlimefunExtension.ADVANCED_EN_SPEED),
+            LorePreset.energyPerSecond(SlimefunExtension.ADVANCED_EN_ENERGY)
     );
     public static final SlimefunItemStack ADVANCED_DISENCHANTER = new SlimefunItemStack(
             "ADVANCED_DISENCHANTER",
             Material.ENCHANTING_TABLE,
             "&cAdvanced Disenchanter",
             "",
-            LorePreset.speed(SlimefunConstructors.ADVANCED_DIS_SPEED),
-            LorePreset.energyPerSecond(SlimefunConstructors.ADVANCED_DIS_ENERGY)
+            LorePreset.speed(SlimefunExtension.ADVANCED_DIS_SPEED),
+            LorePreset.energyPerSecond(SlimefunExtension.ADVANCED_DIS_ENERGY)
     );
     public static final SlimefunItemStack INFINITY_ENCHANTER = new SlimefunItemStack(
             "INFINITY_ENCHANTER",
             Material.ENCHANTING_TABLE,
             "&bInfinity Enchanter",
             "",
-            LorePreset.speed(SlimefunConstructors.INFINITY_EN_SPEED),
-            LorePreset.energy(SlimefunConstructors.INFINITY_EN_ENERGY) + "per use"
+            LorePreset.speed(SlimefunExtension.INFINITY_EN_SPEED),
+            LorePreset.energy(SlimefunExtension.INFINITY_EN_ENERGY) + "per use"
     );
     public static final SlimefunItemStack INFINITY_DISENCHANTER = new SlimefunItemStack(
             "INFINITY_DISENCHANTER",
             Material.ENCHANTING_TABLE,
             "&bInfinity Disenchanter",
             "",
-            LorePreset.speed(SlimefunConstructors.INFINITY_DIS_SPEED),
-            LorePreset.energy(SlimefunConstructors.INFINITY_DIS_ENERGY) + "per use"
+            LorePreset.speed(SlimefunExtension.INFINITY_DIS_SPEED),
+            LorePreset.energy(SlimefunExtension.INFINITY_DIS_ENERGY) + "per use"
     );
     public static final SlimefunItemStack INFINITY_CAPACITOR = new SlimefunItemStack(
             "INFINITY_CAPACITOR",

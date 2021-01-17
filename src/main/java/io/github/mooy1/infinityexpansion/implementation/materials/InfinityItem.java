@@ -3,13 +3,12 @@ package io.github.mooy1.infinityexpansion.implementation.materials;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
-import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.UnplaceableBlock;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public final class InfinityItem extends SlimefunItem implements NotPlaceable {
+public final class InfinityItem extends UnplaceableBlock {
     
     public static final SlimefunItemStack CIRCUIT = new SlimefunItemStack(
             "INFINITE_MACHINE_CIRCUIT",

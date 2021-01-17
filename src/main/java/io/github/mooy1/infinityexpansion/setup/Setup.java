@@ -42,6 +42,7 @@ import io.github.mooy1.infinityexpansion.setup.categories.InfinityCategory;
 import io.github.mooy1.infinityexpansion.setup.categories.MultiCategory;
 import io.github.mooy1.infinitylib.PluginUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -69,6 +70,7 @@ public final class Setup {
         );
         
         // categories
+        Categories.INFINITY_CHEAT.register(plugin);
         MultiCategory.CATEGORY.register(plugin,
                 Categories.MAIN_MATERIALS,
                 Categories.BASIC_MACHINES,
@@ -78,11 +80,11 @@ public final class Setup {
                 Categories.INFINITY_MATERIALS,
                 InfinityCategory.CATEGORY
         );
-        Categories.INFINITY_CHEAT.register(plugin);
         
         // items
         PluginUtils.registerAddonInfoItem(Categories.MAIN_MATERIALS, plugin);
 
+        // blocks
         Strainer.setup(plugin);
         StorageUnit.setup(plugin);
         new StrainerBase().register(plugin);
@@ -93,11 +95,11 @@ public final class Setup {
         
         // materials
         CompressedItem.setup(plugin);
-        Singularity.setup(plugin);
         SmelteryItem.setup(plugin);
         MachineItem.setup(plugin);
         MiscItem.setup(plugin);
         InfinityItem.setup(plugin);
+        Singularity.setup(plugin);
         new EnderEssence().register(plugin);
 
         // machines
@@ -126,7 +128,7 @@ public final class Setup {
         new InfinityMatrix().register(plugin);
         new EnderFlame().register(plugin);
         
-        SlimefunConstructors.setup(plugin);
+        SlimefunExtension.setup(plugin);
     }
     
     private static void addEnchantsFromConfig(String section, String gearType, FileConfiguration config, SlimefunItemStack... items) {
@@ -141,7 +143,7 @@ public final class Setup {
             ItemMeta meta = item.getItemMeta();
             Objects.requireNonNull(meta).setUnbreakable(true);
             List<String> lore = meta.getLore();
-            Objects.requireNonNull(lore).add("&bSoulbound");
+            Objects.requireNonNull(lore).add(ChatColor.AQUA + "Soulbound");
             meta.setLore(lore);
             item.setItemMeta(meta);
 

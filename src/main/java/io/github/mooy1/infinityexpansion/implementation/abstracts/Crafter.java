@@ -4,11 +4,11 @@ import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.filter.FilterType;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
 import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
+import io.github.mooy1.infinitylib.misc.Pair;
 import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -113,7 +113,7 @@ public abstract class Crafter extends AbstractContainer {
 
             } else {
 
-                inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.getFirstValue().clone()));
+                inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.getA().clone()));
 
             }
         }
@@ -143,9 +143,9 @@ public abstract class Crafter extends AbstractContainer {
         } else {
             
             // check for correct amounts
-            for (int slot = 0 ; slot < output.getSecondValue().length ; slot++) {
+            for (int slot = 0 ; slot < output.getB().length ; slot++) {
                 ItemStack input = inv.getItemInSlot(INPUT_SLOTS[slot]);
-                int required = output.getSecondValue()[slot];
+                int required = output.getB()[slot];
                 if (required == 0 ? input != null : input.getAmount() < required) {
                     inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
                     MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid input amounts!");
@@ -153,7 +153,7 @@ public abstract class Crafter extends AbstractContainer {
                 }
             }
             
-            if (!inv.fits(output.getFirstValue(), OUTPUT_SLOT)) { //not enough room
+            if (!inv.fits(output.getA(), OUTPUT_SLOT)) { //not enough room
 
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
                 MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
@@ -161,16 +161,16 @@ public abstract class Crafter extends AbstractContainer {
             } else { //enough room
 
                 for (int i = 0 ; i < INPUT_SLOTS.length ; i++) {
-                    int amount = output.getSecondValue()[i];
+                    int amount = output.getB()[i];
                     if (amount > 0) {
                         inv.consumeItem(INPUT_SLOTS[i], amount);
                     }
                 }
-                MessageUtils.messageWithCD(p, 1000, ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getFirstValue()));
+                MessageUtils.messageWithCD(p, 1000, ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getA()));
 
                 postCraft(inv.getLocation(), inv, p);
 
-                inv.pushItem(output.getFirstValue(), OUTPUT_SLOT);
+                inv.pushItem(output.getA(), OUTPUT_SLOT);
 
             }
         }
@@ -194,9 +194,9 @@ public abstract class Crafter extends AbstractContainer {
         Pair<SlimefunItemStack, int[]> pair = this.recipes.get(input);
         
         if (pair != null) {
-            ItemStack output = pair.getFirstValue().clone();
+            ItemStack output = pair.getA().clone();
             modifyOutput(inv, output);
-            return new Pair<>(output, pair.getSecondValue());
+            return new Pair<>(output, pair.getB());
         }
         
         return null;

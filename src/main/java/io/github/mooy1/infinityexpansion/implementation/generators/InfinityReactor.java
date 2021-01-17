@@ -5,7 +5,7 @@ import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem
 import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
-import io.github.mooy1.infinityexpansion.setup.SlimefunConstructors;
+import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
@@ -71,7 +71,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
                 null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null,
                 SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
                 SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, SlimefunConstructors.ADVANCED_NETHER_STAR_REACTOR, SlimefunConstructors.ADVANCED_NETHER_STAR_REACTOR, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
+                SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, SlimefunExtension.ADVANCED_NETHER_STAR_REACTOR, SlimefunExtension.ADVANCED_NETHER_STAR_REACTOR, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
                 SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
                 SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, SmelteryItem.INFINITY
         });
@@ -151,7 +151,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
 
         if (progress == 0) { //need infinity + void
 
-            if (!Objects.equals(StackUtils.getID(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
@@ -160,7 +160,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
 
             }
             
-            if (!Objects.equals(StackUtils.getID(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -196,7 +196,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
         
         if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
-            if (!Objects.equals(StackUtils.getID(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
                 if (playerWatching) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));

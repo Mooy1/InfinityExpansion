@@ -22,7 +22,7 @@ import java.util.logging.Level;
 
 
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
-    
+
     @Getter
     private static InfinityExpansion instance;
     @Getter
@@ -30,19 +30,18 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     @Getter
     private static double vanillaScale = 1;
     private final FileConfiguration config = getConfig();
-    
+
     @Override
     public void onEnable() {
         instance = this;
-        
+
         PluginUtils.setup(ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion", this, "Mooy1/InfinityExpansion/master", getFile());
         new CommandLib(this, "infinityexpansion", "infinityexpansion.admin", "/ie, /ix, /infinity");
         CommandLib.addCommands(new GiveRecipe(), new ResetConfig());
         setupConfigOptions();
-        
-        @SuppressWarnings("unused")
-        final Metrics metrics = new Metrics(this, 8991);
-        
+
+        @SuppressWarnings("unused") final Metrics metrics = new Metrics(this, 8991);
+
         Setup.setup(this);
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
@@ -69,7 +68,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     public JavaPlugin getJavaPlugin() {
         return this;
     }
-    
+
     private void setupConfigOptions() {
         StorageUnit.DISPLAY_SIGNS = getOrDefault("storage-unit-options.display-signs", true);
         MobSimulationChamber.CHANCE = getOrDefault("balance-options.mob-simulation-xp-chance", 1, 10, 2);
@@ -77,7 +76,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         vanillaScale = getOrDefault("balance-options.vanilla-economy-scale", .1, 10, 1);
         saveConfig();
     }
-    
+
     private int getOrDefault(String path, int min, int max, int def) {
         if (hasPath(path, this.config)) {
             int value = this.config.getInt(path);
@@ -121,16 +120,16 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         }
         return def;
     }
-    
-     private boolean hasPath(String path, FileConfiguration config) {
-         if (config.contains(path)) {
-             return true;
-         } else {
-             configWarnPath(path);
-             return false;
-         }
-     }
-    
+
+    private boolean hasPath(String path, FileConfiguration config) {
+        if (config.contains(path)) {
+            return true;
+        } else {
+            configWarnPath(path);
+            return false;
+        }
+    }
+
     private void configWarnValue(String path) {
         PluginUtils.log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting it to default");
     }
@@ -141,19 +140,21 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
     /**
      * @param rate ticks per progress
+     *
      * @return whether the block should progress
      */
     public static boolean progressEvery(int rate) {
         return progressOn(rate, 0);
     }
-    
+
     /**
      * @param rate ticks per progress
-     * @param pos offset from from other progress at same rate
+     * @param pos  offset from from other progress at same rate
+     *
      * @return whether the block should progress
      */
     public static boolean progressOn(int rate, int pos) {
         return currentTick % rate == pos;
     }
-    
+
 }

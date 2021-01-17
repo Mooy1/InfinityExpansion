@@ -43,7 +43,7 @@ public final class StorageForge extends Crafter {
     
     @Override
     protected void modifyOutput(@Nonnull BlockMenu inv, @Nonnull ItemStack output) {
-        output.setItemMeta(StorageUnit.transferMeta(inv.getItemInSlot(INPUT_SLOTS[4]), output.getItemMeta()));
+        output.setItemMeta(StorageUnit.transferData(inv.getItemInSlot(INPUT_SLOTS[4]).getItemMeta(), output.getItemMeta()));
     }
 
     @Override
