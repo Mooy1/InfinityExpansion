@@ -18,6 +18,7 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -68,7 +69,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
     
     @Override
     public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        if (!InfinityExpansion.progressEvery(30)) {
+        if (!InfinityExpansion.progressEvery(40)) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aDrilling..."));
             }
@@ -101,7 +102,16 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
         }
         return true;
     }
-    
+
+    @Override
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        } else {
+            return new int[0];
+        }
+    }
+
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
     }

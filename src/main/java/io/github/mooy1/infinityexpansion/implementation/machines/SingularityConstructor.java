@@ -158,10 +158,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     @Override
     public boolean process(@Nonnull Block b, @Nonnull BlockMenu menu) {
         ItemStack input = menu.getItemInSlot(INPUT_SLOT);
-        if (input == null) {
-            return false;
-        }
-        String inputID = StackUtils.getIDorType(input);
+        String inputID = StackUtils.getIDorTypeOfNullable(input);
 
         // load data
         Integer progressID = getProgressID(b);
@@ -172,28 +169,35 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
 
         if (progressID == null || progress == 0) {
             // not started
-            Pair<Integer, Triplet<SlimefunItemStack, String, Integer>> pair = Singularity.getRecipeByID(inputID);
-            if (pair != null) {
-                progress = Math.min(this.speed, input.getAmount());
-                input.setAmount(input.getAmount() - progress);
-                progressID = pair.getA();
-                triplet = pair.getB();
-                takeCharge = true;
+            if (inputID != null) {
+                Pair<Integer, Triplet<SlimefunItemStack, String, Integer>> pair = Singularity.getRecipeByID(inputID);
+                if (pair != null) {
+                    progress = Math.min(this.speed, input.getAmount());
+                    input.setAmount(input.getAmount() - progress);
+                    progressID = pair.getA();
+                    triplet = pair.getB();
+                    takeCharge = true;
+                } else {
+                    // invalid input
+                    triplet = null;
+                }
             } else {
-                // invalid input
+                // still haven't started
                 triplet = null;
             }
         } else {
             // started
             triplet = Singularity.getRecipeByIndex(progressID);
-            int max = Math.min(triplet.getC() - progress, Math.min(this.speed, input.getAmount()));
-            if (max > 0) {
-                if (triplet.getB().equals(inputID)) {
-                    progress += max;
-                    input.setAmount(input.getAmount() - max);
-                    takeCharge = true;
-                } // invalid input
-            } // already done
+            if (inputID != null) {
+                int max = Math.min(triplet.getC() - progress, Math.min(this.speed, input.getAmount()));
+                if (max > 0) {
+                    if (triplet.getB().equals(inputID)) {
+                        progress += max;
+                        input.setAmount(input.getAmount() - max);
+                        takeCharge = true;
+                    } // invalid input
+                } // already done
+            }
         }
 
         // show status and output if done

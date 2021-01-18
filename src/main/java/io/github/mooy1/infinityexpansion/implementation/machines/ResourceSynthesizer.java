@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
+import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.objects.AbstractMachine;
@@ -62,19 +63,19 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
     private static final SlimefunItemStack[] RECIPES = {
-            Singularity.IRON, Singularity.COAL, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
+            Singularity.IRON, Singularity.COAL, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 24),
             Singularity.IRON, Singularity.REDSTONE, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
-            Singularity.DIAMOND, Singularity.COAL, new SlimefunItemStack(SlimefunItems.COMPRESSED_CARBON, 16),
-            Singularity.GOLD, Singularity.EMERALD, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 4),
-            Singularity.COPPER, Singularity.IRON, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 32),
+            Singularity.DIAMOND, Singularity.COAL, new SlimefunItemStack(SlimefunItems.CARBONADO, 12),
+            Singularity.GOLD, Singularity.EMERALD, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 8),
+            Singularity.COPPER, Singularity.ZINC, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
             Singularity.IRON, Singularity.QUARTZ, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
     };
 
     public ResourceSynthesizer() {
         super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE,
+                SmelteryItem.ADAMANTITE, SmelteryItem.ADAMANTITE, SmelteryItem.ADAMANTITE,
                 MachineItem.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                MachineItem.MACHINE_PLATE, MachineItem.MACHINE_CORE, MachineItem.MACHINE_PLATE
         }, STATUS_SLOT, ENERGY);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {

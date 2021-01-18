@@ -15,18 +15,17 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacito
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoDisenchanter;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.AutoEnchanter;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ChargingBench;
-import io.github.thebusybiscuit.slimefun4.implementation.items.electric.reactors.Reactor;
+import io.github.thebusybiscuit.slimefun4.implementation.items.electric.reactors.NetherStarReactor;
 import io.github.thebusybiscuit.slimefun4.implementation.items.geo.GEOMiner;
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
-import io.github.thebusybiscuit.slimefun4.utils.holograms.ReactorHologram;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineFuel;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
@@ -238,7 +237,7 @@ public class SlimefunExtension {
                 SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY
         }).setCapacity(INFINITY_CHARGER_ENERGY).setEnergyConsumption(INFINITY_CHARGER_ENERGY).setProcessingSpeed(INFINITY_CHARGER_SPEED).register(plugin);
         
-        new Reactor(Categories.ADVANCED_MACHINES, ADVANCED_NETHER_STAR_REACTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new NetherStarReactor(Categories.ADVANCED_MACHINES, ADVANCED_NETHER_STAR_REACTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.WITHER_PROOF_GLASS, SlimefunItems.WITHER_PROOF_GLASS, SlimefunItems.WITHER_PROOF_GLASS,
                 MachineItem.MACHINE_CIRCUIT, SlimefunItems.NETHER_STAR_REACTOR, MachineItem.MACHINE_CIRCUIT,
                 SlimefunItems.WITHER_PROOF_OBSIDIAN, SlimefunItems.WITHER_PROOF_OBSIDIAN, SlimefunItems.WITHER_PROOF_OBSIDIAN,
@@ -261,57 +260,35 @@ public class SlimefunExtension {
 
             @Override
             public void extraTick(@Nonnull Location l) {
-                if (InfinityExpansion.progressEvery(4)) return;
-                
+                if (!InfinityExpansion.progressEvery(5)) {
+                    return;
+                }
                 PluginUtils.runSync(() -> {
-                    ArmorStand hologram = ReactorHologram.getArmorStand(l, true);
-                    if (hologram == null) return;
-                    
-                    for (Entity entity : hologram.getNearbyEntities(8, 8, 8)) {
+                    Location check = l.clone().add(0, 1, 0);
+                    World w = check.getWorld();
+                    if (w == null) {
+                        return;
+                    }
+                    boolean checkWitherProof = check.getBlock().getType() == Material.AIR;
+                    for (Entity entity : w.getNearbyEntities(check, 8, 8, 8)) {
                         if (entity instanceof LivingEntity && entity.isValid()) {
-                            
-                            Location h = hologram.getLocation().clone().add(0, 1, 0);
-                            
-                            if (h.getBlock().getType() == Material.AIR) {
-                                
-                                RayTraceResult result = hologram.getWorld().rayTraceBlocks(h, entity.getLocation().toVector().subtract(h.toVector()), 16);
-
+                            if (checkWitherProof) {
+                                RayTraceResult result = w.rayTraceBlocks(check, entity.getLocation().subtract(check).toVector(), 16);
                                 if (result != null) {
                                     Block hit = result.getHitBlock();
-
                                     if (hit != null) {
                                         String id = BlockStorage.getLocationInfo(hit.getLocation(), "id");
-
                                         if (id != null && id.contains("WITHER_PROOF")) {
                                             continue;
                                         }
                                     }
                                 }
                             }
-                            
-                            ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 1));
+                            ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 2));
                         }
                     }
                 });
             }
-
-            @Override
-            public ItemStack getCoolant() {
-                return SlimefunItems.NETHER_ICE_COOLANT_CELL;
-            }
-
-            @Nonnull
-            @Override
-            public ItemStack getFuelIcon() {
-                return new ItemStack(Material.NETHER_STAR);
-            }
-
-            @Nonnull
-            @Override
-            public ItemStack getProgressBar() {
-                return new ItemStack(Material.NETHER_STAR);
-            }
-
         }.register(plugin);
         
         new GEOMiner(Categories.ADVANCED_MACHINES, ADVANCED_GEO_MINER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

@@ -45,7 +45,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         Setup.setup(this);
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            if (currentTick < 60) {
+            if (currentTick < 120) {
                 currentTick++;
             } else {
                 currentTick = 1;

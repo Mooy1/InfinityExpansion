@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
@@ -54,20 +55,19 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
         this.addItemHandler(new BlockTicker() {
             public void tick(Block b, SlimefunItem sf, Config data) { PoweredBedrock.this.tick(b); }
 
-            public boolean isSynchronized() { return false; }
+            public boolean isSynchronized() { return true; }
         });
     }
 
     public void tick(Block b) {
-        if (b.getType() == Material.AIR) {
+        if (!InfinityExpansion.progressEvery(4) || b.getType() == Material.AIR) {
             return;
         }
         Location l = b.getLocation();
-
-        if (getCharge(l) >= ENERGY) {
-            b.setType(Material.BEDROCK);
-        } else {
+        if (getCharge(l) < ENERGY) {
             b.setType(Material.NETHERITE_BLOCK);
+        } else {
+            b.setType(Material.BEDROCK);
         }
         removeCharge(l, ENERGY);
     }
