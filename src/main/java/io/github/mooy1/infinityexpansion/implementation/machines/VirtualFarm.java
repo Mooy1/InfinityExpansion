@@ -46,9 +46,9 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
                 MachineItem.MACHINE_CIRCUIT, new ItemStack(Material.GRASS_BLOCK), MachineItem.MACHINE_CIRCUIT
         }, 18, 1).register(plugin);
         new VirtualFarm(Categories.ADVANCED_MACHINES, ADVANCED, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
-                SmelteryItem.MAGSTEEL, new ItemStack(Material.DIAMOND_HOE), SmelteryItem.MAGSTEEL,
-                MachineItem.MACHINE_CIRCUIT, new ItemStack(Material.GRASS_BLOCK), MachineItem.MACHINE_CIRCUIT
+                SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS,
+                SmelteryItem.MAGNONIUM, BASIC, SmelteryItem.MAGNONIUM,
+                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
         }, 90, 5).register(plugin);
         new VirtualFarm(Categories.INFINITY_CHEAT, INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
                 new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),

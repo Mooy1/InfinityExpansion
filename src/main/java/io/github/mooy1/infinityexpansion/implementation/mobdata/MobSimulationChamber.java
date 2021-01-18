@@ -79,7 +79,7 @@ public final class MobSimulationChamber extends AbstractContainer implements Ene
     @Override
     public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
 
-        MobDataCard.Type card = MobDataCard.CARDS.get(StackUtils.getID(inv.getItemInSlot(CARD_SLOT)));
+        MobDataCard.Type card = MobDataCard.CARDS.get(StackUtils.getIDofNullable(inv.getItemInSlot(CARD_SLOT)));
 
         if (card == null) {
             if (inv.hasViewer()) {
