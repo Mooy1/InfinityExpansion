@@ -241,13 +241,13 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
             }
             return 0;
         } else {
-            int gen = type.more ? this.generation + this.generation >> 1 : this.generation;
+            int gen = type.more ? this.generation << 1 : this.generation;
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(4, new CustomItem(
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&aGeneration",
                         "&7Type: &6" + type.status,
-                        "&7Generating: &6" + LorePreset.roundHundreds(this.generation * PluginUtils.TICK_RATIO) + " J/s ",
+                        "&7Generating: &6" + LorePreset.roundHundreds(gen * PluginUtils.TICK_RATIO) + " J/s ",
                         "&7Stored: &6" + LorePreset.format(getCharge(l)) + " J"
                 ));
             }
@@ -287,13 +287,13 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
             }
 
             if (this.type == Type.LUNAR) {
-                return Type.DARKNESS;
+                return Type.LUNAR;
             }
 
         } else if (world.getEnvironment() == World.Environment.THE_END) {
 
             if (this.type == Type.LUNAR) {
-                return Type.DARKNESS;
+                return Type.LUNAR;
             }
 
         } else if (world.getEnvironment() == World.Environment.NORMAL) {
@@ -331,10 +331,9 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
         WATER("Hydroelectric", false),
         GEOTHERMAL("Geothermal", false),
         SOLAR("Day", false),
-        DARKNESS("Darkness", false),
+        LUNAR("Night", false),
         INFINITY("Infinity", false),
         
-        LUNAR("Night", false),
         NETHER("Nether (2x)", true);
         
         private final String status;
