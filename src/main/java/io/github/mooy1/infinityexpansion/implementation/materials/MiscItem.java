@@ -17,7 +17,7 @@ public final class MiscItem extends MaterialItem {
     );
     
     public static void setup(InfinityExpansion plugin) {
-        new MiscItem(VOID_BIT, VoidHarvester.TYPE, null);
+        new MiscItem(VOID_BIT, VoidHarvester.TYPE, null).register(InfinityExpansion.getInstance());
     }
     
     MiscItem(SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
