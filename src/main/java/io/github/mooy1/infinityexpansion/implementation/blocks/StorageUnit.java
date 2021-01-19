@@ -241,12 +241,12 @@ public final class StorageUnit extends AbstractContainer {
                         ItemStack inputDefault = StackUtils.getItemByIDorType(inputID);
                         
                         if (canBeAdded(input, container, inputDefault)) {
-                            
+
                             id = inputID;
                             amount = input.getAmount();
                             input.setAmount(0);
                             stored = inputDefault;
-                            
+
                         } else {
                             stored = null;
                         }
@@ -353,8 +353,8 @@ public final class StorageUnit extends AbstractContainer {
         setStored(b, id);
     }
     
-    private static boolean canBeAdded(ItemStack stack, PersistentDataContainer container, ItemStack stored) {
-        if (stack.getEnchantments().size() != 0) {
+    private static boolean canBeAdded(@Nonnull ItemStack stack, @Nonnull PersistentDataContainer container, @Nullable ItemStack stored) {
+        if (stored == null || stack.getEnchantments().size() != 0) {
             return false;
         }
         return container.equals(stored.getItemMeta().getPersistentDataContainer());

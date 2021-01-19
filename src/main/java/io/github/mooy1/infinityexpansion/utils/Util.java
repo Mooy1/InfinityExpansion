@@ -1,12 +1,9 @@
 package io.github.mooy1.infinityexpansion.utils;
 
 import io.github.mooy1.infinitylib.items.LoreUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class Util {
 
@@ -29,14 +26,7 @@ public final class Util {
     
     @Nonnull
     public static ItemStack getDisplayItem(@Nonnull ItemStack output) {
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GREEN + "");
-        lore.add(ChatColor.GREEN + "-------------------");
-        lore.add(ChatColor.GREEN + "\u21E8 Click to craft");
-        lore.add(ChatColor.GREEN + "-------------------");
-
-        LoreUtils.addLore(output, lore);
-
+        LoreUtils.addLore(output, "", "&a-------------------", "&a\u21E8 Click to craft", "&a-------------------");
         return output;
     }
     

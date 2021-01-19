@@ -109,19 +109,22 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
                     if (triplet != null) {
                         ItemStack drop = StackUtils.getItemByIDorType(triplet.getB(), 64);
                         
-                        int stacks = MathUtils.divPow2(progress, 64);
+                        if (drop != null) {
 
-                        if (stacks > 0) {
-                            for (int i = 0 ; i < stacks ; i++) {
+                            int stacks = progress / 64;
+
+                            if (stacks > 0) {
+                                for (int i = 0 ; i < stacks ; i++) {
+                                    b.getWorld().dropItemNaturally(l, drop);
+                                }
+                            }
+
+                            int remainder = MathUtils.modPow2(progress, 64);
+
+                            if (remainder > 0) {
+                                drop.setAmount(remainder);
                                 b.getWorld().dropItemNaturally(l, drop);
                             }
-                        }
-
-                        int remainder = MathUtils.modPow2(progress, 64);
-
-                        if (remainder > 0) {
-                            drop.setAmount(remainder);
-                            b.getWorld().dropItemNaturally(l, drop);
                         }
                     }
                 }
