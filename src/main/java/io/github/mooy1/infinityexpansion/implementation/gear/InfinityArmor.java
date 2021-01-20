@@ -87,7 +87,7 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
             "&7Saturation I",
             "&7Night Vision I",
             "&7Water Breathing I",
-            "&7Bee Sting Immunity"
+            "&7Elytra Crash Immunity"
     );
     public static final SlimefunItemStack CHESTPLATE = new SlimefunItemStack(
             "INFINITY_CHESTPLATE",
@@ -96,7 +96,7 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
             "&7Strength II",
             "&7Health Boost III",
             "&7Resistance II",
-            "&7Elytra Crashing Immunity"
+            "&7Bee Sting Immunity"
     );
     public static final SlimefunItemStack LEGGINGS = new SlimefunItemStack(
             "INFINITY_LEGGINGS",

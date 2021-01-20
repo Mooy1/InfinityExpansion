@@ -186,7 +186,7 @@ public final class StorageUnit extends AbstractContainer {
             if (item == null) {
                 continue;
             }
-            if (canBeAdded(item, item.getItemMeta().getPersistentDataContainer(), storedItem)) {
+            if (item.getType() == storedItem.getType() && canBeAdded(item, item.getItemMeta().getPersistentDataContainer(), storedItem)) {
                 int amount = Math.min(this.max - stored, item.getAmount());
                 if (amount > 0) {
                     stored += amount;
@@ -240,7 +240,7 @@ public final class StorageUnit extends AbstractContainer {
                         
                         ItemStack inputDefault = StackUtils.getItemByIDorType(inputID);
                         
-                        if (canBeAdded(input, container, inputDefault)) {
+                        if (inputDefault != null && canBeAdded(input, container, inputDefault)) {
 
                             id = inputID;
                             amount = input.getAmount();
@@ -259,7 +259,7 @@ public final class StorageUnit extends AbstractContainer {
             } else {
                 // try to add input to storage
                 stored = StackUtils.getItemByIDorType(id);
-                if (canBeAdded(input, input.getItemMeta().getPersistentDataContainer(), stored)) {
+                if (stored != null && input.getType() == stored.getType() && canBeAdded(input, input.getItemMeta().getPersistentDataContainer(), stored)) {
                     int max = this.max - amount;
                     if (max > 0) {
                         int add = input.getAmount();
@@ -353,8 +353,8 @@ public final class StorageUnit extends AbstractContainer {
         setStored(b, id);
     }
     
-    private static boolean canBeAdded(@Nonnull ItemStack stack, @Nonnull PersistentDataContainer container, @Nullable ItemStack stored) {
-        if (stored == null || stack.getEnchantments().size() != 0) {
+    private static boolean canBeAdded(@Nonnull ItemStack stack, @Nonnull PersistentDataContainer container, @Nonnull ItemStack stored) {
+        if (stack.getEnchantments().size() != 0) {
             return false;
         }
         return container.equals(stored.getItemMeta().getPersistentDataContainer());
