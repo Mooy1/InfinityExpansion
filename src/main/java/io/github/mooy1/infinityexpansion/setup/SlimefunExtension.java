@@ -260,7 +260,7 @@ public class SlimefunExtension {
 
             @Override
             public void extraTick(@Nonnull Location l) {
-                if (!InfinityExpansion.progressEvery(5)) {
+                if ((PluginUtils.getCurrentTick()  & 3) != 0) {
                     return;
                 }
                 PluginUtils.runSync(() -> {

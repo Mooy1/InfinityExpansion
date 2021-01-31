@@ -1,22 +1,20 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
-import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -27,14 +25,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Machine that changes the material of gear and tools
  *
  * @author Mooy1
  */
-public final class GearTransformer extends AbstractContainer implements EnergyNetComponent, RecipeDisplayItem {
+public final class GearTransformer extends AbstractEnergyCrafter implements RecipeDisplayItem {
     
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "GEAR_TRANSFORMER",
@@ -46,7 +43,7 @@ public final class GearTransformer extends AbstractContainer implements EnergyNe
     );
 
     public static final int ENERGY = 12000;
-    public static boolean sf = false;
+    public static final boolean SF = ConfigUtils.getOrDefault(InfinityExpansion.getInstance().getConfig(), "balance-options.allow-sf-item-transform", false);
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
     };
@@ -70,7 +67,7 @@ public final class GearTransformer extends AbstractContainer implements EnergyNe
                 MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CIRCUIT, MachineItem.MAGSTEEL_PLATE,
                 MachineItem.MACHINE_CIRCUIT, new ItemStack(Material.SMITHING_TABLE), MachineItem.MACHINE_CIRCUIT,
                 MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CIRCUIT, MachineItem.MAGSTEEL_PLATE
-        });
+        }, ENERGY, STATUS_SLOT);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -83,86 +80,9 @@ public final class GearTransformer extends AbstractContainer implements EnergyNe
             return true;
         });
     }
-
+    
     @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        if (!inv.hasViewer()) return;
-
-        if (getCharge(b.getLocation()) < ENERGY) { //not enough energy
-
-            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            return;
-
-        }
-
-        ItemStack inputItem = inv.getItemInSlot(INPUT_SLOT1);
-
-        if (inputItem == null) { //no input
-
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a tool or piece of gear"));
-            return;
-
-        }
-        
-        if (!sf && StackUtils.getID(inputItem) != null) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cSlimefun items may not have their material changed!"));
-            return;
-        }
-
-        String inputToolType = getType(inputItem);
-
-        if (inputToolType == null) { //invalid input
-
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNot a tool or piece of gear!"));
-            return;
-
-        }
-
-        ItemStack inputMaterial = inv.getItemInSlot(INPUT_SLOT2);
-
-        if (inputMaterial == null) { //no material
-
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input materials"));
-            return;
-
-        }
-
-        Pair<Material, Integer> pair = getOutput(inputMaterial, inputToolType);
-
-        if (pair == null) { //invalid material
-
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
-            return;
-
-        }
-
-        if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null) { //valid material, not enough room
-
-            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
-            return;
-
-        }
-
-        //output
-        removeCharge(b.getLocation(), ENERGY);
-
-        MessageUtils.messagePlayersInInv(inv, "Transformed into: " + pair.getFirstValue().toString().toUpperCase(Locale.ROOT));
-
-        inputItem.setType(pair.getFirstValue());
-        inv.pushItem(inputItem, OUTPUT_SLOTS);
-
-        inv.replaceExistingItem(INPUT_SLOT1, null);
-        inv.consumeItem(INPUT_SLOT2, pair.getSecondValue());
-
-        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
-    }
-
-    @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        
-    }
-
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : BACKGROUND) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -185,26 +105,12 @@ public final class GearTransformer extends AbstractContainer implements EnergyNe
     }
 
     @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
-        if (flow == ItemTransportFlow.INSERT) {
-            return INPUT_SLOTS;
-        } else if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        } else {
-            return new int[0];
-        }
-    }
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
-    /**
-     * This method gets the output from the input material and input tool
-     *
-     * @param inputMaterial material
-     * @param inputToolType tools type
-     *
-     * @return output if any
-     */
+    }
+    
     @Nullable
-    private Pair<Material, Integer> getOutput(ItemStack inputMaterial, String inputToolType) {
+    private static Pair<Material, Integer> getOutput(ItemStack inputMaterial, String inputToolType) {
 
         for (String toolType : TOOL_TYPES) {
             if (inputToolType.equals(toolType)) { //make sure its a tool
@@ -242,7 +148,7 @@ public final class GearTransformer extends AbstractContainer implements EnergyNe
     }
 
     @Nullable
-    private String getType(ItemStack item) {
+    private static String getType(ItemStack item) {
         Material material = item.getType();
 
         for (String armorType : ARMOR_TYPES) {
@@ -293,18 +199,7 @@ public final class GearTransformer extends AbstractContainer implements EnergyNe
             "DIAMOND",
             "NETHERITE"
     };
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CONSUMER;
-    }
-
-    @Override
-    public int getCapacity() {
-        return ENERGY * 2;
-    }
-
+    
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
@@ -335,5 +230,67 @@ public final class GearTransformer extends AbstractContainer implements EnergyNe
             new ItemStack(Material.DIAMOND, 9),
             new ItemStack(Material.NETHERITE_INGOT, 2)
     };
+
+    @Override
+    public void update(@Nonnull BlockMenu inv) {
+        ItemStack inputItem = inv.getItemInSlot(INPUT_SLOT1);
+
+        if (inputItem == null) { //no input
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a tool or piece of gear"));
+            return;
+
+        }
+
+        if (!SF && StackUtils.getID(inputItem) != null) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cSlimefun items may not have their material changed!"));
+            return;
+        }
+
+        String inputToolType = getType(inputItem);
+
+        if (inputToolType == null) { //invalid input
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNot a tool or piece of gear!"));
+            return;
+
+        }
+
+        ItemStack inputMaterial = inv.getItemInSlot(INPUT_SLOT2);
+
+        if (inputMaterial == null) { //no material
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input materials"));
+            return;
+
+        }
+
+        Pair<Material, Integer> pair = getOutput(inputMaterial, inputToolType);
+
+        if (pair == null) { //invalid material
+
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
+            return;
+
+        }
+
+        if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null) { //valid material, not enough room
+
+            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
+            return;
+
+        }
+
+        //output
+        setCharge(inv.getLocation(), 0);
+        
+        inputItem.setType(pair.getFirstValue());
+        inv.pushItem(inputItem, OUTPUT_SLOTS);
+
+        inv.replaceExistingItem(INPUT_SLOT1, null);
+        inv.consumeItem(INPUT_SLOT2, pair.getSecondValue());
+
+        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
+    }
 
 }

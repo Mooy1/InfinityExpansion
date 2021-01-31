@@ -1,23 +1,25 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.misc.Pair;
-import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
@@ -68,56 +70,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
     }
     
     @Override
-    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        if (!InfinityExpansion.progressEvery(40)) {
-            if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aDrilling..."));
-            }
-            return true;
-        }
-        
-        ItemStack output = recipes.computeIfAbsent(new Pair<>(b.getBiome(), b.getWorld().getEnvironment()), k -> {
-            RandomizedSet<ItemStack> set = new RandomizedSet<>();
-            for (GEOResource resource : SlimefunPlugin.getRegistry().getGEOResources().values()) {
-                if (resource.isObtainableFromGEOMiner()) {
-                    int supply = resource.getDefaultSupply(b.getWorld().getEnvironment(), b.getBiome());
-                    if (supply > 0) {
-                        set.add(resource.getItem(), supply);
-                    }
-                }
-            }
-            return set;
-        }).getRandom();
-        
-        if (!inv.fits(output, OUTPUT_SLOTS)) {
-            if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS, MenuPreset.notEnoughRoom);
-            }
-            return false;
-        }
-
-        inv.pushItem(output.clone(), OUTPUT_SLOTS);
-        if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aFound!"));
-        }
-        return true;
-    }
-
-    @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        } else {
-            return new int[0];
-        }
-    }
-
-    @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-    }
-
-    @Override
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : BORDER) {
             blockMenuPreset.addItem(i, new CustomItem(Material.GRAY_STAINED_GLASS_PANE, " "), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -127,6 +80,21 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
         blockMenuPreset.addItem(STATUS, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
+    @Nonnull
+    @Override
+    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        } else {
+            return new int[0];
+        }
+    }
+
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        
+    }
+    
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
@@ -144,6 +112,42 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
     @Override
     public int getCapacity() {
         return ENERGY * 4;
+    }
+
+    @Override
+    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
+        if (PluginUtils.getCurrentTick() % 40 != 0) {
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aDrilling..."));
+            }
+            return true;
+        }
+
+        ItemStack output = recipes.computeIfAbsent(new Pair<>(b.getBiome(), b.getWorld().getEnvironment()), k -> {
+            RandomizedSet<ItemStack> set = new RandomizedSet<>();
+            for (GEOResource resource : SlimefunPlugin.getRegistry().getGEOResources().values()) {
+                if (resource.isObtainableFromGEOMiner()) {
+                    int supply = resource.getDefaultSupply(b.getWorld().getEnvironment(), b.getBiome());
+                    if (supply > 0) {
+                        set.add(resource.getItem(), supply);
+                    }
+                }
+            }
+            return set;
+        }).getRandom();
+
+        if (!inv.fits(output, OUTPUT_SLOTS)) {
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS, MenuPreset.notEnoughRoom);
+            }
+            return false;
+        }
+
+        inv.pushItem(output.clone(), OUTPUT_SLOTS);
+        if (inv.hasViewer()) {
+            inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aFound!"));
+        }
+        return true;
     }
 
 }

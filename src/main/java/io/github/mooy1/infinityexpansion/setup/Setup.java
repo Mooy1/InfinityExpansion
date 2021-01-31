@@ -40,18 +40,17 @@ import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationCha
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.setup.categories.InfinityCategory;
 import io.github.mooy1.infinityexpansion.setup.categories.MultiCategory;
+import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.PluginUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 
 /**
@@ -64,7 +63,7 @@ public final class Setup {
     public static void setup(@Nonnull InfinityExpansion plugin) {
         
         // stacks
-        addEnchantsFromConfig("infinity-enchant-levels", "INFINITY", plugin.getConfig(),
+        addInfinityEnchants(plugin.getConfig(),
                 InfinityArmor.CROWN, InfinityArmor.CHESTPLATE, InfinityArmor.LEGGINGS, InfinityArmor.BOOTS,
                 InfinityTool.AXE, InfinityTool.BLADE, InfinityTool.PICKAXE, InfinityTool.SHIELD, InfinityTool.SHOVEL, InfinityTool.BOW
         );
@@ -80,9 +79,6 @@ public final class Setup {
                 Categories.INFINITY_MATERIALS,
                 InfinityCategory.CATEGORY
         );
-        
-        // items
-        PluginUtils.registerAddonInfoItem(Categories.MAIN_MATERIALS, plugin);
 
         // blocks
         Strainer.setup(plugin);
@@ -131,67 +127,38 @@ public final class Setup {
         SlimefunExtension.setup(plugin);
     }
     
-    private static void addEnchantsFromConfig(String section, String gearType, FileConfiguration config, SlimefunItemStack... items) {
-        ConfigurationSection typeSection = config.getConfigurationSection(section);
+    private static void addInfinityEnchants(FileConfiguration config, SlimefunItemStack... items) {
+        ConfigurationSection typeSection = config.getConfigurationSection("infinity-enchant-levels");
 
         if (typeSection == null) {
-            PluginUtils.log(Level.SEVERE, "Config section " + section + " missing, Check your config and report this!");
+            PluginUtils.log(Level.SEVERE, "Config section \"infinity-enchant-levels\" missing, Check your config and report this!");
             return;
         }
 
         for (SlimefunItemStack item : items) {
             ItemMeta meta = item.getItemMeta();
-            Objects.requireNonNull(meta).setUnbreakable(true);
+            
+            meta.setUnbreakable(true);
+            
             List<String> lore = meta.getLore();
-            Objects.requireNonNull(lore).add(ChatColor.AQUA + "Soulbound");
+            if (lore == null) {
+                lore = new ArrayList<>();
+            }
+            lore.add(ChatColor.AQUA + "Soulbound");
             meta.setLore(lore);
             item.setItemMeta(meta);
 
-            String itemPath = item.getItemId().replace(gearType + "_", "").toLowerCase();
+            String itemPath = item.getItemId().replace("INFINITY_", "").toLowerCase();
             ConfigurationSection itemSection = typeSection.getConfigurationSection(itemPath);
-            if (itemSection == null) {
-                PluginUtils.log(Level.SEVERE, "Config section " + itemPath + " missing, Check your config and report this!");
-                continue;
-            }
-
-            for (String path : itemSection.getKeys(false)) {
-                int level = config.getInt(section + "." + itemPath + "." + path);
-                if (level > 0 && level <= Short.MAX_VALUE) {
-                    Enchantment e = getEnchantFromString(path);
-                    if (e == null) {
-                        PluginUtils.log(Level.WARNING, "Failed to add enchantment " + path + ", your config may be messed up, report this!");
-                        continue;
-                    }
-                    item.addUnsafeEnchantment(e, level);
-                } else if (level != 0) {
-                    config.set(section + "." + itemPath + "." + path, 1);
-                    PluginUtils.log(Level.WARNING, "Enchantment level " + level + " for enchantment " + path + " is not allowed, resetting to 1, please check your config and update it with a correct value");
-                }
+            
+            if (itemSection != null) {
+                item.addUnsafeEnchantments(Util.getEnchants(itemSection));
+            } else {
+                PluginUtils.log(Level.SEVERE, "Config section for " + itemPath + " missing, Check your config and report this!");
             }
         }
 
         InfinityExpansion.getInstance().saveConfig();
-    }
-
-    @Nullable //TODO move to infinity lib in map of all
-    private static Enchantment getEnchantFromString(String string) {
-        switch (string) {
-            case "sharpness": return Enchantment.DAMAGE_ALL;
-            case "efficiency": return Enchantment.DIG_SPEED;
-            case "protection": return Enchantment.PROTECTION_ENVIRONMENTAL;
-            case "fire-aspect": return Enchantment.FIRE_ASPECT;
-            case "fortune": return Enchantment.LOOT_BONUS_BLOCKS;
-            case "looting": return Enchantment.LOOT_BONUS_MOBS;
-            case "silk-touch": return Enchantment.SILK_TOUCH;
-            case "thorns": return Enchantment.THORNS;
-            case "aqua-affinity": return Enchantment.WATER_WORKER;
-            case "power": return Enchantment.ARROW_DAMAGE;
-            case "flame": return Enchantment.ARROW_FIRE;
-            case "infinity": return Enchantment.ARROW_INFINITE;
-            case "punch": return Enchantment.ARROW_KNOCKBACK;
-            case "feather-falling": return Enchantment.PROTECTION_FALL;
-            default: return null;
-        }
     }
     
 }

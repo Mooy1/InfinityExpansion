@@ -37,7 +37,7 @@ public final class CompressedItem extends MachineItem {
             "COMPRESSED_COBBLESTONE_3",
             Material.STONE,
             "&7Triple Compressed Cobblestone",
-            "&8243 cobblestone combined"
+            "&8729 cobblestone combined"
     );
     public static final SlimefunItemStack COBBLE_4 = new SlimefunItemStack(
             "COMPRESSED_COBBLESTONE_4",

@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -69,7 +70,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     private static final long CD = 1000;
     private static final NamespacedKey key = PluginUtils.getKey("vein_miner");
     private static final Map<UUID, Long> CDS = new HashMap<>();
-    private static final String[] LORE = {"", ChatColor.AQUA + "Veinminer - Crouch to use"};
+    private static final String LORE = ChatColor.AQUA + "Veinminer - Crouch to use";
     private static final Set<String> ALLOWED = new HashSet<>(Arrays.asList(
             "_ORE", "_LOG", "_WOOD", "GILDED", "SOUL", "GRAVEL",
             "MAGMA", "OBSIDIAN", "DIORITE", "ANDESITE", "GRANITE", "_LEAVES",
@@ -84,7 +85,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
                 SmelteryItem.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, SmelteryItem.MAGSTEEL,
         });
         LeaveListener.add(CDS);
-        PluginUtils.registerEvents(this);
+        PluginUtils.registerListener(this);
     }
     
     @EventHandler
@@ -150,22 +151,13 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     }
 
     public static boolean isVeinMiner(@Nonnull ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-
-            return container.has(key, PersistentDataType.BYTE);
-        }
-
-        return false;
+        return item.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.BYTE);
     }
     
     public static void setVeinMiner(@Nullable ItemStack item, boolean makeVeinMiner) {
         if (item == null) return;
 
         ItemMeta meta = item.getItemMeta();
-        
-        if (meta == null) return;
 
         boolean isVeinMiner = isVeinMiner(item);
 
@@ -179,8 +171,12 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
 
         if (!makeVeinMiner && isVeinMiner) {
             container.remove(key);
+            List<String> lore = meta.getLore();
+            if (lore != null) {
+                lore.remove(LORE);
+                meta.setLore(lore);
+            }
             item.setItemMeta(meta);
-            LoreUtils.removeLore(item, -1, LORE[1], 2);
         }
     }
     
@@ -253,7 +249,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         }
     }
     
-    private boolean isAllowed(String mat) {
+    private static boolean isAllowed(String mat) {
         for (String test : ALLOWED) {
             if (test.startsWith("_")) {
                 if (mat.endsWith(test)) return true;
@@ -264,7 +260,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         return false;
     }
     
-    private void getVein(Set<Location> checked, Set<Block> found, Location l, Block b) {
+    private static void getVein(Set<Location> checked, Set<Block> found, Location l, Block b) {
         if (found.size() >= MAX) return;
         
         found.add(b);

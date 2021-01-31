@@ -1,11 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -60,7 +60,7 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
     }
 
     public void tick(Block b) {
-        if (!InfinityExpansion.progressEvery(4) || b.getType() == Material.AIR) {
+        if ((PluginUtils.getCurrentTick() & 3) == 0  || b.getType() == Material.AIR) {
             return;
         }
         Location l = b.getLocation();

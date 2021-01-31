@@ -4,18 +4,20 @@ import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -89,9 +91,9 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
             return true;
         });
     }
-
+    
     @Override
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : BACKGROUND) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -110,12 +112,12 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
         for (int i : MenuPreset.slotChunk2) {
             blockMenuPreset.addItem(i + 27, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier,
-                ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
 
+    @Nonnull
     @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
             return INPUT_SLOTS;
         } else if (flow == ItemTransportFlow.WITHDRAW) {
@@ -124,14 +126,34 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
             return new int[0];
         }
     }
-    
+
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
     }
+    
+    @Override
+    public int getCapacity() {
+        return ENERGY * 2;
+    }
+
+    @Nonnull
+    @Override
+    public List<ItemStack> getDisplayRecipes() {
+        final List<ItemStack> items = new ArrayList<>();
+
+        for (int i = 0; i < RECIPES.length; i += 3) {
+            items.add(RECIPES[i]);
+            items.add(RECIPES[i + 2]);
+            items.add(RECIPES[i + 1]);
+            items.add(RECIPES[i + 2]);
+        }
+
+        return items;
+    }
 
     @Override
-    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
+    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
 
         ItemStack input1 = inv.getItemInSlot(INPUT_SLOT1);
         ItemStack input2 = inv.getItemInSlot(INPUT_SLOT2);
@@ -144,7 +166,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
             return false;
 
         }
-        
+
         String id1 = StackUtils.getID(input1);
 
         if (id1 == null) return false;
@@ -193,23 +215,4 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
         }
     }
 
-    @Override
-    public int getCapacity() {
-        return ENERGY * 2;
-    }
-
-    @Nonnull
-    @Override
-    public List<ItemStack> getDisplayRecipes() {
-        final List<ItemStack> items = new ArrayList<>();
-
-        for (int i = 0; i < RECIPES.length; i += 3) {
-            items.add(RECIPES[i]);
-            items.add(RECIPES[i + 2]);
-            items.add(RECIPES[i + 1]);
-            items.add(RECIPES[i + 2]);
-        }
-
-        return items;
-    }
 }

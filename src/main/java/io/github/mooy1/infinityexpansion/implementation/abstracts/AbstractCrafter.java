@@ -1,20 +1,22 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import io.github.mooy1.infinityexpansion.utils.Util;
+import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.filter.FilterType;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
 import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
 import io.github.mooy1.infinitylib.misc.Pair;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.bukkit.ChatColor;
@@ -34,7 +36,7 @@ import java.util.Map;
  * @author Mooy1
  *
  */
-public abstract class Crafter extends AbstractContainer {
+public abstract class AbstractCrafter extends AbstractTicker {
     
     private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemStack[9]).hashCode();
     protected static final int[] INPUT_SLOTS = MenuPreset.craftingInput;
@@ -45,7 +47,7 @@ public abstract class Crafter extends AbstractContainer {
 
     private final Map<MultiFilter, Pair<SlimefunItemStack, int[]>> recipes = new HashMap<>();
     
-    public Crafter(Category category, SlimefunItemStack stack, DelayedRecipeType recipeType, RecipeType type, ItemStack[] recipe) {
+    public AbstractCrafter(Category category, SlimefunItemStack stack, DelayedRecipeType recipeType, RecipeType type, ItemStack[] recipe) {
         super(category, stack, type, recipe);
 
         recipeType.acceptEach((stacks, stack1) -> {
@@ -65,7 +67,14 @@ public abstract class Crafter extends AbstractContainer {
         });
     }
 
-    public final void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+    @Nonnull
+    @Override
+    protected final int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
+        return new int[0];
+    }
+
+    @Override
+    public final void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int slot : MenuPreset.craftingInputBorder) {
             blockMenuPreset.addItem(slot, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -98,7 +107,7 @@ public abstract class Crafter extends AbstractContainer {
     public abstract void postCraft(@Nonnull Location l, @Nonnull BlockMenu inv, @Nonnull Player p);
 
     @Override
-    public final void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
+    public final void tick(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config config) {
         if (inv.hasViewer()) {
             if (preCraftFail(b.getLocation(), inv)) {
                 inv.replaceExistingItem(STATUS_SLOT, preCraftItem(b.getLocation(), inv));
@@ -118,13 +127,7 @@ public abstract class Crafter extends AbstractContainer {
             }
         }
     }
-
-    /**
-     * This method crafts an item and updates the status of the menu
-     *
-     * @param inv BlockMenu
-     * @param p player crafting it
-     */
+    
     private void craft(@Nonnull BlockMenu inv, @Nonnull Player p) {
         if (preCraftFail(inv.getLocation(), inv)) {
             inv.replaceExistingItem(STATUS_SLOT, preCraftItem(inv.getLocation(), inv));
@@ -175,13 +178,7 @@ public abstract class Crafter extends AbstractContainer {
             }
         }
     }
-
-    /**
-     * This method gets the output from an inventory
-     *
-     * @param inv inventory to check
-     * @return the output if any
-     */
+    
     @Nullable
     private Pair<ItemStack, int[]> getOutput(@Nonnull BlockMenu inv) {
         
@@ -214,8 +211,4 @@ public abstract class Crafter extends AbstractContainer {
         });
     }
 
-    @Override
-    public final int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
-        return new int[0];
-    }
 }

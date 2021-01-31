@@ -3,13 +3,13 @@ package io.github.mooy1.infinityexpansion.implementation.blocks;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
+import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.math.RandomUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
-import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -18,12 +18,9 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +37,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public final class StrainerBase extends AbstractContainer implements RecipeDisplayItem {
+public final class StrainerBase extends AbstractTicker implements RecipeDisplayItem {
     
     private static final int TIME = 48;
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
@@ -93,8 +90,9 @@ public final class StrainerBase extends AbstractContainer implements RecipeDispl
             return true;
         });
     }
-
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+    
+    @Override
+    public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : MenuPreset.slotChunk1) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -106,145 +104,25 @@ public final class StrainerBase extends AbstractContainer implements RecipeDispl
         }
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
-
-    @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
-        return new int[0];
-    }
-
+    
+    @Nonnull
     @Override
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
         if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
         }
-        
         if (Strainer.getStrainer(item) > 0) {
             return INPUT_SLOTS;
         }
-
         return new int[0];
-    }
-
-    @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        boolean playerWatching = inv.hasViewer();
-
-        //check water
-        BlockData blockData = b.getBlockData();
-        
-        if (blockData instanceof Waterlogged) {
-            Waterlogged waterlogged = (Waterlogged) blockData;
-
-            if (!waterlogged.isWaterlogged()) {
-
-                if (playerWatching) {
-                    inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cMust be in water!"));
-                }
-
-                return;
-            }
-
-        } else return;
-
-        //check input
-
-        ItemStack strainer = inv.getItemInSlot(INPUT_SLOTS[0]);
-        int speed = Strainer.getStrainer(strainer);
-        
-        if (speed == 0) {
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a Strainer!"));
-            }
-
-            return;
-        }
-
-        //progress
-
-        if (!RandomUtils.chanceIn(TIME / speed)) {
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
-            }
-
-            return;
-        }
-
-        //fish
-
-        if (RandomUtils.chanceIn(10000)) {
-            fish(inv);
-        }
-        
-        ItemStack output = RandomUtils.randomOutput(OUTPUTS);
-
-        //check fits
-
-        if (!inv.fits(output, OUTPUT_SLOTS)) {
-
-            if (playerWatching) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
-            }
-
-            return;
-        }
-
-        //output
-
-        inv.pushItem(output, OUTPUT_SLOTS);
-
-        if (playerWatching) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMaterial Collected!"));
-        }
-
-        //reduce durability
-
-        if (RandomUtils.chanceIn(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + (3 * strainer.getEnchantmentLevel(Enchantment.MENDING)) + 1)) {
-            ItemMeta itemMeta = strainer.getItemMeta();
-            Damageable durability = (Damageable) itemMeta;
-            
-            int current = Objects.requireNonNull(durability).getDamage();
-
-            if (current + 1 == Material.FISHING_ROD.getMaxDurability()) {
-
-                inv.consumeItem(INPUT_SLOTS[0]);
-
-            } else { //reduce
-
-                ((Damageable) itemMeta).setDamage(current + 1);
-                strainer.setItemMeta(itemMeta);
-                inv.replaceExistingItem(INPUT_SLOTS[0], strainer);
-
-            }
-        }
-        //((Waterlogged) blockData).setWaterlogged(false);
-        //b.setBlockData(blockData);
     }
 
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         
     }
-
-
-
-    private static final ItemStack potato = new CustomItem(Material.POTATO, "&7:&6Potatofish&7:", "&eLucky");
-
-    /**
-     * This method will try to output a lucky potatofish
-     *
-     * @param inv inventory to output to
-     */
-    private static void fish(BlockMenu inv) {
-        if (inv.fits(potato, OUTPUT_SLOTS)) {
-            inv.pushItem(potato, OUTPUT_SLOTS);
-            MessageUtils.messagePlayersInInv(inv, ChatColor.YELLOW + "You caught a lucky fish! ... potato?");
-        }
-    }
+    
+    private static final ItemStack POTATO = new CustomItem(Material.POTATO, "&7:&6Potatofish&7:", "&eLucky");
 
     @Nonnull
     @Override
@@ -264,4 +142,89 @@ public final class StrainerBase extends AbstractContainer implements RecipeDispl
     public String getRecipeSectionLabel(@Nonnull Player p) {
         return "&7Collects:";
     }
+
+    @Override
+    public void tick(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config config) {
+
+        //check water
+        if (!Util.isWaterLogged(b)) {
+            return;
+        }
+
+        //check input
+
+        ItemStack strainer = inv.getItemInSlot(INPUT_SLOTS[0]);
+        int speed = Strainer.getStrainer(strainer);
+
+        if (speed == 0) {
+
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a Strainer!"));
+            }
+
+            return;
+        }
+
+        //progress
+
+        if (!RandomUtils.chanceIn(TIME / speed)) {
+
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
+            }
+
+            return;
+        }
+
+        //fish
+
+        if (RandomUtils.chanceIn(10000)) {
+            inv.pushItem(POTATO, OUTPUT_SLOTS);
+        }
+
+        ItemStack output = RandomUtils.randomOutput(OUTPUTS);
+
+        //check fits
+
+        if (!inv.fits(output, OUTPUT_SLOTS)) {
+
+            if (inv.hasViewer()) {
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
+            }
+
+            return;
+        }
+
+        //output
+
+        inv.pushItem(output, OUTPUT_SLOTS);
+
+        if (inv.hasViewer()) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMaterial Collected!"));
+        }
+
+        //reduce durability
+
+        if (RandomUtils.chanceIn(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + (3 * strainer.getEnchantmentLevel(Enchantment.MENDING)) + 1)) {
+            ItemMeta itemMeta = strainer.getItemMeta();
+            Damageable durability = (Damageable) itemMeta;
+
+            int current = Objects.requireNonNull(durability).getDamage();
+
+            if (current + 1 == Material.FISHING_ROD.getMaxDurability()) {
+
+                inv.consumeItem(INPUT_SLOTS[0]);
+
+            } else { //reduce
+
+                ((Damageable) itemMeta).setDamage(current + 1);
+                strainer.setItemMeta(itemMeta);
+                inv.replaceExistingItem(INPUT_SLOTS[0], strainer);
+
+            }
+        }
+        //((Waterlogged) blockData).setWaterlogged(false);
+        //b.setBlockData(blockData);
+    }
+
 }

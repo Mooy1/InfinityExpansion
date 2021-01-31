@@ -5,30 +5,28 @@ import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.player.MessageUtils;
-import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
+import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.annotation.Nonnull;
+import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Flight
  * 
  */
-public final class InfinityMatrix extends SlimefunItem implements Listener, Soulbound, NotPlaceable {
+public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> implements Listener, Soulbound, NotPlaceable {
     
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "INFINITY_MATRIX",
@@ -36,10 +34,11 @@ public final class InfinityMatrix extends SlimefunItem implements Listener, Soul
             "&fInfinity Matrix",
             "&6Gives Unlimited Flight",
             "&7Right-Click to enable/disable and claim",
-            "&7Crouch and Right-Click to remove ownership"
+            "&7Crouch and Right-Click to remove ownership",
+            "&bSoulbound"
     );
     
-    public InfinityMatrix() { // TODO switch to PDCs
+    public InfinityMatrix() {
         super(Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[] {
                 SmelteryItem.INFINITY, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, SmelteryItem.INFINITY,
                 SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
@@ -48,52 +47,7 @@ public final class InfinityMatrix extends SlimefunItem implements Listener, Soul
                 SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
                 SmelteryItem.INFINITY, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, SmelteryItem.INFINITY
         });
-        PluginUtils.registerEvents(this);
-    }
-
-    @EventHandler
-    private void onRightClick(PlayerRightClickEvent e) {
-        ItemStack item = e.getItem();
-        if (!(SlimefunItem.getByItem(item) instanceof InfinityMatrix)) {
-            return;
-        }
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            return;
-        }
-        List<String> lore = meta.getLore();
-        if (lore == null) {
-            return;
-        }
-
-        Player p = e.getPlayer();
-
-        for (String line : lore) {
-            if (ChatColor.stripColor(line).contains("UUID: ")) {
-                Player owner = Bukkit.getOfflinePlayer(UUID.fromString(ChatColor.stripColor(line).substring(6))).getPlayer();
-                if (!p.equals(owner)) {
-                    MessageUtils.message(p, ChatColor.YELLOW + "You do not own this matrix!");
-                    return;
-                }
-
-                if (p.isSneaking()) { //remove owner
-                    LoreUtils.removeLore(item, -1, "UUID: ", 2);
-                    MessageUtils.message(p, ChatColor.GOLD + "Ownership removed!");
-                    disableFlight(p);
-
-                } else if (p.getAllowFlight()) {
-                    disableFlight(p);
-                } else {
-                    enableFlight(p);
-                }
-
-                return;
-            }
-        }
-        
-        LoreUtils.addLore(item, "", ChatColor.GREEN + "UUID: " + p.getUniqueId().toString());
-        MessageUtils.message(p, ChatColor.GOLD + "Ownership claimed!");
-        enableFlight(p);
+        PluginUtils.registerListener(this);
     }
 
     private static void disableFlight(Player p) {
@@ -105,5 +59,56 @@ public final class InfinityMatrix extends SlimefunItem implements Listener, Soul
         MessageUtils.message(p, ChatColor.GREEN + "Infinity Flight Enabled!");
         p.setAllowFlight(true);
     }
-    
+
+    @Nonnull
+    @Override
+    public ItemUseHandler getItemHandler() {
+        return e -> {
+            ItemStack item = e.getItem();
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = meta.getLore();
+            if (lore == null) {
+                return;
+            }
+
+            Player p = e.getPlayer();
+
+            Iterator<String> iterator = lore.listIterator();
+
+            while (iterator.hasNext()) {
+                String line = iterator.next();
+
+                if (ChatColor.stripColor(line).contains("UUID: ")) {
+                    String uuid = ChatColor.stripColor(line).substring(6);
+
+                    if (!p.getUniqueId().toString().equals(uuid)) {
+                        MessageUtils.message(p, ChatColor.YELLOW + "You do not own this matrix!");
+                        return;
+                    }
+
+                    if (p.isSneaking()) { //remove owner
+                        iterator.remove();
+                        meta.setLore(lore);
+                        item.setItemMeta(meta);
+                        MessageUtils.message(p, ChatColor.GOLD + "Ownership removed!");
+                        disableFlight(p);
+
+                    } else if (p.getAllowFlight()) {
+                        disableFlight(p);
+                    } else {
+                        enableFlight(p);
+                    }
+
+                    return;
+                }
+            }
+
+            lore.add(ChatColor.GREEN + "UUID: " + p.getUniqueId().toString());
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+            MessageUtils.message(p, ChatColor.GOLD + "Ownership claimed!");
+            enableFlight(p);
+        };
+    }
+
 }

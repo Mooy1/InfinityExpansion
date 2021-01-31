@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Crafter;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public final class StorageForge extends Crafter {
+public final class StorageForge extends AbstractCrafter {
     
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "STORAGE_FORGE",

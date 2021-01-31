@@ -72,10 +72,8 @@ public final class Strainer extends SlimefunItem implements NotPlaceable {
     private Strainer(SlimefunItemStack item, ItemStack[] recipe, int speed) {
         super(Categories.BASIC_MACHINES, item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe);
         ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.getPersistentDataContainer().set(KEY, PersistentDataType.INTEGER, speed);
-            item.setItemMeta(meta); 
-        }
+        meta.getPersistentDataContainer().set(KEY, PersistentDataType.INTEGER, speed);
+        item.setItemMeta(meta);
     }
 
     /**
@@ -85,11 +83,7 @@ public final class Strainer extends SlimefunItem implements NotPlaceable {
      */
     public static int getStrainer(@Nullable ItemStack item) {
         if (item != null) {
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta != null) {
-                return meta.getPersistentDataContainer().getOrDefault(Strainer.KEY, PersistentDataType.INTEGER, 0);
-            }
+            return item.getItemMeta().getPersistentDataContainer().getOrDefault(Strainer.KEY, PersistentDataType.INTEGER, 0);
         }
 
         return 0;

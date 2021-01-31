@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
@@ -10,14 +11,9 @@ import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNet;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -34,7 +30,6 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +39,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  */
-public final class InfinityReactor extends AbstractContainer implements EnergyNetProvider, RecipeDisplayItem {
+public final class InfinityReactor extends AbstractGenerator implements RecipeDisplayItem {
     
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "INFINITY_REACTOR",
@@ -87,8 +82,16 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             return true;
         });
     }
+    
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        if (BlockStorage.getLocationInfo(b.getLocation(), "progress") == null) {
+            BlockStorage.addBlockInfo(b, "progress", "0");
+        }
+    }
 
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+    @Override
+    public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : MenuPreset.slotChunk2) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -104,56 +107,30 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
     }
     
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        if (getProgress(b) == null) {
-            setProgress(b, 0);
-        }
-    }
-
-    @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
-        if (flow == ItemTransportFlow.INSERT) {
-            return INPUT_SLOTS;
-        }
-        return new int[0];
-    }
-
-    @Override
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
             String input = StackUtils.getID(item);
-            if (Objects.equals(input, "VOID_INGOT")) {
+            if (CompressedItem.VOID_INGOT.getItemId().equals(input)) {
                 return new int[] {INPUT_SLOTS[1]};
-            } else if (Objects.equals(input, "INFINITE_INGOT")) {
+            } else if (SmelteryItem.INFINITY.getItemId().equals(input)) {
                 return new int[] {INPUT_SLOTS[0]};
             }
         }
 
         return new int[0];
     }
-
-    @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        if (inv.hasViewer() && !SlimefunPlugin.getNetworkManager().getNetworkFromLocation(b.getLocation(), EnergyNet.class).isPresent()) {
-            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.connectToEnergyNet);
-        }
-    }
-
+    
     @Override
     public int getGeneratedOutput(@Nonnull Location l, @Nonnull Config config) {
-        @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
-        if (inv == null) return 0;
-        Block b = l.getBlock();
+        BlockMenu inv = BlockStorage.getInventory(l);
 
-        boolean playerWatching = inv.hasViewer();
-
-        int progress = Integer.parseInt(getProgress(b));
+        int progress = Integer.parseInt(BlockStorage.getLocationInfo(l, "progress"));
 
         if (progress == 0) { //need infinity + void
 
             if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
 
-                if (playerWatching) {
+                if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
                 }
                 return 0;
@@ -162,7 +139,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             
             if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
-                if (playerWatching) {
+                if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
                 }
                 return 0;
@@ -170,7 +147,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             } 
             
             //correct input
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                                 "&aStarting Generation",
                                 "&aTime until infinity ingot needed: " + INFINITY_INTERVAL,
@@ -179,17 +156,17 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             }
             inv.consumeItem(INPUT_SLOTS[0]);
             inv.consumeItem(INPUT_SLOTS[1]);
-            setProgress(b, 1);
+            config.setValue("progress", "1");
             return ENERGY;
             
         }
         
         if (progress >= INFINITY_INTERVAL) { //done
 
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aFinished Generation"));
             }
-            setProgress(b, 0);
+            config.setValue("progress", "0");
             return ENERGY;
 
         } 
@@ -198,7 +175,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
 
             if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
 
-                if (playerWatching) {
+                if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
                 }
                 return 0;
@@ -206,14 +183,14 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             }
             
             //right input
-            if (playerWatching) {
+            if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                                 "&aGenerating...",
                                 "&aTime until infinity ingot needed: " + (INFINITY_INTERVAL - progress),
                                 "&aTime until void ingot needed: " + (VOID_INTERVAL - Math.floorMod(progress, VOID_INTERVAL))
                         ));
             }
-            setProgress(b, progress + 1);
+            config.setValue("progress", String.valueOf(progress + 1));
             inv.consumeItem(INPUT_SLOTS[1]);
             return ENERGY;
 
@@ -221,7 +198,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
         
         //generate
 
-        if (playerWatching) {
+        if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                             "&aGenerating...",
                             "&aTime until infinity ingot needed: " + (INFINITY_INTERVAL - progress),
@@ -229,19 +206,18 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
                     )
             );
         }
-        setProgress(b, progress + 1);
+        config.setValue("progress", String.valueOf(progress + 1));
         return ENERGY;
+    }
+
+    @Override
+    public int getStatus() {
+        return STATUS_SLOT;
     }
 
     @Override
     public int getCapacity() {
         return STORAGE;
-    }
-
-    @Nonnull
-    @Override
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.GENERATOR;
     }
 
     @Nonnull
@@ -262,15 +238,4 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
         return items;
     }
 
-    private void setProgress(Block b, int progress) {
-        setBlockData(b, String.valueOf(progress));
-    }
-
-    private String getProgress(Block b) {
-        return BlockStorage.getLocationInfo(b.getLocation(), "progress");
-    }
-
-    private void setBlockData(Block b, String data) {
-        BlockStorage.addBlockInfo(b, "progress", data);
-    }
 }

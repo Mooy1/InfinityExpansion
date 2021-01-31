@@ -1,21 +1,19 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.objects.AbstractContainer;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNet;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -24,14 +22,13 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -47,7 +44,7 @@ import java.util.Objects;
  * @author J3fftw1
  * for some stuff to work off of
  */
-public final class EnergyGenerator extends AbstractContainer implements EnergyNetProvider {
+public final class EnergyGenerator extends AbstractGenerator {
 
     public static void setup(InfinityExpansion plugin) {
         new EnergyGenerator(Categories.BASIC_MACHINES, HYDRO, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -199,25 +196,18 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
         this.storage = generation * 100;
     }
 
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+    @Override
+    public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i = 0 ; i < 9 ; i++) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(4, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
+    @Nonnull
     @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+    public int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow itemTransportFlow, ItemStack itemStack) {
         return new int[0];
-    }
-
-    @Override
-    public void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        if (inv.hasViewer()) {
-            if (!SlimefunPlugin.getNetworkManager().getNetworkFromLocation(b.getLocation(), EnergyNet.class).isPresent()) {
-                inv.replaceExistingItem(4, MenuPreset.connectToEnergyNet);
-            }
-        }
     }
 
     @Override
@@ -225,6 +215,7 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
 
     }
 
+    @Override
     public int getGeneratedOutput(@Nonnull Location l, @Nonnull Config data) {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return 0;
@@ -259,20 +250,7 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
         if (this.type == Type.WATER) {
 
             // don't check water log every tick
-            if (InfinityExpansion.progressEvery(8)) {
-                BlockData blockData = block.getBlockData();
-
-                if (blockData instanceof Waterlogged) {
-                    Waterlogged waterLogged = (Waterlogged) blockData;
-                    if (waterLogged.isWaterlogged()) {
-                        BlockStorage.addBlockInfo(block.getLocation(), "water_logged", "true");
-                        return Type.WATER;
-                    } else {
-                        BlockStorage.addBlockInfo(block.getLocation(), "water_logged", "false");
-                    }
-                }
-
-            } else if (Objects.equals(BlockStorage.getLocationInfo(block.getLocation(), "water_logged"), "true")) {
+            if (Util.isWaterLogged(block)) {
                 return Type.WATER;
             }
 
@@ -325,6 +303,11 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
     @Override
     public EnergyNetComponentType getEnergyComponentType() {
         return EnergyNetComponentType.GENERATOR;
+    }
+
+    @Override
+    public int getStatus() {
+        return 4;
     }
 
     private enum Type {

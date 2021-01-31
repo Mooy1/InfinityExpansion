@@ -7,8 +7,8 @@ import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
+import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.math.RandomUtils;
-import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -16,6 +16,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import lombok.NonNull;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -127,41 +128,8 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
         });
     }
 
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : MenuPreset.slotChunk1) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.slotChunk1) {
-            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : Util.largeOutputBorder) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
-    }
-
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        if (getProgress(b) == null) {
-            setProgress(b, 0);
-        }
-    }
-
-    @Override
-    public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
-
-        if (flow == ItemTransportFlow.INSERT && SlimefunTag.SAPLINGS.isTagged(item.getType())) {
-            return INPUT_SLOTS;
-        }
-
-        return new int[0];
-    }
-
-    @Override
-    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
+    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
         int progress = Integer.parseInt(getProgress(b));
 
         if (progress == 0) { //try to start
@@ -254,34 +222,62 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
         }
     }
 
-    /**
-     * This method gets the type of input
-     *
-     * @param input input item
-     *
-     * @return type of input
-     */
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        if (getProgress(b) == null) {
+            setProgress(b, 0);
+        }
+    }
+
+    @Override
+    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : Util.largeOutputBorder) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Nonnull
+    @Override
+    public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        }
+
+        if (flow == ItemTransportFlow.INSERT && SlimefunTag.SAPLINGS.isTagged(item.getType())) {
+            return INPUT_SLOTS;
+        }
+
+        return new int[0];
+    }
+
     @Nullable
-    private String getInputType(@NonNull ItemStack input) {
+    private static String getInputType(@NonNull ItemStack input) {
         for (String recipe : INPUTS) {
             if (input.getType() == Material.getMaterial(recipe + "_SAPLING")) return recipe;
         }
         return null;
     }
 
-    private void setType(Block b, String type) {
+    private static void setType(Block b, String type) {
         BlockStorage.addBlockInfo(b, "type", type);
     }
 
-    private String getType(Block b) {
+    private static String getType(Block b) {
         return BlockStorage.getLocationInfo(b.getLocation(), "type");
     }
 
-    private void setProgress(Block b, int progress) {
+    private static void setProgress(Block b, int progress) {
         BlockStorage.addBlockInfo(b, "progress", String.valueOf(progress));
     }
 
-    private String getProgress(Block b) {
+    private static String getProgress(Block b) {
         return BlockStorage.getLocationInfo(b.getLocation(), "progress");
     }
 

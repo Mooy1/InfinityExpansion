@@ -9,18 +9,20 @@ import io.github.mooy1.infinityexpansion.implementation.materials.MiscItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.objects.AbstractMachine;
+import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -99,39 +101,10 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         });
     }
 
-    public void setupInv(@Nonnull BlockMenuPreset  blockMenuPreset) {
-        for (int i = 0; i < 13; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i = 14; i < 18; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed,
-                ChestMenuUtils.getEmptyClickHandler());
-    }
-
-
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        if (getProgress(b) == null) {
-            setProgress(b, 0);
-        }
-    }
-
-    @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
-
-        return new int[0];
-    }
-
-    @Override
-    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
+    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
         int progress = Integer.parseInt(getProgress(b));
-        
+
         if (progress >= TIME) { //reached full progress
 
             ItemStack output = MiscItem.VOID_BIT;
@@ -149,7 +122,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         } else {
             progress+= this.speed;
         }
-        
+
         setProgress(b, progress);
         if (inv.hasViewer()) { //update status
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
@@ -159,12 +132,41 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         }
         return true;
     }
+    
+    @Override
+    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        for (int i = 0; i < 13; i++) {
+            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i = 14; i < 18; i++) {
+            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
 
-    private void setProgress(Block b, int progress) {
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Nonnull
+    @Override
+    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
+        if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        }
+
+        return new int[0];
+    }
+
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        if (getProgress(b) == null) {
+            setProgress(b, 0);
+        }
+    }
+    
+    private static void setProgress(Block b, int progress) {
         BlockStorage.addBlockInfo(b, "progress", String.valueOf(progress));
     }
 
-    private String getProgress(Block b) {
+    private static String getProgress(Block b) {
         return BlockStorage.getLocationInfo(b.getLocation(), "progress");
     }
 

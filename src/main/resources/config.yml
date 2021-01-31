@@ -2,12 +2,8 @@
 # 
 # balance-options:
 # 
-# vanilla-economy-scale: (default 1) (range .1 - 10)
-# Decrease or increase this depending on the scale of your economy.
-# By default, this value is perfect for a server with some slimefun addons, some other plugins, spawners, and kits
-# RECOMMENDED NOT TO CHANGE THIS
-# If it is super easy to get lots of items, slightly increase this.
-# If it is super hard to get lots of items, slightly decrease this.
+# difficulty: (default 1) (range .1 - 10)
+# the overall difficulty of this addon, affecting energy generation and consumption, item production, and recipe costs
 # 
 # mob-simulation-xp-chance: (default 2 (50%)) (range 1-10)
 # amount of ticks average for a simulation chamber to output xp, higher number is lower change, at default its 1/2 or 50%
@@ -18,26 +14,38 @@
 # 
 # -----
 # 
+# advanced-anvil-max-levels: 
+# These are the maximum level of enchants that can be obtained by combining 2 of the same enchant of the same level.
+#
+# -----
+# 
 # storage-unit-options: 
 # display-signs: (default true)
 # if true, signs connected to storage units will update wither the stored item and amount, this may increase timings
-# 
-# sign-refresh-ticks: (default 16) (range 4-32)
-# ticks before refreshing signs, smaller number increases timings.
 # 
 # -----
 # 
 # infinity-enchant-levels:
 # levels of infinity gear. this will not affect existing items. adding more enchants wont have any effect, only change levels. 
-# KEEP IN MIND PROTECTION LEVELS PAST 5 ARE PURELY COSMETIC AND ARE THE SAME AS 5.
+# KEEP IN MIND PROTECTION LEVELS PAST 10 ARE PURELY COSMETIC AND ARE THE SAME AS 5.
 # 
 # -----
 balance-options:
-  vanilla-economy-scale: 1.0
+  difficulty: 1.0
   mob-simulation-xp-chance: 2
   allow-sf-item-transform: false
 storage-unit-options:
   display-signs: true
+advanced-anvil-max-levels:
+  sharpness: 9
+  protection: 10
+  fortune: 6
+  efficiency: 7
+  fire-aspect: 6
+  power: 7
+  thorns: 13
+  looting: 6
+  unbreaking: 13
 infinity-enchant-levels:
   blade:
     sharpness: 20

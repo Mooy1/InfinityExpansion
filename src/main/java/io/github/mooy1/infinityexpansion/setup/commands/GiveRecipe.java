@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.setup.commands;
 
-import io.github.mooy1.infinitylib.command.LibCommand;
+import io.github.mooy1.infinitylib.command.AbstractCommand;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiveRecipe extends LibCommand {
+public class GiveRecipe extends AbstractCommand {
     public GiveRecipe() {
         super("giverecipe", "gives all the items in a Slimefun item recipe", true);
     }

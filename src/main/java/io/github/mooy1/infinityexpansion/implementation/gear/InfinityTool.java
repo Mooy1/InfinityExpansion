@@ -75,38 +75,32 @@ public final class InfinityTool extends SlimefunItem implements Soulbound, NotPl
     public static final SlimefunItemStack SHIELD = new SlimefunItemStack(
             "INFINITY_SHIELD",
             Material.SHIELD,
-            "&bCosmic Aegis",
-            "&7&o"
+            "&bCosmic Aegis"
     );
     public static final SlimefunItemStack BLADE = new SlimefunItemStack(
             "INFINITY_BLADE",
             Material.NETHERITE_SWORD,
-            "&bBlade of the Cosmos",
-            "&b&oEdge of infinity"
+            "&bBlade of the Cosmos"
     );
     public static final SlimefunItemStack PICKAXE = new SlimefunItemStack(
             "INFINITY_PICKAXE",
             Material.NETHERITE_PICKAXE,
-            "&9World Breaker",
-            "&3&oThe end of the world"
+            "&9World Breaker"
     );
     public static final SlimefunItemStack AXE = new SlimefunItemStack(
             "INFINITY_AXE",
             Material.NETHERITE_AXE,
-            "&4Nature's Ruin",
-            "&c&oThe embodiment of fury"
+            "&4Nature's Ruin"
     );
     public static final SlimefunItemStack SHOVEL = new SlimefunItemStack(
             "INFINITY_SHOVEL",
             Material.NETHERITE_SHOVEL,
-            "&aMountain Eater",
-            "&2&oYum"
+            "&aMountain Eater"
     );
     public static final SlimefunItemStack BOW = new SlimefunItemStack(
             "INFINITY_BOW",
             Material.BOW,
-            "&6Sky Piercer",
-            "&e&oThe longbow of the Heavens"
+            "&6Sky Piercer"
     );
     
     private InfinityTool(@Nonnull SlimefunItemStack stack, ItemStack[] recipe) {

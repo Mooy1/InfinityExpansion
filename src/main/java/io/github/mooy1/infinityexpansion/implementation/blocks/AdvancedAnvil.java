@@ -2,10 +2,11 @@ package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
@@ -15,7 +16,6 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -32,13 +32,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Combines slimefun items, exceeds vanilla anvil limits
  *
  * @author Mooy1
  */
-public final class AdvancedAnvil extends AbstractMachine {
+public final class AdvancedAnvil extends AbstractEnergyCrafter {
 
     public static final int ENERGY = 100_000;
     
@@ -49,21 +50,11 @@ public final class AdvancedAnvil extends AbstractMachine {
             "&7Combines tools and gear enchants and sometimes upgrades them",
             "&bWorks with Slimefun items",
             "",
-            LorePreset.energy(AdvancedAnvil.ENERGY) + "per use"
+            LorePreset.energy(ENERGY) + "per use"
 
     );
     
-    private static final Map<Enchantment, Integer> UPGRADEABLE = new HashMap<>();
-    
-    static {
-        UPGRADEABLE.put(Enchantment.DAMAGE_ALL, 9);
-        UPGRADEABLE.put(Enchantment.DAMAGE_ARTHROPODS, 9);
-        UPGRADEABLE.put(Enchantment.DAMAGE_UNDEAD, 9);
-        UPGRADEABLE.put(Enchantment.PROTECTION_ENVIRONMENTAL, 10);
-        UPGRADEABLE.put(Enchantment.DURABILITY, 13);
-        UPGRADEABLE.put(Enchantment.LOOT_BONUS_MOBS, 6);
-        UPGRADEABLE.put(Enchantment.LOOT_BONUS_BLOCKS, 6);
-    }
+    private static final Map<Enchantment, Integer> MAX_LEVELS = Util.getEnchants(Objects.requireNonNull(InfinityExpansion.getInstance().getConfig().getConfigurationSection("advanced-anvil-max-levels")));
 
     private static final int[] INPUT_SLOTS = {
             MenuPreset.slot1, MenuPreset.slot2
@@ -86,7 +77,7 @@ public final class AdvancedAnvil extends AbstractMachine {
                 MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE,
                 MachineItem.MACHINE_PLATE, new ItemStack(Material.ANVIL), MachineItem.MACHINE_PLATE,
                 MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
-        }, STATUS_SLOT, ENERGY);
+        }, ENERGY, STATUS_SLOT);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -101,7 +92,8 @@ public final class AdvancedAnvil extends AbstractMachine {
         });
     }
 
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
+    @Override
+    public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : MenuPreset.slotChunk3) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -122,45 +114,22 @@ public final class AdvancedAnvil extends AbstractMachine {
         }
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
     }
-
-    @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
-        return new int[0];
-    }
-
-    @Override
-    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
-        ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);
-        ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
-
-        if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid items!"));
-            return false;
-        }
-
-        ItemStack output = getOutput(item1, item2);
-
-        if (output == null) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNo upgrades!"));
-            return false;
-        }
-
-        inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output));
-        
-        return false;
-    }
-
+    
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         menu.addMenuClickHandler(STATUS_SLOT, (player, i, itemStack, clickAction) -> {
-            craft(menu, b.getLocation(), player);
+            craft(menu, b, player);
             return false;
         });
     }
 
-    private void craft(BlockMenu inv, Location l, Player p) {
+    private void craft(BlockMenu inv, Block b, Player p) {
+        Location l = b.getLocation();
         if (getCharge(l) < ENERGY) { //not enough energy
-            MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Not enough energy!", ChatColor.GREEN + "Charge: " + ChatColor.RED + getCharge(l) + ChatColor.GREEN + "/" + ENERGY + " J");
+            MessageUtils.messageWithCD(p, 1000,
+                    ChatColor.RED + "Not enough energy!",
+                    ChatColor.GREEN + "Charge: " + ChatColor.RED + getCharge(l) + ChatColor.GREEN + "/" + ENERGY + " J"
+            );
             return;
         }
 
@@ -189,30 +158,21 @@ public final class AdvancedAnvil extends AbstractMachine {
         inv.consumeItem(INPUT_SLOT2, 1);
         inv.pushItem(output, OUTPUT_SLOTS);
         removeCharge(l, ENERGY);
-        tick(l.getBlock() , inv); //update stuff
+        update(inv);
     }
 
     @Nullable
-    private ItemStack getOutput(@Nonnull ItemStack item1, @Nonnull ItemStack item2) {
-        ItemMeta meta1 = item1.getItemMeta();
-        ItemMeta meta2 = item2.getItemMeta();
-        
-        if (meta1 == null || meta2 == null) {
-            return null;
-        }
-        
-        Map<Enchantment, Integer> enchants1 = getEnchants(meta1);
-        Map<Enchantment, Integer> enchants2 = getEnchants(meta2);
-        
+    private static ItemStack getOutput(@Nonnull ItemStack item1, @Nonnull ItemStack item2) {
+        Map<Enchantment, Integer> enchants1 = getEnchants(item1.getItemMeta());
+        Map<Enchantment, Integer> enchants2 = getEnchants(item2.getItemMeta());
         if (enchants1.size() == 0 && enchants2.size() == 0) {
             return null;
         }
-            
         return combineEnchants(Maps.difference(enchants1, enchants2), item1, item2);
     }
     
     @Nonnull
-    private Map<Enchantment, Integer> getEnchants(@Nonnull ItemMeta meta) {
+    private static Map<Enchantment, Integer> getEnchants(@Nonnull ItemMeta meta) {
         if (meta instanceof EnchantmentStorageMeta) {
             EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
             if (book.hasStoredEnchants()) {
@@ -225,7 +185,7 @@ public final class AdvancedAnvil extends AbstractMachine {
         return new HashMap<>();
     }
     
-    private void setEnchants(@Nonnull ItemStack item, @Nonnull ItemMeta meta, @Nonnull Map<Enchantment, Integer> enchants) {
+    private static void setEnchants(@Nonnull ItemStack item, @Nonnull ItemMeta meta, @Nonnull Map<Enchantment, Integer> enchants) {
         if (meta instanceof EnchantmentStorageMeta) {
             EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
             for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
@@ -239,13 +199,11 @@ public final class AdvancedAnvil extends AbstractMachine {
         }
     }
     
-    private ItemStack combineEnchants(@Nonnull MapDifference<Enchantment, Integer> dif, @Nonnull ItemStack item1, @Nonnull ItemStack item2) {
+    private static ItemStack combineEnchants(@Nonnull MapDifference<Enchantment, Integer> dif, @Nonnull ItemStack item1, @Nonnull ItemStack item2) {
         ItemStack item = item1.clone();
         item.setAmount(1);
         ItemMeta meta = item.getItemMeta();
-        
-        if (meta == null) return null;
-        
+
         Map<Enchantment, Integer> enchants = new HashMap<>();
         Map<Enchantment, Integer> common = dif.entriesInCommon();
         Map<Enchantment, MapDifference.ValueDifference<Integer>> differing = dif.entriesDiffering();
@@ -255,7 +213,7 @@ public final class AdvancedAnvil extends AbstractMachine {
 
         //upgrades (same enchant and level)
         for (Map.Entry<Enchantment, Integer> e : common.entrySet()) {
-            if (UPGRADEABLE.containsKey(e.getKey()) && e.getValue() < UPGRADEABLE.get(e.getKey())) {
+            if (MAX_LEVELS.containsKey(e.getKey()) && e.getValue() < MAX_LEVELS.get(e.getKey())) {
                 enchants.put(e.getKey(), e.getValue() + 1);
                 changed = true;
             }
@@ -289,7 +247,24 @@ public final class AdvancedAnvil extends AbstractMachine {
     }
     
     @Override
-    public int getCapacity() {
-        return ENERGY * 2;
+    public void update(@Nonnull BlockMenu inv) {
+        ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);
+        ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
+
+        if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid items!"));
+            return;
+        }
+
+        ItemStack output = getOutput(item1, item2);
+
+        if (output == null) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNo upgrades!"));
+            return;
+        }
+
+        inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output));
+
     }
+
 }

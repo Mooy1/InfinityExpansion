@@ -7,19 +7,21 @@ import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
+import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.math.RandomUtils;
-import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
@@ -116,39 +118,8 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
         });
     }
 
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : MenuPreset.slotChunk1) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.slotChunk1) {
-            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : Util.largeOutputBorder) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
-    }
-
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        if (getProgress(b) == null) {
-            setProgress(b, 0);
-        }
-    }
-
-    @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
-        if (flow == ItemTransportFlow.INSERT) {
-            return INPUT_SLOTS;
-        } else if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        } else {
-            return new int[0];
-        }
-    }
-    
-    @Override
-    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
+    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
         int progress = Integer.parseInt(getProgress(b));
 
         if (progress == 0) { //try to start
@@ -191,7 +162,7 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
                     return true;
                 }
             }
-            
+
             return false;
         }
 
@@ -234,15 +205,42 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
 
         }
     }
+    
+    @Override
+    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : Util.largeOutputBorder) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+    }
 
-    /**
-     * This method gets the input type
-     *
-     * @param input input item
-     * @return type if any
-     */
+    @Nonnull
+    @Override
+    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
+        if (flow == ItemTransportFlow.INSERT) {
+            return INPUT_SLOTS;
+        } else if (flow == ItemTransportFlow.WITHDRAW) {
+            return OUTPUT_SLOTS;
+        } else {
+            return new int[0];
+        }
+    }
+
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        if (getProgress(b) == null) {
+            setProgress(b, 0);
+        }
+    }
+    
     @Nullable
-    private String getInputType(Material input) {
+    private static String getInputType(Material input) {
         for (int i = 0; i < INPUTS.length; i++) {
             if (input == INPUTS[i]) return String.valueOf(i);
         }
@@ -250,27 +248,27 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
         return null;
     }
 
-    private void setType(Block b, String type) {
+    private static void setType(Block b, String type) {
         setBlockData(b, "type", type);
     }
 
-    private String getType(Block b) {
+    private static String getType(Block b) {
         return getBlockData(b.getLocation(), "type");
     }
 
-    private void setProgress(Block b, int progress) {
+    private static void setProgress(Block b, int progress) {
         setBlockData(b, "progress", String.valueOf(progress));
     }
 
-    private String getProgress(Block b) {
+    private static String getProgress(Block b) {
         return getBlockData(b.getLocation(), "progress");
     }
 
-    private void setBlockData(Block b, String key, String data) {
+    private static void setBlockData(Block b, String key, String data) {
         BlockStorage.addBlockInfo(b, key, data);
     }
 
-    private String getBlockData(Location l, String key) {
+    private static String getBlockData(Location l, String key) {
         return BlockStorage.getLocationInfo(l, key);
     }
     

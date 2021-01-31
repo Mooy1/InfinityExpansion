@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
-import io.github.mooy1.infinityexpansion.implementation.abstracts.Crafter;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class MobDataInfuser extends Crafter implements EnergyNetComponent {
+public final class MobDataInfuser extends AbstractCrafter implements EnergyNetComponent {
     
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "DATA_INFUSER",

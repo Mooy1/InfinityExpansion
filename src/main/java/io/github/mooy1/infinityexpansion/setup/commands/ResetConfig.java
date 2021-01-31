@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.setup.commands;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.command.LibCommand;
+import io.github.mooy1.infinitylib.command.AbstractCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class ResetConfig extends LibCommand {
+public class ResetConfig extends AbstractCommand {
+    
     public ResetConfig() {
         super("resetconfig", "resets the config, all current options will be set to default, this might not work", true);
     }

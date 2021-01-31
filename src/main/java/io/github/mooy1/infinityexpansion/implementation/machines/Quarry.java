@@ -9,19 +9,22 @@ import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.math.RandomUtils;
-import io.github.mooy1.infinitylib.objects.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -42,63 +45,65 @@ import java.util.List;
  */
 public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
+    private static final int INTERVAL = Math.max(2, Math.min(32, (int) (8 * InfinityExpansion.getDifficulty())));
+    
     public static void setup(InfinityExpansion plugin) {
         new Quarry(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 MachineItem.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, MachineItem.MAGSTEEL_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 MachineItem.MACHINE_CIRCUIT,MachineItem.MACHINE_CORE,MachineItem.MACHINE_CIRCUIT
-        }, 300, 1, 10, new ItemStack[] {
-                makeOutput(Material.COAL, 4),
-                makeOutput(Material.IRON_ORE, 1),
-                makeOutput(Material.COAL, 4),
-                makeOutput(Material.GOLD_ORE, 1),
-                makeOutput(Material.LAPIS_LAZULI, 4),
-                makeOutput(Material.EMERALD, 1),
-                makeOutput(Material.DIAMOND, 1),
-                makeOutput(Material.REDSTONE, 4),
+        }, 300, 1, 8, new ItemStack[] {
+                new ItemStack(Material.COAL, 4),
+                new ItemStack(Material.IRON_ORE, 1),
+                new ItemStack(Material.COAL, 4),
+                new ItemStack(Material.GOLD_ORE, 1),
+                new ItemStack(Material.LAPIS_LAZULI, 4),
+                new ItemStack(Material.EMERALD, 1),
+                new ItemStack(Material.DIAMOND, 1),
+                new ItemStack(Material.REDSTONE, 4),
         }).register(plugin);
         
         new Quarry(Categories.ADVANCED_MACHINES, ADVANCED, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 MachineItem.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, MachineItem.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), BASIC, new ItemStack(Material.DIAMOND_PICKAXE),
                 MachineItem.MACHINE_CIRCUIT,MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
-        }, 900, 2, 8, new ItemStack[] {
-                makeOutput(Material.COAL, 8),
-                makeOutput(Material.IRON_INGOT, 2),
-                makeOutput(Material.NETHERRACK, 2),
-                makeOutput(Material.NETHERRACK, 2),
-                makeOutput(Material.QUARTZ, 8),
-                makeOutput(Material.GOLD_INGOT, 2),
-                makeOutput(Material.COAL, 8),
-                makeOutput(Material.LAPIS_LAZULI, 8),
-                makeOutput(Material.EMERALD, 2),
-                makeOutput(Material.DIAMOND, 2),
-                makeOutput(Material.REDSTONE, 8),
-                makeOutput(Material.NETHERITE_INGOT, 1)
+        }, 900, 2, 6, new ItemStack[] {
+                new ItemStack(Material.COAL, 8),
+                new ItemStack(Material.IRON_INGOT, 2),
+                new ItemStack(Material.NETHERRACK, 2),
+                new ItemStack(Material.NETHERRACK, 2),
+                new ItemStack(Material.QUARTZ, 8),
+                new ItemStack(Material.GOLD_INGOT, 2),
+                new ItemStack(Material.COAL, 4),
+                new ItemStack(Material.LAPIS_LAZULI, 8),
+                new ItemStack(Material.EMERALD, 2),
+                new ItemStack(Material.DIAMOND, 2),
+                new ItemStack(Material.REDSTONE, 8),
+                new ItemStack(Material.NETHERITE_INGOT, 1)
         }).register(plugin);
         
         new Quarry(Categories.ADVANCED_MACHINES, VOID, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 CompressedItem.VOID_INGOT, SlimefunExtension.VOID_CAPACITOR, CompressedItem.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), ADVANCED, new ItemStack(Material.NETHERITE_PICKAXE),
                 MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE,MachineItem.MACHINE_CIRCUIT
-        }, 3600, 4, 6, new ItemStack[] {
-                makeOutput(Material.COAL, 16),
-                makeOutput(SlimefunItems.SIFTED_ORE, 6),
-                makeOutput(Material.COBBLESTONE, 4),
-                makeOutput(Material.IRON_INGOT, 4),
-                makeOutput(Material.NETHERRACK, 4),
-                makeOutput(Material.NETHERRACK, 4),
-                makeOutput(Material.QUARTZ, 16),
-                makeOutput(Material.COAL, 16),
-                makeOutput(Material.GOLD_INGOT, 4),
-                makeOutput(Material.COAL, 16),
-                makeOutput(SlimefunItems.SIFTED_ORE, 6),
-                makeOutput(Material.LAPIS_LAZULI, 16),
-                makeOutput(Material.EMERALD, 4),
-                makeOutput(Material.DIAMOND, 4),
-                makeOutput(Material.REDSTONE, 16),
-                makeOutput(SlimefunItems.GOLD_24K, 4),
-                makeOutput(Material.NETHERITE_INGOT, 2),
+        }, 3600, 4, 4, new ItemStack[] {
+                new ItemStack(Material.COAL, 16),
+                new CustomItem(SlimefunItems.SIFTED_ORE, 6),
+                new ItemStack(Material.COBBLESTONE, 4),
+                new ItemStack(Material.IRON_INGOT, 4),
+                new ItemStack(Material.NETHERRACK, 4),
+                new ItemStack(Material.NETHERRACK, 4),
+                new ItemStack(Material.QUARTZ, 16),
+                new ItemStack(Material.COAL, 16),
+                new ItemStack(Material.GOLD_INGOT, 4),
+                new ItemStack(Material.COAL, 16),
+                new CustomItem(SlimefunItems.SIFTED_ORE, 6),
+                new ItemStack(Material.LAPIS_LAZULI, 16),
+                new ItemStack(Material.EMERALD, 4),
+                new ItemStack(Material.DIAMOND, 4),
+                new ItemStack(Material.REDSTONE, 16),
+                new CustomItem(SlimefunItems.GOLD_24K, 4),
+                new ItemStack(Material.NETHERITE_INGOT, 2),
         }).register(plugin);
         
         new Quarry(Categories.INFINITY_CHEAT,INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
@@ -108,28 +113,28 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
                 CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT,
                 CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT,
                 CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT
-        }, 36000, 16, 4, new ItemStack[] {
-                makeOutput(Material.COAL, 64),
-                makeOutput(Material.IRON_INGOT, 16),
-                makeOutput(Material.NETHERRACK, 16),
-                makeOutput(Material.NETHERRACK, 16),
-                makeOutput(Material.QUARTZ, 64),
-                makeOutput(Material.COAL, 64),
-                makeOutput(Material.GOLD_INGOT, 16),
-                makeOutput(SlimefunItems.MAGNESIUM_INGOT, 16),
-                makeOutput(SlimefunItems.COPPER_INGOT, 16),
-                makeOutput(SlimefunItems.ZINC_INGOT, 16),
-                makeOutput(SlimefunItems.TIN_INGOT, 16),
-                makeOutput(SlimefunItems.ALUMINUM_INGOT, 16),
-                makeOutput(SlimefunItems.SILVER_INGOT, 16),
-                makeOutput(SlimefunItems.LEAD_INGOT, 16),
-                makeOutput(Material.LAPIS_LAZULI, 64),
-                makeOutput(Material.EMERALD, 16),
-                makeOutput(Material.COAL, 64),
-                makeOutput(Material.DIAMOND, 16),
-                makeOutput(Material.REDSTONE, 64),
-                makeOutput(SlimefunItems.GOLD_24K, 16),
-                makeOutput(Material.NETHERITE_INGOT, 8),
+        }, 36000, 16, 2, new ItemStack[] {
+                new ItemStack(Material.COAL, 64),
+                new ItemStack(Material.IRON_INGOT, 16),
+                new ItemStack(Material.NETHERRACK, 16),
+                new ItemStack(Material.NETHERRACK, 16),
+                new ItemStack(Material.QUARTZ, 64),
+                new ItemStack(Material.COAL, 64),
+                new ItemStack(Material.GOLD_INGOT, 16),
+                new CustomItem(SlimefunItems.MAGNESIUM_INGOT, 16),
+                new CustomItem(SlimefunItems.COPPER_INGOT, 16),
+                new CustomItem(SlimefunItems.ZINC_INGOT, 16),
+                new CustomItem(SlimefunItems.TIN_INGOT, 16),
+                new CustomItem(SlimefunItems.ALUMINUM_INGOT, 16),
+                new CustomItem(SlimefunItems.SILVER_INGOT, 16),
+                new CustomItem(SlimefunItems.LEAD_INGOT, 16),
+                new ItemStack(Material.LAPIS_LAZULI, 64),
+                new ItemStack(Material.EMERALD, 16),
+                new ItemStack(Material.COAL, 64),
+                new ItemStack(Material.DIAMOND, 16),
+                new ItemStack(Material.REDSTONE, 64),
+                new CustomItem(SlimefunItems.GOLD_24K, 16),
+                new ItemStack(Material.NETHERITE_INGOT, 8),
         }).register(plugin);
     }
     
@@ -180,6 +185,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
 
     private final ItemStack cobble;
     private final int chance;
+    private final int energy;
     private final ItemStack[] outputs;
     
     private Quarry(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed, int chance, ItemStack[] outputs) {
@@ -187,6 +193,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         this.cobble = new ItemStack(Material.COBBLESTONE, speed);
         this.chance = chance;
         this.outputs = outputs;
+        this.energy = energy;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -200,7 +207,22 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     }
 
     @Override
-    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        for (int i = 0 ; i < 4 ; i++) {
+            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i = 5 ; i < 9 ; i++) {
+            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i = 45 ; i < 54 ; i++) {
+            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Nonnull
+    @Override
+    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
         if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
         }
@@ -211,15 +233,33 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
     }
-
+    
     @Override
-    public boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
+    public int getCapacity() {
+        return this.energy * 2;
+    }
 
-        if (getCharge(b.getLocation()) < this.energy) {
-            if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughEnergy);
-            }
-            return false;
+    @Nonnull
+    @Override
+    public List<ItemStack> getDisplayRecipes() {
+        List<ItemStack> items = new ArrayList<>();
+
+        items.add(this.cobble);
+        items.addAll(Arrays.asList(this.outputs));
+
+        return items;
+    }
+
+    @Nonnull
+    @Override
+    public String getRecipeSectionLabel(@Nonnull Player p) {
+        return "&7Mines:";
+    }
+    
+    @Override
+    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
+        if ((PluginUtils.getCurrentTick() % INTERVAL) != 0) {
+            return true;
         }
 
         ItemStack outputItem;
@@ -246,50 +286,6 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         }
         inv.pushItem(outputItem, OUTPUT_SLOTS);
         return true;
-    }
-
-    @Override
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i = 0 ; i < 4 ; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i = 5 ; i < 9 ; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i = 45 ; i < 54 ; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
-    }
-
-    @Override
-    public int getCapacity() {
-        return this.energy * 2;
-    }
-
-    @Nonnull
-    @Override
-    public List<ItemStack> getDisplayRecipes() {
-        List<ItemStack> items = new ArrayList<>();
-
-        items.add(this.cobble);
-        items.addAll(Arrays.asList(this.outputs));
-
-        return items;
-    }
-
-    @Nonnull
-    @Override
-    public String getRecipeSectionLabel(@Nonnull Player p) {
-        return "&7Mines:";
-    }
-    
-    private static ItemStack makeOutput(Material material, int amount) {
-        return new ItemStack(material, (int) (InfinityExpansion.getVanillaScale() * Math.ceil((float) amount / 2)));
-    }
-
-    private static ItemStack makeOutput(SlimefunItemStack stack, int amount) {
-        return new SlimefunItemStack(stack, amount);
     }
 
 }
