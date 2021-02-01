@@ -33,7 +33,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         
         @SuppressWarnings("unused") final Metrics metrics = new Metrics(this, 8991);
 
-        difficulty = ConfigUtils.getOrDefault(getConfig(), "balance-options.vanilla-economy-scale", .1, 10, 1);
+        difficulty = ConfigUtils.getOrDefault(getConfig(), "balance-options.difficulty", .1, 10, 1);
 
         Setup.setup(this);
         
