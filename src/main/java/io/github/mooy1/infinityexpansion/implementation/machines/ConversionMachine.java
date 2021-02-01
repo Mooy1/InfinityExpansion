@@ -209,19 +209,6 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         });
     }
 
-    public void setupInv(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : MenuPreset.slotChunk1) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.slotChunk2) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.slotChunk3) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
-    }
-
     @Nonnull
     @Override
     public int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack itemStack) {
@@ -300,8 +287,17 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
     }
 
     @Override
-    public void setupMenu(@Nonnull BlockMenuPreset preset) {
-
+    public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        for (int i : MenuPreset.slotChunk1) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : MenuPreset.slotChunk2) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : MenuPreset.slotChunk3) {
+            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
 }

@@ -48,30 +48,27 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
                 CompressedItem.COBBLE_5, MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE, CompressedItem.COBBLE_5,
                 CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5
         });
-    }
 
-    @Override
-    public void preRegister() {
         this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) { PoweredBedrock.this.tick(b); }
+            public void tick(Block b, SlimefunItem sf, Config data) {
+                if ((PluginUtils.getCurrentTick() & 3) == 0  || b.getType() == Material.AIR) {
+                    return;
+                }
+                Location l = b.getLocation();
+                if (getCharge(l) < ENERGY) {
+                    b.setType(Material.NETHERITE_BLOCK);
+                } else {
+                    b.setType(Material.BEDROCK);
+                }
+                removeCharge(l, ENERGY);
+            }
 
-            public boolean isSynchronized() { return true; }
+            public boolean isSynchronized() {
+                return true;
+            }
         });
     }
-
-    public void tick(Block b) {
-        if ((PluginUtils.getCurrentTick() & 3) == 0  || b.getType() == Material.AIR) {
-            return;
-        }
-        Location l = b.getLocation();
-        if (getCharge(l) < ENERGY) {
-            b.setType(Material.NETHERITE_BLOCK);
-        } else {
-            b.setType(Material.BEDROCK);
-        }
-        removeCharge(l, ENERGY);
-    }
-
+    
     @Nonnull
     @Override
     public EnergyNetComponentType getEnergyComponentType() {

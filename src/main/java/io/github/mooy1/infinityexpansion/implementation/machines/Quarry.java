@@ -217,7 +217,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         for (int i = 45 ; i < 54 ; i++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MINING, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull
@@ -256,6 +256,8 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         return "&7Mines:";
     }
     
+    private static final ItemStack MINING = new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMining...");
+    
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
         if ((PluginUtils.getCurrentTick() % INTERVAL) != 0) {
@@ -267,7 +269,9 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         if (RandomUtils.chanceIn(this.chance)) {
             outputItem = RandomUtils.randomOutput(this.outputs);
             Material outputType = outputItem.getType();
-            if (b.getWorld().getEnvironment() != World.Environment.NETHER && (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)) {
+            if (b.getWorld().getEnvironment() != World.Environment.NETHER &&
+                    (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)
+            ) {
                 outputItem = this.cobble.clone();
             }
         } else {
@@ -282,7 +286,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         }
 
         if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMining..."));
+            inv.replaceExistingItem(STATUS_SLOT, MINING);
         }
         inv.pushItem(outputItem, OUTPUT_SLOTS);
         return true;
