@@ -38,7 +38,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -150,7 +149,10 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         return false;
     }
 
-    public static boolean isVeinMiner(@Nonnull ItemStack item) {
+    public static boolean isVeinMiner(@Nullable ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return false;
+        }
         return item.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.BYTE);
     }
     
@@ -175,8 +177,8 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
             if (lore != null) {
                 lore.remove(LORE);
                 meta.setLore(lore);
+                item.setItemMeta(meta);
             }
-            item.setItemMeta(meta);
         }
     }
     
