@@ -5,6 +5,7 @@ import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
@@ -94,16 +95,16 @@ public final class Util {
         }
     }
     
-    public static int getIntData(String key, Config config) {
+    public static int getIntData(String key, Config config, Location block) {
         String val = config.getString(key);
         if (val == null) {
-            config.setValue(key, "0");
+            BlockStorage.addBlockInfo(block, key, "0");
             return 0;
         }
         try {
             return Integer.parseInt(val);
         } catch (NumberFormatException x) {
-            config.setValue(key, "0");
+            BlockStorage.addBlockInfo(block, key, "0");
             return 0;
         }
     }

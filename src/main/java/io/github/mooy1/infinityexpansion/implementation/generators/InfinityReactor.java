@@ -156,7 +156,7 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
             }
             inv.consumeItem(INPUT_SLOTS[0]);
             inv.consumeItem(INPUT_SLOTS[1]);
-            config.setValue("progress", "1");
+            BlockStorage.addBlockInfo(l, "progress", "1");
             return ENERGY;
             
         }
@@ -166,7 +166,7 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aFinished Generation"));
             }
-            config.setValue("progress", "0");
+            BlockStorage.addBlockInfo(l, "progress", "0");
             return ENERGY;
 
         } 
@@ -190,7 +190,7 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
                                 "&aTime until void ingot needed: " + (VOID_INTERVAL - Math.floorMod(progress, VOID_INTERVAL))
                         ));
             }
-            config.setValue("progress", String.valueOf(progress + 1));
+            BlockStorage.addBlockInfo(l, "progress", String.valueOf(progress + 1));
             inv.consumeItem(INPUT_SLOTS[1]);
             return ENERGY;
 
@@ -206,7 +206,7 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
                     )
             );
         }
-        config.setValue("progress", String.valueOf(progress + 1));
+        BlockStorage.addBlockInfo(l, "progress", String.valueOf(progress + 1));
         return ENERGY;
     }
 

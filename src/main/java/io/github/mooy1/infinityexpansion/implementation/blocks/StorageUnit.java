@@ -147,7 +147,7 @@ public final class StorageUnit extends AbstractTicker {
         
         Config config = BlockStorage.getLocationInfo(l);
 
-        int stored = Util.getIntData(STORED_AMOUNT, config);
+        int stored = Util.getIntData(STORED_AMOUNT, config, l);
 
         if (stored > 0) {
             String id = config.getString(STORED_ITEM);
@@ -264,9 +264,9 @@ public final class StorageUnit extends AbstractTicker {
     @Override
     public void tick(@Nonnull BlockMenu menu, @Nonnull Block block, @Nonnull Config config) {
         String id = config.getString(STORED_ITEM);
-        int amount = Util.getIntData(STORED_AMOUNT, config);
+        int amount = Util.getIntData(STORED_AMOUNT, config, block.getLocation());
         ItemStack stored;
-
+        
         // input
         ItemStack input = menu.getItemInSlot(INPUT_SLOT);
         if (input != null) {
@@ -368,11 +368,10 @@ public final class StorageUnit extends AbstractTicker {
         if (DISPLAY_SIGNS && (PluginUtils.getCurrentTick() & 15) == 0) {
             for (Block sign : SIGNS.computeIfAbsent(block, k -> {
                 List<Block> list = new ArrayList<>(8);
-                Location l = block.getLocation();
-                list.add(l.clone().add(1, 0, 0).getBlock());
-                list.add(l.clone().add(-1, 0, 0).getBlock());
-                list.add(l.clone().add(0, 0, 1).getBlock());
-                list.add(l.clone().add(0, 0, -1).getBlock());
+                list.add(block.getRelative(1, 0, 0));
+                list.add(block.getRelative(-1, 0, 0));
+                list.add(block.getRelative(0, 0, 1));
+                list.add(block.getRelative(0, 0, -1));
                 return list;
             })) {
                 if (SlimefunTag.WALL_SIGNS.isTagged(sign.getType())) {
@@ -390,9 +389,9 @@ public final class StorageUnit extends AbstractTicker {
             }
         }
 
-        // set data
-        config.setValue(STORED_AMOUNT, String.valueOf(amount));
-        config.setValue(STORED_ITEM, id);
+        // set data, don't use config cuz that bugs it out lul
+        BlockStorage.addBlockInfo(block, STORED_AMOUNT, String.valueOf(amount));
+        BlockStorage.addBlockInfo(block, STORED_ITEM, id);
     }
 
 }
