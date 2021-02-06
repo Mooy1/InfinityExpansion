@@ -6,7 +6,6 @@ import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.misc.Pair;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
@@ -21,6 +20,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -77,7 +77,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
         for (int i : OUTPUT_BORDER) {
             blockMenuPreset.addItem(i, new CustomItem(Material.ORANGE_STAINED_GLASS_PANE, " "), ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull

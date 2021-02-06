@@ -171,7 +171,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
     private final ItemFilter[] inputs;
 
     public ConversionMachine(SlimefunItemStack item, ItemStack[] recipe, int energy, boolean random, ItemStack[] outputs, ItemStack[] inputs) {
-        super(Categories.ADVANCED_MACHINES, item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe, energy, STATUS_SLOT);
+        super(Categories.ADVANCED_MACHINES, item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe, STATUS_SLOT, energy);
         this.energy = energy;
         this.random = random;
         this.outputs = outputs;
@@ -297,7 +297,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         for (int i : MenuPreset.slotChunk3) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
 
 }

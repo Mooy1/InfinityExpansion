@@ -1,6 +1,5 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
@@ -43,7 +42,7 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
     );
 
     public static final int ENERGY = 12000;
-    public static final boolean SF = ConfigUtils.getOrDefault(InfinityExpansion.getInstance().getConfig(), "balance-options.allow-sf-item-transform", false);
+    public static final boolean SF = ConfigUtils.getBoolean("balance-options.allow-sf-item-transform", false);
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
     };
@@ -101,7 +100,7 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
         for (int i : MenuPreset.slotChunk2) {
             blockMenuPreset.addItem(i + 27, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override

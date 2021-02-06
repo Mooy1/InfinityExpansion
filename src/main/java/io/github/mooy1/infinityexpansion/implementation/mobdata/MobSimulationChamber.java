@@ -1,6 +1,5 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
@@ -52,7 +51,7 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
     private static final int XP_Slot = 46;
     public static final int BUFFER = 16000;
     public static final int ENERGY = 240;
-    private static final int CHANCE = ConfigUtils.getOrDefault(InfinityExpansion.getInstance().getConfig(), "balance-options.mob-simulation-xp-chance", 1, 10, 2);
+    private static final int CHANCE = ConfigUtils.getInt("balance-options.mob-simulation-xp-chance", 1, 10, 2);
 
     private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     

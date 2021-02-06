@@ -13,7 +13,6 @@ import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.math.MathUtils;
-import io.github.mooy1.infinitylib.misc.Pair;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -28,6 +27,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -158,8 +158,8 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
                 if (pair != null) {
                     progress = Math.min(this.speed, input.getAmount());
                     input.setAmount(input.getAmount() - progress);
-                    progressID = pair.getA();
-                    triplet = pair.getB();
+                    progressID = pair.getFirstValue();
+                    triplet = pair.getSecondValue();
                     takeCharge = true;
                 } else {
                     // invalid input
@@ -219,7 +219,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         MenuPreset.setupBasicMenu(blockMenuPreset);
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull

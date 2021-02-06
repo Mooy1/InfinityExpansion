@@ -10,12 +10,9 @@ import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.misc.Pair;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
-import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -25,6 +22,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
@@ -34,6 +32,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.WallSign;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -58,9 +57,6 @@ import java.util.Map;
  *
  */
 public final class StorageUnit extends AbstractTicker {
-    
-    private static final String STORED_AMOUNT = "stored";
-    private static final String STORED_ITEM = "storeditem";
     
     public static void setup(InfinityExpansion plugin) {
         new StorageUnit(BASIC, BASIC_STORAGE, new ItemStack[] {
@@ -90,13 +86,11 @@ public final class StorageUnit extends AbstractTicker {
         }).register(plugin);
     }
     
-    private static final boolean DISPLAY_SIGNS = ConfigUtils.getOrDefault(InfinityExpansion.getInstance().getConfig(), "storage-unit-options.display-signs", true);
-    
-    public static final int BASIC_STORAGE = 6400;
-    public static final int ADVANCED_STORAGE = 25600;
-    public static final int REINFORCED_STORAGE = 102400;
-    public static final int VOID_STORAGE = 409600;
-    public static final int INFINITY_STORAGE = 1_600_000_000;
+    private static final int BASIC_STORAGE = 6400;
+    private static final int ADVANCED_STORAGE = 25600;
+    private static final int REINFORCED_STORAGE = 102400;
+    private static final int VOID_STORAGE = 409600;
+    private static final int INFINITY_STORAGE = 1_600_000_000;
     
     public static final SlimefunItemStack BASIC = new SlimefunItemStack(
             "BASIC_STORAGE",
@@ -129,6 +123,10 @@ public final class StorageUnit extends AbstractTicker {
             "&6Capacity: &eInfinite items"
     );
     
+    private static final boolean DISPLAY_SIGNS = ConfigUtils.getBoolean("storage-unit-options.display-signs", true);
+    private static final String STORED_AMOUNT = "stored";
+    private static final String STORED_ITEM = "storeditem";
+    
     private static final int STATUS_SLOT = MenuPreset.slot2;
     private static final int[] INPUT_SLOTS = {MenuPreset.slot1};
     private static final int INPUT_SLOT = INPUT_SLOTS[0];
@@ -141,55 +139,47 @@ public final class StorageUnit extends AbstractTicker {
     private StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
         super(Categories.STORAGE_TRANSPORT, item, StorageForge.TYPE, recipe);
         this.max = max;
-
-        addItemHandler(new BlockPlaceHandler(false) { 
-            @Override
-            public void onPlayerPlace(BlockPlaceEvent e) {
-                Pair<String, Integer> data = getData(e.getItemInHand().getItemMeta());
-                BlockStorage.addBlockInfo(e.getBlock(), STORED_ITEM, data.getA());
-                BlockStorage.addBlockInfo(e.getBlock(), STORED_AMOUNT, String.valueOf(data.getB()));
-                if (data.getA() != null) {
-                    MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to block");
-                }
-            }
-        });
-        
-        addItemHandler((BlockBreakHandler) (e, item1, fortune, drops) -> {
-            Location l = e.getBlock().getLocation();
-            BlockMenu inv = BlockStorage.getInventory(l);
-            
-            if (inv == null) {
-                return true;
-            }
-            
-            Config config = BlockStorage.getLocationInfo(l);
-            
-            int stored = Util.getIntData(STORED_AMOUNT, config);
-            
-            if (stored > 0) {
-                String id = BlockStorage.getLocationInfo(l, STORED_ITEM);
-
-                ItemStack storedItem = StackUtils.getItemByNullableIDorType(id);
-
-                if (storedItem != null) {
-                    e.setDropItems(false);
-
-                    ItemStack drop = getItem().clone();
-
-                    drop.setItemMeta(saveData(drop.getItemMeta(), id, storedItem, tryToStoreOrDrop(inv, stored, storedItem, INPUT_SLOT, OUTPUT_SLOT)));
-
-                    MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to dropped item");
-
-                    e.getBlock().getWorld().dropItemNaturally(l, drop);
-                }
-            }
-            
-            inv.dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
-            
-            return true;
-        });
     }
-    
+
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu) {
+        Location l = e.getBlock().getLocation();
+        
+        Config config = BlockStorage.getLocationInfo(l);
+
+        int stored = Util.getIntData(STORED_AMOUNT, config);
+
+        if (stored > 0) {
+            String id = config.getString(STORED_ITEM);
+
+            ItemStack storedItem = StackUtils.getItemByNullableIDorType(id);
+
+            if (storedItem != null) {
+                e.setDropItems(false);
+
+                ItemStack drop = getItem().clone();
+
+                drop.setItemMeta(saveData(drop.getItemMeta(), id, storedItem, tryToStoreOrDrop(menu, stored, storedItem, INPUT_SLOT, OUTPUT_SLOT)));
+
+                MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to dropped item");
+
+                e.getBlock().getWorld().dropItemNaturally(l, drop);
+            }
+        }
+
+        menu.dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
+    }
+
+    @Override
+    protected void onPlace(@Nonnull BlockPlaceEvent e) {
+        Pair<String, Integer> data = getData(e.getItemInHand().getItemMeta());
+        BlockStorage.addBlockInfo(e.getBlock(), STORED_ITEM, data.getFirstValue());
+        BlockStorage.addBlockInfo(e.getBlock(), STORED_AMOUNT, String.valueOf(data.getSecondValue()));
+        if (data.getFirstValue() != null) {
+            MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to block");
+        }
+    }
+
     private int tryToStoreOrDrop(@Nonnull BlockMenu inv, int stored, ItemStack storedItem, int... slots) {
         for (int slot : slots) {
             ItemStack item = inv.getItemInSlot(slot);
@@ -211,7 +201,7 @@ public final class StorageUnit extends AbstractTicker {
     @Override
     public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         MenuPreset.setupBasicMenu(blockMenuPreset);
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull
@@ -232,10 +222,7 @@ public final class StorageUnit extends AbstractTicker {
     }
 
     private static boolean canBeAdded(@Nonnull ItemStack stack, @Nonnull PersistentDataContainer container, @Nonnull ItemStack stored) {
-        if (stack.getEnchantments().size() != 0) {
-            return false;
-        }
-        return container.equals(stored.getItemMeta().getPersistentDataContainer());
+        return stack.getEnchantments().size() == 0 && container.equals(stored.getItemMeta().getPersistentDataContainer());
     }
     
     private static final NamespacedKey ITEM_KEY = PluginUtils.getKey("stored_item");
@@ -268,8 +255,8 @@ public final class StorageUnit extends AbstractTicker {
     
     static ItemMeta transferData(@Nullable ItemMeta input, @Nullable ItemMeta output) {
         Pair<String, Integer> data = getData(input);
-        if (data.getA() != null) {
-            saveData(output, data.getA(), StackUtils.getItemByID(data.getA()), data.getB());
+        if (data.getFirstValue() != null) {
+            saveData(output, data.getFirstValue(), StackUtils.getItemByID(data.getFirstValue()), data.getSecondValue());
         }
         return output;
     }
@@ -380,7 +367,7 @@ public final class StorageUnit extends AbstractTicker {
         // update signs
         if (DISPLAY_SIGNS && (PluginUtils.getCurrentTick() & 15) == 0) {
             for (Block sign : SIGNS.computeIfAbsent(block, k -> {
-                List<Block> list = new ArrayList<>();
+                List<Block> list = new ArrayList<>(8);
                 Location l = block.getLocation();
                 list.add(l.clone().add(1, 0, 0).getBlock());
                 list.add(l.clone().add(-1, 0, 0).getBlock());

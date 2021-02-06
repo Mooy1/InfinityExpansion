@@ -5,7 +5,6 @@ import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.filter.FilterType;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
 import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
-import io.github.mooy1.infinitylib.misc.Pair;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -18,6 +17,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -87,7 +87,7 @@ public abstract class AbstractCrafter extends AbstractTicker {
         for (int slot : STATUS_BORDER) {
             blockMenuPreset.addItem(slot, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
     
     public boolean preCraftFail(@Nonnull Location l, @Nonnull BlockMenu inv) {
@@ -122,7 +122,7 @@ public abstract class AbstractCrafter extends AbstractTicker {
 
             } else {
 
-                inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.getA().clone()));
+                inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.getFirstValue().clone()));
 
             }
         }
@@ -146,9 +146,9 @@ public abstract class AbstractCrafter extends AbstractTicker {
         } else {
             
             // check for correct amounts
-            for (int slot = 0 ; slot < output.getB().length ; slot++) {
+            for (int slot = 0 ; slot < output.getSecondValue().length ; slot++) {
                 ItemStack input = inv.getItemInSlot(INPUT_SLOTS[slot]);
-                int required = output.getB()[slot];
+                int required = output.getSecondValue()[slot];
                 if (required == 0 ? input != null : input.getAmount() < required) {
                     inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
                     MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid input amounts!");
@@ -156,7 +156,7 @@ public abstract class AbstractCrafter extends AbstractTicker {
                 }
             }
             
-            if (!inv.fits(output.getA(), OUTPUT_SLOT)) { //not enough room
+            if (!inv.fits(output.getFirstValue(), OUTPUT_SLOT)) { //not enough room
 
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
                 MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
@@ -164,16 +164,16 @@ public abstract class AbstractCrafter extends AbstractTicker {
             } else { //enough room
 
                 for (int i = 0 ; i < INPUT_SLOTS.length ; i++) {
-                    int amount = output.getB()[i];
+                    int amount = output.getSecondValue()[i];
                     if (amount > 0) {
                         inv.consumeItem(INPUT_SLOTS[i], amount);
                     }
                 }
-                MessageUtils.messageWithCD(p, 1000, ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getA()));
+                MessageUtils.messageWithCD(p, 1000, ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getFirstValue()));
 
                 postCraft(inv.getLocation(), inv, p);
 
-                inv.pushItem(output.getA(), OUTPUT_SLOT);
+                inv.pushItem(output.getFirstValue(), OUTPUT_SLOT);
 
             }
         }
@@ -191,9 +191,9 @@ public abstract class AbstractCrafter extends AbstractTicker {
         Pair<SlimefunItemStack, int[]> pair = this.recipes.get(input);
         
         if (pair != null) {
-            ItemStack output = pair.getA().clone();
+            ItemStack output = pair.getFirstValue().clone();
             modifyOutput(inv, output);
-            return new Pair<>(output, pair.getB());
+            return new Pair<>(output, pair.getSecondValue());
         }
         
         return null;

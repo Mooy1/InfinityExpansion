@@ -46,7 +46,7 @@ public final class Util {
     public static Map<Enchantment, Integer> getEnchants(@Nonnull ConfigurationSection section) {
         Map<Enchantment, Integer> enchants = new HashMap<>();
         for (String path : section.getKeys(false)) {
-            enchants.put(enchantmentByPath(path), ConfigUtils.getOrDefault(section, path, 1, Short.MAX_VALUE, 1));
+            enchants.put(enchantmentByPath(path), ConfigUtils.getInt(section, path, 1, Short.MAX_VALUE, 1));
         }
         return enchants;
     }
@@ -95,8 +95,13 @@ public final class Util {
     }
     
     public static int getIntData(String key, Config config) {
+        String val = config.getString(key);
+        if (val == null) {
+            config.setValue(key, "0");
+            return 0;
+        }
         try {
-            return Integer.parseInt(config.getString(key));
+            return Integer.parseInt(val);
         } catch (NumberFormatException x) {
             config.setValue(key, "0");
             return 0;

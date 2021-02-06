@@ -5,10 +5,10 @@ import io.github.mooy1.infinityexpansion.implementation.machines.SingularityCons
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Triplet;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.misc.Pair;
 import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.UnplaceableBlock;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;

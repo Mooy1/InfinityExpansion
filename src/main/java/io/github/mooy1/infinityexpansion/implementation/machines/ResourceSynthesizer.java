@@ -112,7 +112,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
         for (int i : MenuPreset.slotChunk2) {
             blockMenuPreset.addItem(i + 27, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemBarrier, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull
