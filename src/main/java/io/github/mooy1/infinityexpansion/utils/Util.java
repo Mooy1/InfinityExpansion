@@ -47,7 +47,10 @@ public final class Util {
     public static Map<Enchantment, Integer> getEnchants(@Nonnull ConfigurationSection section) {
         Map<Enchantment, Integer> enchants = new HashMap<>();
         for (String path : section.getKeys(false)) {
-            enchants.put(enchantmentByPath(path), ConfigUtils.getInt(section, path, 1, Short.MAX_VALUE, 1));
+            int level = ConfigUtils.getInt(section, path, 0, Short.MAX_VALUE, 0);
+            if (level != 0) {
+                enchants.put(enchantmentByPath(path), level);
+            }
         }
         return enchants;
     }

@@ -37,7 +37,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
         Setup.setup(this);
         
-        PluginUtils.runSync(() -> PluginUtils.log("Join the Slimefun Addon Community Discord: https://discord.gg/V2cJR9ADFU"));
+        PluginUtils.runSync(() -> PluginUtils.log("Join the Slimefun Addon Community Discord: discord.gg/V2cJR9ADFU"));
         
         PluginUtils.startTicker(() -> {});
 
