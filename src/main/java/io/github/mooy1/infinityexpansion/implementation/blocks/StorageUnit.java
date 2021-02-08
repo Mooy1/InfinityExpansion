@@ -6,9 +6,9 @@ import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
+import io.github.mooy1.infinitylib.config.ConfigUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -142,8 +142,7 @@ public final class StorageUnit extends AbstractTicker {
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu) {
-        Location l = e.getBlock().getLocation();
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
         
         Config config = BlockStorage.getLocationInfo(l);
 
@@ -171,10 +170,10 @@ public final class StorageUnit extends AbstractTicker {
     }
 
     @Override
-    protected void onPlace(@Nonnull BlockPlaceEvent e) {
+    protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
         Pair<String, Integer> data = getData(e.getItemInHand().getItemMeta());
-        BlockStorage.addBlockInfo(e.getBlock(), STORED_ITEM, data.getFirstValue());
-        BlockStorage.addBlockInfo(e.getBlock(), STORED_AMOUNT, String.valueOf(data.getSecondValue()));
+        BlockStorage.addBlockInfo(b, STORED_ITEM, data.getFirstValue());
+        BlockStorage.addBlockInfo(b, STORED_AMOUNT, String.valueOf(data.getSecondValue()));
         if (data.getFirstValue() != null) {
             MessageUtils.message(e.getPlayer(), ChatColor.GREEN + "Stored items transferred to block");
         }
