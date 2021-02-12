@@ -30,7 +30,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Generates items slowly using up strainers, must be waterlogged
@@ -205,11 +204,11 @@ public final class StrainerBase extends AbstractTicker implements RecipeDisplayI
 
         //reduce durability
 
-        if (RandomUtils.chanceIn(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + (3 * strainer.getEnchantmentLevel(Enchantment.MENDING)) + 1)) {
+        if (RandomUtils.chanceIn(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + 3 * strainer.getEnchantmentLevel(Enchantment.MENDING) + 1)) {
             ItemMeta itemMeta = strainer.getItemMeta();
             Damageable durability = (Damageable) itemMeta;
 
-            int current = Objects.requireNonNull(durability).getDamage();
+            int current = durability.getDamage();
 
             if (current + 1 == Material.FISHING_ROD.getMaxDurability()) {
 

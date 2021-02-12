@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
  */
 public class SubCategory extends Category {
     
-    public SubCategory(NamespacedKey key, ItemStack item, int tier) {
-        super(key, item, tier);
+    public SubCategory(NamespacedKey key, ItemStack item) {
+        super(key, item,3);
     }
 
     @Override

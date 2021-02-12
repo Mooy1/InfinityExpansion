@@ -45,7 +45,7 @@ import java.util.logging.Level;
 public class InfinityCategory extends FlexCategory implements Listener {
     
     public static final InfinityCategory CATEGORY = new InfinityCategory(PluginUtils.getKey("infinity_recipes"),
-            new CustomItem(Material.RESPAWN_ANCHOR, "&bInfinity &7Recipes"), 2
+            new CustomItem(Material.RESPAWN_ANCHOR, "&bInfinity &7Recipes"), 3
     );
 
     private static final int[] INFINITY_RECIPE_SLOTS = {

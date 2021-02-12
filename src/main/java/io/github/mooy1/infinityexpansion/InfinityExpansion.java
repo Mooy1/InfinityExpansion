@@ -2,7 +2,6 @@ package io.github.mooy1.infinityexpansion;
 
 import io.github.mooy1.infinityexpansion.setup.Setup;
 import io.github.mooy1.infinityexpansion.setup.commands.GiveRecipe;
-import io.github.mooy1.infinityexpansion.setup.commands.ResetConfig;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.command.CommandManager;
 import io.github.mooy1.infinitylib.config.ConfigUtils;
@@ -28,16 +27,15 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         PluginUtils.setup(ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion", this, "Mooy1/InfinityExpansion/master", getFile());
         
         CommandManager.setup("infinityexpansion", "infinityexpansion.admin", "/ie, /ix, /infinity",
-                new GiveRecipe(), new ResetConfig()
+                new GiveRecipe()
         );
         
-        @SuppressWarnings("unused") final Metrics metrics = new Metrics(this, 8991);
+        @SuppressWarnings("unused") 
+        final Metrics metrics = new Metrics(this, 8991);
 
         difficulty = ConfigUtils.getDouble(getConfig(), "balance-options.difficulty", .1, 10, 1);
 
         Setup.setup(this);
-        
-        PluginUtils.runSync(() -> PluginUtils.log("Join the Slimefun Addon Community Discord: discord.gg/V2cJR9ADFU"));
         
         PluginUtils.startTicker(() -> {});
 
