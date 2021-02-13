@@ -14,9 +14,6 @@ Make a new issue, pull request, or contact me on discord @Riley#5911
   <a href="https://discord.gg/slimefun">
     <img src="https://discordapp.com/api/guilds/565557184348422174/widget.png?style=banner3" alt="Discord Invite"/>
   </a>
-  <a href="https://discord.gg/V2cJR9ADFU">
-    <img src="https://discordapp.com/api/guilds/799294416196075572/widget.png?style=banner3" alt="Discord Invite"/>
-  </a>
 </p>
 
 # Requirements
