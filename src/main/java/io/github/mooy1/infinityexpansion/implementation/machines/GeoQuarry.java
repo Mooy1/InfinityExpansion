@@ -58,7 +58,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
                 MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
                 CompressedItem.VOID_INGOT, SlimefunExtension.ADVANCED_GEO_MINER, CompressedItem.VOID_INGOT,
                 MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
-        }, STATUS, ENERGY);
+        });
         
         registerBlockHandler(getId(), (p, b, item, reason) -> {
             BlockMenu menu = BlockStorage.getInventory(b);
@@ -71,13 +71,13 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
     
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        super.setupMenu(blockMenuPreset);
         for (int i : BORDER) {
             blockMenuPreset.addItem(i, new CustomItem(Material.GRAY_STAINED_GLASS_PANE, " "), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : OUTPUT_BORDER) {
             blockMenuPreset.addItem(i, new CustomItem(Material.ORANGE_STAINED_GLASS_PANE, " "), ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull
@@ -93,6 +93,16 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         
+    }
+
+    @Override
+    protected int getStatusSlot() {
+        return STATUS;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return ENERGY;
     }
     
     @Nonnull

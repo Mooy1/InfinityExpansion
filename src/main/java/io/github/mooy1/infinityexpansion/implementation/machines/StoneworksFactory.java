@@ -31,8 +31,6 @@ import java.util.List;
 
 /**
  * Turns cobble into stuff
- *
- * @author Mooy1
  */
 public final class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem {
     
@@ -61,7 +59,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
                 MachineItem.MAGSTEEL_PLATE, MaterialGenerator.BASIC_COBBLE, MachineItem.MAGSTEEL_PLATE,
                 SlimefunItems.ELECTRIC_FURNACE_3, MachineItem.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
                 MachineItem.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, MachineItem.MAGSTEEL_PLATE
-        }, STATUS_SLOT, ENERGY);
+        });
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -77,6 +75,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
 
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        super.setupMenu(blockMenuPreset);
         for (int i : PROCESS_BORDER) {
             blockMenuPreset.addItem(i, PROCESSING, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -86,7 +85,16 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
         for (int i : CHOICE_SLOTS) {
             blockMenuPreset.addItem(i, Choice.NONE.item, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, COBBLE_GEN, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Override
+    protected int getStatusSlot() {
+        return STATUS_SLOT;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return ENERGY;
     }
 
     @Nonnull

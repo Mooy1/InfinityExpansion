@@ -78,7 +78,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
                 SmelteryItem.ADAMANTITE, SmelteryItem.ADAMANTITE, SmelteryItem.ADAMANTITE,
                 MachineItem.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, MachineItem.MACHINE_PLATE,
                 MachineItem.MACHINE_PLATE, MachineItem.MACHINE_CORE, MachineItem.MACHINE_PLATE
-        }, STATUS_SLOT, ENERGY);
+        });
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -91,9 +91,20 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
             return true;
         });
     }
+
+    @Override
+    protected int getStatusSlot() {
+        return STATUS_SLOT;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return ENERGY;
+    }
     
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        super.setupMenu(blockMenuPreset);
         for (int i : BACKGROUND) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -112,7 +123,6 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
         for (int i : MenuPreset.slotChunk2) {
             blockMenuPreset.addItem(i + 27, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull

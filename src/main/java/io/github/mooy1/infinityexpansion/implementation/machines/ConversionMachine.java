@@ -5,11 +5,10 @@ import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.filter.FilterType;
-import io.github.mooy1.infinitylib.filter.ItemFilter;
-import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.recipes.strict.StrictOutput;
+import io.github.mooy1.infinitylib.recipes.strict.StrictRandomRecipeMap;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -21,7 +20,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,7 +27,6 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,34 +161,26 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
     private static final int[] OUTPUT_SLOTS = {MenuPreset.slot3};
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
-    private final boolean random;
     private final int energy;
-    private final ItemStack[] outputs;
     private final List<ItemStack> displayRecipes = new ArrayList<>();
-    private final ItemFilter[] inputs;
+    private final StrictRandomRecipeMap recipes = new StrictRandomRecipeMap();
 
     public ConversionMachine(SlimefunItemStack item, ItemStack[] recipe, int energy, boolean random, ItemStack[] outputs, ItemStack[] inputs) {
-        super(Categories.ADVANCED_MACHINES, item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe, STATUS_SLOT, energy);
+        super(Categories.ADVANCED_MACHINES, item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe);
         this.energy = energy;
-        this.random = random;
-        this.outputs = outputs;
-
-        ItemFilter[] filters = new ItemFilter[inputs.length];
-        for (int i = 0 ; i < inputs.length ; i++) {
-            filters[i] = new ItemFilter(inputs[i], FilterType.MIN_AMOUNT);
-        }
-        this.inputs = filters;
-
+        
         if (inputs.length == outputs.length) { //1 to 1
             for (int i = 0 ; i < inputs.length ; i++) {
                 this.displayRecipes.add(inputs[i]);
                 this.displayRecipes.add(outputs[i]);
+                this.recipes.put(inputs[i], outputs[i], 1);
             }
         } else { //each input gets each output
             for (ItemStack input : inputs) {
                 for (ItemStack output : outputs) {
                     this.displayRecipes.add(input);
                     this.displayRecipes.add(output);
+                    this.recipes.put(input, output, 1);
                 }
             }
         }
@@ -237,22 +226,6 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         return this.displayRecipes;
     }
 
-    @Nullable
-    private Pair<ItemStack, Integer> getOutput(@Nonnull ItemStack input) {
-        for (int i = 0 ; i < this.inputs.length ; i++) {
-            ItemFilter filter = this.inputs[i];
-            if (filter.fits(new ItemFilter(input, FilterType.MIN_AMOUNT))) {
-                if (this.random) {
-                    return new Pair<>(RandomUtils.randomOutput(this.outputs), filter.getAmount());
-                } else {
-                    return new Pair<>(this.outputs[i].clone(), filter.getAmount());
-                }
-
-            }
-        }
-        return null;
-    }
-
     @Override
     public boolean process(@Nonnull BlockMenu inv, @Nonnull Block block, @Nonnull Config config) {
         ItemStack input = inv.getItemInSlot(INPUT_SLOTS[0]);
@@ -264,18 +237,18 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
             return false;
         }
 
-        Pair<ItemStack, Integer> pair = getOutput(input);
+        StrictOutput output = this.recipes.get(input);
 
-        if (pair == null) {
+        if (output == null) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidInput);
             }
             return false;
         }
 
-        if (inv.fits(pair.getFirstValue(), OUTPUT_SLOTS)) {
-            inv.consumeItem(INPUT_SLOTS[0], pair.getSecondValue());
-            inv.pushItem(pair.getFirstValue(), OUTPUT_SLOTS);
+        if (inv.fits(output.getOutput(), OUTPUT_SLOTS)) {
+            inv.consumeItem(INPUT_SLOTS[0], output.getInputConsumption());
+            inv.pushItem(output.getOutput().clone(), OUTPUT_SLOTS);
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverting..."));
             }
@@ -288,6 +261,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
 
     @Override
     public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        super.setupMenu(blockMenuPreset);
         for (int i : MenuPreset.slotChunk1) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -297,7 +271,16 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         for (int i : MenuPreset.slotChunk3) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Override
+    protected int getStatusSlot() {
+        return STATUS_SLOT;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return this.energy;
     }
 
 }

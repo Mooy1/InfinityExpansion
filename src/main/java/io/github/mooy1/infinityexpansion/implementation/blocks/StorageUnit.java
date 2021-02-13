@@ -8,7 +8,6 @@ import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
-import io.github.mooy1.infinitylib.config.ConfigUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -123,7 +122,7 @@ public final class StorageUnit extends AbstractTicker {
             "&6Capacity: &eInfinite items"
     );
     
-    private static final boolean DISPLAY_SIGNS = ConfigUtils.getBoolean("storage-unit-options.display-signs", true);
+    private static final boolean DISPLAY_SIGNS = InfinityExpansion.getInstance().getConfig().getBoolean("storage-unit-options.display-signs");
     private static final String STORED_AMOUNT = "stored";
     private static final String STORED_ITEM = "storeditem";
     

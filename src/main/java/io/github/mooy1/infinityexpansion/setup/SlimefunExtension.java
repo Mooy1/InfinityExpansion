@@ -18,6 +18,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.reactors.NetherStarReactor;
 import io.github.thebusybiscuit.slimefun4.implementation.items.geo.GEOMiner;
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
+import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineFuel;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -35,7 +36,8 @@ import org.bukkit.util.RayTraceResult;
 
 import javax.annotation.Nonnull;
 
-public class SlimefunExtension {
+@UtilityClass
+public final class SlimefunExtension {
     
     public static final int INFINITY_CAPACITY = 1600000000;
     public static final int VOID_CAPACITY = 16000000;

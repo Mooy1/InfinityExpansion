@@ -3,7 +3,7 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
-import io.github.mooy1.infinitylib.config.ConfigUtils;
+import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
@@ -42,7 +42,7 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
     );
 
     public static final int ENERGY = 12000;
-    public static final boolean SF = ConfigUtils.getBoolean("balance-options.allow-sf-item-transform", false);
+    public static final boolean SF = ConfigUtils.getBoolean("balance-options.allow-sf-item-transform");
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
     };

@@ -85,11 +85,13 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
     private static final int TIME = 960;
 
     private final int speed;
+    private final int energy;
 
     private VoidHarvester(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
-        super(category, item, type, recipe, STATUS_SLOT, energy);
+        super(category, item, type, recipe);
         this.speed = speed;
-
+        this.energy = energy;
+        
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
 
@@ -99,6 +101,16 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
 
             return true;
         });
+    }
+
+    @Override
+    protected int getStatusSlot() {
+        return STATUS_SLOT;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return this.energy;
     }
 
     @Override
@@ -135,6 +147,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
     
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        super.setupMenu(blockMenuPreset);
         for (int i = 0; i < 13; i++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -142,7 +155,6 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
 
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull

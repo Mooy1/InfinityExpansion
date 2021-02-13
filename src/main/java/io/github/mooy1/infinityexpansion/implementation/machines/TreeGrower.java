@@ -102,10 +102,12 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
     private static final int STATUS_SLOT = MenuPreset.slot1;
 
     private final int speed;
+    private final int energy;
 
     private TreeGrower(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy, int speed) {
-        super(category, item, recipeType, recipe, STATUS_SLOT, energy);
+        super(category, item, recipeType, recipe);
         this.speed = speed;
+        this.energy = energy;
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -126,6 +128,16 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
 
             return true;
         });
+    }
+
+    @Override
+    protected int getStatusSlot() {
+        return STATUS_SLOT;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return this.energy;
     }
 
     @Override
@@ -231,6 +243,7 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
 
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        super.setupMenu(blockMenuPreset);
         for (int i : MenuPreset.slotChunk1) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -240,7 +253,6 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
         for (int i : Util.largeOutputBorder) {
             blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull

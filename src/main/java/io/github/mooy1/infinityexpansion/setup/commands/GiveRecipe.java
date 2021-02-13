@@ -14,7 +14,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiveRecipe extends AbstractCommand {
+public final class GiveRecipe extends AbstractCommand {
+    
     public GiveRecipe() {
         super("giverecipe", "gives all the items in a Slimefun item recipe", true);
     }

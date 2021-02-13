@@ -2,8 +2,7 @@ package io.github.mooy1.infinityexpansion.setup.categories;
 
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.filter.FilterType;
-import io.github.mooy1.infinitylib.filter.ItemFilter;
+import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -35,7 +34,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * A custom category for displaying 6x6 recipes and their sub-recipes
@@ -130,7 +128,6 @@ public class InfinityCategory extends FlexCategory implements Listener {
                 return false;
             });
         } else {
-            error("MAIN");
             return;
         }
 
@@ -150,11 +147,11 @@ public class InfinityCategory extends FlexCategory implements Listener {
         menu.addItem(1, new CustomItem(ChestMenuUtils.getBackButton(player, "", ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(player, "guide.back.guide"))));
 
         int i = 9;
-        for (SlimefunItemStack item : InfinityWorkbench.RECIPES.values()) {
+        for (Pair<SlimefunItemStack, ItemStack[]> item : InfinityWorkbench.ITEMS.values()) {
             if (i == 45) break;
 
-            menu.addItem(i, item, (p, slot, item1, action) -> {
-                openInfinityRecipe(p, item.getItemId(), entry);
+            menu.addItem(i, item.getFirstValue(), (p, slot, item1, action) -> {
+                openInfinityRecipe(p, item.getFirstValue().getItemId(), entry);
                 return false;
             });
 
@@ -173,7 +170,6 @@ public class InfinityCategory extends FlexCategory implements Listener {
         Pair<SlimefunItemStack, ItemStack[]> pair = InfinityWorkbench.ITEMS.get(id);
 
         if (pair == null) {
-            error("ID NOT FOUND");
             return;
         }
 
@@ -255,14 +251,7 @@ public class InfinityCategory extends FlexCategory implements Listener {
         menu.open(player);
 
     }
-
     
-    /**
-     * This method attempts to move items from the players inventories to the correct spots in the table
-     *
-     * @param player player
-     * @param menu   workbench menu
-     */
     private static void moveRecipe(@Nonnull Player player, @Nonnull BlockMenu menu, Pair<SlimefunItemStack, ItemStack[]> pair, boolean max) {
         ItemStack[] recipe = pair.getSecondValue();
         PlayerInventory inv = player.getInventory();
@@ -275,10 +264,10 @@ public class InfinityCategory extends FlexCategory implements Listener {
                     continue;
                 }
 
-                ItemFilter filter = new ItemFilter(recipe[slot], FilterType.IGNORE_AMOUNT);
+                String id = StackUtils.getIDorType(recipeItem);
 
                 for (ItemStack item : inv.getContents()) { //each slot in their inv
-                    if (item != null && filter.fits(new ItemFilter(item, FilterType.IGNORE_AMOUNT), FilterType.IGNORE_AMOUNT)) { //matches recipe
+                    if (item != null && StackUtils.getIDorType(item).equals(id)) { //matches recipe
                         //get item
                         ItemStack output = item.clone();
                         output.setAmount(1);
@@ -304,7 +293,6 @@ public class InfinityCategory extends FlexCategory implements Listener {
         SlimefunItem slimefunItem = slimefunHistory.peekLast();
         
         if (slimefunItem == null) {
-            error("NULL SF ITEM");
             return;
         }
         
@@ -352,10 +340,6 @@ public class InfinityCategory extends FlexCategory implements Listener {
 
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
         menu.open(player);
-    }
-
-    private static void error(String msg) {
-        PluginUtils.log(Level.WARNING, "Error opening infinity category: " + msg + " Report this on Discord or Github!");
     }
     
     @AllArgsConstructor

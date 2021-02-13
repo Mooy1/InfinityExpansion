@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.utils;
 
+import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.config.ConfigUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;

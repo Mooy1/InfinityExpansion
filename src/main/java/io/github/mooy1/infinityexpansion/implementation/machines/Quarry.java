@@ -189,7 +189,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     private final ItemStack[] outputs;
     
     private Quarry(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed, int chance, ItemStack[] outputs) {
-        super(category, item, type, recipe, STATUS_SLOT, energy);
+        super(category, item, type, recipe);
         this.cobble = new ItemStack(Material.COBBLESTONE, speed);
         this.chance = chance;
         this.outputs = outputs;
@@ -208,6 +208,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
 
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        super.setupMenu(blockMenuPreset);
         for (int i = 0 ; i < 4 ; i++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -217,7 +218,16 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         for (int i = 45 ; i < 54 ; i++) {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MINING, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Override
+    protected int getStatusSlot() {
+        return STATUS_SLOT;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return this.energy;
     }
 
     @Nonnull

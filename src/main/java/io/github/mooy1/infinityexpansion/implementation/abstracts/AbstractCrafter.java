@@ -2,11 +2,11 @@ package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
-import io.github.mooy1.infinitylib.filter.FilterType;
-import io.github.mooy1.infinitylib.filter.MultiFilter;
-import io.github.mooy1.infinitylib.misc.DelayedRecipeType;
+import io.github.mooy1.infinitylib.delayed.DelayedRecipeType;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.recipes.large.LargeOutput;
+import io.github.mooy1.infinitylib.recipes.large.LargeRecipeMap;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -27,8 +27,6 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * An abstract crafter
@@ -38,24 +36,18 @@ import java.util.Map;
  */
 public abstract class AbstractCrafter extends AbstractTicker {
     
-    private static final int EMPTY = new MultiFilter(FilterType.MIN_AMOUNT, new ItemStack[9]).hashCode();
     protected static final int[] INPUT_SLOTS = MenuPreset.craftingInput;
     private static final int[] OUTPUT_SLOT = MenuPreset.craftingOutput;
     private static final int[] BACKGROUND = {5, 6, 7, 8, 41, 42, 43, 44};
     private static final int[] STATUS_BORDER = {14, 32};
     private static final int STATUS_SLOT = 23;
 
-    private final Map<MultiFilter, Pair<SlimefunItemStack, int[]>> recipes = new HashMap<>();
+    private final LargeRecipeMap recipes = new LargeRecipeMap(9);
     
     public AbstractCrafter(Category category, SlimefunItemStack stack, DelayedRecipeType recipeType, RecipeType type, ItemStack[] recipe) {
         super(category, stack, type, recipe);
 
-        recipeType.acceptEach((stacks, stack1) -> {
-            if (stacks.length == 9 && stack1 instanceof SlimefunItemStack) {
-                MultiFilter filter = new MultiFilter(FilterType.IGNORE_AMOUNT, stacks);
-                this.recipes.put(filter, new Pair<>((SlimefunItemStack) stack1, filter.getAmounts()));
-            }
-        });
+        recipeType.acceptEach(this.recipes::put);
 
         registerBlockHandler(getId(), (p, b, slimefunItem, reason) -> {
             BlockMenu inv = BlockStorage.getInventory(b);
@@ -181,22 +173,13 @@ public abstract class AbstractCrafter extends AbstractTicker {
     
     @Nullable
     private Pair<ItemStack, int[]> getOutput(@Nonnull BlockMenu inv) {
-        
-        MultiFilter input = MultiFilter.fromMenu(FilterType.IGNORE_AMOUNT, inv, INPUT_SLOTS);
-        
-        if (input.hashCode() == EMPTY) {
+        LargeOutput output = this.recipes.get(inv, INPUT_SLOTS);
+        if (output == null) {
             return null;
         }
-
-        Pair<SlimefunItemStack, int[]> pair = this.recipes.get(input);
-        
-        if (pair != null) {
-            ItemStack output = pair.getFirstValue().clone();
-            modifyOutput(inv, output);
-            return new Pair<>(output, pair.getSecondValue());
-        }
-        
-        return null;
+        ItemStack out = output.getOutput().clone();
+        modifyOutput(inv, out);
+        return new Pair<>(out, output.getInputConsumption());
     }
     
     protected void modifyOutput(@Nonnull BlockMenu inv, @Nonnull ItemStack output) {

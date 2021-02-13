@@ -17,7 +17,6 @@ import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
@@ -90,7 +89,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     private final int energy;
 
     private SingularityConstructor(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
-        super(category, item, type, recipe, STATUS_SLOT, energy);
+        super(category, item, type, recipe);
         this.speed = speed;
         this.energy = energy;
 
@@ -218,8 +217,18 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
 
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        super.setupMenu(blockMenuPreset);
         MenuPreset.setupBasicMenu(blockMenuPreset);
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Override
+    protected int getStatusSlot() {
+        return STATUS_SLOT;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return this.energy;
     }
 
     @Nonnull

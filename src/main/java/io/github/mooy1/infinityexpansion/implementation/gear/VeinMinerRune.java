@@ -5,7 +5,6 @@ import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.math.RandomUtils;
-import io.github.mooy1.infinitylib.menus.LocationUtils;
 import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
@@ -39,8 +38,10 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -267,7 +268,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         
         found.add(b);
         
-        for (Location check : LocationUtils.getAdjacentLocations(l, true)) {
+        for (Location check : getAdjacentLocations(l)) {
             if (checked.contains(check) || BlockStorage.hasBlockInfo(check)) continue;
 
             checked.add(check);
@@ -276,6 +277,18 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
                 getVein(checked, found, check, check.getBlock());
             }
         }
+    }
+    
+    private static List<Location> getAdjacentLocations(Location l) {
+        List<Location> list = new ArrayList<>();
+        list.add(l.clone().add(1, 0, 0));
+        list.add(l.clone().add(-1, 0, 0));
+        list.add(l.clone().add(0, 1, 0));
+        list.add(l.clone().add(0, -1, 0));
+        list.add(l.clone().add(0, 0, 1));
+        list.add(l.clone().add(0, 0, -1));
+        Collections.shuffle(list);
+        return list;
     }
     
 }
