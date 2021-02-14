@@ -79,7 +79,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
                 new ItemStack(Material.EMERALD, 2),
                 new ItemStack(Material.DIAMOND, 2),
                 new ItemStack(Material.REDSTONE, 8),
-                new ItemStack(Material.NETHERITE_SCRAP, 1)
+                new ItemStack(Material.NETHERITE_INGOT, 1)
         }).register(plugin);
         
         new Quarry(Categories.ADVANCED_MACHINES, VOID, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -103,7 +103,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
                 new ItemStack(Material.DIAMOND, 4),
                 new ItemStack(Material.REDSTONE, 16),
                 new CustomItem(SlimefunItems.GOLD_24K, 4),
-                new ItemStack(Material.NETHERITE_SCRAP, 2),
+                new ItemStack(Material.NETHERITE_INGOT, 2),
         }).register(plugin);
         
         new Quarry(Categories.INFINITY_CHEAT,INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
@@ -134,7 +134,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
                 new ItemStack(Material.DIAMOND, 16),
                 new ItemStack(Material.REDSTONE, 64),
                 new CustomItem(SlimefunItems.GOLD_24K, 16),
-                new ItemStack(Material.NETHERITE_SCRAP, 8),
+                new ItemStack(Material.NETHERITE_INGOT, 8),
         }).register(plugin);
     }
     
@@ -280,7 +280,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
             outputItem = RandomUtils.randomOutput(this.outputs);
             Material outputType = outputItem.getType();
             if (b.getWorld().getEnvironment() != World.Environment.NETHER &&
-                    (outputType == Material.QUARTZ || outputType == Material.NETHERITE_SCRAP || outputType == Material.NETHERRACK)
+                    (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)
             ) {
                 outputItem = this.cobble.clone();
             }
