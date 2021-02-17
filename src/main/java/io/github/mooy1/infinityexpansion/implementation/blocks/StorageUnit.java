@@ -385,6 +385,14 @@ public final class StorageUnit extends AbstractTicker {
                     }
                 }
             }
+            if (SlimefunTag.SIGNS.isTagged(block.getRelative(0, 1, 0).getType())) {
+                Sign lines = (Sign) block.getRelative(0, 1, 0).getState();
+                lines.setLine(0, ChatColor.AQUA + "------------");
+                lines.setLine(1, ChatColor.WHITE + (stored != null ? ItemUtils.getItemName(stored) : "None"));
+                lines.setLine(2, ChatColor.GRAY + "Stored: " + amount);
+                lines.setLine(3, ChatColor.AQUA + "------------");
+                lines.update();
+            }
         }
 
         // set data, don't use config cuz that bugs it out lul
