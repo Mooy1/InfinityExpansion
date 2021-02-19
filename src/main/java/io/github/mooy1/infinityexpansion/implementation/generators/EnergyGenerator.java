@@ -44,7 +44,7 @@ import java.util.Objects;
  * Thanks to panda for some stuff to work off of
  */
 public final class EnergyGenerator extends AbstractGenerator {
-
+    
     public static void setup(InfinityExpansion plugin) {
         new EnergyGenerator(Categories.BASIC_MACHINES, HYDRO, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL,
@@ -77,7 +77,7 @@ public final class EnergyGenerator extends AbstractGenerator {
                 BASIC_PANEL, BASIC_PANEL, BASIC_PANEL,
                 SmelteryItem.TITANIUM, SlimefunItems.SOLAR_GENERATOR_4, SmelteryItem.TITANIUM,
                 MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT
-        }, 120, Type.SOLAR).register(plugin);
+        }, 150, Type.SOLAR).register(plugin);
 
         new EnergyGenerator(Categories.ADVANCED_MACHINES, CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE,
@@ -125,8 +125,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&cGeothermal Generator",
             "&7Generates energy from the heat of the world",
             "",
-            LorePreset.energyBuffer(4500),
-            LorePreset.energyPerSecond(45)
+            LorePreset.energyBuffer(3600),
+            LorePreset.energyPerSecond(36)
     );
     public static final SlimefunItemStack REINFORCED_GEOTHERMAL = new SlimefunItemStack(
             "REINFORCED_GEOTHERMAL_GENERATOR",
@@ -135,8 +135,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&7Generates large amounts of energy",
             "&7from the heat of the world",
             "",
-            LorePreset.energyBuffer(22500),
-            LorePreset.energyPerSecond(225)
+            LorePreset.energyBuffer(18000),
+            LorePreset.energyPerSecond(180)
     );
     public static final SlimefunItemStack BASIC_PANEL = new SlimefunItemStack(
             "BASIC_PANEL",
@@ -153,8 +153,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&cAdvanced Solar Panel",
             "&7Generates energy from the sun",
             "",
-            LorePreset.energyBuffer(18000),
-            LorePreset.energyPerSecond(180)
+            LorePreset.energyBuffer(15000),
+            LorePreset.energyPerSecond(150)
     );
     public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
             "CELESTIAL_PANEL",
@@ -162,8 +162,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&eCelestial Panel",
             "&7Generates energy from the sun",
             "",
-            LorePreset.energyBuffer(75000),
-            LorePreset.energyPerSecond(750)
+            LorePreset.energyBuffer(50000),
+            LorePreset.energyPerSecond(500)
     );
     public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
             "VOID_PANEL",
@@ -171,8 +171,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&8Void Panel",
             "&7Generates energy from darkness",
             "",
-            LorePreset.energyBuffer(360000),
-            LorePreset.energyPerSecond(3600)
+            LorePreset.energyBuffer(240000),
+            LorePreset.energyPerSecond(2400)
     );
     public static final SlimefunItemStack INFINITE_PANEL = new SlimefunItemStack(
             "INFINITE_PANEL",
@@ -180,8 +180,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&bInfinity Panel",
             "&7Generates energy from the cosmos",
             "",
-            LorePreset.energyBuffer(7500000),
-            LorePreset.energyPerSecond(75000)
+            LorePreset.energyBuffer(5000000),
+            LorePreset.energyPerSecond(50000)
     );
 
     private final Type type;

@@ -41,18 +41,14 @@ import org.bukkit.persistence.PersistentDataType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Basically just barrels...
+ * Basically just barrels
  *
  * @author Mooy1
  *
- * Thanks to
- * @author NCBPFluffyBear
- * for idea, a few bits of code, and code to learn from
+ * Thanks to FluffyBear for stuff to learn from
  *
  */
 public final class StorageUnit extends AbstractTicker {
@@ -130,8 +126,6 @@ public final class StorageUnit extends AbstractTicker {
     private static final int[] INPUT_SLOTS = {MenuPreset.slot1};
     private static final int INPUT_SLOT = INPUT_SLOTS[0];
     private static final int OUTPUT_SLOT = MenuPreset.slot3;
-    
-    private static final Map<Block, List<Block>> SIGNS = new HashMap<>();
     
     private final int max;
     
@@ -361,35 +355,42 @@ public final class StorageUnit extends AbstractTicker {
                 menu.replaceExistingItem(STATUS_SLOT, status);
             }
         }
-
+        
+        // set data, don't use config cuz that bugs it out
+        BlockStorage.addBlockInfo(block, STORED_AMOUNT, String.valueOf(amount));
+        BlockStorage.addBlockInfo(block, STORED_ITEM, id);
+        
         // update signs
         if (DISPLAY_SIGNS && (PluginUtils.getCurrentTick() & 15) == 0) {
-            for (Block sign : SIGNS.computeIfAbsent(block, k -> {
-                List<Block> list = new ArrayList<>(8);
-                list.add(block.getRelative(1, 0, 0));
-                list.add(block.getRelative(-1, 0, 0));
-                list.add(block.getRelative(0, 0, 1));
-                list.add(block.getRelative(0, 0, -1));
-                return list;
-            })) {
-                if (SlimefunTag.WALL_SIGNS.isTagged(sign.getType())) {
-                    WallSign wall = (WallSign) sign.getBlockData();
-                    if (sign.getRelative(wall.getFacing().getOppositeFace()).equals(block)) {
-                        Sign lines = (Sign) sign.getState();
-                        lines.setLine(0, ChatColor.AQUA + "------------");
-                        lines.setLine(1, ChatColor.WHITE + (stored != null ? ItemUtils.getItemName(stored) : "None"));
-                        lines.setLine(2, ChatColor.GRAY + "Stored: " + amount);
-                        lines.setLine(3, ChatColor.AQUA + "------------");
-                        lines.update();
-                        break;
+            Block top = block.getRelative(0, 1, 0);
+            if (SlimefunTag.SIGNS.isTagged(top.getType())) {
+                writeToSign(top, stored, amount);
+                return;
+            }
+            List<Block> blocks = new ArrayList<>();
+            blocks.add(block.getRelative(1, 0, 0));
+            blocks.add(block.getRelative(-1, 0, 0));
+            blocks.add(block.getRelative(0, 0, 1));
+            blocks.add(block.getRelative(0, 0, -1));
+            for (Block side : blocks) {
+                if (SlimefunTag.WALL_SIGNS.isTagged(side.getType())) {
+                    WallSign wall = (WallSign) side.getBlockData();
+                    if (side.getRelative(wall.getFacing().getOppositeFace()).equals(block)) {
+                        writeToSign(side, stored, amount);
+                        return;
                     }
                 }
             }
         }
-
-        // set data, don't use config cuz that bugs it out lul
-        BlockStorage.addBlockInfo(block, STORED_AMOUNT, String.valueOf(amount));
-        BlockStorage.addBlockInfo(block, STORED_ITEM, id);
     }
 
+    private static void writeToSign(Block b, ItemStack item, int amount) {
+        Sign sign = (Sign) b.getState();
+        sign.setLine(0, "--------------");
+        sign.setLine(1, ChatColor.WHITE +  (item == null ? "None" : ItemUtils.getItemName(item)));
+        sign.setLine(2, ChatColor.YELLOW.toString() + amount);
+        sign.setLine(3, "--------------");
+        sign.update();
+    }
+    
 }
