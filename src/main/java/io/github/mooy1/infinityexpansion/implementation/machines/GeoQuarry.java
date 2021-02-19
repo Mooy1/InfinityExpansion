@@ -51,7 +51,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
     private static final int[] BORDER = { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 44, 45, 53 };
     private static final int[] OUTPUT_BORDER = { 19, 20, 21, 22, 23, 24, 25, 28, 34, 37, 43, 46, 47, 48, 49, 50, 51, 52 };
     private static final int[] OUTPUT_SLOTS = { 29, 30, 31, 32, 33, 38, 39, 40, 41, 42 };
-    private static final Map<Pair<Biome, World.Environment>, RandomizedSet<ItemStack>> recipes = new HashMap<>();
+    private final Map<Pair<Biome, World.Environment>, RandomizedSet<ItemStack>> recipes = new HashMap<>();
     
     public GeoQuarry() {
         super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -126,14 +126,14 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
 
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        if (PluginUtils.getCurrentTick() % 40 != 0) {
+        if (PluginUtils.getCurrentTick() % 100 != 0) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aDrilling..."));
             }
             return true;
         }
 
-        ItemStack output = recipes.computeIfAbsent(new Pair<>(b.getBiome(), b.getWorld().getEnvironment()), k -> {
+        ItemStack output = this.recipes.computeIfAbsent(new Pair<>(b.getBiome(), b.getWorld().getEnvironment()), k -> {
             RandomizedSet<ItemStack> set = new RandomizedSet<>();
             for (GEOResource resource : SlimefunPlugin.getRegistry().getGEOResources().values()) {
                 if (resource.isObtainableFromGEOMiner()) {

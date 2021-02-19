@@ -45,7 +45,7 @@ import java.util.List;
  */
 public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
-    private static final int INTERVAL = Math.max(1, Math.min(36, (int) (6 * InfinityExpansion.getDifficulty())));
+    private static final int INTERVAL = (int) (16 * InfinityExpansion.getDifficulty());
     
     public static void setup(InfinityExpansion plugin) {
         new Quarry(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

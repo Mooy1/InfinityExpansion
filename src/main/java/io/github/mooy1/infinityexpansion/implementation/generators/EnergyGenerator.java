@@ -15,6 +15,7 @@ import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import lombok.AllArgsConstructor;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
@@ -40,9 +41,7 @@ import java.util.Objects;
  *
  * @author Mooy1
  *
- * Thanks to
- * @author J3fftw1
- * for some stuff to work off of
+ * Thanks to panda for some stuff to work off of
  */
 public final class EnergyGenerator extends AbstractGenerator {
 
@@ -62,12 +61,12 @@ public final class EnergyGenerator extends AbstractGenerator {
                 MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE,
                 SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2, SlimefunItems.LAVA_GENERATOR_2,
                 MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
-        }, 45, Type.GEOTHERMAL).register(plugin);
+        }, 36, Type.GEOTHERMAL).register(plugin);
         new EnergyGenerator(Categories.ADVANCED_MACHINES, REINFORCED_GEOTHERMAL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 GEOTHERMAL, MachineItem.MACHINE_CIRCUIT, GEOTHERMAL,
                 MachineItem.MACHINE_PLATE, MachineItem.MACHINE_CORE, MachineItem.MACHINE_PLATE,
                 GEOTHERMAL, MachineItem.MACHINE_CIRCUIT, GEOTHERMAL
-        }, 225, Type.GEOTHERMAL).register(plugin);
+        }, 180, Type.GEOTHERMAL).register(plugin);
 
         new EnergyGenerator(Categories.BASIC_MACHINES, BASIC_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SmelteryItem.MAGSTEEL, MachineItem.MAGSTEEL_PLATE, SmelteryItem.MAGSTEEL,
@@ -78,18 +77,18 @@ public final class EnergyGenerator extends AbstractGenerator {
                 BASIC_PANEL, BASIC_PANEL, BASIC_PANEL,
                 SmelteryItem.TITANIUM, SlimefunItems.SOLAR_GENERATOR_4, SmelteryItem.TITANIUM,
                 MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT
-        }, 180, Type.SOLAR).register(plugin);
+        }, 120, Type.SOLAR).register(plugin);
 
         new EnergyGenerator(Categories.ADVANCED_MACHINES, CELESTIAL_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE,
                 ADVANCED_PANEL, ADVANCED_PANEL, ADVANCED_PANEL,
                 MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
-        }, 750, Type.SOLAR).register(plugin);
+        }, 500, Type.SOLAR).register(plugin);
         new EnergyGenerator(Categories.ADVANCED_MACHINES, VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
                 CELESTIAL_PANEL, CELESTIAL_PANEL, CELESTIAL_PANEL,
                 SmelteryItem.MAGNONIUM, SmelteryItem.MAGNONIUM, SmelteryItem.MAGNONIUM
-        }, 3600, Type.LUNAR).register(plugin);
+        }, 2400, Type.LUNAR).register(plugin);
 
         new EnergyGenerator(Categories.INFINITY_CHEAT, INFINITE_PANEL, InfinityWorkbench.TYPE, new ItemStack[] {
                 EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL,
@@ -98,7 +97,7 @@ public final class EnergyGenerator extends AbstractGenerator {
                 SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, SmelteryItem.INFINITY,
                 SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
                 EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL
-        }, 75000, Type.INFINITY).register(plugin);
+        }, 50000, Type.INFINITY).register(plugin);
     }
     
     public static final SlimefunItemStack HYDRO = new SlimefunItemStack(
@@ -310,6 +309,7 @@ public final class EnergyGenerator extends AbstractGenerator {
         return 4;
     }
 
+    @AllArgsConstructor
     private enum Type {
         WATER("Hydroelectric", false),
         GEOTHERMAL("Geothermal", false),
@@ -321,11 +321,6 @@ public final class EnergyGenerator extends AbstractGenerator {
         
         private final String status;
         private final boolean more;
-        
-        Type(String status, boolean more) {
-            this.status = status;
-            this.more = more;
-        }
         
     }
 

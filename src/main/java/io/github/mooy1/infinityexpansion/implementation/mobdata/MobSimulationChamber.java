@@ -173,6 +173,8 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
             }
             return;
         }
+        
+         removeCharge(b.getLocation(), energy);
 
         if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, makeSimulating(energy));
@@ -196,8 +198,6 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
                 }
             }
         }
-
-        removeCharge(b.getLocation(), energy);
     }
 
 }

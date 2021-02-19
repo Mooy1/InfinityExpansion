@@ -90,7 +90,7 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
             LorePreset.energyPerSecond(900)
     );
     
-    private static final int TIME = 150;
+    private static final int TIME = 600;
     private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int[] INPUT_SLOTS = {
             MenuPreset.slot1 + 27

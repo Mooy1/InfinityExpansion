@@ -38,13 +38,13 @@ public final class EnderEssence extends SlimefunItem implements NotPlaceable, GE
     @Override
     public int getDefaultSupply(@Nonnull World.Environment environment, @Nonnull Biome biome) {
         if (environment == World.Environment.THE_END) {
-            return 16;
-        }
-        if (biome == Biome.THE_VOID) {
             return 12;
         }
-        if (environment == World.Environment.NETHER) {
+        if (biome == Biome.THE_VOID) {
             return 8;
+        }
+        if (environment == World.Environment.NETHER) {
+            return 4;
         }
         return 0;
     }

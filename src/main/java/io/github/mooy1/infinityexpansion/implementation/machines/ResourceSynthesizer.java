@@ -65,12 +65,12 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
     private static final SlimefunItemStack[] RECIPES = {
-            Singularity.IRON, Singularity.COAL, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 24),
-            Singularity.IRON, Singularity.REDSTONE, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
-            Singularity.DIAMOND, Singularity.COAL, new SlimefunItemStack(SlimefunItems.CARBONADO, 12),
+            Singularity.IRON, Singularity.COAL, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 12),
+            Singularity.IRON, Singularity.REDSTONE, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 16),
+            Singularity.DIAMOND, Singularity.COAL, new SlimefunItemStack(SlimefunItems.CARBONADO, 8),
             Singularity.GOLD, Singularity.EMERALD, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 8),
-            Singularity.COPPER, Singularity.ZINC, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
-            Singularity.IRON, Singularity.QUARTZ, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
+            Singularity.COPPER, Singularity.ZINC, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 16),
+            Singularity.IRON, Singularity.QUARTZ, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 32)
     };
 
     public ResourceSynthesizer() {

@@ -82,7 +82,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 960;
+    private static final int TIME = 1600;
 
     private final int speed;
     private final int energy;

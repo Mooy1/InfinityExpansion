@@ -93,7 +93,7 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
             LorePreset.energyPerSecond(1800)
     );
 
-    public static final int TIME = 600;
+    private static final int TIME = 1200;
 
     private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int[] INPUT_SLOTS = {
