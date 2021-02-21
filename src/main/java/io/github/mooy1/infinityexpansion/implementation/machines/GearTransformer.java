@@ -42,7 +42,7 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
     );
 
     public static final int ENERGY = 12000;
-    public static final boolean SF = ConfigUtils.getBoolean("balance-options.allow-sf-item-transform");
+    public static final boolean SF = ConfigUtils.getBoolean("balance-options.allow-sf-item-transform", false);
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
     };

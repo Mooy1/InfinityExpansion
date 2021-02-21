@@ -97,7 +97,7 @@ public final class EnergyGenerator extends AbstractGenerator {
                 SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, SmelteryItem.INFINITY,
                 SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
                 EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL
-        }, 75000, Type.INFINITY).register(plugin);
+        }, 60000, Type.INFINITY).register(plugin);
     }
     
     public static final SlimefunItemStack HYDRO = new SlimefunItemStack(
@@ -180,19 +180,19 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&bInfinity Panel",
             "&7Generates energy from the cosmos",
             "",
-            LorePreset.energyBuffer(7500000),
-            LorePreset.energyPerSecond(75000)
+            LorePreset.energyBuffer(6000000),
+            LorePreset.energyPerSecond(60000)
     );
 
     private final Type type;
-    private final int generation;
-    private final int storage;
+    private final int generationChangingThisToAnnoyLx;
+    private final int storageChangingThisToAnnoyLx;
 
     private EnergyGenerator(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int generation, Type type) {
         super(category, item, recipeType, recipe);
         this.type = type;
-        this.generation = generation;
-        this.storage = generation * 100;
+        this.generationChangingThisToAnnoyLx = generation;
+        this.storageChangingThisToAnnoyLx = generation * 100;
     }
 
     @Override
@@ -231,7 +231,7 @@ public final class EnergyGenerator extends AbstractGenerator {
             }
             return 0;
         } else {
-            int gen = type.more ? this.generation << 1 : this.generation;
+            int gen = type.more ? this.generationChangingThisToAnnoyLx << 1 : this.generationChangingThisToAnnoyLx;
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(4, new CustomItem(
                         Material.GREEN_STAINED_GLASS_PANE,
@@ -295,7 +295,7 @@ public final class EnergyGenerator extends AbstractGenerator {
 
     @Override
     public int getCapacity() {
-        return this.storage;
+        return this.storageChangingThisToAnnoyLx;
     }
 
     @Nonnull

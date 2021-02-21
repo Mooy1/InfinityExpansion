@@ -5,8 +5,8 @@ import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.delayed.DelayedRecipeType;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.mooy1.infinitylib.recipes.large.LargeOutput;
-import io.github.mooy1.infinitylib.recipes.large.LargeRecipeMap;
+import io.github.mooy1.infinitylib.recipes.largestrict.StrictLargeOutput;
+import io.github.mooy1.infinitylib.recipes.largestrict.StrictLargeRecipeMap;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -42,7 +42,7 @@ public abstract class AbstractCrafter extends AbstractTicker {
     private static final int[] STATUS_BORDER = {14, 32};
     private static final int STATUS_SLOT = 23;
 
-    private final LargeRecipeMap recipes = new LargeRecipeMap(9);
+    private final StrictLargeRecipeMap recipes = new StrictLargeRecipeMap(9);
     
     public AbstractCrafter(Category category, SlimefunItemStack stack, DelayedRecipeType recipeType, RecipeType type, ItemStack[] recipe) {
         super(category, stack, type, recipe);
@@ -137,17 +137,6 @@ public abstract class AbstractCrafter extends AbstractTicker {
 
         } else {
             
-            // check for correct amounts
-            for (int slot = 0 ; slot < output.getSecondValue().length ; slot++) {
-                ItemStack input = inv.getItemInSlot(INPUT_SLOTS[slot]);
-                int required = output.getSecondValue()[slot];
-                if (required == 0 ? input != null : input.getAmount() < required) {
-                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
-                    MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid input amounts!");
-                    return;
-                }
-            }
-            
             if (!inv.fits(output.getFirstValue(), OUTPUT_SLOT)) { //not enough room
 
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
@@ -173,7 +162,7 @@ public abstract class AbstractCrafter extends AbstractTicker {
     
     @Nullable
     private Pair<ItemStack, int[]> getOutput(@Nonnull BlockMenu inv) {
-        LargeOutput output = this.recipes.get(inv, INPUT_SLOTS);
+        StrictLargeOutput output = this.recipes.get(inv, INPUT_SLOTS);
         if (output == null) {
             return null;
         }

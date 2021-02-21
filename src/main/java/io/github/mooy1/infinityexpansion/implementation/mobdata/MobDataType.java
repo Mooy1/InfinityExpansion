@@ -99,7 +99,7 @@ enum MobDataType {
     }, ImmutableMap.of(1, new ItemStack(Material.BLAZE_ROD, 1), 2, new ItemStack(Material.BLAZE_ROD, 1))),
 
     DRAGON("Ender Dragon", 9000, 150, 3, new ItemStack[] {
-            new ItemStack(Material.END_CRYSTAL, 64), new ItemStack(Material.DRAGON_EGG), new ItemStack(Material.CHORUS_FLOWER, 64),
+            new ItemStack(Material.END_CRYSTAL, 64), new SlimefunItemStack(CompressedItem.VOID_INGOT, 64), new ItemStack(Material.CHORUS_FLOWER, 64),
             SlimefunItems.INFUSED_ELYTRA, EmptyDataCard.ITEM, new ItemStack(Material.DRAGON_HEAD, 1),
             new SlimefunItemStack(SlimefunItems.ENDER_LUMP_3, 64), CompressedItem.VOID_INGOT, new ItemStack(Material.DRAGON_BREATH, 64)
     }, ImmutableMap.of(1, new ItemStack(Material.ENDER_PEARL, 3), 2, new ItemStack(Material.DRAGON_BREATH, 2), 8, MiscItem.VOID_BIT));

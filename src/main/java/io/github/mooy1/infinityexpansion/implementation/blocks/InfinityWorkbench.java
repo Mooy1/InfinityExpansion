@@ -10,7 +10,6 @@ import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.mooy1.infinitylib.recipes.large.LargeOutput;
 import io.github.mooy1.infinitylib.recipes.large.LargeRecipeMap;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -132,14 +131,14 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
             return;
         }
         
-        LargeOutput output = RECIPES.get(inv, INPUT_SLOTS);
+        ItemStack output = RECIPES.get(inv, INPUT_SLOTS);
         
         if (output == null) { //invalid
             MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid Recipe!");
             return;
         }
             
-        if (!inv.fits(output.getOutput(), OUTPUT_SLOTS)) { //not enough room
+        if (!inv.fits(output, OUTPUT_SLOTS)) { //not enough room
             MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
             return;
         }
@@ -150,9 +149,9 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
             }
         }
         
-        MessageUtils.message(p, ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + output.getOutput().getItemMeta().getDisplayName());
+        MessageUtils.message(p, ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + output.getItemMeta().getDisplayName());
 
-        inv.pushItem(output.getOutput().clone(), OUTPUT_SLOTS);
+        inv.pushItem(output.clone(), OUTPUT_SLOTS);
         setCharge(b.getLocation(), 0);
             
     }
@@ -160,7 +159,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
     @Override
     public void update(@Nonnull BlockMenu inv) {
 
-        LargeOutput output = RECIPES.get(inv, INPUT_SLOTS);
+        ItemStack output = RECIPES.get(inv, INPUT_SLOTS);
 
         if (output == null) { //invalid
 
@@ -168,7 +167,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
 
         } else { //correct recipe
 
-            inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.getOutput().clone()));
+            inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.clone()));
             
         }
         
