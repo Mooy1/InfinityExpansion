@@ -285,10 +285,10 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
             if (b.getWorld().getEnvironment() != World.Environment.NETHER &&
                     (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)
             ) {
-                outputItem = this.cobble.clone();
+                outputItem = this.cobble;
             }
         } else {
-            outputItem = this.cobble.clone();
+            outputItem = this.cobble;
         }
 
         if (!inv.fits(outputItem, OUTPUT_SLOTS)) {
@@ -301,7 +301,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, MINING);
         }
-        inv.pushItem(outputItem, OUTPUT_SLOTS);
+        inv.pushItem(outputItem.clone(), OUTPUT_SLOTS);
         return true;
     }
 
