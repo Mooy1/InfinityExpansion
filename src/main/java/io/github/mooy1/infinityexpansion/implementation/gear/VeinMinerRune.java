@@ -4,7 +4,6 @@ import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
-import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
@@ -50,6 +49,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A VeinMiner rune, most code from {@link SoulboundRune}
@@ -243,7 +243,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
             w.spawn(b.getLocation(), ExperienceOrb.class).setExperience(found.size() * 2);
         }
         
-        if (RandomUtils.chanceIn(2)) {
+        if (ThreadLocalRandom.current().nextBoolean()) {
             FoodLevelChangeEvent event = new FoodLevelChangeEvent(p, p.getFoodLevel() - 1);
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {

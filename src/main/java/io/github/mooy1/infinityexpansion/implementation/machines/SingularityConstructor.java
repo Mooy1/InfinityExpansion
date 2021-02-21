@@ -12,7 +12,6 @@ import io.github.mooy1.infinityexpansion.utils.Triplet;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.math.MathUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -120,7 +119,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
                                 }
                             }
 
-                            int remainder = MathUtils.modPow2(progress, 64);
+                            int remainder = progress % 64;
 
                             if (remainder > 0) {
                                 drop.setAmount(remainder);

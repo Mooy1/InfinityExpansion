@@ -97,7 +97,7 @@ public final class EnergyGenerator extends AbstractGenerator {
                 SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, SmelteryItem.INFINITY,
                 SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
                 EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL, EnergyGenerator.VOID_PANEL
-        }, 50000, Type.INFINITY).register(plugin);
+        }, 75000, Type.INFINITY).register(plugin);
     }
     
     public static final SlimefunItemStack HYDRO = new SlimefunItemStack(
@@ -180,8 +180,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&bInfinity Panel",
             "&7Generates energy from the cosmos",
             "",
-            LorePreset.energyBuffer(5000000),
-            LorePreset.energyPerSecond(50000)
+            LorePreset.energyBuffer(7500000),
+            LorePreset.energyPerSecond(75000)
     );
 
     private final Type type;

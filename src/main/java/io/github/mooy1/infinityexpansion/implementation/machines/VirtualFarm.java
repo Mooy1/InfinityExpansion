@@ -8,7 +8,6 @@ import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -33,6 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Grows crops in a virtual interface
@@ -184,7 +184,7 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
         int type = Integer.parseInt(getType(b));
 
         ItemStack output1 = new ItemStack(OUTPUTS[type], OUTPUT_AMOUNTS[type]);
-        ItemStack output2 = new ItemStack(INPUTS[type], RandomUtils.randomFromRange(1, 2));
+        ItemStack output2 = new ItemStack(INPUTS[type], 1 + ThreadLocalRandom.current().nextInt(1));
 
         if (!inv.fits(output1, OUTPUT_SLOTS)) {
 

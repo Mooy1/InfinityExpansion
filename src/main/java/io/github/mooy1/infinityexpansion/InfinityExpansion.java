@@ -4,10 +4,10 @@ import io.github.mooy1.infinityexpansion.setup.Setup;
 import io.github.mooy1.infinityexpansion.setup.commands.GiveRecipe;
 import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
 import io.github.mooy1.infinitylib.command.CommandManager;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import lombok.Getter;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,15 +30,27 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 new GiveRecipe()
         );
         
-        @SuppressWarnings("unused") 
-        final Metrics metrics = new Metrics(this, 8991);
-
-        difficulty = ConfigUtils.getDouble(getConfig(), "balance-options.difficulty", .1, 10, 1);
-
+        loadDifficulty();
+        
+        Metrics metrics = PluginUtils.setupMetrics(8991);
+        
+        metrics.addCustomChart(new Metrics.SimplePie("difficulty", () -> String.valueOf(difficulty)));
+        
         Setup.setup(this);
         
         PluginUtils.startTicker(() -> {});
 
+    }
+    
+    private void loadDifficulty() {
+        double val = ConfigUtils.getDouble(getConfig(), "balance-options.difficulty", .1, 10, 1);
+        // round to .1 .2 .3 or 1 2 3 etc
+        if (val < 1) {
+            val = ((int) (val * 10)) / 10D;
+        } else if (val > 1) {
+            val = (int) val;
+        }
+        difficulty = val;
     }
 
     @Override

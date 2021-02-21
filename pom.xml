@@ -56,15 +56,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-bukkit</artifactId>
-            <version>1.7</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>io.github.mooy1</groupId>
             <artifactId>InfinityLib</artifactId>
-            <version>cf155ec</version>
+            <version>35825fd</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -96,10 +90,6 @@
                 <version>3.1.0</version>
                 <configuration>
                     <relocations>
-                        <relocation>
-                            <pattern>org.bstats</pattern>
-                            <shadedPattern>io.github.mooy1.infinityexpansion.bstats</shadedPattern>
-                        </relocation>
                         <relocation>
                             <pattern>io.github.mooy1.infinitylib</pattern>
                             <shadedPattern>io.github.mooy1.infinityexpansion.infinitylib</shadedPattern>

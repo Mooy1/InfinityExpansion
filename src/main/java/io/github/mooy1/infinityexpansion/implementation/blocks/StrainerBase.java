@@ -4,7 +4,6 @@ import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
-import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -30,6 +29,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates items slowly using up strainers, must be waterlogged
@@ -163,10 +164,12 @@ public final class StrainerBase extends AbstractTicker implements RecipeDisplayI
 
             return;
         }
+        
+        Random random = ThreadLocalRandom.current();
 
         //progress
 
-        if (!RandomUtils.chanceIn(TIME / speed)) {
+        if (random.nextInt(TIME / speed) != 0) {
 
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
@@ -177,11 +180,11 @@ public final class StrainerBase extends AbstractTicker implements RecipeDisplayI
 
         //fish
 
-        if (RandomUtils.chanceIn(10000)) {
+        if (random.nextInt(10000) == 0) {
             inv.pushItem(POTATO, OUTPUT_SLOTS);
         }
 
-        ItemStack output = RandomUtils.randomOutput(OUTPUTS);
+        ItemStack output = OUTPUTS[random.nextInt(OUTPUTS.length)];
 
         //check fits
 
@@ -196,7 +199,7 @@ public final class StrainerBase extends AbstractTicker implements RecipeDisplayI
 
         //output
 
-        inv.pushItem(output, OUTPUT_SLOTS);
+        inv.pushItem(output.clone(), OUTPUT_SLOTS);
 
         if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMaterial Collected!"));
@@ -204,7 +207,7 @@ public final class StrainerBase extends AbstractTicker implements RecipeDisplayI
 
         //reduce durability
 
-        if (RandomUtils.chanceIn(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + 3 * strainer.getEnchantmentLevel(Enchantment.MENDING) + 1)) {
+        if (random.nextInt(strainer.getEnchantmentLevel(Enchantment.DURABILITY) + 3 * strainer.getEnchantmentLevel(Enchantment.MENDING) + 1) == 0) {
             ItemMeta itemMeta = strainer.getItemMeta();
             Damageable durability = (Damageable) itemMeta;
 
@@ -222,8 +225,6 @@ public final class StrainerBase extends AbstractTicker implements RecipeDisplayI
 
             }
         }
-        //((Waterlogged) blockData).setWaterlogged(false);
-        //b.setBlockData(blockData);
     }
 
 }

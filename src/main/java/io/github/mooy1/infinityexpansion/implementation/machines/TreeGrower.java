@@ -8,7 +8,6 @@ import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -36,6 +35,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Grows trees in a virtual interface
@@ -201,9 +202,10 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
         //done
         String type = getType(b);
 
-        ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), RandomUtils.randomFromRange(6, 12));
-        ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), RandomUtils.randomFromRange(8, 16));
-        ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), RandomUtils.randomFromRange(1, 2));
+        Random rand = ThreadLocalRandom.current();
+        ItemStack output1 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LOG")), 6 + rand.nextInt(6));
+        ItemStack output2 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_LEAVES")), 8 + rand.nextInt(8));
+        ItemStack output3 = new ItemStack(Objects.requireNonNull(Material.getMaterial(type + "_SAPLING")), 1 + rand.nextInt(1));
 
         if (!inv.fits(output1, OUTPUT_SLOTS)) {
 

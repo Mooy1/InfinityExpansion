@@ -7,7 +7,6 @@ import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
@@ -31,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class MobSimulationChamber extends AbstractTicker implements EnergyNetComponent {
     
@@ -45,12 +45,12 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
     );
     
     private static final int CARD_SLOT = MenuPreset.slot1 + 27;
-    private static final int INTERVAL = 16;
+    private static final int INTERVAL = 24;
     private static final int STATUS_SLOT = MenuPreset.slot1;
     private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int XP_Slot = 46;
     public static final int BUFFER = 16000;
-    public static final int ENERGY = 240;
+    public static final int ENERGY = 360;
     private static final int CHANCE = ConfigUtils.getInt("balance-options.mob-simulation-xp-chance", 1, 10, 2);
 
     private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
@@ -156,7 +156,7 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
 
     @Override
     protected void tick(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        MobDataCard.Type card = MobDataCard.CARDS.get(StackUtils.getIDofNullable(inv.getItemInSlot(CARD_SLOT)));
+        MobDataType card = MobDataCard.CARDS.get(StackUtils.getIDofNullable(inv.getItemInSlot(CARD_SLOT)));
 
         if (card == null) {
             if (inv.hasViewer()) {
@@ -183,13 +183,13 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
 
         if (PluginUtils.getCurrentTick() % INTERVAL != 0) return;
 
-        if (RandomUtils.chanceIn(CHANCE)) {
+        if (ThreadLocalRandom.current().nextInt(CHANCE) == 0) {
             int xp = getXP(b.getLocation()) + card.xp;
             setXp(b.getLocation(), xp);
         }
 
         for (Map.Entry<Integer, ItemStack> entry : card.drops.entrySet()) {
-            if (RandomUtils.chanceIn(entry.getKey())) {
+            if (ThreadLocalRandom.current().nextInt(entry.getKey()) == 0) {
                 ItemStack output = entry.getValue();
                 if (inv.fits(output, OUTPUT_SLOTS)) {
                     inv.pushItem(output.clone(), OUTPUT_SLOTS);

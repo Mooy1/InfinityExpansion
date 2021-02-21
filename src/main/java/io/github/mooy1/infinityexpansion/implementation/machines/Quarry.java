@@ -11,7 +11,6 @@ import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.math.RandomUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -37,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Mines stuff
@@ -45,7 +46,7 @@ import java.util.List;
  */
 public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
-    private static final int INTERVAL = (int) (16 * InfinityExpansion.getDifficulty());
+    private static final int INTERVAL = (int) (10 * InfinityExpansion.getDifficulty());
     
     public static void setup(InfinityExpansion plugin) {
         new Quarry(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -113,28 +114,28 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
                 CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT,
                 CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT,
                 CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT
-        }, 36000, 16, 2, new ItemStack[] {
+        }, 36000, 24, 2, new ItemStack[] {
                 new ItemStack(Material.COAL, 64),
-                new ItemStack(Material.IRON_INGOT, 16),
-                new ItemStack(Material.NETHERRACK, 16),
-                new ItemStack(Material.NETHERRACK, 16),
+                new ItemStack(Material.IRON_INGOT, 24),
+                new ItemStack(Material.NETHERRACK, 24),
+                new ItemStack(Material.NETHERRACK, 24),
                 new ItemStack(Material.QUARTZ, 64),
                 new ItemStack(Material.COAL, 64),
-                new ItemStack(Material.GOLD_INGOT, 16),
-                new CustomItem(SlimefunItems.MAGNESIUM_INGOT, 16),
-                new CustomItem(SlimefunItems.COPPER_INGOT, 16),
-                new CustomItem(SlimefunItems.ZINC_INGOT, 16),
-                new CustomItem(SlimefunItems.TIN_INGOT, 16),
-                new CustomItem(SlimefunItems.ALUMINUM_INGOT, 16),
-                new CustomItem(SlimefunItems.SILVER_INGOT, 16),
-                new CustomItem(SlimefunItems.LEAD_INGOT, 16),
+                new ItemStack(Material.GOLD_INGOT, 24),
+                new CustomItem(SlimefunItems.MAGNESIUM_INGOT, 24),
+                new CustomItem(SlimefunItems.COPPER_INGOT, 24),
+                new CustomItem(SlimefunItems.ZINC_INGOT, 24),
+                new CustomItem(SlimefunItems.TIN_INGOT, 24),
+                new CustomItem(SlimefunItems.ALUMINUM_INGOT, 24),
+                new CustomItem(SlimefunItems.SILVER_INGOT, 24),
+                new CustomItem(SlimefunItems.LEAD_INGOT, 24),
                 new ItemStack(Material.LAPIS_LAZULI, 64),
-                new ItemStack(Material.EMERALD, 16),
+                new ItemStack(Material.EMERALD, 24),
                 new ItemStack(Material.COAL, 64),
-                new ItemStack(Material.DIAMOND, 16),
+                new ItemStack(Material.DIAMOND, 24),
                 new ItemStack(Material.REDSTONE, 64),
-                new CustomItem(SlimefunItems.GOLD_24K, 16),
-                new ItemStack(Material.NETHERITE_INGOT, 8),
+                new CustomItem(SlimefunItems.GOLD_24K, 24),
+                new ItemStack(Material.NETHERITE_INGOT, 16),
         }).register(plugin);
     }
     
@@ -276,8 +277,10 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
 
         ItemStack outputItem;
 
-        if (RandomUtils.chanceIn(this.chance)) {
-            outputItem = RandomUtils.randomOutput(this.outputs);
+        Random random = ThreadLocalRandom.current();
+        
+        if (random.nextInt(this.chance) == 0) {
+            outputItem = this.outputs[random.nextInt(this.outputs.length)];
             Material outputType = outputItem.getType();
             if (b.getWorld().getEnvironment() != World.Environment.NETHER &&
                     (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)
