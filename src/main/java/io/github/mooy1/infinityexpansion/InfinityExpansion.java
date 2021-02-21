@@ -39,7 +39,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         Setup.setup(this);
         
         PluginUtils.startTicker(() -> {});
-
+        
     }
     
     private void loadDifficulty() {
