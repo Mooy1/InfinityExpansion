@@ -9,7 +9,6 @@ import io.github.mooy1.infinitylib.command.CommandManager;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import lombok.Getter;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -21,7 +20,7 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
     private static InfinityExpansion instance;
     @Getter
     private static double difficulty = 1;
-
+    
     @Override
     public void onEnable() {
         instance = this;
@@ -32,28 +31,30 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
                 new GiveRecipe()
         );
         
+        Metrics metrics = PluginUtils.setupMetrics(8991);
+
         loadDifficulty();
         
-        Metrics metrics = PluginUtils.setupMetrics(8991);
-        
         metrics.addCustomChart(new Metrics.SimplePie("difficulty", () -> String.valueOf(difficulty)));
+        
+        boolean lXInstalled = getServer().getPluginManager().getPlugin("LiteXpansion") != null;
+        
+        if (lXInstalled) {
+            PluginUtils.runSync(() -> PluginUtils.log(Level.WARNING,
+                    "############################################",
+                    "LiteXpansion has done some nerfs on a few of this addon's items,",
+                    " aswell as some of Slimefun's items.",
+                    "If you don't want these nerfs, you will need to remove LiteXpansion.",
+                    "Any complaints as a result of this should be directed to LiteXpansion.",
+                    "############################################"
+            ));
+        }
+        
+        metrics.addCustomChart(new Metrics.SimplePie("litexpansion_installed", () -> String.valueOf(lXInstalled)));
         
         Setup.setup(this);
         
         PluginUtils.startTicker(() -> {});
-
-        PluginUtils.runSync(() -> {
-            Plugin lx = getServer().getPluginManager().getPlugin("LiteXpansion");
-            if (lx != null) {
-                PluginUtils.log(Level.WARNING,
-                        "############################################",
-                        "LiteXpansion has done some nerfs on a few of this addon's items,", 
-                        " aswell as some of Slimefun's items.",
-                        "If you don't want these nerfs, you will need to remove LiteXpansion.",
-                        "Any complaints as a result of this should be directed to LiteXpansion.",
-                        "############################################");
-            }
-        });
     }
     
     private void loadDifficulty() {
