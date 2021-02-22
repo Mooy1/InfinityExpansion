@@ -386,10 +386,10 @@ public final class StorageUnit extends AbstractTicker {
 
     private static void writeToSign(Block b, ItemStack item, int amount) {
         Sign sign = (Sign) b.getState();
-        sign.setLine(0, "--------------");
+        sign.setLine(0, ChatColor.GRAY + "--------------");
         sign.setLine(1, ChatColor.WHITE +  (item == null ? "None" : ItemUtils.getItemName(item)));
         sign.setLine(2, ChatColor.YELLOW.toString() + amount);
-        sign.setLine(3, "--------------");
+        sign.setLine(3, ChatColor.GRAY + "--------------");
         sign.update();
     }
     

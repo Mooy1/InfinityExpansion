@@ -41,12 +41,13 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         
         if (lXInstalled) {
             PluginUtils.runSync(() -> PluginUtils.log(Level.WARNING,
-                    "############################################",
+                    "###################################################################################",
                     "LiteXpansion has done some nerfs on a few of this addon's items,",
-                    " aswell as some of Slimefun's items.",
+                    "specifically solar panels, aswell as some of Slimefun's items.",
                     "If you don't want these nerfs, you will need to remove LiteXpansion.",
+                    "If you want to keep LiteXpansion, make a suggestion to them to add config options.",
                     "Any complaints as a result of this should be directed to LiteXpansion.",
-                    "############################################"
+                    "###################################################################################"
             ));
         }
         
