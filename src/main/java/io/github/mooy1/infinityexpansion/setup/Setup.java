@@ -59,7 +59,7 @@ import java.util.logging.Level;
  * @author Mooy1
  */
 public final class Setup {
-
+    
     public static void setup(@Nonnull InfinityExpansion plugin) {
         
         // stacks

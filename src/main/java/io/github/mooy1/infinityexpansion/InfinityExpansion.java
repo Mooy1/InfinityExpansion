@@ -9,9 +9,11 @@ import io.github.mooy1.infinitylib.command.CommandManager;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import java.util.logging.Level;
 
 public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
 
@@ -39,7 +41,19 @@ public class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
         Setup.setup(this);
         
         PluginUtils.startTicker(() -> {});
-        
+
+        PluginUtils.runSync(() -> {
+            Plugin lx = getServer().getPluginManager().getPlugin("LiteXpansion");
+            if (lx != null) {
+                PluginUtils.log(Level.WARNING,
+                        "############################################",
+                        "LiteXpansion has done some nerfs on a few of this addon's items,", 
+                        " aswell as some of Slimefun's items.",
+                        "If you don't want these nerfs, you will need to remove LiteXpansion.",
+                        "Any complaints as a result of this should be directed to LiteXpansion.",
+                        "############################################");
+            }
+        });
     }
     
     private void loadDifficulty() {

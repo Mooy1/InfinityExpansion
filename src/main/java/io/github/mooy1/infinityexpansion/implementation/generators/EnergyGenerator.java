@@ -185,13 +185,13 @@ public final class EnergyGenerator extends AbstractGenerator {
     );
 
     private final Type type;
-    private final Generator generation;
+    private final int generation;
     private final int storage;
 
     private EnergyGenerator(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, final int generation, Type type) {
         super(category, item, recipeType, recipe);
         this.type = type;
-        this.generation = () -> generation;
+        this.generation = generation;
         this.storage = generation * 100;
     }
 
@@ -231,7 +231,7 @@ public final class EnergyGenerator extends AbstractGenerator {
             }
             return 0;
         } else {
-            int gen = type.more ? this.generation.generate() << 1 : this.generation.generate();
+            int gen = type.more ? this.generation << 1 : this.generation;
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(4, new CustomItem(
                         Material.GREEN_STAINED_GLASS_PANE,
@@ -322,12 +322,6 @@ public final class EnergyGenerator extends AbstractGenerator {
         private final String status;
         private final boolean more;
         
-    }
-    
-    // lul
-    @FunctionalInterface
-    private interface Generator {
-        int generate();
     }
 
 }
