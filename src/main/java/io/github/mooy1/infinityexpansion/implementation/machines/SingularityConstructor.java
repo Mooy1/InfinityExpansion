@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
@@ -49,10 +49,10 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
         }, 120, 1).register(plugin);
         new SingularityConstructor(Categories.INFINITY_CHEAT, INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
                 null, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, null,
-                null, Items.VOID_INGOT, Items.CIRCUIT, Items.CIRCUIT, Items.VOID_INGOT, null,
+                null, Items.VOID_INGOT, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, Items.VOID_INGOT, null,
                 null, Items.VOID_INGOT, BASIC, BASIC, Items.VOID_INGOT, null,
                 null, Items.VOID_INGOT, BASIC, BASIC, Items.VOID_INGOT, null,
-                null, Items.INFINITY, Items.CORE, Items.CORE, Items.INFINITY, null,
+                null, Items.INFINITY, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.INFINITY, null,
                 Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY
         }, 1200, 32).register(plugin);
     }

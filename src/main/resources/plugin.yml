@@ -18,3 +18,4 @@ permissions:
   infinityexpansion.admin:
     description: InfinityExpansion admin commands
     default: op
+    

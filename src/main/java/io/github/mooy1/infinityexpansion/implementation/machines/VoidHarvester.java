@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -46,8 +46,8 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         new VoidHarvester(Categories.INFINITY_CHEAT, INFINITE, InfinityWorkbench.TYPE, new ItemStack[] {
                 Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
                 Items.MAGNONIUM, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.MAGNONIUM,
-                Items.MAGNONIUM, Items.VOID_INGOT, Items.CIRCUIT, Items.CIRCUIT, Items.VOID_INGOT, Items.MAGNONIUM,
-                Items.MAGNONIUM, Items.VOID_INGOT, Items.CORE, Items.CORE, Items.VOID_INGOT, Items.MAGNONIUM,
+                Items.MAGNONIUM, Items.VOID_INGOT, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, Items.VOID_INGOT, Items.MAGNONIUM,
+                Items.MAGNONIUM, Items.VOID_INGOT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.VOID_INGOT, Items.MAGNONIUM,
                 Items.MAGNONIUM, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.MAGNONIUM,
                 Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE
         }, 1200, 32).register(plugin);

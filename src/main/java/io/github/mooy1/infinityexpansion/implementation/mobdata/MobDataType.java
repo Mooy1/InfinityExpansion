@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.mooy1.infinityexpansion.implementation.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;

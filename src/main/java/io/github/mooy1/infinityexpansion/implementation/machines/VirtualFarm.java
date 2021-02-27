@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
@@ -56,7 +56,7 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
                 new ItemStack(Material.GLASS), null, null, null, null, new ItemStack(Material.GLASS),
                 new ItemStack(Material.GLASS), new ItemStack(Material.GRASS_BLOCK), new ItemStack(Material.GRASS_BLOCK), new ItemStack(Material.GRASS_BLOCK), new ItemStack(Material.GRASS_BLOCK), new ItemStack(Material.GLASS),
                 Items.MACHINE_PLATE, SlimefunItems.CROP_GROWTH_ACCELERATOR_2, ADVANCED, ADVANCED, SlimefunItems.CROP_GROWTH_ACCELERATOR_2, Items.MACHINE_PLATE,
-                Items.MACHINE_PLATE, Items.CIRCUIT, Items.CORE, Items.CORE, Items.CIRCUIT, Items.MACHINE_PLATE
+                Items.MACHINE_PLATE, Items.INFINITE_CIRCUIT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.INFINITE_CIRCUIT, Items.MACHINE_PLATE
         }, 900, 25).register(plugin);
     }
     

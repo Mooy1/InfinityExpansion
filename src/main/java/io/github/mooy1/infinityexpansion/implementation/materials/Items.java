@@ -1,15 +1,14 @@
-package io.github.mooy1.infinityexpansion.implementation;
+package io.github.mooy1.infinityexpansion.implementation.materials;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
-import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
-import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.presets.RecipePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.Material;
@@ -59,7 +58,7 @@ public final class Items {
                 MAGSTEEL_PLATE, TITANIUM, MAGSTEEL_PLATE,
                 SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_PLATE, SlimefunItems.REINFORCED_ALLOY_INGOT
         });
-        register(CIRCUIT, InfinityWorkbench.TYPE, new ItemStack[] {
+        register(Categories.INFINITY_CHEAT, INFINITE_CIRCUIT, InfinityWorkbench.TYPE, new ItemStack[] {
                 MACHINE_CIRCUIT, INFINITY, MACHINE_CIRCUIT, MACHINE_CIRCUIT, INFINITY, MACHINE_CIRCUIT,
                 VOID_INGOT, MACHINE_CIRCUIT, VOID_INGOT, VOID_INGOT, MACHINE_CIRCUIT, VOID_INGOT,
                 INFINITY, VOID_INGOT, MACHINE_CIRCUIT, MACHINE_CIRCUIT, VOID_INGOT, INFINITY,
@@ -67,7 +66,7 @@ public final class Items {
                 VOID_INGOT, MACHINE_CIRCUIT, VOID_INGOT, VOID_INGOT, MACHINE_CIRCUIT, VOID_INGOT,
                 MACHINE_CIRCUIT, INFINITY, MACHINE_CIRCUIT, MACHINE_CIRCUIT, INFINITY, MACHINE_CIRCUIT
         });
-        register(CORE, InfinityWorkbench.TYPE, new ItemStack[] {
+        register(Categories.INFINITY_CHEAT, INFINITE_CORE, InfinityWorkbench.TYPE, new ItemStack[] {
                 MACHINE_PLATE, MACHINE_CORE, INFINITY, INFINITY, MACHINE_CORE, MACHINE_PLATE,
                 MACHINE_CORE, MACHINE_PLATE, MACHINE_CIRCUIT, MACHINE_CIRCUIT, MACHINE_PLATE, MACHINE_CORE,
                 INFINITY, MACHINE_CIRCUIT, INFINITY, INFINITY, MACHINE_CIRCUIT, INFINITY,
@@ -86,16 +85,20 @@ public final class Items {
     }
     
     private static void register(SlimefunItemStack itemStack, RecipeType type, ItemStack[] recipe) {
-        new SlimefunItem(Categories.MAIN_MATERIALS, itemStack, type, recipe).register(InfinityExpansion.getInstance());
+        register(Categories.MAIN_MATERIALS, itemStack, type, recipe);
     }
     
-    public static final SlimefunItemStack CIRCUIT = new SlimefunItemStack(
+    private static void register(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+        new SlimefunItem(category, item, recipeType, recipe).register(InfinityExpansion.getInstance());
+    }
+    
+    public static final SlimefunItemStack INFINITE_CIRCUIT = new SlimefunItemStack(
             "INFINITE_MACHINE_CIRCUIT",
             Material.DIAMOND,
             "&bInfinite &6Machine Circuit",
             "&7Machine Component"
     );
-    public static final SlimefunItemStack CORE = new SlimefunItemStack(
+    public static final SlimefunItemStack INFINITE_CORE = new SlimefunItemStack(
             "INFINITE_MACHINE_CORE",
             Material.DIAMOND_BLOCK,
             "&bInfinite Machine Core",

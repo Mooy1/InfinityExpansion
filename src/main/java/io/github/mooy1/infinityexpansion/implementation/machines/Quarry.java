@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityTool;
 import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
@@ -106,8 +106,8 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         
         new Quarry(Categories.INFINITY_CHEAT,INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
                 null, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, null,
-                Items.MACHINE_PLATE, InfinityTool.PICKAXE, Items.CIRCUIT, Items.CIRCUIT, InfinityTool.PICKAXE, Items.MACHINE_PLATE,
-                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CORE, Items.CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, InfinityTool.PICKAXE, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, InfinityTool.PICKAXE, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
                 Items.VOID_INGOT, null, Items.INFINITY, Items.INFINITY, null, Items.VOID_INGOT,
                 Items.VOID_INGOT, null, Items.INFINITY, Items.INFINITY, null, Items.VOID_INGOT,
                 Items.VOID_INGOT, null, Items.INFINITY, Items.INFINITY, null, Items.VOID_INGOT

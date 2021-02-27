@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.setup;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
@@ -157,10 +157,10 @@ public final class SlimefunExtension {
         new Capacitor(Categories.INFINITY_CHEAT, INFINITY_CAPACITY, INFINITY_CAPACITOR,
                 InfinityWorkbench.TYPE, new ItemStack[] {
                 null, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, null,
-                null, Items.INFINITY, Items.CIRCUIT, Items.CIRCUIT, Items.INFINITY, null,
+                null, Items.INFINITY, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, Items.INFINITY, null,
                 null, Items.INFINITY, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITY, null,
                 null, Items.INFINITY, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITY, null,
-                null, Items.INFINITY, Items.CIRCUIT, Items.CIRCUIT, Items.INFINITY, null,
+                null, Items.INFINITY, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, Items.INFINITY, null,
                 null, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, null
         }).register(plugin);
 
@@ -197,8 +197,8 @@ public final class SlimefunExtension {
                 null, null, null, null, null, null,
                 Items.VOID_INGOT, null, null, null, null, Items.VOID_INGOT,
                 Items.VOID_INGOT, Items.VOID_INGOT, ADVANCED_ENCHANTER, ADVANCED_ENCHANTER, Items.VOID_INGOT, Items.VOID_INGOT,
-                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CIRCUIT, Items.CIRCUIT, Items.VOID_INGOT, Items.MACHINE_PLATE,
-                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CORE, Items.CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
                 Items.MACHINE_PLATE, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.MACHINE_PLATE
         }) {
             @Override
@@ -211,8 +211,8 @@ public final class SlimefunExtension {
                 null, null, null, null, null, null,
                 Items.VOID_INGOT, null, null, null, null, Items.VOID_INGOT,
                 Items.VOID_INGOT, Items.VOID_INGOT, ADVANCED_DISENCHANTER, ADVANCED_DISENCHANTER, Items.VOID_INGOT, Items.VOID_INGOT,
-                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CIRCUIT, Items.CIRCUIT, Items.VOID_INGOT, Items.MACHINE_PLATE,
-                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CORE, Items.CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
                 Items.MACHINE_PLATE, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.MACHINE_PLATE
         }) {
             @Override
@@ -232,7 +232,7 @@ public final class SlimefunExtension {
                 Items.VOID_INGOT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.VOID_INGOT,
                 Items.VOID_INGOT, Items.MACHINE_CIRCUIT, ADVANCED_CHARGER, ADVANCED_CHARGER, Items.MACHINE_CIRCUIT, Items.VOID_INGOT,
                 Items.VOID_INGOT, Items.MACHINE_CIRCUIT, ADVANCED_CHARGER, ADVANCED_CHARGER, Items.MACHINE_CIRCUIT, Items.VOID_INGOT,
-                Items.VOID_INGOT, Items.CIRCUIT, Items.CORE, Items.CORE, Items.CIRCUIT, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.INFINITE_CIRCUIT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.INFINITE_CIRCUIT, Items.VOID_INGOT,
                 Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY
         }).setCapacity(INFINITY_CHARGER_ENERGY).setEnergyConsumption(INFINITY_CHARGER_ENERGY).setProcessingSpeed(INFINITY_CHARGER_SPEED).register(plugin);
         

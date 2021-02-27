@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
-import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.setup.categories.InfinityCategory;
 import io.github.mooy1.infinityexpansion.utils.Util;
@@ -67,12 +67,10 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
     public static final List<String> IDS = new ArrayList<>();
     
     public static final RecipeType TYPE = new RecipeType(PluginUtils.getKey("infinity_forge"), ITEM, (stacks, stack) -> {
-        if (stacks.length == 36 && stack instanceof SlimefunItemStack) {
-            SlimefunItemStack item = (SlimefunItemStack) stack;
-            RECIPES.put(stacks, item);
-            ITEMS.put(item.getItemId(), new Pair<>(item, stacks));
-            IDS.add(item.getItemId());
-        }
+        SlimefunItemStack item = (SlimefunItemStack) stack;
+        RECIPES.put(stacks, item);
+        ITEMS.put(item.getItemId(), new Pair<>(item, stacks));
+        IDS.add(item.getItemId());
     }, "", "&cUse the infinity recipes category to see the correct recipe!");
     
     public InfinityWorkbench() {
