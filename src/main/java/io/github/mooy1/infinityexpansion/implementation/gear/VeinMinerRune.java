@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
@@ -80,9 +80,9 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     
     public VeinMinerRune() {
         super(Categories.MAIN_MATERIALS, ITEM, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
-                SmelteryItem.MAGSTEEL, SlimefunItems.PICKAXE_OF_VEIN_MINING, SmelteryItem.MAGSTEEL,
+                Items.MAGSTEEL, SlimefunItems.PICKAXE_OF_VEIN_MINING, Items.MAGSTEEL,
                 new ItemStack(Material.REDSTONE_ORE), SlimefunItems.BLANK_RUNE, new ItemStack(Material.LAPIS_ORE),
-                SmelteryItem.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, SmelteryItem.MAGSTEEL,
+                Items.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, Items.MAGSTEEL,
         });
         LeaveListener.add(CDS);
         PluginUtils.registerListener(this);

@@ -35,9 +35,9 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        for (int i : this.type.drops.keySet()) {
+        for (ItemStack i : this.type.drops.values()) {
             items.add(null);
-            items.add(this.type.drops.get(i));
+            items.add(i);
         }
 
         return items;

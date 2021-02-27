@@ -1,7 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -55,9 +54,9 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
     
     public GeoQuarry() {
         super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
-                CompressedItem.VOID_INGOT, SlimefunExtension.ADVANCED_GEO_MINER, CompressedItem.VOID_INGOT,
-                MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.VOID_INGOT, SlimefunExtension.ADVANCED_GEO_MINER, Items.VOID_INGOT,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE,
         });
         
         registerBlockHandler(getId(), (p, b, item, reason) -> {

@@ -1,9 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
-import io.github.mooy1.infinityexpansion.implementation.materials.MiscItem;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -77,7 +76,7 @@ enum MobDataType {
             new ItemStack(Material.SPONGE, 4), EmptyDataCard.ITEM, new ItemStack(Material.PUFFERFISH, 4),
             new ItemStack(Material.PRISMARINE_CRYSTALS, 64), new ItemStack(Material.PRISMARINE_SHARD, 64), new ItemStack(Material.COOKED_COD, 16)
     }, ImmutableMap.of(1, new ItemStack(Material.PRISMARINE_SHARD), 2, new ItemStack(Material.PRISMARINE_CRYSTALS),
-            3, new ItemStack(Material.COD), 8, new ItemStack(Material.PUFFERFISH), 16, new ItemStack(Material.SPONGE))),
+            3, new ItemStack(Material.COD), 8, new ItemStack(Material.PUFFERFISH), 32, new ItemStack(Material.SPONGE))),
 
     CHICKEN("Chicken", 60, 1, 1, new ItemStack[] {
             new ItemStack(Material.CHICKEN, 64), new ItemStack(Material.FEATHER, 64), new ItemStack(Material.COOKED_CHICKEN, 64),
@@ -99,10 +98,10 @@ enum MobDataType {
     }, ImmutableMap.of(1, new ItemStack(Material.BLAZE_ROD, 1), 2, new ItemStack(Material.BLAZE_ROD, 1))),
 
     DRAGON("Ender Dragon", 9000, 150, 3, new ItemStack[] {
-            new ItemStack(Material.END_CRYSTAL, 64), new SlimefunItemStack(CompressedItem.VOID_INGOT, 64), new ItemStack(Material.CHORUS_FLOWER, 64),
+            new ItemStack(Material.END_CRYSTAL, 64), new SlimefunItemStack(Items.VOID_INGOT, 32), new ItemStack(Material.CHORUS_FLOWER, 64),
             SlimefunItems.INFUSED_ELYTRA, EmptyDataCard.ITEM, new ItemStack(Material.DRAGON_HEAD, 1),
-            new SlimefunItemStack(SlimefunItems.ENDER_LUMP_3, 64), CompressedItem.VOID_INGOT, new ItemStack(Material.DRAGON_BREATH, 64)
-    }, ImmutableMap.of(1, new ItemStack(Material.ENDER_PEARL, 3), 2, new ItemStack(Material.DRAGON_BREATH, 2), 8, MiscItem.VOID_BIT));
+            new SlimefunItemStack(SlimefunItems.ENDER_LUMP_3, 64), new SlimefunItemStack(Items.VOID_INGOT, 32), new ItemStack(Material.DRAGON_BREATH, 64)
+    }, ImmutableMap.of(1, new ItemStack(Material.ENDER_PEARL, 3), 2, new ItemStack(Material.DRAGON_BREATH, 2), 8, Items.VOID_BIT));
 
     @Nonnull
     final ItemStack[] recipe;

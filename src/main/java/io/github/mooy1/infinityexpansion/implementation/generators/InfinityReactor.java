@@ -1,11 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -63,12 +60,12 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
 
     public InfinityReactor() {
         super(Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[]  {
-                null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, SlimefunExtension.ADVANCED_NETHER_STAR_REACTOR, SlimefunExtension.ADVANCED_NETHER_STAR_REACTOR, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, SmelteryItem.INFINITY
+                null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
+                Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY,
+                Items.INFINITY, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.INFINITY,
+                Items.INFINITY, Items.MACHINE_PLATE, SlimefunExtension.ADVANCED_NETHER_STAR_REACTOR, SlimefunExtension.ADVANCED_NETHER_STAR_REACTOR, Items.MACHINE_PLATE, Items.INFINITY,
+                Items.INFINITY, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.INFINITY,
+                Items.INFINITY, Items.CIRCUIT, Items.CORE, Items.CORE, Items.CIRCUIT, Items.INFINITY
         });
         
         registerBlockHandler(getId(), (p, b, stack, reason) -> {
@@ -110,9 +107,9 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
             String input = StackUtils.getID(item);
-            if (CompressedItem.VOID_INGOT.getItemId().equals(input)) {
+            if (Items.VOID_INGOT.getItemId().equals(input)) {
                 return new int[] {INPUT_SLOTS[1]};
-            } else if (SmelteryItem.INFINITY.getItemId().equals(input)) {
+            } else if (Items.INFINITY.getItemId().equals(input)) {
                 return new int[] {INPUT_SLOTS[0]};
             }
         }
@@ -225,12 +222,12 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack item = SmelteryItem.INFINITY.clone();
+        ItemStack item = Items.INFINITY.clone();
         LoreUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 1 day");
         items.add(item);
         items.add(null);
 
-        item = CompressedItem.VOID_INGOT.clone();
+        item = Items.VOID_INGOT.clone();
         LoreUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 4 hours");
         items.add(item);
         items.add(null);

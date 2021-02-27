@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.delayed.DelayedRecipeType;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -36,9 +36,9 @@ public final class MobDataInfuser extends AbstractCrafter implements EnergyNetCo
 
     public MobDataInfuser() {
         super(Categories.MOB_SIMULATION, ITEM, TYPE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                MachineItem.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, MachineItem.MACHINE_CIRCUIT,
-                SlimefunItems.REINFORCED_ALLOY_INGOT, MachineItem.MACHINE_CORE, SlimefunItems.REINFORCED_ALLOY_INGOT,
-                MachineItem.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, MachineItem.MACHINE_CIRCUIT
+                Items.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CIRCUIT,
+                SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CORE, SlimefunItems.REINFORCED_ALLOY_INGOT,
+                Items.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CIRCUIT
         });
     }
 

@@ -1,12 +1,9 @@
 package io.github.mooy1.infinityexpansion.setup;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -159,25 +156,25 @@ public final class SlimefunExtension {
         
         new Capacitor(Categories.INFINITY_CHEAT, INFINITY_CAPACITY, INFINITY_CAPACITOR,
                 InfinityWorkbench.TYPE, new ItemStack[] {
-                null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null,
-                null, SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CIRCUIT, SmelteryItem.INFINITY, null,
-                null, SmelteryItem.INFINITY, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, SmelteryItem.INFINITY, null,
-                null, SmelteryItem.INFINITY, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, SmelteryItem.INFINITY, null,
-                null, SmelteryItem.INFINITY, InfinityItem.CIRCUIT, InfinityItem.CIRCUIT, SmelteryItem.INFINITY, null,
-                null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null
+                null, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, null,
+                null, Items.INFINITY, Items.CIRCUIT, Items.CIRCUIT, Items.INFINITY, null,
+                null, Items.INFINITY, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITY, null,
+                null, Items.INFINITY, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, Items.INFINITY, null,
+                null, Items.INFINITY, Items.CIRCUIT, Items.CIRCUIT, Items.INFINITY, null,
+                null, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, null
         }).register(plugin);
 
         new Capacitor(Categories.ADVANCED_MACHINES, VOID_CAPACITY, VOID_CAPACITOR,
                 RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                CompressedItem.VOID_INGOT, Singularity.REDSTONE, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, Singularity.REDSTONE, CompressedItem.VOID_INGOT
+                Items.VOID_INGOT, Singularity.REDSTONE, Items.VOID_INGOT,
+                Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT,
+                Items.VOID_INGOT, Singularity.REDSTONE, Items.VOID_INGOT
         }).register(plugin);
 
         new AutoEnchanter(Categories.ADVANCED_MACHINES, ADVANCED_ENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL,
-                MachineItem.MAGSTEEL_PLATE, SlimefunItems.AUTO_ENCHANTER, MachineItem.MAGSTEEL_PLATE,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
+                Items.MAGSTEEL_PLATE, SlimefunItems.AUTO_ENCHANTER, Items.MAGSTEEL_PLATE,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }) {
             @Override
             public ItemStack getProgressBar() {
@@ -186,9 +183,9 @@ public final class SlimefunExtension {
         }.setCapacity(ADVANCED_EN_ENERGY).setEnergyConsumption(ADVANCED_EN_ENERGY).setProcessingSpeed(ADVANCED_EN_SPEED).register(plugin);
 
         new AutoDisenchanter(Categories.ADVANCED_MACHINES, ADVANCED_DISENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL,
-                MachineItem.MAGSTEEL_PLATE, SlimefunItems.AUTO_DISENCHANTER, MachineItem.MAGSTEEL_PLATE,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
+                Items.MAGSTEEL_PLATE, SlimefunItems.AUTO_DISENCHANTER, Items.MAGSTEEL_PLATE,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }) {
             @Override
             public ItemStack getProgressBar() {
@@ -198,11 +195,11 @@ public final class SlimefunExtension {
 
         new AutoEnchanter(Categories.INFINITY_CHEAT, INFINITY_ENCHANTER, InfinityWorkbench.TYPE, new ItemStack[] {
                 null, null, null, null, null, null,
-                CompressedItem.VOID_INGOT, null, null, null, null, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, ADVANCED_ENCHANTER, ADVANCED_ENCHANTER, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
-                MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, InfinityItem.CIRCUIT, InfinityItem.CIRCUIT, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, InfinityItem.CORE, InfinityItem.CORE, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE
+                Items.VOID_INGOT, null, null, null, null, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.VOID_INGOT, ADVANCED_ENCHANTER, ADVANCED_ENCHANTER, Items.VOID_INGOT, Items.VOID_INGOT,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CIRCUIT, Items.CIRCUIT, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CORE, Items.CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.MACHINE_PLATE
         }) {
             @Override
             public ItemStack getProgressBar() {
@@ -212,11 +209,11 @@ public final class SlimefunExtension {
 
         new AutoDisenchanter(Categories.INFINITY_CHEAT, INFINITY_DISENCHANTER, InfinityWorkbench.TYPE, new ItemStack[] {
                 null, null, null, null, null, null,
-                CompressedItem.VOID_INGOT, null, null, null, null, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, ADVANCED_DISENCHANTER, ADVANCED_DISENCHANTER, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
-                MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, InfinityItem.CIRCUIT, InfinityItem.CIRCUIT, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, InfinityItem.CORE, InfinityItem.CORE, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_PLATE, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, MachineItem.MACHINE_PLATE
+                Items.VOID_INGOT, null, null, null, null, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.VOID_INGOT, ADVANCED_DISENCHANTER, ADVANCED_DISENCHANTER, Items.VOID_INGOT, Items.VOID_INGOT,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CIRCUIT, Items.CIRCUIT, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CORE, Items.CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.MACHINE_PLATE
         }) {
             @Override
             public ItemStack getProgressBar() {
@@ -225,23 +222,23 @@ public final class SlimefunExtension {
         }.setCapacity(INFINITY_DIS_ENERGY).setEnergyConsumption(INFINITY_DIS_ENERGY).setProcessingSpeed(INFINITY_DIS_SPEED).register(plugin);
 
         new ChargingBench(Categories.ADVANCED_MACHINES, ADVANCED_CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CIRCUIT, MachineItem.MAGSTEEL_PLATE,
-                MachineItem.MACHINE_CIRCUIT, SlimefunItems.CHARGING_BENCH, MachineItem.MACHINE_CIRCUIT,
-                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CORE, MachineItem.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
+                Items.MACHINE_CIRCUIT, SlimefunItems.CHARGING_BENCH, Items.MACHINE_CIRCUIT,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_CORE, Items.MAGSTEEL_PLATE,
         }).setCapacity(ADVANCED_CHARGER_ENERGY).setEnergyConsumption(ADVANCED_CHARGER_ENERGY).setProcessingSpeed(ADVANCED_CHARGER_SPEED).register(plugin);
 
         new ChargingBench(Categories.INFINITY_CHEAT, INFINITY_CHARGER, InfinityWorkbench.TYPE, new ItemStack[] {
                 null, null, null, null, null, null,
-                CompressedItem.VOID_INGOT, MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CIRCUIT, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, MachineItem.MACHINE_CIRCUIT, ADVANCED_CHARGER, ADVANCED_CHARGER, MachineItem.MACHINE_CIRCUIT, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, MachineItem.MACHINE_CIRCUIT, ADVANCED_CHARGER, ADVANCED_CHARGER, MachineItem.MACHINE_CIRCUIT, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, CompressedItem.VOID_INGOT,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY
+                Items.VOID_INGOT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.MACHINE_CIRCUIT, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.MACHINE_CIRCUIT, ADVANCED_CHARGER, ADVANCED_CHARGER, Items.MACHINE_CIRCUIT, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.MACHINE_CIRCUIT, ADVANCED_CHARGER, ADVANCED_CHARGER, Items.MACHINE_CIRCUIT, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.CIRCUIT, Items.CORE, Items.CORE, Items.CIRCUIT, Items.VOID_INGOT,
+                Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY
         }).setCapacity(INFINITY_CHARGER_ENERGY).setEnergyConsumption(INFINITY_CHARGER_ENERGY).setProcessingSpeed(INFINITY_CHARGER_SPEED).register(plugin);
         
         new NetherStarReactor(Categories.ADVANCED_MACHINES, ADVANCED_NETHER_STAR_REACTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.WITHER_PROOF_GLASS, SlimefunItems.WITHER_PROOF_GLASS, SlimefunItems.WITHER_PROOF_GLASS,
-                MachineItem.MACHINE_CIRCUIT, SlimefunItems.NETHER_STAR_REACTOR, MachineItem.MACHINE_CIRCUIT,
+                Items.MACHINE_CIRCUIT, SlimefunItems.NETHER_STAR_REACTOR, Items.MACHINE_CIRCUIT,
                 SlimefunItems.WITHER_PROOF_OBSIDIAN, SlimefunItems.WITHER_PROOF_OBSIDIAN, SlimefunItems.WITHER_PROOF_OBSIDIAN,
         }){
 
@@ -294,9 +291,9 @@ public final class SlimefunExtension {
         }.register(plugin);
         
         new GEOMiner(Categories.ADVANCED_MACHINES, ADVANCED_GEO_MINER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
                 SlimefunItems.COBALT_PICKAXE, SlimefunItems.GEO_MINER, SlimefunItems.COBALT_PICKAXE,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }).setCapacity(ADVANCED_GEO_ENERGY).setProcessingSpeed(ADVANCED_GEO_SPEED).setEnergyConsumption(ADVANCED_GEO_ENERGY).register(plugin);
     }
 }

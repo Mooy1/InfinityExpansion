@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.delayed.DelayedRecipeType;
 import io.github.mooy1.infinitylib.player.MessageUtils;
@@ -35,9 +35,9 @@ public final class StorageForge extends AbstractCrafter {
     
     public StorageForge() {
         super(Categories.STORAGE_TRANSPORT, ITEM, TYPE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                SmelteryItem.MAGSTEEL, new ItemStack(Material.ANVIL), SmelteryItem.MAGSTEEL,
-                SmelteryItem.MAGSTEEL, new ItemStack(Material.CRAFTING_TABLE), SmelteryItem.MAGSTEEL,
-                SmelteryItem.MAGSTEEL, new ItemStack(Material.BARREL), SmelteryItem.MAGSTEEL,
+                Items.MAGSTEEL, new ItemStack(Material.ANVIL), Items.MAGSTEEL,
+                Items.MAGSTEEL, new ItemStack(Material.CRAFTING_TABLE), Items.MAGSTEEL,
+                Items.MAGSTEEL, new ItemStack(Material.BARREL), Items.MAGSTEEL,
         });
     }
     

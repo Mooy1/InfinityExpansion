@@ -1,10 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
@@ -48,21 +46,21 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
     public static void setup(InfinityExpansion plugin) {
         new TreeGrower(Categories.BASIC_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
-                SmelteryItem.MAGSTEEL, new ItemStack(Material.PODZOL), SmelteryItem.MAGSTEEL,
-                MachineItem.MACHINE_CIRCUIT, VirtualFarm.BASIC, MachineItem.MACHINE_CIRCUIT
+                Items.MAGSTEEL, new ItemStack(Material.PODZOL), Items.MAGSTEEL,
+                Items.MACHINE_CIRCUIT, VirtualFarm.BASIC, Items.MACHINE_CIRCUIT
         }, 36, 1).register(plugin);
         new TreeGrower(Categories.ADVANCED_MACHINES, ADVANCED, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS, SlimefunItems.HARDENED_GLASS,
-                SmelteryItem.MAGNONIUM, BASIC,SmelteryItem.MAGNONIUM,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                Items.MAGNONIUM, BASIC,Items.MAGNONIUM,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, 180, 5).register(plugin);
         new TreeGrower(Categories.INFINITY_CHEAT, INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
                 new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
                 new ItemStack(Material.GLASS), SlimefunItems.TREE_GROWTH_ACCELERATOR, null, null, SlimefunItems.TREE_GROWTH_ACCELERATOR, new ItemStack(Material.GLASS),
                 new ItemStack(Material.GLASS), ADVANCED, null, null, ADVANCED, new ItemStack(Material.GLASS),
                 new ItemStack(Material.GLASS), SlimefunItems.TREE_GROWTH_ACCELERATOR, null, null, SlimefunItems.TREE_GROWTH_ACCELERATOR, new ItemStack(Material.GLASS),
-                MachineItem.MACHINE_PLATE, new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_PLATE, InfinityItem.CIRCUIT, InfinityItem.CORE, InfinityItem.CORE, InfinityItem.CIRCUIT, MachineItem.MACHINE_PLATE
+                Items.MACHINE_PLATE, new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.CIRCUIT, Items.CORE, Items.CORE, Items.CIRCUIT, Items.MACHINE_PLATE
         }, 1800, 25).register(plugin);
     }
 

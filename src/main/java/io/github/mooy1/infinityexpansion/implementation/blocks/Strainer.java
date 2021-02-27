@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -31,9 +31,9 @@ public final class Strainer extends SlimefunItem implements NotPlaceable {
                 new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
         }, 1).register(plugin);
         new Strainer(ADVANCED, new ItemStack[] {
-                SmelteryItem.MAGSTEEL, new ItemStack(Material.STRING), SmelteryItem.MAGSTEEL,
+                Items.MAGSTEEL, new ItemStack(Material.STRING), Items.MAGSTEEL,
                 new ItemStack(Material.STRING),BASIC, new ItemStack(Material.STRING),
-                SmelteryItem.MAGSTEEL, new ItemStack(Material.STRING), SmelteryItem.MAGSTEEL
+                Items.MAGSTEEL, new ItemStack(Material.STRING), Items.MAGSTEEL
         }, 4).register(plugin);
         new Strainer(REINFORCED, new ItemStack[] {
                 SlimefunItems.REINFORCED_ALLOY_INGOT, new ItemStack(Material.STRING), SlimefunItems.REINFORCED_ALLOY_INGOT,

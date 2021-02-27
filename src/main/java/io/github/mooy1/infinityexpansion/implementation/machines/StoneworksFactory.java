@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
@@ -43,7 +43,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
             LorePreset.energyPerSecond(StoneworksFactory.ENERGY)
     );
     
-    public static final int ENERGY = 180;
+    public static final int ENERGY = 240;
 
     private static final int[] PROCESS_BORDER = {0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23};
     private static final int[] OUT_BORDER = {6, 7, 8, 17, 24, 25, 26};
@@ -56,9 +56,9 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
 
     public StoneworksFactory() {
         super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                MachineItem.MAGSTEEL_PLATE, MaterialGenerator.BASIC_COBBLE, MachineItem.MAGSTEEL_PLATE,
-                SlimefunItems.ELECTRIC_FURNACE_3, MachineItem.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
-                MachineItem.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, MachineItem.MAGSTEEL_PLATE
+                Items.MAGSTEEL_PLATE, MaterialGenerator.BASIC_COBBLE, Items.MAGSTEEL_PLATE,
+                SlimefunItems.ELECTRIC_FURNACE_3, Items.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
+                Items.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, Items.MAGSTEEL_PLATE
         });
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {

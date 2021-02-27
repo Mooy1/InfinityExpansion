@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
@@ -75,7 +75,7 @@ public final class StrainerBase extends AbstractTicker implements RecipeDisplayI
         super(Categories.BASIC_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
                 new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
                 new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
-                SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL,
+                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
         });
         
         registerBlockHandler(getId(), (p, b, stack, reason) -> {

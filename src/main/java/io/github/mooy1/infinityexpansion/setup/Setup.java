@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.setup;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.blocks.StorageForge;
@@ -26,13 +27,8 @@ import io.github.mooy1.infinityexpansion.implementation.machines.StoneworksFacto
 import io.github.mooy1.infinityexpansion.implementation.machines.TreeGrower;
 import io.github.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
-import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MiscItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.EmptyDataCard;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataCard;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataInfuser;
@@ -90,11 +86,7 @@ public final class Setup {
         new StorageForge().register(plugin);
         
         // materials
-        CompressedItem.setup(plugin);
-        SmelteryItem.setup(plugin);
-        MachineItem.setup(plugin);
-        MiscItem.setup(plugin);
-        InfinityItem.setup(plugin);
+        Items.setup();
         Singularity.setup(plugin);
         new EnderEssence().register(plugin);
 

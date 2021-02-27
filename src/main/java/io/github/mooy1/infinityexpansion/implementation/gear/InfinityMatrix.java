@@ -1,8 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.player.MessageUtils;
@@ -40,12 +39,12 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
     
     public InfinityMatrix() {
         super(Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[] {
-                SmelteryItem.INFINITY, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, new ItemStack(Material.ELYTRA), new ItemStack(Material.ELYTRA), CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, SmelteryItem.INFINITY
+                Items.INFINITY, null, Items.INFINITY, Items.INFINITY, null, Items.INFINITY,
+                Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY,
+                Items.VOID_INGOT, Items.VOID_INGOT, new ItemStack(Material.ELYTRA), new ItemStack(Material.ELYTRA), Items.VOID_INGOT, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT,
+                Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY,
+                Items.INFINITY, null, Items.INFINITY, Items.INFINITY, null, Items.INFINITY
         });
         PluginUtils.registerListener(this);
     }

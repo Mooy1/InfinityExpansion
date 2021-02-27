@@ -1,9 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
@@ -23,52 +22,52 @@ public final class InfinityTool extends SlimefunItem implements Soulbound, NotPl
     
     public static void setup(InfinityExpansion plugin) {
         new InfinityTool(SHIELD, new ItemStack[] {
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null,
-                null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null
+                Items.INFINITY, Items.INFINITY, null, null, Items.INFINITY, Items.INFINITY,
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                null, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, null,
+                null, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, null
         }).register(plugin);
         new InfinityTool(BOW, new ItemStack[] {
-                null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, null, null,
-                SmelteryItem.INFINITY, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, null,
-                CompressedItem.VOID_INGOT, null, null, EnderFlame.ITEM, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT,
-                null, CompressedItem.VOID_INGOT, null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                null, null, CompressedItem.VOID_INGOT, null, null, SmelteryItem.INFINITY,
-                null, null, null, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null
+                null, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, null, null,
+                Items.INFINITY, null, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, null,
+                Items.VOID_INGOT, null, null, EnderFlame.ITEM, Items.INFINITY, Items.VOID_INGOT,
+                null, Items.VOID_INGOT, null, null, Items.INFINITY, Items.INFINITY,
+                null, null, Items.VOID_INGOT, null, null, Items.INFINITY,
+                null, null, null, Items.VOID_INGOT, Items.INFINITY, null
         }).register(plugin);
         new InfinityTool(AXE, new ItemStack[] {
-                null, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, null,
-                CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, null,
-                null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                null, null, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                null, CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, null, null, null, CompressedItem.VOID_INGOT, null
+                null, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, null, null,
+                Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, null,
+                null, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY,
+                null, null, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.INFINITY,
+                null, Items.VOID_INGOT, null, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT,
+                Items.VOID_INGOT, null, null, null, Items.VOID_INGOT, null
         }).register(plugin);
         new InfinityTool(BLADE, new ItemStack[] {
-                null, null, null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                null, null, null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                null, null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null, null,
-                null, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null, null, null,
-                CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, null, null, null
+                null, null, null, null, Items.INFINITY, Items.INFINITY,
+                null, null, null, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                null, null, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, null,
+                Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, null, null,
+                null, Items.VOID_INGOT, Items.INFINITY, null, null, null,
+                Items.VOID_INGOT, null, Items.INFINITY, null, null, null
         }).register(plugin);
         new InfinityTool(SHOVEL, new ItemStack[] {
-                null, null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                null, null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                null, null, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null,
-                null, CompressedItem.VOID_INGOT, null, null, null, null,
-                CompressedItem.VOID_INGOT, null, null, null, null, null
+                null, null, null, Items.INFINITY, Items.INFINITY, Items.INFINITY,
+                null, null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY,
+                null, null, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY,
+                null, null, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, null,
+                null, Items.VOID_INGOT, null, null, null, null,
+                Items.VOID_INGOT, null, null, null, null, null
         }).register(plugin);
         new InfinityTool(PICKAXE, new ItemStack[] {
-                null, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null,
-                null, null, null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                null, null, null, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                null, null, CompressedItem.VOID_INGOT, null, null, SmelteryItem.INFINITY,
-                null, CompressedItem.VOID_INGOT, null, null, null, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, null, null, null, null, null
+                null, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
+                null, null, null, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                null, null, null, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY,
+                null, null, Items.VOID_INGOT, null, null, Items.INFINITY,
+                null, Items.VOID_INGOT, null, null, null, Items.VOID_INGOT,
+                Items.VOID_INGOT, null, null, null, null, null
         }).register(plugin);
     }
     

@@ -1,12 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Triplet;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -46,17 +43,17 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
 
     public static void setup(InfinityExpansion plugin) {
         new SingularityConstructor(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL, SmelteryItem.MAGSTEEL,
-                MachineItem.MACHINE_PLATE, SlimefunItems.CARBON_PRESS_3, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
+                Items.MACHINE_PLATE, SlimefunItems.CARBON_PRESS_3, Items.MACHINE_PLATE,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, 120, 1).register(plugin);
         new SingularityConstructor(Categories.INFINITY_CHEAT, INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
-                null, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, null,
-                null, CompressedItem.VOID_INGOT, InfinityItem.CIRCUIT, InfinityItem.CIRCUIT, CompressedItem.VOID_INGOT, null,
-                null, CompressedItem.VOID_INGOT, BASIC, BASIC, CompressedItem.VOID_INGOT, null,
-                null, CompressedItem.VOID_INGOT, BASIC, BASIC, CompressedItem.VOID_INGOT, null,
-                null, SmelteryItem.INFINITY, InfinityItem.CORE, InfinityItem.CORE, SmelteryItem.INFINITY, null,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY
+                null, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, null,
+                null, Items.VOID_INGOT, Items.CIRCUIT, Items.CIRCUIT, Items.VOID_INGOT, null,
+                null, Items.VOID_INGOT, BASIC, BASIC, Items.VOID_INGOT, null,
+                null, Items.VOID_INGOT, BASIC, BASIC, Items.VOID_INGOT, null,
+                null, Items.INFINITY, Items.CORE, Items.CORE, Items.INFINITY, null,
+                Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY
         }, 1200, 32).register(plugin);
     }
 

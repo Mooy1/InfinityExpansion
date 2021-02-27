@@ -1,9 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
@@ -35,10 +34,10 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 new PotionEffect(PotionEffectType.NIGHT_VISION, 1200, 0),
                 new PotionEffect(PotionEffectType.WATER_BREATHING, 1200, 0)
         }, new ItemStack[] {
-                null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                null, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, null,
+                null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
+                Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY,
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                null, Items.INFINITY, null, null, Items.INFINITY, null,
                 null, null, null, null, null, null,
                 null, null, null, null, null, null
         }).register(plugin);
@@ -47,24 +46,24 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1),
                 new PotionEffect(PotionEffectType.ABSORPTION, 1200, 2),
         }, new ItemStack[] {
-                null, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, null,
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT,
-                null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null,
-                null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null
+                null, Items.INFINITY, null, null, Items.INFINITY, null,
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, Items.VOID_INGOT,
+                null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
+                null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null
         }).register(plugin);
         new InfinityArmor(LEGGINGS, new PotionEffect[] {
                 new PotionEffect(PotionEffectType.CONDUIT_POWER, 1200, 0),
                 new PotionEffect(PotionEffectType.FAST_DIGGING, 1200, 2),
                 new PotionEffect(PotionEffectType.REGENERATION, 1200, 0),
         }, new ItemStack[] {
-                null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, CompressedItem.VOID_INGOT,
-                null, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, null
+                null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
+                Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY,
+                Items.VOID_INGOT, Items.INFINITY, null, null, Items.INFINITY, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.INFINITY, null, null, Items.INFINITY, Items.VOID_INGOT,
+                Items.VOID_INGOT, Items.INFINITY, null, null, Items.INFINITY, Items.VOID_INGOT,
+                null, Items.INFINITY, null, null, Items.INFINITY, null
         }).register(plugin);
         new InfinityArmor(BOOTS, new PotionEffect[] {
                 new PotionEffect(PotionEffectType.SPEED, 1200, 2),
@@ -72,11 +71,11 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1200, 0)
         }, new ItemStack[] {
                 null, null, null, null, null, null,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, null, null, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY
+                Items.INFINITY, Items.INFINITY, null, null, Items.INFINITY, Items.INFINITY,
+                Items.INFINITY, Items.INFINITY, null, null, Items.INFINITY, Items.INFINITY,
+                Items.VOID_INGOT, Items.VOID_INGOT, null, null, Items.VOID_INGOT, Items.VOID_INGOT,
+                Items.INFINITY, Items.INFINITY, null, null, Items.INFINITY, Items.INFINITY,
+                Items.INFINITY, Items.INFINITY, null, null, Items.INFINITY, Items.INFINITY
         }).register(plugin);
     }
     

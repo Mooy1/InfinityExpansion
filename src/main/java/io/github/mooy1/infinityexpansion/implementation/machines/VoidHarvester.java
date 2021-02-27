@@ -1,12 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MiscItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
@@ -43,17 +39,17 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
 
     public static void setup(InfinityExpansion plugin) {
         new VoidHarvester(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                SmelteryItem.TITANIUM, SmelteryItem.TITANIUM, SmelteryItem.TITANIUM,
-                MachineItem.MACHINE_PLATE, SlimefunItems.GEO_MINER, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                Items.TITANIUM, Items.TITANIUM, Items.TITANIUM,
+                Items.MACHINE_PLATE, SlimefunItems.GEO_MINER, Items.MACHINE_PLATE,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, 120, 1).register(plugin);
         new VoidHarvester(Categories.INFINITY_CHEAT, INFINITE, InfinityWorkbench.TYPE, new ItemStack[] {
-                MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE,
-                SmelteryItem.MAGNONIUM, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.MAGNONIUM,
-                SmelteryItem.MAGNONIUM, CompressedItem.VOID_INGOT, InfinityItem.CIRCUIT, InfinityItem.CIRCUIT, CompressedItem.VOID_INGOT, SmelteryItem.MAGNONIUM,
-                SmelteryItem.MAGNONIUM, CompressedItem.VOID_INGOT, InfinityItem.CORE, InfinityItem.CORE, CompressedItem.VOID_INGOT, SmelteryItem.MAGNONIUM,
-                SmelteryItem.MAGNONIUM, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, SmelteryItem.MAGNONIUM,
-                MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE
+                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
+                Items.MAGNONIUM, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.MAGNONIUM,
+                Items.MAGNONIUM, Items.VOID_INGOT, Items.CIRCUIT, Items.CIRCUIT, Items.VOID_INGOT, Items.MAGNONIUM,
+                Items.MAGNONIUM, Items.VOID_INGOT, Items.CORE, Items.CORE, Items.VOID_INGOT, Items.MAGNONIUM,
+                Items.MAGNONIUM, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.MAGNONIUM,
+                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE
         }, 1200, 32).register(plugin);
     }
     
@@ -119,7 +115,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
 
         if (progress >= TIME) { //reached full progress
 
-            ItemStack output = MiscItem.VOID_BIT;
+            ItemStack output = Items.VOID_BIT;
 
             if (inv.fits(output, OUTPUT_SLOTS)) {
 
@@ -193,7 +189,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         final List<ItemStack> items = new ArrayList<>();
 
         items.add(null);
-        items.add(MiscItem.VOID_BIT);
+        items.add(Items.VOID_BIT);
 
         return items;
     }

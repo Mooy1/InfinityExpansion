@@ -1,8 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.items.StackUtils;
@@ -65,19 +64,19 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
     private static final SlimefunItemStack[] RECIPES = {
-            Singularity.IRON, Singularity.COAL, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 12),
-            Singularity.IRON, Singularity.REDSTONE, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 16),
-            Singularity.DIAMOND, Singularity.COAL, new SlimefunItemStack(SlimefunItems.CARBONADO, 8),
-            Singularity.GOLD, Singularity.EMERALD, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 8),
-            Singularity.COPPER, Singularity.ZINC, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 16),
-            Singularity.IRON, Singularity.QUARTZ, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 32)
+            Singularity.IRON, Singularity.COAL, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
+            Singularity.IRON, Singularity.REDSTONE, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
+            Singularity.DIAMOND, Singularity.COAL, new SlimefunItemStack(SlimefunItems.CARBONADO, 16),
+            Singularity.GOLD, Singularity.EMERALD, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 16),
+            Singularity.COPPER, Singularity.ZINC, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
+            Singularity.IRON, Singularity.QUARTZ, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
     };
 
     public ResourceSynthesizer() {
         super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                SmelteryItem.ADAMANTITE, SmelteryItem.ADAMANTITE, SmelteryItem.ADAMANTITE,
-                MachineItem.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_PLATE, MachineItem.MACHINE_CORE, MachineItem.MACHINE_PLATE
+                Items.ADAMANTITE, Items.ADAMANTITE, Items.ADAMANTITE,
+                Items.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.MACHINE_CORE, Items.MACHINE_PLATE
         });
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {

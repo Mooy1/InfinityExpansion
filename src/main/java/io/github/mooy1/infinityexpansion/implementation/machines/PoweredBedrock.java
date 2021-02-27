@@ -1,9 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -41,12 +39,12 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
     
     public PoweredBedrock() {
         super (Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[] {
-                CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5,
-                CompressedItem.COBBLE_5, MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE, CompressedItem.COBBLE_5,
-                CompressedItem.COBBLE_5, CompressedItem.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, CompressedItem.VOID_INGOT, CompressedItem.COBBLE_5,
-                CompressedItem.COBBLE_5, CompressedItem.VOID_INGOT, InfinityItem.CORE, InfinityItem.CIRCUIT, CompressedItem.VOID_INGOT, CompressedItem.COBBLE_5,
-                CompressedItem.COBBLE_5, MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE, CompressedItem.COBBLE_5,
-                CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5, CompressedItem.COBBLE_5
+                Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5,
+                Items.COBBLE_5, Items.MACHINE_PLATE, Items.VOID_INGOT, Items.VOID_INGOT, Items.MACHINE_PLATE, Items.COBBLE_5,
+                Items.COBBLE_5, Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT, Items.COBBLE_5,
+                Items.COBBLE_5, Items.VOID_INGOT, Items.CORE, Items.CIRCUIT, Items.VOID_INGOT, Items.COBBLE_5,
+                Items.COBBLE_5, Items.MACHINE_PLATE, Items.VOID_INGOT, Items.VOID_INGOT, Items.MACHINE_PLATE, Items.COBBLE_5,
+                Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5
         });
 
         this.addItemHandler(new BlockTicker() {

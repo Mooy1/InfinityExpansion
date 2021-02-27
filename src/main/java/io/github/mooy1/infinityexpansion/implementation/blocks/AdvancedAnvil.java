@@ -3,8 +3,8 @@ package io.github.mooy1.infinityexpansion.implementation.blocks;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.player.MessageUtils;
@@ -74,9 +74,9 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
 
     public AdvancedAnvil() {
         super(Categories.MAIN_MATERIALS, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_PLATE, new ItemStack(Material.ANVIL), MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, new ItemStack(Material.ANVIL), Items.MACHINE_PLATE,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, ENERGY, STATUS_SLOT);
 
         registerBlockHandler(getId(), (p, b, stack, reason) -> {

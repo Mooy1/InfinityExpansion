@@ -1,8 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -41,7 +40,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         new ConversionMachine(EXTREME_FREEZER, new ItemStack[] {
                 SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2,
                 new ItemStack(Material.WATER_BUCKET), SlimefunItems.FLUID_PUMP, new ItemStack(Material.WATER_BUCKET),
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
         }, 90, false, new ItemStack[] {
                 SlimefunItems.REACTOR_COOLANT_CELL,
                 SlimefunItems.NETHER_ICE_COOLANT_CELL
@@ -53,8 +52,8 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         new ConversionMachine(DUST_EXTRACTOR, new ItemStack[] {
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT,
-        }, 180, true, new ItemStack[] {
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
+        }, 240, true, new ItemStack[] {
                 new SlimefunItemStack(SlimefunItems.COPPER_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.ZINC_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.TIN_DUST, 2),
@@ -75,7 +74,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         new ConversionMachine(URANIUM_EXTRACTOR, new ItemStack[] {
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2,
                 SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3, SlimefunItems.AUTOMATED_CRAFTING_CHAMBER,
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
         }, 240, false, new ItemStack[] {
                 SlimefunItems.SMALL_URANIUM
         }, new ItemStack[] {
@@ -87,9 +86,9 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         }).register(plugin);
 
         new ConversionMachine(DECOMPRESSOR, new ItemStack[] {
-                MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE, MachineItem.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
                 new ItemStack(Material.STICKY_PISTON), SlimefunItems.ELECTRIC_PRESS_2, new ItemStack(Material.STICKY_PISTON),
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT,
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
         }, 60, false, new ItemStack[] {
                 new ItemStack(Material.EMERALD, 9),
                 new ItemStack(Material.DIAMOND, 9),
@@ -100,10 +99,10 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
                 new ItemStack(Material.QUARTZ, 4),
                 new ItemStack(Material.LAPIS_LAZULI, 9),
                 new ItemStack(Material.COAL, 9),
-                new SlimefunItemStack(CompressedItem.COBBLE_4, 9),
-                new SlimefunItemStack(CompressedItem.COBBLE_3, 9),
-                new SlimefunItemStack(CompressedItem.COBBLE_2, 9),
-                new SlimefunItemStack(CompressedItem.COBBLE_1, 9),
+                new SlimefunItemStack(Items.COBBLE_4, 9),
+                new SlimefunItemStack(Items.COBBLE_3, 9),
+                new SlimefunItemStack(Items.COBBLE_2, 9),
+                new SlimefunItemStack(Items.COBBLE_1, 9),
                 new ItemStack(Material.COBBLESTONE, 9)
         }, new ItemStack[] {
                 new ItemStack(Material.EMERALD_BLOCK, 1),
@@ -115,11 +114,11 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
                 new ItemStack(Material.QUARTZ_BLOCK, 1),
                 new ItemStack(Material.LAPIS_BLOCK, 1),
                 new ItemStack(Material.COAL_BLOCK, 1),
-                CompressedItem.COBBLE_5,
-                CompressedItem.COBBLE_4,
-                CompressedItem.COBBLE_3,
-                CompressedItem.COBBLE_2,
-                CompressedItem.COBBLE_1
+                Items.COBBLE_5,
+                Items.COBBLE_4,
+                Items.COBBLE_3,
+                Items.COBBLE_2,
+                Items.COBBLE_1
         }).register(plugin);
     }
 
@@ -137,7 +136,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
             "&8Dust Extractor",
             "&7Converts cobble into dusts",
             "",
-            LorePreset.energyPerSecond(180)
+            LorePreset.energyPerSecond(240)
     );
 
     public static final SlimefunItemStack URANIUM_EXTRACTOR = new SlimefunItemStack(

@@ -1,12 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityTool;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.InfinityItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
 import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -50,9 +47,9 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
     public static void setup(InfinityExpansion plugin) {
         new Quarry(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                MachineItem.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, MachineItem.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MAGSTEEL_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
-                MachineItem.MACHINE_CIRCUIT,MachineItem.MACHINE_CORE,MachineItem.MACHINE_CIRCUIT
+                Items.MACHINE_CIRCUIT,Items.MACHINE_CORE,Items.MACHINE_CIRCUIT
         }, 300, 1, 8, new ItemStack[] {
                 new ItemStack(Material.COAL, 4),
                 new ItemStack(Material.IRON_ORE, 1),
@@ -65,9 +62,9 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         }).register(plugin);
         
         new Quarry(Categories.ADVANCED_MACHINES, ADVANCED, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                MachineItem.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, MachineItem.MACHINE_PLATE,
+                Items.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Items.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), BASIC, new ItemStack(Material.DIAMOND_PICKAXE),
-                MachineItem.MACHINE_CIRCUIT,MachineItem.MACHINE_CORE, MachineItem.MACHINE_CIRCUIT
+                Items.MACHINE_CIRCUIT,Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, 900, 2, 6, new ItemStack[] {
                 new ItemStack(Material.COAL, 8),
                 new ItemStack(Material.IRON_INGOT, 2),
@@ -84,9 +81,9 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         }).register(plugin);
         
         new Quarry(Categories.ADVANCED_MACHINES, VOID, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                CompressedItem.VOID_INGOT, SlimefunExtension.VOID_CAPACITOR, CompressedItem.VOID_INGOT,
+                Items.VOID_INGOT, SlimefunExtension.VOID_CAPACITOR, Items.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), ADVANCED, new ItemStack(Material.NETHERITE_PICKAXE),
-                MachineItem.MACHINE_CIRCUIT, MachineItem.MACHINE_CORE,MachineItem.MACHINE_CIRCUIT
+                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE,Items.MACHINE_CIRCUIT
         }, 3600, 4, 4, new ItemStack[] {
                 new ItemStack(Material.COAL, 16),
                 new CustomItem(SlimefunItems.SIFTED_ORE, 6),
@@ -108,12 +105,12 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         }).register(plugin);
         
         new Quarry(Categories.INFINITY_CHEAT,INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
-                null, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MACHINE_PLATE, null,
-                MachineItem.MACHINE_PLATE, InfinityTool.PICKAXE, InfinityItem.CIRCUIT, InfinityItem.CIRCUIT, InfinityTool.PICKAXE, MachineItem.MACHINE_PLATE,
-                MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT, InfinityItem.CORE, InfinityItem.CORE, CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE,
-                CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT,
-                CompressedItem.VOID_INGOT, null, SmelteryItem.INFINITY, SmelteryItem.INFINITY, null, CompressedItem.VOID_INGOT
+                null, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, null,
+                Items.MACHINE_PLATE, InfinityTool.PICKAXE, Items.CIRCUIT, Items.CIRCUIT, InfinityTool.PICKAXE, Items.MACHINE_PLATE,
+                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.CORE, Items.CORE, Items.VOID_INGOT, Items.MACHINE_PLATE,
+                Items.VOID_INGOT, null, Items.INFINITY, Items.INFINITY, null, Items.VOID_INGOT,
+                Items.VOID_INGOT, null, Items.INFINITY, Items.INFINITY, null, Items.VOID_INGOT,
+                Items.VOID_INGOT, null, Items.INFINITY, Items.INFINITY, null, Items.VOID_INGOT
         }, 36000, 24, 2, new ItemStack[] {
                 new ItemStack(Material.COAL, 64),
                 new ItemStack(Material.IRON_INGOT, 24),

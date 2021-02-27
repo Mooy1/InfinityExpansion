@@ -1,9 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.presets.LorePreset;
@@ -39,19 +37,19 @@ public final class MaterialGenerator extends AbstractMachine implements RecipeDi
 
     public static void setup(InfinityExpansion plugin) {
         new MaterialGenerator(Categories.BASIC_MACHINES, BASIC_COBBLE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                SmelteryItem.MAGSTEEL, new ItemStack(Material.DIAMOND_PICKAXE), SmelteryItem.MAGSTEEL,
-                new ItemStack(Material.WATER_BUCKET), CompressedItem.COBBLE_2, new ItemStack(Material.LAVA_BUCKET),
-                SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL
+                Items.MAGSTEEL, new ItemStack(Material.DIAMOND_PICKAXE), Items.MAGSTEEL,
+                new ItemStack(Material.WATER_BUCKET), Items.COBBLE_2, new ItemStack(Material.LAVA_BUCKET),
+                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
         }, 24, 1, Material.COBBLESTONE).register(plugin);
         new MaterialGenerator(Categories.ADVANCED_MACHINES, ADVANCED_COBBLE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                MachineItem.MAGSTEEL_PLATE, SlimefunItems.PROGRAMMABLE_ANDROID_MINER, MachineItem.MAGSTEEL_PLATE,
-                new ItemStack(Material.WATER_BUCKET), CompressedItem.COBBLE_4, new ItemStack(Material.LAVA_BUCKET),
-                MachineItem.MACHINE_CIRCUIT, BASIC_COBBLE, MachineItem.MACHINE_CIRCUIT
+                Items.MAGSTEEL_PLATE, SlimefunItems.PROGRAMMABLE_ANDROID_MINER, Items.MAGSTEEL_PLATE,
+                new ItemStack(Material.WATER_BUCKET), Items.COBBLE_4, new ItemStack(Material.LAVA_BUCKET),
+                Items.MACHINE_CIRCUIT, BASIC_COBBLE, Items.MACHINE_CIRCUIT
         }, 120, 4, Material.COBBLESTONE).register(plugin);
         new MaterialGenerator(Categories.ADVANCED_MACHINES, BASIC_OBSIDIAN, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.FLUID_PUMP, SlimefunItems.PROGRAMMABLE_ANDROID_MINER, SlimefunItems.FLUID_PUMP,
-                new ItemStack(Material.DISPENSER), CompressedItem.VOID_INGOT, new ItemStack(Material.DISPENSER),
-                MachineItem.MACHINE_CIRCUIT, ADVANCED_COBBLE, MachineItem.MACHINE_CIRCUIT
+                new ItemStack(Material.DISPENSER), Items.VOID_INGOT, new ItemStack(Material.DISPENSER),
+                Items.MACHINE_CIRCUIT, ADVANCED_COBBLE, Items.MACHINE_CIRCUIT
         }, 240, 1, Material.OBSIDIAN).register(plugin);
     }
     

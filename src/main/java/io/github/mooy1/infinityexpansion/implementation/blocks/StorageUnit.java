@@ -1,9 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.CompressedItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.MachineItem;
-import io.github.mooy1.infinityexpansion.implementation.materials.SmelteryItem;
+import io.github.mooy1.infinityexpansion.implementation.Items;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -55,29 +53,29 @@ public final class StorageUnit extends AbstractTicker {
     
     public static void setup(InfinityExpansion plugin) {
         new StorageUnit(BASIC, BASIC_STORAGE, new ItemStack[] {
-                new ItemStack(Material.OAK_LOG), SmelteryItem.MAGSTEEL, new ItemStack(Material.OAK_LOG),
+                new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
-                new ItemStack(Material.OAK_LOG), SmelteryItem.MAGSTEEL, new ItemStack(Material.OAK_LOG)
+                new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
         }).register(plugin);
         new StorageUnit(ADVANCED, ADVANCED_STORAGE,  new ItemStack[] {
-                SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL,
-                SmelteryItem.MAGSTEEL, StorageUnit.BASIC, SmelteryItem.MAGSTEEL,
-                SmelteryItem.MAGSTEEL, MachineItem.MACHINE_CIRCUIT, SmelteryItem.MAGSTEEL
+                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
+                Items.MAGSTEEL, StorageUnit.BASIC, Items.MAGSTEEL,
+                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
         }).register(plugin);
         new StorageUnit(REINFORCED, REINFORCED_STORAGE,  new ItemStack[] {
-                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_CIRCUIT, MachineItem.MAGSTEEL_PLATE,
-                MachineItem.MAGSTEEL_PLATE, StorageUnit.ADVANCED, MachineItem.MAGSTEEL_PLATE,
-                MachineItem.MAGSTEEL_PLATE, MachineItem.MACHINE_PLATE, MachineItem.MAGSTEEL_PLATE
+                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, StorageUnit.ADVANCED, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE
         }).register(plugin);
         new StorageUnit(VOID, VOID_STORAGE,  new ItemStack[] {
-                CompressedItem.VOID_INGOT, MachineItem.MACHINE_PLATE, CompressedItem.VOID_INGOT,
-                SmelteryItem.MAGNONIUM, StorageUnit.REINFORCED, SmelteryItem.MAGNONIUM,
-                CompressedItem.VOID_INGOT, MachineItem.MACHINE_CORE, CompressedItem.VOID_INGOT
+                Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
+                Items.MAGNONIUM, StorageUnit.REINFORCED, Items.MAGNONIUM,
+                Items.VOID_INGOT, Items.MACHINE_CORE, Items.VOID_INGOT
         }).register(plugin);
         new StorageUnit(INFINITY, INFINITY_STORAGE,  new ItemStack[] {
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, StorageUnit.VOID, SmelteryItem.INFINITY,
-                SmelteryItem.INFINITY, CompressedItem.VOID_INGOT, SmelteryItem.INFINITY
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                Items.INFINITY, StorageUnit.VOID, Items.INFINITY,
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY
         }).register(plugin);
     }
     
