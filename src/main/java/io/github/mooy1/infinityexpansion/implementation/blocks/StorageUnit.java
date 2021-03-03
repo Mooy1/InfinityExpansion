@@ -33,12 +33,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -176,7 +174,7 @@ public final class StorageUnit extends AbstractTicker {
             if (item == null) {
                 continue;
             }
-            if (item.getType() == storedItem.getType() && canBeAdded(item, item.getItemMeta().getPersistentDataContainer(), storedItem)) {
+            if (item.getType() == storedItem.getType() && ItemUtils.canStack(item, storedItem)) {
                 int amount = Math.min(this.max - stored, item.getAmount());
                 if (amount > 0) {
                     stored += amount;
@@ -209,10 +207,6 @@ public final class StorageUnit extends AbstractTicker {
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
-    }
-
-    private static boolean canBeAdded(@Nonnull ItemStack stack, @Nonnull PersistentDataContainer container, @Nonnull ItemStack stored) {
-        return stack.getEnchantments().size() == 0 && container.equals(stored.getItemMeta().getPersistentDataContainer());
     }
     
     private static final NamespacedKey ITEM_KEY = PluginUtils.getKey("stored_item");
@@ -253,45 +247,33 @@ public final class StorageUnit extends AbstractTicker {
 
     @Override
     public void tick(@Nonnull BlockMenu menu, @Nonnull Block block, @Nonnull Config config) {
-        String id = config.getString(STORED_ITEM);
+        String storedID = config.getString(STORED_ITEM);
         int amount = Util.getIntData(STORED_AMOUNT, config, block.getLocation());
         ItemStack stored;
         
         // input
         ItemStack input = menu.getItemInSlot(INPUT_SLOT);
         if (input != null) {
-            if (id == null || amount <= 0) {
+            if (storedID == null || amount <= 0) {
+                
+                String inputID = StackUtils.getIDorType(input);
+                ItemStack inputDefault = StackUtils.getItemByIDorType(inputID);
 
-                // try to start storing input
-                if (!SlimefunTag.SHULKER_BOXES.isTagged(input.getType())) {
+                if (ItemUtils.canStack(inputDefault, input)) {
 
-                    PersistentDataContainer container = input.getItemMeta().getPersistentDataContainer();
-                    String inputID = StackUtils.getIDorType(container, input);
+                    storedID = inputID;
+                    amount = input.getAmount();
+                    input.setAmount(0);
+                    stored = inputDefault;
 
-                    if (!inputID.contains("BACKPACK")) {
-
-                        ItemStack inputDefault = StackUtils.getItemByIDorType(inputID);
-
-                        if (inputDefault != null && canBeAdded(input, container, inputDefault)) {
-
-                            id = inputID;
-                            amount = input.getAmount();
-                            input.setAmount(0);
-                            stored = inputDefault;
-
-                        } else {
-                            stored = null;
-                        }
-                    } else {
-                        stored = null;
-                    }
                 } else {
                     stored = null;
                 }
+                
             } else {
                 // try to add input to storage
-                stored = StackUtils.getItemByIDorType(id);
-                if (stored != null && input.getType() == stored.getType() && canBeAdded(input, input.getItemMeta().getPersistentDataContainer(), stored)) {
+                stored = StackUtils.getItemByIDorType(storedID);
+                if (ItemUtils.canStack(stored, input)) {
                     int max = this.max - amount;
                     if (max > 0) {
                         int add = input.getAmount();
@@ -307,11 +289,10 @@ public final class StorageUnit extends AbstractTicker {
                 }  // else cant be added
             }
         } else {
-            stored = StackUtils.getItemByNullableIDorType(id);
+            stored = StackUtils.getItemByNullableIDorType(storedID);
         }
 
         if (stored != null) {
-            StackUtils.removeEnchants(stored);
 
             // output
             if (amount > 0) {
@@ -321,7 +302,7 @@ public final class StorageUnit extends AbstractTicker {
                     if (menu.getItemInSlot(OUTPUT_SLOT) == null) {
                         menu.replaceExistingItem(OUTPUT_SLOT, stored, false);
                         amount = 0;
-                        id = null;
+                        storedID = null;
                         stored = null;
                     }
                 } else {
@@ -356,7 +337,7 @@ public final class StorageUnit extends AbstractTicker {
         
         // set data, don't use config cuz that bugs it out
         BlockStorage.addBlockInfo(block, STORED_AMOUNT, String.valueOf(amount));
-        BlockStorage.addBlockInfo(block, STORED_ITEM, id);
+        BlockStorage.addBlockInfo(block, STORED_ITEM, storedID);
         
         // update signs
         if (DISPLAY_SIGNS && (PluginUtils.getCurrentTick() & 15) == 0) {
@@ -365,11 +346,12 @@ public final class StorageUnit extends AbstractTicker {
                 writeToSign(top, stored, amount);
                 return;
             }
-            List<Block> blocks = new ArrayList<>();
-            blocks.add(block.getRelative(1, 0, 0));
-            blocks.add(block.getRelative(-1, 0, 0));
-            blocks.add(block.getRelative(0, 0, 1));
-            blocks.add(block.getRelative(0, 0, -1));
+            Block[] blocks = {
+                    block.getRelative(1, 0, 0),
+                    block.getRelative(-1, 0, 0),
+                    block.getRelative(0, 0, 1),
+                    block.getRelative(0, 0, -1)
+            };
             for (Block side : blocks) {
                 if (SlimefunTag.WALL_SIGNS.isTagged(side.getType())) {
                     WallSign wall = (WallSign) side.getBlockData();

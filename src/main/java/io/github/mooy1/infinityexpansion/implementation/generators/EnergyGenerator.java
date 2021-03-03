@@ -80,12 +80,12 @@ public final class EnergyGenerator extends AbstractGenerator {
                 Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
                 ADVANCED_PANEL, ADVANCED_PANEL, ADVANCED_PANEL,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, 500, Type.SOLAR).register(plugin);
+        }, 600, Type.SOLAR).register(plugin);
         new EnergyGenerator(Categories.ADVANCED_MACHINES, VOID_PANEL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT,
                 CELESTIAL_PANEL, CELESTIAL_PANEL, CELESTIAL_PANEL,
                 Items.MAGNONIUM, Items.MAGNONIUM, Items.MAGNONIUM
-        }, 2400, Type.LUNAR).register(plugin);
+        }, 2700, Type.LUNAR).register(plugin);
 
         new EnergyGenerator(Categories.INFINITY_CHEAT, INFINITE_PANEL, InfinityWorkbench.TYPE, new ItemStack[] {
                 EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL, EnergyGenerator.CELESTIAL_PANEL,
@@ -159,8 +159,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&eCelestial Panel",
             "&7Generates energy from the sun",
             "",
-            LorePreset.energyBuffer(50000),
-            LorePreset.energyPerSecond(500)
+            LorePreset.energyBuffer(60000),
+            LorePreset.energyPerSecond(600)
     );
     public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
             "VOID_PANEL",
@@ -168,8 +168,8 @@ public final class EnergyGenerator extends AbstractGenerator {
             "&8Void Panel",
             "&7Generates energy from darkness",
             "",
-            LorePreset.energyBuffer(240000),
-            LorePreset.energyPerSecond(2400)
+            LorePreset.energyBuffer(270000),
+            LorePreset.energyPerSecond(2700)
     );
     public static final SlimefunItemStack INFINITE_PANEL = new SlimefunItemStack(
             "INFINITE_PANEL",
