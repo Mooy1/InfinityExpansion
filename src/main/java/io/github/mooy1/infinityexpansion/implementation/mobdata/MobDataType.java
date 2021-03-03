@@ -97,6 +97,12 @@ enum MobDataType {
             new ItemStack(Material.MAGMA_BLOCK, 64), new ItemStack(Material.BLAZE_ROD, 64), new ItemStack(Material.MAGMA_BLOCK, 64)
     }, ImmutableMap.of(1, new ItemStack(Material.BLAZE_ROD, 1), 2, new ItemStack(Material.BLAZE_ROD, 1))),
 
+    WITHER("Wither", 6000, 60, 3, new ItemStack[] {
+            new ItemStack(Material.WITHER_SKELETON_SKULL, 64), new ItemStack(Material.WITHER_SKELETON_SKULL, 64), new ItemStack(Material.WITHER_SKELETON_SKULL, 64),
+            new SlimefunItemStack(SlimefunItems.WITHER_PROOF_OBSIDIAN, 64), EmptyDataCard.ITEM,new SlimefunItemStack(SlimefunItems.WITHER_PROOF_OBSIDIAN, 64),
+            new SlimefunItemStack(Items.VOID_INGOT, 4), new SlimefunItemStack(SlimefunItems.WITHER_ASSEMBLER, 4), new SlimefunItemStack(Items.VOID_INGOT, 4)
+    }, ImmutableMap.of(2, new ItemStack(Material.NETHER_STAR))),
+    
     DRAGON("Ender Dragon", 9000, 150, 3, new ItemStack[] {
             new ItemStack(Material.END_CRYSTAL, 64), new SlimefunItemStack(Items.VOID_INGOT, 32), new ItemStack(Material.CHORUS_FLOWER, 64),
             SlimefunItems.INFUSED_ELYTRA, EmptyDataCard.ITEM, new ItemStack(Material.DRAGON_HEAD, 1),
