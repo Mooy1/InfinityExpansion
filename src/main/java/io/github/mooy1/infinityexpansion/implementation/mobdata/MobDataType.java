@@ -101,13 +101,13 @@ enum MobDataType {
             new ItemStack(Material.WITHER_SKELETON_SKULL, 64), new ItemStack(Material.WITHER_SKELETON_SKULL, 64), new ItemStack(Material.WITHER_SKELETON_SKULL, 64),
             new SlimefunItemStack(SlimefunItems.WITHER_PROOF_OBSIDIAN, 64), EmptyDataCard.ITEM,new SlimefunItemStack(SlimefunItems.WITHER_PROOF_OBSIDIAN, 64),
             new SlimefunItemStack(Items.VOID_INGOT, 4), new SlimefunItemStack(SlimefunItems.WITHER_ASSEMBLER, 4), new SlimefunItemStack(Items.VOID_INGOT, 4)
-    }, ImmutableMap.of(2, new ItemStack(Material.NETHER_STAR))),
+    }, ImmutableMap.of(1, new ItemStack(Material.NETHER_STAR), 2, SlimefunItems.COMPRESSED_CARBON, 3, SlimefunItems.COMPRESSED_CARBON)),
     
     DRAGON("Ender Dragon", 9000, 150, 3, new ItemStack[] {
             new ItemStack(Material.END_CRYSTAL, 64), new SlimefunItemStack(Items.VOID_INGOT, 32), new ItemStack(Material.CHORUS_FLOWER, 64),
             SlimefunItems.INFUSED_ELYTRA, EmptyDataCard.ITEM, new ItemStack(Material.DRAGON_HEAD, 1),
             new SlimefunItemStack(SlimefunItems.ENDER_LUMP_3, 64), new SlimefunItemStack(Items.VOID_INGOT, 32), new ItemStack(Material.DRAGON_BREATH, 64)
-    }, ImmutableMap.of(1, new ItemStack(Material.ENDER_PEARL, 3), 2, new ItemStack(Material.DRAGON_BREATH, 2), 8, Items.VOID_BIT));
+    }, ImmutableMap.of(1, Items.VOID_DUST, 2, new ItemStack(Material.DRAGON_BREATH, 2), 4000000, new ItemStack(Material.DRAGON_EGG)));
 
     @Nonnull
     final ItemStack[] recipe;

@@ -43,7 +43,7 @@ public final class StorageForge extends AbstractCrafter {
     
     @Override
     protected void modifyOutput(@Nonnull BlockMenu inv, @Nonnull ItemStack output) {
-        output.setItemMeta(StorageUnit.transferData(inv.getItemInSlot(INPUT_SLOTS[4]).getItemMeta(), output.getItemMeta()));
+        StorageUnit.transferToStack(inv.getItemInSlot(INPUT_SLOTS[4]), output);
     }
 
     @Override

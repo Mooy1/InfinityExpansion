@@ -1,8 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.setup.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.setup.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -29,7 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A reactor that generates huge power but costs infinity ingots and void ingots
@@ -122,10 +121,12 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
         BlockMenu inv = BlockStorage.getInventory(l);
 
         int progress = Integer.parseInt(BlockStorage.getLocationInfo(l, "progress"));
+        ItemStack infinityInput = inv.getItemInSlot(INPUT_SLOTS[0]);
+        ItemStack voidInput = inv.getItemInSlot(INPUT_SLOTS[1]);
 
         if (progress == 0) { //need infinity + void
 
-            if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[0])), "INFINITE_INGOT")) { //wrong input
+            if (infinityInput == null || !Items.INFINITY.getItemId().equals(StackUtils.getID(infinityInput))) { //wrong input
 
                 if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
@@ -134,7 +135,7 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
 
             }
             
-            if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            if (voidInput == null || !Items.VOID_INGOT.getItemId().equals(StackUtils.getID(voidInput))) { //wrong input
 
                 if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -170,7 +171,7 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
         
         if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
-            if (!Objects.equals(StackUtils.getIDofNullable(inv.getItemInSlot(INPUT_SLOTS[1])), "VOID_INGOT")) { //wrong input
+            if (voidInput == null || !Items.VOID_INGOT.getItemId().equals(StackUtils.getID(voidInput))) { //wrong input
 
                 if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));

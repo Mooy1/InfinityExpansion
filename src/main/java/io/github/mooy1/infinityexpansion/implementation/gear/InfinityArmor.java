@@ -24,14 +24,14 @@ import javax.annotation.Nonnull;
  *
  * @author Mooy1
  */
-public final class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor, Soulbound, NotPlaceable { //add sf bow too
+public final class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor, Soulbound, NotPlaceable {
     
     private static final NamespacedKey key = PluginUtils.getKey("infinity_armor");
     
     public static void setup(InfinityExpansion plugin) {
         new InfinityArmor(CROWN, new PotionEffect[] {
-                new PotionEffect(PotionEffectType.NIGHT_VISION, 1200, 0),
-                new PotionEffect(PotionEffectType.CONDUIT_POWER, 1200, 0),
+                new PotionEffect(PotionEffectType.NIGHT_VISION, 1200, 0, false, false, false),
+                new PotionEffect(PotionEffectType.CONDUIT_POWER, 1200, 0, false, false, false),
         }, new ItemStack[] {
                 null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
                 Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY,
@@ -41,9 +41,9 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 null, null, null, null, null, null
         }).register(plugin);
         new InfinityArmor(CHESTPLATE, new PotionEffect[] {
-                new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 1200, 1),
-                new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1),
-                new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1200, 0)
+                new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 1200, 0, false, false, false),
+                new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1, false, false, false),
+                new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1200, 0, false, false, false)
         }, new ItemStack[] {
                 null, Items.INFINITY, null, null, Items.INFINITY, null,
                 Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
@@ -53,9 +53,9 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null
         }).register(plugin);
         new InfinityArmor(LEGGINGS, new PotionEffect[] {
-                new PotionEffect(PotionEffectType.FAST_DIGGING, 1200, 2),
-                new PotionEffect(PotionEffectType.REGENERATION, 1200, 0),
-                new PotionEffect(PotionEffectType.SATURATION, 1200, 0),
+                new PotionEffect(PotionEffectType.FAST_DIGGING, 1200, 2, false, false, false),
+                new PotionEffect(PotionEffectType.REGENERATION, 1200, 0, false, false, false),
+                new PotionEffect(PotionEffectType.SATURATION, 1200, 0, false, false, false),
         }, new ItemStack[] {
                 null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
                 Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY,
@@ -65,8 +65,8 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 null, Items.INFINITY, null, null, Items.INFINITY, null
         }).register(plugin);
         new InfinityArmor(BOOTS, new PotionEffect[] {
-                new PotionEffect(PotionEffectType.SPEED, 1200, 2),
-                new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 1200, 0),
+                new PotionEffect(PotionEffectType.SPEED, 1200, 2, false, false, false),
+                new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 1200, 0, false, false, false),
         }, new ItemStack[] {
                 null, null, null, null, null, null,
                 Items.INFINITY, Items.INFINITY, null, null, Items.INFINITY, Items.INFINITY,
@@ -90,7 +90,7 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
             Material.NETHERITE_CHESTPLATE,
             "&bInfinity Chestplate",
             "&7Strength II",
-            "&7Resistance II",
+            "&7Resistance I",
             "&7Fire Resistance I",
             "&7Bee Sting Immunity"
     );

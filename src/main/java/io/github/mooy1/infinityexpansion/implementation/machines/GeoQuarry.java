@@ -125,7 +125,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
 
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        if (PluginUtils.getCurrentTick() % 100 != 0) {
+        if (PluginUtils.getCurrentTick() % 200 != 0) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aDrilling..."));
             }

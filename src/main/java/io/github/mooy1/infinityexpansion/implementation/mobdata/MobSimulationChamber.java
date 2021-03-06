@@ -156,7 +156,13 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
 
     @Override
     protected void tick(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        MobDataType card = MobDataCard.CARDS.get(StackUtils.getIDofNullable(inv.getItemInSlot(CARD_SLOT)));
+        ItemStack input = inv.getItemInSlot(CARD_SLOT);
+        
+        if (input == null) {
+            return;
+        }
+        
+        MobDataType card = MobDataCard.CARDS.get(StackUtils.getID(input));
 
         if (card == null) {
             if (inv.hasViewer()) {
