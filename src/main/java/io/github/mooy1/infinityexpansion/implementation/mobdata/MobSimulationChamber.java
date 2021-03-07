@@ -21,6 +21,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,7 +30,6 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class MobSimulationChamber extends AbstractTicker implements EnergyNetComponent {
@@ -52,7 +52,6 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
     public static final int BUFFER = 15000;
     public static final int ENERGY = 150;
     private static final int CHANCE = ConfigUtils.getInt("balance-options.mob-simulation-xp-chance", 1, 10, 2);
-
     private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     
     public MobSimulationChamber() {
@@ -162,7 +161,7 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
             return;
         }
         
-        MobDataType card = MobDataCard.CARDS.get(StackUtils.getID(input));
+        MobDataCard card = MobDataCard.CARDS.get(StackUtils.getID(input));
 
         if (card == null) {
             if (inv.hasViewer()) {
@@ -194,9 +193,9 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
             setXp(b.getLocation(), xp);
         }
 
-        for (Map.Entry<Integer, ItemStack> entry : card.drops.entrySet()) {
-            if (ThreadLocalRandom.current().nextInt(entry.getKey()) == 0) {
-                ItemStack output = entry.getValue();
+        for (Pair<ItemStack, Integer> entry : card.drops) {
+            if (ThreadLocalRandom.current().nextInt(entry.getSecondValue()) == 0) {
+                ItemStack output = entry.getFirstValue();
                 if (inv.fits(output, OUTPUT_SLOTS)) {
                     inv.pushItem(output.clone(), OUTPUT_SLOTS);
                 } else if (inv.hasViewer()) {

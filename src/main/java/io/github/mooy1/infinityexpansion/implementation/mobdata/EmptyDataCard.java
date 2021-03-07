@@ -26,4 +26,5 @@ public final class EmptyDataCard extends SlimefunItem implements NotPlaceable {
                 SlimefunItems.MAGNESIUM_INGOT, Items.MACHINE_CIRCUIT, SlimefunItems.MAGNESIUM_INGOT
         });
     }
+    
 }

@@ -26,6 +26,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -178,12 +179,13 @@ public class StorageUnit extends AbstractTicker {
     @Override
     public void tick(@Nonnull BlockMenu menu, @Nonnull Block block, @Nonnull Config config) {
         int amount = Util.getIntData(STORED_AMOUNT, block.getLocation());
+        @Nullable
         CachedItemMeta cachedItemMeta = cachedMetas.get(block.getLocation());
 
         // input
         ItemStack input = menu.getItemInSlot(INPUT_SLOT);
         if (input != null) {
-            if (amount <= 0) {
+            if (amount <= 0 || cachedItemMeta == null) {
                 // set stored item to input
                 amount = input.getAmount();
                 cachedMetas.put(block.getLocation(), cachedItemMeta = new CachedItemMeta(input));
@@ -207,7 +209,7 @@ public class StorageUnit extends AbstractTicker {
         }
 
         // output
-        if (amount > 0) {
+        if (amount > 0 && cachedItemMeta != null) {
             int remove = Math.min(cachedItemMeta.type.getMaxStackSize(), amount - 1);
             if (remove == 0) {
                 // last item
@@ -365,7 +367,7 @@ public class StorageUnit extends AbstractTicker {
         Pair<ItemStack, Integer> data = loadFromStack(source.getItemMeta());
         if (data != null) {
             target.setItemMeta(saveToStack(target.getItemMeta(), data.getFirstValue(),
-                    StackUtils.getName(data.getFirstValue()), data.getSecondValue()));
+                    StackUtils.getDisplayName(data.getFirstValue()), data.getSecondValue()));
         }
     }
 
@@ -493,15 +495,21 @@ public class StorageUnit extends AbstractTicker {
     private static final class CachedItemMeta {
 
         private final Material type;
-        private final ItemMeta meta;
         private final String displayName;
+        @Nullable
+        private final ItemMeta meta;
 
         // load from input
         private CachedItemMeta(ItemStack item) {
+            if (item.hasItemMeta()) {
+                this.meta = item.getItemMeta();
+                this.displayName = StackUtils.getDisplayName(item, this.meta);
+            } else {
+                this.meta = null;
+                this.displayName = StackUtils.getInternalName(item);
+            }
             this.type = item.getType();
-            this.meta = item.getItemMeta();
-            this.displayName = StackUtils.getName(item, this.meta);
-
+            
             // add the display key to the display item and set amount 1
             ItemMeta meta = item.getItemMeta();
             meta.getPersistentDataContainer().set(DISPLAY_KEY, PersistentDataType.BYTE, (byte) 1);
@@ -511,21 +519,31 @@ public class StorageUnit extends AbstractTicker {
 
         // load from stored
         private CachedItemMeta(ItemStack item, ItemMeta meta) {
-            this.type = item.getType();
-            this.meta = meta;
-            this.displayName = StackUtils.getName(item, this.meta);
-
             // remove the display key from this meta
             meta.getPersistentDataContainer().remove(DISPLAY_KEY);
+            
+            // check if it had meta besides the display key
+            if (meta.equals(Bukkit.getItemFactory().getItemMeta(item.getType()))) {
+                this.meta = null;
+                this.displayName = StackUtils.getInternalName(item);
+            } else {
+                this.meta = meta;
+                this.displayName = StackUtils.getDisplayName(item, meta);
+            }
+            this.type = item.getType();
         }
 
         private boolean matches(ItemStack item) {
-            return item.getType() == this.type && item.getItemMeta().equals(this.meta);
+            return item.getType() == this.type
+                    && item.hasItemMeta() == (this.meta != null)
+                    && (this.meta == null || this.meta.equals(item.getItemMeta()));
         }
 
         private ItemStack createItem(int amount) {
             ItemStack item = new ItemStack(this.type, amount);
-            item.setItemMeta(this.meta);
+            if (this.meta != null) {
+                item.setItemMeta(this.meta);
+            }
             return item;
         }
 
