@@ -189,8 +189,8 @@ public class StorageUnit extends AbstractTicker {
                 // set stored item to input
                 amount = input.getAmount();
                 cachedMetas.put(block.getLocation(), cachedItemMeta = new CachedItemMeta(input));
-                menu.replaceExistingItem(DISPLAY_SLOT, input);
                 menu.replaceExistingItem(INPUT_SLOT, null);
+                menu.replaceExistingItem(DISPLAY_SLOT, input);
             } else {
                 // try to add input to storage
                 int max = this.max - amount;
@@ -228,6 +228,9 @@ public class StorageUnit extends AbstractTicker {
                 amount -= remove;
             }
         }
+        
+        // set data, don't use config cuz that bugs it out
+        BlockStorage.addBlockInfo(block, STORED_AMOUNT, String.valueOf(amount));
 
         // update status
         if (menu.hasViewer()) {
@@ -265,9 +268,6 @@ public class StorageUnit extends AbstractTicker {
                 sign.update();
             }
         }
-
-        // set data, don't use config cuz that bugs it out
-        BlockStorage.addBlockInfo(block, STORED_AMOUNT, String.valueOf(amount));
     }
 
     protected String displayStoredInfo(int amount) {
@@ -280,14 +280,79 @@ public class StorageUnit extends AbstractTicker {
     }
 
     @Override
+    protected void onPlace(BlockPlaceEvent e, @Nonnull Block b) {
+        Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
+        if (data != null) {
+            cachedMetas.put(b.getLocation(), new CachedItemMeta(data.getFirstValue(), data.getFirstValue().getItemMeta()));
+            BlockStorage.getInventory(b).replaceExistingItem(DISPLAY_SLOT, data.getFirstValue());
+            BlockStorage.addBlockInfo(b, STORED_AMOUNT, String.valueOf(data.getSecondValue()));
+        } else {
+            BlockStorage.addBlockInfo(b, STORED_AMOUNT, "0");
+        }
+    }
+
+    @Override
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        Location l = b.getLocation();
+
+        // add interaction handler
+        menu.addMenuClickHandler(INTERACT_SLOT, new InteractionHandler(menu, l));
+        
+        // update old data if present
+        ItemStack display = menu.getItemInSlot(DISPLAY_SLOT);
+        if (display == null) {
+            String oldID = BlockStorage.getLocationInfo(l, OLD_STORED_ITEM);
+            if (oldID != null) {
+                ItemStack item = StackUtils.getItemByIDorType(oldID);
+                if (item != null) {
+                    cachedMetas.put(l, new CachedItemMeta(item));
+                    menu.replaceExistingItem(DISPLAY_SLOT, item);
+                } else {
+                    menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
+                }
+                BlockStorage.addBlockInfo(l, OLD_STORED_ITEM, null);
+            } else {
+                // when placed
+                menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
+            }
+        } else {
+            // cache stored meta
+            ItemMeta stored = display.getItemMeta();
+            
+            if (stored.getPersistentDataContainer().has(DISPLAY_KEY, PersistentDataType.BYTE)) {
+                
+                // hot fix
+                if (stored.getPersistentDataContainer().has(EMPTY_KEY, PersistentDataType.BYTE)) {
+                    ItemStack output = menu.getItemInSlot(OUTPUT_SLOT);
+                    if (output != null) {
+                        cachedMetas.put(l, new CachedItemMeta(output));
+                        menu.replaceExistingItem(OUTPUT_SLOT, null);
+                        menu.replaceExistingItem(DISPLAY_SLOT, output);
+                    } else {
+                        menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
+                        BlockStorage.addBlockInfo(l, STORED_AMOUNT, "0");
+                    }
+                    return;
+                }
+                
+                cachedMetas.put(l, new CachedItemMeta(display, stored));
+                menu.replaceExistingItem(DISPLAY_SLOT, display);
+            } else {
+                menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
+            }
+        }
+    }
+
+    @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-
         int amount = Util.getIntData(STORED_AMOUNT, BlockStorage.getLocationInfo(l), l);
-
         if (amount > 0) {
-            e.setDropItems(false);
-
             CachedItemMeta cachedItemMeta = cachedMetas.remove(l);
+            if (cachedItemMeta == null) {
+                return;
+            }
+            
+            e.setDropItems(false);
 
             // add output slot
             ItemStack output = menu.getItemInSlot(OUTPUT_SLOT);
@@ -310,18 +375,6 @@ public class StorageUnit extends AbstractTicker {
 
         menu.dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
 
-    }
-
-    @Override
-    protected void onPlace(BlockPlaceEvent e, @Nonnull Block b) {
-        Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
-        if (data != null) {
-            cachedMetas.put(b.getLocation(), new CachedItemMeta(data.getFirstValue(), data.getFirstValue().getItemMeta()));
-            BlockStorage.getInventory(b).replaceExistingItem(DISPLAY_SLOT, data.getFirstValue());
-            BlockStorage.addBlockInfo(b, STORED_AMOUNT, String.valueOf(data.getSecondValue()));
-        } else {
-            BlockStorage.addBlockInfo(b, STORED_AMOUNT, "0");
-        }
     }
 
     private static ItemMeta saveToStack(ItemMeta meta, ItemStack displayItem, String displayName, int amount) {
@@ -370,7 +423,7 @@ public class StorageUnit extends AbstractTicker {
                     StackUtils.getDisplayName(data.getFirstValue()), data.getSecondValue()));
         }
     }
-
+    
     @Nonnull
     @Override
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
@@ -383,41 +436,6 @@ public class StorageUnit extends AbstractTicker {
             return new int[] {OUTPUT_SLOT};
         }
         return new int[0];
-    }
-
-    @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        Location l = b.getLocation();
-
-        // add interaction handler
-        menu.addMenuClickHandler(INTERACT_SLOT, new InteractionHandler(menu, l));
-        
-        // update old data if present
-        ItemStack display = menu.getItemInSlot(DISPLAY_SLOT);
-        if (display == null) {
-            String oldID = BlockStorage.getLocationInfo(l, OLD_STORED_ITEM);
-            if (oldID != null) {
-                ItemStack item = StackUtils.getItemByIDorType(oldID);
-                if (item != null) {
-                    cachedMetas.put(l, new CachedItemMeta(item));
-                    menu.replaceExistingItem(DISPLAY_SLOT, item);
-                } else {
-                    menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-                }
-                BlockStorage.addBlockInfo(l, OLD_STORED_ITEM, null);
-            } else {
-                menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-            }
-        } else {
-            // cache stored meta
-            ItemMeta stored = display.getItemMeta();
-            if (stored.getPersistentDataContainer().has(DISPLAY_KEY, PersistentDataType.BYTE)) {
-                cachedMetas.put(l, new CachedItemMeta(display, stored));
-                menu.replaceExistingItem(DISPLAY_SLOT, display);
-            } else {
-                menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-            }
-        }
     }
 
     @AllArgsConstructor
