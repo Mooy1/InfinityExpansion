@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.setup.categories;
+package io.github.mooy1.infinityexpansion.categories;
 
 import io.github.mooy1.infinitylib.PluginUtils;
 import me.mrCookieSlime.Slimefun.Objects.Category;

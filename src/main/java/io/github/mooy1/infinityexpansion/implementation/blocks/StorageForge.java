@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinitylib.delayed.DelayedRecipeType;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;

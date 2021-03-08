@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;

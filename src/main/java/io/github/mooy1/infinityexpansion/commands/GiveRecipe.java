@@ -1,6 +1,7 @@
-package io.github.mooy1.infinityexpansion.setup.commands;
+package io.github.mooy1.infinityexpansion.commands;
 
 import io.github.mooy1.infinitylib.command.AbstractCommand;
+import io.github.mooy1.infinitylib.command.CommandManager;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -23,7 +24,7 @@ public final class GiveRecipe extends AbstractCommand {
     @Override
     public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "&cOnly players can use this!");
+            sender.sendMessage("Only players can use this!");
             return;
         }
         
@@ -57,8 +58,12 @@ public final class GiveRecipe extends AbstractCommand {
     public List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
         List<String> tabs = new ArrayList<>();
         if (args.length == 2) {
-            for (SlimefunItem i : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {
-                tabs.add(i.getId());
+            int i = 0;
+            for (SlimefunItem item : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {
+                tabs.add(item.getId());
+                if (i++ == CommandManager.MAX_TAB_COMPLETE) {
+                    break;
+                }
             } 
         }
         return tabs;

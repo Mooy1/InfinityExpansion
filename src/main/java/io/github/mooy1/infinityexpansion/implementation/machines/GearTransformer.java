@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;

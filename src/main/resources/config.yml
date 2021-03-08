@@ -32,7 +32,6 @@
 # -----
 balance-options:
   difficulty: 1.0
-  mob-simulation-xp-chance: 2
   allow-sf-item-transform: false
 storage-unit-options:
   display-signs: true

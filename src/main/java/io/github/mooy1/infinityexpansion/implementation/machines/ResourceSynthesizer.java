@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;

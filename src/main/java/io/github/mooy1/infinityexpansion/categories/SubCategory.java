@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.setup.categories;
+package io.github.mooy1.infinityexpansion.categories;
 
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import org.bukkit.NamespacedKey;

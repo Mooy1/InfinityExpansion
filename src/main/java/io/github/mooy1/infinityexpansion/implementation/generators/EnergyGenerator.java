@@ -4,7 +4,7 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;

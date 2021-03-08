@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.ConfigUtils;
 import io.github.mooy1.infinitylib.PluginUtils;
@@ -330,7 +330,7 @@ public class StorageUnit extends AbstractTicker {
             lore.add(ChatColor.GOLD + "Stored: " + displayName + ChatColor.YELLOW + " x " + amount);
             meta.setLore(lore);
         }
-        meta.getPersistentDataContainer().set(ITEM_KEY, PersistentItemStack.TYPE, displayItem);
+        meta.getPersistentDataContainer().set(ITEM_KEY, PersistentItemStack.instance(), displayItem);
         meta.getPersistentDataContainer().set(AMOUNT_KEY, PersistentDataType.INTEGER, amount);
         return meta;
     }
@@ -355,7 +355,7 @@ public class StorageUnit extends AbstractTicker {
             }
 
             // get item
-            ItemStack item = meta.getPersistentDataContainer().get(ITEM_KEY, PersistentItemStack.TYPE);
+            ItemStack item = meta.getPersistentDataContainer().get(ITEM_KEY, PersistentItemStack.instance());
             if (item != null) {
                 return new Pair<>(item, amount);
             }

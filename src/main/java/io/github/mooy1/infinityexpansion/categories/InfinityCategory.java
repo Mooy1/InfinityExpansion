@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.setup.categories;
+package io.github.mooy1.infinityexpansion.categories;
 
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinitylib.PluginUtils;

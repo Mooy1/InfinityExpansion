@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.presets.MenuPreset;

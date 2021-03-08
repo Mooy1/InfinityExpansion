@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.mooy1.infinitylib.presets.LorePreset;

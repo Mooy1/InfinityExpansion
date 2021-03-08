@@ -2,7 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.materials;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.machines.SingularityConstructor;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Triplet;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.UnplaceableBlock;

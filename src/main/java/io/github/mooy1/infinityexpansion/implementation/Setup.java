@@ -1,7 +1,9 @@
-package io.github.mooy1.infinityexpansion.setup;
+package io.github.mooy1.infinityexpansion.implementation;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.InfinityCategory;
+import io.github.mooy1.infinityexpansion.categories.MultiCategory;
 import io.github.mooy1.infinityexpansion.implementation.blocks.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.blocks.StorageForge;
@@ -28,14 +30,12 @@ import io.github.mooy1.infinityexpansion.implementation.machines.TreeGrower;
 import io.github.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
 import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.EmptyDataCard;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataCard;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataInfuser;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
-import io.github.mooy1.infinityexpansion.setup.categories.Categories;
-import io.github.mooy1.infinityexpansion.setup.categories.InfinityCategory;
-import io.github.mooy1.infinityexpansion.setup.categories.MultiCategory;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.PluginUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
