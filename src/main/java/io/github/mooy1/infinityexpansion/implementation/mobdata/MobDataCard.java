@@ -138,7 +138,7 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
                 new ItemStack(Material.WITHER_SKELETON_SKULL, 8), new ItemStack(Material.BONE, 64), new ItemStack(Material.WITHER_SKELETON_SKULL, 8),
                 new ItemStack(Material.COAL_BLOCK, 64), EmptyDataCard.ITEM, new ItemStack(Material.COAL_BLOCK, 64),
                 new ItemStack(Material.STONE_SWORD, 1), new ItemStack(Material.BONE, 64), new ItemStack(Material.STONE_SWORD, 1)
-        }, new ItemStack(Material.COAL), 1, new ItemStack(Material.BONE), 2, new ItemStack(Material.COAL), 3).register(plugin);
+        }, new ItemStack(Material.COAL), 1, new ItemStack(Material.BONE), 2, new ItemStack(Material.WITHER_SKELETON_SKULL), 5).register(plugin);
         new MobDataCard("Endermen", MobDataTier.ADVANCED, new ItemStack[] {
                 new ItemStack(Material.ENDER_EYE, 16), new ItemStack(Material.OBSIDIAN, 64), new ItemStack(Material.ENDER_EYE, 16),
                 new ItemStack(Material.ENDER_PEARL, 16), EmptyDataCard.ITEM, new ItemStack(Material.ENDER_PEARL, 16),

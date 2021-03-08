@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion;
 
+import io.github.mooy1.infinityexpansion.commands.PrintItem;
 import io.github.mooy1.infinityexpansion.commands.SetData;
 import io.github.mooy1.infinityexpansion.implementation.Setup;
 import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
@@ -29,7 +30,7 @@ public final class InfinityExpansion extends JavaPlugin implements SlimefunAddon
         PluginUtils.setup(ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion", this, "Mooy1/InfinityExpansion/master", getFile());
         
         CommandManager.setup("infinityexpansion", "infinityexpansion.admin", "/ie, /ix, /infinity",
-                new GiveRecipe(), new SetData()
+                new GiveRecipe(), new SetData(), new PrintItem()
         );
         
         Metrics metrics = PluginUtils.setupMetrics(8991);
