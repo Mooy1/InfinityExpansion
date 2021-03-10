@@ -164,7 +164,7 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
                 new ItemStack(Material.IRON_BLOCK, 64), new ItemStack(Material.PUMPKIN, 16), new ItemStack(Material.IRON_BLOCK, 64),
                 new ItemStack(Material.POPPY, 16), EmptyDataCard.ITEM, new ItemStack(Material.POPPY, 16),
                 new ItemStack(Material.IRON_BLOCK, 64), new ItemStack(Material.PUMPKIN, 16), new ItemStack(Material.IRON_BLOCK, 64)
-        }, new ItemStack(Material.IRON_INGOT), 1, new ItemStack(Material.POPPY), 2, new ItemStack(Material.IRON_INGOT), 3).register(plugin);
+        }, new ItemStack(Material.IRON_INGOT), 1, new ItemStack(Material.POPPY), 2, SlimefunItems.BASIC_CIRCUIT_BOARD, 3).register(plugin);
         new MobDataCard("Blaze", MobDataTier.ADVANCED, new ItemStack[] {
                 new ItemStack(Material.MAGMA_BLOCK, 64), new ItemStack(Material.BLAZE_ROD, 64), new ItemStack(Material.MAGMA_BLOCK, 64),
                 new ItemStack(Material.BLAZE_ROD, 64), EmptyDataCard.ITEM, new ItemStack(Material.BLAZE_ROD, 64),
