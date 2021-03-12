@@ -1,13 +1,13 @@
 package io.github.mooy1.infinityexpansion;
 
+import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.commands.PrintItem;
 import io.github.mooy1.infinityexpansion.commands.SetData;
 import io.github.mooy1.infinityexpansion.implementation.Setup;
-import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
-import io.github.mooy1.infinitylib.ConfigUtils;
-import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
 import io.github.mooy1.infinitylib.command.CommandManager;
+import io.github.mooy1.infinitylib.core.ConfigUtils;
+import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import lombok.Getter;
 import org.bukkit.ChatColor;

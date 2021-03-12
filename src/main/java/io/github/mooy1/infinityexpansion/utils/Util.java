@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.utils;
 
-import io.github.mooy1.infinitylib.ConfigUtils;
-import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.core.ConfigUtils;
+import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -58,6 +58,8 @@ public final class Util {
     private static Enchantment enchantmentByPath(@Nonnull String path) {
         switch (path) {
             case "sharpness": return Enchantment.DAMAGE_ALL;
+            case "smite": return Enchantment.DAMAGE_UNDEAD;
+            case "bane-of-arthropods": return Enchantment.DAMAGE_ARTHROPODS;
             case "efficiency": return Enchantment.DIG_SPEED;
             case "protection": return Enchantment.PROTECTION_ENVIRONMENTAL;
             case "fire-aspect": return Enchantment.FIRE_ASPECT;

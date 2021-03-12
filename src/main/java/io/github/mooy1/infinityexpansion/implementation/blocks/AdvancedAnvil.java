@@ -3,13 +3,13 @@ package io.github.mooy1.infinityexpansion.implementation.blocks;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.player.MessageUtils;
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.players.MessageUtils;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -42,7 +42,7 @@ import java.util.Objects;
 public final class AdvancedAnvil extends AbstractEnergyCrafter {
 
     public static final int ENERGY = 100_000;
-    
+
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "ADVANCED_ANVIL",
             Material.SMITHING_TABLE,
@@ -53,8 +53,10 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
             LorePreset.energy(ENERGY) + "per use"
 
     );
-    
-    private static final Map<Enchantment, Integer> MAX_LEVELS = Util.getEnchants(Objects.requireNonNull(InfinityExpansion.getInstance().getConfig().getConfigurationSection("advanced-anvil-max-levels")));
+
+    private static final Map<Enchantment, Integer> MAX_LEVELS = Util.getEnchants(Objects.requireNonNull(
+            InfinityExpansion.getInstance().getConfig().getConfigurationSection("advanced-anvil-max-levels")
+    ));
 
     private static final int[] INPUT_SLOTS = {
             MenuPreset.slot1, MenuPreset.slot2
@@ -73,7 +75,7 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
     };
 
     public AdvancedAnvil() {
-        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
                 Items.MACHINE_PLATE, new ItemStack(Material.ANVIL), Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
@@ -114,7 +116,7 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         }
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
     }
-    
+
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         menu.addMenuClickHandler(STATUS_SLOT, (player, i, itemStack, clickAction) -> {
@@ -170,7 +172,7 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         }
         return combineEnchants(Maps.difference(enchants1, enchants2), item1, item2);
     }
-    
+
     @Nonnull
     private static Map<Enchantment, Integer> getEnchants(@Nonnull ItemMeta meta) {
         if (meta instanceof EnchantmentStorageMeta) {
@@ -179,12 +181,12 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
                 return book.getStoredEnchants();
             }
         } else if (meta.hasEnchants()) {
-             return meta.getEnchants();
-         }
-        
+            return meta.getEnchants();
+        }
+
         return new HashMap<>();
     }
-    
+
     private static void setEnchants(@Nonnull ItemStack item, @Nonnull ItemMeta meta, @Nonnull Map<Enchantment, Integer> enchants) {
         if (meta instanceof EnchantmentStorageMeta) {
             EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
@@ -198,7 +200,7 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
             }
         }
     }
-    
+
     private static ItemStack combineEnchants(@Nonnull MapDifference<Enchantment, Integer> dif, @Nonnull ItemStack item1, @Nonnull ItemStack item2) {
         ItemStack item = item1.clone();
         item.setAmount(1);
@@ -245,7 +247,7 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
             return null;
         }
     }
-    
+
     @Override
     public void update(@Nonnull BlockMenu inv) {
         ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);

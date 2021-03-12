@@ -1,10 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinitylib.core.PluginUtils;
+import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
@@ -64,11 +64,14 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
     public ItemUseHandler getItemHandler() {
         return e -> {
             ItemStack item = e.getItem();
-            ItemMeta meta = item.getItemMeta();
-            List<String> lore = meta.getLore();
-            if (lore == null) {
+            if (!item.hasItemMeta()) {
                 return;
             }
+            ItemMeta meta = item.getItemMeta();
+            if (!meta.hasLore()) {
+                return;
+            }
+            List<String> lore = meta.getLore();
 
             Player p = e.getPlayer();
 
