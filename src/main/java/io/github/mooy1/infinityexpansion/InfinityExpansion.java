@@ -57,7 +57,7 @@ public final class InfinityExpansion extends JavaPlugin implements SlimefunAddon
         
         Setup.setup(this);
         
-        PluginUtils.startTicker(() -> {});
+        PluginUtils.startTicker();
     }
     
     private void loadDifficulty() {

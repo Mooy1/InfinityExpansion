@@ -6,7 +6,7 @@ import io.github.mooy1.infinityexpansion.categories.InfinityCategory;
 import io.github.mooy1.infinityexpansion.categories.MultiCategory;
 import io.github.mooy1.infinityexpansion.implementation.blocks.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.blocks.StorageForge;
+import io.github.mooy1.infinityexpansion.implementation.storage.StorageForge;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinityexpansion.implementation.blocks.Strainer;
 import io.github.mooy1.infinityexpansion.implementation.blocks.StrainerBase;

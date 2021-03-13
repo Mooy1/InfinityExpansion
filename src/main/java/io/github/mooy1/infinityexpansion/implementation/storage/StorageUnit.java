@@ -2,28 +2,22 @@ package io.github.mooy1.infinityexpansion.implementation.storage;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.blocks.StorageForge;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.core.ConfigUtils;
 import io.github.mooy1.infinitylib.core.PluginUtils;
-import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.PersistentItemStack;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.players.MessageUtils;
-import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractTicker;
+import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
@@ -31,8 +25,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
-import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,24 +32,55 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Basically just barrels
+ * A block that stored large amounts of 1 item
  *
  * @author Mooy1
  *
  * Thanks to FluffyBear for stuff to learn from
  */
-public class StorageUnit extends AbstractTicker {
+public final class StorageUnit extends AbstractContainer {
 
+    public static void setup(InfinityExpansion plugin) {
+        new StorageUnit(BASIC, BASIC_STORAGE, new ItemStack[] {
+                new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
+                new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
+                new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
+        }).register(plugin);
+        new StorageUnit(ADVANCED, ADVANCED_STORAGE, new ItemStack[] {
+                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
+                Items.MAGSTEEL, StorageUnit.BASIC, Items.MAGSTEEL,
+                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
+        }).register(plugin);
+        new StorageUnit(REINFORCED, REINFORCED_STORAGE, new ItemStack[] {
+                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, StorageUnit.ADVANCED, Items.MAGSTEEL_PLATE,
+                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE
+        }).register(plugin);
+        new StorageUnit(VOID, VOID_STORAGE, new ItemStack[] {
+                Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
+                Items.MAGNONIUM, StorageUnit.REINFORCED, Items.MAGNONIUM,
+                Items.VOID_INGOT, Items.MACHINE_CORE, Items.VOID_INGOT
+        }).register(plugin);
+        new StorageUnit(INFINITY, INFINITY_STORAGE, new ItemStack[] {
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
+                Items.INFINITY, StorageUnit.VOID, Items.INFINITY,
+                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY
+        }).register(plugin);
+    }
+
+    /* Storage amounts for each tier */
     private static final int BASIC_STORAGE = 6400;
     private static final int ADVANCED_STORAGE = 25600;
     private static final int REINFORCED_STORAGE = 102400;
     private static final int VOID_STORAGE = 409600;
-    private static final int INFINITY_STORAGE = 1_600_000_000;
+    static final int INFINITY_STORAGE = 1_600_000_000;
 
+    /* Items */
     public static final SlimefunItemStack BASIC = new SlimefunItemStack(
             "BASIC_STORAGE",
             Material.OAK_WOOD,
@@ -89,55 +112,21 @@ public class StorageUnit extends AbstractTicker {
             "&6Capacity: &eInfinite items"
     );
 
-    public static void setup(InfinityExpansion plugin) {
-        new StorageUnit(BASIC, BASIC_STORAGE, new ItemStack[] {
-                new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
-                new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
-                new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
-        }).register(plugin);
-        new StorageUnit(ADVANCED, ADVANCED_STORAGE, new ItemStack[] {
-                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
-                Items.MAGSTEEL, StorageUnit.BASIC, Items.MAGSTEEL,
-                Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
-        }).register(plugin);
-        new StorageUnit(REINFORCED, REINFORCED_STORAGE, new ItemStack[] {
-                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
-                Items.MAGSTEEL_PLATE, StorageUnit.ADVANCED, Items.MAGSTEEL_PLATE,
-                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE
-        }).register(plugin);
-        new StorageUnit(VOID, VOID_STORAGE, new ItemStack[] {
-                Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
-                Items.MAGNONIUM, StorageUnit.REINFORCED, Items.MAGNONIUM,
-                Items.VOID_INGOT, Items.MACHINE_CORE, Items.VOID_INGOT
-        }).register(plugin);
-        new StorageUnit(INFINITY, INFINITY_STORAGE, new ItemStack[] {
-                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
-                Items.INFINITY, StorageUnit.VOID, Items.INFINITY,
-                Items.INFINITY, Items.VOID_INGOT, Items.INFINITY
-        }) {
-            @Override
-            protected String displayStoredInfo(int amount) {
-                return "";
-            }
-        }.register(plugin);
-    }
-
-    private static final boolean DISPLAY_SIGNS = ConfigUtils.getBoolean("storage-unit-options.display-signs", true);
-
-    private static final String OLD_STORED_ITEM = "storeditem"; // old item key in block data
-    static final String STORED_AMOUNT = "stored"; // amount key in block data
-    static final String VOID_EXCESS = "void_excess";
-    
+    /* Namespaced keys */
+    static final NamespacedKey EMPTY_KEY = PluginUtils.getKey("empty"); // key for empty item
+    static final NamespacedKey DISPLAY_KEY = PluginUtils.getKey("display"); // key for display item
     private static final NamespacedKey OLD_ITEM_KEY = PluginUtils.getKey("stored_item"); // old item key in pdc
     private static final NamespacedKey ITEM_KEY = PluginUtils.getKey("item"); // item key for item pdc
     private static final NamespacedKey AMOUNT_KEY = PluginUtils.getKey("stored"); // amount key for item pdc
-    private static final NamespacedKey EMPTY_KEY = PluginUtils.getKey("empty"); // key for empty item
-    static final NamespacedKey DISPLAY_KEY = PluginUtils.getKey("display"); // key for display item
 
-    static final ItemStack EMPTY_ITEM = new CustomItem(Material.BARRIER, meta -> {
-        meta.setDisplayName(ChatColor.WHITE + "Empty");
-        meta.getPersistentDataContainer().set(EMPTY_KEY, PersistentDataType.BYTE, (byte) 1);
-    });
+    /* Menu slots */
+    static final int INPUT_SLOT = MenuPreset.slot1;
+    static final int DISPLAY_SLOT = MenuPreset.slot2;
+    static final int STATUS_SLOT = DISPLAY_SLOT - 9;
+    static final int OUTPUT_SLOT = MenuPreset.slot3;
+    private static final int INTERACT_SLOT = DISPLAY_SLOT + 9;
+
+    /* Menu items */
     private static final ItemStack INTERACTION_ITEM = new CustomItem(Material.LIME_STAINED_GLASS_PANE,
             "&aQuick Actions",
             "&bLeft Click: &7Withdraw 1 item",
@@ -149,274 +138,85 @@ public class StorageUnit extends AbstractTicker {
             "&bStatus",
             "&7Loading..."
     );
-    private static final String VOID_EXCESS_TRUE = ChatColors.color("&7Void Excess:&e true &7(Click to toggle)");
-    private static final String VOID_EXCESS_FALSE = ChatColors.color("&7Void Excess:&e false &7(Click to toggle)");
 
-    private static final int INPUT_SLOT = MenuPreset.slot1;
-    static final int DISPLAY_SLOT = MenuPreset.slot2;
-    private static final int STATUS_SLOT = DISPLAY_SLOT - 9;
-    private static final int INTERACT_SLOT = DISPLAY_SLOT + 9;
-    private static final int OUTPUT_SLOT = MenuPreset.slot3;
-
-    private final int max;
+    /* Instance constants */
+    private final Map<Block, StorageCache> caches = new HashMap<>();
+    final int max;
 
     private StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
         super(Categories.STORAGE_TRANSPORT, item, StorageForge.TYPE, recipe);
         this.max = max;
-    }
 
-    @Override
-    public void setupMenu(@Nonnull BlockMenuPreset preset) {
-        MenuPreset.setupBasicMenu(preset);
-        preset.addMenuClickHandler(DISPLAY_SLOT, ChestMenuUtils.getEmptyClickHandler());
-        preset.addItem(INTERACT_SLOT, INTERACTION_ITEM);
-        preset.addItem(STATUS_SLOT, LOADING_ITEM);
-    }
-
-    @Nonnull
-    @Override
-    protected int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack item) {
-        // TODO input output
-        if (flow == ItemTransportFlow.INSERT) {
-            return new int[] {INPUT_SLOT};
-        } 
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return new int[] {OUTPUT_SLOT};
-        }
-        return new int[0];
-    }
-    
-    private void inputOutput(BlockMenu menu, StorageCache cache) {
-        
-        // input
-        ItemStack input = menu.getItemInSlot(INPUT_SLOT);
-        if (input != null) {
-            if (amount <= 0 || cachedItemMeta == null) {
-                // set stored to input
-                amount = input.getAmount();
-                cachedMetas.put(menu.getLocation(), cachedItemMeta = new CachedInfo(input));
-                menu.replaceExistingItem(INPUT_SLOT, null);
-                menu.replaceExistingItem(DISPLAY_SLOT, input);
-            } else if (voidExcess) {
-                // input and void excess
-                if (cachedItemMeta.matches(input)) {
-                    amount = Math.min(amount + input.getAmount(), this.max);
-                    input.setAmount(0);
-                }
-            } else {
-                // input as much as possible
-                int max = this.max - amount;
-                if (max > 0 && cachedItemMeta.matches(input)) {
-                    int add = input.getAmount();
-                    int dif = add - max;
-                    if (dif < 0) {
-                        amount += add;
-                        input.setAmount(0);
-                    } else {
-                        amount += max;
-                        input.setAmount(dif);
-                    }
-                }
+        addItemHandler(new BlockTicker() {
+            @Override
+            public boolean isSynchronized() {
+                return true;
             }
-        }
 
-        // output
-        if (amount > 0 && cachedItemMeta != null) {
-            int remove = Math.min(cachedItemMeta.type.getMaxStackSize(), amount - 1);
-            if (remove == 0) {
-                // last item
-                if (menu.getItemInSlot(OUTPUT_SLOT) == null) {
-                    menu.replaceExistingItem(OUTPUT_SLOT, cachedItemMeta.createItem(1), false);
-                    cachedItemMeta = null;
-                    cachedMetas.remove(block.getLocation());
-                    menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-                    amount = 0;
-                }
-            } else {
-                ItemStack remaining = menu.pushItem(cachedItemMeta.createItem(remove), OUTPUT_SLOT);
-                if (remaining != null) {
-                    remove -= remaining.getAmount();
-                }
-                amount -= remove;
+            @Override
+            public void tick(Block b, SlimefunItem item, Config data) {
+                StorageUnit.this.caches.get(b).updateStatus(b);
             }
-        }
-        
-        
-    }
-    
-    @Override
-    public void tick(@Nonnull BlockMenu menu, @Nonnull Block block, @Nonnull Config config) {
-        int amount = Util.getIntData(STORED_AMOUNT, block.getLocation());
-        @Nullable
-        StorageCache cachedItemMeta = StorageCache.get(block.getLocation());
-        boolean voidExcess = config.getString(VOID_EXCESS) != null;
-        
-        // set data, don't use config cuz that bugs it out
-        BlockStorage.addBlockInfo(block, STORED_AMOUNT, String.valueOf(amount));
-
-        // update status
-        if (menu.hasViewer()) {
-            if (cachedItemMeta == null) {
-                menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                        Material.CYAN_STAINED_GLASS_PANE,
-                        "&bStatus",
-                        "&6Stored: &e0" + displayStoredInfo(0),
-                        "&7Stacks: 0",
-                        voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE
-                ), false);
-            } else {
-                menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                        Material.CYAN_STAINED_GLASS_PANE,
-                        "&bStatus",
-                        "&6Stored: &e" + LorePreset.format(amount) + displayStoredInfo(amount),
-                        "&7Stacks: " + amount / cachedItemMeta.getMaterial().getMaxStackSize(),
-                        voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE
-                ), false);
-            }
-        }
-
-        // update signs synchronously
-        if (DISPLAY_SIGNS && (PluginUtils.getCurrentTick() & 15) == 0) {
-            PluginUtils.runSync(() -> {
-                Block check = block.getRelative(0, 1, 0);
-                if (SlimefunTag.SIGNS.isTagged(check.getType())
-                        || checkWallSign(check = block.getRelative(1, 0, 0), block)
-                        || checkWallSign(check = block.getRelative(-1, 0, 0), block)
-                        || checkWallSign(check = block.getRelative(0, 0, 1), block)
-                        || checkWallSign(check = block.getRelative(0, 0, -1), block)
-                ) {
-                    Sign sign = (Sign) check.getState();
-                    sign.setLine(0, ChatColor.GRAY + "--------------");
-                    sign.setLine(1, cachedItemMeta == null ? ChatColor.WHITE + "Empty" : cachedItemMeta.getDisplayName());
-                    sign.setLine(2, ChatColor.YELLOW.toString() + amount);
-                    sign.setLine(3, ChatColor.GRAY + "--------------");
-                    sign.update();
-                }
-            });
-        }
-    }
-    
-    protected String displayStoredInfo(int amount) {
-        return " / " + LorePreset.format(this.max) + " &7(" + (100 * amount) / this.max + "%)";
-    }
-
-    private static boolean checkWallSign(Block sign, Block block) {
-        return SlimefunTag.WALL_SIGNS.isTagged(sign.getType())
-                && sign.getRelative(((WallSign) sign.getBlockData()).getFacing().getOppositeFace()).equals(block);
-    }
-
-    @Override
-    protected void onPlace(BlockPlaceEvent e, @Nonnull Block b) {
-        Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
-        if (data != null) {
-            cachedMetas.put(b.getLocation(), new CachedInfo(data.getFirstValue(), data.getFirstValue().getItemMeta()));
-            BlockStorage.getInventory(b).replaceExistingItem(DISPLAY_SLOT, data.getFirstValue());
-            BlockStorage.addBlockInfo(b, STORED_AMOUNT, String.valueOf(data.getSecondValue()));
-        } else {
-            BlockStorage.addBlockInfo(b, STORED_AMOUNT, "0");
-        }
-    }
-
-    @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        Location l = b.getLocation();
-
-        // add interaction handler
-        menu.addMenuClickHandler(INTERACT_SLOT, new InteractionHandler(menu, l));
-        
-        // add void excess handler
-        menu.addMenuClickHandler(STATUS_SLOT, (p, slot, item, action) -> {
-            String voidExcess = BlockStorage.getLocationInfo(l, VOID_EXCESS);
-            if (voidExcess == null) {
-                BlockStorage.addBlockInfo(l, VOID_EXCESS, "true");
-                LoreUtils.replaceLine(menu.getItemInSlot(STATUS_SLOT), VOID_EXCESS_FALSE, VOID_EXCESS_TRUE);
-            } else {
-                BlockStorage.addBlockInfo(l, VOID_EXCESS, null);
-                LoreUtils.replaceLine(menu.getItemInSlot(STATUS_SLOT), VOID_EXCESS_TRUE, VOID_EXCESS_FALSE);
-            }
-            return false;
         });
-        
-        // update old data if present
-        ItemStack display = menu.getItemInSlot(DISPLAY_SLOT);
-        if (display == null) {
-            String oldID = BlockStorage.getLocationInfo(l, OLD_STORED_ITEM);
-            if (oldID != null) {
-                ItemStack item = StackUtils.getItemByIDorType(oldID);
-                if (item != null) {
-                    cachedMetas.put(l, new CachedInfo(item));
-                    menu.replaceExistingItem(DISPLAY_SLOT, item);
-                } else {
-                    menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-                }
-                BlockStorage.addBlockInfo(l, OLD_STORED_ITEM, null);
-            } else {
-                // when placed
-                menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-            }
-        } else {
-            // cache stored meta
-            ItemMeta stored = display.getItemMeta();
-            
-            if (stored.getPersistentDataContainer().has(DISPLAY_KEY, PersistentDataType.BYTE)) {
-                
-                // hot fix
-                if (stored.getPersistentDataContainer().has(EMPTY_KEY, PersistentDataType.BYTE)) {
-                    ItemStack output = menu.getItemInSlot(OUTPUT_SLOT);
-                    if (output != null) {
-                        cachedMetas.put(l, new CachedInfo(output));
-                        menu.replaceExistingItem(OUTPUT_SLOT, null);
-                        menu.replaceExistingItem(DISPLAY_SLOT, output);
-                    } else {
-                        menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-                        BlockStorage.addBlockInfo(l, STORED_AMOUNT, "0");
-                    }
-                    return;
-                }
-                
-                cachedMetas.put(l, new CachedInfo(display, stored));
-                menu.replaceExistingItem(DISPLAY_SLOT, display);
-            } else {
-                menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-            }
-        }
+    }
+
+    @Override
+    protected void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        StorageCache cache = new StorageCache(StorageUnit.this, b, menu);
+        StorageUnit.this.caches.put(b, cache);
+        menu.addMenuClickHandler(STATUS_SLOT, cache::voidExcessHandler);
+        menu.addMenuClickHandler(INTERACT_SLOT, cache::interactHandler);
     }
 
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-        int amount = Util.getIntData(STORED_AMOUNT, BlockStorage.getLocationInfo(l), l);
-        if (amount > 0) {
-            CachedInfo cachedItemMeta = cachedMetas.remove(l);
-            if (cachedItemMeta == null) {
-                return;
-            }
-            
-            e.setDropItems(false);
-
-            // add output slot
-            ItemStack output = menu.getItemInSlot(OUTPUT_SLOT);
-            if (output != null && cachedItemMeta.matches(output)) {
-                int add = Math.min(this.max - amount, output.getAmount());
-                if (add != 0) {
-                    amount += add;
-                    output.setAmount(output.getAmount() - add);
-                }
-            }
-
-            ItemStack drop = getItem().clone();
-
-            drop.setItemMeta(saveToStack(drop.getItemMeta(), menu.getItemInSlot(DISPLAY_SLOT), cachedItemMeta.displayName, amount));
-
-            MessageUtils.message(e.getPlayer(), "&aStored items transferred to dropped item");
-
-            e.getBlock().getWorld().dropItemNaturally(l, drop);
-        }
-
-        menu.dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
-
+        this.caches.remove(e.getBlock()).destroy(e);
     }
 
-    private static ItemMeta saveToStack(ItemMeta meta, ItemStack displayItem, String displayName, int amount) {
+    @Override
+    protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
+        Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
+        if (data != null) {
+            PluginUtils.runSync(() -> this.caches.get(b)
+                    .load(data.getFirstValue(), data.getFirstValue().getItemMeta())
+                    .setAmount(data.getSecondValue())
+            );
+        }
+    }
+
+    @Override
+    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
+        MenuPreset.setupBasicMenu(blockMenuPreset);
+        blockMenuPreset.addMenuClickHandler(DISPLAY_SLOT, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(INTERACT_SLOT, INTERACTION_ITEM);
+        blockMenuPreset.addItem(STATUS_SLOT, LOADING_ITEM);
+    }
+
+    @Nonnull
+    @Override
+    protected int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack itemStack) {
+        if (flow == ItemTransportFlow.INSERT) {
+            StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getBlock());
+            if (cache.isEmpty() || cache.matches(itemStack)) {
+                cache.input();
+                return new int[] {INPUT_SLOT};
+            }
+        } else if (flow == ItemTransportFlow.WITHDRAW) {
+            this.caches.get(((BlockMenu) dirtyChestMenu).getBlock()).output();
+            return new int[] {OUTPUT_SLOT};
+        }
+        return new int[0];
+    }
+
+    static void transferToStack(@Nonnull ItemStack source, @Nonnull ItemStack target) {
+        Pair<ItemStack, Integer> data = loadFromStack(source.getItemMeta());
+        if (data != null) {
+            target.setItemMeta(saveToStack(target.getItemMeta(), data.getFirstValue(),
+                    StackUtils.getDisplayName(data.getFirstValue()), data.getSecondValue()));
+        }
+    }
+
+    static ItemMeta saveToStack(ItemMeta meta, ItemStack displayItem, String displayName, int amount) {
         if (meta.hasLore()) {
             List<String> lore = meta.getLore();
             lore.add(ChatColor.GOLD + "Stored: " + displayName + ChatColor.YELLOW + " x " + amount);
@@ -427,7 +227,6 @@ public class StorageUnit extends AbstractTicker {
         return meta;
     }
 
-    @Nullable
     private static Pair<ItemStack, Integer> loadFromStack(ItemMeta meta) {
         // get amount
         Integer amount = meta.getPersistentDataContainer().get(AMOUNT_KEY, PersistentDataType.INTEGER);
@@ -453,14 +252,6 @@ public class StorageUnit extends AbstractTicker {
             }
         }
         return null;
-    }
-
-    static void transferToStack(@Nonnull ItemStack source, @Nonnull ItemStack target) {
-        Pair<ItemStack, Integer> data = loadFromStack(source.getItemMeta());
-        if (data != null) {
-            target.setItemMeta(saveToStack(target.getItemMeta(), data.getFirstValue(),
-                    StackUtils.getDisplayName(data.getFirstValue()), data.getSecondValue()));
-        }
     }
 
 }

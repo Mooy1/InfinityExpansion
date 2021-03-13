@@ -1,9 +1,8 @@
-package io.github.mooy1.infinityexpansion.implementation.blocks;
+package io.github.mooy1.infinityexpansion.implementation.storage;
 
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.mooy1.infinitylib.slimefun.utils.DelayedRecipeType;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
