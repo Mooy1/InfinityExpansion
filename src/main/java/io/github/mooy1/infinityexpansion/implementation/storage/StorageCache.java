@@ -292,6 +292,11 @@ final class StorageCache {
             }
         }
     }
+
+    private static boolean checkWallSign(Block sign, Block block) {
+        return SlimefunTag.WALL_SIGNS.isTagged(sign.getType())
+                && sign.getRelative(((WallSign) sign.getBlockData()).getFacing().getOppositeFace()).equals(block);
+    }
     
     @SuppressWarnings("unused")
     boolean interactHandler(Player p, int slot, ItemStack item, ClickAction action) {
@@ -331,11 +336,6 @@ final class StorageCache {
             this.voidExcess = true;
         }
         return false;
-    }
-
-    private static boolean checkWallSign(Block sign, Block block) {
-        return SlimefunTag.WALL_SIGNS.isTagged(sign.getType())
-                && sign.getRelative(((WallSign) sign.getBlockData()).getFacing().getOppositeFace()).equals(block);
     }
     
     private void setStored(ItemStack input) {
