@@ -12,7 +12,6 @@ import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -24,6 +23,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -80,18 +80,12 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
                 Items.MACHINE_PLATE, new ItemStack(Material.ANVIL), Items.MACHINE_PLATE,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
         }, ENERGY, STATUS_SLOT);
+    }
 
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-
-            if (inv != null) {
-                Location l = b.getLocation();
-                inv.dropItems(l, INPUT_SLOTS);
-                inv.dropItems(l, OUTPUT_SLOTS);
-            }
-
-            return true;
-        });
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
+        inv.dropItems(l, INPUT_SLOTS);
+        inv.dropItems(l, OUTPUT_SLOTS);
     }
 
     @Override

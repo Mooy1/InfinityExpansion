@@ -14,6 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -47,14 +48,18 @@ public final class Util {
     public static Map<Enchantment, Integer> getEnchants(@Nonnull ConfigurationSection section) {
         Map<Enchantment, Integer> enchants = new HashMap<>();
         for (String path : section.getKeys(false)) {
-            int level = ConfigUtils.getInt(section, path, 0, Short.MAX_VALUE, 0);
-            if (level != 0) {
-                enchants.put(enchantmentByPath(path), level);
+            Enchantment e = enchantmentByPath(path);
+            if (e != null) {
+                int level = ConfigUtils.getInt(section, path, 0, Short.MAX_VALUE, 0);
+                if (level != 0) {
+                    enchants.put(e, level);
+                }
             }
         }
         return enchants;
     }
 
+    @Nullable
     private static Enchantment enchantmentByPath(@Nonnull String path) {
         switch (path) {
             case "sharpness": return Enchantment.DAMAGE_ALL;
@@ -74,7 +79,7 @@ public final class Util {
             case "punch": return Enchantment.ARROW_KNOCKBACK;
             case "feather-falling": return Enchantment.PROTECTION_FALL;
             case "unbreaking": return Enchantment.DURABILITY;
-            default: throw new IllegalArgumentException("Enchantment " + path + " was not recognized!");
+            default: return null;
         }
     }
     

@@ -26,6 +26,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -107,26 +108,15 @@ public final class TreeGrower extends AbstractMachine implements RecipeDisplayIt
         super(category, item, recipeType, recipe);
         this.speed = speed;
         this.energy = energy;
+    }
 
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-
-            if (inv != null) {
-                Location l = b.getLocation();
-                inv.dropItems(l, OUTPUT_SLOTS);
-                inv.dropItems(l, INPUT_SLOTS);
-
-                String progressType = getType(b);
-                if (progressType != null) {
-                    b.getWorld().dropItemNaturally(l, new ItemStack(Objects.requireNonNull(Material.getMaterial(progressType + "_SAPLING"))));
-                }
-            }
-
-            setProgress(b, 0);
-            setType(b, null);
-
-            return true;
-        });
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
+        inv.dropItems(l, OUTPUT_SLOTS);
+        inv.dropItems(l, INPUT_SLOTS);
+        
+        setProgress(e.getBlock(), 0);
+        setType(e.getBlock(), null);
     }
 
     @Override

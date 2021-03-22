@@ -38,10 +38,13 @@ import io.github.mooy1.infinitylib.core.PluginUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -56,18 +59,13 @@ public final class Setup {
         // infinity item setup
         addInfinityEnchants(
                 InfinityArmor.CROWN, InfinityArmor.CHESTPLATE, InfinityArmor.LEGGINGS, InfinityArmor.BOOTS,
-                InfinityTool.AXE, InfinityTool.BLADE, InfinityTool.PICKAXE, InfinityTool.SHIELD, InfinityTool.SHOVEL, InfinityTool.BOW
+                InfinityTool.AXE, InfinityTool.BLADE, InfinityTool.PICKAXE,
+                InfinityTool.SHIELD, InfinityTool.SHOVEL, InfinityTool.BOW
         );
         
         // categories
+        Categories.MAIN_CATEGORY.register(plugin);
         Categories.INFINITY_CHEAT.register(plugin);
-        Categories.MAIN_MATERIALS.register(plugin);
-        Categories.BASIC_MACHINES.register(plugin);
-        Categories.ADVANCED_MACHINES.register(plugin);
-        Categories.STORAGE.register(plugin);
-        Categories.MOB_SIMULATION.register(plugin);
-        Categories.INFINITY_MATERIALS.register(plugin);
-        Categories.INFINITY_CATEGORY.register(plugin);
 
         // blocks
         Strainer.setup(plugin);
@@ -122,22 +120,31 @@ public final class Setup {
 
         for (SlimefunItemStack item : items) {
             ItemMeta meta = item.getItemMeta();
-            
-            meta.setUnbreakable(true);
-            
-            List<String> lore = meta.getLore();
+
+            // lore
+            List<String> lore;
+            if (meta.hasLore()) {
+                lore = meta.getLore();
+            } else {
+                lore = new ArrayList<>();
+            }
             lore.add(ChatColor.AQUA + "Soulbound");
             meta.setLore(lore);
-            item.setItemMeta(meta);
 
+            // find path
             String itemPath = item.getItemId().replace("INFINITY_", "").toLowerCase();
             ConfigurationSection itemSection = typeSection.getConfigurationSection(itemPath);
-            
             if (itemSection != null) {
-                item.addUnsafeEnchantments(Util.getEnchants(itemSection));
+                // unbreakable and enchants
+                meta.setUnbreakable(itemSection.getBoolean("unbreakable"));
+                for (Map.Entry<Enchantment, Integer> entry : Util.getEnchants(itemSection).entrySet()) {
+                    meta.addEnchant(entry.getKey(), entry.getValue(), true);
+                }
             } else {
                 PluginUtils.log(Level.SEVERE, "Config section for " + itemPath + " missing, Check your config and report this!");
             }
+            
+            item.setItemMeta(meta);
         }
     }
     

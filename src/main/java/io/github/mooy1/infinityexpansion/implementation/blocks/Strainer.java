@@ -69,7 +69,7 @@ public final class Strainer extends SlimefunItem implements NotPlaceable {
     
     private static final NamespacedKey KEY = new NamespacedKey(InfinityExpansion.getInstance(), "strainer_speed");
     
-    private Strainer(SlimefunItemStack item, ItemStack[] recipe, int speed) {
+    public Strainer(SlimefunItemStack item, ItemStack[] recipe, int speed) {
         super(Categories.BASIC_MACHINES, item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(KEY, PersistentDataType.INTEGER, speed);

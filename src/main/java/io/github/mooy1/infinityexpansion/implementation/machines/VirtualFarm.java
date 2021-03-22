@@ -24,6 +24,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -102,20 +103,15 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
         super(category, item, recipeType, recipe);
         this.speed = speed;
         this.energy = energy;
+    }
 
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
+        inv.dropItems(l, OUTPUT_SLOTS);
+        inv.dropItems(l, INPUT_SLOTS);
 
-            if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
-                inv.dropItems(b.getLocation(), INPUT_SLOTS);
-            }
-
-            setProgress(b, 0);
-            setBlockData(b, "type", null);
-
-            return true;
-        });
+        setProgress(e.getBlock(), 0);
+        setType(e.getBlock(), null);
     }
 
     @Override
@@ -259,27 +255,19 @@ public final class VirtualFarm extends AbstractMachine implements RecipeDisplayI
     }
 
     private static void setType(Block b, String type) {
-        setBlockData(b, "type", type);
+        BlockStorage.addBlockInfo(b, "type", type);
     }
 
     private static String getType(Block b) {
-        return getBlockData(b.getLocation(), "type");
+        return BlockStorage.getLocationInfo(b.getLocation(), "type");
     }
 
     private static void setProgress(Block b, int progress) {
-        setBlockData(b, "progress", String.valueOf(progress));
+        BlockStorage.addBlockInfo(b, "progress", String.valueOf(progress));
     }
 
     private static String getProgress(Block b) {
-        return getBlockData(b.getLocation(), "progress");
-    }
-
-    private static void setBlockData(Block b, String key, String data) {
-        BlockStorage.addBlockInfo(b, key, data);
-    }
-
-    private static String getBlockData(Location l, String key) {
-        return BlockStorage.getLocationInfo(l, key);
+        return BlockStorage.getLocationInfo(b.getLocation(), "progress");
     }
     
     @Override

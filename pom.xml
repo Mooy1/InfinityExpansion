@@ -58,7 +58,7 @@
         <dependency>
             <groupId>io.github.mooy1</groupId>
             <artifactId>InfinityLib</artifactId>
-            <version>a6937a5</version>
+            <version>4b264b6</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

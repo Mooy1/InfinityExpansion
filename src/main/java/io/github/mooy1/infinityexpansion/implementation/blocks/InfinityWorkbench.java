@@ -13,7 +13,6 @@ import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -24,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -79,20 +79,14 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
                 SlimefunItems.ENERGIZED_CAPACITOR, new ItemStack(Material.CRAFTING_TABLE), SlimefunItems.ENERGIZED_CAPACITOR,
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT
         }, ENERGY, STATUS_SLOT);
-
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-
-            if (inv != null) {
-                Location l = b.getLocation();
-                inv.dropItems(l, OUTPUT_SLOTS);
-                inv.dropItems(l, INPUT_SLOTS);
-            }
-
-            return true;
-        });
     }
-    
+
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
+        inv.dropItems(l, OUTPUT_SLOTS);
+        inv.dropItems(l, INPUT_SLOTS);
+    }
+
     @Override
     public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         for (int i : MenuPreset.slotChunk3) {

@@ -24,6 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -66,17 +67,6 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
                 Items.INFINITY, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.INFINITY,
                 Items.INFINITY, Items.INFINITE_CIRCUIT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.INFINITE_CIRCUIT, Items.INFINITY
         });
-        
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-
-            if (inv != null) {
-                Location l = b.getLocation();
-                inv.dropItems(l, INPUT_SLOTS);
-            }
-
-            return true;
-        });
     }
     
     @Override
@@ -84,6 +74,11 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
         if (BlockStorage.getLocationInfo(b.getLocation(), "progress") == null) {
             BlockStorage.addBlockInfo(b, "progress", "0");
         }
+    }
+
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
+        inv.dropItems(l, INPUT_SLOTS);
     }
 
     @Override
