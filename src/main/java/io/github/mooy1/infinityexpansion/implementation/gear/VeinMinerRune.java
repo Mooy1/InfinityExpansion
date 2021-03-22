@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
@@ -265,14 +265,9 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     private static void getVein(Set<Location> checked, Set<Block> found, Location l, Block b) {
         if (found.size() >= MAX) return;
         
-        found.add(b);
-        
         for (Location check : getAdjacentLocations(l)) {
-            if (checked.contains(check) || BlockStorage.hasBlockInfo(check)) continue;
-
-            checked.add(check);
-
-            if (check.getBlock().getType() == b.getType()) {
+            if (checked.add(check) && check.getBlock().getType() == b.getType() && !BlockStorage.hasBlockInfo(b)) {
+                found.add(b);
                 getVein(checked, found, check, check.getBlock());
             }
         }

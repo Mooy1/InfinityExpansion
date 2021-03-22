@@ -4,14 +4,13 @@ import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.mooy1.infinitylib.recipes.largestrict.StrictLargeOutput;
 import io.github.mooy1.infinitylib.recipes.largestrict.StrictLargeRecipeMap;
-import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractTicker;
+import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.mooy1.infinitylib.slimefun.utils.DelayedRecipeType;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -23,6 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
  * @author Mooy1
  *
  */
-public abstract class AbstractCrafter extends AbstractTicker {
+public abstract class AbstractCrafter extends TickingContainer {
     
     protected static final int[] INPUT_SLOTS = MenuPreset.craftingInput;
     private static final int[] OUTPUT_SLOT = MenuPreset.craftingOutput;
@@ -46,17 +46,13 @@ public abstract class AbstractCrafter extends AbstractTicker {
     
     public AbstractCrafter(Category category, SlimefunItemStack stack, DelayedRecipeType recipeType, RecipeType type, ItemStack[] recipe) {
         super(category, stack, type, recipe);
+        recipeType.accept(this.recipes::put);
+    }
 
-        recipeType.acceptEach(this.recipes::put);
-
-        registerBlockHandler(getId(), (p, b, slimefunItem, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-            if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOT);
-                inv.dropItems(b.getLocation(), INPUT_SLOTS);
-            }
-            return true;
-        });
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
+        menu.dropItems(l, OUTPUT_SLOT);
+        menu.dropItems(l, INPUT_SLOTS);
     }
 
     @Nonnull

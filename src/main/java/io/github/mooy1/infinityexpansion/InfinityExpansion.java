@@ -5,7 +5,7 @@ import io.github.mooy1.infinityexpansion.commands.PrintItem;
 import io.github.mooy1.infinityexpansion.commands.SetData;
 import io.github.mooy1.infinityexpansion.implementation.Setup;
 import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
-import io.github.mooy1.infinitylib.command.CommandManager;
+import io.github.mooy1.infinitylib.commands.CommandManager;
 import io.github.mooy1.infinitylib.core.ConfigUtils;
 import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -29,7 +29,7 @@ public final class InfinityExpansion extends JavaPlugin implements SlimefunAddon
 
         PluginUtils.setup(ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion", this, "Mooy1/InfinityExpansion/master", getFile());
         
-        CommandManager.setup("infinityexpansion", "infinityexpansion.admin", "/ie, /ix, /infinity",
+        CommandManager.setup("infinityexpansion", "/ie, /ix, /infinity",
                 new GiveRecipe(), new SetData(), new PrintItem()
         );
         

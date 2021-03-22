@@ -1,9 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.core.PluginUtils;
-import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -23,6 +23,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -60,17 +61,12 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
                 SlimefunItems.ELECTRIC_FURNACE_3, Items.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
                 Items.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, Items.MAGSTEEL_PLATE
         });
+    }
 
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-
-            if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
-                inv.dropItems(b.getLocation(), PROCESS_SLOTS);
-            }
-
-            return true;
-        });
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
+        inv.dropItems( l, OUTPUT_SLOTS);
+        inv.dropItems( l, PROCESS_SLOTS);
     }
 
     @Override

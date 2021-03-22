@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.commands;
 
-import io.github.mooy1.infinitylib.command.AbstractCommand;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.FluidCollisionMode;
@@ -10,8 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public final class SetData extends AbstractCommand {
@@ -62,37 +60,31 @@ public final class SetData extends AbstractCommand {
         }
     }
 
-    @Nonnull
     @Override
-    public List<String> onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings) {
+    protected void onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings, @Nonnull List<String> list) {
         if (!(commandSender instanceof Player)) {
-            return Collections.emptyList();
+            return;
         }
-        
+
         Player p = (Player) commandSender;
-        
+
         Block target = p.getTargetBlockExact(8, FluidCollisionMode.NEVER);
-        
-        if (target == null || target.getType() == Material.AIR) { 
-            return Collections.emptyList();
+
+        if (target == null || target.getType() == Material.AIR) {
+            return;
         }
-        
+
         if (strings.length == 2) {
             if (BlockStorage.hasBlockInfo(target)) {
-                List<String> list = new ArrayList<>(BlockStorage.getLocationInfo(target.getLocation()).getKeys());
+                list.addAll(BlockStorage.getLocationInfo(target.getLocation()).getKeys());
                 list.remove("id");
-                return list;
             }
         } else if (strings.length == 3 && !strings[1].equals("id")) {
             String current = BlockStorage.getLocationInfo(target.getLocation(), strings[1]);
             if (current != null) {
-                List<String> list = new ArrayList<>();
                 list.add(current);
-                return list;
             }
         }
-        
-        return Collections.emptyList();
     }
 
 }

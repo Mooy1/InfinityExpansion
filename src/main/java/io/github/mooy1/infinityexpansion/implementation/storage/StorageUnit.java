@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.PersistentItemStack;
@@ -144,7 +144,7 @@ public final class StorageUnit extends AbstractContainer {
     final int max;
 
     private StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
-        super(Categories.STORAGE_TRANSPORT, item, StorageForge.TYPE, recipe);
+        super(Categories.STORAGE, item, StorageForge.TYPE, recipe);
         this.max = max;
 
         addItemHandler(new BlockTicker() {

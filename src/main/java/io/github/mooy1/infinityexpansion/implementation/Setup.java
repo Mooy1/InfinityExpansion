@@ -1,13 +1,8 @@
 package io.github.mooy1.infinityexpansion.implementation;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.categories.InfinityCategory;
-import io.github.mooy1.infinityexpansion.categories.MultiCategory;
 import io.github.mooy1.infinityexpansion.implementation.blocks.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.storage.StorageForge;
-import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinityexpansion.implementation.blocks.Strainer;
 import io.github.mooy1.infinityexpansion.implementation.blocks.StrainerBase;
 import io.github.mooy1.infinityexpansion.implementation.gear.EnderFlame;
@@ -36,16 +31,16 @@ import io.github.mooy1.infinityexpansion.implementation.mobdata.EmptyDataCard;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataCard;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataInfuser;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
+import io.github.mooy1.infinityexpansion.implementation.storage.StorageForge;
+import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.core.PluginUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -58,23 +53,21 @@ public final class Setup {
     
     public static void setup(@Nonnull InfinityExpansion plugin) {
         
-        // stacks
-        addInfinityEnchants(plugin.getConfig(),
+        // infinity item setup
+        addInfinityEnchants(
                 InfinityArmor.CROWN, InfinityArmor.CHESTPLATE, InfinityArmor.LEGGINGS, InfinityArmor.BOOTS,
                 InfinityTool.AXE, InfinityTool.BLADE, InfinityTool.PICKAXE, InfinityTool.SHIELD, InfinityTool.SHOVEL, InfinityTool.BOW
         );
         
         // categories
         Categories.INFINITY_CHEAT.register(plugin);
-        MultiCategory.CATEGORY.register(plugin,
-                Categories.MAIN_MATERIALS,
-                Categories.BASIC_MACHINES,
-                Categories.ADVANCED_MACHINES,
-                Categories.STORAGE_TRANSPORT,
-                Categories.MOB_SIMULATION,
-                Categories.INFINITY_MATERIALS,
-                InfinityCategory.CATEGORY
-        );
+        Categories.MAIN_MATERIALS.register(plugin);
+        Categories.BASIC_MACHINES.register(plugin);
+        Categories.ADVANCED_MACHINES.register(plugin);
+        Categories.STORAGE.register(plugin);
+        Categories.MOB_SIMULATION.register(plugin);
+        Categories.INFINITY_MATERIALS.register(plugin);
+        Categories.INFINITY_CATEGORY.register(plugin);
 
         // blocks
         Strainer.setup(plugin);
@@ -119,8 +112,8 @@ public final class Setup {
         SlimefunExtension.setup(plugin);
     }
     
-    private static void addInfinityEnchants(FileConfiguration config, SlimefunItemStack... items) {
-        ConfigurationSection typeSection = config.getConfigurationSection("infinity-enchant-levels");
+    private static void addInfinityEnchants(SlimefunItemStack... items) {
+        ConfigurationSection typeSection = InfinityExpansion.getInstance().getConfig().getConfigurationSection("infinity-enchant-levels");
 
         if (typeSection == null) {
             PluginUtils.log(Level.SEVERE, "Config section \"infinity-enchant-levels\" missing, Check your config and report this!");
@@ -133,9 +126,6 @@ public final class Setup {
             meta.setUnbreakable(true);
             
             List<String> lore = meta.getLore();
-            if (lore == null) {
-                lore = new ArrayList<>();
-            }
             lore.add(ChatColor.AQUA + "Soulbound");
             meta.setLore(lore);
             item.setItemMeta(meta);
@@ -149,8 +139,6 @@ public final class Setup {
                 PluginUtils.log(Level.SEVERE, "Config section for " + itemPath + " missing, Check your config and report this!");
             }
         }
-
-        InfinityExpansion.getInstance().saveConfig();
     }
     
 }

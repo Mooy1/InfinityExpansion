@@ -1,11 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;

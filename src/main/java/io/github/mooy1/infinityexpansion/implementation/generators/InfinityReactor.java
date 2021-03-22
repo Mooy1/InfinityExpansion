@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;

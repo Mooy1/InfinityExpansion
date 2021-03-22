@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.core.PluginUtils;

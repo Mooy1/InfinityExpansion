@@ -1,7 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
