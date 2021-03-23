@@ -43,8 +43,6 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
-    private static final int INTERVAL = (int) (10 * InfinityExpansion.getDifficulty());
-    
     public static void setup(InfinityExpansion plugin) {
         new Quarry(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Items.MAGSTEEL_PLATE,
@@ -181,6 +179,9 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     };
     private static final int STATUS_SLOT = 4;
 
+    private static final int INTERVAL = (int) (10 * InfinityExpansion.getDifficulty());
+    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.getInstance().getConfig().getBoolean("balance-options.quarry-nether-materials-in-overworld");
+
     private final ItemStack cobble;
     private final int chance;
     private final int energy;
@@ -279,7 +280,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         if (random.nextInt(this.chance) == 0) {
             outputItem = this.outputs[random.nextInt(this.outputs.length)];
             Material outputType = outputItem.getType();
-            if (b.getWorld().getEnvironment() != World.Environment.NETHER &&
+            if (!ALLOW_NETHER_IN_OVERWORLD && b.getWorld().getEnvironment() != World.Environment.NETHER &&
                     (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)
             ) {
                 outputItem = this.cobble;
