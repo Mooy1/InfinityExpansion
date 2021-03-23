@@ -9,6 +9,9 @@
 # Will allow the gear transformer to change slimefun gear's material. Diamond tools can already be upgraded to netherite, 
 # but some addon developers do not want there gear to be transformable so change this at your own risk...
 # 
+# quarry-nether-materials-in-overworld: (default false)
+# Allow quarries to mine quartz and netherite in overworld and end
+# 
 # -----
 # 
 # advanced-anvil-max-levels: 
@@ -30,6 +33,7 @@
 balance-options:
   difficulty: 1.0
   allow-sf-item-transform: false
+  quarry-nether-materials-in-overworld: false
 storage-unit-options:
   display-signs: true
 advanced-anvil-max-levels:
