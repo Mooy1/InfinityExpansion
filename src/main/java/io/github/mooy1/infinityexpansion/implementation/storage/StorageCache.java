@@ -1,11 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.core.ConfigUtils;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
@@ -42,7 +40,7 @@ import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUn
 final class StorageCache {
 
     /* Configuration */
-    private static final boolean DISPLAY_SIGNS = ConfigUtils.getBoolean("storage-unit-options.display-signs", true);
+    private static final boolean DISPLAY_SIGNS = InfinityExpansion.inst().getConfig().getBoolean("storage-unit-options.display-signs");
 
     /* Menu items */
     private static final ItemStack EMPTY_ITEM = new CustomItem(Material.BARRIER, meta -> {
@@ -164,7 +162,7 @@ final class StorageCache {
 
             ItemStack drop = this.unit.getItem().clone();
             drop.setItemMeta(StorageUnit.saveToStack(drop.getItemMeta(), this.menu.getItemInSlot(DISPLAY_SLOT), this.displayName, this.amount));
-            MessageUtils.message(e.getPlayer(), "&aStored items transferred to dropped item");
+            e.getPlayer().sendMessage(ChatColor.GREEN + "Stored items transferred to dropped item");
             e.getBlock().getWorld().dropItemNaturally(this.menu.getLocation(), drop);
         }
 
@@ -172,6 +170,9 @@ final class StorageCache {
     }
 
     void input() {
+        if (this.amount == this.unit.max) {
+            return;
+        }
         ItemStack input = this.menu.getItemInSlot(INPUT_SLOT);
         if (input == null) {
             return;
@@ -191,38 +192,34 @@ final class StorageCache {
             }
         } else {
             // input as much as possible
-            int max = this.unit.max - this.amount;
-            if (max > 0 && matches(input)) {
-                int add = input.getAmount();
-                int dif = add - max;
-                if (dif < 0) {
-                    this.amount += add;
-                    input.setAmount(0);
-                } else {
-                    this.amount += max;
-                    input.setAmount(dif);
-                }
+            if (input.getAmount() + this.amount >= this.unit.max) {
+                // last item
+                input.setAmount(input.getAmount() - (this.unit.max - this.amount));
+                setAmount(this.unit.max);
+            } else {
+                setAmount(this.amount + input.getAmount());
+                input.setAmount(0);
             }
         }
     }
 
-    void output() {
-        if (this.amount > 0) {
-            int remove = Math.min(this.material.getMaxStackSize(), this.amount - 1);
-            if (remove == 0) {
-                if (this.menu.getItemInSlot(OUTPUT_SLOT) == null) {
+    void output(boolean partial) {
+        if (this.amount != 0) {
+            ItemStack outputSlot = this.menu.getItemInSlot(OUTPUT_SLOT);
+            if (outputSlot == null) {
+                if (this.amount == 1) {
                     this.menu.replaceExistingItem(OUTPUT_SLOT, createItem(1), false);
                     setEmpty();
+                } else {
+                    int amt = Math.min(this.material.getMaxStackSize(), this.amount - 1);
+                    this.menu.replaceExistingItem(OUTPUT_SLOT, createItem(amt), false);
+                    setAmount(this.amount - amt);
                 }
-            } else {
-                ItemStack current = this.menu.getItemInSlot(OUTPUT_SLOT);
-                if (current == null) {
-                    this.menu.replaceExistingItem(OUTPUT_SLOT, createItem(remove));
-                    setAmount(this.amount - remove);
-                } else if (current.getAmount() != current.getMaxStackSize() && matches(current)) {
-                    remove = Math.min(remove, this.material.getMaxStackSize() - current.getAmount());
-                    current.setAmount(current.getAmount() + remove);
-                    setAmount(this.amount - remove);
+            } else if (partial && this.amount != 1) {
+                int amt = Math.min(this.material.getMaxStackSize() - outputSlot.getAmount(), this.amount - 1);
+                if (amt != 0 && matches(outputSlot)) {
+                    outputSlot.setAmount(outputSlot.getAmount() + amt);
+                    setAmount(this.amount - amt);
                 }
             }
         }
@@ -230,8 +227,6 @@ final class StorageCache {
 
     void updateStatus(Block block) {
         if (this.menu.hasViewer()) {
-            input();
-            output();
             if (this.unit.max == INFINITY_STORAGE) {
                 if (this.amount == 0) {
                     this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
@@ -275,7 +270,7 @@ final class StorageCache {
             }
         }
         
-        if (DISPLAY_SIGNS && (PluginUtils.getCurrentTick() & 15) == 0) {
+        if (DISPLAY_SIGNS && (InfinityExpansion.inst().getGlobalTick() & 15) == 0) {
             Block check = block.getRelative(0, 1, 0);
             if (SlimefunTag.SIGNS.isTagged(check.getType())
                     || checkWallSign(check = block.getRelative(1, 0, 0), block)
@@ -401,22 +396,24 @@ final class StorageCache {
     }
 
     private void depositAll(Player p) {
-        int notDeposited = this.unit.max - this.amount;
-        if (notDeposited != 0) {
+        if (this.amount < this.unit.max) {
+            int amount = this.amount;
             for (ItemStack item : p.getInventory().getStorageContents()) {
                 if (item != null && matches(item)) {
-                    if (item.getAmount() > notDeposited) {
-                        notDeposited -= item.getAmount();
-                        item.setAmount(0);
+                    if (item.getAmount() + amount >= this.unit.max) {
+                        // last item
+                        item.setAmount(item.getAmount() - (this.unit.max - amount));
+                        amount = this.unit.max;
+                        break;
                     } else {
-                        // the storage is full after this
-                        item.setAmount(item.getAmount() - notDeposited);
-                        setAmount(this.unit.max);
-                        return;
+                        amount += item.getAmount();
+                        item.setAmount(0);
                     }
                 }
             }
-            setAmount(this.unit.max - notDeposited);
+            if (amount != this.amount) {
+                setAmount(amount);
+            }
         }
     }
 

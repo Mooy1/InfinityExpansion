@@ -89,7 +89,7 @@ public final class Items {
     }
     
     private static void register(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        new SlimefunItem(category, item, recipeType, recipe).register(InfinityExpansion.getInstance());
+        new SlimefunItem(category, item, recipeType, recipe).register(InfinityExpansion.inst());
     }
     
     public static final SlimefunItemStack INFINITE_CIRCUIT = new SlimefunItemStack(

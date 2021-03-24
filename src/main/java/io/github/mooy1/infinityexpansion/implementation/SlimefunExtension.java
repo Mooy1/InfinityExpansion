@@ -4,7 +4,6 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
@@ -258,10 +257,10 @@ public final class SlimefunExtension {
 
             @Override
             public void extraTick(@Nonnull Location l) {
-                if ((PluginUtils.getCurrentTick()  & 3) != 0) {
+                if ((InfinityExpansion.inst().getGlobalTick()  & 3) != 0) {
                     return;
                 }
-                PluginUtils.runSync(() -> {
+                InfinityExpansion.inst().runSync(() -> {
                     Location check = l.clone().add(0, 1, 0);
                     World w = check.getWorld();
                     if (w == null) {

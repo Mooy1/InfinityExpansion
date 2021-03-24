@@ -1,9 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -215,7 +215,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
         inv.replaceExistingItem(STATUS_SLOT, COBBLE_GEN);
 
-        int tick = PluginUtils.getCurrentTick() & 3;
+        int tick = InfinityExpansion.inst().getGlobalTick() & 3;
 
         if (tick == 3) {
             ItemStack cobble = new ItemStack(Material.COBBLESTONE);

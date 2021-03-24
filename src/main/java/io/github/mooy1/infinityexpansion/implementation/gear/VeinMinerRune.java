@@ -1,11 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.players.CoolDownMap;
-import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.SoulboundRune;
@@ -71,9 +70,9 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     private static final double RANGE = 1.5;
     private static final int MAX = 64;
     private static final String LORE = ChatColor.AQUA + "Veinminer - Crouch to use";
-    private static final NamespacedKey key = PluginUtils.getKey("vein_miner");
+    private static final NamespacedKey key = InfinityExpansion.inst().getKey("vein_miner");
     
-    private final CoolDownMap cooldowns = new CoolDownMap();
+    private final CoolDownMap cooldowns = new CoolDownMap(InfinityExpansion.inst());
     private final Set<Block> processing = new HashSet<>();
     
     public VeinMinerRune() {
@@ -82,13 +81,13 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
                 new ItemStack(Material.REDSTONE_ORE), SlimefunItems.BLANK_RUNE, new ItemStack(Material.LAPIS_ORE),
                 Items.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, Items.MAGSTEEL,
         });
-        PluginUtils.registerListener(this);
+        InfinityExpansion.inst().registerListener(this);
     }
     
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
         if (isItem(e.getItemDrop().getItemStack()) && e.getItemDrop().getItemStack().getAmount() == 1) {
-            PluginUtils.runSync(() -> activate(e.getPlayer(), e.getItemDrop()), 20L);
+            InfinityExpansion.inst().runSync(() -> activate(e.getPlayer(), e.getItemDrop()), 20L);
         }
     }
 
@@ -111,7 +110,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
                 // This lightning is just an effect, it deals no damage.
                 l.getWorld().strikeLightningEffect(l);
 
-                PluginUtils.runSync(() -> {
+                InfinityExpansion.inst().runSync(() -> {
                     // Being sure entities are still valid and not picked up or whatsoever.
                     if (rune.isValid() && item.isValid() && rune.getItemStack().getAmount() == 1) {
 
@@ -124,14 +123,14 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
                         setVeinMiner(itemStack, true);
                         l.getWorld().dropItemNaturally(l, itemStack);
 
-                        MessageUtils.message(p, ChatColor.GREEN + "Added Vein Miner to tool!");
+                        p.sendMessage(ChatColor.GREEN + "Added Vein Miner to tool!");
                     } else {
-                        MessageUtils.message(p, ChatColor.RED + "Failed to add vein miner!");
+                        p.sendMessage(ChatColor.RED + "Failed to add vein miner!");
                     }
                 }, 10L);
                 
             } else {
-                MessageUtils.message(p, ChatColor.RED + "Failed to add vein miner!");
+                p.sendMessage(ChatColor.RED + "Failed to add vein miner!");
             }
         }
     }
@@ -197,7 +196,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         }
             
         if (p.getFoodLevel() == 0) {
-            MessageUtils.messageWithCD(p, 500, ChatColor.GOLD + "You are too tired to vein-mine!");
+            p.sendMessage(ChatColor.GOLD + "You are too tired to vein-mine!");
             return;
         }
         
@@ -212,7 +211,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         boolean cd = this.cooldowns.check(p.getUniqueId(), 1000);
         
         if (!cd) {
-            MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "You must wait 1 second before using again!");
+            p.sendMessage(ChatColor.GOLD + "You must wait 1 second before using again!");
             return;
         }
 

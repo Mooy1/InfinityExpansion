@@ -1,9 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.ConfigUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
@@ -42,8 +42,8 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
             LorePreset.energy(GearTransformer.ENERGY) + "Per Use"
     );
 
-    public static final int ENERGY = 12000;
-    public static final boolean SF = ConfigUtils.getBoolean("balance-options.allow-sf-item-transform", false);
+    private static final int ENERGY = 12000;
+    private static final boolean SF = InfinityExpansion.inst().getConfig().getBoolean("balance-options.allow-sf-item-transform", false);
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
     };

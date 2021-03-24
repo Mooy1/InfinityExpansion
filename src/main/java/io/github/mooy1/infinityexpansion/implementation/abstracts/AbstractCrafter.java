@@ -1,7 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.mooy1.infinitylib.recipes.largestrict.StrictLargeOutput;
 import io.github.mooy1.infinitylib.recipes.largestrict.StrictLargeRecipeMap;
 import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
@@ -120,7 +119,9 @@ public abstract class AbstractCrafter extends TickingContainer {
         if (preCraftFail(inv.getLocation(), inv)) {
             inv.replaceExistingItem(STATUS_SLOT, preCraftItem(inv.getLocation(), inv));
             String msg = preCraftMessage(inv.getLocation(), inv);
-            if (msg != null) MessageUtils.messageWithCD(p, 1000, msg);
+            if (msg != null) {
+                p.sendMessage(msg);
+            }
             return;
         }
         
@@ -129,14 +130,14 @@ public abstract class AbstractCrafter extends TickingContainer {
         if (output == null) { //invalid
 
             inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
-            MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid Recipe!");
+            p.sendMessage( ChatColor.RED + "Invalid Recipe!");
 
         } else {
             
             if (!inv.fits(output.getFirstValue(), OUTPUT_SLOT)) { //not enough room
 
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
-                MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
+                p.sendMessage(  ChatColor.GOLD + "Not enough room!");
 
             } else { //enough room
 
@@ -146,7 +147,7 @@ public abstract class AbstractCrafter extends TickingContainer {
                         inv.consumeItem(INPUT_SLOTS[i], amount);
                     }
                 }
-                MessageUtils.messageWithCD(p, 1000, ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getFirstValue()));
+                p.sendMessage(  ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(output.getFirstValue()));
 
                 postCraft(inv.getLocation(), inv, p);
 

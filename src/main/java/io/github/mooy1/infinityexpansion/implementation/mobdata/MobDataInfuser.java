@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
@@ -32,7 +33,7 @@ public final class MobDataInfuser extends AbstractCrafter implements EnergyNetCo
             LorePreset.energy(MobDataInfuser.ENERGY) + "per use"
     );
     private static final int ENERGY = 20000;
-    public static final DelayedRecipeType TYPE = new DelayedRecipeType(ITEM);
+    public static final DelayedRecipeType TYPE = new DelayedRecipeType(InfinityExpansion.inst(), ITEM);
 
     public MobDataInfuser() {
         super(Categories.MOB_SIMULATION, ITEM, TYPE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

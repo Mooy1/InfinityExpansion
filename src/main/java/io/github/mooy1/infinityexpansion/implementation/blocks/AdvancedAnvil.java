@@ -7,7 +7,6 @@ import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -55,7 +54,7 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
     );
 
     private static final Map<Enchantment, Integer> MAX_LEVELS = Util.getEnchants(Objects.requireNonNull(
-            InfinityExpansion.getInstance().getConfig().getConfigurationSection("advanced-anvil-max-levels")
+            InfinityExpansion.inst().getConfig().getConfigurationSection("advanced-anvil-max-levels")
     ));
 
     private static final int[] INPUT_SLOTS = {
@@ -122,10 +121,10 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
     private void craft(BlockMenu inv, Block b, Player p) {
         Location l = b.getLocation();
         if (getCharge(l) < ENERGY) { //not enough energy
-            MessageUtils.messageWithCD(p, 1000,
+            p.sendMessage(new String[] {
                     ChatColor.RED + "Not enough energy!",
                     ChatColor.GREEN + "Charge: " + ChatColor.RED + getCharge(l) + ChatColor.GREEN + "/" + ENERGY + " J"
-            );
+            });
             return;
         }
 
@@ -133,19 +132,19 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
 
         if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
-            MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid items!");
+            p.sendMessage(ChatColor.RED + "Invalid items!");
             return;
         }
 
         ItemStack output = getOutput(item1, item2);
 
         if (output == null) {
-            MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "No upgrades!");
+            p.sendMessage(ChatColor.RED + "No upgrades!");
             return;
         }
 
         if (!inv.fits(output, OUTPUT_SLOTS)) {
-            MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
+            p.sendMessage(ChatColor.GOLD + "Not enough room!");
             return;
         }
 

@@ -1,12 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.InfinityCategory;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.core.PluginUtils;
-import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.mooy1.infinitylib.recipes.large.LargeRecipeMap;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
@@ -66,7 +65,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
     public static final LinkedHashMap<String, Pair<SlimefunItemStack, ItemStack[]>> ITEMS = new LinkedHashMap<>();
     public static final List<String> IDS = new ArrayList<>();
     
-    public static final RecipeType TYPE = new RecipeType(PluginUtils.getKey("infinity_forge"), ITEM, (stacks, stack) -> {
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("infinity_forge"), ITEM, (stacks, stack) -> {
         SlimefunItemStack item = (SlimefunItemStack) stack;
         RECIPES.put(stacks, item);
         ITEMS.put(item.getItemId(), new Pair<>(item, stacks));
@@ -115,22 +114,22 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
         int charge = getCharge(b.getLocation());
          
         if (charge < ENERGY) { //not enough energy
-            MessageUtils.messageWithCD(p, 1000,
+            p.sendMessage( new String[] {
                     ChatColor.RED + "Not enough energy!",
                     ChatColor.GREEN + "Charge: " + ChatColor.RED + charge + ChatColor.GREEN + "/" + ENERGY + " J"
-            );
+            });
             return;
         }
         
         ItemStack output = RECIPES.get(inv, INPUT_SLOTS);
         
         if (output == null) { //invalid
-            MessageUtils.messageWithCD(p, 1000, ChatColor.RED + "Invalid Recipe!");
+            p.sendMessage( ChatColor.RED + "Invalid Recipe!");
             return;
         }
             
         if (!inv.fits(output, OUTPUT_SLOTS)) { //not enough room
-            MessageUtils.messageWithCD(p, 1000, ChatColor.GOLD + "Not enough room!");
+            p.sendMessage( ChatColor.GOLD + "Not enough room!");
             return;
         }
 
@@ -139,8 +138,8 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
                 inv.consumeItem(slot);
             }
         }
-        
-        MessageUtils.message(p, ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + output.getItemMeta().getDisplayName());
+
+        p.sendMessage( ChatColor.GREEN + "Successfully crafted: " + ChatColor.WHITE + output.getItemMeta().getDisplayName());
 
         inv.pushItem(output.clone(), OUTPUT_SLOTS);
         setCharge(b.getLocation(), 0);

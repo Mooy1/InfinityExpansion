@@ -8,7 +8,6 @@ import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinityexpansion.utils.Triplet;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
@@ -77,7 +76,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
             LorePreset.speed(32),
             LorePreset.energyPerSecond(1200)
     );
-    public static final RecipeType TYPE = new RecipeType(PluginUtils.getKey("singularity_constructor"), BASIC);
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("singularity_constructor"), BASIC);
 
     private static final int STATUS_SLOT = 13;
     private static final int INPUT_SLOT = 10;

@@ -147,7 +147,7 @@ public final class Singularity extends UnplaceableBlock {
     }
     
     private static void addRecipe(SlimefunItemStack item, String id, int amount) {
-        Triplet<SlimefunItemStack, String, Integer> triplet = new Triplet<>(item, id, (int) (amount * InfinityExpansion.getDifficulty()));
+        Triplet<SlimefunItemStack, String, Integer> triplet = new Triplet<>(item, id, (int) (amount * InfinityExpansion.inst().getDifficulty()));
         RECIPES.add(triplet);
         MAP.put(id, new Pair<>(RECIPES.size() - 1, triplet));
     }

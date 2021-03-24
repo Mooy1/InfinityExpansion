@@ -7,7 +7,6 @@ import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachin
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityTool;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -180,8 +179,8 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     };
     private static final int STATUS_SLOT = 4;
 
-    private static final int INTERVAL = (int) (10 * InfinityExpansion.getDifficulty());
-    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.getInstance().getConfig().getBoolean("balance-options.quarry-nether-materials-in-overworld");
+    private static final int INTERVAL = (int) (10 * InfinityExpansion.inst().getDifficulty());
+    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.inst().getConfig().getBoolean("balance-options.quarry-nether-materials-in-overworld");
 
     private final ItemStack cobble;
     private final int chance;
@@ -265,7 +264,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        if ((PluginUtils.getCurrentTick() % INTERVAL) != 0) {
+        if ((InfinityExpansion.inst().getGlobalTick() % INTERVAL) != 0) {
             return true;
         }
 

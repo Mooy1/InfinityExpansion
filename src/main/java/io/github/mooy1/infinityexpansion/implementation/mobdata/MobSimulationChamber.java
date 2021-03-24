@@ -4,11 +4,11 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -45,7 +45,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
             LorePreset.energyPerSecond(MobSimulationChamber.ENERGY)
     );
     
-    private static final int INTERVAL = 10 + (int) (10 * InfinityExpansion.getDifficulty());
+    private static final int INTERVAL = 10 + (int) (10 * InfinityExpansion.inst().getDifficulty());
     
     private static final int CARD_SLOT = MenuPreset.slot1 + 27;
     private static final int STATUS_SLOT = MenuPreset.slot1;
@@ -75,7 +75,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
 
     @Nonnull
     private static ItemStack makeSimulating(int energy) {
-        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round(energy * PluginUtils.TICK_RATIO) + " J/s)");
+        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round(energy * SlimefunConstants.TICKER_TPS) + " J/s)");
     }
 
     @Nonnull
@@ -171,7 +171,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
             inv.replaceExistingItem(XP_Slot, makeXpItem(xp));
         }
 
-        if (PluginUtils.getCurrentTick() % INTERVAL != 0) return;
+        if (InfinityExpansion.inst().getGlobalTick() % INTERVAL != 0) return;
 
         if (ThreadLocalRandom.current().nextBoolean()) {
             BlockStorage.addBlockInfo(b.getLocation(), "xp", String.valueOf(xp + card.tier.xp));

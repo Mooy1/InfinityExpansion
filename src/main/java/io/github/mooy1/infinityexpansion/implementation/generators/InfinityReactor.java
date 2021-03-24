@@ -5,11 +5,11 @@ import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -51,8 +51,8 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
     
     public static final int ENERGY = 90_000;
     public static final int STORAGE = 90_000_000;
-    public static final int INFINITY_INTERVAL = (int) (86400 * PluginUtils.TICK_RATIO); 
-    public static final int VOID_INTERVAL = (int) (14400 * PluginUtils.TICK_RATIO);
+    public static final int INFINITY_INTERVAL = (int) (86400 * SlimefunConstants.TICKER_TPS); 
+    public static final int VOID_INTERVAL = (int) (14400 * SlimefunConstants.TICKER_TPS);
     public static final int[] INPUT_SLOTS = {
             MenuPreset.slot1, MenuPreset.slot3
     };

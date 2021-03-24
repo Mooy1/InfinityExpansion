@@ -1,9 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
@@ -60,7 +60,7 @@ public final class PoweredBedrock extends AbstractTicker implements EnergyNetCom
 
     @Override
     protected void tick(@Nonnull Block block, @Nonnull Config config) {
-        if ((PluginUtils.getCurrentTick() & 3) == 0  || block.getType() == Material.AIR) {
+        if ((InfinityExpansion.inst().getGlobalTick() & 3) == 0  || block.getType() == Material.AIR) {
             return;
         }
         Location l = block.getLocation();

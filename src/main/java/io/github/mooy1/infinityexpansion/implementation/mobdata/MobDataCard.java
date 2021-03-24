@@ -180,6 +180,11 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
                 SlimefunItems.INFUSED_ELYTRA, EmptyDataCard.ITEM, new ItemStack(Material.DRAGON_HEAD, 1),
                 new SlimefunItemStack(SlimefunItems.ENDER_LUMP_3, 64), new SlimefunItemStack(Items.VOID_INGOT, 32), new ItemStack(Material.DRAGON_BREATH, 64)
         }, Items.VOID_DUST, 1, EnderEssence.ITEM, 4, new ItemStack(Material.DRAGON_EGG), 4_000_000).register(plugin);
+        new MobDataCard("Bee", MobDataTier.NEUTRAL, new ItemStack[] {
+                new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16),new ItemStack(Material.HONEYCOMB_BLOCK, 16),
+                new ItemStack(Material.HONEY_BLOCK, 16), EmptyDataCard.ITEM,  new ItemStack(Material.HONEY_BLOCK, 16),
+                new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16),new ItemStack(Material.HONEYCOMB_BLOCK, 16)
+        }, new ItemStack(Material.HONEYCOMB), 1, new ItemStack(Material.HONEYCOMB), 2).register(plugin);
     }
 
 }

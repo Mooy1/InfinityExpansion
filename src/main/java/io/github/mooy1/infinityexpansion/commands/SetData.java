@@ -61,7 +61,7 @@ public final class SetData extends AbstractCommand {
     }
 
     @Override
-    protected void onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings, @Nonnull List<String> list) {
+    public void onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings, @Nonnull List<String> list) {
         if (!(commandSender instanceof Player)) {
             return;
         }

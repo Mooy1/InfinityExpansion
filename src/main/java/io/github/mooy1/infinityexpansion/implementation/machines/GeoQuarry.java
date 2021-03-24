@@ -5,7 +5,6 @@ import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
@@ -47,7 +46,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
             LorePreset.energyPerSecond(GeoQuarry.ENERGY)
     );
     
-    private static final int INTERVAL = (int) (360 * InfinityExpansion.getDifficulty());
+    private static final int INTERVAL = (int) (360 * InfinityExpansion.inst().getDifficulty());
     private static final int ENERGY = 450;
     private static final int STATUS = 4;
     private static final int[] BORDER = { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 44, 45, 53 };
@@ -125,7 +124,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
 
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        if (PluginUtils.getCurrentTick() % INTERVAL != 0) {
+        if (InfinityExpansion.inst().getGlobalTick() % INTERVAL != 0) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aDrilling..."));
             }

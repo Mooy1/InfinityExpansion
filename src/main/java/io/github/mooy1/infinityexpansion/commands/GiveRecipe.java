@@ -53,7 +53,7 @@ public final class GiveRecipe extends AbstractCommand {
     }
 
     @Override
-    protected void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    public void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
         if (args.length == 2) {
             int i = 0;
             for (SlimefunItem item : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {

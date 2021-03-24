@@ -4,45 +4,39 @@ import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.commands.PrintItem;
 import io.github.mooy1.infinityexpansion.commands.SetData;
 import io.github.mooy1.infinityexpansion.implementation.Setup;
+import io.github.mooy1.infinitylib.AbstractAddon;
 import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
-import io.github.mooy1.infinitylib.commands.CommandManager;
-import io.github.mooy1.infinitylib.core.ConfigUtils;
-import io.github.mooy1.infinitylib.core.PluginUtils;
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import lombok.Getter;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
-public final class InfinityExpansion extends JavaPlugin implements SlimefunAddon {
-
-    @Getter
+public final class InfinityExpansion extends AbstractAddon {
+    
     private static InfinityExpansion instance;
+    
+    public static InfinityExpansion inst() {
+        return instance;
+    }
+    
     @Getter
-    private static double difficulty = 1;
+    private double difficulty = 1;
     
     @Override
     public void onEnable() {
+        super.onEnable();
         instance = this;
-
-        PluginUtils.setup(ChatColor.AQUA + "Infinity" + ChatColor.GRAY + "Expansion", this, "Mooy1/InfinityExpansion/master", getFile());
         
-        CommandManager.setup("infinityexpansion", "/ie, /ix, /infinity",
-                new GiveRecipe(), new SetData(), new PrintItem()
-        );
-        
-        Metrics metrics = PluginUtils.setupMetrics(8991);
-
         loadDifficulty();
         
-        metrics.addCustomChart(new Metrics.SimplePie("difficulty", () -> String.valueOf(difficulty)));
+        getMetrics().addCustomChart(new Metrics.SimplePie("difficulty", () -> String.valueOf(this.difficulty)));
         
         boolean lXInstalled = getServer().getPluginManager().getPlugin("LiteXpansion") != null;
         
         if (lXInstalled) {
-            PluginUtils.runSync(() -> PluginUtils.log(Level.WARNING,
+            runSync(() -> log(Level.WARNING,
                     "###################################################################################",
                     "LiteXpansion has done some nerfs on a few of this addon's items,",
                     "specifically solar panels, aswell as some of Slimefun's items.",
@@ -53,38 +47,44 @@ public final class InfinityExpansion extends JavaPlugin implements SlimefunAddon
             ));
         }
         
-        metrics.addCustomChart(new Metrics.SimplePie("litexpansion_installed", () -> String.valueOf(lXInstalled)));
+        getMetrics().addCustomChart(new Metrics.SimplePie("litexpansion_installed", () -> String.valueOf(lXInstalled)));
         
         Setup.setup(this);
-        
-        PluginUtils.startTicker();
     }
-    
+
+    @Override
+    protected int getMetricsID() {
+        return 8991;
+    }
+
+    @Override
+    protected String getGithubPath() {
+        return "Mooy1/InfinityExpansion/master";
+    }
+
+    @Override
+    protected List<AbstractCommand> getSubCommands() {
+        return Arrays.asList(new GiveRecipe(), new SetData(), new PrintItem());        
+    }
+
     private void loadDifficulty() {
-        double val = ConfigUtils.getDouble(getConfig(), "balance-options.difficulty", .1, 10, 1);
+        double val = getConfig().getDouble("balance-options.difficulty");
         // round to .1 .2 .3 or 1 2 3 etc
-        if (val < 1) {
-            val = ((int) (val * 10)) / 10D;
-        } else if (val > 1) {
-            val = (int) val;
+        if (val >= .1 && val < 1) {
+            this.difficulty = ((int) (val * 10)) / 10D;
+        } else if (val >= 1 && val <= 10) {
+            this.difficulty = (int) val;
+        } else {
+            this.difficulty = 1;
+            getConfig().set("balance-options.difficulty", 1);
+            log(Level.WARNING, "Difficulty value was out of bounds, resetting to default!");
+            saveConfig();
         }
-        difficulty = val;
     }
 
     @Override
     public void onDisable() {
         instance = null;
     }
-
-    @Override
-    public String getBugTrackerURL() {
-        return "https://github.com/Mooy1/InfinityExpansion/issues";
-    }
-
-    @Nonnull
-    @Override
-    public JavaPlugin getJavaPlugin() {
-        return this;
-    }
-
+    
 }

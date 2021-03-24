@@ -3,7 +3,6 @@ package io.github.mooy1.infinityexpansion.implementation.storage;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.items.PersistentItemStack;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractContainer;
@@ -113,11 +112,11 @@ public final class StorageUnit extends AbstractContainer {
     );
 
     /* Namespaced keys */
-    static final NamespacedKey EMPTY_KEY = PluginUtils.getKey("empty"); // key for empty item
-    static final NamespacedKey DISPLAY_KEY = PluginUtils.getKey("display"); // key for display item
-    private static final NamespacedKey OLD_ITEM_KEY = PluginUtils.getKey("stored_item"); // old item key in pdc
-    private static final NamespacedKey ITEM_KEY = PluginUtils.getKey("item"); // item key for item pdc
-    private static final NamespacedKey AMOUNT_KEY = PluginUtils.getKey("stored"); // amount key for item pdc
+    static final NamespacedKey EMPTY_KEY = InfinityExpansion.inst().getKey("empty"); // key for empty item
+    static final NamespacedKey DISPLAY_KEY = InfinityExpansion.inst().getKey("display"); // key for display item
+    private static final NamespacedKey OLD_ITEM_KEY = InfinityExpansion.inst().getKey("stored_item"); // old item key in pdc
+    private static final NamespacedKey ITEM_KEY = InfinityExpansion.inst().getKey("item"); // item key for item pdc
+    private static final NamespacedKey AMOUNT_KEY = InfinityExpansion.inst().getKey("stored"); // amount key for item pdc
 
     /* Menu slots */
     static final int INPUT_SLOT = MenuPreset.slot1;
@@ -155,7 +154,10 @@ public final class StorageUnit extends AbstractContainer {
 
             @Override
             public void tick(Block b, SlimefunItem item, Config data) {
-                StorageUnit.this.caches.get(b).updateStatus(b);
+                StorageCache cache = StorageUnit.this.caches.get(b);
+                cache.input();
+                cache.output(true);
+                cache.updateStatus(b);
             }
         });
     }
@@ -177,7 +179,7 @@ public final class StorageUnit extends AbstractContainer {
     protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
         Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
         if (data != null) {
-            PluginUtils.runSync(() -> this.caches.get(b)
+            InfinityExpansion.inst().runSync(() -> this.caches.get(b)
                     .load(data.getFirstValue(), data.getFirstValue().getItemMeta())
                     .setAmount(data.getSecondValue())
             );
@@ -196,13 +198,18 @@ public final class StorageUnit extends AbstractContainer {
     @Override
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack itemStack) {
         if (flow == ItemTransportFlow.INSERT) {
+            // check if input can be stored
             StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getBlock());
             if (cache.isEmpty() || cache.matches(itemStack)) {
-                cache.input();
+                ItemStack input = dirtyChestMenu.getItemInSlot(INPUT_SLOT);
+                if (input != null && input.getAmount() + itemStack.getAmount() > itemStack.getMaxStackSize()) {
+                    // clear the input spot to make room
+                    cache.input();
+                }
                 return new int[] {INPUT_SLOT};
             }
         } else if (flow == ItemTransportFlow.WITHDRAW) {
-            this.caches.get(((BlockMenu) dirtyChestMenu).getBlock()).output();
+            this.caches.get(((BlockMenu) dirtyChestMenu).getBlock()).output(false);
             return new int[] {OUTPUT_SLOT};
         }
         return new int[0];

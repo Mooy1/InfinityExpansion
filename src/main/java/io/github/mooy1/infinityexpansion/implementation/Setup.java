@@ -34,7 +34,6 @@ import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationCha
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageForge;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -111,10 +110,10 @@ public final class Setup {
     }
     
     private static void addInfinityEnchants(SlimefunItemStack... items) {
-        ConfigurationSection typeSection = InfinityExpansion.getInstance().getConfig().getConfigurationSection("infinity-enchant-levels");
+        ConfigurationSection typeSection = InfinityExpansion.inst().getConfig().getConfigurationSection("infinity-enchant-levels");
 
         if (typeSection == null) {
-            PluginUtils.log(Level.SEVERE, "Config section \"infinity-enchant-levels\" missing, Check your config and report this!");
+            InfinityExpansion.inst().log(Level.SEVERE, "Config section \"infinity-enchant-levels\" missing, Check your config and report this!");
             return;
         }
 
@@ -141,7 +140,7 @@ public final class Setup {
                     meta.addEnchant(entry.getKey(), entry.getValue(), true);
                 }
             } else {
-                PluginUtils.log(Level.SEVERE, "Config section for " + itemPath + " missing, Check your config and report this!");
+                InfinityExpansion.inst().log(Level.SEVERE, "Config section for " + itemPath + " missing, Check your config and report this!");
             }
             
             item.setItemMeta(meta);

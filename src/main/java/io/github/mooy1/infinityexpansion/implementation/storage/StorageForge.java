@@ -1,9 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.players.MessageUtils;
 import io.github.mooy1.infinitylib.slimefun.utils.DelayedRecipeType;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -31,7 +31,7 @@ public final class StorageForge extends AbstractCrafter {
             "&7Retains stored items"
     );
     
-    public static final DelayedRecipeType TYPE = new DelayedRecipeType(ITEM);
+    public static final DelayedRecipeType TYPE = new DelayedRecipeType(InfinityExpansion.inst(), ITEM);
     
     public StorageForge() {
         super(Categories.STORAGE, ITEM, TYPE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
@@ -48,7 +48,7 @@ public final class StorageForge extends AbstractCrafter {
 
     @Override
     public void postCraft(@Nonnull Location l, @Nonnull BlockMenu inv, @Nonnull Player p) {
-        MessageUtils.message(p, ChatColor.GREEN + "Transferred items to upgraded unit");
+        p.sendMessage(ChatColor.GREEN + "Transferred items to upgraded unit");
     }
     
 }

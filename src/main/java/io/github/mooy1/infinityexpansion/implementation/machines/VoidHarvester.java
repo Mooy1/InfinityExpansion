@@ -5,7 +5,6 @@ import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -74,13 +73,13 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
             LorePreset.energyPerSecond(1200)
     );
     
-    public static final RecipeType TYPE = new RecipeType(PluginUtils.getKey("void_harvester"), BASIC);
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("void_harvester"), BASIC);
     
     private static final int[] OUTPUT_SLOTS = {
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = (int) (100 * InfinityExpansion.getDifficulty()) + 900;
+    private static final int TIME = (int) (100 * InfinityExpansion.inst().getDifficulty()) + 900;
 
     private final int speed;
     private final int energy;

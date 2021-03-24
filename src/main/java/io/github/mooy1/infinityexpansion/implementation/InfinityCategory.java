@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.players.LeaveListener;
@@ -87,7 +88,7 @@ public final class InfinityCategory extends FlexCategory {
 
     InfinityCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
-        LeaveListener.add(history);
+        LeaveListener.create(InfinityExpansion.inst(), history);
     }
 
     @Override
