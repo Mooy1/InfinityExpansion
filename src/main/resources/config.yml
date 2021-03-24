@@ -13,7 +13,7 @@
 # but some addon developers do not want there gear to be transformable so change this at your own risk...
 # 
 # quarry-nether-materials-in-overworld: (default false)
-# Allow quarries to mine quartz and netherite in overworld and end
+# Allow quarries to mine quartz, netherite, netherrack in any world
 # 
 # -----
 # 
