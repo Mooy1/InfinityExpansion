@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.commands;
 
-import io.github.mooy1.infinitylib.command.AbstractCommand;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.List;
 
 public final class PrintItem extends AbstractCommand {
@@ -35,10 +34,9 @@ public final class PrintItem extends AbstractCommand {
         p.sendMessage(item.toString());
     }
 
-    @Nonnull
     @Override
-    public List<String> onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings) {
-        return Collections.emptyList();
+    public void onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings, @Nonnull List<String> list) {
+        
     }
 
 }

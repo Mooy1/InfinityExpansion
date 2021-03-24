@@ -1,10 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.ProtectionType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.ProtectiveArmor;
@@ -26,7 +25,7 @@ import javax.annotation.Nonnull;
  */
 public final class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor, Soulbound, NotPlaceable {
     
-    private static final NamespacedKey key = PluginUtils.getKey("infinity_armor");
+    private static final NamespacedKey key = InfinityExpansion.inst().getKey("infinity_armor");
     
     public static void setup(InfinityExpansion plugin) {
         new InfinityArmor(CROWN, new PotionEffect[] {

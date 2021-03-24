@@ -1,14 +1,14 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -217,11 +217,6 @@ public final class EnergyGenerator extends AbstractGenerator {
     }
 
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-
-    }
-
-    @Override
     public int getGeneratedOutput(@Nonnull Location l, @Nonnull Config data) {
         @Nullable final BlockMenu inv = BlockStorage.getInventory(l);
         if (inv == null) return 0;
@@ -244,7 +239,7 @@ public final class EnergyGenerator extends AbstractGenerator {
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&aGeneration",
                         "&7Type: &6" + type.status,
-                        "&7Generating: &6" + LorePreset.roundHundreds(gen * PluginUtils.TICK_RATIO) + " J/s ",
+                        "&7Generating: &6" + LorePreset.roundHundreds(gen * SlimefunConstants.TICKER_TPS) + " J/s ",
                         "&7Stored: &6" + LorePreset.format(getCharge(l)) + " J"
                 ));
             }

@@ -1,14 +1,14 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -27,12 +27,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class MobSimulationChamber extends AbstractTicker implements EnergyNetComponent {
+public final class MobSimulationChamber extends TickingContainer implements EnergyNetComponent {
     
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "MOB_SIMULATION_CHAMBER",
@@ -44,7 +45,7 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
             LorePreset.energyPerSecond(MobSimulationChamber.ENERGY)
     );
     
-    private static final int INTERVAL = 10 + (int) (10 * InfinityExpansion.getDifficulty());
+    private static final int INTERVAL = 10 + (int) (10 * InfinityExpansion.inst().getDifficulty());
     
     private static final int CARD_SLOT = MenuPreset.slot1 + 27;
     private static final int STATUS_SLOT = MenuPreset.slot1;
@@ -60,26 +61,21 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
                 Items.MACHINE_CIRCUIT, SlimefunItems.PROGRAMMABLE_ANDROID_BUTCHER, Items.MACHINE_CIRCUIT,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
         });
-
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-            Location l = b.getLocation();
-            
-            if (inv != null) {
-                inv.dropItems(l, OUTPUT_SLOTS);
-                inv.dropItems(l, CARD_SLOT);
-            }
-            
-            p.giveExp(Util.getIntData("xp", l));
-            BlockStorage.addBlockInfo(l, "xp", "0");
-
-            return true;
-        });
     }
-    
+
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
+
+        menu.dropItems(l, OUTPUT_SLOTS);
+        menu.dropItems(l, CARD_SLOT);
+
+        e.getPlayer().giveExp(Util.getIntData("xp", l));
+        BlockStorage.addBlockInfo(l, "xp", "0");
+    }
+
     @Nonnull
     private static ItemStack makeSimulating(int energy) {
-        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round(energy * PluginUtils.TICK_RATIO) + " J/s)");
+        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round(energy * SlimefunConstants.TICKER_TPS) + " J/s)");
     }
 
     @Nonnull
@@ -175,7 +171,7 @@ public final class MobSimulationChamber extends AbstractTicker implements Energy
             inv.replaceExistingItem(XP_Slot, makeXpItem(xp));
         }
 
-        if (PluginUtils.getCurrentTick() % INTERVAL != 0) return;
+        if (InfinityExpansion.inst().getGlobalTick() % INTERVAL != 0) return;
 
         if (ThreadLocalRandom.current().nextBoolean()) {
             BlockStorage.addBlockInfo(b.getLocation(), "xp", String.valueOf(xp + card.tier.xp));

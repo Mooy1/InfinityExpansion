@@ -1,11 +1,12 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinitylib.delayed.DelayedRecipeType;
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.utils.DelayedRecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -32,7 +33,7 @@ public final class MobDataInfuser extends AbstractCrafter implements EnergyNetCo
             LorePreset.energy(MobDataInfuser.ENERGY) + "per use"
     );
     private static final int ENERGY = 20000;
-    public static final DelayedRecipeType TYPE = new DelayedRecipeType(ITEM);
+    public static final DelayedRecipeType TYPE = new DelayedRecipeType(InfinityExpansion.inst(), ITEM);
 
     public MobDataInfuser() {
         super(Categories.MOB_SIMULATION, ITEM, TYPE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

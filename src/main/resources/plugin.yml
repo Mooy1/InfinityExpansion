@@ -13,9 +13,3 @@ commands:
     description: Do /infinityexpansion help for a list of commands
     usage: /infinityexpansion <subcommand>
     aliases: [ie, ix, infinity]
-
-permissions:
-  infinityexpansion.admin:
-    description: InfinityExpansion admin commands
-    default: op
-    

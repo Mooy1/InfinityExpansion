@@ -1,32 +1,32 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
+import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.gear.InfinityTool;
-import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -179,8 +179,8 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     };
     private static final int STATUS_SLOT = 4;
 
-    private static final int INTERVAL = (int) (10 * InfinityExpansion.getDifficulty());
-    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.getInstance().getConfig().getBoolean("balance-options.quarry-nether-materials-in-overworld");
+    private static final int INTERVAL = (int) (10 * InfinityExpansion.inst().getDifficulty());
+    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.inst().getConfig().getBoolean("balance-options.quarry-nether-materials-in-overworld");
 
     private final ItemStack cobble;
     private final int chance;
@@ -193,16 +193,11 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         this.chance = chance;
         this.outputs = outputs;
         this.energy = energy;
+    }
 
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
-
-            if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
-            }
-
-            return true;
-        });
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
+        menu.dropItems(l, OUTPUT_SLOTS);
     }
 
     @Override
@@ -269,7 +264,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        if ((PluginUtils.getCurrentTick() % INTERVAL) != 0) {
+        if ((InfinityExpansion.inst().getGlobalTick() % INTERVAL) != 0) {
             return true;
         }
 

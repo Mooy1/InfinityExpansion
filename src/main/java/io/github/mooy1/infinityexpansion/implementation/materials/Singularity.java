@@ -1,12 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.machines.SingularityConstructor;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.utils.Triplet;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.UnplaceableBlock;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
@@ -113,8 +112,7 @@ public final class Singularity extends UnplaceableBlock {
             "&bInfinity Singularity"
     );
     
-    @Getter
-    private static final List<Triplet<SlimefunItemStack, String, Integer>> RECIPES = new ArrayList<>();
+    public static final List<Triplet<SlimefunItemStack, String, Integer>> RECIPES = new ArrayList<>();
     private static final Map<String, Pair<Integer, Triplet<SlimefunItemStack, String, Integer>>> MAP = new HashMap<>();
     
     public static Triplet<SlimefunItemStack, String, Integer> getRecipeByIndex(@Nonnull Integer id) {
@@ -149,7 +147,7 @@ public final class Singularity extends UnplaceableBlock {
     }
     
     private static void addRecipe(SlimefunItemStack item, String id, int amount) {
-        Triplet<SlimefunItemStack, String, Integer> triplet = new Triplet<>(item, id, (int) (amount * InfinityExpansion.getDifficulty()));
+        Triplet<SlimefunItemStack, String, Integer> triplet = new Triplet<>(item, id, (int) (amount * InfinityExpansion.inst().getDifficulty()));
         RECIPES.add(triplet);
         MAP.put(id, new Pair<>(RECIPES.size() - 1, triplet));
     }

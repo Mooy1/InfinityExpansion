@@ -1,20 +1,18 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -23,10 +21,12 @@ import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -46,7 +46,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
             LorePreset.energyPerSecond(GeoQuarry.ENERGY)
     );
     
-    private static final int INTERVAL = (int) (360 * InfinityExpansion.getDifficulty());
+    private static final int INTERVAL = (int) (360 * InfinityExpansion.inst().getDifficulty());
     private static final int ENERGY = 450;
     private static final int STATUS = 4;
     private static final int[] BORDER = { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 44, 45, 53 };
@@ -60,16 +60,13 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
                 Items.VOID_INGOT, SlimefunExtension.ADVANCED_GEO_MINER, Items.VOID_INGOT,
                 Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE,
         });
-        
-        registerBlockHandler(getId(), (p, b, item, reason) -> {
-            BlockMenu menu = BlockStorage.getInventory(b);
-            if (menu != null) {
-                menu.dropItems(b.getLocation(), OUTPUT_SLOTS);
-            }
-            return true;
-        });
     }
-    
+
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
+        menu.dropItems(l, OUTPUT_SLOTS);
+    }
+
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         super.setupMenu(blockMenuPreset);
@@ -127,7 +124,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
 
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        if (PluginUtils.getCurrentTick() % INTERVAL != 0) {
+        if (InfinityExpansion.inst().getGlobalTick() % INTERVAL != 0) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aDrilling..."));
             }

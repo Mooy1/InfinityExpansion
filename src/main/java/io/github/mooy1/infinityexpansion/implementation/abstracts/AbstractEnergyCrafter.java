@@ -1,6 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
-import io.github.mooy1.infinitylib.abstracts.AbstractTicker;
+import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractEnergyCrafter extends AbstractTicker implements EnergyNetComponent {
+public abstract class AbstractEnergyCrafter extends TickingContainer implements EnergyNetComponent {
     
     protected final int energy;
     protected final int statusSlot;

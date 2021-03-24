@@ -1,10 +1,9 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.player.MessageUtils;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
@@ -46,16 +45,16 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
                 Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY,
                 Items.INFINITY, null, Items.INFINITY, Items.INFINITY, null, Items.INFINITY
         });
-        PluginUtils.registerListener(this);
+        InfinityExpansion.inst().registerListener(this);
     }
 
     private static void disableFlight(Player p) {
-        MessageUtils.message(p, ChatColor.RED + "Infinity Flight Disabled!");
+        p.sendMessage( ChatColor.RED + "Infinity Flight Disabled!");
         p.setAllowFlight(false);
     }
 
     private static void enableFlight(Player p) {
-        MessageUtils.message(p, ChatColor.GREEN + "Infinity Flight Enabled!");
+        p.sendMessage( ChatColor.GREEN + "Infinity Flight Enabled!");
         p.setAllowFlight(true);
     }
 
@@ -64,11 +63,14 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
     public ItemUseHandler getItemHandler() {
         return e -> {
             ItemStack item = e.getItem();
-            ItemMeta meta = item.getItemMeta();
-            List<String> lore = meta.getLore();
-            if (lore == null) {
+            if (!item.hasItemMeta()) {
                 return;
             }
+            ItemMeta meta = item.getItemMeta();
+            if (!meta.hasLore()) {
+                return;
+            }
+            List<String> lore = meta.getLore();
 
             Player p = e.getPlayer();
 
@@ -81,7 +83,7 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
                     String uuid = ChatColor.stripColor(line).substring(6);
 
                     if (!p.getUniqueId().toString().equals(uuid)) {
-                        MessageUtils.message(p, ChatColor.YELLOW + "You do not own this matrix!");
+                        p.sendMessage( ChatColor.YELLOW + "You do not own this matrix!");
                         return;
                     }
 
@@ -89,7 +91,7 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
                         iterator.remove();
                         meta.setLore(lore);
                         item.setItemMeta(meta);
-                        MessageUtils.message(p, ChatColor.GOLD + "Ownership removed!");
+                        p.sendMessage( ChatColor.GOLD + "Ownership removed!");
                         disableFlight(p);
 
                     } else if (p.getAllowFlight()) {
@@ -105,7 +107,7 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
             lore.add(ChatColor.GREEN + "UUID: " + p.getUniqueId().toString());
             meta.setLore(lore);
             item.setItemMeta(meta);
-            MessageUtils.message(p, ChatColor.GOLD + "Ownership claimed!");
+            p.sendMessage( ChatColor.GOLD + "Ownership claimed!");
             enableFlight(p);
         };
     }

@@ -1,10 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -180,6 +180,11 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
                 SlimefunItems.INFUSED_ELYTRA, EmptyDataCard.ITEM, new ItemStack(Material.DRAGON_HEAD, 1),
                 new SlimefunItemStack(SlimefunItems.ENDER_LUMP_3, 64), new SlimefunItemStack(Items.VOID_INGOT, 32), new ItemStack(Material.DRAGON_BREATH, 64)
         }, Items.VOID_DUST, 1, EnderEssence.ITEM, 4, new ItemStack(Material.DRAGON_EGG), 4_000_000).register(plugin);
+        new MobDataCard("Bee", MobDataTier.NEUTRAL, new ItemStack[] {
+                new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16),new ItemStack(Material.HONEYCOMB_BLOCK, 16),
+                new ItemStack(Material.HONEY_BLOCK, 16), EmptyDataCard.ITEM,  new ItemStack(Material.HONEY_BLOCK, 16),
+                new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16),new ItemStack(Material.HONEYCOMB_BLOCK, 16)
+        }, new ItemStack(Material.HONEYCOMB), 1, new ItemStack(Material.HONEYCOMB), 2).register(plugin);
     }
 
 }

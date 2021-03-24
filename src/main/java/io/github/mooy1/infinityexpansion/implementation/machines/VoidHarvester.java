@@ -1,13 +1,12 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.implementation.Categories;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -21,9 +20,11 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -72,13 +73,13 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
             LorePreset.energyPerSecond(1200)
     );
     
-    public static final RecipeType TYPE = new RecipeType(PluginUtils.getKey("void_harvester"), BASIC);
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("void_harvester"), BASIC);
     
     private static final int[] OUTPUT_SLOTS = {
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = (int) (100 * InfinityExpansion.getDifficulty()) + 900;
+    private static final int TIME = (int) (100 * InfinityExpansion.inst().getDifficulty()) + 900;
 
     private final int speed;
     private final int energy;
@@ -87,16 +88,11 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         super(category, item, type, recipe);
         this.speed = speed;
         this.energy = energy;
-        
-        registerBlockHandler(getId(), (p, b, stack, reason) -> {
-            BlockMenu inv = BlockStorage.getInventory(b);
+    }
 
-            if (inv != null) {
-                inv.dropItems(b.getLocation(), OUTPUT_SLOTS);
-            }
-
-            return true;
-        });
+    @Override
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
+        menu.dropItems(l, OUTPUT_SLOTS);
     }
 
     @Override

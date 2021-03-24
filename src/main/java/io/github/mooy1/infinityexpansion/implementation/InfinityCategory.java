@@ -1,12 +1,14 @@
-package io.github.mooy1.infinityexpansion.categories;
+package io.github.mooy1.infinityexpansion.implementation;
 
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.player.LeaveListener;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.players.LeaveListener;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.utils.MultiCategory;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
+import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -23,7 +25,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -32,6 +33,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -40,12 +42,8 @@ import java.util.UUID;
  *
  * @author Mooy1
  */
-public class InfinityCategory extends FlexCategory implements Listener {
+public final class InfinityCategory extends FlexCategory {
     
-    public static final InfinityCategory CATEGORY = new InfinityCategory(PluginUtils.getKey("infinity_recipes"),
-            new CustomItem(Material.RESPAWN_ANCHOR, "&bInfinity &7Recipes"), 3
-    );
-
     private static final int[] INFINITY_RECIPE_SLOTS = {
             1, 2, 3, 4, 5, 6,
             10, 11, 12, 13, 14, 15,
@@ -86,21 +84,21 @@ public class InfinityCategory extends FlexCategory implements Listener {
     );
     private static final ItemStack INFO = new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&3Info");
     
-    private static final HashMap<UUID, String> history = new HashMap<>();
+    private static final Map<UUID, String> history = new HashMap<>();
 
-    private InfinityCategory(NamespacedKey key, ItemStack item, int tier) {
+    InfinityCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
-        LeaveListener.add(history);
+        LeaveListener.create(InfinityExpansion.inst(), history);
     }
 
     @Override
-    public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    public boolean isVisible(@Nonnull Player p, @Nonnull PlayerProfile profile, @Nonnull SlimefunGuideMode layout) {
         return false;
     }
 
     @Override
     public void open(Player player, PlayerProfile playerProfile, SlimefunGuideMode slimefunGuideMode) {
-        open(player, new BackEntry(null, playerProfile, slimefunGuideMode), true);
+        open(player, new BackEntry(null, playerProfile.getGuideHistory()), true);
         playerProfile.getGuideHistory().add(this, 1);
     }
     
@@ -117,14 +115,14 @@ public class InfinityCategory extends FlexCategory implements Listener {
         
         ChestMenu menu = new ChestMenu("&bInfinity Recipes");
 
-        if (entry.mode != null && entry.profile != null) {
+        if (entry.history != null) {
             menu.addMenuClickHandler(1, (player1, i, itemStack, clickAction) -> {
-                MultiCategory.CATEGORY.open(player1, entry.profile, entry.mode);
+                entry.history.goBack(MultiCategory.SURVIVAL_GUIDE);
                 return false;
             });
-        } else if (entry.workBench != null) {
+        } else if (entry.bench != null) {
             menu.addMenuClickHandler(1, (player1, i, itemStack, clickAction) -> {
-                entry.workBench.open(player1);
+                entry.bench.open(player1);
                 return false;
             });
         } else {
@@ -200,7 +198,7 @@ public class InfinityCategory extends FlexCategory implements Listener {
             }
         }
 
-        if (entry.workBench == null) {
+        if (entry.bench == null) {
             menu.addItem(INFINITY_BENCH, InfinityWorkbench.ITEM, (p, slot, item, action) -> {
                 SlimefunItem slimefunItem = InfinityWorkbench.ITEM.getItem();
                 if (slimefunItem != null) {
@@ -212,7 +210,7 @@ public class InfinityCategory extends FlexCategory implements Listener {
             });
         } else {
             menu.addItem(INFINITY_BENCH, BENCH, (p, slot, item, action) -> {
-                moveRecipe(p, entry.workBench, pair, action.isRightClicked());
+                moveRecipe(p, entry.bench, pair, action.isRightClicked());
                 return false;
             });
         }
@@ -343,14 +341,12 @@ public class InfinityCategory extends FlexCategory implements Listener {
     }
     
     @AllArgsConstructor
-    public static class BackEntry {
+    public static final class BackEntry {
 
         @Nullable
-        private final BlockMenu workBench;
+        private final BlockMenu bench;
         @Nullable
-        private final PlayerProfile profile;
-        @Nullable
-        private final SlimefunGuideMode mode;
+        private final GuideHistory history;
         
     }
 
