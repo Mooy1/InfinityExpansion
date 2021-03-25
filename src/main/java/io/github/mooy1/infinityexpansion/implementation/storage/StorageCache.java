@@ -122,7 +122,7 @@ final class StorageCache {
         }
     }
     
-    StorageCache load(ItemStack stored, ItemMeta copy) {
+    void load(ItemStack stored, ItemMeta copy) {
         this.menu.replaceExistingItem(DISPLAY_SLOT, stored);
 
         // remove the display key from copy
@@ -137,8 +137,6 @@ final class StorageCache {
             this.displayName = StackUtils.getDisplayName(stored, copy);
         }
         this.material = stored.getType();
-        
-        return this;
     }
 
     void setAmount(int amount) {

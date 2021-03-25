@@ -155,9 +155,11 @@ public final class StorageUnit extends AbstractContainer {
             @Override
             public void tick(Block b, SlimefunItem item, Config data) {
                 StorageCache cache = StorageUnit.this.caches.get(b);
-                cache.input();
-                cache.output(true);
-                cache.updateStatus(b);
+                if (cache != null) {
+                    cache.input();
+                    cache.output(true);
+                    cache.updateStatus(b);
+                }
             }
         });
     }
@@ -165,7 +167,7 @@ public final class StorageUnit extends AbstractContainer {
     @Override
     protected void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         StorageCache cache = new StorageCache(StorageUnit.this, b, menu);
-        StorageUnit.this.caches.put(b, cache);
+        this.caches.put(b, cache);
         menu.addMenuClickHandler(STATUS_SLOT, cache::voidExcessHandler);
         menu.addMenuClickHandler(INTERACT_SLOT, cache::interactHandler);
     }
@@ -179,10 +181,11 @@ public final class StorageUnit extends AbstractContainer {
     protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
         Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
         if (data != null) {
-            InfinityExpansion.inst().runSync(() -> this.caches.get(b)
-                    .load(data.getFirstValue(), data.getFirstValue().getItemMeta())
-                    .setAmount(data.getSecondValue())
-            );
+            InfinityExpansion.inst().runSync(() -> {
+                StorageCache cache = this.caches.get(b);
+                cache.load(data.getFirstValue(), data.getFirstValue().getItemMeta());
+                cache.setAmount(data.getSecondValue());
+            });
         }
     }
 
@@ -197,20 +200,22 @@ public final class StorageUnit extends AbstractContainer {
     @Nonnull
     @Override
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack itemStack) {
-        if (flow == ItemTransportFlow.INSERT) {
-            // check if input can be stored
-            StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getBlock());
-            if (cache.isEmpty() || cache.matches(itemStack)) {
-                ItemStack input = dirtyChestMenu.getItemInSlot(INPUT_SLOT);
-                if (input != null && input.getAmount() + itemStack.getAmount() > itemStack.getMaxStackSize()) {
-                    // clear the input spot to make room
-                    cache.input();
+        StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getBlock());
+        if (cache != null) {
+            if (flow == ItemTransportFlow.INSERT) {
+                // check if input can be stored
+                if (cache.isEmpty() || cache.matches(itemStack)) {
+                    ItemStack input = dirtyChestMenu.getItemInSlot(INPUT_SLOT);
+                    if (input != null && input.getAmount() + itemStack.getAmount() > itemStack.getMaxStackSize()) {
+                        // clear the input spot to make room
+                        cache.input();
+                    }
+                    return new int[] {INPUT_SLOT};
                 }
-                return new int[] {INPUT_SLOT};
+            } else if (flow == ItemTransportFlow.WITHDRAW) {
+                cache.output(false);
+                return new int[] {OUTPUT_SLOT};
             }
-        } else if (flow == ItemTransportFlow.WITHDRAW) {
-            this.caches.get(((BlockMenu) dirtyChestMenu).getBlock()).output(false);
-            return new int[] {OUTPUT_SLOT};
         }
         return new int[0];
     }
