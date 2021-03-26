@@ -45,27 +45,27 @@ import java.util.Map;
 public final class StorageUnit extends AbstractContainer {
 
     public static void setup(InfinityExpansion plugin) {
-        new StorageUnit(BASIC, BASIC_STORAGE, new ItemStack[] {
+        new StorageUnit(BASIC, BASIC_STORAGE,true, new ItemStack[] {
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), Items.MAGSTEEL, new ItemStack(Material.OAK_LOG)
         }).register(plugin);
-        new StorageUnit(ADVANCED, ADVANCED_STORAGE, new ItemStack[] {
+        new StorageUnit(ADVANCED, ADVANCED_STORAGE,true, new ItemStack[] {
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL,
                 Items.MAGSTEEL, StorageUnit.BASIC, Items.MAGSTEEL,
                 Items.MAGSTEEL, Items.MACHINE_CIRCUIT, Items.MAGSTEEL
         }).register(plugin);
-        new StorageUnit(REINFORCED, REINFORCED_STORAGE, new ItemStack[] {
+        new StorageUnit(REINFORCED, REINFORCED_STORAGE,true, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
                 Items.MAGSTEEL_PLATE, StorageUnit.ADVANCED, Items.MAGSTEEL_PLATE,
                 Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE
         }).register(plugin);
-        new StorageUnit(VOID, VOID_STORAGE, new ItemStack[] {
+        new StorageUnit(VOID, VOID_STORAGE, true, new ItemStack[] {
                 Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
                 Items.MAGNONIUM, StorageUnit.REINFORCED, Items.MAGNONIUM,
                 Items.VOID_INGOT, Items.MACHINE_CORE, Items.VOID_INGOT
         }).register(plugin);
-        new StorageUnit(INFINITY, INFINITY_STORAGE, new ItemStack[] {
+        new StorageUnit(INFINITY, INFINITY_STORAGE, false, new ItemStack[] {
                 Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
                 Items.INFINITY, StorageUnit.VOID, Items.INFINITY,
                 Items.INFINITY, Items.VOID_INGOT, Items.INFINITY
@@ -123,7 +123,7 @@ public final class StorageUnit extends AbstractContainer {
     static final int DISPLAY_SLOT = MenuPreset.slot2;
     static final int STATUS_SLOT = DISPLAY_SLOT - 9;
     static final int OUTPUT_SLOT = MenuPreset.slot3;
-    private static final int INTERACT_SLOT = DISPLAY_SLOT + 9;
+    static final int INTERACT_SLOT = DISPLAY_SLOT + 9;
 
     /* Menu items */
     private static final ItemStack INTERACTION_ITEM = new CustomItem(Material.LIME_STAINED_GLASS_PANE,
@@ -139,12 +139,18 @@ public final class StorageUnit extends AbstractContainer {
     );
 
     /* Instance constants */
-    private final Map<Block, StorageCache> caches = new HashMap<>();
+    private final Map<Location, StorageCache> caches = new HashMap<>();
+    final boolean displayMax;
+    final String maxString;
+    final String emptyString;
     final int max;
 
-    private StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
+    private StorageUnit(SlimefunItemStack item, int max, boolean displayMax, ItemStack[] recipe) {
         super(Categories.STORAGE, item, StorageForge.TYPE, recipe);
         this.max = max;
+        this.displayMax = displayMax;
+        this.maxString = " / " + LorePreset.format(max) + " &7(";
+        this.emptyString = "&6Stored: &e0" + (displayMax ? " / " + LorePreset.format(max) + " &7(0%)" : "");
 
         addItemHandler(new BlockTicker() {
             @Override
@@ -154,7 +160,7 @@ public final class StorageUnit extends AbstractContainer {
 
             @Override
             public void tick(Block b, SlimefunItem item, Config data) {
-                StorageCache cache = StorageUnit.this.caches.get(b);
+                StorageCache cache = StorageUnit.this.caches.get(b.getLocation());
                 if (cache != null) {
                     cache.input();
                     cache.output(true);
@@ -166,15 +172,12 @@ public final class StorageUnit extends AbstractContainer {
 
     @Override
     protected void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        StorageCache cache = new StorageCache(StorageUnit.this, b, menu);
-        this.caches.put(b, cache);
-        menu.addMenuClickHandler(STATUS_SLOT, cache::voidExcessHandler);
-        menu.addMenuClickHandler(INTERACT_SLOT, cache::interactHandler);
+        this.caches.put(b.getLocation(), new StorageCache(StorageUnit.this, b, menu));
     }
 
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-        this.caches.remove(e.getBlock()).destroy(e);
+        this.caches.remove(l).destroy(e);
     }
 
     @Override
@@ -182,7 +185,7 @@ public final class StorageUnit extends AbstractContainer {
         Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
         if (data != null) {
             InfinityExpansion.inst().runSync(() -> {
-                StorageCache cache = this.caches.get(b);
+                StorageCache cache = this.caches.get(b.getLocation());
                 cache.load(data.getFirstValue(), data.getFirstValue().getItemMeta());
                 cache.setAmount(data.getSecondValue());
             });
@@ -200,7 +203,7 @@ public final class StorageUnit extends AbstractContainer {
     @Nonnull
     @Override
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack itemStack) {
-        StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getBlock());
+        StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getLocation());
         if (cache != null) {
             if (flow == ItemTransportFlow.INSERT) {
                 // check if input can be stored

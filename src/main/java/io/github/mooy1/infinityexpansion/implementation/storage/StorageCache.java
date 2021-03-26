@@ -27,8 +27,8 @@ import org.bukkit.persistence.PersistentDataType;
 import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.DISPLAY_KEY;
 import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.DISPLAY_SLOT;
 import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.EMPTY_KEY;
-import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.INFINITY_STORAGE;
 import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.INPUT_SLOT;
+import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.INTERACT_SLOT;
 import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.OUTPUT_SLOT;
 import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.STATUS_SLOT;
 
@@ -72,6 +72,9 @@ final class StorageCache {
     StorageCache(StorageUnit unit, Block block, BlockMenu menu) {
         this.unit = unit;
         this.menu = menu;
+        
+        menu.addMenuClickHandler(STATUS_SLOT, this::voidExcessHandler);
+        menu.addMenuClickHandler(INTERACT_SLOT, this::interactHandler);
         
         Location l = block.getLocation();
 
@@ -168,9 +171,6 @@ final class StorageCache {
     }
 
     void input() {
-        if (this.amount == this.unit.max) {
-            return;
-        }
         ItemStack input = this.menu.getItemInSlot(INPUT_SLOT);
         if (input == null) {
             return;
@@ -179,21 +179,21 @@ final class StorageCache {
             // set the stored item to input
             setAmount(input.getAmount());
             setStored(input);
-            this.menu.replaceExistingItem(INPUT_SLOT, null);
+            this.menu.replaceExistingItem(INPUT_SLOT, null, false);
         } else if (this.voidExcess) {
             // input and void excess
             if (matches(input)) {
-                input.setAmount(0);
-                if (this.amount != this.unit.max) {
+                if (this.amount < this.unit.max) {
                     setAmount(Math.min(this.amount + input.getAmount(), this.unit.max));
                 }
+                input.setAmount(0);
             }
-        } else {
+        } else if (this.amount < this.unit.max) {
             // input as much as possible
             if (input.getAmount() + this.amount >= this.unit.max) {
                 // last item
-                input.setAmount(input.getAmount() - (this.unit.max - this.amount));
                 setAmount(this.unit.max);
+                input.setAmount(input.getAmount() - (this.unit.max - this.amount));
             } else {
                 setAmount(this.amount + input.getAmount());
                 input.setAmount(0);
@@ -225,46 +225,22 @@ final class StorageCache {
 
     void updateStatus(Block block) {
         if (this.menu.hasViewer()) {
-            if (this.unit.max == INFINITY_STORAGE) {
-                if (this.amount == 0) {
-                    this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                            Material.CYAN_STAINED_GLASS_PANE,
-                            "&bStatus",
-                            "&6Stored: &e0",
-                            "&7Stacks: 0",
-                            this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE,
-                            "&7(Click to toggle)"
-                    ), false);
-                } else {
-                    this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                            Material.CYAN_STAINED_GLASS_PANE,
-                            "&bStatus",
-                            "&6Stored: &e" + LorePreset.format(this.amount),
-                            "&7Stacks: " + this.amount / this.material.getMaxStackSize(),
-                            this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE,
-                            "&7(Click to toggle)"
-                    ), false);
-                }
+            if (this.amount == 0) {
+                this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                        Material.CYAN_STAINED_GLASS_PANE,
+                        "&bStatus",
+                        this.unit.emptyString,
+                        this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE,
+                        "&7(Click to toggle)"
+                ), false);
             } else {
-                if (this.amount == 0) {
-                    this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                            Material.CYAN_STAINED_GLASS_PANE,
-                            "&bStatus",
-                            "&6Stored: &e0 / " + LorePreset.format(this.unit.max) + " &7(0%)",
-                            "&7Stacks: 0",
-                            this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE,
-                            "&7(Click to toggle)"
-                    ), false);
-                } else {
-                    this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                            Material.CYAN_STAINED_GLASS_PANE,
-                            "&bStatus",
-                            "&6Stored: &e" + LorePreset.format(this.amount) + " / " + LorePreset.format(this.unit.max) + " &7(" + (100 * this.amount) / this.unit.max + "%)",
-                            "&7Stacks: " + this.amount / this.material.getMaxStackSize(),
-                            this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE,
-                            "&7(Click to toggle)"
-                    ), false);
-                }
+                this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                        Material.CYAN_STAINED_GLASS_PANE,
+                        "&bStatus",
+                        "&6Stored: &e" + LorePreset.format(this.amount) + (this.unit.displayMax ? this.unit.maxString + (100 * this.amount) / this.unit.max + "%)" : ""),
+                        this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE,
+                        "&7(Click to toggle)"
+                ), false);
             }
         }
         

@@ -74,11 +74,6 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
     }
 
     @Nonnull
-    private static ItemStack makeSimulating(int energy) {
-        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + Math.round(energy * SlimefunConstants.TICKER_TPS) + " J/s)");
-    }
-
-    @Nonnull
     @Override
     public EnergyNetComponentType getEnergyComponentType() {
         return EnergyNetComponentType.CONSUMER;
@@ -167,7 +162,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
         int xp = Util.getIntData("xp", b.getLocation());
         
         if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS_SLOT, makeSimulating(energy));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aSimulating... (" + LorePreset.format(energy * SlimefunConstants.TICKER_TPS) + " J/s)"));
             inv.replaceExistingItem(XP_Slot, makeXpItem(xp));
         }
 
