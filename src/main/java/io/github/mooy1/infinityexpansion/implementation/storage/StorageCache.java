@@ -275,7 +275,7 @@ final class StorageCache {
             } else {
                 withdrawLast(p);
             }
-        } else {
+        } else if (this.amount != 0) {
             if (action.isRightClicked()) {
                 if (action.isShiftClicked()) {
                     withdraw(p, this.amount - 1);
@@ -364,7 +364,7 @@ final class StorageCache {
     }
 
     private void withdrawLast(Player p) {
-        if (p.getInventory().addItem(createItem(1)).isEmpty()) {
+        if (p.getInventory().addItem(createItem(1)).get(0) == null) {
             setEmpty();
         }
     }

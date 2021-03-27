@@ -1,15 +1,16 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
-import io.github.mooy1.infinityexpansion.implementation.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
+import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
+import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -36,7 +37,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
-public final class InfinityReactor extends AbstractGenerator implements RecipeDisplayItem {
+public final class InfinityReactor extends AbstractContainer implements EnergyNetProvider, RecipeDisplayItem {
     
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "INFINITY_REACTOR",
@@ -51,8 +52,8 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
     
     public static final int ENERGY = 90_000;
     public static final int STORAGE = 90_000_000;
-    public static final int INFINITY_INTERVAL = (int) (86400 * SlimefunConstants.TICKER_TPS); 
-    public static final int VOID_INTERVAL = (int) (14400 * SlimefunConstants.TICKER_TPS);
+    public static final int INFINITY_INTERVAL = (int) (86400 * TickerUtils.TPS); 
+    public static final int VOID_INTERVAL = (int) (14400 * TickerUtils.TPS);
     public static final int[] INPUT_SLOTS = {
             MenuPreset.slot1, MenuPreset.slot3
     };
@@ -201,11 +202,6 @@ public final class InfinityReactor extends AbstractGenerator implements RecipeDi
         }
         BlockStorage.addBlockInfo(l, "progress", String.valueOf(progress + 1));
         return ENERGY;
-    }
-
-    @Override
-    public int getStatus() {
-        return STATUS_SLOT;
     }
 
     @Override

@@ -1,10 +1,12 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.recipes.largestrict.StrictLargeOutput;
-import io.github.mooy1.infinitylib.recipes.largestrict.StrictLargeRecipeMap;
 import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.recipes.AdvancedRecipeMap;
+import io.github.mooy1.infinitylib.slimefun.recipes.RecipeMap;
+import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictMultiInput;
+import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictMultiOutput;
 import io.github.mooy1.infinitylib.slimefun.utils.DelayedRecipeType;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
@@ -41,11 +43,11 @@ public abstract class AbstractCrafter extends TickingContainer {
     private static final int[] STATUS_BORDER = {14, 32};
     private static final int STATUS_SLOT = 23;
 
-    private final StrictLargeRecipeMap recipes = new StrictLargeRecipeMap(9);
+    private final RecipeMap<StrictMultiInput, StrictMultiOutput> recipes = new AdvancedRecipeMap<>();
     
     public AbstractCrafter(Category category, SlimefunItemStack stack, DelayedRecipeType recipeType, RecipeType type, ItemStack[] recipe) {
         super(category, stack, type, recipe);
-        recipeType.accept(this.recipes::put);
+        recipeType.accept((stacks, itemStack) -> this.recipes.put(new StrictMultiInput(stacks), new StrictMultiOutput(itemStack)));
     }
 
     @Override
@@ -159,7 +161,7 @@ public abstract class AbstractCrafter extends TickingContainer {
     
     @Nullable
     private Pair<ItemStack, int[]> getOutput(@Nonnull BlockMenu inv) {
-        StrictLargeOutput output = this.recipes.get(inv, INPUT_SLOTS);
+        StrictMultiOutput output = this.recipes.get(new StrictMultiInput(inv, INPUT_SLOTS));
         if (output == null) {
             return null;
         }

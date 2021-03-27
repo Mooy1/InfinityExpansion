@@ -1,14 +1,16 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.Categories;
-import io.github.mooy1.infinityexpansion.implementation.InfinityCategory;
+import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.InfinityCategory;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.recipes.large.LargeRecipeMap;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.recipes.RecipeMap;
+import io.github.mooy1.infinitylib.slimefun.recipes.SimpleRecipeMap;
+import io.github.mooy1.infinitylib.slimefun.recipes.inputs.MultiInput;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -61,13 +63,13 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
     private static final int[] STATUS_BORDER = {6, 8, 15, 17, 24, 25, 26};
     private static final int RECIPE_SLOT = 7;
     
-    public static final LargeRecipeMap RECIPES = new LargeRecipeMap(36);
+    public static final RecipeMap<MultiInput, ItemStack> RECIPES = new SimpleRecipeMap<>();
     public static final LinkedHashMap<String, Pair<SlimefunItemStack, ItemStack[]>> ITEMS = new LinkedHashMap<>();
     public static final List<String> IDS = new ArrayList<>();
     
     public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("infinity_forge"), ITEM, (stacks, stack) -> {
         SlimefunItemStack item = (SlimefunItemStack) stack;
-        RECIPES.put(stacks, item);
+        RECIPES.put(new MultiInput(stacks), item);
         ITEMS.put(item.getItemId(), new Pair<>(item, stacks));
         IDS.add(item.getItemId());
     }, "", "&cUse the infinity recipes category to see the correct recipe!");
@@ -121,7 +123,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
             return;
         }
         
-        ItemStack output = RECIPES.get(inv, INPUT_SLOTS);
+        ItemStack output = RECIPES.get(new MultiInput(inv, INPUT_SLOTS));
         
         if (output == null) { //invalid
             p.sendMessage( ChatColor.RED + "Invalid Recipe!");
@@ -149,7 +151,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
     @Override
     public void update(@Nonnull BlockMenu inv) {
 
-        ItemStack output = RECIPES.get(inv, INPUT_SLOTS);
+        ItemStack output = RECIPES.get(new MultiInput(inv, INPUT_SLOTS));
 
         if (output == null) { //invalid
 

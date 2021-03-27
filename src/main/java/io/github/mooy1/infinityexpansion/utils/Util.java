@@ -16,7 +16,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Level;
 
 public final class Util {
@@ -126,7 +125,7 @@ public final class Util {
             }
 
         } else {
-            return Objects.equals(BlockStorage.getLocationInfo(b.getLocation(), "water_logged"), "true");
+            return "true".equals(BlockStorage.getLocationInfo(b.getLocation(), "water_logged"));
         }
     }
 

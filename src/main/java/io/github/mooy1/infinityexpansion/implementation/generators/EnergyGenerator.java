@@ -1,14 +1,15 @@
 package io.github.mooy1.infinityexpansion.implementation.generators;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.Categories;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractGenerator;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
+import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
+import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
+import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -40,7 +41,7 @@ import java.util.Objects;
  *
  * Thanks to panda for some stuff to work off of
  */
-public final class EnergyGenerator extends AbstractGenerator {
+public final class EnergyGenerator extends AbstractContainer implements EnergyNetProvider {
     
     private static final int HYDRO_ENERGY = 5;
     private static final int ADVANCED_HYDRO_ENERGY = 45;
@@ -239,7 +240,7 @@ public final class EnergyGenerator extends AbstractGenerator {
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&aGeneration",
                         "&7Type: &6" + type.status,
-                        "&7Generating: &6" + LorePreset.roundHundreds(gen * SlimefunConstants.TICKER_TPS) + " J/s ",
+                        "&7Generating: &6" + LorePreset.roundHundreds(gen * TickerUtils.TPS) + " J/s ",
                         "&7Stored: &6" + LorePreset.format(getCharge(l)) + " J"
                 ));
             }
@@ -306,11 +307,6 @@ public final class EnergyGenerator extends AbstractGenerator {
         return EnergyNetComponentType.GENERATOR;
     }
 
-    @Override
-    public int getStatus() {
-        return 4;
-    }
-
     @AllArgsConstructor
     private enum Type {
         WATER("Hydroelectric", false),
@@ -325,5 +321,5 @@ public final class EnergyGenerator extends AbstractGenerator {
         private final boolean more;
         
     }
-
+    
 }

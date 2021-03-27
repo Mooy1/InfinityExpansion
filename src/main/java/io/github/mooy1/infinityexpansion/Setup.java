@@ -1,6 +1,7 @@
-package io.github.mooy1.infinityexpansion.implementation;
+package io.github.mooy1.infinityexpansion;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.implementation.blocks.AdvancedAnvil;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.blocks.Strainer;
@@ -15,14 +16,13 @@ import io.github.mooy1.infinityexpansion.implementation.generators.InfinityReact
 import io.github.mooy1.infinityexpansion.implementation.machines.ConversionMachine;
 import io.github.mooy1.infinityexpansion.implementation.machines.GearTransformer;
 import io.github.mooy1.infinityexpansion.implementation.machines.GeoQuarry;
+import io.github.mooy1.infinityexpansion.implementation.machines.GrowingMachine;
 import io.github.mooy1.infinityexpansion.implementation.machines.MaterialGenerator;
 import io.github.mooy1.infinityexpansion.implementation.machines.PoweredBedrock;
 import io.github.mooy1.infinityexpansion.implementation.machines.Quarry;
 import io.github.mooy1.infinityexpansion.implementation.machines.ResourceSynthesizer;
 import io.github.mooy1.infinityexpansion.implementation.machines.SingularityConstructor;
 import io.github.mooy1.infinityexpansion.implementation.machines.StoneworksFactory;
-import io.github.mooy1.infinityexpansion.implementation.machines.TreeGrower;
-import io.github.mooy1.infinityexpansion.implementation.machines.VirtualFarm;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
 import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
@@ -86,8 +86,7 @@ public final class Setup {
         VoidHarvester.setup(plugin);
         SingularityConstructor.setup(plugin);
         ConversionMachine.setup(plugin);
-        VirtualFarm.setup(plugin);
-        TreeGrower.setup(plugin);
+        GrowingMachine.setup(plugin);
         MaterialGenerator.setup(plugin);
         MobDataCard.setup(plugin);
         new MobDataInfuser().register(plugin);

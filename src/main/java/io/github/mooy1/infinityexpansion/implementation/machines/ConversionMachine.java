@@ -1,13 +1,15 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.Categories;
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.recipes.normalstrict.StrictOutput;
-import io.github.mooy1.infinitylib.recipes.normalstrict.StrictRandomRecipeMap;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.recipes.AdvancedRecipeMap;
+import io.github.mooy1.infinitylib.slimefun.recipes.RecipeMap;
+import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictInput;
+import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictOutput;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -28,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Machines that convert 1 item to another with energy
@@ -41,19 +44,25 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
                 SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2,
                 new ItemStack(Material.WATER_BUCKET), SlimefunItems.FLUID_PUMP, new ItemStack(Material.WATER_BUCKET),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
-        }, 90, false, new ItemStack[] {
-                SlimefunItems.REACTOR_COOLANT_CELL,
-                SlimefunItems.NETHER_ICE_COOLANT_CELL
-        }, new ItemStack[] {
+        }, 90, new ItemStack[] {
                 new ItemStack(Material.ICE, 2),
                 new ItemStack(Material.MAGMA_BLOCK, 2)
+        }, new ItemStack[] {
+                SlimefunItems.REACTOR_COOLANT_CELL,
+                SlimefunItems.NETHER_ICE_COOLANT_CELL
         }).register(plugin);
 
         new ConversionMachine(DUST_EXTRACTOR, new ItemStack[] {
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
-        }, 240, true, new ItemStack[] {
+        }, 240, new ItemStack[] {
+                new ItemStack(Material.COBBLESTONE, 4),
+                new ItemStack(Material.ANDESITE, 4),
+                new ItemStack(Material.STONE, 4),
+                new ItemStack(Material.DIORITE, 4),
+                new ItemStack(Material.GRANITE, 4)
+        }, new ItemStack[] {
                 new SlimefunItemStack(SlimefunItems.COPPER_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.ZINC_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.TIN_DUST, 2),
@@ -63,48 +72,27 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
                 new SlimefunItemStack(SlimefunItems.GOLD_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.IRON_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 2)
-        }, new ItemStack[] {
-                new ItemStack(Material.COBBLESTONE, 4),
-                new ItemStack(Material.ANDESITE, 4),
-                new ItemStack(Material.STONE, 4),
-                new ItemStack(Material.DIORITE, 4),
-                new ItemStack(Material.GRANITE, 4)
         }).register(plugin);
 
         new ConversionMachine(URANIUM_EXTRACTOR, new ItemStack[] {
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2,
                 SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3, new ItemStack(Material.CRAFTING_TABLE), // TODO REPLACE
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
-        }, 240, false, new ItemStack[] {
-                SlimefunItems.SMALL_URANIUM
-        }, new ItemStack[] {
+        }, 240, new ItemStack[] {
                 new ItemStack(Material.COBBLESTONE, 4),
                 new ItemStack(Material.ANDESITE, 4),
                 new ItemStack(Material.STONE, 4),
                 new ItemStack(Material.DIORITE, 4),
                 new ItemStack(Material.GRANITE, 4)
+        }, new ItemStack[] {
+                SlimefunItems.SMALL_URANIUM
         }).register(plugin);
 
         new ConversionMachine(DECOMPRESSOR, new ItemStack[] {
                 Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE, Items.MAGSTEEL_PLATE,
                 new ItemStack(Material.STICKY_PISTON), SlimefunItems.ELECTRIC_PRESS_2, new ItemStack(Material.STICKY_PISTON),
                 Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT,
-        }, 60, false, new ItemStack[] {
-                new ItemStack(Material.EMERALD, 9),
-                new ItemStack(Material.DIAMOND, 9),
-                new ItemStack(Material.GOLD_INGOT, 9),
-                new ItemStack(Material.IRON_INGOT, 9),
-                new ItemStack(Material.NETHERITE_INGOT, 9),
-                new ItemStack(Material.REDSTONE, 9),
-                new ItemStack(Material.QUARTZ, 4),
-                new ItemStack(Material.LAPIS_LAZULI, 9),
-                new ItemStack(Material.COAL, 9),
-                new SlimefunItemStack(Items.COBBLE_4, 9),
-                new SlimefunItemStack(Items.COBBLE_3, 9),
-                new SlimefunItemStack(Items.COBBLE_2, 9),
-                new SlimefunItemStack(Items.COBBLE_1, 9),
-                new ItemStack(Material.COBBLESTONE, 9)
-        }, new ItemStack[] {
+        }, 60, new ItemStack[] {
                 new ItemStack(Material.EMERALD_BLOCK, 1),
                 new ItemStack(Material.DIAMOND_BLOCK, 1),
                 new ItemStack(Material.GOLD_BLOCK, 1),
@@ -119,6 +107,21 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
                 Items.COBBLE_3,
                 Items.COBBLE_2,
                 Items.COBBLE_1
+        }, new ItemStack[] {
+                new ItemStack(Material.EMERALD, 9),
+                new ItemStack(Material.DIAMOND, 9),
+                new ItemStack(Material.GOLD_INGOT, 9),
+                new ItemStack(Material.IRON_INGOT, 9),
+                new ItemStack(Material.NETHERITE_INGOT, 9),
+                new ItemStack(Material.REDSTONE, 9),
+                new ItemStack(Material.QUARTZ, 4),
+                new ItemStack(Material.LAPIS_LAZULI, 9),
+                new ItemStack(Material.COAL, 9),
+                new SlimefunItemStack(Items.COBBLE_4, 9),
+                new SlimefunItemStack(Items.COBBLE_3, 9),
+                new SlimefunItemStack(Items.COBBLE_2, 9),
+                new SlimefunItemStack(Items.COBBLE_1, 9),
+                new ItemStack(Material.COBBLESTONE, 9)
         }).register(plugin);
     }
 
@@ -162,24 +165,24 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
 
     private final int energy;
     private final List<ItemStack> displayRecipes = new ArrayList<>();
-    private final StrictRandomRecipeMap recipes = new StrictRandomRecipeMap();
+    private final RecipeMap<StrictInput, StrictOutput> recipes = new AdvancedRecipeMap<>();
 
-    public ConversionMachine(SlimefunItemStack item, ItemStack[] recipe, int energy, boolean random, ItemStack[] outputs, ItemStack[] inputs) {
+    private ConversionMachine(SlimefunItemStack item, ItemStack[] recipe, int energy, ItemStack[] inputs, ItemStack[] outputs) {
         super(Categories.ADVANCED_MACHINES, item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe);
         this.energy = energy;
         
-        if (inputs.length == outputs.length) { //1 to 1
+        if (inputs.length == outputs.length) {
             for (int i = 0 ; i < inputs.length ; i++) {
                 this.displayRecipes.add(inputs[i]);
                 this.displayRecipes.add(outputs[i]);
-                this.recipes.put(inputs[i], outputs[i], 1);
+                this.recipes.put(new StrictInput(inputs[i]), new StrictOutput(outputs[i]));
             }
-        } else { //each input gets each output
+        } else {
             for (ItemStack input : inputs) {
+                this.recipes.put(new StrictInput(input), new RandomizedOutput(outputs));
                 for (ItemStack output : outputs) {
                     this.displayRecipes.add(input);
                     this.displayRecipes.add(output);
-                    this.recipes.put(input, output, 1);
                 }
             }
         }
@@ -230,7 +233,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
             return false;
         }
 
-        StrictOutput output = this.recipes.get(input);
+        StrictOutput output = this.recipes.get(new StrictInput(input));
 
         if (output == null) {
             if (inv.hasViewer()) {
@@ -274,6 +277,22 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
     @Override
     protected int getEnergyConsumption() {
         return this.energy;
+    }
+    
+    private static final class RandomizedOutput extends StrictOutput {
+
+        private final ItemStack[] items;
+
+        public RandomizedOutput(ItemStack... outputs) {
+            super(outputs[0]);
+            this.items = outputs;
+        }
+
+        @Override
+        public ItemStack getOutput() {
+            return this.items[ThreadLocalRandom.current().nextInt(this.items.length)];
+        }
+
     }
 
 }
