@@ -37,7 +37,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -61,12 +60,11 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
             "&bVein Miner Rune",
             "&7Upgrades a tool to vein-mine certain materials"
     );
-    
-    private static final Set<String> ALLOWED = new HashSet<>(Arrays.asList(
+    private static final String[] ALLOWED = {
             "_ORE", "_LOG", "_WOOD", "GILDED", "SOUL", "GRAVEL",
             "MAGMA", "OBSIDIAN", "DIORITE", "ANDESITE", "GRANITE", "_LEAVES",
             "GLASS", "DIRT", "GRASS", "DEBRIS", "GLOWSTONE"
-    ));
+    };
     private static final double RANGE = 1.5;
     private static final int MAX = 64;
     private static final String LORE = ChatColor.AQUA + "Veinminer - Crouch to use";
@@ -207,15 +205,11 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         Location l = b.getLocation();
 
         if (BlockStorage.hasBlockInfo(l)) return;
-
-        boolean cd = this.cooldowns.check(p.getUniqueId(), 1000);
         
-        if (!cd) {
+        if (!this.cooldowns.checkAndPut(p.getUniqueId(), 1000)) {
             p.sendMessage(ChatColor.GOLD + "You must wait 1 second before using again!");
             return;
         }
-
-        this.cooldowns.put(p.getUniqueId());
         
         Set<Block> found = new HashSet<>();
         Set<Location> checked = new HashSet<>();
@@ -252,10 +246,8 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     
     private static boolean isAllowed(String mat) {
         for (String test : ALLOWED) {
-            if (test.startsWith("_")) {
-                if (mat.endsWith(test)) return true;
-            } else {
-                if (mat.contains(test)) return true;
+            if (mat.contains(test)) {
+                return true;
             }
         }
         return false;

@@ -180,23 +180,23 @@ final class StorageCache {
             setAmount(input.getAmount());
             setStored(input);
             this.menu.replaceExistingItem(INPUT_SLOT, null, false);
-        } else if (this.voidExcess) {
-            // input and void excess
-            if (matches(input)) {
+        } else if (matches(input)) {
+            if (this.voidExcess) {
+                // input and void excess
                 if (this.amount < this.unit.max) {
                     setAmount(Math.min(this.amount + input.getAmount(), this.unit.max));
                 }
                 input.setAmount(0);
-            }
-        } else if (this.amount < this.unit.max) {
-            // input as much as possible
-            if (input.getAmount() + this.amount >= this.unit.max) {
-                // last item
-                setAmount(this.unit.max);
-                input.setAmount(input.getAmount() - (this.unit.max - this.amount));
-            } else {
-                setAmount(this.amount + input.getAmount());
-                input.setAmount(0);
+            } else if (this.amount < this.unit.max) {
+                // input as much as possible
+                if (input.getAmount() + this.amount >= this.unit.max) {
+                    // last item
+                    setAmount(this.unit.max);
+                    input.setAmount(input.getAmount() - (this.unit.max - this.amount));
+                } else {
+                    setAmount(this.amount + input.getAmount());
+                    input.setAmount(0);
+                }
             }
         }
     }
