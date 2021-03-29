@@ -191,8 +191,8 @@ final class StorageCache {
                 // input as much as possible
                 if (input.getAmount() + this.amount >= this.unit.max) {
                     // last item
-                    setAmount(this.unit.max);
                     input.setAmount(input.getAmount() - (this.unit.max - this.amount));
+                    setAmount(this.unit.max);
                 } else {
                     setAmount(this.amount + input.getAmount());
                     input.setAmount(0);
