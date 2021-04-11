@@ -172,6 +172,7 @@ public final class StorageUnit extends AbstractContainer {
 
     @Override
     protected void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        // TODO move creation to compute if absent
         this.caches.put(b.getLocation(), new StorageCache(StorageUnit.this, b, menu));
     }
 

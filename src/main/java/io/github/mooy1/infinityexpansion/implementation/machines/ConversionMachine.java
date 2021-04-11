@@ -10,6 +10,7 @@ import io.github.mooy1.infinitylib.slimefun.recipes.AdvancedRecipeMap;
 import io.github.mooy1.infinitylib.slimefun.recipes.RecipeMap;
 import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictInput;
 import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictOutput;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotHopperable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -37,7 +38,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Mooy1
  */
-public final class ConversionMachine extends AbstractMachine implements RecipeDisplayItem {
+public final class ConversionMachine extends AbstractMachine implements RecipeDisplayItem, NotHopperable {
 
     public static void setup(InfinityExpansion plugin) {
         new ConversionMachine(EXTREME_FREEZER, new ItemStack[] {

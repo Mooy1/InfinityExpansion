@@ -61,7 +61,7 @@ public abstract class AbstractEnergyCrafter extends TickingContainer implements 
 
     @Nonnull
     @Override
-    protected final int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
+    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
         return new int[0];
     }
 

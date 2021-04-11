@@ -6,6 +6,7 @@ import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachin
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotHopperable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -33,7 +34,7 @@ import java.util.List;
 /**
  * Turns cobble into stuff
  */
-public final class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem {
+public final class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem, NotHopperable {
     
     public static final SlimefunItemStack ITEM = new SlimefunItemStack(
             "STONEWORKS_FACTORY",

@@ -32,21 +32,14 @@ public final class InfinityExpansion extends AbstractAddon {
         
         getMetrics().addCustomChart(new Metrics.SimplePie("difficulty", () -> String.valueOf(this.difficulty)));
         
-        boolean lXInstalled = getServer().getPluginManager().getPlugin("LiteXpansion") != null;
-        
-        if (lXInstalled) {
+        if (getServer().getPluginManager().getPlugin("LiteXpansion") != null) {
             runSync(() -> log(Level.WARNING,
-                    "###################################################################################",
-                    "LiteXpansion has done some nerfs on a few of this addon's items,",
-                    "specifically solar panels, aswell as some of Slimefun's items.",
-                    "If you don't want these nerfs, you will need to remove LiteXpansion.",
-                    "If you want to keep LiteXpansion, make a suggestion to them to add config options.",
-                    "Any complaints as a result of this should be directed to LiteXpansion.",
-                    "###################################################################################"
+                    "########################################################",
+                    "LiteXpansion nerfs energy generation in this addon.",
+                    "You can disable these nerfs in the LiteXpansion config.",
+                    "########################################################"
             ));
         }
-        
-        getMetrics().addCustomChart(new Metrics.SimplePie("litexpansion_installed", () -> String.valueOf(lXInstalled)));
         
         Setup.setup(this);
     }

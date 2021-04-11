@@ -13,7 +13,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -70,57 +69,62 @@ final class StorageCache {
     private String displayName;
 
     StorageCache(StorageUnit unit, Block block, BlockMenu menu) {
+        
+        // menu click handlers
+        menu.addMenuClickHandler(STATUS_SLOT, (p, slot, item, action) -> {
+            voidExcessHandler();
+            return false;
+        });
+        menu.addMenuClickHandler(INTERACT_SLOT, (p, slot, item, action) -> {
+            interactHandler(p, action);
+            return false;
+        });
+        
+        // instance vars
         this.unit = unit;
         this.menu = menu;
-        
-        menu.addMenuClickHandler(STATUS_SLOT, this::voidExcessHandler);
-        menu.addMenuClickHandler(INTERACT_SLOT, this::interactHandler);
-        
-        Location l = block.getLocation();
-
-        this.voidExcess = BlockStorage.getLocationInfo(l, VOID_EXCESS) != null;
-        this.amount = Util.getIntData(STORED_AMOUNT, l);
+        this.voidExcess = BlockStorage.getLocationInfo(block.getLocation(), VOID_EXCESS) != null;
+        this.amount = Util.getIntData(STORED_AMOUNT, block.getLocation());
 
         if (this.amount == 0) {
+            // empty
             this.displayName = EMPTY_DISPLAY_NAME;
             menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-            return;
-        }
-
-        ItemStack display = menu.getItemInSlot(DISPLAY_SLOT);
-        if (display != null) {
-            ItemMeta copy = display.getItemMeta();
-
-            // fix if they somehow store the empty item
-            if (copy.getPersistentDataContainer().has(EMPTY_KEY, PersistentDataType.BYTE)) {
-                // attempt to recover the correct item from output
-                ItemStack output = menu.getItemInSlot(OUTPUT_SLOT);
-                if (output != null) {
-                    setStored(output);
-                    menu.replaceExistingItem(OUTPUT_SLOT, null);
-                } else {
-                    setEmpty();
-                }
-                return;
-            }
-
-            load(display, copy);
-
         } else {
-            // attempt to load old data
-            String oldID = BlockStorage.getLocationInfo(l, OLD_STORED_ITEM);
-            if (oldID != null) {
-                BlockStorage.addBlockInfo(l, OLD_STORED_ITEM, null);
-                ItemStack item = StackUtils.getItemByIDorType(oldID);
-                if (item != null) {
-                    load(item, item.getItemMeta());
+            // something is stored
+            ItemStack display = menu.getItemInSlot(DISPLAY_SLOT);
+            if (display != null) {
+                ItemMeta copy = display.getItemMeta();
+                // fix if they somehow store the empty item
+                if (copy.getPersistentDataContainer().has(EMPTY_KEY, PersistentDataType.BYTE)) {
+                    // attempt to recover the correct item from output
+                    ItemStack output = menu.getItemInSlot(OUTPUT_SLOT);
+                    if (output != null) {
+                        setStored(output);
+                        menu.replaceExistingItem(OUTPUT_SLOT, null);
+                    } else {
+                        setEmpty();
+                    }
+                } else {
+                    // load the item in menu
+                    load(display, copy);
+                }
+            } else {
+                // attempt to load old data
+                String oldID = BlockStorage.getLocationInfo(block.getLocation(), OLD_STORED_ITEM);
+                if (oldID != null) {
+                    BlockStorage.addBlockInfo(block.getLocation(), OLD_STORED_ITEM, null);
+                    ItemStack item = StackUtils.getItemByIDorType(oldID);
+                    if (item != null) {
+                        load(item, item.getItemMeta());
+                    } else {
+                        // shouldn't happen
+                        setEmpty();
+                    }
                 } else {
                     // shouldn't happen
                     setEmpty();
                 }
-            } else {
-                // shouldn't happen
-                setEmpty();
             }
         }
     }
@@ -267,8 +271,7 @@ final class StorageCache {
                 && sign.getRelative(((WallSign) sign.getBlockData()).getFacing().getOppositeFace()).equals(block);
     }
     
-    @SuppressWarnings("unused")
-    boolean interactHandler(Player p, int slot, ItemStack item, ClickAction action) {
+    private void interactHandler(Player p, ClickAction action) {
         if (this.amount == 1) {
             if (action.isShiftClicked() && !action.isRightClicked()) {
                 depositAll(p);
@@ -290,11 +293,9 @@ final class StorageCache {
                 }
             }
         }
-        return false;
     }
-
-    @SuppressWarnings("unused")
-    boolean voidExcessHandler(Player p, int slot, ItemStack item, ClickAction action) {
+    
+    private void voidExcessHandler() {
         if (this.voidExcess) {
             BlockStorage.addBlockInfo(this.menu.getLocation(), VOID_EXCESS, null);
             LoreUtils.replaceLine(this.menu.getItemInSlot(STATUS_SLOT), VOID_EXCESS_TRUE, VOID_EXCESS_FALSE);
@@ -304,7 +305,6 @@ final class StorageCache {
             LoreUtils.replaceLine(this.menu.getItemInSlot(STATUS_SLOT), VOID_EXCESS_FALSE, VOID_EXCESS_TRUE);
             this.voidExcess = true;
         }
-        return false;
     }
     
     private void setStored(ItemStack input) {
