@@ -1,17 +1,17 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.items.LoreUtils;
-import io.github.mooy1.infinitylib.players.CoolDownMap;
-import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.SoulboundRune;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.annotation.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -35,16 +35,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.players.CoolDownMap;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.SoulboundRune;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 /**
  * A VeinMiner rune, most code from {@link SoulboundRune}

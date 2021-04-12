@@ -1,16 +1,5 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.items.LoreUtils;
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
-import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,6 +11,18 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.utils.Util;
+import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.DISPLAY_KEY;
 import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit.DISPLAY_SLOT;
@@ -37,9 +38,6 @@ import static io.github.mooy1.infinityexpansion.implementation.storage.StorageUn
  * @author Mooy1
  */
 final class StorageCache {
-
-    /* Configuration */
-    private static final boolean DISPLAY_SIGNS = InfinityExpansion.inst().getConfig().getBoolean("storage-unit-options.display-signs");
 
     /* Menu items */
     private static final ItemStack EMPTY_ITEM = new CustomItem(Material.BARRIER, meta -> {
@@ -248,7 +246,7 @@ final class StorageCache {
             }
         }
         
-        if (DISPLAY_SIGNS && (InfinityExpansion.inst().getGlobalTick() & 15) == 0) {
+        if ((InfinityExpansion.inst().getGlobalTick() & 15) == 0) {
             Block check = block.getRelative(0, 1, 0);
             if (SlimefunTag.SIGNS.isTagged(check.getType())
                     || checkWallSign(check = block.getRelative(1, 0, 0), block)

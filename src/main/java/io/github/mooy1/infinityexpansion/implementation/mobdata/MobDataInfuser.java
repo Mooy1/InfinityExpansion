@@ -1,26 +1,29 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
-import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.utils.DelayedRecipeType;
-import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
-import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import javax.annotation.Nonnull;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.recipes.AdvancedRecipeMap;
+import io.github.mooy1.infinitylib.slimefun.recipes.RecipeMap;
+import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictMultiInput;
+import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictMultiOutput;
+import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
+import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 public final class MobDataInfuser extends AbstractCrafter implements EnergyNetComponent {
     
@@ -33,10 +36,12 @@ public final class MobDataInfuser extends AbstractCrafter implements EnergyNetCo
             LorePreset.energy(MobDataInfuser.ENERGY) + "per use"
     );
     private static final int ENERGY = 20000;
-    public static final DelayedRecipeType TYPE = new DelayedRecipeType(InfinityExpansion.inst(), ITEM);
+    private static final RecipeMap<StrictMultiInput, StrictMultiOutput> RECIPES = new AdvancedRecipeMap<>();
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("mob_data_infuser"), ITEM,
+            ((stacks, itemStack) -> RECIPES.put(new StrictMultiInput(stacks), new StrictMultiOutput(itemStack))));
 
     public MobDataInfuser() {
-        super(Categories.MOB_SIMULATION, ITEM, TYPE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        super(Categories.MOB_SIMULATION, ITEM, RECIPES, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Items.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CIRCUIT,
                 SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CORE, SlimefunItems.REINFORCED_ALLOY_INGOT,
                 Items.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Items.MACHINE_CIRCUIT
@@ -54,7 +59,7 @@ public final class MobDataInfuser extends AbstractCrafter implements EnergyNetCo
         return ChatColor.RED + "Not enough energy!";
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public ItemStack preCraftItem(@Nonnull Location l, @Nonnull BlockMenu inv) {
         return MenuPreset.notEnoughEnergy;

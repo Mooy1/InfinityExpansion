@@ -1,41 +1,29 @@
-# -----
-# 
-# balance-options:
-# 
-# difficulty: (default 1) (range .1 - 10)
-# the overall difficulty of this addon, affecting energy generation and consumption, item production, and recipe costs
-# 
-# allow-sf-item-transform: (default false)
-# Will allow the gear transformer to change slimefun gear's material. Diamond tools can already be upgraded to netherite, 
-# but some addon developers do not want there gear to be transformable so change this at your own risk...
-# 
-# quarry-nether-materials-in-overworld: (default false)
-# Allow quarries to mine quartz, netherite, netherrack in any world
-# 
-# -----
-# 
-# advanced-anvil-max-levels: 
-# These are the maximum level of enchants that can be obtained by combining 2 of the same enchant of the same level.
-# 
-# -----
-# 
-# storage-unit-options: 
-# display-signs: (default true)
-# if true, signs connected to storage units will update wither the stored item and amount, this may increase timings
-# 
-# -----
-# 
-# infinity-enchant-levels:
-# levels of infinity gear. this will not affect existing items. adding more enchants wont have any effect, only change levels. 
-# KEEP IN MIND PROTECTION LEVELS PAST 10 ARE PURELY COSMETIC AND ARE THE SAME AS 5.
-# 
-# -----
 balance-options:
-  difficulty: 1.0
+  
+  # Increases or decreases the cost of infinity singularities
+  singularity-cost-multiplier: 1.0
+  
+  # Will allow the gear transformer to change slimefun gear's material. Diamond tools can already be upgraded to netherite, 
+  # but some addon developers do not want there gear to be transformable so change this at your own risk.
   allow-sf-item-transform: false
-  quarry-nether-materials-in-overworld: false
-storage-unit-options:
-  display-signs: true
+  
+mob-simulation-options:
+
+  # The number of slimefun ticks it takes to output xp and drops. 1 slimefun ticks = .6 seconds by default
+  ticks-per-output: 20
+
+  # Multiplies amount of xp gained from mob simulation
+  xp-multiplier: 1.0
+  
+quarry-options:
+
+  # The number of slimefun ticks it takes to mine 1 block. 1 slimefun ticks = .6 seconds by default
+  ticks-per-output: 10
+
+  # Allow quarries to mine quartz, netherite, netherrack in any world
+  output-nether-materials-in-overworld: false
+  
+# These are the maximum level of enchants that can be obtained by combining 2 of the same enchant of the same level.
 advanced-anvil-max-levels:
   sharpness: 9
   bane-of-arthropods: 9
@@ -48,6 +36,9 @@ advanced-anvil-max-levels:
   thorns: 13
   looting: 6
   unbreaking: 13
+
+# levels of infinity gear. this will not affect existing items. adding more enchants wont have any effect, only change levels. 
+# protection caps out at 20 levels across all 4 pieces of gear. So 10+10+10+10 is still the same as 5+5+5+5.
 infinity-enchant-levels:
   blade:
     unbreakable: true

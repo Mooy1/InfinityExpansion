@@ -1,5 +1,17 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
@@ -20,16 +32,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * harvests void bits from... the void
@@ -79,7 +81,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = (int) (100 * InfinityExpansion.inst().getDifficulty()) + 900;
+    private static final int TIME = 1000;
 
     private final int speed;
     private final int energy;

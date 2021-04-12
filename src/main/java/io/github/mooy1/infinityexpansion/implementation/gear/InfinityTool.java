@@ -1,17 +1,18 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
+import javax.annotation.Nonnull;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * tools

@@ -1,5 +1,13 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
+import javax.annotation.Nonnull;
+
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
@@ -10,13 +18,6 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.ProtectiveArmor;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import io.github.thebusybiscuit.slimefun4.implementation.items.armor.SlimefunArmorPiece;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
-import javax.annotation.Nonnull;
 
 /**
  * armor

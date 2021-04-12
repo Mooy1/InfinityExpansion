@@ -1,7 +1,9 @@
 package io.github.mooy1.infinityexpansion.commands;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import org.bukkit.ChatColor;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Material;
@@ -9,8 +11,8 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nonnull;
-import java.util.List;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
 public final class SetData extends AbstractCommand {
 

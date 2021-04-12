@@ -1,5 +1,16 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
+import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.machines.SingularityConstructor;
@@ -9,15 +20,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.Unplaceabl
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.apache.commons.lang.Validate;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Singularities and there recipe displays
@@ -112,6 +114,7 @@ public final class Singularity extends UnplaceableBlock {
             "&bInfinity Singularity"
     );
     
+    private static final double COST_MULTIPLIER = InfinityExpansion.inst().getConfig().getDouble("balance-options.singularity-cost-multiplier", 0.1, 100);
     public static final List<Triplet<SlimefunItemStack, String, Integer>> RECIPES = new ArrayList<>();
     private static final Map<String, Pair<Integer, Triplet<SlimefunItemStack, String, Integer>>> MAP = new HashMap<>();
     
@@ -147,7 +150,7 @@ public final class Singularity extends UnplaceableBlock {
     }
     
     private static void addRecipe(SlimefunItemStack item, String id, int amount) {
-        Triplet<SlimefunItemStack, String, Integer> triplet = new Triplet<>(item, id, (int) (amount * InfinityExpansion.inst().getDifficulty()));
+        Triplet<SlimefunItemStack, String, Integer> triplet = new Triplet<>(item, id, (int) (amount * COST_MULTIPLIER));
         RECIPES.add(triplet);
         MAP.put(id, new Pair<>(RECIPES.size() - 1, triplet));
     }

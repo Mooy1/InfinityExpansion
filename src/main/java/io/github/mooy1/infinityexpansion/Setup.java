@@ -1,5 +1,17 @@
 package io.github.mooy1.infinityexpansion;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.ItemMeta;
+
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.implementation.blocks.AdvancedAnvil;
@@ -35,16 +47,6 @@ import io.github.mooy1.infinityexpansion.implementation.storage.StorageForge;
 import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * Sets up items

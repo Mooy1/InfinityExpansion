@@ -1,5 +1,13 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
+import javax.annotation.Nonnull;
+
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
@@ -7,13 +15,6 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * Ender essence geo-resource item

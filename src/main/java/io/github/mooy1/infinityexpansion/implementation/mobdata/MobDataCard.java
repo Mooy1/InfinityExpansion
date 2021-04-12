@@ -1,5 +1,16 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
@@ -11,15 +22,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * A mob data card which will be able to be used in the {@link MobSimulationChamber}

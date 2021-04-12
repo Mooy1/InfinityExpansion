@@ -1,14 +1,16 @@
 package io.github.mooy1.infinityexpansion.commands;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
-import java.util.List;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
 
 public final class PrintItem extends AbstractCommand {
 

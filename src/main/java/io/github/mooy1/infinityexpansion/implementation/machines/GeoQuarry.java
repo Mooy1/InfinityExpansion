@@ -1,5 +1,20 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
@@ -21,19 +36,6 @@ import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public final class GeoQuarry extends AbstractMachine implements RecipeDisplayItem {
     
@@ -46,7 +48,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
             LorePreset.energyPerSecond(GeoQuarry.ENERGY)
     );
     
-    private static final int INTERVAL = (int) (360 * InfinityExpansion.inst().getDifficulty());
+    private static final int INTERVAL = 400;
     private static final int ENERGY = 450;
     private static final int STATUS = 4;
     private static final int[] BORDER = { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 44, 45, 53 };

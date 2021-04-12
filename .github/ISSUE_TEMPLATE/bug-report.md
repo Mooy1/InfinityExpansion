@@ -29,6 +29,5 @@ assignees: ''
 <!-- You can look under the "Infinity Expansion" Category top left item to find the Plugin version. -->
 
  - Minecraft Version:
- - CS-CoreLib Version:
  - Slimefun Version:
  - Plugin Version: 

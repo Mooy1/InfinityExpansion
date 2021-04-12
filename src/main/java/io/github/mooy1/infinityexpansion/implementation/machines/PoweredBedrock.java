@@ -1,5 +1,12 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import javax.annotation.Nonnull;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
@@ -11,12 +18,6 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponen
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * A block that becomes bedrock when powered, for decoration of course

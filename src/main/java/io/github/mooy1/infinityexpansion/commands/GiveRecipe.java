@@ -1,18 +1,20 @@
 package io.github.mooy1.infinityexpansion.commands;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
-import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 
 public final class GiveRecipe extends AbstractCommand {
     
@@ -55,12 +57,8 @@ public final class GiveRecipe extends AbstractCommand {
     @Override
     public void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
         if (args.length == 2) {
-            int i = 0;
             for (SlimefunItem item : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {
                 tabs.add(item.getId());
-                if (i++ == 64) {
-                    break;
-                }
             } 
         }
     }

@@ -1,9 +1,12 @@
 package io.github.mooy1.infinityexpansion.utils;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinitylib.items.LoreUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -12,11 +15,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinitylib.items.LoreUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
 public final class Util {
 

@@ -1,21 +1,22 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import javax.annotation.Nullable;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nullable;
+import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 /**
  * Items to be used in the Strainer Base

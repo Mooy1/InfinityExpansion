@@ -1,20 +1,22 @@
 package io.github.mooy1.infinityexpansion.implementation.materials;
 
+import java.util.Arrays;
+
+import lombok.experimental.UtilityClass;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
 import io.github.mooy1.infinitylib.slimefun.presets.RecipePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
 
 @UtilityClass
 public final class Items {

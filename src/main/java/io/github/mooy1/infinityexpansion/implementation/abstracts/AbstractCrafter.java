@@ -1,13 +1,21 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.recipes.AdvancedRecipeMap;
 import io.github.mooy1.infinitylib.slimefun.recipes.RecipeMap;
 import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictMultiInput;
 import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictMultiOutput;
-import io.github.mooy1.infinitylib.slimefun.utils.DelayedRecipeType;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -19,15 +27,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * An abstract crafter
@@ -43,11 +42,12 @@ public abstract class AbstractCrafter extends TickingContainer {
     private static final int[] STATUS_BORDER = {14, 32};
     private static final int STATUS_SLOT = 23;
 
-    private final RecipeMap<StrictMultiInput, StrictMultiOutput> recipes = new AdvancedRecipeMap<>();
+    private final RecipeMap<StrictMultiInput, StrictMultiOutput> recipes;
     
-    public AbstractCrafter(Category category, SlimefunItemStack stack, DelayedRecipeType recipeType, RecipeType type, ItemStack[] recipe) {
+    public AbstractCrafter(Category category, SlimefunItemStack stack,
+                           RecipeMap<StrictMultiInput, StrictMultiOutput> recipes, RecipeType type, ItemStack[] recipe) {
         super(category, stack, type, recipe);
-        recipeType.accept((stacks, itemStack) -> this.recipes.put(new StrictMultiInput(stacks), new StrictMultiOutput(itemStack)));
+        this.recipes = recipes;
     }
 
     @Override

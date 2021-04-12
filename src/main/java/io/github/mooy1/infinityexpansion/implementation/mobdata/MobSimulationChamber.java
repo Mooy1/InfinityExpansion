@@ -1,5 +1,16 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
@@ -23,15 +34,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.block.Block;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.concurrent.ThreadLocalRandom;
 
 public final class MobSimulationChamber extends TickingContainer implements EnergyNetComponent {
     
@@ -44,16 +46,17 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
             LorePreset.energyBuffer(MobSimulationChamber.BUFFER),
             LorePreset.energyPerSecond(MobSimulationChamber.ENERGY)
     );
+
+    static final double XP_MULTIPLIER = InfinityExpansion.inst().getConfig().getDouble("mob-simulation-options.xp-multiplier", 0, 1000);
+    private static final int INTERVAL = InfinityExpansion.inst().getConfig().getInt("mob-simulation-options.ticks-per-output", 1, 1000);
     
-    private static final int INTERVAL = 10 + (int) (10 * InfinityExpansion.inst().getDifficulty());
-    
+    private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     private static final int CARD_SLOT = MenuPreset.slot1 + 27;
     private static final int STATUS_SLOT = MenuPreset.slot1;
     private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int XP_Slot = 46;
     public static final int BUFFER = 15000;
     public static final int ENERGY = 150;
-    private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     
     public MobSimulationChamber() {
         super(Categories.MOB_SIMULATION, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -170,9 +173,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
 
         if (InfinityExpansion.inst().getGlobalTick() % INTERVAL != 0) return;
 
-        if (ThreadLocalRandom.current().nextBoolean()) {
-            BlockStorage.addBlockInfo(b.getLocation(), "xp", String.valueOf(xp + card.tier.xp));
-        }
+        BlockStorage.addBlockInfo(b.getLocation(), "xp", String.valueOf(xp + card.tier.xp));
 
         for (Pair<ItemStack, Integer> entry : card.drops) {
             if (ThreadLocalRandom.current().nextInt(entry.getSecondValue()) == 0) {

@@ -1,5 +1,11 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
+import javax.annotation.Nonnull;
+
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
@@ -11,11 +17,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
 
 public abstract class AbstractEnergyCrafter extends TickingContainer implements EnergyNetComponent {
     

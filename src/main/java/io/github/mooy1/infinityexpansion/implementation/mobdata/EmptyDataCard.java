@@ -1,14 +1,15 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 public final class EmptyDataCard extends SlimefunItem implements NotPlaceable {
 

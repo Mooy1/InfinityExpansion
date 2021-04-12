@@ -1,5 +1,21 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
@@ -21,20 +37,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Mines stuff
@@ -179,8 +181,8 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     };
     private static final int STATUS_SLOT = 4;
 
-    private static final int INTERVAL = (int) (10 * InfinityExpansion.inst().getDifficulty());
-    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.inst().getConfig().getBoolean("balance-options.quarry-nether-materials-in-overworld");
+    private static final int INTERVAL = InfinityExpansion.inst().getConfig().getInt("quarry-options.ticks-per-output", 1, 100);
+    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.inst().getConfig().getBoolean("quarry-options.output-nether-materials-in-overworld");
 
     private final ItemStack cobble;
     private final int chance;
@@ -264,6 +266,10 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
+        if (inv.hasViewer()) {
+            inv.replaceExistingItem(STATUS_SLOT, MINING);
+        }
+        
         if ((InfinityExpansion.inst().getGlobalTick() % INTERVAL) != 0) {
             return true;
         }
@@ -290,10 +296,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
             }
             return false;
         }
-
-        if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS_SLOT, MINING);
-        }
+        
         inv.pushItem(outputItem.clone(), OUTPUT_SLOTS);
         return true;
     }

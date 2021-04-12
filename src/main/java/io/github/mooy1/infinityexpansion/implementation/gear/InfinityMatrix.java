@@ -1,5 +1,17 @@
 package io.github.mooy1.infinityexpansion.implementation.gear;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
@@ -9,16 +21,6 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import javax.annotation.Nonnull;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Flight

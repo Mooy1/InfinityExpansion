@@ -1,11 +1,12 @@
 package io.github.mooy1.infinityexpansion.categories;
 
+import org.bukkit.Material;
+
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinitylib.slimefun.utils.MultiCategory;
 import io.github.mooy1.infinitylib.slimefun.utils.SubCategory;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Material;
 
 /**
  * Categories for this addon
