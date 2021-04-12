@@ -83,10 +83,9 @@ public final class Strainer extends SlimefunItem implements NotPlaceable {
      * @return speed
      */
     public static int getStrainer(@Nullable ItemStack item) {
-        if (item != null) {
+        if (item != null && item.hasItemMeta()) {
             return item.getItemMeta().getPersistentDataContainer().getOrDefault(Strainer.KEY, PersistentDataType.INTEGER, 0);
         }
-
         return 0;
     }
 
