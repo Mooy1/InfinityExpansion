@@ -30,8 +30,8 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
     
     public static void setup(InfinityExpansion plugin) {
         new InfinityArmor(CROWN, new PotionEffect[] {
-                new PotionEffect(PotionEffectType.NIGHT_VISION, 1200, 0, false, false, false),
-                new PotionEffect(PotionEffectType.CONDUIT_POWER, 1200, 0, false, false, false),
+                new PotionEffect(PotionEffectType.NIGHT_VISION, 240, 0, false, false, false),
+                new PotionEffect(PotionEffectType.CONDUIT_POWER, 240, 0, false, false, false),
         }, new ItemStack[] {
                 null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
                 Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY,
@@ -41,9 +41,9 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 null, null, null, null, null, null
         }).register(plugin);
         new InfinityArmor(CHESTPLATE, new PotionEffect[] {
-                new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 1200, 0, false, false, false),
-                new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1, false, false, false),
-                new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1200, 0, false, false, false)
+                new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 240, 0, false, false, false),
+                new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 240, 1, false, false, false),
+                new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 240, 0, false, false, false)
         }, new ItemStack[] {
                 null, Items.INFINITY, null, null, Items.INFINITY, null,
                 Items.INFINITY, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.INFINITY,
@@ -53,9 +53,9 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null
         }).register(plugin);
         new InfinityArmor(LEGGINGS, new PotionEffect[] {
-                new PotionEffect(PotionEffectType.FAST_DIGGING, 1200, 2, false, false, false),
-                new PotionEffect(PotionEffectType.REGENERATION, 1200, 0, false, false, false),
-                new PotionEffect(PotionEffectType.SATURATION, 1200, 0, false, false, false),
+                new PotionEffect(PotionEffectType.FAST_DIGGING, 240, 2, false, false, false),
+                new PotionEffect(PotionEffectType.REGENERATION, 240, 0, false, false, false),
+                new PotionEffect(PotionEffectType.SATURATION, 240, 0, false, false, false),
         }, new ItemStack[] {
                 null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
                 Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY,
@@ -65,8 +65,8 @@ public final class InfinityArmor extends SlimefunArmorPiece implements Protectiv
                 null, Items.INFINITY, null, null, Items.INFINITY, null
         }).register(plugin);
         new InfinityArmor(BOOTS, new PotionEffect[] {
-                new PotionEffect(PotionEffectType.SPEED, 1200, 2, false, false, false),
-                new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 1200, 0, false, false, false),
+                new PotionEffect(PotionEffectType.SPEED, 240, 2, false, false, false),
+                new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 240, 0, false, false, false),
         }, new ItemStack[] {
                 null, null, null, null, null, null,
                 Items.INFINITY, Items.INFINITY, null, null, Items.INFINITY, Items.INFINITY,

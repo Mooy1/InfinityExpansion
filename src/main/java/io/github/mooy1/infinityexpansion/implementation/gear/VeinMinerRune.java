@@ -39,6 +39,7 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.players.CoolDownMap;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -139,15 +140,16 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         if (entity instanceof Item) {
             Item item = (Item) entity;
             ItemStack stack = item.getItemStack();
-
-            return stack.getAmount() == 1 && stack.getItemMeta() instanceof Damageable && !isVeinMiner(stack) && !isItem(stack) ;
+            return stack.getAmount() == 1
+                    && stack.getItemMeta() instanceof Damageable
+                    && !isVeinMiner(stack) && !isItem(stack);
         }
 
         return false;
     }
 
     public static boolean isVeinMiner(@Nullable ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
+        if (item == null || !item.hasItemMeta()) {
             return false;
         }
         return item.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.BYTE);
@@ -226,10 +228,12 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
             Bukkit.getPluginManager().callEvent(event);
             this.processing.remove(mine);
             if (!event.isCancelled()) {
-                for (ItemStack drop : mine.getDrops(item)) {
-                    w.dropItemNaturally(l, drop);
-                }
                 mine.setType(Material.AIR);
+                if (event.isDropItems() && !"SMELTERS_PICKAXE".equals(StackUtils.getID(item))) {
+                    for (ItemStack drop : mine.getDrops(item)) {
+                        w.dropItemNaturally(l, drop);
+                    }
+                }
             }
         }
         
