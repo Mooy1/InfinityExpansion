@@ -86,25 +86,25 @@ public final class StorageUnit extends AbstractContainer {
             "BASIC_STORAGE",
             Material.OAK_WOOD,
             "&9Basic &8Storage Unit",
-            LorePreset.storesItem(StorageUnit.BASIC_STORAGE)
+            "&6Capacity: &e" + LorePreset.format(BASIC_STORAGE) + " &eitems"
     );
     public static final SlimefunItemStack ADVANCED = new SlimefunItemStack(
             "ADVANCED_STORAGE",
             Material.DARK_OAK_WOOD,
             "&cAdvanced &8Storage Unit",
-            LorePreset.storesItem(StorageUnit.ADVANCED_STORAGE)
+            "&6Capacity: &e" + LorePreset.format(ADVANCED_STORAGE) + " &eitems"
     );
     public static final SlimefunItemStack REINFORCED = new SlimefunItemStack(
             "REINFORCED_STORAGE",
             Material.ACACIA_WOOD,
             "&fReinforced &8Storage Unit",
-            LorePreset.storesItem(StorageUnit.REINFORCED_STORAGE)
+            "&6Capacity: &e" + LorePreset.format(REINFORCED_STORAGE) + " &eitems"
     );
     public static final SlimefunItemStack VOID = new SlimefunItemStack(
             "VOID_STORAGE",
             Material.CRIMSON_HYPHAE,
             "&8Void &8Storage Unit",
-            LorePreset.storesItem(StorageUnit.VOID_STORAGE)
+            "&6Capacity: &e" + LorePreset.format(VOID_STORAGE) + " &eitems"
     );
     public static final SlimefunItemStack INFINITY = new SlimefunItemStack(
             "INFINITY_STORAGE",

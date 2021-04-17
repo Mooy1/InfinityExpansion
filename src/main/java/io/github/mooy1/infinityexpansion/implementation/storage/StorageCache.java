@@ -1,5 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.storage;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,7 +16,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
@@ -82,7 +83,7 @@ final class StorageCache {
         this.unit = unit;
         this.menu = menu;
         this.voidExcess = BlockStorage.getLocationInfo(block.getLocation(), VOID_EXCESS) != null;
-        this.amount = Util.getIntData(STORED_AMOUNT, block.getLocation());
+        this.amount = Util.getIntData(STORED_AMOUNT, menu.getLocation());
 
         if (this.amount == 0) {
             // empty
@@ -226,6 +227,7 @@ final class StorageCache {
     }
 
     void updateStatus(Block block) {
+        this.amount = Util.getIntData(STORED_AMOUNT, this.menu.getLocation());
         if (this.menu.hasViewer()) {
             if (this.amount == 0) {
                 this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
@@ -294,15 +296,14 @@ final class StorageCache {
     }
     
     private void voidExcessHandler() {
-        if (this.voidExcess) {
-            BlockStorage.addBlockInfo(this.menu.getLocation(), VOID_EXCESS, null);
-            LoreUtils.replaceLine(this.menu.getItemInSlot(STATUS_SLOT), VOID_EXCESS_TRUE, VOID_EXCESS_FALSE);
-            this.voidExcess = false;
-        } else {
-            BlockStorage.addBlockInfo(this.menu.getLocation(), VOID_EXCESS, "true");
-            LoreUtils.replaceLine(this.menu.getItemInSlot(STATUS_SLOT), VOID_EXCESS_FALSE, VOID_EXCESS_TRUE);
-            this.voidExcess = true;
-        }
+        this.voidExcess = !this.voidExcess;
+        BlockStorage.addBlockInfo(this.menu.getLocation(), VOID_EXCESS, this.voidExcess ? "true" : null);
+        ItemStack item = this.menu.getItemInSlot(STATUS_SLOT);
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = meta.getLore();
+        lore.set(1, this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE);
+        meta.setLore(lore);
+        item.setItemMeta(meta);
     }
     
     private void setStored(ItemStack input) {

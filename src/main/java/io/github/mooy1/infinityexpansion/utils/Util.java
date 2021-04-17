@@ -16,7 +16,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinitylib.items.LoreUtils;
+import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
@@ -41,7 +41,7 @@ public final class Util {
 
     @Nonnull
     public static ItemStack getDisplayItem(@Nonnull ItemStack output) {
-        LoreUtils.addLore(output, "", "&a-------------------", "&a\u21E8 Click to craft", "&a-------------------");
+        StackUtils.addLore(output, "", "&a-------------------", "&a\u21E8 Click to craft", "&a-------------------");
         return output;
     }
 

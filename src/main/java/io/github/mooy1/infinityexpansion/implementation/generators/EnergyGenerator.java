@@ -243,7 +243,7 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&aGeneration",
                         "&7Type: &6" + type.status,
-                        "&7Generating: &6" + LorePreset.roundHundreds(gen * TickerUtils.TPS) + " J/s ",
+                        "&7Generating: &6" + LorePreset.format(gen * TickerUtils.TPS) + " J/s ",
                         "&7Stored: &6" + LorePreset.format(getCharge(l)) + " J"
                 ));
             }

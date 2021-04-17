@@ -11,7 +11,6 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
-import io.github.mooy1.infinitylib.slimefun.presets.RecipePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
@@ -22,13 +21,41 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 public final class Items {
 
     public static void setup() {
-        registerEnhanced(COBBLE_1, RecipePreset.Compress(new ItemStack(Material.COBBLESTONE)));
-        registerEnhanced(COBBLE_2, RecipePreset.Compress(COBBLE_1));
-        registerEnhanced(COBBLE_3, RecipePreset.Compress(COBBLE_2));
-        registerEnhanced(COBBLE_4, RecipePreset.Compress(COBBLE_3));
-        registerEnhanced(COBBLE_5, RecipePreset.Compress(COBBLE_4));
-        registerEnhanced(VOID_DUST, RecipePreset.Compress(VOID_BIT));
-        registerEnhanced(VOID_INGOT, RecipePreset.Compress(VOID_DUST));
+        registerEnhanced(COBBLE_1, new ItemStack[] {
+                new ItemStack(Material.COBBLESTONE), new ItemStack(Material.COBBLESTONE), new ItemStack(Material.COBBLESTONE),
+                new ItemStack(Material.COBBLESTONE), new ItemStack(Material.COBBLESTONE), new ItemStack(Material.COBBLESTONE),
+                new ItemStack(Material.COBBLESTONE), new ItemStack(Material.COBBLESTONE), new ItemStack(Material.COBBLESTONE)
+        });
+        registerEnhanced(COBBLE_2, new ItemStack[] {
+                COBBLE_1, COBBLE_1, COBBLE_1,
+                COBBLE_1, COBBLE_1, COBBLE_1,
+                COBBLE_1, COBBLE_1, COBBLE_1
+        });
+        registerEnhanced(COBBLE_3, new ItemStack[] {
+                COBBLE_2, COBBLE_2, COBBLE_2,
+                COBBLE_2, COBBLE_2, COBBLE_2,
+                COBBLE_2, COBBLE_2, COBBLE_2
+        });
+        registerEnhanced(COBBLE_4, new ItemStack[] {
+                COBBLE_3, COBBLE_3, COBBLE_3,
+                COBBLE_3, COBBLE_3, COBBLE_3,
+                COBBLE_3, COBBLE_3, COBBLE_3
+        });
+        registerEnhanced(COBBLE_5, new ItemStack[] {
+                COBBLE_4, COBBLE_4, COBBLE_4,
+                COBBLE_4, COBBLE_4, COBBLE_4,
+                COBBLE_4, COBBLE_4, COBBLE_4
+        });
+        registerEnhanced(VOID_DUST, new ItemStack[] {
+                VOID_BIT, VOID_BIT, VOID_BIT,
+                VOID_BIT, VOID_BIT, VOID_BIT,
+                VOID_BIT, VOID_BIT, VOID_BIT
+        });
+        registerEnhanced(VOID_INGOT, new ItemStack[] {
+                VOID_DUST, VOID_DUST, VOID_DUST,
+                VOID_DUST, VOID_DUST, VOID_DUST,
+                VOID_DUST, VOID_DUST, VOID_DUST
+        });
         registerSmeltery(INFINITY, EARTH, MYTHRIL, FORTUNE, MAGIC, VOID_INGOT, METAL);
         registerSmeltery(FORTUNE, Singularity.GOLD, Singularity.DIAMOND, Singularity.EMERALD, Singularity.NETHERITE, ADAMANTITE);
         registerSmeltery(MAGIC, Singularity.REDSTONE, Singularity.LAPIS, Singularity.QUARTZ, Singularity.MAGNESIUM, MAGNONIUM);

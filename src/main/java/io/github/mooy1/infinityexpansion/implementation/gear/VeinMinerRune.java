@@ -38,7 +38,6 @@ import org.bukkit.persistence.PersistentDataType;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.items.LoreUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.players.CoolDownMap;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
@@ -167,7 +166,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         if (makeVeinMiner && !isVeinMiner) {
             container.set(key, PersistentDataType.BYTE, (byte) 1);
             item.setItemMeta(meta);
-            LoreUtils.addLore(item, LORE);
+            StackUtils.addLore(item, LORE);
         }
 
         if (!makeVeinMiner && isVeinMiner) {

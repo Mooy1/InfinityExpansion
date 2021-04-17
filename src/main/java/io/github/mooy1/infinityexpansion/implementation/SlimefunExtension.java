@@ -150,7 +150,7 @@ public final class SlimefunExtension {
             HeadTexture.CAPACITOR_25,
             "&8Void Capacitor",
             "",
-            "&8\u21E8 &e\u26A1 " + LorePreset.roundHundreds(VOID_CAPACITY) + " &7J Capacity"
+            "&8\u21E8 &e\u26A1 " + LorePreset.format(VOID_CAPACITY) + " &7J Capacity"
     );
     
     public static void setup(InfinityExpansion plugin) {
