@@ -2,7 +2,6 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
@@ -11,18 +10,14 @@ import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -36,17 +31,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class ResourceSynthesizer extends AbstractMachine implements RecipeDisplayItem {
-
-    public static final int ENERGY = 1_000_000;
-    
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "RESOURCE_SYNTHESIZER",
-            Material.LODESTONE,
-            "&6Resource Synthesizer",
-            "&7Creates resources by combining 2 Singularities",
-            "",
-            LorePreset.energy(ResourceSynthesizer.ENERGY) + "per use"
-    );
     
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
@@ -66,21 +50,13 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
-    private static final SlimefunItemStack[] RECIPES = {
-            Singularity.IRON, Singularity.COAL, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
-            Singularity.IRON, Singularity.REDSTONE, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
-            Singularity.DIAMOND, Singularity.COAL, new SlimefunItemStack(SlimefunItems.CARBONADO, 16),
-            Singularity.GOLD, Singularity.EMERALD, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 16),
-            Singularity.COPPER, Singularity.ZINC, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
-            Singularity.IRON, Singularity.QUARTZ, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
-    };
+    private final int energy;
+    private final SlimefunItemStack[] recipes;
 
-    public ResourceSynthesizer() {
-        super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.ADAMANTITE, Items.ADAMANTITE, Items.ADAMANTITE,
-                Items.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Items.MACHINE_PLATE,
-                Items.MACHINE_PLATE, Items.MACHINE_CORE, Items.MACHINE_PLATE
-        });
+    public ResourceSynthesizer(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, SlimefunItemStack[] recipes, int energy) {
+        super(category, item, recipeType, recipe);
+        this.recipes = recipes;
+        this.energy = energy;
     }
 
     @Override
@@ -96,7 +72,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
 
     @Override
     protected int getEnergyConsumption() {
-        return ENERGY;
+        return this.energy;
     }
     
     @Override
@@ -138,22 +114,17 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
     }
-    
-    @Override
-    public int getCapacity() {
-        return ENERGY * 2;
-    }
 
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
-        for (int i = 0; i < RECIPES.length; i += 3) {
-            items.add(RECIPES[i]);
-            items.add(RECIPES[i + 2]);
-            items.add(RECIPES[i + 1]);
-            items.add(RECIPES[i + 2]);
+        for (int i = 0 ; i < this.recipes.length; i += 3) {
+            items.add(this.recipes[i]);
+            items.add(this.recipes[i + 2]);
+            items.add(this.recipes[i + 1]);
+            items.add(this.recipes[i + 2]);
         }
 
         return items;
@@ -184,9 +155,9 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
 
         ItemStack recipe = null;
 
-        for (int i = 0; i < RECIPES.length; i += 3) {
-            if ((id1.equals(RECIPES[i].getItemId()) && id2.equals(RECIPES[i + 1].getItemId()) || (id2.equals(RECIPES[i].getItemId()) && id1.equals(RECIPES[i + 1].getItemId())))) {
-                recipe = RECIPES[i + 2];
+        for (int i = 0 ; i < this.recipes.length; i += 3) {
+            if ((id1.equals(this.recipes[i].getItemId()) && id2.equals(this.recipes[i + 1].getItemId()) || (id2.equals(this.recipes[i].getItemId()) && id1.equals(this.recipes[i + 1].getItemId())))) {
+                recipe = this.recipes[i + 2];
             }
         }
 

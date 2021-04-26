@@ -2,17 +2,15 @@ package io.github.mooy1.infinityexpansion.implementation.materials;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
@@ -23,16 +21,11 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
  */
 public final class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResource {
     
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "END_ESSENCE",
-            Material.BLAZE_POWDER,
-            "&5Ender Essence",
-            "&8&oFrom the depths of the end..."
-    );
-    private static final NamespacedKey key = InfinityExpansion.inst().getKey("ender_essence");
-     
-    public EnderEssence() {
-        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.GEO_MINER, new ItemStack[9]);
+    private final NamespacedKey key;
+    
+    public EnderEssence(Category category, SlimefunItemStack item, NamespacedKey key) {
+        super(category, item, RecipeType.GEO_MINER, new ItemStack[9]);
+        this.key = key;
         register();
     }
     
@@ -53,7 +46,7 @@ public final class EnderEssence extends SlimefunItem implements NotPlaceable, GE
     @Nonnull
     @Override
     public NamespacedKey getKey() {
-        return key;
+        return this.key;
     }
 
     @Override
@@ -65,12 +58,6 @@ public final class EnderEssence extends SlimefunItem implements NotPlaceable, GE
     @Override
     public String getName() {
         return getItemName();
-    }
-
-    @Nonnull
-    @Override
-    public ItemStack getItem() {
-        return ITEM;
     }
 
     @Override

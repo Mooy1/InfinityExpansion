@@ -2,51 +2,27 @@ package io.github.mooy1.infinityexpansion.implementation.gear;
 
 import java.util.Iterator;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
-/**
- * Flight
- * 
- */
 public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> implements Listener, Soulbound, NotPlaceable {
     
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "INFINITY_MATRIX",
-            Material.NETHER_STAR,
-            "&fInfinity Matrix",
-            "&6Gives Unlimited Flight",
-            "&7Right-Click to enable/disable and claim",
-            "&7Crouch and Right-Click to remove ownership",
-            "&bSoulbound"
-    );
-    
-    public InfinityMatrix() {
-        super(Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[] {
-                Items.INFINITY, null, Items.INFINITY, Items.INFINITY, null, Items.INFINITY,
-                Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY,
-                Items.VOID_INGOT, Items.VOID_INGOT, new ItemStack(Material.ELYTRA), new ItemStack(Material.ELYTRA), Items.VOID_INGOT, Items.VOID_INGOT,
-                Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT,
-                Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY,
-                Items.INFINITY, null, Items.INFINITY, Items.INFINITY, null, Items.INFINITY
-        });
+    public InfinityMatrix(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
+        super(category, item, type, recipe);
         InfinityExpansion.inst().registerListener(this);
     }
 

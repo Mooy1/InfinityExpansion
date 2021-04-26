@@ -1,9 +1,10 @@
 package io.github.mooy1.infinityexpansion.implementation.blocks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
+import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;
@@ -15,19 +16,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.categories.InfinityCategory;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.recipes.RecipeMap;
-import io.github.mooy1.infinitylib.slimefun.recipes.SimpleRecipeMap;
 import io.github.mooy1.infinitylib.slimefun.recipes.inputs.MultiInput;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -40,16 +36,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class InfinityWorkbench extends AbstractEnergyCrafter {
-
-    private static final int ENERGY = 10_000_000;
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "INFINITY_FORGE",
-            Material.RESPAWN_ANCHOR,
-            "&6Infinity Workbench",
-            "&7Used to craft infinity items",
-            "",
-            LorePreset.energy(ENERGY) + "per item"
-    );
     
     public static final int[] INPUT_SLOTS = {
         0, 1, 2, 3, 4, 5,
@@ -65,23 +51,19 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
     private static final int[] STATUS_BORDER = {6, 8, 15, 17, 24, 25, 26};
     private static final int RECIPE_SLOT = 7;
     
-    public static final RecipeMap<MultiInput, ItemStack> RECIPES = new SimpleRecipeMap<>();
+    public static final Map<MultiInput, ItemStack> RECIPES = new HashMap<>();
     public static final LinkedHashMap<String, Pair<SlimefunItemStack, ItemStack[]>> ITEMS = new LinkedHashMap<>();
     public static final List<String> IDS = new ArrayList<>();
     
-    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("infinity_forge"), ITEM, (stacks, stack) -> {
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("infinity_forge"), Blocks.INFINITY_FORGE, (stacks, stack) -> {
         SlimefunItemStack item = (SlimefunItemStack) stack;
         RECIPES.put(new MultiInput(stacks), item);
         ITEMS.put(item.getItemId(), new Pair<>(item, stacks));
         IDS.add(item.getItemId());
     }, "", "&cUse the infinity recipes category to see the correct recipe!");
     
-    public InfinityWorkbench() {
-        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-            Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT,
-                SlimefunItems.ENERGIZED_CAPACITOR, new ItemStack(Material.CRAFTING_TABLE), SlimefunItems.ENERGIZED_CAPACITOR,
-                Items.VOID_INGOT, Items.MACHINE_PLATE, Items.VOID_INGOT
-        }, ENERGY, STATUS_SLOT);
+    public InfinityWorkbench(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
+        super(category, item, type, recipe, energy, STATUS_SLOT);
     }
 
     @Override
@@ -117,10 +99,10 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
     public void craft(@Nonnull Block b, @Nonnull BlockMenu inv, @Nonnull  Player p) {
         int charge = getCharge(b.getLocation());
          
-        if (charge < ENERGY) { //not enough energy
+        if (charge < this.energy) { //not enough energy
             p.sendMessage( new String[] {
                     ChatColor.RED + "Not enough energy!",
-                    ChatColor.GREEN + "Charge: " + ChatColor.RED + charge + ChatColor.GREEN + "/" + ENERGY + " J"
+                    ChatColor.GREEN + "Charge: " + ChatColor.RED + charge + ChatColor.GREEN + "/" + this.energy + " J"
             });
             return;
         }
@@ -139,7 +121,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
 
         for (int slot : INPUT_SLOTS) {
             if (inv.getItemInSlot(slot) != null) {
-                inv.consumeItem(slot);
+                inv.consumeItem(slot, 1);
             }
         }
 
@@ -147,7 +129,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
 
         inv.pushItem(output.clone(), OUTPUT_SLOTS);
         setCharge(b.getLocation(), 0);
-            
+        
     }
     
     @Override

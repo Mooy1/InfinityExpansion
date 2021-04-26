@@ -2,9 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Nonnull;
-
 import lombok.AllArgsConstructor;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -15,17 +13,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotHopperable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -39,17 +34,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  */
 public final class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem, NotHopperable {
     
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "STONEWORKS_FACTORY",
-            Material.BLAST_FURNACE,
-            "&8Stoneworks Factory",
-            "&7Generates cobblestone and processes it into various materials",
-            "",
-            LorePreset.energyPerSecond(StoneworksFactory.ENERGY)
-    );
-    
-    public static final int ENERGY = 240;
-
     private static final int[] PROCESS_BORDER = {0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23};
     private static final int[] OUT_BORDER = {6, 7, 8, 17, 24, 25, 26};
     private static final int[] OUTPUT_SLOTS = {16};
@@ -59,12 +43,11 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
     private static final ItemStack COBBLE_GEN = new CustomItem(Material.GRAY_CONCRETE, "&8Cobblegen");
     private static final ItemStack PROCESSING = new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "&7Processing");
 
-    public StoneworksFactory() {
-        super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                Items.MAGSTEEL_PLATE, MaterialGenerator.BASIC_COBBLE, Items.MAGSTEEL_PLATE,
-                SlimefunItems.ELECTRIC_FURNACE_3, Items.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
-                Items.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, Items.MAGSTEEL_PLATE
-        });
+    private final int energy;
+    
+    public StoneworksFactory(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy) {
+        super(category, item, recipeType, recipe);
+        this.energy = energy;
     }
 
     @Override
@@ -94,7 +77,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
 
     @Override
     protected int getEnergyConsumption() {
-        return ENERGY;
+        return this.energy;
     }
 
     @Nonnull
@@ -180,11 +163,6 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
                 break;
             }
         }
-    }
-
-    @Override
-    public int getCapacity() {
-        return ENERGY * 2;
     }
 
     @Nonnull

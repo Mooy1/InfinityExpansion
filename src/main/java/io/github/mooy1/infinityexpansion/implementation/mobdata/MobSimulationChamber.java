@@ -1,7 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import java.util.concurrent.ThreadLocalRandom;
-
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
@@ -12,8 +11,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
@@ -22,10 +19,10 @@ import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -37,33 +34,19 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 public final class MobSimulationChamber extends TickingContainer implements EnergyNetComponent {
     
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "MOB_SIMULATION_CHAMBER",
-            Material.GILDED_BLACKSTONE,
-            "&8Mob Simulation Chamber",
-            "&7Use mob data cards to activate",
-            "",
-            LorePreset.energyBuffer(MobSimulationChamber.BUFFER),
-            LorePreset.energyPerSecond(MobSimulationChamber.ENERGY)
-    );
-
-    static final double XP_MULTIPLIER = InfinityExpansion.inst().getConfig().getDouble("mob-simulation-options.xp-multiplier", 0, 1000);
-    private static final int INTERVAL = InfinityExpansion.inst().getConfig().getInt("mob-simulation-options.ticks-per-output", 1, 1000);
-    
     private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
     private static final int CARD_SLOT = MenuPreset.slot1 + 27;
     private static final int STATUS_SLOT = MenuPreset.slot1;
     private static final int[] OUTPUT_SLOTS = Util.largeOutput;
-    private static final int XP_Slot = 46;
-    public static final int BUFFER = 15000;
-    public static final int ENERGY = 150;
+    private static final int XP_SLOT = 46;
     
-    public MobSimulationChamber() {
-        super(Categories.MOB_SIMULATION, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
-                Items.MACHINE_CIRCUIT, SlimefunItems.PROGRAMMABLE_ANDROID_BUTCHER, Items.MACHINE_CIRCUIT,
-                Items.MAGSTEEL_PLATE, Items.MACHINE_PLATE, Items.MAGSTEEL_PLATE,
-        });
+    private final int energy;
+    private final int interval;
+    
+    public MobSimulationChamber(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int interval) {
+        super(category, item, type, recipe);
+        this.energy = energy;
+        this.interval = interval;
     }
 
     @Override
@@ -84,7 +67,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
 
     @Override
     public int getCapacity() {
-        return BUFFER;
+        return this.energy * 10;
     }
 
     @Override
@@ -99,7 +82,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
             blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
         }
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
-        blockMenuPreset.addItem(XP_Slot, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(XP_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull
@@ -117,14 +100,14 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
         if (BlockStorage.getLocationInfo(l, "xp") == null) {
             BlockStorage.addBlockInfo(l, "xp", "O");
         }
-        menu.replaceExistingItem(XP_Slot, makeXpItem(0));
-        menu.addMenuClickHandler(XP_Slot, (p, slot, item, action) -> {
+        menu.replaceExistingItem(XP_SLOT, makeXpItem(0));
+        menu.addMenuClickHandler(XP_SLOT, (p, slot, item, action) -> {
             int xp = Util.getIntData("xp", l);
             if (xp > 0) {
                 p.giveExp(xp);
                 p.playSound(l, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                 BlockStorage.addBlockInfo(l, "xp", "O");
-                menu.replaceExistingItem(XP_Slot, makeXpItem(0));
+                menu.replaceExistingItem(XP_SLOT, makeXpItem(0));
             }
             return false;
         });
@@ -151,7 +134,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
             return;
         }
 
-        int energy = card.tier.energy + ENERGY;
+        int energy = card.tier.energy + this.energy;
 
         if (getCharge(b.getLocation()) < energy) {
             if (inv.hasViewer()) {
@@ -168,10 +151,10 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                     "&aSimulating... (" + LorePreset.format(energy * TickerUtils.TPS) + " J/s)")
             );
-            inv.replaceExistingItem(XP_Slot, makeXpItem(xp));
+            inv.replaceExistingItem(XP_SLOT, makeXpItem(xp));
         }
 
-        if (InfinityExpansion.inst().getGlobalTick() % INTERVAL != 0) return;
+        if (InfinityExpansion.inst().getGlobalTick() % this.interval != 0) return;
 
         BlockStorage.addBlockInfo(b.getLocation(), "xp", String.valueOf(xp + card.tier.xp));
 

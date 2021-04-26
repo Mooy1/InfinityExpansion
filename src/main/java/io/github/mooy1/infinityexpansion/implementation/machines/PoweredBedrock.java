@@ -8,15 +8,12 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractTicker;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 /**
@@ -25,27 +22,12 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
  * @author Mooy1
  */
 public final class PoweredBedrock extends AbstractTicker implements EnergyNetComponent {
-
-    public static final int ENERGY = 10_000;
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "POWERED_BEDROCK",
-            Material.NETHERITE_BLOCK,
-            "&4Powered Bedrock",
-            "&7When powered, transforms into a bedrock",
-            "&7Will revert once unpowered or broken",
-            "",
-            LorePreset.energyPerSecond(PoweredBedrock.ENERGY)
-    );
     
-    public PoweredBedrock() {
-        super (Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[] {
-                Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5,
-                Items.COBBLE_5, Items.MACHINE_PLATE, Items.VOID_INGOT, Items.VOID_INGOT, Items.MACHINE_PLATE, Items.COBBLE_5,
-                Items.COBBLE_5, Items.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, Items.VOID_INGOT, Items.COBBLE_5,
-                Items.COBBLE_5, Items.VOID_INGOT, Items.INFINITE_CORE, Items.INFINITE_CIRCUIT, Items.VOID_INGOT, Items.COBBLE_5,
-                Items.COBBLE_5, Items.MACHINE_PLATE, Items.VOID_INGOT, Items.VOID_INGOT, Items.MACHINE_PLATE, Items.COBBLE_5,
-                Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5, Items.COBBLE_5
-        });
+    private final int energy;
+    
+    public PoweredBedrock(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
+        super (category, item, type, recipe);
+        this.energy = energy;
     }
     
     @Nonnull
@@ -56,7 +38,7 @@ public final class PoweredBedrock extends AbstractTicker implements EnergyNetCom
 
     @Override
     public int getCapacity() {
-        return ENERGY * 2;
+        return energy * 2;
     }
 
     @Override
@@ -65,7 +47,7 @@ public final class PoweredBedrock extends AbstractTicker implements EnergyNetCom
             return;
         }
         Location l = block.getLocation();
-        if (getCharge(l) < ENERGY) {
+        if (getCharge(l) < energy) {
             if (block.getType() != Material.NETHERITE_BLOCK) {
                 block.setType(Material.NETHERITE_BLOCK);
             }
@@ -74,7 +56,7 @@ public final class PoweredBedrock extends AbstractTicker implements EnergyNetCom
                 block.setType(Material.BEDROCK);
             }
         }
-        removeCharge(l, ENERGY);
+        removeCharge(l, energy);
     }
 
     @Override

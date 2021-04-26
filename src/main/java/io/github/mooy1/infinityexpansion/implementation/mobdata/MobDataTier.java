@@ -27,7 +27,7 @@ public enum MobDataTier {
     final Material material;
     
     MobDataTier(int xp, int energy, Material material) {
-        this.xp = (int) (xp * MobSimulationChamber.XP_MULTIPLIER);
+        this.xp = (int) (xp * MobData.XP_MULTIPLIER);
         this.energy = energy;
         this.material = material;
     }

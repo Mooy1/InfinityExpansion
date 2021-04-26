@@ -3,9 +3,9 @@ package io.github.mooy1.infinityexpansion.utils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import lombok.experimental.UtilityClass;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -20,6 +20,7 @@ import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
+@UtilityClass
 public final class Util {
 
     public static final int[] largeOutput = {
@@ -110,7 +111,7 @@ public final class Util {
     }
 
     public static boolean isWaterLogged(@Nonnull Block b) {
-        if ((InfinityExpansion.inst().getGlobalTick() & 7) == 0) {
+        if ((InfinityExpansion.inst().getGlobalTick() & 15) == 0) {
             BlockData blockData = b.getBlockData();
 
             if (blockData instanceof Waterlogged) {

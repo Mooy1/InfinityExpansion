@@ -5,11 +5,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import lombok.AllArgsConstructor;
 
 import org.bukkit.ChatColor;
@@ -21,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.blocks.Blocks;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.players.LeaveListener;
@@ -202,8 +201,8 @@ public final class InfinityCategory extends FlexCategory {
         }
 
         if (entry.bench == null) {
-            menu.addItem(INFINITY_BENCH, InfinityWorkbench.ITEM, (p, slot, item, action) -> {
-                SlimefunItem slimefunItem = InfinityWorkbench.ITEM.getItem();
+            menu.addItem(INFINITY_BENCH, Blocks.INFINITY_FORGE, (p, slot, item, action) -> {
+                SlimefunItem slimefunItem = Blocks.INFINITY_FORGE.getItem();
                 if (slimefunItem != null) {
                     LinkedList<SlimefunItem> list = new LinkedList<>();
                     list.add(slimefunItem);

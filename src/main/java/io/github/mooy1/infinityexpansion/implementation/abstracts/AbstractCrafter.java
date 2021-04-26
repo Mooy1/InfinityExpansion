@@ -1,5 +1,6 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -13,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.recipes.RecipeMap;
 import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictMultiInput;
 import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictMultiOutput;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -42,10 +42,10 @@ public abstract class AbstractCrafter extends TickingContainer {
     private static final int[] STATUS_BORDER = {14, 32};
     private static final int STATUS_SLOT = 23;
 
-    private final RecipeMap<StrictMultiInput, StrictMultiOutput> recipes;
+    private final Map<StrictMultiInput, StrictMultiOutput> recipes;
     
     public AbstractCrafter(Category category, SlimefunItemStack stack,
-                           RecipeMap<StrictMultiInput, StrictMultiOutput> recipes, RecipeType type, ItemStack[] recipe) {
+                           Map<StrictMultiInput, StrictMultiOutput> recipes, RecipeType type, ItemStack[] recipe) {
         super(category, stack, type, recipe);
         this.recipes = recipes;
     }

@@ -2,7 +2,6 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
@@ -13,14 +12,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
-import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -39,43 +34,8 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class VoidHarvester extends AbstractMachine implements RecipeDisplayItem {
-
-    public static void setup(InfinityExpansion plugin) {
-        new VoidHarvester(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.TITANIUM, Items.TITANIUM, Items.TITANIUM,
-                Items.MACHINE_PLATE, SlimefunItems.GEO_MINER, Items.MACHINE_PLATE,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, 120, 1).register(plugin);
-        new VoidHarvester(Categories.INFINITY_CHEAT, INFINITE, InfinityWorkbench.TYPE, new ItemStack[] {
-                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
-                Items.MAGNONIUM, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.MAGNONIUM,
-                Items.MAGNONIUM, Items.VOID_INGOT, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, Items.VOID_INGOT, Items.MAGNONIUM,
-                Items.MAGNONIUM, Items.VOID_INGOT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.VOID_INGOT, Items.MAGNONIUM,
-                Items.MAGNONIUM, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.VOID_INGOT, Items.MAGNONIUM,
-                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE
-        }, 1200, 32).register(plugin);
-    }
     
-    public static final SlimefunItemStack BASIC = new SlimefunItemStack(
-            "VOID_HARVESTER",
-            Material.OBSIDIAN,
-            "&8Void Harvester",
-            "&7Slowly harvests &8Void &7Bits from nothing...",
-            "",
-            LorePreset.speed(1),
-            LorePreset.energyPerSecond(120)
-    );
-    public static final SlimefunItemStack INFINITE = new SlimefunItemStack(
-            "INFINITE_VOID_HARVESTER",
-            Material.CRYING_OBSIDIAN,
-            "&bInfinite &8Void Harvester",
-            "&7Harvests &8Void &7Bits from nothing...",
-            "",
-            LorePreset.speed(32),
-            LorePreset.energyPerSecond(1200)
-    );
-    
-    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("void_harvester"), BASIC);
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("void_harvester"), Machines.VOID_HARVESTER);
     
     private static final int[] OUTPUT_SLOTS = {
         13
@@ -86,7 +46,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
     private final int speed;
     private final int energy;
 
-    private VoidHarvester(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
+    public VoidHarvester(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
         super(category, item, type, recipe);
         this.speed = speed;
         this.energy = energy;
@@ -113,7 +73,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
 
         if (progress >= TIME) { //reached full progress
 
-            ItemStack output = Items.VOID_BIT;
+            ItemStack output = Materials.VOID_BIT;
 
             if (inv.fits(output, OUTPUT_SLOTS)) {
 
@@ -187,7 +147,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
         final List<ItemStack> items = new ArrayList<>();
 
         items.add(null);
-        items.add(Items.VOID_BIT);
+        items.add(Materials.VOID_BIT);
 
         return items;
     }

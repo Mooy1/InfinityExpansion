@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
@@ -17,8 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
+import io.github.mooy1.infinityexpansion.implementation.materials.Strainer;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
@@ -27,6 +26,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -40,13 +40,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class StrainerBase extends TickingContainer implements RecipeDisplayItem {
-    
-    private static final int TIME = 48;
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "STRAINER_BASE",
-            Material.SANDSTONE_WALL,
-            "&7Strainer Base"
-    );
     
     private static final int STATUS_SLOT = MenuPreset.slot1;
     private static final int[] OUTPUT_SLOTS = Util.largeOutput;
@@ -72,13 +65,12 @@ public final class StrainerBase extends TickingContainer implements RecipeDispla
             new SlimefunItemStack(SlimefunItems.TIN_DUST, 1),
             new SlimefunItemStack(SlimefunItems.ZINC_DUST, 1),
     };
+    
+    private final int time;
 
-    public StrainerBase() {
-        super(Categories.BASIC_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
-                new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
-                new ItemStack(Material.STICK), new ItemStack(Material.STRING), new ItemStack(Material.STICK),
-                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-        });
+    public StrainerBase(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int time) {
+        super(category, item, type, recipe);
+        this.time = time;
     }
 
     @Override
@@ -126,7 +118,7 @@ public final class StrainerBase extends TickingContainer implements RecipeDispla
         List<ItemStack> items = new ArrayList<>();
         
         for (ItemStack output : OUTPUTS) {
-            items.add(Strainer.BASIC);
+            items.add(Materials.BASIC_STRAINER);
             items.add(output);
         }
         
@@ -165,7 +157,7 @@ public final class StrainerBase extends TickingContainer implements RecipeDispla
 
         //progress
 
-        if (random.nextInt(TIME / speed) != 0) {
+        if (random.nextInt(this.time / speed) != 0) {
 
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));

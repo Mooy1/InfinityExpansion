@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
@@ -16,11 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -28,6 +23,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -39,29 +35,19 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 public final class GeoQuarry extends AbstractMachine implements RecipeDisplayItem {
     
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "GEO_QUARRY",
-            Material.QUARTZ_BRICKS,
-            "&fGeo Quarry",
-            "&7Slowly harvests geo resources from the void using power",
-            "",
-            LorePreset.energyPerSecond(GeoQuarry.ENERGY)
-    );
-    
-    private static final int INTERVAL = 400;
-    private static final int ENERGY = 450;
     private static final int STATUS = 4;
     private static final int[] BORDER = { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 44, 45, 53 };
     private static final int[] OUTPUT_BORDER = { 19, 20, 21, 22, 23, 24, 25, 28, 34, 37, 43, 46, 47, 48, 49, 50, 51, 52 };
     private static final int[] OUTPUT_SLOTS = { 29, 30, 31, 32, 33, 38, 39, 40, 41, 42 };
     private final Map<Pair<Biome, World.Environment>, RandomizedSet<ItemStack>> recipes = new HashMap<>();
     
-    public GeoQuarry() {
-        super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE,
-                Items.VOID_INGOT, SlimefunExtension.ADVANCED_GEO_MINER, Items.VOID_INGOT,
-                Items.MACHINE_PLATE, Items.VOID_INGOT, Items.MACHINE_PLATE,
-        });
+    private final int energy;
+    private final int interval;
+    
+    public GeoQuarry(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int interval) {
+        super(category, item, type, recipe);
+        this.energy = energy;
+        this.interval = interval;
     }
 
     @Override
@@ -102,7 +88,7 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
 
     @Override
     protected int getEnergyConsumption() {
-        return ENERGY;
+        return this.energy;
     }
     
     @Nonnull
@@ -118,15 +104,10 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
 
         return displayRecipes;
     }
-    
-    @Override
-    public int getCapacity() {
-        return ENERGY * 4;
-    }
 
     @Override
     protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config data) {
-        if (InfinityExpansion.inst().getGlobalTick() % INTERVAL != 0) {
+        if (InfinityExpansion.inst().getGlobalTick() % this.interval != 0) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aDrilling..."));
             }

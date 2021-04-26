@@ -1,10 +1,12 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import lombok.AllArgsConstructor;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,18 +15,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
-import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
-import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
-import io.github.mooy1.infinityexpansion.utils.Triplet;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
@@ -43,43 +38,23 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class SingularityConstructor extends AbstractMachine implements RecipeDisplayItem {
+    
+    private static final List<Recipe> RECIPE_LIST = new ArrayList<>();
+    private static final Map<String, Pair<Integer, Recipe>> RECIPE_MAP = new HashMap<>();
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("singularity_constructor"), Machines.SINGULARITY_CONSTRUCTOR, (stacks, itemStack) -> {
+        int amt = 0;
+        for (ItemStack item : stacks) {
+            if (item != null) {
+                amt += item.getAmount();
+            }
+        }
+        String id = StackUtils.getIDorType(stacks[0]);
+        Recipe recipe = new Recipe((SlimefunItemStack) itemStack, stacks[0], id, amt);
+        RECIPE_LIST.add(recipe);
+        RECIPE_MAP.put(id, new Pair<>(RECIPE_LIST.size() - 1, recipe));
+    });
 
-    public static void setup(InfinityExpansion plugin) {
-        new SingularityConstructor(Categories.ADVANCED_MACHINES, BASIC, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MAGSTEEL, Items.MAGSTEEL, Items.MAGSTEEL,
-                Items.MACHINE_PLATE, SlimefunItems.CARBON_PRESS_3, Items.MACHINE_PLATE,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, 120, 1).register(plugin);
-        new SingularityConstructor(Categories.INFINITY_CHEAT, INFINITY, InfinityWorkbench.TYPE, new ItemStack[] {
-                null, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, null,
-                null, Items.VOID_INGOT, Items.INFINITE_CIRCUIT, Items.INFINITE_CIRCUIT, Items.VOID_INGOT, null,
-                null, Items.VOID_INGOT, BASIC, BASIC, Items.VOID_INGOT, null,
-                null, Items.VOID_INGOT, BASIC, BASIC, Items.VOID_INGOT, null,
-                null, Items.INFINITY, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.INFINITY, null,
-                Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY
-        }, 1200, 32).register(plugin);
-    }
-
-    public static final SlimefunItemStack BASIC = new SlimefunItemStack(
-            "SINGULARITY_CONSTRUCTOR",
-            Material.QUARTZ_BRICKS,
-            "&fSingularity Constructor",
-            "&7Condenses large amounts of resources",
-            "",
-            LorePreset.speed(1),
-            LorePreset.energyPerSecond(120)
-    );
-    public static final SlimefunItemStack INFINITY = new SlimefunItemStack(
-            "INFINITY_CONSTRUCTOR",
-            Material.CHISELED_QUARTZ_BLOCK,
-            "&bInfinity &fConstructor",
-            "&7Quickly condenses large amounts of resources",
-            "",
-            LorePreset.speed(32),
-            LorePreset.energyPerSecond(1200)
-    );
-    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("singularity_constructor"), BASIC);
-
+    private static final String PROGRESS = "progress";
     private static final int STATUS_SLOT = 13;
     private static final int INPUT_SLOT = 10;
     private static final int OUTPUT_SLOT = 16;
@@ -87,7 +62,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     private final int speed;
     private final int energy;
 
-    private SingularityConstructor(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
+    public SingularityConstructor(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
         super(category, item, type, recipe);
         this.speed = speed;
         this.energy = energy;
@@ -95,34 +70,31 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
 
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-        int progress = getProgress(l);
+        int progress = Util.getIntData(PROGRESS, l);
         Integer progressID = getProgressID(l);
 
         menu.dropItems(l, OUTPUT_SLOT, INPUT_SLOT);
 
         if (progress > 0 && progressID != null) {
 
-            Triplet<SlimefunItemStack, String, Integer> triplet = Singularity.RECIPES.get(progressID);
+            Recipe triplet = RECIPE_LIST.get(progressID);
 
             if (triplet != null) {
-                ItemStack drop = StackUtils.getItemByIDorType(triplet.getB(), 64);
+                ItemStack drop = new CustomItem(triplet.input, 64);
 
-                if (drop != null) {
+                int stacks = progress / 64;
 
-                    int stacks = progress / 64;
-
-                    if (stacks > 0) {
-                        for (int i = 0 ; i < stacks ; i++) {
-                            e.getBlock().getWorld().dropItemNaturally(l, drop);
-                        }
-                    }
-
-                    int remainder = progress % 64;
-
-                    if (remainder > 0) {
-                        drop.setAmount(remainder);
+                if (stacks > 0) {
+                    for (int i = 0 ; i < stacks ; i++) {
                         e.getBlock().getWorld().dropItemNaturally(l, drop);
                     }
+                }
+
+                int remainder = progress % 64;
+
+                if (remainder > 0) {
+                    drop.setAmount(remainder);
+                    e.getBlock().getWorld().dropItemNaturally(l, drop);
                 }
             }
         }
@@ -143,15 +115,15 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
 
         // load data
         Integer progressID = getProgressID(b.getLocation());
-        int progress = getProgress(b.getLocation());
+        int progress = Util.getIntData(PROGRESS, b.getLocation());
 
-        Triplet<SlimefunItemStack, String, Integer> triplet;
+        Recipe triplet;
         boolean takeCharge = false;
 
         if (progressID == null || progress == 0) {
             // not started
             if (inputID != null) {
-                Pair<Integer, Triplet<SlimefunItemStack, String, Integer>> pair = Singularity.getRecipeByID(inputID);
+                Pair<Integer, Recipe> pair = RECIPE_MAP.get(inputID);
                 if (pair != null) {
                     progress = Math.min(this.speed, input.getAmount());
                     input.setAmount(input.getAmount() - progress);
@@ -168,11 +140,11 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
             }
         } else {
             // started
-            triplet = Singularity.getRecipeByIndex(progressID);
+            triplet = RECIPE_LIST.get(progressID);
             if (inputID != null) {
-                int max = Math.min(triplet.getC() - progress, Math.min(this.speed, input.getAmount()));
+                int max = Math.min(triplet.amount - progress, Math.min(this.speed, input.getAmount()));
                 if (max > 0) {
-                    if (triplet.getB().equals(inputID)) {
+                    if (triplet.id.equals(inputID)) {
                         progress += max;
                         input.setAmount(input.getAmount() - max);
                         takeCharge = true;
@@ -183,23 +155,23 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
 
         // show status and output if done
         if (triplet != null) {
-            if (progress >= triplet.getC() && menu.fits(triplet.getA(), OUTPUT_SLOT)) {
-                menu.pushItem(triplet.getA().clone(), OUTPUT_SLOT);
+            if (progress >= triplet.amount && menu.fits(triplet.output, OUTPUT_SLOT)) {
+                menu.pushItem(triplet.output.clone(), OUTPUT_SLOT);
                 progress = 0;
                 progressID = null;
 
                 if (menu.hasViewer()) {
                     menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
                             Material.LIME_STAINED_GLASS_PANE,
-                            "&aConstructing " + triplet.getA().getDisplayName() + "...",
+                            "&aConstructing " + triplet.output.getDisplayName() + "...",
                             "&7Complete"
                     ));
                 }
             } else if (menu.hasViewer()) {
                 menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         Material.LIME_STAINED_GLASS_PANE,
-                        "&aConstructing " + triplet.getA().getDisplayName() + "...",
-                        "&7" + progress + " / " + triplet.getC()
+                        "&aConstructing " + triplet.output.getDisplayName() + "...",
+                        "&7" + progress + " / " + triplet.amount
                 ));
             }
         } else if (menu.hasViewer()) {
@@ -265,10 +237,6 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
         }
     }
 
-    private static int getProgress(Location l) {
-        return Util.getIntData("progress", l);
-    }
-
     private static Integer getProgressID(Location l) {
         String id = BlockStorage.getLocationInfo(l, "progressid");
         if (id == null) {
@@ -291,13 +259,22 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
-        for (int i = 0 ; i < Singularity.RECIPES.size() ; i++) {
-            Triplet<SlimefunItemStack, String, Integer> triplet = Singularity.RECIPES.get(i);
-            items.add(StackUtils.getItemByIDorType(triplet.getB(), 1));
-            items.add(triplet.getA());
+        for (Recipe recipe : RECIPE_LIST) {
+            items.add(recipe.input);
+            items.add(recipe.output);
         }
 
         return items;
+    }
+    
+    @AllArgsConstructor
+    private static final class Recipe {
+
+        private final SlimefunItemStack output;
+        private final ItemStack input;
+        private final String id;
+        private final int amount;
+        
     }
 
 }

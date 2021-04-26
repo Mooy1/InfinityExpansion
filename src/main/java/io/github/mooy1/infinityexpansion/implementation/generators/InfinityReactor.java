@@ -2,7 +2,6 @@ package io.github.mooy1.infinityexpansion.implementation.generators;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;
@@ -12,19 +11,17 @@ import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
-import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
+import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractContainer;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -40,37 +37,20 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  */
 public final class InfinityReactor extends AbstractContainer implements EnergyNetProvider, RecipeDisplayItem {
     
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "INFINITY_REACTOR",
-            Material.BEACON,
-            "&bInfinity Reactor",
-            "&7Generates power through the compression",
-            "&7of &8Void &7and &bInfinity &7Ingots",
-            "",
-            LorePreset.energyBuffer(InfinityReactor.STORAGE),
-            LorePreset.energyPerSecond(InfinityReactor.ENERGY)
-    );
-    
-    public static final int ENERGY = 90_000;
-    public static final int STORAGE = 90_000_000;
-    public static final int INFINITY_INTERVAL = (int) (86400 * TickerUtils.TPS); 
-    public static final int VOID_INTERVAL = (int) (14400 * TickerUtils.TPS);
-    public static final int[] INPUT_SLOTS = {
+    private static final int INFINITY_INTERVAL = (int) (86400 * TickerUtils.TPS); 
+    private static final int VOID_INTERVAL = (int) (14400 * TickerUtils.TPS);
+    private static final int[] INPUT_SLOTS = {
             MenuPreset.slot1, MenuPreset.slot3
     };
-    public static final int STATUS_SLOT = MenuPreset.slot2;
+    private static final int STATUS_SLOT = MenuPreset.slot2;
 
-    public InfinityReactor() {
-        super(Categories.INFINITY_CHEAT, ITEM, InfinityWorkbench.TYPE, new ItemStack[]  {
-                null, Items.INFINITY, Items.INFINITY, Items.INFINITY, Items.INFINITY, null,
-                Items.INFINITY, Items.INFINITY, Items.VOID_INGOT, Items.VOID_INGOT, Items.INFINITY, Items.INFINITY,
-                Items.INFINITY, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.INFINITY,
-                Items.INFINITY, Items.MACHINE_PLATE, SlimefunExtension.ADVANCED_NETHER_STAR_REACTOR, SlimefunExtension.ADVANCED_NETHER_STAR_REACTOR, Items.MACHINE_PLATE, Items.INFINITY,
-                Items.INFINITY, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.INFINITY,
-                Items.INFINITY, Items.INFINITE_CIRCUIT, Items.INFINITE_CORE, Items.INFINITE_CORE, Items.INFINITE_CIRCUIT, Items.INFINITY
-        });
-    }
+    private final int gen;
     
+    public InfinityReactor(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int gen) {
+        super(category, item, recipeType, recipe);
+        this.gen = gen;
+    }
+
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         if (BlockStorage.getLocationInfo(b.getLocation(), "progress") == null) {
@@ -103,9 +83,9 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
             String input = StackUtils.getID(item);
-            if (Items.VOID_INGOT.getItemId().equals(input)) {
+            if (Materials.VOID_INGOT.getItemId().equals(input)) {
                 return new int[] {INPUT_SLOTS[1]};
-            } else if (Items.INFINITY.getItemId().equals(input)) {
+            } else if (Materials.INFINITY.getItemId().equals(input)) {
                 return new int[] {INPUT_SLOTS[0]};
             }
         }
@@ -123,7 +103,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
 
         if (progress == 0) { //need infinity + void
 
-            if (infinityInput == null || !Items.INFINITY.getItemId().equals(StackUtils.getID(infinityInput))) { //wrong input
+            if (infinityInput == null || !Materials.INFINITY.getItemId().equals(StackUtils.getID(infinityInput))) { //wrong input
 
                 if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
@@ -132,7 +112,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
 
             }
             
-            if (voidInput == null || !Items.VOID_INGOT.getItemId().equals(StackUtils.getID(voidInput))) { //wrong input
+            if (voidInput == null || !Materials.VOID_INGOT.getItemId().equals(StackUtils.getID(voidInput))) { //wrong input
 
                 if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -152,7 +132,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             inv.consumeItem(INPUT_SLOTS[0]);
             inv.consumeItem(INPUT_SLOTS[1]);
             BlockStorage.addBlockInfo(l, "progress", "1");
-            return ENERGY;
+            return this.gen;
             
         }
         
@@ -162,13 +142,13 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aFinished Generation"));
             }
             BlockStorage.addBlockInfo(l, "progress", "0");
-            return ENERGY;
+            return this.gen;
 
         } 
         
         if (Math.floorMod(progress, VOID_INTERVAL) == 0) { //need void
 
-            if (voidInput == null || !Items.VOID_INGOT.getItemId().equals(StackUtils.getID(voidInput))) { //wrong input
+            if (voidInput == null || !Materials.VOID_INGOT.getItemId().equals(StackUtils.getID(voidInput))) { //wrong input
 
                 if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &8Void Ingots"));
@@ -187,7 +167,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             }
             BlockStorage.addBlockInfo(l, "progress", String.valueOf(progress + 1));
             inv.consumeItem(INPUT_SLOTS[1]);
-            return ENERGY;
+            return this.gen;
 
         } 
         
@@ -202,12 +182,12 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             );
         }
         BlockStorage.addBlockInfo(l, "progress", String.valueOf(progress + 1));
-        return ENERGY;
+        return this.gen;
     }
 
     @Override
     public int getCapacity() {
-        return STORAGE;
+        return this.gen * 1000;
     }
 
     @Nonnull
@@ -215,12 +195,12 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack item = Items.INFINITY.clone();
+        ItemStack item = Materials.INFINITY.clone();
         StackUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 1 day");
         items.add(item);
         items.add(null);
 
-        item = Items.VOID_INGOT.clone();
+        item = Materials.VOID_INGOT.clone();
         StackUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 4 hours");
         items.add(item);
         items.add(null);

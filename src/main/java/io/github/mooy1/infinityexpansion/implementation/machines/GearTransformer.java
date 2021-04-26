@@ -2,7 +2,6 @@ package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -13,15 +12,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -35,16 +32,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  */
 public final class GearTransformer extends AbstractEnergyCrafter implements RecipeDisplayItem {
     
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "GEAR_TRANSFORMER",
-            Material.EMERALD_BLOCK,
-            "&7Gear Transformer",
-            "&7Changes the material of vanilla tools and gear",
-            "",
-            LorePreset.energy(GearTransformer.ENERGY) + "Per Use"
-    );
-
-    private static final int ENERGY = 12000;
     private static final boolean SF = InfinityExpansion.inst().getConfig().getBoolean("balance-options.allow-sf-item-transform", false);
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.slot2 + 27
@@ -64,12 +51,8 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
     private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
     private static final int STATUS_SLOT = MenuPreset.slot2;
 
-    public GearTransformer() {
-        super(Categories.ADVANCED_MACHINES, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE,
-                Items.MACHINE_CIRCUIT, new ItemStack(Material.SMITHING_TABLE), Items.MACHINE_CIRCUIT,
-                Items.MAGSTEEL_PLATE, Items.MACHINE_CIRCUIT, Items.MAGSTEEL_PLATE
-        }, ENERGY, STATUS_SLOT);
+    public GearTransformer(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
+        super(category, item, type, recipe, energy, STATUS_SLOT);
     }
 
     @Override

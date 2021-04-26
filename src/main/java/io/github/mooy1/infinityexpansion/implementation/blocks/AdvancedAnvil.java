@@ -3,7 +3,6 @@ package io.github.mooy1.infinityexpansion.implementation.blocks;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -22,14 +21,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
-import io.github.mooy1.infinityexpansion.implementation.materials.Items;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -41,19 +38,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class AdvancedAnvil extends AbstractEnergyCrafter {
-
-    public static final int ENERGY = 100_000;
-
-    public static final SlimefunItemStack ITEM = new SlimefunItemStack(
-            "ADVANCED_ANVIL",
-            Material.SMITHING_TABLE,
-            "&cAdvanced Anvil",
-            "&7Combines tools and gear enchants and sometimes upgrades them",
-            "&bWorks with Slimefun items",
-            "",
-            LorePreset.energy(ENERGY) + "per use"
-
-    );
 
     private static final Map<Enchantment, Integer> MAX_LEVELS = Util.getEnchants(Objects.requireNonNull(
             InfinityExpansion.inst().getConfig().getConfigurationSection("advanced-anvil-max-levels")
@@ -75,12 +59,8 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
             45, 46, 52, 53
     };
 
-    public AdvancedAnvil() {
-        super(Categories.MAIN_MATERIALS, ITEM, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                Items.MACHINE_PLATE, Items.MACHINE_PLATE, Items.MACHINE_PLATE,
-                Items.MACHINE_PLATE, new ItemStack(Material.ANVIL), Items.MACHINE_PLATE,
-                Items.MACHINE_CIRCUIT, Items.MACHINE_CORE, Items.MACHINE_CIRCUIT
-        }, ENERGY, STATUS_SLOT);
+    public AdvancedAnvil(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
+        super(category, item, type, recipe, energy, STATUS_SLOT);
     }
 
     @Override
@@ -122,10 +102,10 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
 
     private void craft(BlockMenu inv, Block b, Player p) {
         Location l = b.getLocation();
-        if (getCharge(l) < ENERGY) { //not enough energy
+        if (getCharge(l) < this.energy) { //not enough energy
             p.sendMessage(new String[] {
                     ChatColor.RED + "Not enough energy!",
-                    ChatColor.GREEN + "Charge: " + ChatColor.RED + getCharge(l) + ChatColor.GREEN + "/" + ENERGY + " J"
+                    ChatColor.GREEN + "Charge: " + ChatColor.RED + getCharge(l) + ChatColor.GREEN + "/" + this.energy + " J"
             });
             return;
         }
@@ -154,7 +134,7 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         inv.consumeItem(INPUT_SLOT1, 1);
         inv.consumeItem(INPUT_SLOT2, 1);
         inv.pushItem(output, OUTPUT_SLOTS);
-        removeCharge(l, ENERGY);
+        removeCharge(l, this.energy);
         update(inv);
     }
 
