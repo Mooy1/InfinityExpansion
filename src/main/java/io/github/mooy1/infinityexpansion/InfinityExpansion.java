@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
+import javax.annotation.Nonnull;
+
 import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.commands.PrintItem;
 import io.github.mooy1.infinityexpansion.commands.SetData;
@@ -53,11 +55,13 @@ public final class InfinityExpansion extends AbstractAddon {
         return new Metrics(this, 8991);
     }
 
+    @Nonnull
     @Override
     protected String getGithubPath() {
         return "Mooy1/InfinityExpansion/master";
     }
 
+    @Nonnull
     @Override
     protected List<AbstractCommand> getSubCommands() {
         return Arrays.asList(new GiveRecipe(), new SetData(), new PrintItem());        
