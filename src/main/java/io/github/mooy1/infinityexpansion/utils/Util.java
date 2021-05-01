@@ -111,7 +111,7 @@ public final class Util {
     }
 
     public static boolean isWaterLogged(@Nonnull Block b) {
-        if ((InfinityExpansion.inst().getGlobalTick() & 15) == 0) {
+        if ((InfinityExpansion.inst().getGlobalTick() & 63) == 0) {
             BlockData blockData = b.getBlockData();
 
             if (blockData instanceof Waterlogged) {

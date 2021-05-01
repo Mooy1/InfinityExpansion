@@ -139,6 +139,12 @@ public final class MobData {
                 new ItemStack(Material.HONEY_BLOCK, 16), EMPTY_DATA_CARD,  new ItemStack(Material.HONEY_BLOCK, 16),
                 new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16),new ItemStack(Material.HONEYCOMB_BLOCK, 16)
         }, new ItemStack(Material.HONEYCOMB), 1, new ItemStack(Material.HONEYCOMB), 2).register(plugin);
+        new MobDataCard("Villager", MobDataTier.ADVANCED, new ItemStack[] {
+                new ItemStack(Material.EMERALD, 64), new ItemStack(Material.POTATO, 64), new ItemStack(Material.EMERALD, 64),
+                new ItemStack(Material.CARROT, 64), EMPTY_DATA_CARD, new ItemStack(Material.WHEAT, 64),
+                new ItemStack(Material.EMERALD, 64), new ItemStack(Material.PUMPKIN, 64), new ItemStack(Material.EMERALD, 64)
+        }, new ItemStack(Material.EMERALD), 1, new ItemStack(Material.EMERALD), 3).register(plugin);
+        
         new MobSimulationChamber(Categories.MOB_SIMULATION, CHAMBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, Materials.MACHINE_PLATE, Materials.MAGSTEEL_PLATE,
                 Materials.MACHINE_CIRCUIT, SlimefunItems.PROGRAMMABLE_ANDROID_BUTCHER, Materials.MACHINE_CIRCUIT,

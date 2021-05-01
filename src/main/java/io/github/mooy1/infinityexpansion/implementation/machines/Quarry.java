@@ -1,9 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.machines;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 
@@ -17,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
+import io.github.mooy1.infinityexpansion.implementation.materials.Oscillator;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
@@ -37,24 +36,28 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  */
 public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     
+    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.inst().getConfig().getBoolean("quarry-options.output-nether-materials-in-overworld");
+    private static final int INTERVAL = InfinityExpansion.inst().getConfig().getInt("quarry-options.ticks-per-output", 1, 100);
+
     private static final int[] OUTPUT_SLOTS = {
             9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, 20, 21, 22, 23, 24, 25, 26,
             27, 28, 29, 30, 31, 32, 33, 34, 35,
             36, 37, 38, 39, 40, 41, 42, 43, 44
     };
+    private static final int OSCILLATOR_SLOT = 49;
     private static final int STATUS_SLOT = 4;
-    private static final int INTERVAL = InfinityExpansion.inst().getConfig().getInt("quarry-options.ticks-per-output", 1, 100);
-    private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.inst().getConfig().getBoolean("quarry-options.output-nether-materials-in-overworld");
-
-    private final ItemStack cobble;
+    
+    private final int speed;
     private final int chance;
     private final int energy;
-    private final ItemStack[] outputs;
+    private final Material[] outputs;
     
-    public Quarry(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed, int chance, ItemStack[] outputs) {
+    public Quarry(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe,
+                  int energy, int speed, int chance, Material... outputs) {
         super(category, item, type, recipe);
-        this.cobble = new ItemStack(Material.COBBLESTONE, speed);
+        
+        this.speed = speed;
         this.chance = chance;
         this.outputs = outputs;
         this.energy = energy;
@@ -75,6 +78,9 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i = 45 ; i < 54 ; i++) {
+            if (i == OSCILLATOR_SLOT) {
+                i++;
+            }
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
     }
@@ -113,8 +119,10 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        items.add(this.cobble);
-        items.addAll(Arrays.asList(this.outputs));
+        items.add(new ItemStack(Material.COBBLESTONE, this.speed));
+        for (Material mat : this.outputs) {
+            items.add(new ItemStack(mat, this.speed));
+        }
 
         return items;
     }
@@ -139,20 +147,24 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
 
         ItemStack outputItem;
 
-        Random random = ThreadLocalRandom.current();
-        
-        if (random.nextInt(this.chance) == 0) {
-            outputItem = this.outputs[random.nextInt(this.outputs.length)];
-            Material outputType = outputItem.getType();
-            if (!ALLOW_NETHER_IN_OVERWORLD && b.getWorld().getEnvironment() != World.Environment.NETHER &&
-                    (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)
-            ) {
-                outputItem = this.cobble;
+        if (ThreadLocalRandom.current().nextInt(this.chance) == 0) {
+            Material oscillator = Oscillator.getOscillator(inv.getItemInSlot(OSCILLATOR_SLOT));
+            if (oscillator == null || ThreadLocalRandom.current().nextBoolean()) {
+                Material outputType = this.outputs[ThreadLocalRandom.current().nextInt(this.outputs.length)];
+                if (!ALLOW_NETHER_IN_OVERWORLD && b.getWorld().getEnvironment() != World.Environment.NETHER &&
+                        (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)
+                ) {
+                    outputItem = new ItemStack(Material.COBBLESTONE, this.speed);
+                } else {
+                    outputItem = new ItemStack(outputType, this.speed);
+                }
+            } else {
+                outputItem = new ItemStack(oscillator, this.speed);
             }
         } else {
-            outputItem = this.cobble;
+            outputItem = new ItemStack(Material.COBBLESTONE, this.speed);
         }
-
+        
         if (!inv.fits(outputItem, OUTPUT_SLOTS)) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
@@ -160,7 +172,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
             return false;
         }
         
-        inv.pushItem(outputItem.clone(), OUTPUT_SLOTS);
+        inv.pushItem(outputItem, OUTPUT_SLOTS);
         return true;
     }
 

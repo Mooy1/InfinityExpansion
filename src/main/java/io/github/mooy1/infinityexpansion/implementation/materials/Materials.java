@@ -393,6 +393,13 @@ public final class Materials {
         new Singularity(LAPIS_SINGULARITY, "LAPIS_LAZULI", 1500).register(plugin);
         new Singularity(QUARTZ_SINGULARITY, "QUARTZ", 1500).register(plugin);
         new Singularity(INFINITY_SINGULARITY, "INFINITE_INGOT", 100).register(plugin);
+
+        new Oscillator(Material.DIAMOND).register(plugin);
+        new Oscillator(Material.EMERALD).register(plugin);
+        new Oscillator(Material.GOLD_INGOT).register(plugin);
+        new Oscillator(Material.IRON_INGOT).register(plugin);
+        new Oscillator(Material.REDSTONE).register(plugin);
+        new Oscillator(Material.LAPIS_LAZULI).register(plugin);
     }
     
     private static void registerEnhanced(SlimefunItemStack item, ItemStack[] recipe) {

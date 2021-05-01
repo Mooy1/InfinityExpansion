@@ -15,11 +15,10 @@ import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 @UtilityClass
 public final class Machines {
-    
+
     private static final int RESOURCE_SYNTH_ENERGY = 1_000_000;
     public static final SlimefunItemStack RESOURCE_SYNTHESIZER = new SlimefunItemStack(
             "RESOURCE_SYNTHESIZER",
@@ -172,7 +171,8 @@ public final class Machines {
             "BASIC_QUARRY",
             Material.CHISELED_SANDSTONE,
             "&9Basic Quarry",
-            "&7Automatically mines vanilla overworld ores",
+            "&7Automatically mines overworld ores",
+            "&7Cobble Rate: 83%",
             "",
             LorePreset.speed(1),
             LorePreset.energyPerSecond(300)
@@ -181,7 +181,8 @@ public final class Machines {
             "ADVANCED_QUARRY",
             Material.CHISELED_RED_SANDSTONE,
             "&cAdvanced Quarry",
-            "&7Smelts vanilla ores and can mine nether ores",
+            "&7Automatically mines overworld and nether ores",
+            "&7Cobble Rate: 75%",
             "",
             LorePreset.speed(2),
             LorePreset.energyPerSecond(900)
@@ -190,18 +191,20 @@ public final class Machines {
             "VOID_QUARRY",
             Material.CHISELED_NETHER_BRICKS,
             "&8Void Quarry",
-            "&7Can mine sifted ores or 24 karat gold occasionally",
+            "&7Automatically mines overworld and nether ores",
+            "&7Cobble Rate: &e50%",
             "",
-            LorePreset.speed(4),
+            LorePreset.speed(6),
             LorePreset.energyPerSecond(3600)
     );
     public static final SlimefunItemStack INFINITY_QUARRY = new SlimefunItemStack(
             "INFINITY_QUARRY",
             Material.CHISELED_POLISHED_BLACKSTONE,
             "&bInfinity Quarry",
-            "&7Can mine and smelt Slimefun ingots",
+            "&7Automatically mines overworld and nether ores",
+            "&7Cobble Rate: &e0%",
             "",
-            LorePreset.speed(16),
+            LorePreset.speed(64),
             LorePreset.energyPerSecond(36000)
     );
     public static final SlimefunItemStack SINGULARITY_CONSTRUCTOR = new SlimefunItemStack(
@@ -248,7 +251,7 @@ public final class Machines {
             LorePreset.speed(64),
             LorePreset.energyPerSecond(12000)
     );
-    
+
     public static void setup(InfinityExpansion plugin) {
         new VoidHarvester(Categories.ADVANCED_MACHINES, VOID_HARVESTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.TITANIUM, Materials.TITANIUM, Materials.TITANIUM,
@@ -263,7 +266,7 @@ public final class Machines {
                 Materials.MAGNONIUM, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.MAGNONIUM,
                 Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE
         }, 12000, 64).register(plugin);
-        new StoneworksFactory(Categories.ADVANCED_MACHINES, STONEWORKS_FACTORY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        new StoneworksFactory(Categories.ADVANCED_MACHINES, STONEWORKS_FACTORY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, BASIC_COBBLE, Materials.MAGSTEEL_PLATE,
                 SlimefunItems.ELECTRIC_FURNACE_3, Materials.MACHINE_CIRCUIT, SlimefunItems.ELECTRIC_ORE_GRINDER,
                 Materials.MAGSTEEL_PLATE, SlimefunItems.ELECTRIC_PRESS, Materials.MAGSTEEL_PLATE
@@ -281,7 +284,7 @@ public final class Machines {
                 null, Materials.INFINITY, Materials.INFINITE_CORE, Materials.INFINITE_CORE, Materials.INFINITY, null,
                 Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY
         }, 1200, 64).register(plugin);
-        new ResourceSynthesizer(Categories.ADVANCED_MACHINES, POWERED_BEDROCK, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        new ResourceSynthesizer(Categories.ADVANCED_MACHINES, POWERED_BEDROCK, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.ADAMANTITE, Materials.ADAMANTITE, Materials.ADAMANTITE,
                 Materials.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Materials.MACHINE_PLATE,
                 Materials.MACHINE_PLATE, Materials.MACHINE_CORE, Materials.MACHINE_PLATE
@@ -293,91 +296,49 @@ public final class Machines {
                 Materials.COPPER_SINGULARITY, Materials.ZINC_SINGULARITY, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
                 Materials.IRON_SINGULARITY, Materials.QUARTZ_SINGULARITY, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
         }, RESOURCE_SYNTH_ENERGY).register(plugin);
+
         new Quarry(Categories.ADVANCED_MACHINES, BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Materials.MAGSTEEL_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 300, 1, 8, new ItemStack[] {
-                new ItemStack(Material.COAL, 4),
-                new ItemStack(Material.IRON_ORE, 1),
-                new ItemStack(Material.COAL, 4),
-                new ItemStack(Material.GOLD_ORE, 1),
-                new ItemStack(Material.LAPIS_LAZULI, 4),
-                new ItemStack(Material.EMERALD, 1),
-                new ItemStack(Material.DIAMOND, 1),
-                new ItemStack(Material.REDSTONE, 4),
-        }).register(plugin);
+        }, 300, 1, 6,
+                Material.COAL, Material.IRON_ORE, Material.COAL, Material.GOLD_ORE,
+                Material.LAPIS_LAZULI, Material.EMERALD, Material.DIAMOND, Material.REDSTONE
+        ).register(plugin);
+
         new Quarry(Categories.ADVANCED_MACHINES, ADVANCED_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Materials.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 900, 2, 6, new ItemStack[] {
-                new ItemStack(Material.COAL, 8),
-                new ItemStack(Material.IRON_INGOT, 2),
-                new ItemStack(Material.NETHERRACK, 2),
-                new ItemStack(Material.NETHERRACK, 2),
-                new ItemStack(Material.QUARTZ, 8),
-                new ItemStack(Material.GOLD_INGOT, 2),
-                new ItemStack(Material.COAL, 4),
-                new ItemStack(Material.LAPIS_LAZULI, 8),
-                new ItemStack(Material.EMERALD, 2),
-                new ItemStack(Material.DIAMOND, 2),
-                new ItemStack(Material.REDSTONE, 8),
-                new ItemStack(Material.NETHERITE_INGOT, 1)
-        }).register(plugin);
+        }, 900, 2, 4,
+                Material.COAL, Material.IRON_ORE, Material.COAL, Material.GOLD_ORE, Material.NETHERRACK,
+                Material.LAPIS_LAZULI, Material.EMERALD, Material.DIAMOND, Material.REDSTONE, Material.QUARTZ,
+                Material.NETHERITE_INGOT, Material.NETHERRACK, Material.QUARTZ
+        ).register(plugin);
+
         new Quarry(Categories.ADVANCED_MACHINES, VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.VOID_INGOT, SlimefunExtension.VOID_CAPACITOR, Materials.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), ADVANCED_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 3600, 6, 4, new ItemStack[] {
-                new ItemStack(Material.COAL, 24),
-                new CustomItem(SlimefunItems.SIFTED_ORE, 10),
-                new ItemStack(Material.COBBLESTONE, 6),
-                new ItemStack(Material.IRON_INGOT, 6),
-                new ItemStack(Material.NETHERRACK, 6),
-                new ItemStack(Material.NETHERRACK, 6),
-                new ItemStack(Material.QUARTZ, 24),
-                new ItemStack(Material.COAL, 24),
-                new ItemStack(Material.GOLD_INGOT, 6),
-                new ItemStack(Material.COAL, 24),
-                new CustomItem(SlimefunItems.SIFTED_ORE, 10),
-                new ItemStack(Material.LAPIS_LAZULI, 24),
-                new ItemStack(Material.EMERALD, 6),
-                new ItemStack(Material.DIAMOND, 6),
-                new ItemStack(Material.REDSTONE, 24),
-                new CustomItem(SlimefunItems.GOLD_24K, 6),
-                new ItemStack(Material.NETHERITE_INGOT, 4),
-        }).register(plugin);
-        new Quarry(Categories.INFINITY_CHEAT,INFINITY_QUARRY, InfinityWorkbench.TYPE, new ItemStack[] {
+        }, 3600, 6, 2,
+                Material.COAL, Material.IRON_ORE, Material.COAL, Material.GOLD_ORE, Material.NETHERRACK,
+                Material.LAPIS_LAZULI, Material.EMERALD, Material.DIAMOND, Material.REDSTONE, Material.QUARTZ,
+                Material.NETHERITE_INGOT, Material.QUARTZ, Material.COAL, Material.COAL
+        ).register(plugin);
+
+        new Quarry(Categories.INFINITY_CHEAT, INFINITY_QUARRY, InfinityWorkbench.TYPE, new ItemStack[] {
                 null, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, null,
                 Materials.MACHINE_PLATE, Gear.PICKAXE, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Gear.PICKAXE, Materials.MACHINE_PLATE,
                 Materials.MACHINE_PLATE, VOID_QUARRY, Materials.INFINITE_CORE, Materials.INFINITE_CORE, VOID_QUARRY, Materials.MACHINE_PLATE,
                 Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, null, Materials.VOID_INGOT,
                 Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, null, Materials.VOID_INGOT,
                 Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, null, Materials.VOID_INGOT
-        }, 36000, 64, 2, new ItemStack[] {
-                new ItemStack(Material.COAL, 64),
-                new ItemStack(Material.IRON_INGOT, 64),
-                new ItemStack(Material.NETHERRACK, 64),
-                new ItemStack(Material.NETHERRACK, 64),
-                new ItemStack(Material.QUARTZ, 64),
-                new ItemStack(Material.COAL, 64),
-                new ItemStack(Material.GOLD_INGOT, 64),
-                new CustomItem(SlimefunItems.MAGNESIUM_INGOT, 64),
-                new CustomItem(SlimefunItems.COPPER_INGOT, 64),
-                new CustomItem(SlimefunItems.ZINC_INGOT, 64),
-                new CustomItem(SlimefunItems.TIN_INGOT, 64),
-                new CustomItem(SlimefunItems.ALUMINUM_INGOT, 64),
-                new CustomItem(SlimefunItems.SILVER_INGOT, 64),
-                new CustomItem(SlimefunItems.LEAD_INGOT, 64),
-                new ItemStack(Material.LAPIS_LAZULI, 64),
-                new ItemStack(Material.EMERALD, 64),
-                new ItemStack(Material.COAL, 64),
-                new ItemStack(Material.DIAMOND, 64),
-                new ItemStack(Material.REDSTONE, 64),
-                new CustomItem(SlimefunItems.GOLD_24K, 64),
-                new ItemStack(Material.NETHERITE_INGOT, 64),
-        }).register(plugin);
+        }, 36000, 64, 1,
+                Material.COAL, Material.IRON_ORE, Material.COAL, Material.GOLD_ORE, Material.NETHERRACK,
+                Material.LAPIS_LAZULI, Material.EMERALD, Material.DIAMOND, Material.REDSTONE, Material.QUARTZ,
+                Material.NETHERITE_INGOT, Material.QUARTZ, Material.COAL, Material.COAL, Material.DIAMOND
+        ).register(plugin);
+
         new PoweredBedrock(Categories.INFINITY_CHEAT, RESOURCE_SYNTHESIZER, InfinityWorkbench.TYPE, new ItemStack[] {
                 Materials.COBBLE_5, Materials.COBBLE_5, Materials.COBBLE_5, Materials.COBBLE_5, Materials.COBBLE_5, Materials.COBBLE_5,
                 Materials.COBBLE_5, Materials.MACHINE_PLATE, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.MACHINE_PLATE, Materials.COBBLE_5,
@@ -438,7 +399,7 @@ public final class Machines {
                 Materials.MACHINE_PLATE, new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), new ItemStack(Material.PODZOL), Materials.MACHINE_PLATE,
                 Materials.MACHINE_PLATE, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CORE, Materials.INFINITE_CORE, Materials.INFINITE_CIRCUIT, Materials.MACHINE_PLATE
         }, 1800, 24, true).register(plugin);
-        
+
         new ConversionMachine(EXTREME_FREEZER, new ItemStack[] {
                 SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2,
                 new ItemStack(Material.WATER_BUCKET), SlimefunItems.FLUID_PUMP, new ItemStack(Material.WATER_BUCKET),
@@ -533,5 +494,5 @@ public final class Machines {
                 Materials.MACHINE_PLATE, Materials.VOID_INGOT, Materials.MACHINE_PLATE,
         }, GEO_QUARRY_ENERGY, GEO_QUARRY_INTERVAL).register(plugin);
     }
-    
+
 }

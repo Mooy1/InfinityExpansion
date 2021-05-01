@@ -63,7 +63,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     private static final String LORE = ChatColor.AQUA + "Veinminer - Crouch to use";
     private static final NamespacedKey key = InfinityExpansion.inst().getKey("vein_miner");
     
-    private final CoolDownMap cooldowns = new CoolDownMap(InfinityExpansion.inst());
+    private final CoolDownMap cooldowns = new CoolDownMap();
     private final Set<Block> processing = new HashSet<>();
     
     public VeinMinerRune(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {

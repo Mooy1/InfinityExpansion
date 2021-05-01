@@ -18,11 +18,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.implementation.blocks.Blocks;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.players.LeaveListener;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.mooy1.infinitylib.slimefun.utils.MultiCategory;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -90,7 +88,6 @@ public final class InfinityCategory extends FlexCategory {
 
     InfinityCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
-        LeaveListener.create(InfinityExpansion.inst(), history);
     }
 
     @Override

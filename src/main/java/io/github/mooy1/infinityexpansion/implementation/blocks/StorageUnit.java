@@ -163,7 +163,7 @@ public final class StorageUnit extends AbstractContainer {
                     ItemStack input = dirtyChestMenu.getItemInSlot(INPUT_SLOT);
                     if (input != null && input.getAmount() + itemStack.getAmount() > itemStack.getMaxStackSize()) {
                         // clear the input spot to make room
-                        cache.input();
+                        cache.input(input);
                     }
                     return new int[] {INPUT_SLOT};
                 }
@@ -229,7 +229,7 @@ public final class StorageUnit extends AbstractContainer {
     }
 
     /**
-     * Represents a single storage unit with cached data and main functionality
+     * Represents a single storage unit with cached data
      *
      * @author Mooy1
      */
@@ -347,7 +347,9 @@ public final class StorageUnit extends AbstractContainer {
 
         private void destroy(BlockBreakEvent e) {
             if (this.amount != 0) {
-                e.setDropItems(false);
+                e.setCancelled(true);
+                e.getBlock().setType(Material.AIR);
+                BlockStorage.clearBlockInfo(e.getBlock());
 
                 // add output slot
                 ItemStack output = this.menu.getItemInSlot(OUTPUT_SLOT);
@@ -368,11 +370,7 @@ public final class StorageUnit extends AbstractContainer {
             this.menu.dropItems(this.menu.getLocation(), INPUT_SLOT, OUTPUT_SLOT);
         }
 
-        private void input() {
-            ItemStack input = this.menu.getItemInSlot(INPUT_SLOT);
-            if (input == null) {
-                return;
-            }
+        private void input(@Nonnull ItemStack input) {
             if (this.amount == 0) {
                 // set the stored item to input
                 setAmount(input.getAmount());
@@ -424,7 +422,11 @@ public final class StorageUnit extends AbstractContainer {
         private void tick(Block block) {
 
             // input output
-            input();
+
+            ItemStack input = this.menu.getItemInSlot(INPUT_SLOT);
+            if (input != null) {
+                input(input);
+            }
             output(true);
 
             // status
