@@ -307,9 +307,9 @@ public final class Machines {
                 new ItemStack(Material.DIAMOND_PICKAXE), BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
         }, 900, 2, 4,
-                Material.COAL, Material.IRON_ORE, Material.COAL, Material.GOLD_ORE, Material.NETHERRACK,
+                Material.COAL, Material.IRON_INGOT, Material.COAL, Material.GOLD_INGOT, Material.NETHERRACK,
                 Material.LAPIS_LAZULI, Material.EMERALD, Material.DIAMOND, Material.REDSTONE, Material.QUARTZ,
-                Material.NETHERITE_INGOT, Material.NETHERRACK, Material.QUARTZ
+                Material.NETHERITE_INGOT, Material.NETHERRACK
         ).register(plugin);
 
         new Quarry(Categories.ADVANCED_MACHINES, VOID_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
@@ -317,9 +317,9 @@ public final class Machines {
                 new ItemStack(Material.NETHERITE_PICKAXE), ADVANCED_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
         }, 3600, 6, 2,
-                Material.COAL, Material.IRON_ORE, Material.COAL, Material.GOLD_ORE, Material.NETHERRACK,
+                Material.COAL, Material.IRON_INGOT, Material.COAL, Material.GOLD_INGOT, Material.NETHERRACK,
                 Material.LAPIS_LAZULI, Material.EMERALD, Material.DIAMOND, Material.REDSTONE, Material.QUARTZ,
-                Material.NETHERITE_INGOT, Material.QUARTZ, Material.COAL, Material.COAL
+                Material.NETHERITE_INGOT, Material.COAL, Material.COAL
         ).register(plugin);
 
         new Quarry(Categories.INFINITY_CHEAT, INFINITY_QUARRY, InfinityWorkbench.TYPE, new ItemStack[] {
@@ -330,9 +330,9 @@ public final class Machines {
                 Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, null, Materials.VOID_INGOT,
                 Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, null, Materials.VOID_INGOT
         }, 36000, 64, 1,
-                Material.COAL, Material.IRON_ORE, Material.COAL, Material.GOLD_ORE, Material.NETHERRACK,
+                Material.COAL, Material.IRON_INGOT, Material.COAL, Material.GOLD_INGOT, Material.NETHERRACK,
                 Material.LAPIS_LAZULI, Material.EMERALD, Material.DIAMOND, Material.REDSTONE, Material.QUARTZ,
-                Material.NETHERITE_INGOT, Material.QUARTZ, Material.COAL, Material.COAL, Material.DIAMOND
+                Material.NETHERITE_INGOT, Material.COAL, Material.COAL, Material.DIAMOND
         ).register(plugin);
 
         new PoweredBedrock(Categories.INFINITY_CHEAT, RESOURCE_SYNTHESIZER, InfinityWorkbench.TYPE, new ItemStack[] {
