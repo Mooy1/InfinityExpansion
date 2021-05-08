@@ -31,8 +31,8 @@ public final class Oscillator extends SlimefunItem {
                 "QUARRY_OSCILLATOR_" + material.name(), 
                 material, 
                 "&b" + StackUtils.getInternalName(new ItemStack(material)) + " Oscillator",
-                "&7Place in a quarry to boost the",
-                "&7chances of mining this material by 50%"
+                "&7Place in a quarry to give it",
+                "&7a 50% chance of mining this material"
         ), RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MACHINE_PLATE, SlimefunItems.BLISTERING_INGOT_3, Materials.MACHINE_PLATE,
                 SlimefunItems.BLISTERING_INGOT_3, new ItemStack(material), SlimefunItems.BLISTERING_INGOT_3,
