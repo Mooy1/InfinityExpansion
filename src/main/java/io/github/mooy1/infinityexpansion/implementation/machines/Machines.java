@@ -280,7 +280,7 @@ public final class Machines {
                 null, Materials.INFINITY, Materials.INFINITE_CORE, Materials.INFINITE_CORE, Materials.INFINITY, null,
                 Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY
         }, 1200, 64).register(plugin);
-        new ResourceSynthesizer(Categories.ADVANCED_MACHINES, POWERED_BEDROCK, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new ResourceSynthesizer(Categories.ADVANCED_MACHINES, RESOURCE_SYNTHESIZER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.ADAMANTITE, Materials.ADAMANTITE, Materials.ADAMANTITE,
                 Materials.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Materials.MACHINE_PLATE,
                 Materials.MACHINE_PLATE, Materials.MACHINE_CORE, Materials.MACHINE_PLATE
@@ -335,7 +335,7 @@ public final class Machines {
                 Material.NETHERITE_INGOT, Material.COAL, Material.COAL, Material.DIAMOND
         ).register(plugin);
 
-        new PoweredBedrock(Categories.INFINITY_CHEAT, RESOURCE_SYNTHESIZER, InfinityWorkbench.TYPE, new ItemStack[] {
+        new PoweredBedrock(Categories.INFINITY_CHEAT, POWERED_BEDROCK, InfinityWorkbench.TYPE, new ItemStack[] {
                 Materials.COBBLE_5, Materials.COBBLE_5, Materials.COBBLE_5, Materials.COBBLE_5, Materials.COBBLE_5, Materials.COBBLE_5,
                 Materials.COBBLE_5, Materials.MACHINE_PLATE, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.MACHINE_PLATE, Materials.COBBLE_5,
                 Materials.COBBLE_5, Materials.VOID_INGOT, SlimefunItems.ENERGIZED_CAPACITOR, SlimefunItems.ENERGIZED_CAPACITOR, Materials.VOID_INGOT, Materials.COBBLE_5,
