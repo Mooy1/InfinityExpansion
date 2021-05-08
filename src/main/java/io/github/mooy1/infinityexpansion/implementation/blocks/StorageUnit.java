@@ -94,7 +94,7 @@ public final class StorageUnit extends AbstractContainer {
     );
 
     /* Instance constants */
-    private final Map<Location, StorageCache> caches = new HashMap<>();
+    private final Map<DirtyChestMenu, StorageCache> caches = new HashMap<>();
     private final int max;
 
     public StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
@@ -109,26 +109,19 @@ public final class StorageUnit extends AbstractContainer {
 
             @Override
             public void tick(Block b, SlimefunItem item, Config data) {
-                StorageCache cache = StorageUnit.this.caches.get(b.getLocation());
-                if (cache != null) {
-                    cache.tick(b);
-                }
+                StorageUnit.this.caches.get(BlockStorage.getInventory(b)).tick(b);
             }
         });
     }
 
     @Override
     protected void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        if (this.caches.containsKey(b.getLocation())) {
-            // TEMP FIX
-            return;
-        }
-        this.caches.put(b.getLocation(), new StorageCache(b, menu));
+        this.caches.put(menu, new StorageCache(b.getLocation(), menu));
     }
 
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-        StorageCache cache = this.caches.remove(l);
+        StorageCache cache = this.caches.remove(menu);
         
         if (cache != null && cache.amount != 0) {
             e.setCancelled(true);
@@ -159,7 +152,7 @@ public final class StorageUnit extends AbstractContainer {
         Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
         if (data != null) {
             InfinityExpansion.inst().runSync(() -> {
-                StorageCache cache = this.caches.get(b.getLocation());
+                StorageCache cache = this.caches.get(BlockStorage.getInventory(b));
                 cache.load(data.getFirstValue(), data.getFirstValue().getItemMeta());
                 cache.setAmount(data.getSecondValue());
             });
@@ -177,7 +170,7 @@ public final class StorageUnit extends AbstractContainer {
     @Nonnull
     @Override
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack itemStack) {
-        StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getLocation());
+        StorageCache cache = this.caches.get(dirtyChestMenu);
         if (cache != null) {
             if (flow == ItemTransportFlow.INSERT) {
                 // check if input can be stored
@@ -244,10 +237,7 @@ public final class StorageUnit extends AbstractContainer {
     }
 
     public void reloadCache(Location l) {
-        StorageCache cache = this.caches.get(l);
-        if (cache != null) {
-            cache.reloadData();
-        }
+        this.caches.get(BlockStorage.getInventory(l)).reloadData();
     }
 
     /**
@@ -264,7 +254,7 @@ public final class StorageUnit extends AbstractContainer {
         private boolean voidExcess;
         private int amount;
 
-        StorageCache(Block block, BlockMenu menu) {
+        StorageCache(Location block, BlockMenu menu) {
 
             // load data
             this.menu = menu;
@@ -298,7 +288,7 @@ public final class StorageUnit extends AbstractContainer {
                     }
                 } else {
                     // attempt to load old data
-                    String oldID = BlockStorage.getLocationInfo(block.getLocation(), OLD_STORED_ITEM);
+                    String oldID = BlockStorage.getLocationInfo(block, OLD_STORED_ITEM);
                     if (oldID != null) {
                         InfinityExpansion.inst().runSync(() -> BlockStorage.addBlockInfo(block, OLD_STORED_ITEM, null));
                         ItemStack item = StackUtils.getItemByIDorType(oldID);

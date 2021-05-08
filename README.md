@@ -35,7 +35,7 @@ https://github.com/Mooy1/InfinityExpansion/wiki/How-to-make-a-Slimefun-Server
 Dev 104 - Added quarry oscillators, witch and villager data card, and fixed a bunch of bugs.
 Dev 105 - Fixed small issues with 104.
 Dev 106 - Fixed ores generating in high tier quarries.
-Dev 107 - Fixed resource synth and powered bedrock being swapped
+Dev 107 - Fixed storage units and some recipes
 
 ## Texture Pack
 

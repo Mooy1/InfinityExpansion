@@ -277,8 +277,8 @@ public final class Machines {
                 null, Materials.VOID_INGOT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.VOID_INGOT, null,
                 null, Materials.VOID_INGOT, SINGULARITY_CONSTRUCTOR, SINGULARITY_CONSTRUCTOR, Materials.VOID_INGOT, null,
                 null, Materials.VOID_INGOT, SINGULARITY_CONSTRUCTOR, SINGULARITY_CONSTRUCTOR, Materials.VOID_INGOT, null,
-                null, Materials.INFINITY, Materials.INFINITE_CORE, Materials.INFINITE_CORE, Materials.INFINITY, null,
-                Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY
+                null, Materials.INFINITE_INGOT, Materials.INFINITE_CORE, Materials.INFINITE_CORE, Materials.INFINITE_INGOT, null,
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT
         }, 1200, 64).register(plugin);
         new ResourceSynthesizer(Categories.ADVANCED_MACHINES, RESOURCE_SYNTHESIZER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.ADAMANTITE, Materials.ADAMANTITE, Materials.ADAMANTITE,
@@ -326,9 +326,9 @@ public final class Machines {
                 null, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, null,
                 Materials.MACHINE_PLATE, Gear.PICKAXE, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Gear.PICKAXE, Materials.MACHINE_PLATE,
                 Materials.MACHINE_PLATE, VOID_QUARRY, Materials.INFINITE_CORE, Materials.INFINITE_CORE, VOID_QUARRY, Materials.MACHINE_PLATE,
-                Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, null, Materials.VOID_INGOT,
-                Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, null, Materials.VOID_INGOT,
-                Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, null, Materials.VOID_INGOT
+                Materials.VOID_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.VOID_INGOT
         }, 36000, 64, 1,
                 Material.COAL, Material.IRON_INGOT, Material.COAL, Material.GOLD_INGOT, Material.NETHERRACK,
                 Material.LAPIS_LAZULI, Material.EMERALD, Material.DIAMOND, Material.REDSTONE, Material.QUARTZ,

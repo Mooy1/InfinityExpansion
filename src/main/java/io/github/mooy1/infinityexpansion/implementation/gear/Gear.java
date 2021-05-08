@@ -132,10 +132,10 @@ public final class Gear {
                 new PotionEffect(PotionEffectType.NIGHT_VISION, 600, 0, false, false, false),
                 new PotionEffect(PotionEffectType.CONDUIT_POWER, 600, 0, false, false, false),
         }, new ItemStack[] {
-                null, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, null,
-                Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY,
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY,
-                null, Materials.INFINITY, null, null, Materials.INFINITY, null,
+                null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null,
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                null, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, null,
                 null, null, null, null, null, null,
                 null, null, null, null, null, null
         }).register(plugin);
@@ -144,91 +144,91 @@ public final class Gear {
                 new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 600, 1, false, false, false),
                 new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 600, 0, false, false, false)
         }, new ItemStack[] {
-                null, Materials.INFINITY, null, null, Materials.INFINITY, null,
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY,
-                Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT,
-                Materials.VOID_INGOT, Materials.INFINITY, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITY, Materials.VOID_INGOT,
-                null, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, null,
-                null, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, null
+                null, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, null,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null,
+                null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null
         }).register(plugin);
         new InfinityArmor(LEGGINGS, new PotionEffect[] {
                 new PotionEffect(PotionEffectType.FAST_DIGGING, 600, 2, false, false, false),
                 new PotionEffect(PotionEffectType.REGENERATION, 600, 0, false, false, false),
                 new PotionEffect(PotionEffectType.SATURATION, 600, 0, false, false, false),
         }, new ItemStack[] {
-                null, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, null,
-                Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY,
-                Materials.VOID_INGOT, Materials.INFINITY, null, null, Materials.INFINITY, Materials.VOID_INGOT,
-                Materials.VOID_INGOT, Materials.INFINITY, null, null, Materials.INFINITY, Materials.VOID_INGOT,
-                Materials.VOID_INGOT, Materials.INFINITY, null, null, Materials.INFINITY, Materials.VOID_INGOT,
-                null, Materials.INFINITY, null, null, Materials.INFINITY, null
+                null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null,
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                null, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, null
         }).register(plugin);
         new InfinityArmor(BOOTS, new PotionEffect[] {
                 new PotionEffect(PotionEffectType.SPEED, 600, 2, false, false, false),
                 new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 600, 0, false, false, false),
         }, new ItemStack[] {
                 null, null, null, null, null, null,
-                Materials.INFINITY, Materials.INFINITY, null, null, Materials.INFINITY, Materials.INFINITY,
-                Materials.INFINITY, Materials.INFINITY, null, null, Materials.INFINITY, Materials.INFINITY,
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
                 Materials.VOID_INGOT, Materials.VOID_INGOT, null, null, Materials.VOID_INGOT, Materials.VOID_INGOT,
-                Materials.INFINITY, Materials.INFINITY, null, null, Materials.INFINITY, Materials.INFINITY,
-                Materials.INFINITY, Materials.INFINITY, null, null, Materials.INFINITY, Materials.INFINITY
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT
         }).register(plugin);
         new InfinityTool(SHIELD, new ItemStack[] {
-                Materials.INFINITY, Materials.INFINITY, null, null, Materials.INFINITY, Materials.INFINITY,
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY,
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY,
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY,
-                null, Materials.INFINITY, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITY, null,
-                null, Materials.INFINITY, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITY, null
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                null, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, null,
+                null, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, null
         }).register(plugin);
         new InfinityTool(BOW, new ItemStack[] {
-                null, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, null, null,
-                Materials.INFINITY, null, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, null,
-                Materials.VOID_INGOT, null, null, ENDER_FLAME, Materials.INFINITY, Materials.VOID_INGOT,
-                null, Materials.VOID_INGOT, null, null, Materials.INFINITY, Materials.INFINITY,
-                null, null, Materials.VOID_INGOT, null, null, Materials.INFINITY,
-                null, null, null, Materials.VOID_INGOT, Materials.INFINITY, null
+                null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, null, null,
+                Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, null,
+                Materials.VOID_INGOT, null, null, ENDER_FLAME, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                null, Materials.VOID_INGOT, null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                null, null, Materials.VOID_INGOT, null, null, Materials.INFINITE_INGOT,
+                null, null, null, Materials.VOID_INGOT, Materials.INFINITE_INGOT, null
         }).register(plugin);
         new InfinityTool(AXE, new ItemStack[] {
-                null, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, null, null,
-                Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, null,
-                null, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY,
-                null, null, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY,
-                null, Materials.VOID_INGOT, null, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT,
+                null, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, null,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, null,
+                null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                null, null, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                null, Materials.VOID_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
                 Materials.VOID_INGOT, null, null, null, Materials.VOID_INGOT, null
         }).register(plugin);
         new InfinityTool(BLADE, new ItemStack[] {
-                null, null, null, null, Materials.INFINITY, Materials.INFINITY,
-                null, null, null, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY,
-                null, null, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, null,
-                Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, null, null,
-                null, Materials.VOID_INGOT, Materials.INFINITY, null, null, null,
-                Materials.VOID_INGOT, null, Materials.INFINITY, null, null, null
+                null, null, null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                null, null, null, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                null, null, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, null,
+                Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, null, null,
+                null, Materials.VOID_INGOT, Materials.INFINITE_INGOT, null, null, null,
+                Materials.VOID_INGOT, null, Materials.INFINITE_INGOT, null, null, null
         }).register(plugin);
         new InfinityTool(SHOVEL, new ItemStack[] {
-                null, null, null, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY,
-                null, null, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY,
-                null, null, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY,
-                null, null, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, null,
+                null, null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                null, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                null, null, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                null, null, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null,
                 null, Materials.VOID_INGOT, null, null, null, null,
                 Materials.VOID_INGOT, null, null, null, null, null
         }).register(plugin);
         new InfinityTool(PICKAXE, new ItemStack[] {
-                null, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.INFINITY, null,
-                null, null, null, Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY,
-                null, null, null, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY,
-                null, null, Materials.VOID_INGOT, null, null, Materials.INFINITY,
+                null, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null,
+                null, null, null, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                null, null, null, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT,
+                null, null, Materials.VOID_INGOT, null, null, Materials.INFINITE_INGOT,
                 null, Materials.VOID_INGOT, null, null, null, Materials.VOID_INGOT,
                 Materials.VOID_INGOT, null, null, null, null, null
         }).register(plugin);
         new InfinityMatrix(Categories.INFINITY_CHEAT, INFINITY_MATRIX, InfinityWorkbench.TYPE, new ItemStack[] {
-                Materials.INFINITY, null, Materials.INFINITY, Materials.INFINITY, null, Materials.INFINITY,
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITY,
+                Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
                 Materials.VOID_INGOT, Materials.VOID_INGOT, new ItemStack(Material.ELYTRA), new ItemStack(Material.ELYTRA), Materials.VOID_INGOT, Materials.VOID_INGOT,
-                Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITY, Materials.INFINITY, Materials.VOID_INGOT, Materials.VOID_INGOT,
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITY,
-                Materials.INFINITY, null, Materials.INFINITY, Materials.INFINITY, null, Materials.INFINITY
+                Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT
         }).register(plugin);
         new VeinMinerRune(Categories.MAIN_MATERIALS, VEIN_MINER_RUNE, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
                 Materials.MAGSTEEL, SlimefunItems.PICKAXE_OF_VEIN_MINING, Materials.MAGSTEEL,

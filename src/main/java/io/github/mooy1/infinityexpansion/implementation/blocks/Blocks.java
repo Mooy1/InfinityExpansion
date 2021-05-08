@@ -110,9 +110,9 @@ public final class Blocks {
                 Materials.VOID_INGOT, Materials.MACHINE_CORE, Materials.VOID_INGOT
         }).register(plugin);
         new StorageUnit(INFINITY_STORAGE, INFINITY_AMOUNT, new ItemStack[] {
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY,
-                Materials.INFINITY, VOID_STORAGE, Materials.INFINITY,
-                Materials.INFINITY, Materials.VOID_INGOT, Materials.INFINITY
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, VOID_STORAGE, Materials.INFINITE_INGOT,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT
         }).register(plugin);
         new AdvancedAnvil(Categories.MAIN_MATERIALS, ADVANCED_ANVIL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MACHINE_PLATE, Materials.MACHINE_PLATE, Materials.MACHINE_PLATE,

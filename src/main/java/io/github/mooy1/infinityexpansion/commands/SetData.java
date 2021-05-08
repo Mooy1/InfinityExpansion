@@ -10,9 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import io.github.mooy1.infinityexpansion.implementation.blocks.StorageUnit;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
 public final class SetData extends AbstractCommand {
@@ -60,11 +58,6 @@ public final class SetData extends AbstractCommand {
         } else {
             p.sendMessage(ChatColor.GREEN + "Successfully set key '" + strings[1] + "' to value '" + strings[2] + "' in " + id);
             BlockStorage.addBlockInfo(target, strings[1], strings[2]);
-        }
-
-        SlimefunItem unit = SlimefunItem.getByID(id);
-        if (unit instanceof StorageUnit) {
-            ((StorageUnit) unit).reloadCache(target.getLocation());
         }
     }
 

@@ -85,7 +85,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
             String input = StackUtils.getID(item);
             if (Materials.VOID_INGOT.getItemId().equals(input)) {
                 return new int[] {INPUT_SLOTS[1]};
-            } else if (Materials.INFINITY.getItemId().equals(input)) {
+            } else if (Materials.INFINITE_INGOT.getItemId().equals(input)) {
                 return new int[] {INPUT_SLOTS[0]};
             }
         }
@@ -103,7 +103,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
 
         if (progress == 0) { //need infinity + void
 
-            if (infinityInput == null || !Materials.INFINITY.getItemId().equals(StackUtils.getID(infinityInput))) { //wrong input
+            if (infinityInput == null || !Materials.INFINITE_INGOT.getItemId().equals(StackUtils.getID(infinityInput))) { //wrong input
 
                 if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cInput more &fInfinity Ingots"));
@@ -195,7 +195,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack item = Materials.INFINITY.clone();
+        ItemStack item = Materials.INFINITE_INGOT.clone();
         StackUtils.addLore(item, "", ChatColor.GOLD + "Lasts for 1 day");
         items.add(item);
         items.add(null);

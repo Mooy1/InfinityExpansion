@@ -65,7 +65,7 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
 
     @Override
     public int getCapacity() {
-        return Math.max(MobDataTier.BOSS.energy, this.energy * 10);
+        return this.energy + Math.max(MobDataTier.BOSS.energy, this.energy * 9);
     }
 
     @Override
