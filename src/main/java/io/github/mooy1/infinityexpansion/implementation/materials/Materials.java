@@ -396,8 +396,6 @@ public final class Materials {
 
         new Oscillator(Material.DIAMOND).register(plugin);
         new Oscillator(Material.EMERALD).register(plugin);
-        new Oscillator(Material.GOLD_INGOT).register(plugin);
-        new Oscillator(Material.IRON_INGOT).register(plugin);
         new Oscillator(Material.REDSTONE).register(plugin);
         new Oscillator(Material.LAPIS_LAZULI).register(plugin);
     }

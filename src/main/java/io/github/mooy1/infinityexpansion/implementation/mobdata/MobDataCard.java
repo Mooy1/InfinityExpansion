@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.categories.Categories;
@@ -15,7 +16,8 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * A mob data card which will be able to be used in the {@link MobSimulationChamber}
@@ -25,43 +27,16 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
     static final Map<String, MobDataCard> CARDS = new HashMap<>();
 
     /**
-     * 1 drop
+     * @deprecated Use {@code MobDataCard.addDrop(drop, weight)} in a chain instead
      */
-    public MobDataCard(String name, MobDataTier tier, ItemStack[] recipe,
-                       ItemStack dropA, int chanceA) {
-        this(name, tier, recipe,
-                new Pair<>(dropA, chanceA));
-    }
-
-    /**
-     * 2 drops
-     */
+    @Deprecated
     public MobDataCard(String name, MobDataTier tier, ItemStack[] recipe,
                        ItemStack dropA, int chanceA, ItemStack dropB, int chanceB) {
-        this(name, tier, recipe,
-                new Pair<>(dropA, chanceA), new Pair<>(dropB, chanceB));
+        this(name, tier, recipe);
+        addDrop(dropA, chanceA).addDrop(dropB, chanceB);
     }
-
-    /**
-     * 3 drops
-     */
-    public MobDataCard(String name, MobDataTier tier, ItemStack[] recipe,
-                       ItemStack dropA, int chanceA, ItemStack dropB, int chanceB, ItemStack dropC, int chanceC) {
-        this(name, tier, recipe,
-                new Pair<>(dropA, chanceA), new Pair<>(dropB, chanceB), new Pair<>(dropC, chanceC));
-    }
-
-    /**
-     * 4 drops
-     */
-    public MobDataCard(String name, MobDataTier tier, ItemStack[] recipe,
-                       ItemStack dropA, int chanceA, ItemStack dropB, int chanceB, ItemStack dropC, int chanceC, ItemStack dropD, int chanceD) {
-        this(name, tier, recipe,
-                new Pair<>(dropA, chanceA), new Pair<>(dropB, chanceB), new Pair<>(dropC, chanceC), new Pair<>(dropD, chanceD));
-    }
-
-    @SafeVarargs
-    private MobDataCard(String name, MobDataTier tier, ItemStack[] recipe, @Nonnull Pair<ItemStack, Integer>... drops) {
+    
+    public MobDataCard(String name, MobDataTier tier, ItemStack[] recipe) {
         super(Categories.MOB_SIMULATION, new SlimefunItemStack(
                 name.toUpperCase(Locale.ROOT).replace(" ", "_") + "_DATA_CARD",
                 tier.material,
@@ -70,26 +45,41 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
                 "",
                 LorePreset.energyPerSecond(tier.energy)
         ), MobDataInfuser.TYPE, recipe);
-        this.drops = drops;
+        
         this.tier = tier;
-    }
-
-    @Nonnull
-    final Pair<ItemStack, Integer>[] drops;
-    final MobDataTier tier;
-
-    @Override
-    public void postRegister() {
+        
         CARDS.put(getId(), this);
     }
 
     @Nonnull
+    final RandomizedSet<ItemStack> drops = new RandomizedSet<>();
+    @Nonnull
+    final MobDataTier tier;
+    
+    public MobDataCard addDrop(ItemStack drop, float chance) {
+        this.drops.add(drop, 1 / chance);
+        return this;
+    }
+
+    public MobDataCard addDrop(ItemStack drop, int amount, float chance) {
+        return addDrop(new CustomItem(drop, amount), chance);
+    }
+
+    public MobDataCard addDrop(Material drop, float chance) {
+        return addDrop(new ItemStack(drop), chance);
+    }
+
+    public MobDataCard addDrop(Material drop, int amount, float chance) {
+        return addDrop(new ItemStack(drop, amount), chance);
+    }
+    
+    @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
-        for (Pair<ItemStack, Integer> i : this.drops) {
+        for (ItemStack item : this.drops) {
             items.add(null);
-            items.add(i.getFirstValue());
+            items.add(item);
         }
         return items;
     }

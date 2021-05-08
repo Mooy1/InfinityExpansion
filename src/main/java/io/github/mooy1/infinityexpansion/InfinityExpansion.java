@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 
+import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.commands.PrintItem;
 import io.github.mooy1.infinityexpansion.commands.SetData;
@@ -41,6 +42,7 @@ public final class InfinityExpansion extends AbstractAddon {
                     "########################################################"
             ));
         }
+        Categories.setup(this);
         MobData.setup(this);
         Materials.setup(this);
         Machines.setup(this);

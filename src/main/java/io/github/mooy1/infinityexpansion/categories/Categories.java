@@ -44,4 +44,10 @@ public final class Categories {
             new CustomItem(Material.RESPAWN_ANCHOR, "&bInfinity &7Recipes &c- INCORRECT RECIPES")
     );
     
+    public static void setup(InfinityExpansion inst) {
+        INFINITY_CATEGORY.register(inst);
+        MAIN_CATEGORY.register(inst);
+        INFINITY_CHEAT.register(inst);
+    }
+    
 }

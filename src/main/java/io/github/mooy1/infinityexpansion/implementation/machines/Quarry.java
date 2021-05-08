@@ -39,6 +39,12 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     private static final boolean ALLOW_NETHER_IN_OVERWORLD = InfinityExpansion.inst().getConfig().getBoolean("quarry-options.output-nether-materials-in-overworld");
     private static final int INTERVAL = InfinityExpansion.inst().getConfig().getInt("quarry-options.ticks-per-output", 1, 100);
 
+    private static final ItemStack OSCILLATOR_INFO = new CustomItem(
+            Material.CYAN_STAINED_GLASS_PANE, 
+            "&bOscillator Slot",
+            "&7Place a quarry oscillator to",
+            "&7boost certain material's rates!"
+    );
     private static final int[] OUTPUT_SLOTS = {
             9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, 20, 21, 22, 23, 24, 25, 26,
@@ -66,6 +72,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
         menu.dropItems(l, OUTPUT_SLOTS);
+        menu.dropItems(l, OSCILLATOR_SLOT);
     }
 
     @Override
@@ -78,8 +85,10 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i = 45 ; i < 54 ; i++) {
-            if (i == OSCILLATOR_SLOT) {
-                i++;
+            if (i == OSCILLATOR_SLOT - 1) {
+                blockMenuPreset.addItem(i, OSCILLATOR_INFO, ChestMenuUtils.getEmptyClickHandler());
+                blockMenuPreset.addItem(i + 2, OSCILLATOR_INFO, ChestMenuUtils.getEmptyClickHandler());
+                i+=3;
             }
             blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }

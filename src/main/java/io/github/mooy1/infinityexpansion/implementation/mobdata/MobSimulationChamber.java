@@ -1,6 +1,5 @@
 package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
-import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
@@ -29,7 +28,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 public final class MobSimulationChamber extends TickingContainer implements EnergyNetComponent {
@@ -158,15 +156,11 @@ public final class MobSimulationChamber extends TickingContainer implements Ener
 
         BlockStorage.addBlockInfo(b.getLocation(), "xp", String.valueOf(xp + card.tier.xp));
 
-        for (Pair<ItemStack, Integer> entry : card.drops) {
-            if (ThreadLocalRandom.current().nextInt(entry.getSecondValue()) == 0) {
-                ItemStack output = entry.getFirstValue();
-                if (inv.fits(output, OUTPUT_SLOTS)) {
-                    inv.pushItem(output.clone(), OUTPUT_SLOTS);
-                } else if (inv.hasViewer()) {
-                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
-                }
-            }
+        ItemStack item = card.drops.getRandom();
+        if (inv.fits(item, OUTPUT_SLOTS)) {
+            inv.pushItem(item.clone(), OUTPUT_SLOTS);
+        } else if (inv.hasViewer()) {
+            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
         }
     }
 

@@ -31,7 +31,6 @@ import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -61,7 +60,7 @@ public final class StorageUnit extends AbstractContainer {
     /* BlockStorage keys */
     private static final String OLD_STORED_ITEM = "storeditem"; // old item key in block data
     private static final String STORED_AMOUNT = "stored"; // amount key in block data
-    private static final String VOID_EXCESS = "void_excess";
+    private static final String VOID_EXCESS = "void_excess"; // void excess true or null key
 
     /* Namespaced keys */
     private static final NamespacedKey EMPTY_KEY = InfinityExpansion.inst().getKey("empty"); // key for empty item
@@ -129,7 +128,30 @@ public final class StorageUnit extends AbstractContainer {
 
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-        this.caches.remove(l).destroy(e);
+        StorageCache cache = this.caches.remove(l);
+        
+        if (cache != null && cache.amount != 0) {
+            e.setCancelled(true);
+            e.getBlock().setType(Material.AIR);
+            BlockStorage.clearBlockInfo(e.getBlock());
+
+            // add output slot
+            ItemStack output = cache.menu.getItemInSlot(OUTPUT_SLOT);
+            if (output != null && cache.matches(output)) {
+                int add = Math.min(this.max - cache.amount, output.getAmount());
+                if (add != 0) {
+                    cache.amount += add;
+                    output.setAmount(output.getAmount() - add);
+                }
+            }
+
+            ItemStack drop = getItem().clone();
+            drop.setItemMeta(saveToStack(drop.getItemMeta(), menu.getItemInSlot(DISPLAY_SLOT), cache.displayName, cache.amount));
+            e.getPlayer().sendMessage(ChatColor.GREEN + "Stored items transferred to dropped item");
+            e.getBlock().getWorld().dropItemNaturally(l, drop);
+        }
+
+        menu.dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
     }
 
     @Override
@@ -159,7 +181,7 @@ public final class StorageUnit extends AbstractContainer {
         if (cache != null) {
             if (flow == ItemTransportFlow.INSERT) {
                 // check if input can be stored
-                if (cache.isEmpty() || cache.matches(itemStack)) {
+                if (cache.amount == 0 || cache.matches(itemStack)) {
                     ItemStack input = dirtyChestMenu.getItemInSlot(INPUT_SLOT);
                     if (input != null && input.getAmount() + itemStack.getAmount() > itemStack.getMaxStackSize()) {
                         // clear the input spot to make room
@@ -297,13 +319,41 @@ public final class StorageUnit extends AbstractContainer {
                 }
             }
 
-            // menu click handlers
+            // void excess handler
             menu.addMenuClickHandler(STATUS_SLOT, (p, slot, item, action) -> {
-                voidExcessHandler();
+                this.voidExcess = !this.voidExcess;
+                BlockStorage.addBlockInfo(this.menu.getLocation(), VOID_EXCESS, this.voidExcess ? "true" : null);
+                ItemMeta meta = item.getItemMeta();
+                List<String> lore = meta.getLore();
+                lore.set(1, this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE);
+                meta.setLore(lore);
+                item.setItemMeta(meta);
                 return false;
             });
+            
+            // interact handler
             menu.addMenuClickHandler(INTERACT_SLOT, (p, slot, item, action) -> {
-                interactHandler(p, action);
+                if (this.amount == 1) {
+                    if (action.isShiftClicked() && !action.isRightClicked()) {
+                        depositAll(p);
+                    } else {
+                        withdrawLast(p);
+                    }
+                } else if (this.amount != 0) {
+                    if (action.isRightClicked()) {
+                        if (action.isShiftClicked()) {
+                            withdraw(p, this.amount - 1);
+                        } else {
+                            withdraw(p, Math.min(this.material.getMaxStackSize(), this.amount - 1));
+                        }
+                    } else {
+                        if (action.isShiftClicked()) {
+                            depositAll(p);
+                        } else {
+                            withdraw(p, 1);
+                        }
+                    }
+                }
                 return false;
             });
 
@@ -343,31 +393,6 @@ public final class StorageUnit extends AbstractContainer {
         private void setAmount(int amount) {
             this.amount = amount;
             BlockStorage.addBlockInfo(this.menu.getLocation(), STORED_AMOUNT, String.valueOf(amount));
-        }
-
-        private void destroy(BlockBreakEvent e) {
-            if (this.amount != 0) {
-                e.setCancelled(true);
-                e.getBlock().setType(Material.AIR);
-                BlockStorage.clearBlockInfo(e.getBlock());
-
-                // add output slot
-                ItemStack output = this.menu.getItemInSlot(OUTPUT_SLOT);
-                if (output != null && matches(output)) {
-                    int add = Math.min(StorageUnit.this.max - this.amount, output.getAmount());
-                    if (add != 0) {
-                        this.amount += add;
-                        output.setAmount(output.getAmount() - add);
-                    }
-                }
-
-                ItemStack drop = StorageUnit.this.getItem().clone();
-                drop.setItemMeta(saveToStack(drop.getItemMeta(), this.menu.getItemInSlot(DISPLAY_SLOT), this.displayName, this.amount));
-                e.getPlayer().sendMessage(ChatColor.GREEN + "Stored items transferred to dropped item");
-                e.getBlock().getWorld().dropItemNaturally(this.menu.getLocation(), drop);
-            }
-
-            this.menu.dropItems(this.menu.getLocation(), INPUT_SLOT, OUTPUT_SLOT);
         }
 
         private void input(@Nonnull ItemStack input) {
@@ -420,9 +445,7 @@ public final class StorageUnit extends AbstractContainer {
         }
 
         private void tick(Block block) {
-
             // input output
-
             ItemStack input = this.menu.getItemInSlot(INPUT_SLOT);
             if (input != null) {
                 input(input);
@@ -475,41 +498,6 @@ public final class StorageUnit extends AbstractContainer {
                     && sign.getRelative(((WallSign) sign.getBlockData()).getFacing().getOppositeFace()).equals(block);
         }
 
-        private void interactHandler(Player p, ClickAction action) {
-            if (this.amount == 1) {
-                if (action.isShiftClicked() && !action.isRightClicked()) {
-                    depositAll(p);
-                } else {
-                    withdrawLast(p);
-                }
-            } else if (this.amount != 0) {
-                if (action.isRightClicked()) {
-                    if (action.isShiftClicked()) {
-                        withdraw(p, this.amount - 1);
-                    } else {
-                        withdraw(p, Math.min(this.material.getMaxStackSize(), this.amount - 1));
-                    }
-                } else {
-                    if (action.isShiftClicked()) {
-                        depositAll(p);
-                    } else {
-                        withdraw(p, 1);
-                    }
-                }
-            }
-        }
-
-        private void voidExcessHandler() {
-            this.voidExcess = !this.voidExcess;
-            BlockStorage.addBlockInfo(this.menu.getLocation(), VOID_EXCESS, this.voidExcess ? "true" : null);
-            ItemStack item = this.menu.getItemInSlot(STATUS_SLOT);
-            ItemMeta meta = item.getItemMeta();
-            List<String> lore = meta.getLore();
-            lore.set(1, this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE);
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-        }
-
         private void setStored(ItemStack input) {
             if (input.hasItemMeta()) {
                 this.meta = input.getItemMeta();
@@ -535,10 +523,6 @@ public final class StorageUnit extends AbstractContainer {
             this.material = null;
             this.menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
             setAmount(0);
-        }
-
-        private boolean isEmpty() {
-            return this.amount == 0;
         }
 
         private boolean matches(ItemStack item) {

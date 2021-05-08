@@ -172,7 +172,6 @@ public final class Machines {
             Material.CHISELED_SANDSTONE,
             "&9Basic Quarry",
             "&7Automatically mines overworld ores",
-            "&7Cobble Rate: 83%",
             "",
             LorePreset.speed(1),
             LorePreset.energyPerSecond(300)
@@ -182,7 +181,6 @@ public final class Machines {
             Material.CHISELED_RED_SANDSTONE,
             "&cAdvanced Quarry",
             "&7Automatically mines overworld and nether ores",
-            "&7Cobble Rate: 75%",
             "",
             LorePreset.speed(2),
             LorePreset.energyPerSecond(900)
@@ -192,7 +190,6 @@ public final class Machines {
             Material.CHISELED_NETHER_BRICKS,
             "&8Void Quarry",
             "&7Automatically mines overworld and nether ores",
-            "&7Cobble Rate: &e50%",
             "",
             LorePreset.speed(6),
             LorePreset.energyPerSecond(3600)
@@ -202,7 +199,6 @@ public final class Machines {
             Material.CHISELED_POLISHED_BLACKSTONE,
             "&bInfinity Quarry",
             "&7Automatically mines overworld and nether ores",
-            "&7Cobble Rate: &e0%",
             "",
             LorePreset.speed(64),
             LorePreset.energyPerSecond(36000)
