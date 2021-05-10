@@ -17,6 +17,7 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -530,13 +531,32 @@ public final class StorageUnit extends AbstractContainer {
         }
 
         private void withdraw(Player p, int withdraw) {
-            ItemStack remaining = p.getInventory().addItem(createItem(withdraw)).get(0);
-            if (remaining != null) {
-                if (remaining.getAmount() != withdraw) {
-                    setAmount(this.amount - withdraw + remaining.getAmount());
+            if (this.material.getMaxStackSize() == 64) {
+                ItemStack remaining = p.getInventory().addItem(createItem(withdraw)).get(0);
+                if (remaining != null) {
+                    if (remaining.getAmount() != withdraw) {
+                        setAmount(this.amount - withdraw + remaining.getAmount());
+                    }
+                } else {
+                    setAmount(this.amount - withdraw);
                 }
-            } else {
-                setAmount(this.amount - withdraw);
+                return;
+            }
+
+            Inventory inv = p.getInventory();
+            int toWithdraw = withdraw;
+            do {
+                int amt = Math.min(this.material.getMaxStackSize(), toWithdraw);
+                ItemStack remaining = inv.addItem(createItem(amt)).get(0);
+                if (remaining != null) {
+                    toWithdraw -= amt - remaining.getAmount();
+                    break;
+                } else {
+                    toWithdraw -= amt;
+                }
+            } while (toWithdraw > 0);
+            if (toWithdraw != withdraw) {
+                setAmount(this.amount + toWithdraw - withdraw);
             }
         }
 

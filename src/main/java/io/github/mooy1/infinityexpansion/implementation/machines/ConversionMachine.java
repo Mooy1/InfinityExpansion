@@ -13,7 +13,6 @@ import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictInput;
@@ -23,6 +22,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -45,8 +45,8 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
     private final List<ItemStack> displayRecipes = new ArrayList<>();
     private final Map<StrictInput, StrictOutput> recipes = new HashMap<>();
 
-    public ConversionMachine(SlimefunItemStack item, ItemStack[] recipe, int energy, ItemStack[] inputs, ItemStack[] outputs) {
-        super(Categories.ADVANCED_MACHINES, item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe);
+    public ConversionMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy, ItemStack[] inputs, ItemStack[] outputs) {
+        super(category, item, recipeType, recipe);
         this.energy = energy;
         
         if (inputs.length == outputs.length) {

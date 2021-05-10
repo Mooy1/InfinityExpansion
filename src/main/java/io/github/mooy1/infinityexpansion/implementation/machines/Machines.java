@@ -116,7 +116,35 @@ public final class Machines {
             "&8Dust Extractor",
             "&7Converts cobble into dusts",
             "",
+            LorePreset.speed(1),
             LorePreset.energyPerSecond(240)
+    );
+    public static final SlimefunItemStack INFINITY_DUST_EXTRACTOR = new SlimefunItemStack(
+            "INFINITY_DUST_EXTRACTOR",
+            Material.FURNACE,
+            "&bInfinity &8Dust Extractor",
+            "&7Converts cobble into dusts",
+            "",
+            LorePreset.speed(16),
+            LorePreset.energyPerSecond(7200)
+    );
+    public static final SlimefunItemStack INGOT_FORMER = new SlimefunItemStack(
+            "INGOT_FORMER",
+            Material.FURNACE,
+            "&8Ingot Former",
+            "&7Forms ingots from dusts",
+            "",
+            LorePreset.speed(1),
+            LorePreset.energyPerSecond(240)
+    );
+    public static final SlimefunItemStack INFINITY_INGOT_FORMER = new SlimefunItemStack(
+            "INFINITY_INGOT_FORMER",
+            Material.FURNACE,
+            "&bInfinity &8Ingot Former",
+            "&7Forms ingots from dusts",
+            "",
+            LorePreset.speed(16),
+            LorePreset.energyPerSecond(7200)
     );
     public static final SlimefunItemStack URANIUM_EXTRACTOR = new SlimefunItemStack(
             "URANIUM_EXTRACTOR",
@@ -158,6 +186,14 @@ public final class Machines {
             "",
             LorePreset.speed(4),
             LorePreset.energyPerSecond(120)
+    );
+    public static final SlimefunItemStack INFINITY_COBBLE = new SlimefunItemStack(
+            "INFINITY_COBBLE_GEN",
+            Material.SMOOTH_STONE,
+            "&cInfinity &8Cobble Generator",
+            "",
+            LorePreset.speed(64),
+            LorePreset.energyPerSecond(800)
     );
     public static final SlimefunItemStack BASIC_OBSIDIAN = new SlimefunItemStack(
             "BASIC_OBSIDIAN_GEN",
@@ -353,6 +389,14 @@ public final class Machines {
                 new ItemStack(Material.WATER_BUCKET), Materials.COBBLE_3, new ItemStack(Material.LAVA_BUCKET),
                 Materials.MACHINE_CIRCUIT, BASIC_COBBLE, Materials.MACHINE_CIRCUIT
         }, 75, 4, Material.COBBLESTONE).register(plugin);
+        new MaterialGenerator(Categories.INFINITY_CHEAT, INFINITY_COBBLE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT,Materials.VOID_INGOT,Materials.VOID_INGOT,Materials.INFINITE_INGOT,
+                Materials.VOID_INGOT,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE, Materials.VOID_INGOT,
+                Materials.VOID_INGOT,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE, Materials.VOID_INGOT,
+                Materials.VOID_INGOT,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE, Materials.VOID_INGOT, 
+                Materials.VOID_INGOT,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE, Materials.VOID_INGOT,
+                Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT,Materials.VOID_INGOT,Materials.VOID_INGOT,Materials.INFINITE_INGOT,
+        }, 800, 64, Material.COBBLESTONE).register(plugin);
         new MaterialGenerator(Categories.ADVANCED_MACHINES, BASIC_OBSIDIAN, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.FLUID_PUMP, SlimefunItems.PROGRAMMABLE_ANDROID_MINER, SlimefunItems.FLUID_PUMP,
                 new ItemStack(Material.DISPENSER), Materials.VOID_INGOT, new ItemStack(Material.DISPENSER),
@@ -396,7 +440,7 @@ public final class Machines {
                 Materials.MACHINE_PLATE, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CORE, Materials.INFINITE_CORE, Materials.INFINITE_CIRCUIT, Materials.MACHINE_PLATE
         }, 1800, 24, true).register(plugin);
 
-        new ConversionMachine(EXTREME_FREEZER, new ItemStack[] {
+        new ConversionMachine(Categories.ADVANCED_MACHINES, EXTREME_FREEZER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2, SlimefunItems.FREEZER_2,
                 new ItemStack(Material.WATER_BUCKET), SlimefunItems.FLUID_PUMP, new ItemStack(Material.WATER_BUCKET),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT,
@@ -407,8 +451,8 @@ public final class Machines {
                 SlimefunItems.REACTOR_COOLANT_CELL,
                 SlimefunItems.NETHER_ICE_COOLANT_CELL
         }).register(plugin);
-
-        new ConversionMachine(DUST_EXTRACTOR, new ItemStack[] {
+        
+        new ConversionMachine(Categories.ADVANCED_MACHINES, DUST_EXTRACTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3,
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT,
@@ -429,8 +473,88 @@ public final class Machines {
                 new SlimefunItemStack(SlimefunItems.IRON_DUST, 2),
                 new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 2)
         }).register(plugin);
+        
+        new ConversionMachine(Categories.INFINITY_CHEAT, INFINITY_DUST_EXTRACTOR, InfinityWorkbench.TYPE, new ItemStack[] {
+                Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, DUST_EXTRACTOR, DUST_EXTRACTOR, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, DUST_EXTRACTOR, DUST_EXTRACTOR, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, DUST_EXTRACTOR, DUST_EXTRACTOR, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT,
+        }, 7200, new ItemStack[] {
+                new ItemStack(Material.COBBLESTONE, 64),
+                new ItemStack(Material.ANDESITE, 64),
+                new ItemStack(Material.STONE, 64),
+                new ItemStack(Material.DIORITE, 64),
+                new ItemStack(Material.GRANITE, 64)
+        }, new ItemStack[] {
+                new SlimefunItemStack(SlimefunItems.COPPER_DUST, 32),
+                new SlimefunItemStack(SlimefunItems.ZINC_DUST, 32),
+                new SlimefunItemStack(SlimefunItems.TIN_DUST, 32),
+                new SlimefunItemStack(SlimefunItems.ALUMINUM_DUST, 32),
+                new SlimefunItemStack(SlimefunItems.LEAD_DUST, 32),
+                new SlimefunItemStack(SlimefunItems.SILVER_DUST, 32),
+                new SlimefunItemStack(SlimefunItems.GOLD_DUST, 32),
+                new SlimefunItemStack(SlimefunItems.IRON_DUST, 32),
+                new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 32)
+        }).register(plugin);
 
-        new ConversionMachine(URANIUM_EXTRACTOR, new ItemStack[] {
+        new ConversionMachine(Categories.ADVANCED_MACHINES, INGOT_FORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                SlimefunItems.ELECTRIC_INGOT_FACTORY_2, SlimefunItems.ELECTRIC_INGOT_FACTORY_2, SlimefunItems.ELECTRIC_INGOT_FACTORY_2,
+                SlimefunItems.ELECTRIC_INGOT_FACTORY_2, SlimefunItems.ELECTRIC_INGOT_FACTORY_2, SlimefunItems.ELECTRIC_INGOT_FACTORY_2,
+                Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT,
+        }, 240, new ItemStack[] {
+                new SlimefunItemStack(SlimefunItems.COPPER_DUST, 8),
+                new SlimefunItemStack(SlimefunItems.ZINC_DUST, 8),
+                new SlimefunItemStack(SlimefunItems.TIN_DUST, 8),
+                new SlimefunItemStack(SlimefunItems.ALUMINUM_DUST, 8),
+                new SlimefunItemStack(SlimefunItems.LEAD_DUST, 8),
+                new SlimefunItemStack(SlimefunItems.SILVER_DUST, 8),
+                new SlimefunItemStack(SlimefunItems.GOLD_DUST, 8),
+                new SlimefunItemStack(SlimefunItems.IRON_DUST, 8),
+                new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 8)
+        }, new ItemStack[] {
+                new SlimefunItemStack(SlimefunItems.COPPER_INGOT, 4),
+                new SlimefunItemStack(SlimefunItems.ZINC_INGOT, 4),
+                new SlimefunItemStack(SlimefunItems.TIN_INGOT, 4),
+                new SlimefunItemStack(SlimefunItems.ALUMINUM_INGOT, 4),
+                new SlimefunItemStack(SlimefunItems.LEAD_INGOT, 4),
+                new SlimefunItemStack(SlimefunItems.SILVER_INGOT, 4),
+                new SlimefunItemStack(SlimefunItems.GOLD_24K, 1),
+                new ItemStack(Material.IRON_INGOT, 4),
+                new SlimefunItemStack(SlimefunItems.MAGNESIUM_INGOT, 4)
+        }).register(plugin);
+
+        new ConversionMachine(Categories.INFINITY_CHEAT, INFINITY_INGOT_FORMER, InfinityWorkbench.TYPE, new ItemStack[] {
+                Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, INGOT_FORMER, INGOT_FORMER, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, INGOT_FORMER, INGOT_FORMER, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.INFINITE_INGOT, INGOT_FORMER, INGOT_FORMER, Materials.INFINITE_INGOT, Materials.VOID_INGOT,
+                Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT,
+        }, 7200, new ItemStack[] {
+                new SlimefunItemStack(SlimefunItems.COPPER_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.ZINC_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.TIN_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.ALUMINUM_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.LEAD_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.SILVER_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.GOLD_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.IRON_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 64)
+        }, new ItemStack[] {
+                new SlimefunItemStack(SlimefunItems.COPPER_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.ZINC_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.TIN_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.ALUMINUM_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.LEAD_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.SILVER_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.GOLD_24K, 16),
+                new ItemStack(Material.IRON_INGOT, 64),
+                new SlimefunItemStack(SlimefunItems.MAGNESIUM_INGOT, 64)
+        }).register(plugin);
+        
+        new ConversionMachine(Categories.ADVANCED_MACHINES, URANIUM_EXTRACTOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2, SlimefunItems.ELECTRIC_ORE_GRINDER_2,
                 SlimefunItems.ELECTRIC_GOLD_PAN_3, SlimefunItems.ELECTRIC_DUST_WASHER_3, SlimefunItems.ENHANCED_AUTO_CRAFTER,
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT,
@@ -444,7 +568,7 @@ public final class Machines {
                 SlimefunItems.SMALL_URANIUM
         }).register(plugin);
 
-        new ConversionMachine(DECOMPRESSOR, new ItemStack[] {
+        new ConversionMachine(Categories.ADVANCED_MACHINES, DECOMPRESSOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, Materials.MAGSTEEL_PLATE, Materials.MAGSTEEL_PLATE,
                 new ItemStack(Material.STICKY_PISTON), SlimefunItems.ELECTRIC_PRESS_2, new ItemStack(Material.STICKY_PISTON),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT,
