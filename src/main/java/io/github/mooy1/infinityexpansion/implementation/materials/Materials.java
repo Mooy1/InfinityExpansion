@@ -398,6 +398,7 @@ public final class Materials {
         new Oscillator(Material.EMERALD).register(plugin);
         new Oscillator(Material.REDSTONE).register(plugin);
         new Oscillator(Material.LAPIS_LAZULI).register(plugin);
+        new Oscillator(Material.QUARTZ).register(plugin);
     }
     
     private static void registerEnhanced(SlimefunItemStack item, ItemStack[] recipe) {

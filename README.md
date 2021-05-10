@@ -42,6 +42,8 @@ Dev 107 - Fixed storage units and some recipes
 
 Dev 108 - Added infinity dust extractor, ingot former, infinity ingot former, infinity cobble gen, and fixed storage withdraw overstacking
 
+Dev 109 - Fixed gold dust dupe and added quartz oscillator
+
 ## Texture Pack
 
 Texture Pack that adds texture for most items in this addon, requires optifine:

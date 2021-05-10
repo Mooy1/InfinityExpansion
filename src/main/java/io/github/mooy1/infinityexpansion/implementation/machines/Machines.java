@@ -549,7 +549,7 @@ public final class Machines {
                 new SlimefunItemStack(SlimefunItems.ALUMINUM_INGOT, 64),
                 new SlimefunItemStack(SlimefunItems.LEAD_INGOT, 64),
                 new SlimefunItemStack(SlimefunItems.SILVER_INGOT, 64),
-                new SlimefunItemStack(SlimefunItems.GOLD_24K, 16),
+                new SlimefunItemStack(SlimefunItems.GOLD_24K, 10),
                 new ItemStack(Material.IRON_INGOT, 64),
                 new SlimefunItemStack(SlimefunItems.MAGNESIUM_INGOT, 64)
         }).register(plugin);

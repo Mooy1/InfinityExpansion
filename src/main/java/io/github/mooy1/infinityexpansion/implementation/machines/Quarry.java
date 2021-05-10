@@ -153,7 +153,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
         if ((InfinityExpansion.inst().getGlobalTick() % INTERVAL) != 0) {
             return true;
         }
-
+        
         ItemStack outputItem;
 
         if (ThreadLocalRandom.current().nextInt(this.chance) == 0) {
