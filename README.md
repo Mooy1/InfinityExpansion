@@ -44,6 +44,8 @@ Dev 108 - Added infinity dust extractor, ingot former, infinity ingot former, in
 
 Dev 109 - Fixed gold dust dupe and added quartz oscillator
 
+Dev 110 - Made infinity cobble gen cheaper
+
 ## Texture Pack
 
 Texture Pack that adds texture for most items in this addon, requires optifine:
