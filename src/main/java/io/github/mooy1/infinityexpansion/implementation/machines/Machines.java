@@ -389,7 +389,7 @@ public final class Machines {
                 new ItemStack(Material.WATER_BUCKET), Materials.COBBLE_3, new ItemStack(Material.LAVA_BUCKET),
                 Materials.MACHINE_CIRCUIT, BASIC_COBBLE, Materials.MACHINE_CIRCUIT
         }, 75, 4, Material.COBBLESTONE).register(plugin);
-        new MaterialGenerator(Categories.INFINITY_CHEAT, INFINITY_COBBLE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new MaterialGenerator(Categories.INFINITY_CHEAT, INFINITY_COBBLE, InfinityWorkbench.TYPE, new ItemStack[] {
                 Materials.VOID_INGOT, Materials.VOID_INGOT, Materials.VOID_INGOT,Materials.VOID_INGOT,Materials.VOID_INGOT,Materials.VOID_INGOT,
                 Materials.VOID_INGOT,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE, Materials.VOID_INGOT,
                 Materials.VOID_INGOT,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE,ADVANCED_COBBLE, Materials.VOID_INGOT,

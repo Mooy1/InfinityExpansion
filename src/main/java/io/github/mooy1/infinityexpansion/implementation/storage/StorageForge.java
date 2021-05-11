@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.blocks;
+package io.github.mooy1.infinityexpansion.implementation.storage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 public final class StorageForge extends AbstractCrafter {
 
     private static final Map<StrictMultiInput, StrictMultiOutput> RECIPES = new HashMap<>();
-    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("storage_forge"), Blocks.STORAGE_FORGE,
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("storage_forge"), Storage.STORAGE_FORGE,
             (stacks, itemStack) -> {
                 StrictMultiInput input = new StrictMultiInput(stacks);
                 RECIPES.put(input, new StrictMultiOutput(itemStack, input.getAmounts()));

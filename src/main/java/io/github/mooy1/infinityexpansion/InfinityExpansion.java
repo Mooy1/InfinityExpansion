@@ -17,6 +17,7 @@ import io.github.mooy1.infinityexpansion.implementation.generators.Generators;
 import io.github.mooy1.infinityexpansion.implementation.machines.Machines;
 import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
 import io.github.mooy1.infinityexpansion.implementation.mobdata.MobData;
+import io.github.mooy1.infinityexpansion.implementation.storage.Storage;
 import io.github.mooy1.infinitylib.AbstractAddon;
 import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
@@ -48,6 +49,7 @@ public final class InfinityExpansion extends AbstractAddon {
         Machines.setup(this);
         Gear.setup(this);
         Blocks.setup(this);
+        Storage.setup(this);
         Generators.setup(this);
         SlimefunExtension.setup(this);
     }

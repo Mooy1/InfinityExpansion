@@ -44,7 +44,7 @@ Dev 108 - Added infinity dust extractor, ingot former, infinity ingot former, in
 
 Dev 109 - Fixed gold dust dupe and added quartz oscillator
 
-Dev 110 - Made infinity cobble gen cheaper
+Dev 110 - Fixed infinity cobble gen, optimized storage units
 
 ## Texture Pack
 
