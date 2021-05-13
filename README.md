@@ -46,6 +46,8 @@ Dev 109 - Fixed gold dust dupe and added quartz oscillator
 
 Dev 110 - Fixed infinity cobble gen, optimized storage units
 
+Dev 111 - Fix auto update thing and temp fix for unit error
+
 ## Texture Pack
 
 Texture Pack that adds texture for most items in this addon, requires optifine:
