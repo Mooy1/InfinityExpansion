@@ -87,7 +87,11 @@ public final class StorageUnit extends AbstractContainer {
 
             @Override
             public void tick(Block b, SlimefunItem item, Config data) {
-                StorageUnit.this.caches.get(BlockStorage.getInventory(b)).tick(b);
+                StorageCache cache = StorageUnit.this.caches.get(BlockStorage.getInventory(b));
+                // TODO remove null check
+                if (cache != null) {
+                    cache.tick(b);
+                }
             }
         });
     }
@@ -130,6 +134,7 @@ public final class StorageUnit extends AbstractContainer {
     @Override
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack itemStack) {
         StorageCache cache = this.caches.get(dirtyChestMenu);
+        // TODO remove null check
         if (cache != null) {
             if (flow == ItemTransportFlow.WITHDRAW) {
                 return new int[] {OUTPUT_SLOT};
@@ -141,8 +146,8 @@ public final class StorageUnit extends AbstractContainer {
         return new int[0];
     }
 
-    public void reloadCache(Location l) {
-        this.caches.get(BlockStorage.getInventory(l)).reloadData();
+    public void reloadCache(Block b) {
+        this.caches.get(BlockStorage.getInventory(b.getLocation())).reloadData();
     }
 
     static void transferToStack(@Nonnull ItemStack source, @Nonnull ItemStack target) {
