@@ -48,7 +48,6 @@ final class StorageCache {
     private static final String VOID_EXCESS_FALSE = ChatColors.color("&7Void Excess:&e false");
 
     /* BlockStorage keys */
-    private static final String OLD_STORED_ITEM = "storeditem"; // old item key in block data
     private static final String STORED_AMOUNT = "stored"; // amount key in block data
     private static final String VOID_EXCESS = "void_excess"; // void excess true or null key
     
@@ -101,26 +100,6 @@ final class StorageCache {
                 } else {
                     // load the item in menu
                     load(display, copy);
-                }
-            } else {
-                // attempt to load old data
-                String oldID = BlockStorage.getLocationInfo(menu.getLocation(), OLD_STORED_ITEM);
-                if (oldID != null) {
-                    InfinityExpansion.inst().runSync(() -> BlockStorage.addBlockInfo(menu.getLocation(), OLD_STORED_ITEM, null));
-                    ItemStack item = StackUtils.getItemByIDorType(oldID);
-                    if (item != null) {
-                        load(item, item.getItemMeta());
-                    } else {
-                        // invalid old id
-                        menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-                        this.displayName = EMPTY_DISPLAY_NAME;
-                        this.amount = 0;
-                    }
-                } else {
-                    // no old id
-                    menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-                    this.displayName = EMPTY_DISPLAY_NAME;
-                    this.amount = 0;
                 }
             }
         }
@@ -317,7 +296,8 @@ final class StorageCache {
                 lore.add(ChatColors.color("&6Stored: &e0 / " + LorePreset.format(this.storageUnit.max) + " &7(0%)"));
             } else {
                 lore.add(ChatColors.color("&6Stored: &e" + LorePreset.format(this.amount)
-                        + " / " + LorePreset.format(this.storageUnit.max) + " &7(" + 100 * ((double) this.amount / this.storageUnit.max) + "%)"
+                        + " / " + LorePreset.format(this.storageUnit.max)
+                        + " &7(" + LorePreset.format((double) this.amount / this.storageUnit.max) + "%)"
                 ));
             }
             lore.add(this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE);

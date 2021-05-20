@@ -19,14 +19,21 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 @UtilityClass
 public final class Machines {
 
-    private static final int RESOURCE_SYNTH_ENERGY = 1_000_000;
+    public static final SlimefunItemStack COBBLE_PRESS = new SlimefunItemStack(
+            "COBBLE_PRESS",
+            Material.SMOOTH_STONE,
+            "&8Cobble Press",
+            "&7Compresses cobblestone more efficiently",
+            "",
+            LorePreset.energyPerSecond(120)
+    );
     public static final SlimefunItemStack RESOURCE_SYNTHESIZER = new SlimefunItemStack(
             "RESOURCE_SYNTHESIZER",
             Material.LODESTONE,
             "&6Resource Synthesizer",
             "&7Creates resources by combining 2 Singularities",
             "",
-            LorePreset.energy(RESOURCE_SYNTH_ENERGY) + "per use"
+            LorePreset.energy(1_000_000) + "per use"
     );
     public static final SlimefunItemStack BASIC_GROWER = new SlimefunItemStack(
             "BASIC_VIRTUAL_FARM",
@@ -327,7 +334,7 @@ public final class Machines {
                 Materials.GOLD_SINGULARITY, Materials.EMERALD_SINGULARITY, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 16),
                 Materials.COPPER_SINGULARITY, Materials.ZINC_SINGULARITY, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
                 Materials.IRON_SINGULARITY, Materials.QUARTZ_SINGULARITY, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
-        }, RESOURCE_SYNTH_ENERGY).register(plugin);
+        }, 1_000_000).register(plugin);
 
         new Quarry(Categories.ADVANCED_MACHINES, BASIC_QUARRY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Materials.MAGSTEEL_PLATE,
@@ -488,17 +495,35 @@ public final class Machines {
                 new ItemStack(Material.DIORITE, 64),
                 new ItemStack(Material.GRANITE, 64)
         }, new ItemStack[] {
-                new SlimefunItemStack(SlimefunItems.COPPER_DUST, 32),
-                new SlimefunItemStack(SlimefunItems.ZINC_DUST, 32),
-                new SlimefunItemStack(SlimefunItems.TIN_DUST, 32),
-                new SlimefunItemStack(SlimefunItems.ALUMINUM_DUST, 32),
-                new SlimefunItemStack(SlimefunItems.LEAD_DUST, 32),
-                new SlimefunItemStack(SlimefunItems.SILVER_DUST, 32),
-                new SlimefunItemStack(SlimefunItems.GOLD_DUST, 32),
-                new SlimefunItemStack(SlimefunItems.IRON_DUST, 32),
-                new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 32)
+                new SlimefunItemStack(SlimefunItems.COPPER_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.ZINC_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.TIN_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.ALUMINUM_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.LEAD_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.SILVER_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.GOLD_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.IRON_DUST, 64),
+                new SlimefunItemStack(SlimefunItems.MAGNESIUM_DUST, 64)
         }).register(plugin);
 
+        new ConversionMachine(Categories.ADVANCED_MACHINES, COBBLE_PRESS, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                Materials.MACHINE_PLATE, Materials.COBBLE_3, Materials.MACHINE_PLATE,
+                SlimefunItems.ELECTRIC_PRESS_2, SlimefunItems.ELECTRIC_PRESS_2, SlimefunItems.ELECTRIC_PRESS_2,
+                Materials.MACHINE_PLATE, Materials.COBBLE_3, Materials.MACHINE_PLATE
+        }, 120, new ItemStack[] {
+                new ItemStack(Material.COBBLESTONE, 64),
+                new SlimefunItemStack(Materials.COBBLE_1, 64),
+                new SlimefunItemStack(Materials.COBBLE_2, 64),
+                new SlimefunItemStack(Materials.COBBLE_3, 64),
+                new SlimefunItemStack(Materials.COBBLE_4, 64)
+        }, new ItemStack[] {
+                new SlimefunItemStack(Materials.COBBLE_1, 8),
+                new SlimefunItemStack(Materials.COBBLE_2, 8),
+                new SlimefunItemStack(Materials.COBBLE_3, 8),
+                new SlimefunItemStack(Materials.COBBLE_4, 8),
+                new SlimefunItemStack(Materials.COBBLE_5, 8)
+        }).register(plugin);
+        
         new ConversionMachine(Categories.ADVANCED_MACHINES, INGOT_FORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.ELECTRIC_INGOT_FACTORY_2, SlimefunItems.ELECTRIC_INGOT_FACTORY_2, SlimefunItems.ELECTRIC_INGOT_FACTORY_2,
                 SlimefunItems.ELECTRIC_INGOT_FACTORY_2, SlimefunItems.ELECTRIC_INGOT_FACTORY_2, SlimefunItems.ELECTRIC_INGOT_FACTORY_2,

@@ -22,6 +22,7 @@ import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ChargingBench;
+import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ElectricSmeltery;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.enchanting.AutoDisenchanter;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.enchanting.AutoEnchanter;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.reactors.NetherStarReactor;
@@ -59,6 +60,9 @@ public final class SlimefunExtension {
     private static final int INFINITY_CHARGER_SPEED = 6000;
     private static final int INFINITY_CHARGER_ENERGY = 60000;
 
+    private static final int ADVANCED_SMELTERY_ENERGY = 240;
+    private static final int ADVANCED_SMELTERY_SPEED = 24;
+
     private static final int STAR_ENERGY = 1800;
     private static final int STAR_BUFFER = 90000;
     
@@ -71,7 +75,15 @@ public final class SlimefunExtension {
             LorePreset.speed(SlimefunExtension.ADVANCED_GEO_SPEED),
             LorePreset.energyPerSecond(SlimefunExtension.ADVANCED_GEO_ENERGY)
     );
-
+    public static final SlimefunItemStack ADVANCED_SMELTERY = new SlimefunItemStack(
+            "ADVANCED_SMELTERY",
+            Material.FURNACE,
+            "&cAdvanced &7Smeltery",
+            "&7A faster smeltery",
+            "",
+            LorePreset.speed(ADVANCED_SMELTERY_SPEED),
+            LorePreset.energyPerSecond(ADVANCED_SMELTERY_ENERGY)
+    );
     public static final SlimefunItemStack ADVANCED_CHARGER = new SlimefunItemStack(
             "ADVANCED_CHARGER",
             Material.HONEYCOMB_BLOCK,
@@ -288,6 +300,12 @@ public final class SlimefunExtension {
                 });
             }
         }.register(plugin);
+        
+        new ElectricSmeltery(Categories.ADVANCED_MACHINES, ADVANCED_SMELTERY, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                SlimefunItems.ELECTRIC_SMELTERY_2, SlimefunItems.ELECTRIC_SMELTERY_2, SlimefunItems.ELECTRIC_SMELTERY_2,
+                SlimefunItems.ELECTRIC_SMELTERY_2, SlimefunItems.ELECTRIC_SMELTERY_2, SlimefunItems.ELECTRIC_SMELTERY_2,
+                Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
+        }).setCapacity(ADVANCED_SMELTERY_ENERGY).setProcessingSpeed(ADVANCED_SMELTERY_SPEED).setEnergyConsumption(ADVANCED_SMELTERY_ENERGY).register(plugin);
         
         new GEOMiner(Categories.ADVANCED_MACHINES, ADVANCED_GEO_MINER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, Materials.MAGSTEEL_PLATE, Materials.MAGSTEEL_PLATE,

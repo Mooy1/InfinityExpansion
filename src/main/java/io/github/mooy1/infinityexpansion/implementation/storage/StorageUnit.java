@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
@@ -47,7 +48,6 @@ public final class StorageUnit extends AbstractContainer {
     /* Namespaced keys */
     static final NamespacedKey EMPTY_KEY = InfinityExpansion.inst().getKey("empty"); // key for empty item
     static final NamespacedKey DISPLAY_KEY = InfinityExpansion.inst().getKey("display"); // key for display item
-    private static final NamespacedKey OLD_ITEM_KEY = InfinityExpansion.inst().getKey("stored_item"); // old item key in pdc
     private static final NamespacedKey ITEM_KEY = InfinityExpansion.inst().getKey("item"); // item key for item pdc
     private static final NamespacedKey AMOUNT_KEY = InfinityExpansion.inst().getKey("stored"); // amount key for item pdc
 
@@ -72,7 +72,7 @@ public final class StorageUnit extends AbstractContainer {
     );
 
     /* Instance constants */
-    private final Map<DirtyChestMenu, StorageCache> caches = new HashMap<>();
+    private final Map<Location, StorageCache> caches = new HashMap<>();
     final int max;
 
     public StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
@@ -87,8 +87,7 @@ public final class StorageUnit extends AbstractContainer {
 
             @Override
             public void tick(Block b, SlimefunItem item, Config data) {
-                StorageCache cache = StorageUnit.this.caches.get(BlockStorage.getInventory(b));
-                // TODO remove null check
+                StorageCache cache = StorageUnit.this.caches.get(b.getLocation());
                 if (cache != null) {
                     cache.tick(b);
                 }
@@ -98,12 +97,15 @@ public final class StorageUnit extends AbstractContainer {
 
     @Override
     protected void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        this.caches.put(menu, new StorageCache(this, menu));
+        // TEMP FIX
+        if (BlockStorage.getInventory(b) == menu) {
+            this.caches.put(b.getLocation(), new StorageCache(this, menu));
+        }
     }
 
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-        StorageCache cache = this.caches.remove(menu);
+        StorageCache cache = this.caches.remove(l);
         if (cache != null) {
             cache.destroy(l, e);
         }
@@ -112,10 +114,10 @@ public final class StorageUnit extends AbstractContainer {
 
     @Override
     protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
-        Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand().getItemMeta());
+        Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand());
         if (data != null) {
             InfinityExpansion.inst().runSync(() -> {
-                StorageCache cache = this.caches.get(BlockStorage.getInventory(b));
+                StorageCache cache = this.caches.get(b.getLocation());
                 cache.load(data.getFirstValue(), data.getFirstValue().getItemMeta());
                 cache.setAmount(data.getSecondValue());
             });
@@ -133,8 +135,7 @@ public final class StorageUnit extends AbstractContainer {
     @Nonnull
     @Override
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack itemStack) {
-        StorageCache cache = this.caches.get(dirtyChestMenu);
-        // TODO remove null check
+        StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getLocation());
         if (cache != null) {
             if (flow == ItemTransportFlow.WITHDRAW) {
                 return new int[] {OUTPUT_SLOT};
@@ -147,11 +148,11 @@ public final class StorageUnit extends AbstractContainer {
     }
 
     public void reloadCache(Block b) {
-        this.caches.get(BlockStorage.getInventory(b.getLocation())).reloadData();
+        this.caches.get(b.getLocation()).reloadData();
     }
 
     static void transferToStack(@Nonnull ItemStack source, @Nonnull ItemStack target) {
-        Pair<ItemStack, Integer> data = loadFromStack(source.getItemMeta());
+        Pair<ItemStack, Integer> data = loadFromStack(source);
         if (data != null) {
             target.setItemMeta(saveToStack(target.getItemMeta(), data.getFirstValue(),
                     StackUtils.getDisplayName(data.getFirstValue()), data.getSecondValue()));
@@ -169,28 +170,15 @@ public final class StorageUnit extends AbstractContainer {
         return meta;
     }
 
-    private static Pair<ItemStack, Integer> loadFromStack(ItemMeta meta) {
-        // get amount
-        Integer amount = meta.getPersistentDataContainer().get(AMOUNT_KEY, PersistentDataType.INTEGER);
-        if (amount != null) {
-
-            // check for old id
-            String oldID = meta.getPersistentDataContainer().get(OLD_ITEM_KEY, PersistentDataType.STRING);
-            if (oldID != null) {
-                ItemStack item = StackUtils.getItemByIDorType(oldID);
+    private static Pair<ItemStack, Integer> loadFromStack(ItemStack source) {
+        if (source.hasItemMeta()) {
+            PersistentDataContainer con = source.getItemMeta().getPersistentDataContainer();
+            Integer amount = con.get(AMOUNT_KEY, PersistentDataType.INTEGER);
+            if (amount != null) {
+                ItemStack item = con.get(ITEM_KEY, PersistenceUtils.ITEM_STACK);
                 if (item != null) {
-                    // add the display key to it
-                    ItemMeta update = item.getItemMeta();
-                    update.getPersistentDataContainer().set(DISPLAY_KEY, PersistentDataType.BYTE, (byte) 1);
-                    item.setItemMeta(update);
                     return new Pair<>(item, amount);
                 }
-            }
-
-            // get item
-            ItemStack item = meta.getPersistentDataContainer().get(ITEM_KEY, PersistenceUtils.ITEM_STACK);
-            if (item != null) {
-                return new Pair<>(item, amount);
             }
         }
         return null;

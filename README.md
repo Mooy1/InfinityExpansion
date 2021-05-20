@@ -48,6 +48,8 @@ Dev 110 - Fixed infinity cobble gen, optimized storage units
 
 Dev 111 - Fix auto update thing and temp fix for unit error
 
+Dev 112 - Added cobble press, advanced smeltery, Attempt to fix Storage Units for the 9000th time, if you are on Dev 95 or lower, update to Dev 111 before this. 
+
 ## Texture Pack
 
 Texture Pack that adds texture for most items in this addon, requires optifine:
