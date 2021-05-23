@@ -3,6 +3,8 @@ package io.github.mooy1.infinityexpansion.implementation.storage;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Setter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,7 +21,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -66,6 +68,7 @@ final class StorageCache {
     private ItemMeta meta;
     private String displayName;
     private boolean voidExcess;
+    @Setter
     private int amount;
 
     StorageCache(StorageUnit storageUnit, BlockMenu menu) {
@@ -200,11 +203,6 @@ final class StorageCache {
         this.material = stored.getType();
     }
 
-    void setAmount(int amount) {
-        this.amount = amount;
-        BlockStorage.addBlockInfo(this.menu.getLocation(), STORED_AMOUNT, String.valueOf(amount));
-    }
-
     void input() {
         ItemStack input = this.menu.getItemInSlot(INPUT_SLOT);
         if (input == null) {
@@ -212,14 +210,14 @@ final class StorageCache {
         }
         if (isEmpty()) {
             // set the stored item to input
-            setAmount(input.getAmount());
+            this.amount = input.getAmount();
             setStored(input);
             this.menu.replaceExistingItem(INPUT_SLOT, null, false);
         } else if (matches(input)) {
             if (this.voidExcess) {
                 // input and void excess
                 if (this.amount < this.storageUnit.max) {
-                    setAmount(Math.min(this.amount + input.getAmount(), this.storageUnit.max));
+                    this.amount = Math.min(this.amount + input.getAmount(), this.storageUnit.max);
                 }
                 input.setAmount(0);
             } else if (this.amount < this.storageUnit.max) {
@@ -227,9 +225,9 @@ final class StorageCache {
                 if (input.getAmount() + this.amount >= this.storageUnit.max) {
                     // last item
                     input.setAmount(input.getAmount() - (this.storageUnit.max - this.amount));
-                    setAmount(this.storageUnit.max);
+                    this.amount = this.storageUnit.max;
                 } else {
-                    setAmount(this.amount + input.getAmount());
+                    this.amount += input.getAmount();
                     input.setAmount(0);
                 }
             }
@@ -248,13 +246,13 @@ final class StorageCache {
             } else {
                 int amt = Math.min(this.material.getMaxStackSize(), this.amount - 1);
                 this.menu.replaceExistingItem(OUTPUT_SLOT, createItem(amt), false);
-                setAmount(this.amount - amt);
+                this.amount -= amt;
             }
         } else if (this.amount > 1) {
             int amt = Math.min(this.material.getMaxStackSize() - outputSlot.getAmount(), this.amount - 1);
             if (amt != 0 && matches(outputSlot)) {
                 outputSlot.setAmount(outputSlot.getAmount() + amt);
-                setAmount(this.amount - amt);
+                this.amount -= amt;
             }
         }
     }
@@ -263,6 +261,9 @@ final class StorageCache {
         // input output
         input();
         output();
+
+        // store amount
+        BlockStorage.addBlockInfo(this.menu.getLocation(), STORED_AMOUNT, String.valueOf(this.amount));
 
         // status
         if (this.menu.hasViewer()) {
@@ -335,7 +336,7 @@ final class StorageCache {
         this.meta = null;
         this.material = null;
         this.menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-        setAmount(0);
+        this.amount = 0;
     }
 
     boolean matches(ItemStack item) {
@@ -361,10 +362,10 @@ final class StorageCache {
             ItemStack remaining = p.getInventory().addItem(createItem(withdraw)).get(0);
             if (remaining != null) {
                 if (remaining.getAmount() != withdraw) {
-                    setAmount(this.amount - withdraw + remaining.getAmount());
+                    this.amount += remaining.getAmount() - withdraw;
                 }
             } else {
-                setAmount(this.amount - withdraw);
+                this.amount -= withdraw;
             }
             return;
         }
@@ -382,7 +383,7 @@ final class StorageCache {
             }
         } while (toWithdraw > 0);
         if (toWithdraw != withdraw) {
-            setAmount(this.amount + toWithdraw - withdraw);
+            this.amount += toWithdraw - withdraw;
         }
     }
 
@@ -394,22 +395,18 @@ final class StorageCache {
 
     private void depositAll(Player p) {
         if (this.amount < this.storageUnit.max) {
-            int amount = this.amount;
             for (ItemStack item : p.getInventory().getStorageContents()) {
                 if (item != null && matches(item)) {
-                    if (item.getAmount() + amount >= this.storageUnit.max) {
+                    if (item.getAmount() + this.amount >= this.storageUnit.max) {
                         // last item
-                        item.setAmount(item.getAmount() - (this.storageUnit.max - amount));
-                        amount = this.storageUnit.max;
+                        item.setAmount(item.getAmount() - (this.storageUnit.max - this.amount));
+                        this.amount = this.storageUnit.max;
                         break;
                     } else {
-                        amount += item.getAmount();
+                        this.amount += item.getAmount();
                         item.setAmount(0);
                     }
                 }
-            }
-            if (amount != this.amount) {
-                setAmount(amount);
             }
         }
     }

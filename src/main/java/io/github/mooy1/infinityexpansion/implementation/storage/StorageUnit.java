@@ -3,6 +3,7 @@ package io.github.mooy1.infinityexpansion.implementation.storage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;
@@ -21,12 +22,9 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.persistence.PersistenceUtils;
-import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractContainer;
-import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.AbstractContainer;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -52,10 +50,10 @@ public final class StorageUnit extends AbstractContainer {
     private static final NamespacedKey AMOUNT_KEY = InfinityExpansion.inst().getKey("stored"); // amount key for item pdc
 
     /* Menu slots */
-    static final int INPUT_SLOT = MenuPreset.slot1;
-    static final int DISPLAY_SLOT = MenuPreset.slot2;
+    static final int INPUT_SLOT = MenuPreset.INPUT;
+    static final int DISPLAY_SLOT = MenuPreset.STATUS;
     static final int STATUS_SLOT = DISPLAY_SLOT - 9;
-    static final int OUTPUT_SLOT = MenuPreset.slot3;
+    static final int OUTPUT_SLOT = MenuPreset.OUTPUT;
     static final int INTERACT_SLOT = DISPLAY_SLOT + 9;
 
     /* Menu items */
@@ -78,21 +76,6 @@ public final class StorageUnit extends AbstractContainer {
     public StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
         super(Categories.STORAGE, item, StorageForge.TYPE, recipe);
         this.max = max;
-
-        addItemHandler(new BlockTicker() {
-            @Override
-            public boolean isSynchronized() {
-                return true;
-            }
-
-            @Override
-            public void tick(Block b, SlimefunItem item, Config data) {
-                StorageCache cache = StorageUnit.this.caches.get(b.getLocation());
-                if (cache != null) {
-                    cache.tick(b);
-                }
-            }
-        });
     }
 
     @Override
@@ -104,20 +87,21 @@ public final class StorageUnit extends AbstractContainer {
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
+    protected void onBreak(@Nonnull BlockBreakEvent e) {
+        Location l = e.getBlock().getLocation();;
         StorageCache cache = this.caches.remove(l);
         if (cache != null) {
             cache.destroy(l, e);
         }
-        menu.dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
+        BlockStorage.getInventory(l).dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
     }
 
     @Override
-    protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
+    protected void onPlace(@Nonnull BlockPlaceEvent e) {
         Pair<ItemStack, Integer> data = loadFromStack(e.getItemInHand());
         if (data != null) {
             InfinityExpansion.inst().runSync(() -> {
-                StorageCache cache = this.caches.get(b.getLocation());
+                StorageCache cache = this.caches.get(e.getBlockPlaced().getLocation());
                 cache.load(data.getFirstValue(), data.getFirstValue().getItemMeta());
                 cache.setAmount(data.getSecondValue());
             });
@@ -145,6 +129,14 @@ public final class StorageUnit extends AbstractContainer {
             }
         }
         return new int[0];
+    }
+
+    @Override
+    protected void tick(@Nonnull Block b) {
+        StorageCache cache = StorageUnit.this.caches.get(b.getLocation());
+        if (cache != null) {
+            cache.tick(b);
+        }
     }
 
     public void reloadCache(Block b) {

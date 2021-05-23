@@ -33,7 +33,9 @@ public final class InfinityExpansion extends AbstractAddon {
     @Override
     public void onEnable() {
         instance = this;
+
         super.onEnable();
+
         if (getServer().getPluginManager().getPlugin("LiteXpansion") != null) {
             runSync(() -> log(Level.WARNING,
                     "########################################################",
@@ -43,6 +45,7 @@ public final class InfinityExpansion extends AbstractAddon {
                     "########################################################"
             ));
         }
+
         Categories.setup(this);
         MobData.setup(this);
         Materials.setup(this);
@@ -67,7 +70,7 @@ public final class InfinityExpansion extends AbstractAddon {
 
     @Nonnull
     @Override
-    protected List<AbstractCommand> getSubCommands() {
+    protected List<AbstractCommand> setupSubCommands() {
         return Arrays.asList(new GiveRecipe(), new SetData(), new PrintItem());        
     }
 
