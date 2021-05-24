@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.materials;
+package io.github.mooy1.infinityexpansion.implementation;
 
 import java.util.Arrays;
 import lombok.experimental.UtilityClass;
@@ -10,6 +10,10 @@ import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.implementation.machines.VoidHarvester;
+import io.github.mooy1.infinityexpansion.implementation.materials.EnderEssence;
+import io.github.mooy1.infinityexpansion.implementation.materials.Oscillator;
+import io.github.mooy1.infinityexpansion.implementation.materials.Singularity;
+import io.github.mooy1.infinityexpansion.implementation.materials.Strainer;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;

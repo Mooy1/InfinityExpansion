@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.InfinityCategory;
+import io.github.mooy1.infinityexpansion.implementation.Blocks;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;

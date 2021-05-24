@@ -12,8 +12,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Machines;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
-import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
+import io.github.mooy1.infinityexpansion.implementation.Materials;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;

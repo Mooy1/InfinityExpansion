@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import io.github.mooy1.infinityexpansion.implementation.blocks.Blocks;
+import io.github.mooy1.infinityexpansion.implementation.Blocks;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;

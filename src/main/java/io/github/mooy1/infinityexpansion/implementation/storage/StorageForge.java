@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.storage;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;
@@ -10,9 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Storage;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
-import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictMultiInput;
-import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictMultiOutput;
+import io.github.mooy1.infinitylib.recipes.inputs.StrictMultiInput;
+import io.github.mooy1.infinitylib.recipes.outputs.StrictMultiOutput;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;

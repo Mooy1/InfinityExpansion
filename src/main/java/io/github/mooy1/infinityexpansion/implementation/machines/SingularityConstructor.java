@@ -15,6 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.Machines;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.items.StackUtils;

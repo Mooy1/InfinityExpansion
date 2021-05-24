@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation.abstracts;
 
 import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -12,14 +13,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
-import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictMultiInput;
-import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictMultiOutput;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.recipes.inputs.StrictMultiInput;
+import io.github.mooy1.infinitylib.recipes.outputs.StrictMultiOutput;
+import io.github.mooy1.infinitylib.slimefun.AbstractContainer;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -34,10 +35,10 @@ import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
  * @author Mooy1
  *
  */
-public abstract class AbstractCrafter extends TickingContainer {
+public abstract class AbstractCrafter extends AbstractContainer {
     
-    protected static final int[] INPUT_SLOTS = MenuPreset.craftingInput;
-    private static final int[] OUTPUT_SLOT = MenuPreset.craftingOutput;
+    protected static final int[] INPUT_SLOTS = MenuPreset.CRAFTING_INPUT;
+    private static final int OUTPUT_SLOT = MenuPreset.CRAFTING_OUTPUT;
     private static final int[] BACKGROUND = {5, 6, 7, 8, 41, 42, 43, 44};
     private static final int[] STATUS_BORDER = {14, 32};
     private static final int STATUS_SLOT = 23;
@@ -51,7 +52,9 @@ public abstract class AbstractCrafter extends TickingContainer {
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
+    protected void onBreak(@Nonnull BlockBreakEvent e) {
+        Location l = e.getBlock().getLocation();
+        BlockMenu menu = BlockStorage.getInventory(l);
         menu.dropItems(l, OUTPUT_SLOT);
         menu.dropItems(l, INPUT_SLOTS);
     }
@@ -64,19 +67,19 @@ public abstract class AbstractCrafter extends TickingContainer {
 
     @Override
     public final void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int slot : MenuPreset.craftingInputBorder) {
-            blockMenuPreset.addItem(slot, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int slot : MenuPreset.CRAFTING_INPUT_BORDER) {
+            blockMenuPreset.addItem(slot, MenuPreset.INPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int slot : MenuPreset.craftingOutputBorder) {
-            blockMenuPreset.addItem(slot, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        for (int slot : MenuPreset.CRAFTING_OUTPUT_BORDER) {
+            blockMenuPreset.addItem(slot, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int slot : BACKGROUND) {
             blockMenuPreset.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
         for (int slot : STATUS_BORDER) {
-            blockMenuPreset.addItem(slot, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(slot, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.invalidInput, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.INVALID_INPUT, ChestMenuUtils.getEmptyClickHandler());
     }
     
     public boolean preCraftFail(@Nonnull Location l, @Nonnull BlockMenu inv) {
@@ -96,7 +99,9 @@ public abstract class AbstractCrafter extends TickingContainer {
     public abstract void postCraft(@Nonnull Location l, @Nonnull BlockMenu inv, @Nonnull Player p);
 
     @Override
-    public final void tick(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config config) {
+    public final void tick(@Nonnull Block b) {
+        BlockMenu inv = BlockStorage.getInventory(b);
+
         if (inv.hasViewer()) {
             if (preCraftFail(b.getLocation(), inv)) {
                 inv.replaceExistingItem(STATUS_SLOT, preCraftItem(b.getLocation(), inv));
@@ -107,7 +112,7 @@ public abstract class AbstractCrafter extends TickingContainer {
 
             if (output == null) {
 
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.INVALID_RECIPE);
 
             } else {
 
@@ -131,14 +136,14 @@ public abstract class AbstractCrafter extends TickingContainer {
         
         if (output == null) { //invalid
 
-            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.invalidRecipe);
+            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.INVALID_RECIPE);
             p.sendMessage( ChatColor.RED + "Invalid Recipe!");
 
         } else {
             
             if (!inv.fits(output.getFirstValue(), OUTPUT_SLOT)) { //not enough room
 
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
                 p.sendMessage(  ChatColor.GOLD + "Not enough room!");
 
             } else { //enough room

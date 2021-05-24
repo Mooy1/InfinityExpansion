@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.implementation.mobdata;
 
 import lombok.experimental.UtilityClass;
 
+import io.github.mooy1.infinityexpansion.implementation.MobData;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @Deprecated

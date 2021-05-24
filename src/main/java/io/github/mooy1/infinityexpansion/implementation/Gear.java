@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.gear;
+package io.github.mooy1.infinityexpansion.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,10 @@ import org.bukkit.potion.PotionEffectType;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
+import io.github.mooy1.infinityexpansion.implementation.gear.InfinityArmor;
+import io.github.mooy1.infinityexpansion.implementation.gear.InfinityMatrix;
+import io.github.mooy1.infinityexpansion.implementation.gear.InfinityTool;
+import io.github.mooy1.infinityexpansion.implementation.gear.VeinMinerRune;
 import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;

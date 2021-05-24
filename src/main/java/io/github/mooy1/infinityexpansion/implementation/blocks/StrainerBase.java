@@ -16,17 +16,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
+import io.github.mooy1.infinityexpansion.implementation.Materials;
 import io.github.mooy1.infinityexpansion.implementation.materials.Strainer;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.slimefun.abstracts.TickingContainer;
-import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
+import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.slimefun.AbstractContainer;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -39,12 +39,12 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  *
  * @author Mooy1
  */
-public final class StrainerBase extends TickingContainer implements RecipeDisplayItem {
+public final class StrainerBase extends AbstractContainer implements RecipeDisplayItem {
     
-    private static final int STATUS_SLOT = MenuPreset.slot1;
+    private static final int STATUS_SLOT = MenuPreset.INPUT;
     private static final int[] OUTPUT_SLOTS = Util.largeOutput;
     private static final int[] INPUT_SLOTS = {
-            MenuPreset.slot1 + 27
+            MenuPreset.INPUT + 27
     };
 
     private static final ItemStack[] OUTPUTS = {
@@ -74,23 +74,25 @@ public final class StrainerBase extends TickingContainer implements RecipeDispla
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
+    protected void onBreak(@Nonnull BlockBreakEvent e) {
+        Location l = e.getBlock().getLocation();
+        BlockMenu inv = BlockStorage.getInventory(l);
         inv.dropItems(l, OUTPUT_SLOTS);
         inv.dropItems(l, INPUT_SLOTS);
     }
 
     @Override
     public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : MenuPreset.slotChunk1) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemStatus, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.INPUT_BORDER) {
+            blockMenuPreset.addItem(i, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
         }
-        for (int i : MenuPreset.slotChunk1) {
-            blockMenuPreset.addItem(i + 27, MenuPreset.borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        for (int i : MenuPreset.INPUT_BORDER) {
+            blockMenuPreset.addItem(i + 27, MenuPreset.INPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
         }
         for (int i : Util.largeOutputBorder) {
-            blockMenuPreset.addItem(i, MenuPreset.borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+            blockMenuPreset.addItem(i, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
         }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.LOADING, ChestMenuUtils.getEmptyClickHandler());
     }
     
     @Nonnull
@@ -132,12 +134,14 @@ public final class StrainerBase extends TickingContainer implements RecipeDispla
     }
 
     @Override
-    public void tick(@Nonnull BlockMenu inv, @Nonnull Block b, @Nonnull Config config) {
+    public void tick(@Nonnull Block b) {
 
         //check water
         if (!Util.isWaterLogged(b)) {
             return;
         }
+
+        BlockMenu inv = BlockStorage.getInventory(b);
 
         //check input
 
@@ -179,7 +183,7 @@ public final class StrainerBase extends TickingContainer implements RecipeDispla
         if (!inv.fits(output, OUTPUT_SLOTS)) {
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.notEnoughRoom);
+                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
             }
 
             return;

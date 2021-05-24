@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.implementation.mobdata;
+package io.github.mooy1.infinityexpansion.implementation;
 
 import lombok.experimental.UtilityClass;
 
@@ -7,8 +7,11 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
-import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataCard;
+import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataInfuser;
+import io.github.mooy1.infinityexpansion.implementation.mobdata.MobDataTier;
+import io.github.mooy1.infinityexpansion.implementation.mobdata.MobSimulationChamber;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;

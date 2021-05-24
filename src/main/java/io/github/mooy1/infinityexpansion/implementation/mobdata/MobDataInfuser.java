@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
+import io.github.mooy1.infinityexpansion.implementation.MobData;
 import io.github.mooy1.infinityexpansion.implementation.abstracts.AbstractCrafter;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
 import io.github.mooy1.infinitylib.slimefun.recipes.inputs.StrictMultiInput;

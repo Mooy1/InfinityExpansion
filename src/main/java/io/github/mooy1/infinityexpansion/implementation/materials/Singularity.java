@@ -24,7 +24,7 @@ public final class Singularity extends UnplaceableBlock {
     
     private static final double COST_MULTIPLIER = InfinityExpansion.inst().getConfig().getDouble("balance-options.singularity-cost-multiplier", 0.1, 100);
     
-    Singularity(SlimefunItemStack item, String id, int amount) {
+    public Singularity(SlimefunItemStack item, String id, int amount) {
         super(Categories.INFINITY_MATERIALS, item, SingularityConstructor.TYPE, makeRecipe(id, (int) (amount * COST_MULTIPLIER)));
     }
 

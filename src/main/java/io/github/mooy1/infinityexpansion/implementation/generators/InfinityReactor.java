@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinityexpansion.implementation.materials.Materials;
+import io.github.mooy1.infinityexpansion.implementation.Materials;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.abstracts.AbstractContainer;
 import io.github.mooy1.infinitylib.slimefun.presets.MenuPreset;
