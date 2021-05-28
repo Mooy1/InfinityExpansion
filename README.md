@@ -48,6 +48,8 @@ Dev 110 - Fixed infinity cobble gen, optimized storage units
 
 Dev 111 - Fix auto update thing and temp fix for unit error
 
+Dev 112 - Fix for latest dev, Requires dev 925!
+
 ## Texture Pack
 
 Texture Pack that adds texture for most items in this addon, requires optifine:
