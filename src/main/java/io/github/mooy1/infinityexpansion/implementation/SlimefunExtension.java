@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.implementation;
 
 import javax.annotation.Nonnull;
+
 import lombok.experimental.UtilityClass;
 
 import org.bukkit.Location;
@@ -17,7 +18,7 @@ import org.bukkit.util.RayTraceResult;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.implementation.blocks.InfinityWorkbench;
-import io.github.mooy1.infinitylib.slimefun.presets.LorePreset;
+import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.Capacitor;
 import io.github.thebusybiscuit.slimefun4.implementation.items.electric.machines.ChargingBench;

@@ -88,7 +88,7 @@ public final class StorageUnit extends AbstractContainer {
 
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e) {
-        Location l = e.getBlock().getLocation();;
+        Location l = e.getBlock().getLocation();
         StorageCache cache = this.caches.remove(l);
         if (cache != null) {
             cache.destroy(l, e);
