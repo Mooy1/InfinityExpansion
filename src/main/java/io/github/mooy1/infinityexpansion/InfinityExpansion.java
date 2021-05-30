@@ -23,13 +23,13 @@ import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 
 public final class InfinityExpansion extends AbstractAddon {
-    
+
     private static InfinityExpansion instance;
-    
+
     public static InfinityExpansion inst() {
         return instance;
     }
-    
+
     @Override
     public void onEnable() {
         instance = this;
@@ -46,15 +46,26 @@ public final class InfinityExpansion extends AbstractAddon {
             ));
         }
 
-        Categories.setup(this);
-        MobData.setup(this);
-        Materials.setup(this);
-        Machines.setup(this);
-        Gear.setup(this);
-        Blocks.setup(this);
-        Storage.setup(this);
-        Generators.setup(this);
-        SlimefunExtension.setup(this);
+        try {
+            Categories.setup(this);
+            MobData.setup(this);
+            Materials.setup(this);
+            Machines.setup(this);
+            Gear.setup(this);
+            Blocks.setup(this);
+            Storage.setup(this);
+            Generators.setup(this);
+            SlimefunExtension.setup(this);
+        } catch (Throwable e) {
+            runSync(() -> {
+                log(Level.SEVERE,
+                        "The following error has occurred during InfinityExpansion startup!",
+                        "Not all items will be available because of this!",
+                        "Report this on Github or Discord and make sure to update Slimefun!"
+                );
+                e.printStackTrace();
+            });
+        }
     }
 
     @Override
@@ -71,12 +82,12 @@ public final class InfinityExpansion extends AbstractAddon {
     @Nonnull
     @Override
     protected List<AbstractCommand> setupSubCommands() {
-        return Arrays.asList(new GiveRecipe(), new SetData(), new PrintItem());        
+        return Arrays.asList(new GiveRecipe(), new SetData(), new PrintItem());
     }
 
     @Override
     public void onDisable() {
         instance = null;
     }
-    
+
 }
