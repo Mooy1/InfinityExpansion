@@ -58,6 +58,9 @@ public final class GiveRecipe extends AbstractCommand {
         if (args.length == 2) {
             for (SlimefunItem item : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {
                 tabs.add(item.getId());
+                if (tabs.size() > 64) {
+                    break;
+                }
             } 
         }
     }
