@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;

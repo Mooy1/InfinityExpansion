@@ -1,3 +1,6 @@
+# You should enable this to get bug fixes and receive support asap!
+auto-update: true
+
 balance-options:
   
   # Increases or decreases the cost of infinity singularities

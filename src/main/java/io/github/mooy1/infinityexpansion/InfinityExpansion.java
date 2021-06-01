@@ -10,14 +10,14 @@ import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.commands.PrintItem;
 import io.github.mooy1.infinityexpansion.commands.SetData;
-import io.github.mooy1.infinityexpansion.implementation.SlimefunExtension;
-import io.github.mooy1.infinityexpansion.implementation.Blocks;
-import io.github.mooy1.infinityexpansion.implementation.Gear;
-import io.github.mooy1.infinityexpansion.implementation.Generators;
-import io.github.mooy1.infinityexpansion.implementation.Machines;
-import io.github.mooy1.infinityexpansion.implementation.Materials;
-import io.github.mooy1.infinityexpansion.implementation.MobData;
-import io.github.mooy1.infinityexpansion.implementation.Storage;
+import io.github.mooy1.infinityexpansion.items.Blocks;
+import io.github.mooy1.infinityexpansion.items.Gear;
+import io.github.mooy1.infinityexpansion.items.Generators;
+import io.github.mooy1.infinityexpansion.items.Machines;
+import io.github.mooy1.infinityexpansion.items.Materials;
+import io.github.mooy1.infinityexpansion.items.MobData;
+import io.github.mooy1.infinityexpansion.items.SlimefunExtension;
+import io.github.mooy1.infinityexpansion.items.Storage;
 import io.github.mooy1.infinitylib.AbstractAddon;
 import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
@@ -31,10 +31,8 @@ public final class InfinityExpansion extends AbstractAddon {
     }
 
     @Override
-    public void onEnable() {
+    public void onAddonEnable() {
         instance = this;
-
-        super.onEnable();
 
         if (getServer().getPluginManager().getPlugin("LiteXpansion") != null) {
             runSync(() -> log(Level.WARNING,
@@ -46,26 +44,15 @@ public final class InfinityExpansion extends AbstractAddon {
             ));
         }
 
-        try {
-            Categories.setup(this);
-            MobData.setup(this);
-            Materials.setup(this);
-            Machines.setup(this);
-            Gear.setup(this);
-            Blocks.setup(this);
-            Storage.setup(this);
-            Generators.setup(this);
-            SlimefunExtension.setup(this);
-        } catch (Throwable e) {
-            runSync(() -> {
-                log(Level.SEVERE,
-                        "The following error has occurred during InfinityExpansion startup!",
-                        "Not all items will be available because of this!",
-                        "Report this on Github or Discord and make sure to update Slimefun!"
-                );
-                e.printStackTrace();
-            });
-        }
+        Categories.setup(this);
+        MobData.setup(this);
+        Materials.setup(this);
+        Machines.setup(this);
+        Gear.setup(this);
+        Blocks.setup(this);
+        Storage.setup(this);
+        Generators.setup(this);
+        SlimefunExtension.setup(this);
     }
 
     @Override
@@ -86,7 +73,7 @@ public final class InfinityExpansion extends AbstractAddon {
     }
 
     @Override
-    public void onDisable() {
+    public void onAddonDisable() {
         instance = null;
     }
 

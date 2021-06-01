@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.commands;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;
@@ -10,7 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import io.github.mooy1.infinityexpansion.implementation.storage.StorageUnit;
+import io.github.mooy1.infinityexpansion.items.storage.StorageUnit;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
