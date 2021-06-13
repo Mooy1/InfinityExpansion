@@ -31,7 +31,7 @@ public final class InfinityExpansion extends AbstractAddon {
     }
 
     @Override
-    public void onAddonEnable() {
+    protected void enable() {
         instance = this;
 
         if (getServer().getPluginManager().getPlugin("LiteXpansion") != null) {
@@ -56,6 +56,11 @@ public final class InfinityExpansion extends AbstractAddon {
     }
 
     @Override
+    protected void disable() {
+        instance = null;
+    }
+
+    @Override
     protected Metrics setupMetrics() {
         return new Metrics(this, 8991);
     }
@@ -72,9 +77,10 @@ public final class InfinityExpansion extends AbstractAddon {
         return Arrays.asList(new GiveRecipe(), new SetData(), new PrintItem());
     }
 
+    @Nonnull
     @Override
-    public void onAddonDisable() {
-        instance = null;
+    public String getAutoUpdatePath() {
+        return "auto-update";
     }
 
 }
