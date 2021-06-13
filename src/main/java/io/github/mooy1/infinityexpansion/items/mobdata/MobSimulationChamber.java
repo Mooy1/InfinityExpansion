@@ -65,7 +65,7 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
 
     @Override
     public int getCapacity() {
-        return thisww.energy + MobDataTier.BOSS.energy;
+        return this.energy + MobDataTier.BOSS.energy;
     }
 
     @Override
