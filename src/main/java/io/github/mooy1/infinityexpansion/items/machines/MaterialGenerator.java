@@ -45,7 +45,7 @@ public final class MaterialGenerator extends AbstractMachine implements RecipeDi
         this.material = material;
         this.energy = energy;
     }
-    
+
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         super.setupMenu(blockMenuPreset);

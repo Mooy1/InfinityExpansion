@@ -19,12 +19,12 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @UtilityClass
 public final class MobData {
-    
+
     private static final int CHAMBER_INTERVAL = InfinityExpansion.inst().getConfig().getInt("mob-simulation-options.ticks-per-output", 1, 1000);
     private static final int CHAMBER_BUFFER = 15000;
     private static final int CHAMBER_ENERGY = 150;
     private static final int INFUSER_ENERGY = 20000;
-    
+
     public static final SlimefunItemStack EMPTY_DATA_CARD = new SlimefunItemStack(
             "EMPTY_DATA_CARD",
             Material.CHAINMAIL_CHESTPLATE,
@@ -48,27 +48,27 @@ public final class MobData {
             LorePreset.energyBuffer(CHAMBER_BUFFER),
             LorePreset.energyPerSecond(CHAMBER_ENERGY)
     );
-    
+
     public static void setup(InfinityExpansion plugin) {
-        
+
         new MobSimulationChamber(Categories.MOB_SIMULATION, CHAMBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, Materials.MACHINE_PLATE, Materials.MAGSTEEL_PLATE,
                 Materials.MACHINE_CIRCUIT, SlimefunItems.PROGRAMMABLE_ANDROID_BUTCHER, Materials.MACHINE_CIRCUIT,
                 Materials.MAGSTEEL_PLATE, Materials.MACHINE_PLATE, Materials.MAGSTEEL_PLATE,
         }, CHAMBER_ENERGY, CHAMBER_INTERVAL).register(plugin);
-        
+
         new MobDataInfuser(Categories.MOB_SIMULATION, INFUSER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Materials.MACHINE_CIRCUIT,
                 SlimefunItems.REINFORCED_ALLOY_INGOT, Materials.MACHINE_CORE, SlimefunItems.REINFORCED_ALLOY_INGOT,
                 Materials.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Materials.MACHINE_CIRCUIT
         }, INFUSER_ENERGY).register(plugin);
-        
+
         new SlimefunItem(Categories.MOB_SIMULATION, EMPTY_DATA_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.MAGNESIUM_INGOT, Materials.MACHINE_CIRCUIT, SlimefunItems.MAGNESIUM_INGOT,
                 SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.SYNTHETIC_DIAMOND, SlimefunItems.SYNTHETIC_EMERALD,
                 SlimefunItems.MAGNESIUM_INGOT, Materials.MACHINE_CIRCUIT, SlimefunItems.MAGNESIUM_INGOT
         }).register(plugin);
-        
+
         new MobDataCard("Zombie", MobDataTier.HOSTILE, new ItemStack[] {
                 new ItemStack(Material.IRON_SWORD, 1), new ItemStack(Material.ROTTEN_FLESH, 16), new ItemStack(Material.IRON_SHOVEL, 1),
                 new ItemStack(Material.IRON_INGOT, 64), EMPTY_DATA_CARD, new ItemStack(Material.IRON_INGOT, 1),
@@ -151,9 +151,9 @@ public final class MobData {
                 new SlimefunItemStack(SlimefunItems.ENDER_LUMP_3, 64), new SlimefunItemStack(Materials.VOID_INGOT, 32), new ItemStack(Material.DRAGON_BREATH, 64)
         }).addDrop(Materials.VOID_DUST, 1).addDrop(Materials.ENDER_ESSENCE, 4).addDrop(Material.DRAGON_EGG, 1_000_000).register(plugin);
         new MobDataCard("Bee", MobDataTier.NEUTRAL, new ItemStack[] {
-                new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16),new ItemStack(Material.HONEYCOMB_BLOCK, 16),
-                new ItemStack(Material.HONEY_BLOCK, 16), EMPTY_DATA_CARD,  new ItemStack(Material.HONEY_BLOCK, 16),
-                new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16),new ItemStack(Material.HONEYCOMB_BLOCK, 16)
+                new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16), new ItemStack(Material.HONEYCOMB_BLOCK, 16),
+                new ItemStack(Material.HONEY_BLOCK, 16), EMPTY_DATA_CARD, new ItemStack(Material.HONEY_BLOCK, 16),
+                new ItemStack(Material.HONEYCOMB_BLOCK, 16), new ItemStack(Material.HONEY_BLOCK, 16), new ItemStack(Material.HONEYCOMB_BLOCK, 16)
         }).addDrop(Material.HONEYCOMB, 1).register(plugin);
         new MobDataCard("Villager", MobDataTier.ADVANCED, new ItemStack[] {
                 new ItemStack(Material.EMERALD, 64), new ItemStack(Material.POTATO, 64), new ItemStack(Material.EMERALD, 64),
@@ -167,5 +167,5 @@ public final class MobData {
         }).addDrop(Material.SUGAR, 1).addDrop(Material.REDSTONE, 1)
                 .addDrop(Material.GLASS_BOTTLE, 1).addDrop(Material.GLOWSTONE_DUST, 1).register(plugin);
     }
-    
+
 }

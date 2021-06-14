@@ -15,7 +15,7 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @UtilityClass
 public final class Storage {
-    
+
     public static final SlimefunItemStack STORAGE_FORGE = new SlimefunItemStack(
             "STORAGE_FORGE",
             Material.BEEHIVE,
@@ -60,29 +60,29 @@ public final class Storage {
             "&bInfinity &8Storage Unit",
             "&6Capacity: &e" + LorePreset.format(INFINITY_AMOUNT) + " &eitems"
     );
-    
+
     public static void setup(InfinityExpansion plugin) {
-        new StorageForge(Categories.STORAGE, STORAGE_FORGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
+        new StorageForge(Categories.STORAGE, STORAGE_FORGE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL, new ItemStack(Material.ANVIL), Materials.MAGSTEEL,
                 Materials.MAGSTEEL, new ItemStack(Material.CRAFTING_TABLE), Materials.MAGSTEEL,
                 Materials.MAGSTEEL, new ItemStack(Material.BARREL), Materials.MAGSTEEL,
         }).register(plugin);
-        new StorageUnit(BASIC_STORAGE, BASIC_AMOUNT,  new ItemStack[] {
+        new StorageUnit(BASIC_STORAGE, BASIC_AMOUNT, new ItemStack[] {
                 new ItemStack(Material.OAK_LOG), Materials.MAGSTEEL, new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), new ItemStack(Material.BARREL), new ItemStack(Material.OAK_LOG),
                 new ItemStack(Material.OAK_LOG), Materials.MAGSTEEL, new ItemStack(Material.OAK_LOG)
         }).register(plugin);
-        new StorageUnit(ADVANCED_STORAGE, ADVANCED_AMOUNT,  new ItemStack[] {
+        new StorageUnit(ADVANCED_STORAGE, ADVANCED_AMOUNT, new ItemStack[] {
                 Materials.MAGSTEEL, Materials.MACHINE_CIRCUIT, Materials.MAGSTEEL,
                 Materials.MAGSTEEL, BASIC_STORAGE, Materials.MAGSTEEL,
                 Materials.MAGSTEEL, Materials.MACHINE_CIRCUIT, Materials.MAGSTEEL
         }).register(plugin);
-        new StorageUnit(REINFORCED_STORAGE, REINFORCED_AMOUNT,  new ItemStack[] {
+        new StorageUnit(REINFORCED_STORAGE, REINFORCED_AMOUNT, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, Materials.MACHINE_CIRCUIT, Materials.MAGSTEEL_PLATE,
                 Materials.MAGSTEEL_PLATE, ADVANCED_STORAGE, Materials.MAGSTEEL_PLATE,
                 Materials.MAGSTEEL_PLATE, Materials.MACHINE_PLATE, Materials.MAGSTEEL_PLATE
         }).register(plugin);
-        new StorageUnit(VOID_STORAGE, VOID_AMOUNT,  new ItemStack[] {
+        new StorageUnit(VOID_STORAGE, VOID_AMOUNT, new ItemStack[] {
                 Materials.VOID_INGOT, Materials.MACHINE_PLATE, Materials.VOID_INGOT,
                 Materials.MAGNONIUM, REINFORCED_STORAGE, Materials.MAGNONIUM,
                 Materials.VOID_INGOT, Materials.MACHINE_CORE, Materials.VOID_INGOT
@@ -93,5 +93,5 @@ public final class Storage {
                 Materials.INFINITE_INGOT, Materials.VOID_INGOT, Materials.INFINITE_INGOT
         }).register(plugin);
     }
-    
+
 }

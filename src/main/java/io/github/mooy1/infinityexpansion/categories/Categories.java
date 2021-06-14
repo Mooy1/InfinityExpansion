@@ -14,7 +14,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class Categories {
-    
+
     public static final Category INFINITY_CATEGORY = new InfinityCategory(InfinityExpansion.inst().getKey("infinity_recipes"),
             new CustomItem(Material.RESPAWN_ANCHOR, "&bInfinity &7Recipes"), 3
     );
@@ -43,11 +43,11 @@ public final class Categories {
     public static final Category INFINITY_CHEAT = new SubCategory(InfinityExpansion.inst().getKey("infinity_cheat"),
             new CustomItem(Material.RESPAWN_ANCHOR, "&bInfinity &7Recipes &c- INCORRECT RECIPES")
     );
-    
+
     public static void setup(InfinityExpansion inst) {
         INFINITY_CATEGORY.register(inst);
         MAIN_CATEGORY.register(inst);
         INFINITY_CHEAT.register(inst);
     }
-    
+
 }

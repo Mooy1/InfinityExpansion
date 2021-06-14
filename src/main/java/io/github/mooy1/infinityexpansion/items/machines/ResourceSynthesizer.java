@@ -31,7 +31,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class ResourceSynthesizer extends AbstractMachine implements RecipeDisplayItem {
-    
+
     private static final int[] OUTPUT_SLOTS = {
             MenuPreset.STATUS + 27
     };
@@ -74,7 +74,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     protected int getEnergyConsumption() {
         return this.energy;
     }
-    
+
     @Override
     protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
         super.setupMenu(blockMenuPreset);
@@ -120,7 +120,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> items = new ArrayList<>();
 
-        for (int i = 0 ; i < this.recipes.length; i += 3) {
+        for (int i = 0 ; i < this.recipes.length ; i += 3) {
             items.add(this.recipes[i]);
             items.add(this.recipes[i + 2]);
             items.add(this.recipes[i + 1]);
@@ -155,7 +155,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
 
         ItemStack recipe = null;
 
-        for (int i = 0 ; i < this.recipes.length; i += 3) {
+        for (int i = 0 ; i < this.recipes.length ; i += 3) {
             if ((id1.equals(this.recipes[i].getItemId()) && id2.equals(this.recipes[i + 1].getItemId()) || (id2.equals(this.recipes[i].getItemId()) && id1.equals(this.recipes[i + 1].getItemId())))) {
                 recipe = this.recipes[i + 2];
             }

@@ -22,11 +22,11 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
  * @author Mooy1
  */
 public final class InfinityArmor extends SlimefunArmorPiece implements ProtectiveArmor, Soulbound, NotPlaceable {
-    
+
     private static final NamespacedKey KEY = InfinityExpansion.inst().getKey("infinity_armor");
 
     public InfinityArmor(SlimefunItemStack item, PotionEffect[] effects, ItemStack[] recipe) {
-        super(Categories.INFINITY_CHEAT , item, InfinityWorkbench.TYPE, recipe, effects);
+        super(Categories.INFINITY_CHEAT, item, InfinityWorkbench.TYPE, recipe, effects);
     }
 
     @Nonnull

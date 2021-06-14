@@ -47,7 +47,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
     public ConversionMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy, ItemStack[] inputs, ItemStack[] outputs) {
         super(category, item, recipeType, recipe);
         this.energy = energy;
-        
+
         if (inputs.length == outputs.length) {
             for (int i = 0 ; i < inputs.length ; i++) {
                 this.displayRecipes.add(inputs[i]);
@@ -70,7 +70,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
         menu.dropItems(l, OUTPUT_SLOTS);
         menu.dropItems(l, INPUT_SLOTS);
     }
-    
+
     @Nonnull
     @Override
     public int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack itemStack) {
@@ -160,7 +160,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
     protected int getEnergyConsumption() {
         return this.energy;
     }
-    
+
     private static final class RandomizedOutput extends ItemStack {
 
         private final ItemStack[] items;

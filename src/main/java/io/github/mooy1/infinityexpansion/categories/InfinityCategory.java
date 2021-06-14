@@ -45,7 +45,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class InfinityCategory extends FlexCategory {
-    
+
     private static final int[] INFINITY_RECIPE_SLOTS = {
             1, 2, 3, 4, 5, 6,
             10, 11, 12, 13, 14, 15,
@@ -85,7 +85,7 @@ public final class InfinityCategory extends FlexCategory {
             "&aRight-Click to move as many sets as possible"
     );
     private static final ItemStack INFO = new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&3Info");
-    
+
     private static final Map<UUID, String> history = new HashMap<>();
 
     InfinityCategory(NamespacedKey key, ItemStack item, int tier) {
@@ -102,9 +102,9 @@ public final class InfinityCategory extends FlexCategory {
         open(player, new BackEntry(null, playerProfile.getGuideHistory()), true);
         playerProfile.getGuideHistory().add(this, 1);
     }
-    
+
     public static void open(@Nonnull Player player, @Nonnull BackEntry entry, boolean useHistory) {
-        
+
         if (useHistory) {
             String id = history.get(player.getUniqueId());
 
@@ -113,7 +113,7 @@ public final class InfinityCategory extends FlexCategory {
                 return;
             }
         }
-        
+
         ChestMenu menu = new ChestMenu("&bInfinity Recipes");
 
         if (entry.history != null) {
@@ -160,7 +160,7 @@ public final class InfinityCategory extends FlexCategory {
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 
         history.put(player.getUniqueId(), null);
-        
+
         menu.open(player);
     }
 
@@ -174,12 +174,12 @@ public final class InfinityCategory extends FlexCategory {
 
         ChestMenu menu = new ChestMenu(Objects.requireNonNull(pair.getFirstValue().getDisplayName()));
         menu.setEmptySlotsClickable(false);
-        
+
         menu.addItem(BACK, ChestMenuUtils.getBackButton(player, ""), (player12, i, itemStack, clickAction) -> {
             open(player12, entry, false);
             return false;
         });
-        
+
         for (int i = 0 ; i < INFINITY_RECIPE_SLOTS.length ; i++) {
             ItemStack recipeItem = pair.getSecondValue()[i];
             if (recipeItem != null) {
@@ -215,9 +215,9 @@ public final class InfinityCategory extends FlexCategory {
                 return false;
             });
         }
-        
+
         int page = InfinityWorkbench.IDS.indexOf(id);
-        
+
         menu.addItem(PREV, ChestMenuUtils.getPreviousButton(player, page + 1, InfinityWorkbench.IDS.size()), (player1, i, itemStack, clickAction) -> {
             if (page > 0) {
                 openInfinityRecipe(player1, InfinityWorkbench.IDS.get(page - 1), entry);
@@ -231,7 +231,7 @@ public final class InfinityCategory extends FlexCategory {
             }
             return false;
         });
-        
+
         for (int slot : INFINITY_BACKGROUND) {
             menu.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
@@ -246,11 +246,11 @@ public final class InfinityCategory extends FlexCategory {
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 
         history.put(player.getUniqueId(), id);
-        
+
         menu.open(player);
 
     }
-    
+
     private static void moveRecipe(@Nonnull Player player, @Nonnull BlockMenu menu, Pair<SlimefunItemStack, ItemStack[]> pair, boolean max) {
         ItemStack[] recipe = pair.getSecondValue();
         PlayerInventory inv = player.getInventory();
@@ -290,11 +290,11 @@ public final class InfinityCategory extends FlexCategory {
     @ParametersAreNonnullByDefault
     private static void openSlimefunRecipe(Player player, BackEntry entry, String backID, LinkedList<SlimefunItem> slimefunHistory) {
         SlimefunItem slimefunItem = slimefunHistory.peekLast();
-        
+
         if (slimefunItem == null) {
             return;
         }
-        
+
         ItemStack output = slimefunItem.getRecipeOutput().clone();
 
         ChestMenu menu = new ChestMenu(ItemUtils.getItemName(output));
@@ -311,7 +311,7 @@ public final class InfinityCategory extends FlexCategory {
             }
             return false;
         });
-        
+
         for (int i = 0 ; i < NORMAL_RECIPE_SLOTS.length ; i++) {
             ItemStack recipeItem = slimefunItem.getRecipe()[i];
 
@@ -326,7 +326,7 @@ public final class InfinityCategory extends FlexCategory {
                     return false;
                 });
             }
-            
+
         }
 
         menu.addItem(NORMAL_RECIPE_TYPE, slimefunItem.getRecipeType().toItem(), ChestMenuUtils.getEmptyClickHandler());
@@ -340,7 +340,7 @@ public final class InfinityCategory extends FlexCategory {
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
         menu.open(player);
     }
-    
+
     @AllArgsConstructor
     public static final class BackEntry {
 
@@ -348,7 +348,7 @@ public final class InfinityCategory extends FlexCategory {
         private final BlockMenu bench;
         @Nullable
         private final GuideHistory history;
-        
+
     }
 
 }

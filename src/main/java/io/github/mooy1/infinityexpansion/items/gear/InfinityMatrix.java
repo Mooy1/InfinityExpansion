@@ -21,19 +21,19 @@ import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> implements Listener, Soulbound, NotPlaceable {
-    
+
     public InfinityMatrix(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
         super(category, item, type, recipe);
         InfinityExpansion.inst().registerListener(this);
     }
 
     private static void disableFlight(Player p) {
-        p.sendMessage( ChatColor.RED + "Infinity Flight Disabled!");
+        p.sendMessage(ChatColor.RED + "Infinity Flight Disabled!");
         p.setAllowFlight(false);
     }
 
     private static void enableFlight(Player p) {
-        p.sendMessage( ChatColor.GREEN + "Infinity Flight Enabled!");
+        p.sendMessage(ChatColor.GREEN + "Infinity Flight Enabled!");
         p.setAllowFlight(true);
     }
 
@@ -62,7 +62,7 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
                     String uuid = ChatColor.stripColor(line).substring(6);
 
                     if (!p.getUniqueId().toString().equals(uuid)) {
-                        p.sendMessage( ChatColor.YELLOW + "You do not own this matrix!");
+                        p.sendMessage(ChatColor.YELLOW + "You do not own this matrix!");
                         return;
                     }
 
@@ -70,7 +70,7 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
                         iterator.remove();
                         meta.setLore(lore);
                         item.setItemMeta(meta);
-                        p.sendMessage( ChatColor.GOLD + "Ownership removed!");
+                        p.sendMessage(ChatColor.GOLD + "Ownership removed!");
                         disableFlight(p);
 
                     } else if (p.getAllowFlight()) {
@@ -86,7 +86,7 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
             lore.add(ChatColor.GREEN + "UUID: " + p.getUniqueId());
             meta.setLore(lore);
             item.setItemMeta(meta);
-            p.sendMessage( ChatColor.GOLD + "Ownership claimed!");
+            p.sendMessage(ChatColor.GOLD + "Ownership claimed!");
             enableFlight(p);
         };
     }

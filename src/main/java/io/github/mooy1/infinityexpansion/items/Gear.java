@@ -33,7 +33,7 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @UtilityClass
 public final class Gear {
-    
+
     public static final SlimefunItemStack ENDER_FLAME = new SlimefunItemStack(
             "ENDER_FLAME",
             Material.ENCHANTED_BOOK,
@@ -117,7 +117,7 @@ public final class Gear {
             "&bVein Miner Rune",
             "&7Upgrades a tool to vein-mine certain materials"
     );
-    
+
     public static void setup(InfinityExpansion plugin) {
         addInfinityEnchants(plugin,
                 CROWN, CHESTPLATE, LEGGINGS, BOOTS,
@@ -127,7 +127,7 @@ public final class Gear {
         EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) ENDER_FLAME.getItemMeta();
         Objects.requireNonNull(storageMeta).addStoredEnchant(Enchantment.FIRE_ASPECT, 10, true);
         ENDER_FLAME.setItemMeta(storageMeta);
-        new SlimefunItem(Categories.MAIN_MATERIALS, ENDER_FLAME, RecipeType.MAGIC_WORKBENCH, new ItemStack[]{
+        new SlimefunItem(Categories.MAIN_MATERIALS, ENDER_FLAME, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
                 Materials.ENDER_ESSENCE, Materials.ENDER_ESSENCE, Materials.ENDER_ESSENCE,
                 Materials.ENDER_ESSENCE, new ItemStack(Material.BOOK), Materials.ENDER_ESSENCE,
                 Materials.ENDER_ESSENCE, Materials.ENDER_ESSENCE, Materials.ENDER_ESSENCE
@@ -275,5 +275,5 @@ public final class Gear {
             item.setItemMeta(meta);
         }
     }
-    
+
 }
