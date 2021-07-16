@@ -298,7 +298,7 @@ final class StorageCache {
             } else {
                 lore.add(ChatColors.color("&6Stored: &e" + LorePreset.format(this.amount)
                         + " / " + LorePreset.format(this.storageUnit.max)
-                        + " &7(" + LorePreset.format((double) this.amount / this.storageUnit.max) + "%)"
+                        + " &7(" + LorePreset.format((double) this.amount * 100.D / this.storageUnit.max) + "%)"
                 ));
             }
             lore.add(this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE);
