@@ -34,7 +34,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * Turns cobble into stuff
  */
 public final class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem, NotHopperable {
-    
+
     private static final int[] PROCESS_BORDER = {0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23};
     private static final int[] OUT_BORDER = {6, 7, 8, 17, 24, 25, 26};
     private static final int[] OUTPUT_SLOTS = {16};
@@ -45,7 +45,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
     private static final ItemStack PROCESSING = new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "&7Processing");
 
     private final int energy;
-    
+
     public StoneworksFactory(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy) {
         super(category, item, recipeType, recipe);
         this.energy = energy;
@@ -53,8 +53,8 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
 
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
-        inv.dropItems( l, OUTPUT_SLOTS);
-        inv.dropItems( l, PROCESS_SLOTS);
+        inv.dropItems(l, OUTPUT_SLOTS);
+        inv.dropItems(l, PROCESS_SLOTS);
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         Location l = b.getLocation();
-        
+
         if (BlockStorage.getLocationInfo(l, "choice0") == null) {
             setChoice(l, 0, Choice.NONE);
             setChoice(l, 1, Choice.NONE);
@@ -103,7 +103,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
         for (int i = 0 ; i < CHOICE_SLOTS.length ; i++) {
             menu.replaceExistingItem(CHOICE_SLOTS[i], getChoice(l, i).item);
         }
-        
+
         for (int i = 0 ; i < 3 ; i++) {
             int finalI = i;
             menu.addMenuClickHandler(CHOICE_SLOTS[i], (p, slot, item, action) -> {
@@ -128,21 +128,21 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
             });
         }
     }
-    
+
     private static void process(int i, BlockMenu inv, Location l) {
         int slot = PROCESS_SLOTS[i];
 
         ItemStack item = inv.getItemInSlot(slot);
-        
+
         if (item == null) return;
-        
+
         Choice c = getChoice(l, i);
         int nextSlot = i < 2 ? PROCESS_SLOTS[i + 1] : OUTPUT_SLOTS[0];
 
         if (c == Choice.NONE) {
             item = item.clone();
             item.setAmount(1);
-            
+
             if (inv.fits(item, nextSlot)) {
                 inv.consumeItem(slot, 1);
                 inv.pushItem(item, nextSlot);
@@ -176,10 +176,10 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
                 items.add(new ItemStack(option.outputs[i]));
             }
         }
-        
+
         return items;
     }
-    
+
     @Nonnull
     private static Choice getChoice(Location l, int i) {
         try {
@@ -189,7 +189,7 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
             return Choice.NONE;
         }
     }
-    
+
     private static void setChoice(Location l, int i, Choice o) {
         BlockStorage.addBlockInfo(l, "choice" + i, o.toString());
     }
@@ -220,20 +220,20 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
                 new Material[0]
         ),
         FURNACE(new CustomItem(Material.FURNACE, "&8Smelting", "", "&7 > Click to cycle"),
-                new Material[]{Material.COBBLESTONE, Material.SAND},
-                new Material[]{Material.STONE, Material.GLASS}
+                new Material[] {Material.COBBLESTONE, Material.SAND},
+                new Material[] {Material.STONE, Material.GLASS}
         ),
         CRUSH(new CustomItem(Material.DIAMOND_PICKAXE, "&8Crushing", "", "&7 > Click to cycle"),
-                new Material[]{Material.COBBLESTONE, Material.GRAVEL},
-                new Material[]{Material.GRAVEL, Material.SAND}
+                new Material[] {Material.COBBLESTONE, Material.GRAVEL},
+                new Material[] {Material.GRAVEL, Material.SAND}
         ),
         COMPACT(new CustomItem(Material.PISTON, "&8Compacting", "", "&7 > Click to cycle"),
-                new Material[]{Material.STONE, Material.GRANITE, Material.DIORITE, Material.ANDESITE},
-                new Material[]{Material.STONE_BRICKS, Material.POLISHED_GRANITE, Material.POLISHED_DIORITE, Material.POLISHED_ANDESITE}
+                new Material[] {Material.STONE, Material.GRANITE, Material.DIORITE, Material.ANDESITE},
+                new Material[] {Material.STONE_BRICKS, Material.POLISHED_GRANITE, Material.POLISHED_DIORITE, Material.POLISHED_ANDESITE}
         ),
         TRANSFORM(new CustomItem(Material.ANDESITE, "&8Transforming", "", "&7 > Click to cycle"),
-                new Material[]{Material.COBBLESTONE, Material.ANDESITE, Material.DIORITE},
-                new Material[]{Material.ANDESITE, Material.DIORITE, Material.GRANITE}
+                new Material[] {Material.COBBLESTONE, Material.ANDESITE, Material.DIORITE},
+                new Material[] {Material.ANDESITE, Material.DIORITE, Material.GRANITE}
         );
 
         private final ItemStack item;

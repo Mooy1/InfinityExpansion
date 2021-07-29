@@ -1,3 +1,4 @@
+
 # You should enable this to get bug fixes and receive support asap!
 auto-update: true
 
@@ -25,6 +26,23 @@ quarry-options:
 
   # Allow quarries to mine quartz, netherite, netherrack in any world
   output-nether-materials-in-overworld: false
+
+  # Enable/Disable resources from being produced
+  resources:
+
+    coal: true
+    iron: true
+    gold: true
+    lapis: true
+
+    # Vanilla Copper (1.17+)
+    copper: true
+    quartz: true
+    diamond: true
+    emerald: true
+    redstone: true
+    netherite: true
+    netherrack: true
   
 # These are the maximum level of enchants that can be obtained by combining 2 of the same enchant of the same level.
 advanced-anvil-max-levels:

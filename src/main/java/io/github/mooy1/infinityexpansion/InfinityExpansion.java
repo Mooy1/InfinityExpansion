@@ -16,6 +16,7 @@ import io.github.mooy1.infinityexpansion.items.Generators;
 import io.github.mooy1.infinityexpansion.items.Machines;
 import io.github.mooy1.infinityexpansion.items.Materials;
 import io.github.mooy1.infinityexpansion.items.MobData;
+import io.github.mooy1.infinityexpansion.items.Quarries;
 import io.github.mooy1.infinityexpansion.items.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.items.Storage;
 import io.github.mooy1.infinitylib.AbstractAddon;
@@ -31,7 +32,7 @@ public final class InfinityExpansion extends AbstractAddon {
     }
 
     @Override
-    public void onAddonEnable() {
+    public void enable() {
         instance = this;
 
         if (getServer().getPluginManager().getPlugin("LiteXpansion") != null) {
@@ -48,6 +49,7 @@ public final class InfinityExpansion extends AbstractAddon {
         MobData.setup(this);
         Materials.setup(this);
         Machines.setup(this);
+        Quarries.setup(this);
         Gear.setup(this);
         Blocks.setup(this);
         Storage.setup(this);
@@ -72,8 +74,14 @@ public final class InfinityExpansion extends AbstractAddon {
         return Arrays.asList(new GiveRecipe(), new SetData(), new PrintItem());
     }
 
+    @Nonnull
     @Override
-    public void onAddonDisable() {
+    public String getAutoUpdatePath() {
+        return "auto-update";
+    }
+
+    @Override
+    public void disable() {
         instance = null;
     }
 

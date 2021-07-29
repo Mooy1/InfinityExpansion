@@ -15,9 +15,9 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
  * @author Mooy1
  */
 public final class InfinityTool extends SlimefunItem implements Soulbound, NotPlaceable {
-    
+
     public InfinityTool(SlimefunItemStack stack, ItemStack[] recipe) {
         super(Categories.INFINITY_CHEAT, stack, InfinityWorkbench.TYPE, recipe);
     }
-    
+
 }

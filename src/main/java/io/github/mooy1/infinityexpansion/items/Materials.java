@@ -12,7 +12,6 @@ import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.items.blocks.InfinityWorkbench;
 import io.github.mooy1.infinityexpansion.items.machines.VoidHarvester;
 import io.github.mooy1.infinityexpansion.items.materials.EnderEssence;
-import io.github.mooy1.infinityexpansion.items.materials.Oscillator;
 import io.github.mooy1.infinityexpansion.items.materials.Singularity;
 import io.github.mooy1.infinityexpansion.items.materials.Strainer;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
@@ -281,7 +280,7 @@ public final class Materials {
             "",
             LoreBuilder.speed(20)
     );
-    
+
     public static void setup(InfinityExpansion plugin) {
         new EnderEssence(Categories.MAIN_MATERIALS, ENDER_ESSENCE, plugin.getKey("ender_essence")).register(plugin);
         registerEnhanced(COBBLE_1, new ItemStack[] {
@@ -326,9 +325,9 @@ public final class Materials {
         registerSmeltery(METAL_SINGULARITY, SILVER_SINGULARITY, ALUMINUM_SINGULARITY, TIN_SINGULARITY, ZINC_SINGULARITY, TITANIUM);
         registerSmeltery(MAGSTEEL, SlimefunItems.MAGNESIUM_INGOT, SlimefunItems.STEEL_INGOT, SlimefunItems.MAGNESIUM_DUST);
         registerSmeltery(TITANIUM, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.DAMASCUS_STEEL_INGOT, SlimefunItems.HARDENED_METAL_INGOT);
-        registerSmeltery(MYTHRIL, SlimefunItems.REINFORCED_ALLOY_INGOT,IRON_SINGULARITY, SlimefunItems.HARDENED_METAL_INGOT);
-        registerSmeltery(ADAMANTITE, SlimefunItems.REDSTONE_ALLOY, DIAMOND_SINGULARITY,MAGSTEEL);
-        registerSmeltery(MAGNONIUM, MAGSTEEL,MAGNESIUM_SINGULARITY, ENDER_ESSENCE);
+        registerSmeltery(MYTHRIL, SlimefunItems.REINFORCED_ALLOY_INGOT, IRON_SINGULARITY, SlimefunItems.HARDENED_METAL_INGOT);
+        registerSmeltery(ADAMANTITE, SlimefunItems.REDSTONE_ALLOY, DIAMOND_SINGULARITY, MAGSTEEL);
+        registerSmeltery(MAGNONIUM, MAGSTEEL, MAGNESIUM_SINGULARITY, ENDER_ESSENCE);
         register(VOID_BIT, VoidHarvester.TYPE, new ItemStack[0]);
         registerEnhanced(MAGSTEEL_PLATE, new ItemStack[] {
                 MAGSTEEL, MAGSTEEL, MAGSTEEL,
@@ -347,7 +346,7 @@ public final class Materials {
         }, 1).register(plugin);
         new Strainer(ADVANCED_STRAINER, new ItemStack[] {
                 Materials.MAGSTEEL, new ItemStack(Material.STRING), Materials.MAGSTEEL,
-                new ItemStack(Material.STRING),BASIC_STRAINER, new ItemStack(Material.STRING),
+                new ItemStack(Material.STRING), BASIC_STRAINER, new ItemStack(Material.STRING),
                 Materials.MAGSTEEL, new ItemStack(Material.STRING), Materials.MAGSTEEL
         }, 4).register(plugin);
         new Strainer(REINFORCED_STRAINER, new ItemStack[] {
@@ -398,28 +397,22 @@ public final class Materials {
         new Singularity(LAPIS_SINGULARITY, "LAPIS_LAZULI", 1500).register(plugin);
         new Singularity(QUARTZ_SINGULARITY, "QUARTZ", 1500).register(plugin);
         new Singularity(INFINITY_SINGULARITY, "INFINITE_INGOT", 100).register(plugin);
-
-        new Oscillator(Material.DIAMOND).register(plugin);
-        new Oscillator(Material.EMERALD).register(plugin);
-        new Oscillator(Material.REDSTONE).register(plugin);
-        new Oscillator(Material.LAPIS_LAZULI).register(plugin);
-        new Oscillator(Material.QUARTZ).register(plugin);
     }
-    
+
     private static void registerEnhanced(SlimefunItemStack item, ItemStack[] recipe) {
         register(item, RecipeType.ENHANCED_CRAFTING_TABLE, recipe);
     }
-    
+
     private static void registerSmeltery(SlimefunItemStack itemStack, ItemStack... recipe) {
         register(itemStack, RecipeType.SMELTERY, Arrays.copyOf(recipe, 9));
     }
-    
+
     private static void register(SlimefunItemStack itemStack, RecipeType type, ItemStack[] recipe) {
         register(Categories.MAIN_MATERIALS, itemStack, type, recipe);
     }
-    
+
     private static void register(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         new SlimefunItem(category, item, recipeType, recipe).register(InfinityExpansion.inst());
     }
-    
+
 }

@@ -40,7 +40,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class StrainerBase extends AbstractTickingContainer implements RecipeDisplayItem {
-    
+
     private static final int STATUS_SLOT = MenuPreset.INPUT;
     private static final int[] OUTPUT_SLOTS = Util.LARGE_OUTPUT;
     private static final int[] INPUT_SLOTS = {
@@ -65,7 +65,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
             new SlimefunItemStack(SlimefunItems.TIN_DUST, 1),
             new SlimefunItemStack(SlimefunItems.ZINC_DUST, 1),
     };
-    
+
     private final int time;
 
     public StrainerBase(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int time) {
@@ -92,7 +92,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
         }
         blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.LOADING, ChestMenuUtils.getEmptyClickHandler());
     }
-    
+
     @Nonnull
     @Override
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
@@ -107,21 +107,21 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
 
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        
+
     }
-    
+
     private static final ItemStack POTATO = new CustomItem(Material.POTATO, "&7:&6Potatofish&7:", "&eLucky");
 
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
-        
+
         for (ItemStack output : OUTPUTS) {
             items.add(Materials.BASIC_STRAINER);
             items.add(output);
         }
-        
+
         return items;
     }
 
@@ -152,7 +152,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
 
             return;
         }
-        
+
         Random random = ThreadLocalRandom.current();
 
         //progress

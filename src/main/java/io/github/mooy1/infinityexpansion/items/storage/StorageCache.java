@@ -52,7 +52,7 @@ final class StorageCache {
     /* BlockStorage keys */
     private static final String STORED_AMOUNT = "stored"; // amount key in block data
     private static final String VOID_EXCESS = "void_excess"; // void excess true or null key
-    
+
     /* Menu Items */
     private static final ItemStack EMPTY_ITEM = new CustomItem(Material.BARRIER, meta -> {
         meta.setDisplayName(ChatColor.WHITE + "Empty");
@@ -62,7 +62,7 @@ final class StorageCache {
     /* Instance Constants */
     private final StorageUnit storageUnit;
     private final BlockMenu menu;
-    
+
     /* Instance Variables */
     private Material material;
     private ItemMeta meta;
@@ -74,7 +74,7 @@ final class StorageCache {
     StorageCache(StorageUnit storageUnit, BlockMenu menu) {
         this.storageUnit = storageUnit;
         this.menu = menu;
-        
+
         // load data
         reloadData();
 
@@ -148,12 +148,12 @@ final class StorageCache {
         // load status slot
         updateStatus();
     }
-    
+
     void destroy(Location l, BlockBreakEvent e) {
         if (isEmpty()) {
             return;
         }
-        
+
         e.setCancelled(true);
         e.getBlock().setType(Material.AIR);
         BlockStorage.clearBlockInfo(e.getBlock());
@@ -195,7 +195,7 @@ final class StorageCache {
         // check if the copy has anything besides the display key
         if (copy.equals(Bukkit.getItemFactory().getItemMeta(stored.getType()))) {
             this.meta = null;
-            this.displayName = StackUtils.getInternalName(stored);
+            this.displayName = StackUtils.getDisplayName(stored);
         } else {
             this.meta = copy;
             this.displayName = StackUtils.getDisplayName(stored, copy);
@@ -318,7 +318,7 @@ final class StorageCache {
             this.displayName = StackUtils.getDisplayName(input, this.meta);
         } else {
             this.meta = null;
-            this.displayName = StackUtils.getInternalName(input);
+            this.displayName = StackUtils.getDisplayName(input);
         }
         this.material = input.getType();
 
@@ -352,7 +352,7 @@ final class StorageCache {
         }
         return item;
     }
-    
+
     boolean isEmpty() {
         return this.amount == 0;
     }

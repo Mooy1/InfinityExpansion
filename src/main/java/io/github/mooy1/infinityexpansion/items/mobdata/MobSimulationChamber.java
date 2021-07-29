@@ -37,10 +37,10 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
     private static final int STATUS_SLOT = MenuPreset.INPUT;
     private static final int[] OUTPUT_SLOTS = Util.LARGE_OUTPUT;
     private static final int XP_SLOT = 46;
-    
+
     private final int energy;
     private final int interval;
-    
+
     public MobSimulationChamber(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int interval) {
         super(category, item, type, recipe);
         this.energy = energy;
@@ -110,7 +110,7 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
             return false;
         });
     }
-    
+
     private static ItemStack makeXpItem(int stored) {
         return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aStored xp: " + stored, "", "&a> Click to claim");
     }
@@ -118,11 +118,11 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
     @Override
     protected void tick(@Nonnull BlockMenu inv, @Nonnull Block b) {
         ItemStack input = inv.getItemInSlot(CARD_SLOT);
-        
+
         if (input == null) {
             return;
         }
-        
+
         MobDataCard card = MobDataCard.CARDS.get(StackUtils.getID(input));
 
         if (card == null) {
@@ -140,11 +140,11 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
             }
             return;
         }
-        
+
         removeCharge(b.getLocation(), energy);
-        
+
         int xp = Util.getIntData("xp", b.getLocation());
-        
+
         if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
                     "&aSimulating... (" + LorePreset.formatEnergy(energy) + " J/s)")

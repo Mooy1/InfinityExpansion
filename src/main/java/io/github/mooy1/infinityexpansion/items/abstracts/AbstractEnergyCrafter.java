@@ -18,18 +18,18 @@ import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 public abstract class AbstractEnergyCrafter extends AbstractTickingContainer implements EnergyNetComponent {
-    
+
     protected final int energy;
     protected final int statusSlot;
-    
+
     public AbstractEnergyCrafter(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy, int statusSlot) {
         super(category, item, recipeType, recipe);
         this.energy = energy;
         this.statusSlot = statusSlot;
     }
-    
+
     public abstract void update(@Nonnull BlockMenu blockMenu);
-    
+
     @Override
     protected final void tick(@Nonnull BlockMenu blockMenu, @Nonnull Block block) {
         if (blockMenu.hasViewer()) {

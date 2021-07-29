@@ -20,15 +20,15 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
  * @author Mooy1
  */
 public final class EnderEssence extends SlimefunItem implements NotPlaceable, GEOResource {
-    
+
     private final NamespacedKey key;
-    
+
     public EnderEssence(Category category, SlimefunItemStack item, NamespacedKey key) {
         super(category, item, RecipeType.GEO_MINER, new ItemStack[9]);
         this.key = key;
         register();
     }
-    
+
     @Override
     public int getDefaultSupply(@Nonnull World.Environment environment, @Nonnull Biome biome) {
         if (environment == World.Environment.THE_END) {

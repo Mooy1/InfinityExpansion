@@ -40,5 +40,5 @@ public final class StorageForge extends AbstractCrafter {
     public void postCraft(@Nonnull Location l, @Nonnull BlockMenu inv, @Nonnull Player p) {
         p.sendMessage(ChatColor.GREEN + "Transferred items to upgraded unit");
     }
-    
+
 }

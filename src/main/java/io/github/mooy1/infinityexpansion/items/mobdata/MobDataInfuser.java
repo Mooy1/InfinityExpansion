@@ -24,7 +24,7 @@ public final class MobDataInfuser extends AbstractCrafter implements EnergyNetCo
 
     private static final RecipeMap<ItemStack> RECIPES = new RecipeMap<>(ShapedRecipe::new);
     static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("mob_data_infuser"), MobData.INFUSER, RECIPES::put);
-    
+
     private final int energy;
 
     public MobDataInfuser(Category category, SlimefunItemStack stack, RecipeType type, ItemStack[] recipe, int energy) {

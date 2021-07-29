@@ -57,7 +57,8 @@ public enum GenerationType {
                     }
                     return 0;
                 }
-                default: return 0;
+                default:
+                    return 0;
             }
         }
     },

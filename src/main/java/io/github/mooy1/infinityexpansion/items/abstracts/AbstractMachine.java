@@ -19,7 +19,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
 /**
  * A slimefun item with a menu and ticker, which will process if it has enough energy
- * 
+ *
  * @author Mooy1
  */
 public abstract class AbstractMachine extends AbstractTickingContainer implements EnergyNetComponent {
@@ -27,7 +27,7 @@ public abstract class AbstractMachine extends AbstractTickingContainer implement
     public AbstractMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
     }
-    
+
     protected abstract boolean process(@Nonnull BlockMenu menu, @Nonnull Block b);
 
     @Override
@@ -46,11 +46,11 @@ public abstract class AbstractMachine extends AbstractTickingContainer implement
     protected void setupMenu(@Nonnull BlockMenuPreset preset) {
         preset.addItem(getStatusSlot(), MenuPreset.LOADING, ChestMenuUtils.getEmptyClickHandler());
     }
-    
+
     protected abstract int getStatusSlot();
-    
+
     protected abstract int getEnergyConsumption();
-    
+
     @Override
     public int getCapacity() {
         return getEnergyConsumption() * 2;
@@ -61,5 +61,5 @@ public abstract class AbstractMachine extends AbstractTickingContainer implement
     public final EnergyNetComponentType getEnergyComponentType() {
         return EnergyNetComponentType.CONSUMER;
     }
-    
+
 }

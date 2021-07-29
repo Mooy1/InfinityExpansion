@@ -40,7 +40,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class SingularityConstructor extends AbstractMachine implements RecipeDisplayItem {
-    
+
     private static final List<Recipe> RECIPE_LIST = new ArrayList<>();
     private static final Map<String, Pair<Integer, Recipe>> RECIPE_MAP = new HashMap<>();
     public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("singularity_constructor"), Machines.SINGULARITY_CONSTRUCTOR, (stacks, itemStack) -> {
@@ -108,7 +108,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     @Override
     protected boolean process(@Nonnull BlockMenu menu, @Nonnull Block b) {
         ItemStack input = menu.getItemInSlot(INPUT_SLOT);
-        String  inputID;
+        String inputID;
         if (input == null) {
             inputID = null;
         } else {
@@ -221,14 +221,14 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     public void onNewInstance(@Nonnull BlockMenu blockMenu, @Nonnull Block block) {
         invalidInput(blockMenu);
     }
-    
+
     private static void invalidInput(BlockMenu menu) {
         menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
                 Material.RED_STAINED_GLASS_PANE,
                 "&cInput a valid material to start"
         ));
     }
-    
+
     private static void setProgress(Location l, int progress) {
         BlockStorage.addBlockInfo(l, "progress", String.valueOf(progress));
     }
@@ -271,7 +271,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
 
         return items;
     }
-    
+
     @AllArgsConstructor
     private static final class Recipe {
 
@@ -279,7 +279,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
         private final ItemStack input;
         private final String id;
         private final int amount;
-        
+
     }
 
 }

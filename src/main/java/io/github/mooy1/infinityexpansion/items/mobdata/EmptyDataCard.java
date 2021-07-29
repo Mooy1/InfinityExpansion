@@ -14,5 +14,5 @@ public final class EmptyDataCard {
      */
     @Deprecated
     public static final SlimefunItemStack ITEM = MobData.EMPTY_DATA_CARD;
-    
+
 }

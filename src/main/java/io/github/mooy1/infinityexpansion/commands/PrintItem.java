@@ -27,18 +27,18 @@ public final class PrintItem extends AbstractCommand {
         Player p = (Player) commandSender;
 
         ItemStack item = p.getInventory().getItemInMainHand();
-        
+
         if (item.getType() == Material.AIR) {
             p.sendMessage(ChatColor.RED + "You must be holding an item!");
             return;
         }
-        
+
         p.sendMessage(item.toString());
     }
 
     @Override
     public void onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings, @Nonnull List<String> list) {
-        
+
     }
 
 }

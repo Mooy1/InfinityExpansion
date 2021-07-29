@@ -54,3 +54,5 @@ https://github.com/Mooy1/InfinityExpansion/releases/tag/v1
 | 112 | Fix for latest dev, Requires dev 925! |
 | 113 | Fix future issues on startup |
 | 114 | Added cobble press, advanced smeltery, Attempt to fix Storage Units, Fix config stuff, if you are on Dev 95 or lower, update to Dev 111 before this. |
+| 115 | Fixed issue with storage unit display (From PR) |
+| 116 | Add configuration to all quarry resources, added copper (only with 1.17+) |

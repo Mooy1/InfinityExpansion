@@ -23,9 +23,9 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
  * @author Mooy1
  */
 public final class PoweredBedrock extends SlimefunItem implements EnergyNetComponent {
-    
+
     private final int energy;
-    
+
     public PoweredBedrock(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
         super(category, item, type, recipe);
         this.energy = energy;
@@ -53,7 +53,7 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
             }
         });
     }
-    
+
     @Nonnull
     @Override
     public EnergyNetComponentType getEnergyComponentType() {

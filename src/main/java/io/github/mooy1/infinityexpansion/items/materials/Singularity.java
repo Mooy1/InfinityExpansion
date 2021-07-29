@@ -22,9 +22,9 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  * @author Mooy1
  */
 public final class Singularity extends UnplaceableBlock {
-    
+
     private static final double COST_MULTIPLIER = InfinityExpansion.inst().getConfig().getDouble("balance-options.singularity-cost-multiplier", 0.1, 100);
-    
+
     public Singularity(SlimefunItemStack item, String id, int amount) {
         super(Categories.INFINITY_MATERIALS, item, SingularityConstructor.TYPE, makeRecipe(id, (int) (amount * COST_MULTIPLIER)));
     }
@@ -34,22 +34,22 @@ public final class Singularity extends UnplaceableBlock {
         ItemStack item = StackUtils.getItemByIDorType(id);
 
         Validate.notNull(item, "Failed to make singularity recipe with " + id);
-        
+
         List<ItemStack> recipe = new ArrayList<>();
-        
+
         int stacks = (int) Math.floor(amount / 64D);
         int extra = amount % 64;
 
         for (int i = 0 ; i < stacks ; i++) {
             recipe.add(new CustomItem(item, 64));
         }
-        
+
         recipe.add(new CustomItem(item, extra));
-        
+
         while (recipe.size() < 9) {
             recipe.add(null);
         }
-        
+
         return recipe.toArray(new ItemStack[9]);
     }
 }

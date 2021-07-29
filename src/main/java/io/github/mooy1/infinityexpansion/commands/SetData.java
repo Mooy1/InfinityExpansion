@@ -28,7 +28,7 @@ public final class SetData extends AbstractCommand {
             commandSender.sendMessage("Only players can use this!");
             return;
         }
-        
+
         if (strings.length != 3) {
             commandSender.sendMessage(ChatColor.RED + "You must specify a key and value to set!");
             return;
@@ -43,18 +43,18 @@ public final class SetData extends AbstractCommand {
             return;
         }
 
-        String id =  BlockStorage.getLocationInfo(target.getLocation(), "id");
-        
+        String id = BlockStorage.getLocationInfo(target.getLocation(), "id");
+
         if (id == null) {
             p.sendMessage(ChatColor.RED + "You need to target a slimefun block to use this command!");
             return;
         }
-        
+
         if (strings[1].equals("id")) {
             p.sendMessage(ChatColor.RED + "You cannot change the id of this block, it could cause internal issues!");
             return;
         }
-        
+
         if (strings[2].equals("\\remove")) {
             p.sendMessage(ChatColor.GREEN + "Successfully removed value of key '" + strings[1] + "' in " + id);
             BlockStorage.addBlockInfo(target, strings[1], null);
