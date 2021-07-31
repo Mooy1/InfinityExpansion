@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
 @UtilityClass
@@ -136,20 +135,6 @@ public final class Util {
 
     public static int getIntData(String key, Location block) {
         String val = BlockStorage.getLocationInfo(block, key);
-        if (val == null) {
-            BlockStorage.addBlockInfo(block, key, "0");
-            return 0;
-        }
-        try {
-            return Integer.parseInt(val);
-        } catch (NumberFormatException x) {
-            BlockStorage.addBlockInfo(block, key, "0");
-            return 0;
-        }
-    }
-
-    public static int getIntData(String key, Config config, Location block) {
-        String val = config.getString(key);
         if (val == null) {
             BlockStorage.addBlockInfo(block, key, "0");
             return 0;

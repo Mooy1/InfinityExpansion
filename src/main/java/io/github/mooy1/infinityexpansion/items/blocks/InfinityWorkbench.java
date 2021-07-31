@@ -94,7 +94,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
             return false;
         });
         menu.addMenuClickHandler(RECIPE_SLOT, (p, slot, item, action) -> {
-            InfinityCategory.open(p, new InfinityCategory.BackEntry(menu, null), true);
+            InfinityCategory.open(p, menu);
             return false;
         });
     }
@@ -103,10 +103,10 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
         int charge = getCharge(b.getLocation());
 
         if (charge < this.energy) { //not enough energy
-            p.sendMessage(new String[] {
+            p.sendMessage(
                     ChatColor.RED + "Not enough energy!",
                     ChatColor.GREEN + "Charge: " + ChatColor.RED + charge + ChatColor.GREEN + "/" + this.energy + " J"
-            });
+            );
             return;
         }
 

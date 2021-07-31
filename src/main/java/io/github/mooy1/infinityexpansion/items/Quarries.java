@@ -61,6 +61,11 @@ public final class Quarries {
             LorePreset.speed(64),
             LorePreset.energyPerSecond(36000)
     );
+    public static final SlimefunItemStack DIAMOND_OSCILLATOR = Oscillator.create(Material.DIAMOND);
+    public static final SlimefunItemStack REDSTONE_OSCILLATOR = Oscillator.create(Material.REDSTONE);
+    public static final SlimefunItemStack LAPIS_OSCILLATOR = Oscillator.create(Material.LAPIS_LAZULI);
+    public static final SlimefunItemStack QUARTZ_OSCILLATOR = Oscillator.create(Material.QUARTZ);
+    public static final SlimefunItemStack EMERALD_OSCILLATOR = Oscillator.create(Material.EMERALD);
 
     public static void setup(InfinityExpansion plugin) {
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("quarry-options.resources");
@@ -88,25 +93,25 @@ public final class Quarries {
         }
 
         if (section.getBoolean("redstone")) {
-            new Oscillator(Material.REDSTONE).register(plugin);
+            new Oscillator(REDSTONE_OSCILLATOR).register(plugin);
 
             outputs.add(Material.REDSTONE);
         }
 
         if (section.getBoolean("lapis")) {
-            new Oscillator(Material.LAPIS_LAZULI).register(plugin);
+            new Oscillator(LAPIS_OSCILLATOR).register(plugin);
 
             outputs.add(Material.LAPIS_LAZULI);
         }
 
         if (section.getBoolean("emerald")) {
-            new Oscillator(Material.EMERALD).register(plugin);
+            new Oscillator(EMERALD_OSCILLATOR).register(plugin);
 
             outputs.add(Material.EMERALD);
         }
 
         if (section.getBoolean("diamond")) {
-            new Oscillator(Material.DIAMOND).register(plugin);
+            new Oscillator(DIAMOND_OSCILLATOR).register(plugin);
 
             outputs.add(Material.DIAMOND);
         }
@@ -118,7 +123,7 @@ public final class Quarries {
         }, 300, 1, 6, outputs.toArray(new Material[0])).register(plugin);
 
         if (section.getBoolean("quartz")) {
-            new Oscillator(Material.QUARTZ).register(plugin);
+            new Oscillator(QUARTZ_OSCILLATOR).register(plugin);
 
             outputs.add(Material.QUARTZ);
         }

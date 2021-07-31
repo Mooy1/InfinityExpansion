@@ -17,6 +17,7 @@ import io.github.mooy1.infinityexpansion.items.Machines;
 import io.github.mooy1.infinityexpansion.items.Materials;
 import io.github.mooy1.infinityexpansion.items.MobData;
 import io.github.mooy1.infinityexpansion.items.Quarries;
+import io.github.mooy1.infinityexpansion.items.Researches;
 import io.github.mooy1.infinityexpansion.items.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.items.Storage;
 import io.github.mooy1.infinitylib.AbstractAddon;
@@ -55,6 +56,10 @@ public final class InfinityExpansion extends AbstractAddon {
         Storage.setup(this);
         Generators.setup(this);
         SlimefunExtension.setup(this);
+
+        if (getConfig().getBoolean("balance-options.enable-researches")) {
+            Researches.setup();
+        }
     }
 
     @Override

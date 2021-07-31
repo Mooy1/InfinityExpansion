@@ -27,8 +27,9 @@ import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
-import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import io.github.thebusybiscuit.slimefun4.core.researching.Research;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -85,8 +86,8 @@ public final class InfinityCategory extends FlexCategory {
             "&aRight-Click to move as many sets as possible"
     );
     private static final ItemStack INFO = new CustomItem(Material.CYAN_STAINED_GLASS_PANE, "&3Info");
-
-    private static final Map<UUID, String> history = new HashMap<>();
+    private static final SlimefunGuideImplementation GUIDE = SlimefunPlugin.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
+    private static final Map<UUID, String> HISTORY = new HashMap<>();
 
     InfinityCategory(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
@@ -99,14 +100,19 @@ public final class InfinityCategory extends FlexCategory {
 
     @Override
     public void open(Player player, PlayerProfile playerProfile, SlimefunGuideMode slimefunGuideMode) {
-        open(player, new BackEntry(null, playerProfile.getGuideHistory()), true);
+        open(player, new BackEntry(null, playerProfile), true);
         playerProfile.getGuideHistory().add(this, 1);
     }
 
-    public static void open(@Nonnull Player player, @Nonnull BackEntry entry, boolean useHistory) {
+    public static void open(Player player, BlockMenu menu) {
+        PlayerProfile.get(player, profile -> SlimefunPlugin.runSync(
+                () -> open(player, new BackEntry(menu, profile), true)));
+    }
+
+    private static void open(@Nonnull Player player, @Nonnull BackEntry entry, boolean useHistory) {
 
         if (useHistory) {
-            String id = history.get(player.getUniqueId());
+            String id = HISTORY.get(player.getUniqueId());
 
             if (id != null) {
                 openInfinityRecipe(player, id, entry);
@@ -116,18 +122,16 @@ public final class InfinityCategory extends FlexCategory {
 
         ChestMenu menu = new ChestMenu("&bInfinity Recipes");
 
-        if (entry.history != null) {
-            menu.addMenuClickHandler(1, (player1, i, itemStack, clickAction) -> {
-                entry.history.goBack(MultiCategory.SURVIVAL_GUIDE);
-                return false;
-            });
-        } else if (entry.bench != null) {
+        if (entry.bench != null) {
             menu.addMenuClickHandler(1, (player1, i, itemStack, clickAction) -> {
                 entry.bench.open(player1);
                 return false;
             });
         } else {
-            return;
+            menu.addMenuClickHandler(1, (player1, i, itemStack, clickAction) -> {
+                entry.profile.getGuideHistory().goBack(MultiCategory.SURVIVAL_GUIDE);
+                return false;
+            });
         }
 
         menu.addItem(0, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
@@ -149,17 +153,39 @@ public final class InfinityCategory extends FlexCategory {
         for (Pair<SlimefunItemStack, ItemStack[]> item : InfinityWorkbench.ITEMS.values()) {
             if (i == 45) break;
 
-            menu.addItem(i, item.getFirstValue(), (p, slot, item1, action) -> {
-                openInfinityRecipe(p, item.getFirstValue().getItemId(), entry);
-                return false;
-            });
+            SlimefunItem sfItem = item.getFirstValue().getItem();
+            if (sfItem == null) {
+                return;
+            }
+
+            Research research = sfItem.getResearch();
+            if (research != null && !entry.profile.hasUnlocked(research)) {
+                ItemStack resItem = new CustomItem(
+                        ChestMenuUtils.getNotResearchedItem(),
+                        ChatColor.WHITE + ItemUtils.getItemName(sfItem.getItem()),
+                        "&4&l" + SlimefunPlugin.getLocalization().getMessage(player, "guide.locked"),
+                        "",
+                        "&a> Click to unlock",
+                        "",
+                        "&7Cost: &b" + research.getCost() + " Level(s)"
+                );
+                menu.addItem(i, resItem, (p, slot, item1, action) -> {
+                    research.unlockFromGuide(GUIDE, p, entry.profile, sfItem, Categories.INFINITY_CATEGORY, 0);
+                    return false;
+                });
+            } else {
+                menu.addItem(i, item.getFirstValue(), (p, slot, item1, action) -> {
+                    openInfinityRecipe(p, item.getFirstValue().getItemId(), entry);
+                    return false;
+                });
+            }
 
             i++;
         }
 
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 
-        history.put(player.getUniqueId(), null);
+        HISTORY.put(player.getUniqueId(), null);
 
         menu.open(player);
     }
@@ -245,7 +271,7 @@ public final class InfinityCategory extends FlexCategory {
 
         player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 
-        history.put(player.getUniqueId(), id);
+        HISTORY.put(player.getUniqueId(), id);
 
         menu.open(player);
 
@@ -342,12 +368,11 @@ public final class InfinityCategory extends FlexCategory {
     }
 
     @AllArgsConstructor
-    public static final class BackEntry {
+    private static final class BackEntry {
 
         @Nullable
         private final BlockMenu bench;
-        @Nullable
-        private final GuideHistory history;
+        private final PlayerProfile profile;
 
     }
 

@@ -2,6 +2,7 @@ package io.github.mooy1.infinityexpansion.items.storage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import lombok.Setter;
 
@@ -59,14 +60,18 @@ final class StorageCache {
         meta.getPersistentDataContainer().set(EMPTY_KEY, PersistentDataType.BYTE, (byte) 1);
     });
 
+    /* Space Pattern for Sign Display Names */
+    private static final Pattern SPACE = Pattern.compile(" ");
+
     /* Instance Constants */
     private final StorageUnit storageUnit;
     private final BlockMenu menu;
 
     /* Instance Variables */
+    private final String[] signDisplay = new String[2];
+    private String displayName;
     private Material material;
     private ItemMeta meta;
-    private String displayName;
     private boolean voidExcess;
     @Setter
     private int amount;
@@ -80,7 +85,7 @@ final class StorageCache {
 
         if (isEmpty()) {
             // empty
-            this.displayName = EMPTY_DISPLAY_NAME;
+            setEmptyDisplayName();
             menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
         } else {
             // something is stored
@@ -97,7 +102,7 @@ final class StorageCache {
                     } else {
                         // no output to recover
                         menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);
-                        this.displayName = EMPTY_DISPLAY_NAME;
+                        setEmptyDisplayName();
                         this.amount = 0;
                     }
                 } else {
@@ -149,6 +154,53 @@ final class StorageCache {
         updateStatus();
     }
 
+    private void setDisplayName(String name) {
+        this.displayName = name;
+
+        boolean color = name.charAt(0) == ChatColor.COLOR_CHAR;
+        if (name.length() < 16) {
+            this.signDisplay[0] = color ? name : ChatColor.WHITE + name;
+            this.signDisplay[1] = "";
+            return;
+        }
+
+        String[] words = SPACE.split(name);
+        int i = 1;
+        StringBuilder first = new StringBuilder();
+        if (!color) {
+            first.append(ChatColor.WHITE);
+        }
+        first.append(words[0]);
+        while (i < words.length && words[i].length() + first.length() < 15) {
+            first.append(' ').append(words[i++]);
+        }
+        this.signDisplay[0] = first.toString();
+
+        if (i < words.length) {
+            StringBuilder second = new StringBuilder();
+            if (words[i].charAt(0) != ChatColor.COLOR_CHAR) {
+                if (color) {
+                    second.append(ChatColor.COLOR_CHAR).append(name.charAt(1));
+                } else {
+                    second.append(ChatColor.WHITE);
+                }
+            }
+            second.append(words[i++]);
+            while (i < words.length) {
+                second.append(' ').append(words[i++]);
+            }
+            this.signDisplay[1] = second.toString();
+        } else {
+            this.signDisplay[1] = "";
+        }
+    }
+
+    private void setEmptyDisplayName() {
+        this.displayName = EMPTY_DISPLAY_NAME;
+        this.signDisplay[0] = EMPTY_DISPLAY_NAME;
+        this.signDisplay[1] = "";
+    }
+
     void destroy(Location l, BlockBreakEvent e) {
         if (isEmpty()) {
             return;
@@ -195,10 +247,10 @@ final class StorageCache {
         // check if the copy has anything besides the display key
         if (copy.equals(Bukkit.getItemFactory().getItemMeta(stored.getType()))) {
             this.meta = null;
-            this.displayName = StackUtils.getDisplayName(stored);
+            setDisplayName(StackUtils.getDisplayName(stored));
         } else {
             this.meta = copy;
-            this.displayName = StackUtils.getDisplayName(stored, copy);
+            setDisplayName(StackUtils.getDisplayName(stored, copy));
         }
         this.material = stored.getType();
     }
@@ -271,7 +323,7 @@ final class StorageCache {
         }
 
         // sings
-        if ((InfinityExpansion.inst().getGlobalTick() & 15) == 0) {
+        if ((InfinityExpansion.inst().getGlobalTick() % 20) == 0) {
             Block check = block.getRelative(0, 1, 0);
             if (SlimefunTag.SIGNS.isTagged(check.getType())
                     || checkWallSign(check = block.getRelative(1, 0, 0), block)
@@ -280,10 +332,10 @@ final class StorageCache {
                     || checkWallSign(check = block.getRelative(0, 0, -1), block)
             ) {
                 Sign sign = (Sign) check.getState();
-                sign.setLine(0, ChatColor.GRAY + "--------------");
-                sign.setLine(1, this.displayName);
-                sign.setLine(2, ChatColor.YELLOW.toString() + this.amount);
-                sign.setLine(3, ChatColor.GRAY + "--------------");
+                sign.setLine(0, this.signDisplay[0]);
+                sign.setLine(1, this.signDisplay[1]);
+                sign.setLine(2, ChatColor.GRAY + "------------");
+                sign.setLine(3, ChatColor.YELLOW.toString() + this.amount);
                 sign.update();
             }
         }
@@ -315,10 +367,10 @@ final class StorageCache {
     private void setStored(ItemStack input) {
         if (input.hasItemMeta()) {
             this.meta = input.getItemMeta();
-            this.displayName = StackUtils.getDisplayName(input, this.meta);
+            setDisplayName(StackUtils.getDisplayName(input, this.meta));
         } else {
             this.meta = null;
-            this.displayName = StackUtils.getDisplayName(input);
+            setDisplayName(StackUtils.getDisplayName(input));
         }
         this.material = input.getType();
 
@@ -332,7 +384,7 @@ final class StorageCache {
     }
 
     private void setEmpty() {
-        this.displayName = EMPTY_DISPLAY_NAME;
+        setEmptyDisplayName();
         this.meta = null;
         this.material = null;
         this.menu.replaceExistingItem(DISPLAY_SLOT, EMPTY_ITEM);

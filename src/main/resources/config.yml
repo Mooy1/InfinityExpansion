@@ -10,6 +10,9 @@ balance-options:
   # Will allow the gear transformer to change slimefun gear's material. Diamond tools can already be upgraded to netherite, 
   # but some addon developers do not want there gear to be transformable so change this at your own risk.
   allow-sf-item-transform: false
+
+  # Enables/Disables Researches which requires players to spend xp to unlock items
+  enable-researches: false
   
 mob-simulation-options:
 

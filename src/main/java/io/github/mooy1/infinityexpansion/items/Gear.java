@@ -235,9 +235,9 @@ public final class Gear {
                 Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT
         }).register(plugin);
         new VeinMinerRune(Categories.MAIN_MATERIALS, VEIN_MINER_RUNE, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {
-                Materials.MAGSTEEL, SlimefunItems.PICKAXE_OF_VEIN_MINING, Materials.MAGSTEEL,
-                new ItemStack(Material.REDSTONE_ORE), SlimefunItems.BLANK_RUNE, new ItemStack(Material.LAPIS_ORE),
-                Materials.MAGSTEEL, SlimefunItems.MAGIC_LUMP_3, Materials.MAGSTEEL,
+                Materials.MAGSTEEL_PLATE, SlimefunItems.PICKAXE_OF_VEIN_MINING, Materials.MAGSTEEL_PLATE,
+                Materials.ENDER_ESSENCE, SlimefunItems.BLANK_RUNE, Materials.ENDER_ESSENCE,
+                Materials.MAGSTEEL_PLATE, SlimefunItems.PICKAXE_OF_VEIN_MINING, Materials.MAGSTEEL_PLATE,
         }).register(plugin);
     }
 
