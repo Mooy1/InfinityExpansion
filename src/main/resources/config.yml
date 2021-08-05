@@ -16,7 +16,7 @@ balance-options:
   
 mob-simulation-options:
 
-  # The number of slimefun ticks it takes to output xp and drops. 1 slimefun ticks = .6 seconds by default
+  # The number of slimefun ticks it takes to output xp and drops. 1 slimefun tick = .5 seconds by default
   ticks-per-output: 20
 
   # Multiplies amount of xp gained from mob simulation
