@@ -42,7 +42,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
             13
     };
     private static final int STATUS_SLOT = 4;
-    private static final int TIME = 1000;
+    private static final int TIME = 1024;
 
     private final int speed;
     private final int energy;
@@ -80,10 +80,12 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
 
                 inv.pushItem(output.clone(), OUTPUT_SLOTS);
 
-                progress = 0;
+                progress = this.speed;
 
-            } else if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
+            } else {
+                if (inv.hasViewer()) {
+                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
+                }
                 return false;
             }
         } else {

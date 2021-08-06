@@ -58,3 +58,4 @@ https://github.com/Mooy1/InfinityExpansion/releases/tag/v1
 | 116 | Add configuration to all quarry resources, added copper (only with 1.17+) |
 | 117 | Fix errors of previous 116 |
 | 118 | Added Config option to enable researches, Improved storage unit signs, Slight nerf to mob data xp |
+| 119 | Fixed void harvester speed issue, infinity harvester will be about 6% faster |
