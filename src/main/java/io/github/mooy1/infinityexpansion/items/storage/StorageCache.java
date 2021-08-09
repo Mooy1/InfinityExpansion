@@ -157,39 +157,60 @@ final class StorageCache {
     private void setDisplayName(String name) {
         this.displayName = name;
 
-        boolean color = name.charAt(0) == ChatColor.COLOR_CHAR;
-        if (name.length() < 16) {
-            this.signDisplay[0] = color ? name : ChatColor.WHITE + name;
+        int len = name.length();
+        if (len == 0) {
+            this.signDisplay[0] = "";
+            this.signDisplay[1] = "";
+            return;
+        }
+
+        String color;
+        if (len >= 2 && name.charAt(0) == ChatColor.COLOR_CHAR) {
+            char second = name.charAt(1);
+            if (len >= 14 && second == 'x') {
+                color = name.substring(0, 14);
+            } else {
+                color = new String(new char[] {
+                        ChatColor.COLOR_CHAR, second
+                });
+            }
+        } else {
+            color = null;
+        }
+
+        if (name.length() <= 15) {
+            this.signDisplay[0] = color != null ? name : ChatColor.WHITE + name;
             this.signDisplay[1] = "";
             return;
         }
 
         String[] words = SPACE.split(name);
         int i = 1;
-        StringBuilder first = new StringBuilder();
-        if (!color) {
-            first.append(ChatColor.WHITE);
+        StringBuilder firstLine = new StringBuilder();
+        if (color == null) {
+            firstLine.append(ChatColor.WHITE);
         }
-        first.append(words[0]);
-        while (i < words.length && words[i].length() + first.length() < 15) {
-            first.append(' ').append(words[i++]);
+        firstLine.append(words[0]);
+        while (i < words.length && words[i].length() + firstLine.length() < 15) {
+            firstLine.append(' ').append(words[i++]);
         }
-        this.signDisplay[0] = first.toString();
+        this.signDisplay[0] = firstLine.toString();
 
         if (i < words.length) {
-            StringBuilder second = new StringBuilder();
-            if (words[i].charAt(0) != ChatColor.COLOR_CHAR) {
-                if (color) {
-                    second.append(ChatColor.COLOR_CHAR).append(name.charAt(1));
+            StringBuilder secondLine = new StringBuilder();
+            String first = words[i++];
+            if (first.length() <= 1 || first.charAt(0) != ChatColor.COLOR_CHAR) {
+                if (color == null) {
+                    secondLine.append(ChatColor.WHITE);
                 } else {
-                    second.append(ChatColor.WHITE);
+                    secondLine.append(color);
                 }
             }
-            second.append(words[i++]);
+            secondLine.append(first);
             while (i < words.length) {
-                second.append(' ').append(words[i++]);
+                secondLine.append(' ').append(words[i++]);
             }
-            this.signDisplay[1] = second.toString();
+            this.signDisplay[1] = secondLine.toString();
         } else {
             this.signDisplay[1] = "";
         }
