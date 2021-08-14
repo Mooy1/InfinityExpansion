@@ -1,12 +1,22 @@
 # Infinity Expansion
 
-This addon aims to add a larger endgame to slimefun by adding 'Infinity Ingots' which take an extreme amount of resources and energy to create, and are used to craft powerful machines and gear.
+InfinityExpansion is an addon to the plugin Slimefun which adds a bunch of new machines and resources. 
+It expands the endgame of Slimefun by a large margin.
+You can read about recent changes and additions at the bottom of the page.
 
 ## Download
 
-https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/
+(Click Below)
 
 [![Build Status](https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master/badge.svg)](https://thebusybiscuit.github.io/builds/Mooy1/InfinityExpansion/master)
+
+## Requirements
+
+Minecraft Version: 1.16+ (Paper recommended)
+
+Slimefun Version: DEV 950+ (Click Below)
+
+[![Build Status](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/badge.svg)](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/)
 
 ## Bugs/Suggestions
 
@@ -21,25 +31,21 @@ Make a new issue, pull request, or contact me on discord @Riley#5911
   </a>
 </p>
 
-## Requirements
-
-Minecraft Version: 1.16+ (Paper recommended)
-
-Slimefun Version: DEV 950+
-
-[![Build Status](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/badge.svg)](https://thebusybiscuit.github.io/builds/TheBusyBiscuit/Slimefun4/master/)
-
-If you would like to make your own local server, check out my guide here:
-
-https://github.com/Mooy1/InfinityExpansion/wiki/How-to-make-a-Slimefun-Server
-
 ## Texture Pack
 
 A Texture Pack that adds texture for some items in this addon (requires Optifine):
 
 https://github.com/Mooy1/InfinityExpansion/releases/tag/v1
 
+## Stats
+
+Some stats about the addon including current server count and player count are available here:
+
+https://bstats.org/plugin/bukkit/InfinityExpansion/8991
+
 ## Changelog
+#### Version 120
+- Won't warn about LiteXpansion nerfs if they are disabled
 #### Version 119
 - Fixed void harvester speed issue
 - infinity harvester will be about 6% faster

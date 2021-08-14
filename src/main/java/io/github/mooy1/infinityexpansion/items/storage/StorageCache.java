@@ -224,12 +224,9 @@ final class StorageCache {
 
     void destroy(Location l, BlockBreakEvent e) {
         if (isEmpty()) {
+            e.getBlock().getWorld().dropItemNaturally(l, this.storageUnit.getItem().clone());
             return;
         }
-
-        e.setCancelled(true);
-        e.getBlock().setType(Material.AIR);
-        BlockStorage.clearBlockInfo(e.getBlock());
 
         // add output slot
         ItemStack output = this.menu.getItemInSlot(OUTPUT_SLOT);

@@ -1,5 +1,7 @@
 package io.github.mooy1.infinityexpansion.items.storage;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,11 +107,19 @@ public final class StorageUnit extends AbstractContainer {
         }
     }
 
+    @Nonnull
+    @Override
+    public Collection<ItemStack> getDrops() {
+        return Collections.emptyList();
+    }
+
     @Override
     protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
         StorageCache cache = this.caches.remove(l);
         if (cache != null) {
             cache.destroy(l, e);
+        } else {
+            e.getBlock().getWorld().dropItemNaturally(l, getItem().clone());
         }
         menu.dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
     }

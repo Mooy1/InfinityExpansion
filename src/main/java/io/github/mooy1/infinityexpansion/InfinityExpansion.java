@@ -6,6 +6,8 @@ import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 
+import org.bukkit.plugin.Plugin;
+
 import io.github.mooy1.infinityexpansion.categories.Categories;
 import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.commands.PrintItem;
@@ -36,7 +38,8 @@ public final class InfinityExpansion extends AbstractAddon {
     public void enable() {
         instance = this;
 
-        if (getServer().getPluginManager().getPlugin("LiteXpansion") != null) {
+        Plugin lx = getServer().getPluginManager().getPlugin("LiteXpansion");
+        if (lx != null && lx.getConfig().getBoolean("options.nerf-other-addons")) {
             runSync(() -> log(Level.WARNING,
                     "########################################################",
                     "LiteXpansion nerfs energy generation in this addon.",
