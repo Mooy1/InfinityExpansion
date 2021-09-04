@@ -26,7 +26,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -68,7 +68,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
 
     private final int time;
 
-    public StrainerBase(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int time) {
+    public StrainerBase(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int time) {
         super(category, item, type, recipe);
         this.time = time;
     }
@@ -205,7 +205,8 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
 
                 inv.consumeItem(INPUT_SLOTS[0]);
 
-            } else { //reduce
+            }
+            else { //reduce
 
                 ((Damageable) itemMeta).setDamage(current + 1);
                 strainer.setItemMeta(itemMeta);

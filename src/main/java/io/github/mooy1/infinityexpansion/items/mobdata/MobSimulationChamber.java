@@ -19,7 +19,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -41,7 +41,7 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
     private final int energy;
     private final int interval;
 
-    public MobSimulationChamber(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int interval) {
+    public MobSimulationChamber(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int interval) {
         super(category, item, type, recipe);
         this.energy = energy;
         this.interval = interval;
@@ -152,14 +152,17 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
             inv.replaceExistingItem(XP_SLOT, makeXpItem(xp));
         }
 
-        if (InfinityExpansion.inst().getGlobalTick() % this.interval != 0) return;
+        if (InfinityExpansion.inst().getGlobalTick() % this.interval != 0) {
+            return;
+        }
 
         BlockStorage.addBlockInfo(b.getLocation(), "xp", String.valueOf(xp + card.tier.xp));
 
         ItemStack item = card.drops.getRandom();
         if (inv.fits(item, OUTPUT_SLOTS)) {
             inv.pushItem(item.clone(), OUTPUT_SLOTS);
-        } else if (inv.hasViewer()) {
+        }
+        else if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
         }
     }

@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Groups;
 import io.github.mooy1.infinitylib.presets.LorePreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
@@ -49,13 +49,13 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
     }
 
     public MobDataCard(String name, MobDataTier tier, ItemStack[] recipe) {
-        super(Categories.MOB_SIMULATION, create(name, tier), MobDataInfuser.TYPE, recipe);
+        super(Groups.MOB_SIMULATION, create(name, tier), MobDataInfuser.TYPE, recipe);
         this.tier = tier;
         CARDS.put(getId(), this);
     }
 
     public MobDataCard(SlimefunItemStack item, MobDataTier tier, ItemStack[] recipe) {
-        super(Categories.MOB_SIMULATION, item, MobDataInfuser.TYPE, recipe);
+        super(Groups.MOB_SIMULATION, item, MobDataInfuser.TYPE, recipe);
         this.tier = tier;
         CARDS.put(getId(), this);
     }

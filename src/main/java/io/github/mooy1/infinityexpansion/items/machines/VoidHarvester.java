@@ -20,7 +20,7 @@ import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -47,7 +47,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
     private final int speed;
     private final int energy;
 
-    public VoidHarvester(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
+    public VoidHarvester(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
         super(category, item, type, recipe);
         this.speed = speed;
         this.energy = energy;
@@ -82,13 +82,15 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
 
                 progress = this.speed;
 
-            } else {
+            }
+            else {
                 if (inv.hasViewer()) {
                     inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
                 }
                 return false;
             }
-        } else {
+        }
+        else {
             progress += this.speed;
         }
 

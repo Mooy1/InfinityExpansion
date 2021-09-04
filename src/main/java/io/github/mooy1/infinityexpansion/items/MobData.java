@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Groups;
 import io.github.mooy1.infinityexpansion.items.mobdata.MobDataCard;
 import io.github.mooy1.infinityexpansion.items.mobdata.MobDataInfuser;
 import io.github.mooy1.infinityexpansion.items.mobdata.MobDataTier;
@@ -75,19 +75,19 @@ public final class MobData {
 
     public static void setup(InfinityExpansion plugin) {
 
-        new MobSimulationChamber(Categories.MOB_SIMULATION, CHAMBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new MobSimulationChamber(Groups.MOB_SIMULATION, CHAMBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL_PLATE, Materials.MACHINE_PLATE, Materials.MAGSTEEL_PLATE,
                 Materials.MACHINE_CIRCUIT, SlimefunItems.PROGRAMMABLE_ANDROID_BUTCHER, Materials.MACHINE_CIRCUIT,
                 Materials.MAGSTEEL_PLATE, Materials.MACHINE_PLATE, Materials.MAGSTEEL_PLATE,
         }, CHAMBER_ENERGY, CHAMBER_INTERVAL).register(plugin);
 
-        new MobDataInfuser(Categories.MOB_SIMULATION, INFUSER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new MobDataInfuser(Groups.MOB_SIMULATION, INFUSER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Materials.MACHINE_CIRCUIT,
                 SlimefunItems.REINFORCED_ALLOY_INGOT, Materials.MACHINE_CORE, SlimefunItems.REINFORCED_ALLOY_INGOT,
                 Materials.MACHINE_CIRCUIT, SlimefunItems.REINFORCED_ALLOY_INGOT, Materials.MACHINE_CIRCUIT
         }, INFUSER_ENERGY).register(plugin);
 
-        new SlimefunItem(Categories.MOB_SIMULATION, EMPTY_DATA_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new SlimefunItem(Groups.MOB_SIMULATION, EMPTY_DATA_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 SlimefunItems.MAGNESIUM_INGOT, Materials.MACHINE_CIRCUIT, SlimefunItems.MAGNESIUM_INGOT,
                 SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.SYNTHETIC_DIAMOND, SlimefunItems.SYNTHETIC_EMERALD,
                 SlimefunItems.MAGNESIUM_INGOT, Materials.MACHINE_CIRCUIT, SlimefunItems.MAGNESIUM_INGOT

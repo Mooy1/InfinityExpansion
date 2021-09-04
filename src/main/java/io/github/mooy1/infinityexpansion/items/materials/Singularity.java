@@ -9,7 +9,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Groups;
 import io.github.mooy1.infinityexpansion.items.machines.SingularityConstructor;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.items.blocks.UnplaceableBlock;
@@ -26,7 +26,7 @@ public final class Singularity extends UnplaceableBlock {
     private static final double COST_MULTIPLIER = InfinityExpansion.inst().getConfig().getDouble("balance-options.singularity-cost-multiplier", 0.1, 100);
 
     public Singularity(SlimefunItemStack item, String id, int amount) {
-        super(Categories.INFINITY_MATERIALS, item, SingularityConstructor.TYPE, makeRecipe(id, (int) (amount * COST_MULTIPLIER)));
+        super(Groups.INFINITY_MATERIALS, item, SingularityConstructor.TYPE, makeRecipe(id, (int) (amount * COST_MULTIPLIER)));
     }
 
     @Nonnull
@@ -52,4 +52,5 @@ public final class Singularity extends UnplaceableBlock {
 
         return recipe.toArray(new ItemStack[9]);
     }
+
 }

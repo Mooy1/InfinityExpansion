@@ -21,7 +21,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.NotHopperable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -36,15 +36,15 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  */
 public final class ConversionMachine extends AbstractMachine implements RecipeDisplayItem, NotHopperable {
 
-    private static final int[] INPUT_SLOTS = {MenuPreset.INPUT};
-    private static final int[] OUTPUT_SLOTS = {MenuPreset.OUTPUT};
+    private static final int[] INPUT_SLOTS = { MenuPreset.INPUT };
+    private static final int[] OUTPUT_SLOTS = { MenuPreset.OUTPUT };
     private static final int STATUS_SLOT = MenuPreset.STATUS;
 
     private final int energy;
     private final List<ItemStack> displayRecipes = new ArrayList<>();
     private final RecipeMap<ItemStack> recipes = new RecipeMap<>(ShapedRecipe::new);
 
-    public ConversionMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy, ItemStack[] inputs, ItemStack[] outputs) {
+    public ConversionMachine(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy, ItemStack[] inputs, ItemStack[] outputs) {
         super(category, item, recipeType, recipe);
         this.energy = energy;
 
@@ -52,11 +52,12 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
             for (int i = 0 ; i < inputs.length ; i++) {
                 this.displayRecipes.add(inputs[i]);
                 this.displayRecipes.add(outputs[i]);
-                this.recipes.put(new ItemStack[] {inputs[i]}, outputs[i]);
+                this.recipes.put(new ItemStack[] { inputs[i] }, outputs[i]);
             }
-        } else {
+        }
+        else {
             for (ItemStack input : inputs) {
-                this.recipes.put(new ItemStack[] {input}, new RandomizedOutput(outputs));
+                this.recipes.put(new ItemStack[] { input }, new RandomizedOutput(outputs));
                 for (ItemStack output : outputs) {
                     this.displayRecipes.add(input);
                     this.displayRecipes.add(output);
@@ -76,9 +77,11 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
     public int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow flow, ItemStack itemStack) {
         if (flow == ItemTransportFlow.INSERT) {
             return INPUT_SLOTS;
-        } else if (flow == ItemTransportFlow.WITHDRAW) {
+        }
+        else if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
-        } else {
+        }
+        else {
             return new int[0];
         }
     }
@@ -110,7 +113,7 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
             return false;
         }
 
-        RecipeOutput<ItemStack> output = this.recipes.get(new ItemStack[] {input});
+        RecipeOutput<ItemStack> output = this.recipes.get(new ItemStack[] { input });
 
         if (output == null) {
             if (inv.hasViewer()) {
@@ -131,7 +134,8 @@ public final class ConversionMachine extends AbstractMachine implements RecipeDi
                 inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aConverting..."));
             }
             return true;
-        } else if (inv.hasViewer()) {
+        }
+        else if (inv.hasViewer()) {
             inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
         }
         return false;

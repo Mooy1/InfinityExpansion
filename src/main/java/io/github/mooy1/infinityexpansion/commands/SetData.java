@@ -12,18 +12,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import io.github.mooy1.infinityexpansion.items.storage.StorageUnit;
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import io.github.mooy1.infinitylib.commands.SubCommand;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
-public final class SetData extends AbstractCommand {
+public final class SetData extends SubCommand {
 
     public SetData() {
         super("setdata", "Set slimefun block data of the block you are looking at", true);
     }
 
     @Override
-    public void onExecute(@Nonnull CommandSender commandSender, @Nonnull String[] strings) {
+    protected void execute(@Nonnull CommandSender commandSender, @Nonnull String[] strings) {
         if (!(commandSender instanceof Player)) {
             commandSender.sendMessage("Only players can use this!");
             return;
@@ -58,19 +58,20 @@ public final class SetData extends AbstractCommand {
         if (strings[2].equals("\\remove")) {
             p.sendMessage(ChatColor.GREEN + "Successfully removed value of key '" + strings[1] + "' in " + id);
             BlockStorage.addBlockInfo(target, strings[1], null);
-        } else {
+        }
+        else {
             p.sendMessage(ChatColor.GREEN + "Successfully set key '" + strings[1] + "' to value '" + strings[2] + "' in " + id);
             BlockStorage.addBlockInfo(target, strings[1], strings[2]);
         }
 
-        SlimefunItem unit = SlimefunItem.getByID(id);
+        SlimefunItem unit = SlimefunItem.getById(id);
         if (unit instanceof StorageUnit) {
             ((StorageUnit) unit).reloadCache(target);
         }
     }
 
     @Override
-    public void onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings, @Nonnull List<String> list) {
+    protected void complete(@Nonnull CommandSender commandSender, @Nonnull String[] strings, @Nonnull List<String> list) {
         if (!(commandSender instanceof Player)) {
             return;
         }
@@ -88,7 +89,8 @@ public final class SetData extends AbstractCommand {
                 list.addAll(BlockStorage.getLocationInfo(target.getLocation()).getKeys());
                 list.remove("id");
             }
-        } else if (strings.length == 3 && !strings[1].equals("id")) {
+        }
+        else if (strings.length == 3 && !strings[1].equals("id")) {
             String current = BlockStorage.getLocationInfo(target.getLocation(), strings[1]);
             if (current != null) {
                 list.add(current);

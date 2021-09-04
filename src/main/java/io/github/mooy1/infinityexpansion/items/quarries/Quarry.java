@@ -20,7 +20,7 @@ import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -58,7 +58,7 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
     private final int energy;
     private final Material[] outputs;
 
-    public Quarry(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe,
+    public Quarry(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe,
                   int energy, int speed, int chance, Material... outputs) {
         super(category, item, type, recipe);
 
@@ -163,13 +163,16 @@ public final class Quarry extends AbstractMachine implements RecipeDisplayItem {
                         (outputType == Material.QUARTZ || outputType == Material.NETHERITE_INGOT || outputType == Material.NETHERRACK)
                 ) {
                     outputItem = new ItemStack(Material.COBBLESTONE, this.speed);
-                } else {
+                }
+                else {
                     outputItem = new ItemStack(outputType, this.speed);
                 }
-            } else {
+            }
+            else {
                 outputItem = new ItemStack(oscillator, this.speed);
             }
-        } else {
+        }
+        else {
             outputItem = new ItemStack(Material.COBBLESTONE, this.speed);
         }
 

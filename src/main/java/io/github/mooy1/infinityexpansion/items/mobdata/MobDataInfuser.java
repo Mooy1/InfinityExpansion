@@ -16,7 +16,7 @@ import io.github.mooy1.infinitylib.recipes.ShapedRecipe;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
@@ -27,7 +27,7 @@ public final class MobDataInfuser extends AbstractCrafter implements EnergyNetCo
 
     private final int energy;
 
-    public MobDataInfuser(Category category, SlimefunItemStack stack, RecipeType type, ItemStack[] recipe, int energy) {
+    public MobDataInfuser(ItemGroup category, SlimefunItemStack stack, RecipeType type, ItemStack[] recipe, int energy) {
         super(category, stack, RECIPES, type, recipe);
         this.energy = energy;
     }

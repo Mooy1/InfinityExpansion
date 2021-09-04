@@ -1,6 +1,8 @@
 package io.github.mooy1.infinityexpansion.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -9,6 +11,7 @@ import javax.annotation.Nullable;
 
 import lombok.experimental.UtilityClass;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -16,9 +19,9 @@ import org.bukkit.block.data.Waterlogged;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
 @UtilityClass
@@ -43,7 +46,19 @@ public final class Util {
 
     @Nonnull
     public static ItemStack getDisplayItem(@Nonnull ItemStack output) {
-        StackUtils.addLore(output, "", "&a-------------------", "&a\u21E8 Click to craft", "&a-------------------");
+        ItemMeta meta = output.getItemMeta();
+        List<String> lore;
+        if (meta.hasLore()) {
+            lore = meta.getLore();
+        }
+        else {
+            lore = new ArrayList<>();
+        }
+        lore.add("");
+        lore.add(ChatColor.GREEN + "-------------------");
+        lore.add(ChatColor.GREEN + "\u21E8 Click to craft");
+        lore.add(ChatColor.GREEN + "-------------------");
+        output.setItemMeta(meta);
         return output;
     }
 
@@ -56,9 +71,10 @@ public final class Util {
                 int level = section.getInt(path);
                 if (level > 0 && level <= Short.MAX_VALUE) {
                     enchants.put(e, level);
-                } else if (level != 0) {
+                }
+                else if (level != 0) {
                     section.set(path, 0);
-                    InfinityExpansion.inst().log(Level.WARNING,
+                    InfinityExpansion.log(Level.WARNING,
                             "Enchantment level " + level
                                     + " is out of bounds for " + e.getKey()
                                     + ", resetting to default!"
@@ -112,7 +128,7 @@ public final class Util {
     }
 
     public static boolean isWaterLogged(@Nonnull Block b) {
-        if ((InfinityExpansion.inst().getGlobalTick() & 63) == 0) {
+        if (InfinityExpansion.slimefunTickCount() % 63 == 0) {
             BlockData blockData = b.getBlockData();
 
             if (blockData instanceof Waterlogged) {
@@ -120,15 +136,18 @@ public final class Util {
                 if (waterLogged.isWaterlogged()) {
                     BlockStorage.addBlockInfo(b.getLocation(), "water_logged", "true");
                     return true;
-                } else {
+                }
+                else {
                     BlockStorage.addBlockInfo(b.getLocation(), "water_logged", "false");
                     return false;
                 }
-            } else {
+            }
+            else {
                 return false;
             }
 
-        } else {
+        }
+        else {
             return "true".equals(BlockStorage.getLocationInfo(b.getLocation(), "water_logged"));
         }
     }

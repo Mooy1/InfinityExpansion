@@ -16,7 +16,7 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponen
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -37,7 +37,7 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
     private final GenerationType type;
     private final int generation;
 
-    public EnergyGenerator(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe,
+    public EnergyGenerator(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe,
                            int generation, GenerationType type) {
         super(category, item, recipeType, recipe);
         this.type = type;
@@ -71,7 +71,8 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
                         "&cNot generating",
                         "&7Stored: &6" + LorePreset.format(getCharge(l)) + " J"
                 ));
-            } else {
+            }
+            else {
                 inv.replaceExistingItem(4, new CustomItem(
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&aGeneration",

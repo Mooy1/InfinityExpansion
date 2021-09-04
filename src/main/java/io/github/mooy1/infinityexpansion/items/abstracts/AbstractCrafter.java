@@ -17,7 +17,7 @@ import io.github.mooy1.infinitylib.recipes.RecipeOutput;
 import io.github.mooy1.infinitylib.slimefun.AbstractTickingContainer;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -34,13 +34,13 @@ public abstract class AbstractCrafter extends AbstractTickingContainer {
 
     protected static final int[] INPUT_SLOTS = MenuPreset.CRAFTING_INPUT;
     private static final int OUTPUT_SLOT = MenuPreset.CRAFTING_OUTPUT;
-    private static final int[] BACKGROUND = {5, 6, 7, 8, 41, 42, 43, 44};
-    private static final int[] STATUS_BORDER = {14, 32};
+    private static final int[] BACKGROUND = { 5, 6, 7, 8, 41, 42, 43, 44 };
+    private static final int[] STATUS_BORDER = { 14, 32 };
     private static final int STATUS_SLOT = 23;
 
     private final RecipeMap<ItemStack> recipes;
 
-    public AbstractCrafter(Category category, SlimefunItemStack stack,
+    public AbstractCrafter(ItemGroup category, SlimefunItemStack stack,
                            RecipeMap<ItemStack> recipes, RecipeType type, ItemStack[] recipe) {
         super(category, stack, type, recipe);
         this.recipes = recipes;
@@ -105,7 +105,8 @@ public abstract class AbstractCrafter extends AbstractTickingContainer {
 
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.INVALID_RECIPE);
 
-            } else {
+            }
+            else {
                 ItemStack out = output.getOutput().clone();
                 modifyOutput(inv, out);
                 inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(out));
@@ -130,7 +131,8 @@ public abstract class AbstractCrafter extends AbstractTickingContainer {
             inv.replaceExistingItem(STATUS_SLOT, MenuPreset.INVALID_RECIPE);
             p.sendMessage(ChatColor.RED + "Invalid Recipe!");
 
-        } else {
+        }
+        else {
             ItemStack out = output.getOutput().clone();
             modifyOutput(inv, out);
 
@@ -139,7 +141,8 @@ public abstract class AbstractCrafter extends AbstractTickingContainer {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
                 p.sendMessage(ChatColor.GOLD + "Not enough room!");
 
-            } else { //enough room
+            }
+            else { //enough room
 
                 output.consumeInput();
                 p.sendMessage(ChatColor.GREEN + "Crafted: " + ItemUtils.getItemName(out));

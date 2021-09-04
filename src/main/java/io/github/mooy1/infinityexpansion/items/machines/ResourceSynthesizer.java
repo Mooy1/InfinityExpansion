@@ -17,7 +17,7 @@ import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -53,7 +53,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     private final int energy;
     private final SlimefunItemStack[] recipes;
 
-    public ResourceSynthesizer(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, SlimefunItemStack[] recipes, int energy) {
+    public ResourceSynthesizer(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, SlimefunItemStack[] recipes, int energy) {
         super(category, item, recipeType, recipe);
         this.recipes = recipes;
         this.energy = energy;
@@ -103,9 +103,11 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
             return INPUT_SLOTS;
-        } else if (flow == ItemTransportFlow.WITHDRAW) {
+        }
+        else if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
-        } else {
+        }
+        else {
             return new int[0];
         }
     }
@@ -147,11 +149,15 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
 
         String id1 = StackUtils.getID(input1);
 
-        if (id1 == null) return false;
+        if (id1 == null) {
+            return false;
+        }
 
         String id2 = StackUtils.getID(input2);
 
-        if (id2 == null) return false;
+        if (id2 == null) {
+            return false;
+        }
 
         ItemStack recipe = null;
 
@@ -183,7 +189,8 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
             }
             return true;
 
-        } else { //not enough room
+        }
+        else { //not enough room
 
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);

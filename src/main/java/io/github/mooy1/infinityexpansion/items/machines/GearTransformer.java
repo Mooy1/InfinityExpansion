@@ -19,7 +19,7 @@ import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -52,7 +52,7 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
     private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
     private static final int STATUS_SLOT = MenuPreset.STATUS;
 
-    public GearTransformer(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
+    public GearTransformer(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
         super(category, item, type, recipe, energy, STATUS_SLOT);
     }
 
@@ -136,7 +136,9 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
 
             for (String armorMaterial : ARMOR_MATERIALS) {
 
-                if (material == Material.getMaterial(armorMaterial + armorType)) return armorType;
+                if (material == Material.getMaterial(armorMaterial + armorType)) {
+                    return armorType;
+                }
             }
         }
 
@@ -144,7 +146,9 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
 
             for (String toolMaterial : TOOL_MATERIALS) {
 
-                if (material == Material.getMaterial(toolMaterial + toolType)) return toolType;
+                if (material == Material.getMaterial(toolMaterial + toolType)) {
+                    return toolType;
+                }
             }
         }
         return null;

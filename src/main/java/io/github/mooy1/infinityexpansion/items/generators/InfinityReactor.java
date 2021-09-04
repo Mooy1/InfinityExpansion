@@ -21,7 +21,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -46,7 +46,7 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
 
     private final int gen;
 
-    public InfinityReactor(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int gen) {
+    public InfinityReactor(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int gen) {
         super(category, item, recipeType, recipe);
         this.gen = gen;
     }
@@ -85,9 +85,10 @@ public final class InfinityReactor extends AbstractContainer implements EnergyNe
         if (flow == ItemTransportFlow.INSERT) {
             String input = StackUtils.getID(item);
             if (Materials.VOID_INGOT.getItemId().equals(input)) {
-                return new int[] {INPUT_SLOTS[1]};
-            } else if (Materials.INFINITE_INGOT.getItemId().equals(input)) {
-                return new int[] {INPUT_SLOTS[0]};
+                return new int[] { INPUT_SLOTS[1] };
+            }
+            else if (Materials.INFINITE_INGOT.getItemId().equals(input)) {
+                return new int[] { INPUT_SLOTS[0] };
             }
         }
 

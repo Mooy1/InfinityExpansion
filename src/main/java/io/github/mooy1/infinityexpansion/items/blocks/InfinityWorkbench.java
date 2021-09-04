@@ -13,25 +13,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.InfinityCategory;
+import io.github.mooy1.infinityexpansion.categories.InfinityGroup;
 import io.github.mooy1.infinityexpansion.items.Blocks;
 import io.github.mooy1.infinityexpansion.items.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.mooy1.infinitylib.recipes.RecipeMap;
-import io.github.mooy1.infinitylib.recipes.RecipeOutput;
-import io.github.mooy1.infinitylib.recipes.ShapedRecipe;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * A 6x6 crafting table O.o
@@ -49,9 +43,9 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
             45, 46, 47, 48, 49, 50
     };
 
-    private static final int[] OUTPUT_SLOTS = {MenuPreset.OUTPUT + 27};
+    private static final int[] OUTPUT_SLOTS = { MenuPreset.OUTPUT + 27 };
     private static final int STATUS_SLOT = MenuPreset.OUTPUT;
-    private static final int[] STATUS_BORDER = {6, 8, 15, 17, 24, 25, 26};
+    private static final int[] STATUS_BORDER = { 6, 8, 15, 17, 24, 25, 26 };
     private static final int RECIPE_SLOT = 7;
 
     public static final RecipeMap<SlimefunItemStack> RECIPES = new RecipeMap<>(ShapedRecipe::new);
@@ -65,7 +59,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
         IDS.add(item.getItemId());
     }, "", "&cUse the infinity recipes category to see the correct recipe!");
 
-    public InfinityWorkbench(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
+    public InfinityWorkbench(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
         super(category, item, type, recipe, energy, STATUS_SLOT);
     }
 
@@ -94,7 +88,7 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
             return false;
         });
         menu.addMenuClickHandler(RECIPE_SLOT, (p, slot, item, action) -> {
-            InfinityCategory.open(p, menu);
+            InfinityGroup.open(p, menu);
             return false;
         });
     }
@@ -138,7 +132,8 @@ public final class InfinityWorkbench extends AbstractEnergyCrafter {
 
             inv.replaceExistingItem(STATUS_SLOT, MenuPreset.INVALID_RECIPE);
 
-        } else { //correct recipe
+        }
+        else { //correct recipe
 
             inv.replaceExistingItem(STATUS_SLOT, Util.getDisplayItem(output.clone()));
 

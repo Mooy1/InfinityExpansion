@@ -1,14 +1,10 @@
 package io.github.mooy1.infinityexpansion;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
-
-import javax.annotation.Nonnull;
 
 import org.bukkit.plugin.Plugin;
 
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Groups;
 import io.github.mooy1.infinityexpansion.commands.GiveRecipe;
 import io.github.mooy1.infinityexpansion.commands.PrintItem;
 import io.github.mooy1.infinityexpansion.commands.SetData;
@@ -22,25 +18,23 @@ import io.github.mooy1.infinityexpansion.items.Quarries;
 import io.github.mooy1.infinityexpansion.items.Researches;
 import io.github.mooy1.infinityexpansion.items.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.items.Storage;
-import io.github.mooy1.infinitylib.AbstractAddon;
-import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.mooy1.infinitylib.common.Scheduler;
+import io.github.mooy1.infinitylib.core.AbstractAddon;
+import io.github.mooy1.infinitylib.metrics.bukkit.Metrics;
 
 public final class InfinityExpansion extends AbstractAddon {
 
-    private static InfinityExpansion instance;
-
-    public static InfinityExpansion inst() {
-        return instance;
+    public InfinityExpansion() {
+        super("Mooy1", "InfinityExpansion", "master", "auto-update");
     }
 
     @Override
-    public void enable() {
-        instance = this;
+    protected void enable() {
+        new Metrics(this, 8991);
 
         Plugin lx = getServer().getPluginManager().getPlugin("LiteXpansion");
         if (lx != null && lx.getConfig().getBoolean("options.nerf-other-addons")) {
-            runSync(() -> log(Level.WARNING,
+            Scheduler.run(() -> log(Level.WARNING,
                     "########################################################",
                     "LiteXpansion nerfs energy generation in this addon.",
                     "You can disable these nerfs in the LiteXpansion config.",
@@ -49,7 +43,9 @@ public final class InfinityExpansion extends AbstractAddon {
             ));
         }
 
-        Categories.setup(this);
+        getAddonCommand().addSub(new GiveRecipe()).addSub(new SetData()).addSub(new PrintItem());
+
+        Groups.setup(this);
         MobData.setup(this);
         Materials.setup(this);
         Machines.setup(this);
@@ -66,31 +62,8 @@ public final class InfinityExpansion extends AbstractAddon {
     }
 
     @Override
-    protected Metrics setupMetrics() {
-        return new Metrics(this, 8991);
-    }
-
-    @Nonnull
-    @Override
-    protected String getGithubPath() {
-        return "Mooy1/InfinityExpansion/master";
-    }
-
-    @Nonnull
-    @Override
-    protected List<AbstractCommand> setupSubCommands() {
-        return Arrays.asList(new GiveRecipe(), new SetData(), new PrintItem());
-    }
-
-    @Nonnull
-    @Override
-    public String getAutoUpdatePath() {
-        return "auto-update";
-    }
-
-    @Override
     public void disable() {
-        instance = null;
+
     }
 
 }

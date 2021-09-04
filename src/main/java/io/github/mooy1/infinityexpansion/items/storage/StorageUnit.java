@@ -22,7 +22,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.categories.Categories;
+import io.github.mooy1.infinityexpansion.categories.Groups;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.persistence.PersistenceUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
@@ -80,7 +80,7 @@ public final class StorageUnit extends AbstractContainer {
     final int max;
 
     public StorageUnit(SlimefunItemStack item, int max, ItemStack[] recipe) {
-        super(Categories.STORAGE, item, StorageForge.TYPE, recipe);
+        super(Groups.STORAGE, item, StorageForge.TYPE, recipe);
         this.max = max;
 
         addItemHandler(new BlockTicker() {
@@ -118,7 +118,8 @@ public final class StorageUnit extends AbstractContainer {
         StorageCache cache = this.caches.remove(l);
         if (cache != null) {
             cache.destroy(l, e);
-        } else {
+        }
+        else {
             e.getBlock().getWorld().dropItemNaturally(l, getItem().clone());
         }
         menu.dropItems(l, INPUT_SLOT, OUTPUT_SLOT);
@@ -152,10 +153,11 @@ public final class StorageUnit extends AbstractContainer {
         StorageCache cache = this.caches.get(((BlockMenu) dirtyChestMenu).getLocation());
         if (cache != null) {
             if (flow == ItemTransportFlow.WITHDRAW) {
-                return new int[] {OUTPUT_SLOT};
-            } else if (flow == ItemTransportFlow.INSERT && (cache.isEmpty() || cache.matches(itemStack))) {
+                return new int[] { OUTPUT_SLOT };
+            }
+            else if (flow == ItemTransportFlow.INSERT && (cache.isEmpty() || cache.matches(itemStack))) {
                 cache.input();
-                return new int[] {INPUT_SLOT};
+                return new int[] { INPUT_SLOT };
             }
         }
         return new int[0];

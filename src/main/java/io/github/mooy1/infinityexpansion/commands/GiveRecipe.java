@@ -10,20 +10,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.mooy1.infinitylib.commands.SubCommand;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 
-public final class GiveRecipe extends AbstractCommand {
+public final class GiveRecipe extends SubCommand {
 
     public GiveRecipe() {
         super("giverecipe", "gives all the items in a Slimefun item recipe", true);
     }
 
     @Override
-    public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    protected void execute(@Nonnull CommandSender sender, @Nonnull String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this!");
             return;
@@ -34,7 +34,7 @@ public final class GiveRecipe extends AbstractCommand {
             return;
         }
 
-        SlimefunItem sfItem = SlimefunItem.getByID(args[1].toUpperCase());
+        SlimefunItem sfItem = SlimefunItem.getById(args[1].toUpperCase());
 
         if (sfItem == null || sfItem instanceof MultiBlockMachine || sfItem.getRecipeType() == RecipeType.GEO_MINER) {
             sender.sendMessage(ChatColor.RED + "Invalid Slimefun item!");
@@ -48,16 +48,18 @@ public final class GiveRecipe extends AbstractCommand {
         List<ItemStack> recipe = new ArrayList<>();
 
         for (ItemStack e : sfItem.getRecipe()) {
-            if (e != null) recipe.add(e);
+            if (e != null) {
+                recipe.add(e);
+            }
         }
 
         p.getInventory().addItem(recipe.toArray(new ItemStack[0]));
     }
 
     @Override
-    public void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    protected void complete(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
         if (args.length == 2) {
-            for (SlimefunItem item : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {
+            for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
                 tabs.add(item.getId());
                 if (tabs.size() > 64) {
                     break;
@@ -65,4 +67,5 @@ public final class GiveRecipe extends AbstractCommand {
             }
         }
     }
+
 }

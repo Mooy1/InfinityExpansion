@@ -20,7 +20,7 @@ import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -31,7 +31,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 public final class GrowingMachine extends AbstractMachine implements RecipeDisplayItem {
 
     private static final int[] OUTPUT_SLOTS = Util.LARGE_OUTPUT;
-    private static final int[] INPUT_SLOTS = {MenuPreset.INPUT + 27};
+    private static final int[] INPUT_SLOTS = { MenuPreset.INPUT + 27 };
     private static final int STATUS_SLOT = MenuPreset.INPUT;
     private static final ItemStack GROWING = new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aGrowing...");
     private static final ItemStack INPUT_PLANT = new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a plant!");
@@ -40,18 +40,18 @@ public final class GrowingMachine extends AbstractMachine implements RecipeDispl
     private static final EnumMap<Material, ItemStack[]> TREE_RECIPES = new EnumMap<>(Material.class);
 
     static {
-        NORMAL_RECIPES.put(Material.WHEAT_SEEDS, new ItemStack[] {new ItemStack(Material.WHEAT, 2)});
-        NORMAL_RECIPES.put(Material.CARROT, new ItemStack[] {new ItemStack(Material.CARROT, 2)});
-        NORMAL_RECIPES.put(Material.POTATO, new ItemStack[] {new ItemStack(Material.POTATO, 2)});
-        NORMAL_RECIPES.put(Material.BEETROOT_SEEDS, new ItemStack[] {new ItemStack(Material.BEETROOT, 2)});
-        NORMAL_RECIPES.put(Material.PUMPKIN_SEEDS, new ItemStack[] {new ItemStack(Material.PUMPKIN)});
-        NORMAL_RECIPES.put(Material.MELON_SEEDS, new ItemStack[] {new ItemStack(Material.MELON)});
-        NORMAL_RECIPES.put(Material.SUGAR_CANE, new ItemStack[] {new ItemStack(Material.SUGAR_CANE, 2)});
-        NORMAL_RECIPES.put(Material.COCOA_BEANS, new ItemStack[] {new ItemStack(Material.COCOA_BEANS, 2)});
-        NORMAL_RECIPES.put(Material.CACTUS, new ItemStack[] {new ItemStack(Material.CACTUS, 2)});
-        NORMAL_RECIPES.put(Material.BAMBOO, new ItemStack[] {new ItemStack(Material.BAMBOO, 6)});
-        NORMAL_RECIPES.put(Material.CHORUS_FLOWER, new ItemStack[] {new ItemStack(Material.CHORUS_FRUIT, 6)});
-        NORMAL_RECIPES.put(Material.NETHER_WART, new ItemStack[] {new ItemStack(Material.NETHER_WART, 2)});
+        NORMAL_RECIPES.put(Material.WHEAT_SEEDS, new ItemStack[] { new ItemStack(Material.WHEAT, 2) });
+        NORMAL_RECIPES.put(Material.CARROT, new ItemStack[] { new ItemStack(Material.CARROT, 2) });
+        NORMAL_RECIPES.put(Material.POTATO, new ItemStack[] { new ItemStack(Material.POTATO, 2) });
+        NORMAL_RECIPES.put(Material.BEETROOT_SEEDS, new ItemStack[] { new ItemStack(Material.BEETROOT, 2) });
+        NORMAL_RECIPES.put(Material.PUMPKIN_SEEDS, new ItemStack[] { new ItemStack(Material.PUMPKIN) });
+        NORMAL_RECIPES.put(Material.MELON_SEEDS, new ItemStack[] { new ItemStack(Material.MELON) });
+        NORMAL_RECIPES.put(Material.SUGAR_CANE, new ItemStack[] { new ItemStack(Material.SUGAR_CANE, 2) });
+        NORMAL_RECIPES.put(Material.COCOA_BEANS, new ItemStack[] { new ItemStack(Material.COCOA_BEANS, 2) });
+        NORMAL_RECIPES.put(Material.CACTUS, new ItemStack[] { new ItemStack(Material.CACTUS, 2) });
+        NORMAL_RECIPES.put(Material.BAMBOO, new ItemStack[] { new ItemStack(Material.BAMBOO, 6) });
+        NORMAL_RECIPES.put(Material.CHORUS_FLOWER, new ItemStack[] { new ItemStack(Material.CHORUS_FRUIT, 6) });
+        NORMAL_RECIPES.put(Material.NETHER_WART, new ItemStack[] { new ItemStack(Material.NETHER_WART, 2) });
         TREE_RECIPES.put(Material.OAK_SAPLING, new ItemStack[] {
                 new ItemStack(Material.OAK_LEAVES, 8), new ItemStack(Material.OAK_LOG, 6), new ItemStack(Material.STICK), new ItemStack(Material.APPLE)
         });
@@ -82,7 +82,7 @@ public final class GrowingMachine extends AbstractMachine implements RecipeDispl
     private final int time;
     private final int energy;
 
-    public GrowingMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe,
+    public GrowingMachine(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe,
                           int energy, int time, boolean tree) {
         super(category, item, recipeType, recipe);
         this.energy = energy;
@@ -112,7 +112,8 @@ public final class GrowingMachine extends AbstractMachine implements RecipeDispl
                 }
             }
             return true;
-        } else {
+        }
+        else {
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(STATUS_SLOT, INPUT_PLANT);
             }
@@ -149,9 +150,11 @@ public final class GrowingMachine extends AbstractMachine implements RecipeDispl
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
             return INPUT_SLOTS;
-        } else if (flow == ItemTransportFlow.WITHDRAW) {
+        }
+        else if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
-        } else {
+        }
+        else {
             return new int[0];
         }
     }

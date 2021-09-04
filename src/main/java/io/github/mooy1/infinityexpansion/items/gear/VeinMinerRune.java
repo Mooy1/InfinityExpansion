@@ -41,7 +41,7 @@ import io.github.mooy1.infinitylib.players.CoolDownMap;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.SoulboundRune;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -66,7 +66,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     private final CoolDownMap cooldowns = new CoolDownMap(1000);
     private final Set<Block> processing = new HashSet<>();
 
-    public VeinMinerRune(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
+    public VeinMinerRune(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
         super(category, item, type, recipe);
         InfinityExpansion.inst().registerListener(this);
     }
@@ -111,12 +111,14 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
                         l.getWorld().dropItemNaturally(l, itemStack);
 
                         p.sendMessage(ChatColor.GREEN + "Added Vein Miner to tool!");
-                    } else {
+                    }
+                    else {
                         p.sendMessage(ChatColor.RED + "Failed to add vein miner!");
                     }
                 }, 10L);
 
-            } else {
+            }
+            else {
                 p.sendMessage(ChatColor.RED + "Failed to add vein miner!");
             }
         }
@@ -142,7 +144,9 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     }
 
     public static void setVeinMiner(@Nullable ItemStack item, boolean makeVeinMiner) {
-        if (item == null) return;
+        if (item == null) {
+            return;
+        }
 
         ItemMeta meta = item.getItemMeta();
 
@@ -171,11 +175,15 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     public void onBlockBreak(BlockBreakEvent e) {
         Block b = e.getBlock();
 
-        if (this.processing.contains(b)) return;
+        if (this.processing.contains(b)) {
+            return;
+        }
 
         Player p = e.getPlayer();
 
-        if (!p.isSneaking()) return;
+        if (!p.isSneaking()) {
+            return;
+        }
 
         ItemStack item = p.getInventory().getItemInMainHand();
 
@@ -190,11 +198,15 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
 
         String type = b.getType().toString();
 
-        if (!isAllowed(type)) return;
+        if (!isAllowed(type)) {
+            return;
+        }
 
         Location l = b.getLocation();
 
-        if (BlockStorage.hasBlockInfo(l)) return;
+        if (BlockStorage.hasBlockInfo(l)) {
+            return;
+        }
 
         if (!this.cooldowns.checkAndReset(p.getUniqueId())) {
             p.sendMessage(ChatColor.GOLD + "You must wait 1 second before using again!");
@@ -246,7 +258,9 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     }
 
     private static void getVein(Set<Location> checked, Set<Block> found, Location l, Block b) {
-        if (found.size() >= MAX) return;
+        if (found.size() >= MAX) {
+            return;
+        }
 
         for (Location check : getAdjacentLocations(l)) {
             if (checked.add(check) && check.getBlock().getType() == b.getType() && !BlockStorage.hasBlockInfo(b)) {

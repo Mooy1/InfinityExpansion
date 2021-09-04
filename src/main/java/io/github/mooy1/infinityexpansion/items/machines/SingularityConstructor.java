@@ -24,7 +24,7 @@ import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -64,7 +64,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     private final int speed;
     private final int energy;
 
-    public SingularityConstructor(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
+    public SingularityConstructor(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
         super(category, item, type, recipe);
         this.speed = speed;
         this.energy = energy;
@@ -111,7 +111,8 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
         String inputID;
         if (input == null) {
             inputID = null;
-        } else {
+        }
+        else {
             inputID = StackUtils.getIDorType(input);
         }
 
@@ -132,15 +133,18 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
                     progressID = pair.getFirstValue();
                     triplet = pair.getSecondValue();
                     takeCharge = true;
-                } else {
+                }
+                else {
                     // invalid input
                     triplet = null;
                 }
-            } else {
+            }
+            else {
                 // still haven't started
                 triplet = null;
             }
-        } else {
+        }
+        else {
             // started
             triplet = RECIPE_LIST.get(progressID);
             if (inputID != null) {
@@ -169,14 +173,16 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
                             "&7Complete"
                     ));
                 }
-            } else if (menu.hasViewer()) {
+            }
+            else if (menu.hasViewer()) {
                 menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
                         Material.LIME_STAINED_GLASS_PANE,
                         "&aConstructing " + triplet.output.getDisplayName() + "...",
                         "&7" + progress + " / " + triplet.amount
                 ));
             }
-        } else if (menu.hasViewer()) {
+        }
+        else if (menu.hasViewer()) {
             invalidInput(menu);
         }
 
@@ -209,10 +215,12 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     @Override
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
         if (flow == ItemTransportFlow.INSERT) {
-            return new int[] {INPUT_SLOT};
-        } else if (flow == ItemTransportFlow.WITHDRAW) {
-            return new int[] {OUTPUT_SLOT};
-        } else {
+            return new int[] { INPUT_SLOT };
+        }
+        else if (flow == ItemTransportFlow.WITHDRAW) {
+            return new int[] { OUTPUT_SLOT };
+        }
+        else {
             return new int[0];
         }
     }
@@ -236,7 +244,8 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     private static void setProgressID(Location l, @Nullable Integer progressID) {
         if (progressID == null) {
             BlockStorage.addBlockInfo(l, "progressid", null);
-        } else {
+        }
+        else {
             BlockStorage.addBlockInfo(l, "progressid", String.valueOf(progressID));
         }
     }
@@ -246,11 +255,14 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
         String id = BlockStorage.getLocationInfo(l, "progressid");
         if (id == null) {
             return null;
-        } else try {
-            return Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            setProgressID(l, null);
-            return null;
+        }
+        else {
+            try {
+                return Integer.parseInt(id);
+            } catch (NumberFormatException e) {
+                setProgressID(l, null);
+                return null;
+            }
         }
     }
 

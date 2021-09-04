@@ -17,7 +17,7 @@ import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -32,14 +32,14 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  */
 public final class MaterialGenerator extends AbstractMachine implements RecipeDisplayItem {
 
-    private static final int[] OUTPUT_SLOTS = {13};
+    private static final int[] OUTPUT_SLOTS = { 13 };
     private static final int STATUS_SLOT = 4;
 
     private final int speed;
     private final int energy;
     private final Material material;
 
-    public MaterialGenerator(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed, Material material) {
+    public MaterialGenerator(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed, Material material) {
         super(category, item, type, recipe);
         this.speed = speed;
         this.material = material;

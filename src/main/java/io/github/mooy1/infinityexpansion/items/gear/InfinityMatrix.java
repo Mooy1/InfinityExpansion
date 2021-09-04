@@ -17,12 +17,12 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> implements Listener, Soulbound, NotPlaceable {
 
-    public InfinityMatrix(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
+    public InfinityMatrix(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
         super(category, item, type, recipe);
         InfinityExpansion.inst().registerListener(this);
     }
@@ -73,9 +73,11 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
                         p.sendMessage(ChatColor.GOLD + "Ownership removed!");
                         disableFlight(p);
 
-                    } else if (p.getAllowFlight()) {
+                    }
+                    else if (p.getAllowFlight()) {
                         disableFlight(p);
-                    } else {
+                    }
+                    else {
                         enableFlight(p);
                     }
 

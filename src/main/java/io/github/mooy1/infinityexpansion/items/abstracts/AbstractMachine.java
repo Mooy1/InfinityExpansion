@@ -12,7 +12,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -24,7 +24,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
  */
 public abstract class AbstractMachine extends AbstractTickingContainer implements EnergyNetComponent {
 
-    public AbstractMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+    public AbstractMachine(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
     }
 
@@ -36,7 +36,8 @@ public abstract class AbstractMachine extends AbstractTickingContainer implement
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(getStatusSlot(), MenuPreset.NO_ENERGY);
             }
-        } else if (process(menu, b)) {
+        }
+        else if (process(menu, b)) {
             removeCharge(b.getLocation(), getEnergyConsumption());
         }
     }

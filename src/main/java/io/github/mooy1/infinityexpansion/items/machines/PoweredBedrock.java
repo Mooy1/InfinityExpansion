@@ -12,7 +12,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
@@ -26,7 +26,7 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
 
     private final int energy;
 
-    public PoweredBedrock(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
+    public PoweredBedrock(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
         super(category, item, type, recipe);
         this.energy = energy;
 
@@ -46,7 +46,8 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
                     if (b.getType() != Material.NETHERITE_BLOCK) {
                         b.setType(Material.NETHERITE_BLOCK);
                     }
-                } else if (b.getType() != Material.BEDROCK) {
+                }
+                else if (b.getType() != Material.BEDROCK) {
                     b.setType(Material.BEDROCK);
                     removeCharge(l, energy);
                 }

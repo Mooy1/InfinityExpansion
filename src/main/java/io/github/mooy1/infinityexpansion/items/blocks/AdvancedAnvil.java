@@ -27,7 +27,7 @@ import io.github.mooy1.infinityexpansion.utils.Util;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -53,14 +53,14 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
             MenuPreset.OUTPUT
     };
     private static final int STATUS_SLOT = MenuPreset.STATUS + 27;
-    private static final int[] OTHER_STATUS = {47, 51};
+    private static final int[] OTHER_STATUS = { 47, 51 };
     private static final int[] BACKGROUND = {
             27, 28, 29, 33, 34, 35,
             36, 37, 38, 42, 43, 44,
             45, 46, 52, 53
     };
 
-    public AdvancedAnvil(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
+    public AdvancedAnvil(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
         super(category, item, type, recipe, energy, STATUS_SLOT);
     }
 
@@ -104,10 +104,8 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
     private void craft(BlockMenu inv, Block b, Player p) {
         Location l = b.getLocation();
         if (getCharge(l) < this.energy) { //not enough energy
-            p.sendMessage(new String[] {
-                    ChatColor.RED + "Not enough energy!",
-                    ChatColor.GREEN + "Charge: " + ChatColor.RED + getCharge(l) + ChatColor.GREEN + "/" + this.energy + " J"
-            });
+            p.sendMessage(ChatColor.RED + "Not enough energy!",
+                    ChatColor.GREEN + "Charge: " + ChatColor.RED + getCharge(l) + ChatColor.GREEN + "/" + this.energy + " J");
             return;
         }
 
@@ -156,7 +154,8 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
             if (book.hasStoredEnchants()) {
                 return book.getStoredEnchants();
             }
-        } else if (meta.hasEnchants()) {
+        }
+        else if (meta.hasEnchants()) {
             return meta.getEnchants();
         }
 
@@ -170,7 +169,8 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
                 book.addStoredEnchant(entry.getKey(), entry.getValue(), true);
             }
             item.setItemMeta(book);
-        } else {
+        }
+        else {
             for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
                 item.addUnsafeEnchantment(entry.getKey(), entry.getValue());
             }
@@ -208,7 +208,9 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         //unique (different enchants from 2nd item)
         for (Map.Entry<Enchantment, Integer> e : dif.entriesOnlyOnRight().entrySet()) {
             if (bookOntoTool) {
-                if (!e.getKey().canEnchantItem(item)) continue;
+                if (!e.getKey().canEnchantItem(item)) {
+                    continue;
+                }
             }
             enchants.put(e.getKey(), e.getValue());
             changed = true;
@@ -217,7 +219,8 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         if (changed) {
             setEnchants(item, meta, enchants);
             return item;
-        } else {
+        }
+        else {
             return null;
         }
     }

@@ -8,11 +8,11 @@ import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 /**
  * Ender essence geo-resource item
@@ -23,7 +23,7 @@ public final class EnderEssence extends SlimefunItem implements NotPlaceable, GE
 
     private final NamespacedKey key;
 
-    public EnderEssence(Category category, SlimefunItemStack item, NamespacedKey key) {
+    public EnderEssence(ItemGroup category, SlimefunItemStack item, NamespacedKey key) {
         super(category, item, RecipeType.GEO_MINER, new ItemStack[9]);
         this.key = key;
         register();
@@ -64,4 +64,5 @@ public final class EnderEssence extends SlimefunItem implements NotPlaceable, GE
     public boolean isObtainableFromGEOMiner() {
         return true;
     }
+
 }

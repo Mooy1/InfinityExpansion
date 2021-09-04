@@ -23,7 +23,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -36,15 +36,15 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 public final class GeoQuarry extends AbstractMachine implements RecipeDisplayItem {
 
     private static final int STATUS = 4;
-    private static final int[] BORDER = {0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 44, 45, 53};
-    private static final int[] OUTPUT_BORDER = {19, 20, 21, 22, 23, 24, 25, 28, 34, 37, 43, 46, 47, 48, 49, 50, 51, 52};
-    private static final int[] OUTPUT_SLOTS = {29, 30, 31, 32, 33, 38, 39, 40, 41, 42};
+    private static final int[] BORDER = { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26, 27, 35, 36, 44, 45, 53 };
+    private static final int[] OUTPUT_BORDER = { 19, 20, 21, 22, 23, 24, 25, 28, 34, 37, 43, 46, 47, 48, 49, 50, 51, 52 };
+    private static final int[] OUTPUT_SLOTS = { 29, 30, 31, 32, 33, 38, 39, 40, 41, 42 };
     private final Map<Pair<Biome, World.Environment>, RandomizedSet<ItemStack>> recipes = new HashMap<>();
 
     private final int energy;
     private final int interval;
 
-    public GeoQuarry(Category category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int interval) {
+    public GeoQuarry(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int interval) {
         super(category, item, type, recipe);
         this.energy = energy;
         this.interval = interval;
@@ -71,7 +71,8 @@ public final class GeoQuarry extends AbstractMachine implements RecipeDisplayIte
     protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
         if (flow == ItemTransportFlow.WITHDRAW) {
             return OUTPUT_SLOTS;
-        } else {
+        }
+        else {
             return new int[0];
         }
     }
