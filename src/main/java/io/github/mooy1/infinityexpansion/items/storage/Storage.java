@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.items;
+package io.github.mooy1.infinityexpansion.items.storage;
 
 import lombok.experimental.UtilityClass;
 
@@ -7,8 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Groups;
-import io.github.mooy1.infinityexpansion.items.storage.StorageForge;
-import io.github.mooy1.infinityexpansion.items.storage.StorageUnit;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
 import io.github.mooy1.infinitylib.machines.MachineLore;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;

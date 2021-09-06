@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.items;
+package io.github.mooy1.infinityexpansion.items.mobdata;
 
 import lombok.experimental.UtilityClass;
 
@@ -7,20 +7,19 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Groups;
-import io.github.mooy1.infinityexpansion.items.mobdata.MobDataCard;
-import io.github.mooy1.infinityexpansion.items.mobdata.MobDataInfuser;
-import io.github.mooy1.infinityexpansion.items.mobdata.MobDataTier;
-import io.github.mooy1.infinityexpansion.items.mobdata.MobSimulationChamber;
-import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
+import io.github.mooy1.infinitylib.core.Environment;
+import io.github.mooy1.infinitylib.machines.MachineLore;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @UtilityClass
 public final class MobData {
 
-    private static final int CHAMBER_INTERVAL = InfinityExpansion.inst().getConfig().getInt("mob-simulation-options.ticks-per-output", 1, 1000);
+    private static final int CHAMBER_INTERVAL =
+            InfinityExpansion.config().getInt("mob-simulation-options.ticks-per-output", 1, 1000);
     private static final int CHAMBER_BUFFER = 15000;
     private static final int CHAMBER_ENERGY = 150;
     private static final int INFUSER_ENERGY = 20000;
@@ -37,7 +36,7 @@ public final class MobData {
             "&8Mob Data Infuser",
             "&7Infused empty data cards with mob items",
             "",
-            LorePreset.energy(INFUSER_ENERGY) + "per use"
+            MachineLore.energy(INFUSER_ENERGY) + "per use"
     );
     public static final SlimefunItemStack CHAMBER = new SlimefunItemStack(
             "MOB_SIMULATION_CHAMBER",
@@ -45,8 +44,8 @@ public final class MobData {
             "&8Mob Simulation Chamber",
             "&7Use mob data cards to activate",
             "",
-            LorePreset.energyBuffer(CHAMBER_BUFFER),
-            LorePreset.energyPerSecond(CHAMBER_ENERGY)
+            MachineLore.energyBuffer(CHAMBER_BUFFER),
+            MachineLore.energyPerSecond(CHAMBER_ENERGY)
     );
 
     public static final SlimefunItemStack COW = MobDataCard.create("Cow", MobDataTier.PASSIVE);
@@ -92,6 +91,11 @@ public final class MobData {
                 SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.SYNTHETIC_DIAMOND, SlimefunItems.SYNTHETIC_EMERALD,
                 SlimefunItems.MAGNESIUM_INGOT, Materials.MACHINE_CIRCUIT, SlimefunItems.MAGNESIUM_INGOT
         }).register(plugin);
+
+        if (InfinityExpansion.environment() == Environment.TESTING) {
+            // There is some issues with player skull items in randomized sets when testing
+            return;
+        }
 
         new MobDataCard(ZOMBIE, MobDataTier.HOSTILE, new ItemStack[] {
                 new ItemStack(Material.IRON_SWORD, 1), new ItemStack(Material.ROTTEN_FLESH, 16), new ItemStack(Material.IRON_SHOVEL, 1),

@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.items;
+package io.github.mooy1.infinityexpansion.items.quarries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +12,16 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Groups;
+import io.github.mooy1.infinityexpansion.items.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.items.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.items.quarries.Oscillator;
-import io.github.mooy1.infinityexpansion.items.quarries.Quarry;
-import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinityexpansion.items.gear.Gear;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
+import io.github.mooy1.infinitylib.machines.MachineLore;
 import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @UtilityClass
 public final class Quarries {
@@ -31,8 +32,8 @@ public final class Quarries {
             "&9Basic Quarry",
             "&7Automatically mines overworld ores",
             "",
-            LorePreset.speed(1),
-            LorePreset.energyPerSecond(300)
+            MachineLore.speed(1),
+            MachineLore.energyPerSecond(300)
     );
     public static final SlimefunItemStack ADVANCED_QUARRY = new SlimefunItemStack(
             "ADVANCED_QUARRY",
@@ -40,8 +41,8 @@ public final class Quarries {
             "&cAdvanced Quarry",
             "&7Automatically mines overworld and nether ores",
             "",
-            LorePreset.speed(2),
-            LorePreset.energyPerSecond(900)
+            MachineLore.speed(2),
+            MachineLore.energyPerSecond(900)
     );
     public static final SlimefunItemStack VOID_QUARRY = new SlimefunItemStack(
             "VOID_QUARRY",
@@ -49,8 +50,8 @@ public final class Quarries {
             "&8Void Quarry",
             "&7Automatically mines overworld and nether ores",
             "",
-            LorePreset.speed(6),
-            LorePreset.energyPerSecond(3600)
+            MachineLore.speed(6),
+            MachineLore.energyPerSecond(3600)
     );
     public static final SlimefunItemStack INFINITY_QUARRY = new SlimefunItemStack(
             "INFINITY_QUARRY",
@@ -58,8 +59,8 @@ public final class Quarries {
             "&bInfinity Quarry",
             "&7Automatically mines overworld and nether ores",
             "",
-            LorePreset.speed(64),
-            LorePreset.energyPerSecond(36000)
+            MachineLore.speed(64),
+            MachineLore.energyPerSecond(36000)
     );
     public static final SlimefunItemStack DIAMOND_OSCILLATOR = Oscillator.create(Material.DIAMOND);
     public static final SlimefunItemStack REDSTONE_OSCILLATOR = Oscillator.create(Material.REDSTONE);
@@ -87,7 +88,7 @@ public final class Quarries {
             outputs.add(Material.GOLD_INGOT);
         }
 
-        if (SlimefunPlugin.getMinecraftVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_17) && section.getBoolean("copper")) {
+        if (Slimefun.getMinecraftVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_17) && section.getBoolean("copper")) {
             outputs.add(Material.COPPER_INGOT);
             outputs.add(Material.COPPER_INGOT);
         }
@@ -120,7 +121,7 @@ public final class Quarries {
                 Materials.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Materials.MAGSTEEL_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 300, 1, 6, outputs.toArray(new Material[0])).register(plugin);
+        }, 1, 6, outputs.toArray(new Material[0])).energyPerTick(300).register(plugin);
 
         if (section.getBoolean("quartz")) {
             new Oscillator(QUARTZ_OSCILLATOR).register(plugin);
@@ -141,7 +142,7 @@ public final class Quarries {
                 Materials.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Materials.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 900, 2, 4, outputs.toArray(new Material[0])).register(plugin);
+        }, 2, 4, outputs.toArray(new Material[0])).energyPerTick(900).register(plugin);
 
         if (coal) {
             outputs.add(Material.COAL);
@@ -151,7 +152,7 @@ public final class Quarries {
                 Materials.VOID_INGOT, SlimefunExtension.VOID_CAPACITOR, Materials.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), ADVANCED_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 3600, 6, 2, outputs.toArray(new Material[0])).register(plugin);
+        }, 6, 2, outputs.toArray(new Material[0])).energyPerTick(3600).register(plugin);
 
         if (coal) {
             outputs.add(Material.COAL);
@@ -164,7 +165,7 @@ public final class Quarries {
                 Materials.VOID_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.VOID_INGOT,
                 Materials.VOID_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.VOID_INGOT,
                 Materials.VOID_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.VOID_INGOT
-        }, 36000, 64, 1, outputs.toArray(new Material[0])).register(plugin);
+        }, 64, 1, outputs.toArray(new Material[0])).energyPerTick(36000).register(plugin);
     }
 
 }

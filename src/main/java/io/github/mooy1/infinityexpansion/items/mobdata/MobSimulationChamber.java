@@ -11,31 +11,34 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.AbstractTickingContainer;
+import io.github.mooy1.infinitylib.common.StackUtils;
+import io.github.mooy1.infinitylib.machines.AbstractMachineBlock;
+import io.github.mooy1.infinitylib.machines.MachineLore;
+import io.github.mooy1.infinitylib.machines.TickingMenuBlock;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
-public final class MobSimulationChamber extends AbstractTickingContainer implements EnergyNetComponent {
+public final class MobSimulationChamber extends TickingMenuBlock implements EnergyNetComponent {
 
-    static final double XP_MULTIPLIER = InfinityExpansion.inst().getConfig().getDouble("mob-simulation-options.xp-multiplier", 0, 1000);
+    static final double XP_MULTIPLIER = InfinityExpansion.config().getDouble("mob-simulation-options.xp-multiplier", 0, 1000);
 
-    private static final ItemStack NO_CARD = new CustomItem(Material.BARRIER, "&cInput a Mob Data Card!");
-    private static final int CARD_SLOT = MenuPreset.INPUT + 27;
-    private static final int STATUS_SLOT = MenuPreset.INPUT;
-    private static final int[] OUTPUT_SLOTS = Util.LARGE_OUTPUT;
+    private static final ItemStack NO_CARD = new CustomItemStack(Material.BARRIER, "&cInput a Mob Data Card!");
+    private static final int CARD_SLOT = 37;
+    private static final int STATUS_SLOT = 10;
+    private static final int[] OUTPUT_SLOTS = {
+            13, 14, 15, 16,
+            22, 23, 24, 25,
+            31, 32, 33, 34,
+            40, 41, 42, 43
+    };
     private static final int XP_SLOT = 46;
 
     private final int energy;
@@ -48,13 +51,10 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-
-        menu.dropItems(l, OUTPUT_SLOTS);
-        menu.dropItems(l, CARD_SLOT);
-
-        e.getPlayer().giveExp(Util.getIntData("xp", l));
-        BlockStorage.addBlockInfo(l, "xp", "0");
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu) {
+        super.onBreak(e, menu);
+        e.getPlayer().giveExp(Util.getIntData("xp", menu.getLocation()));
+        BlockStorage.addBlockInfo(menu.getLocation(), "xp", "0");
     }
 
     @Nonnull
@@ -69,27 +69,42 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
     }
 
     @Override
-    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : Util.LARGE_OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.INPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.INPUT_BORDER) {
-            blockMenuPreset.addItem(i + 27, MenuPreset.INPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.LOADING, ChestMenuUtils.getEmptyClickHandler());
-        blockMenuPreset.addItem(XP_SLOT, MenuPreset.LOADING, ChestMenuUtils.getEmptyClickHandler());
+    protected void setup(BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
+                3, 4, 5, 6, 7, 8,
+                12, 17,
+                21, 26,
+                30, 35,
+                39, 44,
+                48, 49, 50, 51, 52, 53
+        });
+        blockMenuPreset.drawBackground(new int[] {
+                0, 1, 2,
+                9, 11,
+                18, 19, 20,
+                STATUS_SLOT, XP_SLOT
+        });
+        blockMenuPreset.drawBackground(INPUT_BORDER, new int[] {
+                27, 28, 29,
+                36, 38,
+                45, 46, 47
+        });
     }
 
     @Nonnull
     @Override
-    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
+    protected int[] getInputSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemStack item) {
         return new int[0];
+    }
+
+    @Override
+    protected int[] getInputSlots() {
+        return new int[] { CARD_SLOT };
+    }
+
+    @Override
+    protected int[] getOutputSlots() {
+        return OUTPUT_SLOTS;
     }
 
     @Override
@@ -112,18 +127,18 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
     }
 
     private static ItemStack makeXpItem(int stored) {
-        return new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aStored xp: " + stored, "", "&a> Click to claim");
+        return new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aStored xp: " + stored, "", "&a> Click to claim");
     }
 
     @Override
-    protected void tick(@Nonnull BlockMenu inv, @Nonnull Block b) {
+    protected void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
         ItemStack input = inv.getItemInSlot(CARD_SLOT);
 
         if (input == null) {
             return;
         }
 
-        MobDataCard card = MobDataCard.CARDS.get(StackUtils.getID(input));
+        MobDataCard card = MobDataCard.CARDS.get(StackUtils.getId(input));
 
         if (card == null) {
             if (inv.hasViewer()) {
@@ -136,7 +151,7 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
 
         if (getCharge(b.getLocation()) < energy) {
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ENERGY);
+                inv.replaceExistingItem(STATUS_SLOT, AbstractMachineBlock.NO_ENERGY_ITEM);
             }
             return;
         }
@@ -146,13 +161,13 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
         int xp = Util.getIntData("xp", b.getLocation());
 
         if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
-                    "&aSimulating... (" + LorePreset.formatEnergy(energy) + " J/s)")
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.LIME_STAINED_GLASS_PANE,
+                    "&aSimulating... (" + MachineLore.formatEnergy(energy) + " J/s)")
             );
             inv.replaceExistingItem(XP_SLOT, makeXpItem(xp));
         }
 
-        if (InfinityExpansion.inst().getGlobalTick() % this.interval != 0) {
+        if (InfinityExpansion.slimefunTickCount() % this.interval != 0) {
             return;
         }
 
@@ -163,7 +178,7 @@ public final class MobSimulationChamber extends AbstractTickingContainer impleme
             inv.pushItem(item.clone(), OUTPUT_SLOTS);
         }
         else if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
+            inv.replaceExistingItem(STATUS_SLOT, NO_ROOM_ITEM);
         }
     }
 

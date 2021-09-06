@@ -3,8 +3,16 @@ package io.github.mooy1.infinityexpansion.items;
 import lombok.experimental.UtilityClass;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.thebusybiscuit.slimefun4.core.researching.Research;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import io.github.mooy1.infinityexpansion.items.blocks.Blocks;
+import io.github.mooy1.infinityexpansion.items.gear.Gear;
+import io.github.mooy1.infinityexpansion.items.generators.Generators;
+import io.github.mooy1.infinityexpansion.items.machines.Machines;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
+import io.github.mooy1.infinityexpansion.items.mobdata.MobData;
+import io.github.mooy1.infinityexpansion.items.quarries.Quarries;
+import io.github.mooy1.infinityexpansion.items.storage.Storage;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 
 @UtilityClass
 public final class Researches {
@@ -127,7 +135,7 @@ public final class Researches {
     }
 
     private static void create(int id, String key, String name, int cost, SlimefunItemStack... items) {
-        new Research(InfinityExpansion.inst().getKey(key), FIRST_RESEARCH_ID + id, name, cost).addItems(items).register();
+        new Research(InfinityExpansion.createKey(key), FIRST_RESEARCH_ID + id, name, cost).addItems(items).register();
     }
 
 }

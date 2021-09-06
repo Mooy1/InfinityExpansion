@@ -3,27 +3,25 @@ package io.github.mooy1.infinityexpansion.items.generators;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.presets.LorePreset;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.AbstractContainer;
+import io.github.mooy1.infinitylib.machines.MachineLore;
+import io.github.mooy1.infinitylib.machines.MenuBlock;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetProvider;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Solar panels and some other basic generators
@@ -32,7 +30,8 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
  *
  * Thanks to panda for some stuff to work off of
  */
-public final class EnergyGenerator extends AbstractContainer implements EnergyNetProvider {
+@ParametersAreNonnullByDefault
+public final class EnergyGenerator extends MenuBlock implements EnergyNetProvider {
 
     private final GenerationType type;
     private final int generation;
@@ -45,40 +44,49 @@ public final class EnergyGenerator extends AbstractContainer implements EnergyNe
     }
 
     @Override
-    public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i = 0 ; i < 9 ; i++) {
-            blockMenuPreset.addItem(i, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(4, MenuPreset.LOADING, ChestMenuUtils.getEmptyClickHandler());
+    protected void setup(BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(new int[] {
+                0, 1, 2, 3, 4, 5, 6, 7, 8
+        });
     }
 
     @Nonnull
     @Override
-    public int[] getTransportSlots(@Nonnull DirtyChestMenu dirtyChestMenu, @Nonnull ItemTransportFlow itemTransportFlow, ItemStack itemStack) {
+    protected int[] getInputSlots(DirtyChestMenu dirtyChestMenu, ItemStack itemStack) {
         return new int[0];
     }
 
     @Override
-    public int getGeneratedOutput(@Nonnull Location l, @Nonnull Config data) {
+    protected int[] getInputSlots() {
+        return new int[0];
+    }
+
+    @Override
+    protected int[] getOutputSlots() {
+        return new int[0];
+    }
+
+    @Override
+    public int getGeneratedOutput(Location l, Config data) {
         BlockMenu inv = BlockStorage.getInventory(l);
 
         int gen = this.type.generate(Objects.requireNonNull(l.getWorld()), l.getBlock(), this.generation);
 
         if (inv.hasViewer()) {
             if (gen == 0) {
-                inv.replaceExistingItem(4, new CustomItem(
+                inv.replaceExistingItem(4, new CustomItemStack(
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&cNot generating",
-                        "&7Stored: &6" + LorePreset.format(getCharge(l)) + " J"
+                        "&7Stored: &6" + MachineLore.format(getCharge(l)) + " J"
                 ));
             }
             else {
-                inv.replaceExistingItem(4, new CustomItem(
+                inv.replaceExistingItem(4, new CustomItemStack(
                         Material.GREEN_STAINED_GLASS_PANE,
                         "&aGeneration",
-                        "&7Type: &6" + this.type.getName(),
-                        "&7Generating: &6" + LorePreset.formatEnergy(gen) + " J/s ",
-                        "&7Stored: &6" + LorePreset.format(getCharge(l)) + " J"
+                        "&7Type: &6" + this.type.toString(),
+                        "&7Generating: &6" + MachineLore.formatEnergy(gen) + " J/s ",
+                        "&7Stored: &6" + MachineLore.format(getCharge(l)) + " J"
                 ));
             }
         }

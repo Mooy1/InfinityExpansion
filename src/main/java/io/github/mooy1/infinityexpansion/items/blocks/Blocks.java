@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.items;
+package io.github.mooy1.infinityexpansion.items.blocks;
 
 import lombok.experimental.UtilityClass;
 
@@ -7,13 +7,11 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Groups;
-import io.github.mooy1.infinityexpansion.items.blocks.AdvancedAnvil;
-import io.github.mooy1.infinityexpansion.items.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.items.blocks.StrainerBase;
-import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
+import io.github.mooy1.infinitylib.machines.MachineLore;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @UtilityClass
 public final class Blocks {
@@ -30,7 +28,7 @@ public final class Blocks {
             "&7Combines tools and gear enchants and sometimes upgrades them",
             "&bWorks with Slimefun items",
             "",
-            LorePreset.energy(100000) + "per use"
+            MachineLore.energy(100000) + "per use"
     );
     public static final SlimefunItemStack INFINITY_FORGE = new SlimefunItemStack(
             "INFINITY_FORGE",
@@ -38,7 +36,7 @@ public final class Blocks {
             "&6Infinity Workbench",
             "&7Used to craft infinity items",
             "",
-            LorePreset.energy(10000000) + "per item"
+            MachineLore.energy(10000000) + "per item"
     );
 
     public static void setup(InfinityExpansion plugin) {

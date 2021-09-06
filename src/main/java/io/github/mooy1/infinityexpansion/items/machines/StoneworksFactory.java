@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.AllArgsConstructor;
 
@@ -11,29 +12,26 @@ import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.items.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.machines.AbstractMachineBlock;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotHopperable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Turns cobble into stuff
  */
-public final class StoneworksFactory extends AbstractMachine implements RecipeDisplayItem, NotHopperable {
+@ParametersAreNonnullByDefault
+public final class StoneworksFactory extends AbstractMachineBlock implements RecipeDisplayItem, NotHopperable {
 
     private static final int[] PROCESS_BORDER = { 0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23 };
     private static final int[] OUT_BORDER = { 6, 7, 8, 17, 24, 25, 26 };
@@ -41,53 +39,18 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
     private static final int STATUS_SLOT = 9;
     private static final int[] CHOICE_SLOTS = { 11, 13, 15 };
     private static final int[] PROCESS_SLOTS = { 10, 12, 14 };
-    private static final ItemStack COBBLE_GEN = new CustomItem(Material.GRAY_CONCRETE, "&8Cobblegen");
-    private static final ItemStack PROCESSING = new CustomItem(Material.GRAY_STAINED_GLASS_PANE, "&7Processing");
+    private static final ItemStack COBBLE_GEN = new CustomItemStack(Material.GRAY_CONCRETE, "&8Cobblegen");
+    private static final ItemStack PROCESSING = new CustomItemStack(Material.GRAY_STAINED_GLASS_PANE, "&7Processing");
 
-    private final int energy;
-
-    public StoneworksFactory(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int energy) {
+    public StoneworksFactory(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
-        this.energy = energy;
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
-        inv.dropItems(l, OUTPUT_SLOTS);
-        inv.dropItems(l, PROCESS_SLOTS);
-    }
-
-    @Override
-    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        super.setupMenu(blockMenuPreset);
-        for (int i : PROCESS_BORDER) {
-            blockMenuPreset.addItem(i, PROCESSING, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : OUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : CHOICE_SLOTS) {
-            blockMenuPreset.addItem(i, Choice.NONE.item, ChestMenuUtils.getEmptyClickHandler());
-        }
-    }
-
-    @Override
-    protected int getStatusSlot() {
-        return STATUS_SLOT;
-    }
-
-    @Override
-    protected int getEnergyConsumption() {
-        return this.energy;
-    }
-
-    @Nonnull
-    @Override
-    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
-        return new int[0];
+    protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(PROCESSING, PROCESS_BORDER);
+        blockMenuPreset.drawBackground(OUTPUT_BORDER, OUT_BORDER);
+        blockMenuPreset.drawBackground(Choice.NONE.item, CHOICE_SLOTS);
     }
 
     @Override
@@ -185,6 +148,21 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
         return items;
     }
 
+    @Override
+    protected int[] getInputSlots(DirtyChestMenu menu, ItemStack item) {
+        return super.getInputSlots(menu, item);
+    }
+
+    @Override
+    protected int[] getInputSlots() {
+        return new int[0];
+    }
+
+    @Override
+    protected int[] getOutputSlots() {
+        return new int[0];
+    }
+
     @Nonnull
     private static Choice getChoice(Location l, int i) {
         try {
@@ -200,10 +178,10 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
     }
 
     @Override
-    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b) {
+    protected boolean process(Block b, BlockMenu inv) {
         inv.replaceExistingItem(STATUS_SLOT, COBBLE_GEN);
 
-        int tick = InfinityExpansion.inst().getGlobalTick() & 3;
+        int tick = InfinityExpansion.slimefunTickCount() & 3;
 
         if (tick == 3) {
             ItemStack cobble = new ItemStack(Material.COBBLESTONE);
@@ -219,25 +197,30 @@ public final class StoneworksFactory extends AbstractMachine implements RecipeDi
         return true;
     }
 
+    @Override
+    protected int getStatusSlot() {
+        return STATUS_SLOT;
+    }
+
     @AllArgsConstructor
     private enum Choice {
-        NONE(new CustomItem(Material.BARRIER, "&cNone", "", "&7 > Click to cycle"),
+        NONE(new CustomItemStack(Material.BARRIER, "&cNone", "", "&7 > Click to cycle"),
                 new Material[0],
                 new Material[0]
         ),
-        FURNACE(new CustomItem(Material.FURNACE, "&8Smelting", "", "&7 > Click to cycle"),
+        FURNACE(new CustomItemStack(Material.FURNACE, "&8Smelting", "", "&7 > Click to cycle"),
                 new Material[] { Material.COBBLESTONE, Material.SAND },
                 new Material[] { Material.STONE, Material.GLASS }
         ),
-        CRUSH(new CustomItem(Material.DIAMOND_PICKAXE, "&8Crushing", "", "&7 > Click to cycle"),
+        CRUSH(new CustomItemStack(Material.DIAMOND_PICKAXE, "&8Crushing", "", "&7 > Click to cycle"),
                 new Material[] { Material.COBBLESTONE, Material.GRAVEL },
                 new Material[] { Material.GRAVEL, Material.SAND }
         ),
-        COMPACT(new CustomItem(Material.PISTON, "&8Compacting", "", "&7 > Click to cycle"),
+        COMPACT(new CustomItemStack(Material.PISTON, "&8Compacting", "", "&7 > Click to cycle"),
                 new Material[] { Material.STONE, Material.GRANITE, Material.DIORITE, Material.ANDESITE },
                 new Material[] { Material.STONE_BRICKS, Material.POLISHED_GRANITE, Material.POLISHED_DIORITE, Material.POLISHED_ANDESITE }
         ),
-        TRANSFORM(new CustomItem(Material.ANDESITE, "&8Transforming", "", "&7 > Click to cycle"),
+        TRANSFORM(new CustomItemStack(Material.ANDESITE, "&8Transforming", "", "&7 > Click to cycle"),
                 new Material[] { Material.COBBLESTONE, Material.ANDESITE, Material.DIORITE },
                 new Material[] { Material.ANDESITE, Material.DIORITE, Material.GRANITE }
         );

@@ -5,89 +5,115 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.items.abstracts.AbstractEnergyCrafter;
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.common.StackUtils;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Machine that changes the material of gear and tools
  *
  * @author Mooy1
  */
+@ParametersAreNonnullByDefault
 public final class GearTransformer extends AbstractEnergyCrafter implements RecipeDisplayItem {
 
-    private static final boolean SF = InfinityExpansion.inst().getConfig().getBoolean("balance-options.allow-sf-item-transform");
-    private static final int[] OUTPUT_SLOTS = {
-            MenuPreset.STATUS + 27
+    private static final boolean SF = InfinityExpansion.config().getBoolean("balance-options.allow-sf-item-transform");
+    private static final int[] OUTPUT_SLOTS = { 40 };
+    private static final int[] INPUT_SLOTS = { 10, 16 };
+    private static final int STATUS_SLOT = 13;
+    private static final ItemStack[] TOOL_RECIPE = {
+            new ItemStack(Material.OAK_PLANKS, 4),
+            new ItemStack(Material.COBBLESTONE, 4),
+            new ItemStack(Material.IRON_INGOT, 4),
+            new ItemStack(Material.GOLD_INGOT, 4),
+            new ItemStack(Material.DIAMOND, 4),
+            new ItemStack(Material.NETHERITE_INGOT, 2)
     };
-    private static final int[] BACKGROUND = {
-            27, 29, 33, 35,
-            36, 44,
-            45, 46, 47, 51, 52, 53
+    private static final ItemStack[] ARMOR_RECIPE = {
+            new ItemStack(Material.LEATHER, 9),
+            new ItemStack(Material.CHAIN, 9),
+            new ItemStack(Material.IRON_INGOT, 9),
+            new ItemStack(Material.GOLD_INGOT, 9),
+            new ItemStack(Material.DIAMOND, 9),
+            new ItemStack(Material.NETHERITE_INGOT, 2)
     };
-    private static final int[] OUTPUT_BORDER = {
-            28, 34, 37, 38, 42, 43
+    private static final String[] ARMOR_TYPES = {
+            "_HELMET",
+            "_CHESTPLATE",
+            "_LEGGINGS",
+            "_BOOTS"
     };
-    private static final int[] INPUT_SLOTS = {
-            MenuPreset.INPUT, MenuPreset.OUTPUT
+    private static final String[] TOOL_TYPES = {
+            "_SWORD",
+            "_PICKAXE",
+            "_AXE",
+            "_SHOVEL",
+            "_HOE"
     };
-    private static final int INPUT_SLOT1 = INPUT_SLOTS[0];
-    private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
-    private static final int STATUS_SLOT = MenuPreset.STATUS;
+    private static final String[] TOOL_MATERIALS = {
+            "WOODEN",
+            "STONE",
+            "IRON",
+            "GOLDEN",
+            "DIAMOND",
+            "NETHERITE"
+    };
+    private static final String[] ARMOR_MATERIALS = {
+            "LEATHER",
+            "CHAINMAIL",
+            "IRON",
+            "GOLDEN",
+            "DIAMOND",
+            "NETHERITE"
+    };
 
     public GearTransformer(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
         super(category, item, type, recipe, energy, STATUS_SLOT);
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
-        inv.dropItems(l, OUTPUT_SLOTS);
-        inv.dropItems(l, INPUT_SLOTS);
+    protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(new int[] {
+                27, 29, 33, 35,
+                36, 44,
+                45, 46, 47, 51, 52, 53
+        });
+        blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
+                28, 34, 37, 38, 42, 43
+        });
+        blockMenuPreset.drawBackground(new CustomItemStack(Material.BLUE_STAINED_GLASS_PANE, "&9Tool Input"), new int[] {
+                0, 1, 2,
+                9, 11,
+                18, 19, 20
+        });
+        blockMenuPreset.drawBackground(new CustomItemStack(Material.BLUE_STAINED_GLASS_PANE, "&9Material Input"), new int[] {
+                6, 7, 8,
+                15, 17,
+                24, 25, 26, STATUS_SLOT
+        });
     }
 
     @Override
-    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : BACKGROUND) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.INPUT_BORDER) {
-            blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Tool Input"), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Material Input"), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.STATUS_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.STATUS_BORDER) {
-            blockMenuPreset.addItem(i + 27, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.INVALID_INPUT, ChestMenuUtils.getEmptyClickHandler());
+    protected int[] getInputSlots() {
+        return INPUT_SLOTS;
     }
 
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-
+    protected int[] getOutputSlots() {
+        return OUTPUT_SLOTS;
     }
 
     @Nullable
@@ -155,36 +181,6 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
 
     }
 
-    private static final String[] ARMOR_TYPES = {
-            "_HELMET",
-            "_CHESTPLATE",
-            "_LEGGINGS",
-            "_BOOTS"
-    };
-    private static final String[] TOOL_TYPES = {
-            "_SWORD",
-            "_PICKAXE",
-            "_AXE",
-            "_SHOVEL",
-            "_HOE"
-    };
-    private static final String[] TOOL_MATERIALS = {
-            "WOODEN",
-            "STONE",
-            "IRON",
-            "GOLDEN",
-            "DIAMOND",
-            "NETHERITE"
-    };
-    private static final String[] ARMOR_MATERIALS = {
-            "LEATHER",
-            "CHAINMAIL",
-            "IRON",
-            "GOLDEN",
-            "DIAMOND",
-            "NETHERITE"
-    };
-
     @Nonnull
     @Override
     public List<ItemStack> getDisplayRecipes() {
@@ -198,37 +194,19 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
         return items;
     }
 
-    private static final ItemStack[] TOOL_RECIPE = {
-            new ItemStack(Material.OAK_PLANKS, 4),
-            new ItemStack(Material.COBBLESTONE, 4),
-            new ItemStack(Material.IRON_INGOT, 4),
-            new ItemStack(Material.GOLD_INGOT, 4),
-            new ItemStack(Material.DIAMOND, 4),
-            new ItemStack(Material.NETHERITE_INGOT, 2)
-    };
-
-    private static final ItemStack[] ARMOR_RECIPE = {
-            new ItemStack(Material.LEATHER, 9),
-            new ItemStack(Material.CHAIN, 9),
-            new ItemStack(Material.IRON_INGOT, 9),
-            new ItemStack(Material.GOLD_INGOT, 9),
-            new ItemStack(Material.DIAMOND, 9),
-            new ItemStack(Material.NETHERITE_INGOT, 2)
-    };
-
     @Override
     public void update(@Nonnull BlockMenu inv) {
-        ItemStack inputItem = inv.getItemInSlot(INPUT_SLOT1);
+        ItemStack inputItem = inv.getItemInSlot(INPUT_SLOTS[0]);
 
         if (inputItem == null) { //no input
 
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input a tool or piece of gear"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.BLUE_STAINED_GLASS_PANE, "&9Input a tool or piece of gear"));
             return;
 
         }
 
-        if (!SF && StackUtils.getID(inputItem) != null) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.RED_STAINED_GLASS_PANE, "&cSlimefun items may not have their material changed!"));
+        if (!SF && StackUtils.getId(inputItem) != null) {
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.RED_STAINED_GLASS_PANE, "&cSlimefun items may not have their material changed!"));
             return;
         }
 
@@ -236,16 +214,16 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
 
         if (inputToolType == null) { //invalid input
 
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNot a tool or piece of gear!"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.BARRIER, "&cNot a tool or piece of gear!"));
             return;
 
         }
 
-        ItemStack inputMaterial = inv.getItemInSlot(INPUT_SLOT2);
+        ItemStack inputMaterial = inv.getItemInSlot(INPUT_SLOTS[1]);
 
         if (inputMaterial == null) { //no material
 
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BLUE_STAINED_GLASS_PANE, "&9Input materials"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.BLUE_STAINED_GLASS_PANE, "&9Input materials"));
             return;
 
         }
@@ -254,14 +232,14 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
 
         if (pair == null) { //invalid material
 
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid Materials!"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.BARRIER, "&cInvalid Materials!"));
             return;
 
         }
 
         if (inv.getItemInSlot(OUTPUT_SLOTS[0]) != null) { //valid material, not enough room
 
-            inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
+            inv.replaceExistingItem(STATUS_SLOT, NO_ROOM_ITEM);
             return;
 
         }
@@ -272,10 +250,10 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
         inputItem.setType(pair.getFirstValue());
         inv.pushItem(inputItem, OUTPUT_SLOTS);
 
-        inv.replaceExistingItem(INPUT_SLOT1, null);
-        inv.consumeItem(INPUT_SLOT2, pair.getSecondValue());
+        inv.replaceExistingItem(INPUT_SLOTS[0], null);
+        inv.consumeItem(INPUT_SLOTS[1], pair.getSecondValue());
 
-        inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
+        inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aTool Transformed!"));
     }
 
 }

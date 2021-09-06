@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,40 +18,37 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.items.Machines;
-import io.github.mooy1.infinityexpansion.items.abstracts.AbstractMachine;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.common.StackUtils;
+import io.github.mooy1.infinitylib.machines.AbstractMachineBlock;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Constructs singularities form many items
  *
  * @author Mooy1
  */
-public final class SingularityConstructor extends AbstractMachine implements RecipeDisplayItem {
+public final class SingularityConstructor extends AbstractMachineBlock implements RecipeDisplayItem {
 
     private static final List<Recipe> RECIPE_LIST = new ArrayList<>();
     private static final Map<String, Pair<Integer, Recipe>> RECIPE_MAP = new HashMap<>();
-    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("singularity_constructor"), Machines.SINGULARITY_CONSTRUCTOR, (stacks, itemStack) -> {
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.createKey("singularity_constructor"),
+            Machines.SINGULARITY_CONSTRUCTOR, (stacks, itemStack) -> {
         int amt = 0;
         for (ItemStack item : stacks) {
             if (item != null) {
                 amt += item.getAmount();
             }
         }
-        String id = StackUtils.getIDorType(stacks[0]);
+        String id = StackUtils.getIdOrType(stacks[0]);
         Recipe recipe = new Recipe((SlimefunItemStack) itemStack, stacks[0], id, amt);
         RECIPE_LIST.add(recipe);
         RECIPE_MAP.put(id, new Pair<>(RECIPE_LIST.size() - 1, recipe));
@@ -58,31 +56,29 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
 
     private static final String PROGRESS = "progress";
     private static final int STATUS_SLOT = 13;
-    private static final int INPUT_SLOT = 10;
-    private static final int OUTPUT_SLOT = 16;
+    private static final int[] INPUT_SLOT = {10};
+    private static final int[] OUTPUT_SLOT = {16};
 
-    private final int speed;
-    private final int energy;
+    @Setter
+    private int speed;
 
-    public SingularityConstructor(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
+    public SingularityConstructor(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
         super(category, item, type, recipe);
-        this.speed = speed;
-        this.energy = energy;
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu) {
+        super.onBreak(e, menu);
+        Location l = menu.getLocation();
         int progress = Util.getIntData(PROGRESS, l);
         Integer progressID = getProgressID(l);
-
-        menu.dropItems(l, OUTPUT_SLOT, INPUT_SLOT);
 
         if (progress > 0 && progressID != null) {
 
             Recipe triplet = RECIPE_LIST.get(progressID);
 
             if (triplet != null) {
-                ItemStack drop = new CustomItem(triplet.input, 64);
+                ItemStack drop = new CustomItemStack(triplet.input, 64);
 
                 int stacks = progress / 64;
 
@@ -106,14 +102,14 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     }
 
     @Override
-    protected boolean process(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        ItemStack input = menu.getItemInSlot(INPUT_SLOT);
+    protected boolean process(@Nonnull Block b, @Nonnull BlockMenu menu) {
+        ItemStack input = menu.getItemInSlot(INPUT_SLOT[0]);
         String inputID;
         if (input == null) {
             inputID = null;
         }
         else {
-            inputID = StackUtils.getIDorType(input);
+            inputID = StackUtils.getIdOrType(input);
         }
 
         // load data
@@ -167,7 +163,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
                 progressID = null;
 
                 if (menu.hasViewer()) {
-                    menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                    menu.replaceExistingItem(STATUS_SLOT, new CustomItemStack(
                             Material.LIME_STAINED_GLASS_PANE,
                             "&aConstructing " + triplet.output.getDisplayName() + "...",
                             "&7Complete"
@@ -175,7 +171,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
                 }
             }
             else if (menu.hasViewer()) {
-                menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
+                menu.replaceExistingItem(STATUS_SLOT, new CustomItemStack(
                         Material.LIME_STAINED_GLASS_PANE,
                         "&aConstructing " + triplet.output.getDisplayName() + "...",
                         "&7" + progress + " / " + triplet.amount
@@ -194,11 +190,22 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     }
 
     @Override
-    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        super.setupMenu(blockMenuPreset);
-        blockMenuPreset.drawBackground(MenuPreset.INPUT_ITEM, MenuPreset.INPUT_BORDER);
-        blockMenuPreset.drawBackground(MenuPreset.STATUS_ITEM, MenuPreset.STATUS_BORDER);
-        blockMenuPreset.drawBackground(MenuPreset.OUTPUT_ITEM, MenuPreset.OUTPUT_BORDER);
+    protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(INPUT_BORDER, new int[] {
+                0, 1, 2,
+                9, 11,
+                18, 19, 20
+        });
+        blockMenuPreset.drawBackground(new int[] {
+                3, 4, 5,
+                12, 13, 14,
+                21, 22, 23
+        });
+        blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
+                6, 7, 8,
+                15, 17,
+                24, 25, 26
+        });
     }
 
     @Override
@@ -207,22 +214,13 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     }
 
     @Override
-    protected int getEnergyConsumption() {
-        return this.energy;
+    protected int[] getInputSlots() {
+        return INPUT_SLOT;
     }
 
-    @Nonnull
     @Override
-    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
-        if (flow == ItemTransportFlow.INSERT) {
-            return new int[] { INPUT_SLOT };
-        }
-        else if (flow == ItemTransportFlow.WITHDRAW) {
-            return new int[] { OUTPUT_SLOT };
-        }
-        else {
-            return new int[0];
-        }
+    protected int[] getOutputSlots() {
+        return OUTPUT_SLOT;
     }
 
     @Override
@@ -231,7 +229,7 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
     }
 
     private static void invalidInput(BlockMenu menu) {
-        menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
+        menu.replaceExistingItem(STATUS_SLOT, new CustomItemStack(
                 Material.RED_STAINED_GLASS_PANE,
                 "&cInput a valid material to start"
         ));
@@ -264,11 +262,6 @@ public final class SingularityConstructor extends AbstractMachine implements Rec
                 return null;
             }
         }
-    }
-
-    @Override
-    public int getCapacity() {
-        return this.energy * 2;
     }
 
     @Nonnull

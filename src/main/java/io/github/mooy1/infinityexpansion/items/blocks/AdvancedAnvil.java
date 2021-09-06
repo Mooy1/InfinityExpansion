@@ -14,7 +14,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,14 +23,13 @@ import com.google.common.collect.Maps;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.items.abstracts.AbstractEnergyCrafter;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Combines slimefun items, exceeds vanilla anvil limits
@@ -41,19 +39,20 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 public final class AdvancedAnvil extends AbstractEnergyCrafter {
 
     private static final Map<Enchantment, Integer> MAX_LEVELS = Util.getEnchants(Objects.requireNonNull(
-            InfinityExpansion.inst().getConfig().getConfigurationSection("advanced-anvil-max-levels")
+            InfinityExpansion.config().getConfigurationSection("advanced-anvil-max-levels")
     ));
-
+    private static final ItemStack ANVIL_SLOT = new CustomItemStack(Material.BLACK_STAINED_GLASS_PANE, " ");
     private static final int[] INPUT_SLOTS = {
-            MenuPreset.INPUT, MenuPreset.STATUS
+            10, 13
     };
-    private static final int INPUT_SLOT1 = INPUT_SLOTS[0];
-    private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
     private static final int[] OUTPUT_SLOTS = {
-            MenuPreset.OUTPUT
+            16
     };
-    private static final int STATUS_SLOT = MenuPreset.STATUS + 27;
-    private static final int[] OTHER_STATUS = { 47, 51 };
+    private static final int STATUS_SLOT = 40;
+    private static final int[] ANVIL_SLOTS = {
+            30, 31, 32, 39, 41, 47, 48, 49, 50, 51
+
+    };
     private static final int[] BACKGROUND = {
             27, 28, 29, 33, 34, 35,
             36, 37, 38, 42, 43, 44,
@@ -65,36 +64,34 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
-        inv.dropItems(l, INPUT_SLOTS);
-        inv.dropItems(l, OUTPUT_SLOTS);
+    protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(BACKGROUND);
+        blockMenuPreset.drawBackground(ANVIL_SLOT, ANVIL_SLOTS);
+        blockMenuPreset.drawBackground(INPUT_BORDER, new int[] {
+                0, 1, 2, 3, 4, 5,
+                9, 11, 12, 14,
+                18, 19, 20, 21, 22, 23
+        });
+        blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
+                6, 7, 8,
+                15, 17,
+                24, 25, 26
+        });
+        blockMenuPreset.addItem(STATUS_SLOT, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
-    public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : MenuPreset.OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : BACKGROUND) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.INPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.INPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.STATUS_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.INPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.STATUS_BORDER) {
-            blockMenuPreset.addItem(i + 27, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : OTHER_STATUS) {
-            blockMenuPreset.addItem(i, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.INVALID_INPUT, ChestMenuUtils.getEmptyClickHandler());
+    protected int[] getInputSlots() {
+        return INPUT_SLOTS;
     }
 
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+    protected int[] getOutputSlots() {
+        return OUTPUT_SLOTS;
+    }
+
+    @Override
+    protected void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         menu.addMenuClickHandler(STATUS_SLOT, (player, i, itemStack, clickAction) -> {
             craft(menu, b, player);
             return false;
@@ -109,8 +106,8 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
             return;
         }
 
-        ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);
-        ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
+        ItemStack item1 = inv.getItemInSlot(INPUT_SLOTS[0]);
+        ItemStack item2 = inv.getItemInSlot(INPUT_SLOTS[0]);
 
         if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
             p.sendMessage(ChatColor.RED + "Invalid items!");
@@ -130,8 +127,8 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         }
 
         p.playSound(l, Sound.BLOCK_ANVIL_USE, 1, 1);
-        inv.consumeItem(INPUT_SLOT1, 1);
-        inv.consumeItem(INPUT_SLOT2, 1);
+        item1.setAmount(item1.getAmount() - 1);
+        item2.setAmount(item2.getAmount() - 1);
         inv.pushItem(output, OUTPUT_SLOTS);
         removeCharge(l, this.energy);
         update(inv);
@@ -227,18 +224,18 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
 
     @Override
     public void update(@Nonnull BlockMenu inv) {
-        ItemStack item1 = inv.getItemInSlot(INPUT_SLOT1);
-        ItemStack item2 = inv.getItemInSlot(INPUT_SLOT2);
+        ItemStack item1 = inv.getItemInSlot(INPUT_SLOTS[0]);
+        ItemStack item2 = inv.getItemInSlot(INPUT_SLOTS[1]);
 
         if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInvalid items!"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.BARRIER, "&cInvalid items!"));
             return;
         }
 
         ItemStack output = getOutput(item1, item2);
 
         if (output == null) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cNo upgrades!"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.BARRIER, "&cNo upgrades!"));
             return;
         }
 

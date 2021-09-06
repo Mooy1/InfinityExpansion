@@ -6,45 +6,50 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.mooy1.infinityexpansion.items.Materials;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
 import io.github.mooy1.infinityexpansion.items.materials.Strainer;
 import io.github.mooy1.infinityexpansion.utils.Util;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
-import io.github.mooy1.infinitylib.slimefun.AbstractTickingContainer;
+import io.github.mooy1.infinitylib.machines.TickingMenuBlock;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Generates items slowly using up strainers, must be waterlogged
  *
  * @author Mooy1
  */
-public final class StrainerBase extends AbstractTickingContainer implements RecipeDisplayItem {
+@ParametersAreNonnullByDefault
+public final class StrainerBase extends TickingMenuBlock implements RecipeDisplayItem {
 
-    private static final int STATUS_SLOT = MenuPreset.INPUT;
-    private static final int[] OUTPUT_SLOTS = Util.LARGE_OUTPUT;
+
+    private static final ItemStack POTATO = new CustomItemStack(Material.POTATO, "&7:&6Potatofish&7:", "&eLucky");
+    private static final int STATUS_SLOT = 10;
+    private static final int[] OUTPUT_SLOTS = {
+            13, 14, 15, 16,
+            22, 23, 24, 25,
+            31, 32, 33, 34,
+            40, 41, 42, 43
+    };
     private static final int[] INPUT_SLOTS = {
-            MenuPreset.INPUT + 27
+            37
     };
 
     private static final ItemStack[] OUTPUTS = {
@@ -74,43 +79,44 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
-        inv.dropItems(l, OUTPUT_SLOTS);
-        inv.dropItems(l, INPUT_SLOTS);
-    }
-
-    @Override
-    public void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        for (int i : MenuPreset.INPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.INPUT_BORDER) {
-            blockMenuPreset.addItem(i + 27, MenuPreset.INPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : Util.LARGE_OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        blockMenuPreset.addItem(STATUS_SLOT, MenuPreset.LOADING, ChestMenuUtils.getEmptyClickHandler());
+    protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(new int[] {
+                0, 1, 2, 9, 11, 18, 19, 20
+        });
+        blockMenuPreset.drawBackground(INPUT_BORDER, new int[] {
+                27, 28, 29, 36, 38, 45, 46, 47
+        });
+        blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
+                3, 4, 5, 6, 7, 8,
+                12, 17,
+                21, 26,
+                30, 35,
+                39, 44,
+                48, 49, 50, 51, 52, 53
+        });
+        blockMenuPreset.addItem(STATUS_SLOT, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Nonnull
     @Override
-    public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
+    public int[] getInputSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemStack item) {
         if (Strainer.getStrainer(item) > 0) {
             return INPUT_SLOTS;
         }
-        return new int[0];
+        else {
+            return new int[0];
+        }
     }
 
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-
+    protected int[] getInputSlots() {
+        return INPUT_SLOTS;
     }
 
-    private static final ItemStack POTATO = new CustomItem(Material.POTATO, "&7:&6Potatofish&7:", "&eLucky");
+    @Override
+    protected int[] getOutputSlots() {
+        return OUTPUT_SLOTS;
+    }
 
     @Nonnull
     @Override
@@ -132,7 +138,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
     }
 
     @Override
-    protected void tick(@Nonnull BlockMenu inv, @Nonnull Block b) {
+    protected void tick(Block b, BlockMenu inv) {
 
         //check water
         if (!Util.isWaterLogged(b)) {
@@ -147,7 +153,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
         if (speed == 0) {
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.BARRIER, "&cInput a Strainer!"));
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.BARRIER, "&cInput a Strainer!"));
             }
 
             return;
@@ -160,7 +166,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
         if (random.nextInt(this.time / speed) != 0) {
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aCollecting..."));
             }
 
             return;
@@ -179,7 +185,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
         if (!inv.fits(output, OUTPUT_SLOTS)) {
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
+                inv.replaceExistingItem(STATUS_SLOT, NO_ROOM_ITEM);
             }
 
             return;
@@ -190,7 +196,7 @@ public final class StrainerBase extends AbstractTickingContainer implements Reci
         inv.pushItem(output.clone(), OUTPUT_SLOTS);
 
         if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aMaterial Collected!"));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aMaterial Collected!"));
         }
 
         //reduce durability

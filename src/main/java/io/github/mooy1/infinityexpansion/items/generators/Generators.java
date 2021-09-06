@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.items;
+package io.github.mooy1.infinityexpansion.items.generators;
 
 import lombok.experimental.UtilityClass;
 
@@ -7,14 +7,13 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Groups;
+import io.github.mooy1.infinityexpansion.items.SlimefunExtension;
 import io.github.mooy1.infinityexpansion.items.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.items.generators.EnergyGenerator;
-import io.github.mooy1.infinityexpansion.items.generators.GenerationType;
-import io.github.mooy1.infinityexpansion.items.generators.InfinityReactor;
-import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
+import io.github.mooy1.infinitylib.machines.MachineLore;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @UtilityClass
 public final class Generators {
@@ -37,8 +36,8 @@ public final class Generators {
             "&7Generates power through the compression",
             "&7of &8Void &7and &bInfinity &7Ingots",
             "",
-            LorePreset.energyBuffer(INFINITY_REACTOR_ENERGY * 1000),
-            LorePreset.energyPerSecond(INFINITY_REACTOR_ENERGY)
+            MachineLore.energyBuffer(INFINITY_REACTOR_ENERGY * 1000),
+            MachineLore.energyPerSecond(INFINITY_REACTOR_ENERGY)
     );
     public static final SlimefunItemStack HYDRO = new SlimefunItemStack(
             "HYDRO_GENERATOR",
@@ -46,8 +45,8 @@ public final class Generators {
             "&9Hydro Generator",
             "&7Generates energy from the movement of water",
             "",
-            LorePreset.energyBuffer(HYDRO_ENERGY * 100),
-            LorePreset.energyPerSecond(HYDRO_ENERGY)
+            MachineLore.energyBuffer(HYDRO_ENERGY * 100),
+            MachineLore.energyPerSecond(HYDRO_ENERGY)
     );
     public static final SlimefunItemStack REINFORCED_HYDRO = new SlimefunItemStack(
             "REINFORCED_HYDRO_GENERATOR",
@@ -56,8 +55,8 @@ public final class Generators {
             "&7Generates large amounts of energy",
             "&7from the movement of water",
             "",
-            LorePreset.energyBuffer(ADVANCED_HYDRO_ENERGY * 100),
-            LorePreset.energyPerSecond(ADVANCED_HYDRO_ENERGY)
+            MachineLore.energyBuffer(ADVANCED_HYDRO_ENERGY * 100),
+            MachineLore.energyPerSecond(ADVANCED_HYDRO_ENERGY)
     );
     public static final SlimefunItemStack GEOTHERMAL = new SlimefunItemStack(
             "GEOTHERMAL_GENERATOR",
@@ -65,8 +64,8 @@ public final class Generators {
             "&cGeothermal Generator",
             "&7Generates energy from the heat of the world",
             "",
-            LorePreset.energyBuffer(GEO_ENERGY * 100),
-            LorePreset.energyPerSecond(GEO_ENERGY)
+            MachineLore.energyBuffer(GEO_ENERGY * 100),
+            MachineLore.energyPerSecond(GEO_ENERGY)
     );
     public static final SlimefunItemStack REINFORCED_GEOTHERMAL = new SlimefunItemStack(
             "REINFORCED_GEOTHERMAL_GENERATOR",
@@ -75,8 +74,8 @@ public final class Generators {
             "&7Generates large amounts of energy",
             "&7from the heat of the world",
             "",
-            LorePreset.energyBuffer(ADVANCED_GEO_ENERGY * 100),
-            LorePreset.energyPerSecond(ADVANCED_GEO_ENERGY)
+            MachineLore.energyBuffer(ADVANCED_GEO_ENERGY * 100),
+            MachineLore.energyPerSecond(ADVANCED_GEO_ENERGY)
     );
     public static final SlimefunItemStack BASIC_PANEL = new SlimefunItemStack(
             "BASIC_PANEL",
@@ -84,8 +83,8 @@ public final class Generators {
             "&9Basic Solar Panel",
             "&7Generates energy from the sun",
             "",
-            LorePreset.energyBuffer(BASIC_SOLAR_ENERGY * 100),
-            LorePreset.energyPerSecond(BASIC_SOLAR_ENERGY)
+            MachineLore.energyBuffer(BASIC_SOLAR_ENERGY * 100),
+            MachineLore.energyPerSecond(BASIC_SOLAR_ENERGY)
     );
     public static final SlimefunItemStack ADVANCED_PANEL = new SlimefunItemStack(
             "ADVANCED_PANEL",
@@ -93,8 +92,8 @@ public final class Generators {
             "&cAdvanced Solar Panel",
             "&7Generates energy from the sun",
             "",
-            LorePreset.energyBuffer(ADVANCED_SOLAR_ENERGY * 100),
-            LorePreset.energyPerSecond(ADVANCED_SOLAR_ENERGY)
+            MachineLore.energyBuffer(ADVANCED_SOLAR_ENERGY * 100),
+            MachineLore.energyPerSecond(ADVANCED_SOLAR_ENERGY)
     );
     public static final SlimefunItemStack CELESTIAL_PANEL = new SlimefunItemStack(
             "CELESTIAL_PANEL",
@@ -102,8 +101,8 @@ public final class Generators {
             "&eCelestial Panel",
             "&7Generates energy from the sun",
             "",
-            LorePreset.energyBuffer(CELESTIAL_ENERGY * 100),
-            LorePreset.energyPerSecond(CELESTIAL_ENERGY)
+            MachineLore.energyBuffer(CELESTIAL_ENERGY * 100),
+            MachineLore.energyPerSecond(CELESTIAL_ENERGY)
     );
     public static final SlimefunItemStack VOID_PANEL = new SlimefunItemStack(
             "VOID_PANEL",
@@ -111,8 +110,8 @@ public final class Generators {
             "&8Void Panel",
             "&7Generates energy from darkness",
             "",
-            LorePreset.energyBuffer(VOID_ENERGY * 100),
-            LorePreset.energyPerSecond(VOID_ENERGY)
+            MachineLore.energyBuffer(VOID_ENERGY * 100),
+            MachineLore.energyPerSecond(VOID_ENERGY)
     );
     public static final SlimefunItemStack INFINITE_PANEL = new SlimefunItemStack(
             "INFINITE_PANEL",
@@ -120,8 +119,8 @@ public final class Generators {
             "&bInfinity Panel",
             "&7Generates energy from the cosmos",
             "",
-            LorePreset.energyBuffer(INFINITY_ENERGY * 100),
-            LorePreset.energyPerSecond(INFINITY_ENERGY)
+            MachineLore.energyBuffer(INFINITY_ENERGY * 100),
+            MachineLore.energyPerSecond(INFINITY_ENERGY)
     );
 
     public static void setup(InfinityExpansion plugin) {

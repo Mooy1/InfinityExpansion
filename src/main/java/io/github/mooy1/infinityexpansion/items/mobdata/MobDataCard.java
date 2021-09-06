@@ -7,22 +7,24 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.categories.Groups;
-import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinitylib.machines.MachineLore;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.RandomizedSet;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 
 /**
  * A mob data card which will be able to be used in the {@link MobSimulationChamber}
  */
+@ParametersAreNonnullByDefault
 public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem, NotPlaceable {
 
     static final Map<String, MobDataCard> CARDS = new HashMap<>();
@@ -34,18 +36,8 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
                 "&b" + name + " Data Card",
                 "&7Place in a mob simulation chamber to activate",
                 "",
-                LorePreset.energyPerSecond(tier.energy)
+                MachineLore.energyPerSecond(tier.energy)
         );
-    }
-
-    /**
-     * @deprecated Use {@code MobDataCard.addDrop(drop, weight)} in a chain instead
-     */
-    @Deprecated
-    public MobDataCard(String name, MobDataTier tier, ItemStack[] recipe,
-                       ItemStack dropA, int chanceA, ItemStack dropB, int chanceB) {
-        this(name, tier, recipe);
-        addDrop(dropA, chanceA).addDrop(dropB, chanceB);
     }
 
     public MobDataCard(String name, MobDataTier tier, ItemStack[] recipe) {
@@ -60,9 +52,7 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
         CARDS.put(getId(), this);
     }
 
-    @Nonnull
     final RandomizedSet<ItemStack> drops = new RandomizedSet<>();
-    @Nonnull
     final MobDataTier tier;
 
     public MobDataCard addDrop(ItemStack drop, float chance) {
@@ -71,7 +61,7 @@ public final class MobDataCard extends SlimefunItem implements RecipeDisplayItem
     }
 
     public MobDataCard addDrop(ItemStack drop, int amount, float chance) {
-        return addDrop(new CustomItem(drop, amount), chance);
+        return addDrop(new CustomItemStack(drop, amount), chance);
     }
 
     public MobDataCard addDrop(Material drop, float chance) {

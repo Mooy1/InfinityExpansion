@@ -1,6 +1,7 @@
 package io.github.mooy1.infinityexpansion.items.abstracts;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,8 +16,8 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponen
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 
+@ParametersAreNonnullByDefault
 public abstract class AbstractEnergyCrafter extends TickingMenuBlock implements EnergyNetComponent {
 
     protected final int energy;
@@ -28,10 +29,8 @@ public abstract class AbstractEnergyCrafter extends TickingMenuBlock implements 
         this.statusSlot = statusSlot;
     }
 
-    public abstract void update(@Nonnull BlockMenu blockMenu);
-
     @Override
-    protected final void tick(@Nonnull BlockMenu blockMenu, @Nonnull Block block) {
+    protected final void tick(Block block, BlockMenu blockMenu) {
         if (blockMenu.hasViewer()) {
             int charge = getCharge(block.getLocation());
             if (charge < this.energy) { //not enough energy
@@ -49,6 +48,8 @@ public abstract class AbstractEnergyCrafter extends TickingMenuBlock implements 
         }
     }
 
+    public abstract void update(BlockMenu blockMenu);
+
     @Nonnull
     @Override
     public final EnergyNetComponentType getEnergyComponentType() {
@@ -60,9 +61,8 @@ public abstract class AbstractEnergyCrafter extends TickingMenuBlock implements 
         return this.energy;
     }
 
-    @Nonnull
     @Override
-    protected final int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
+    protected final int[] getInputSlots(DirtyChestMenu menu, ItemStack item) {
         return new int[0];
     }
 

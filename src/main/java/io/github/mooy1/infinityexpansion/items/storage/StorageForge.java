@@ -1,16 +1,10 @@
 package io.github.mooy1.infinityexpansion.items.storage;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
 
-import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.items.Storage;
-import io.github.mooy1.infinityexpansion.items.abstracts.AbstractCrafter;
+import io.github.mooy1.infinitylib.machines.MachineRecipeType;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
@@ -21,23 +15,19 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
  *
  * @author Mooy1
  */
-public final class StorageForge extends AbstractCrafter {
+@ParametersAreNonnullByDefault
+public final class StorageForge extends io.github.mooy1.infinitylib.machines.CraftingBlock {
 
-    private static final RecipeMap<ItemStack> RECIPES = new RecipeMap<>(ShapedRecipe::new);
-    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("storage_forge"), Storage.STORAGE_FORGE, RECIPES::put);
+    public static final MachineRecipeType TYPE = new MachineRecipeType("storage_forge", Storage.STORAGE_FORGE);
 
     public StorageForge(ItemGroup category, SlimefunItemStack stack, RecipeType type, ItemStack[] recipe) {
-        super(category, stack, RECIPES, type, recipe);
+        super(category, stack, type, recipe);
+        addRecipesFrom(TYPE);
     }
 
     @Override
-    protected void modifyOutput(@Nonnull BlockMenu inv, @Nonnull ItemStack output) {
-        StorageUnit.transferToStack(inv.getItemInSlot(INPUT_SLOTS[4]), output);
-    }
-
-    @Override
-    public void postCraft(@Nonnull Location l, @Nonnull BlockMenu inv, @Nonnull Player p) {
-        p.sendMessage(ChatColor.GREEN + "Transferred items to upgraded unit");
+    protected void onSuccessfulCraft(BlockMenu menu, ItemStack toOutput) {
+        StorageUnit.transferToStack(menu.getItemInSlot(layout.inputSlots()[4]), toOutput);
     }
 
 }

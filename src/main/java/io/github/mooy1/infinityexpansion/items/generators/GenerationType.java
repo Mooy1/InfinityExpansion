@@ -70,7 +70,7 @@ public enum GenerationType {
     };
 
     @Getter
-    private final String name;
+    private final String toString;
 
     protected abstract int generate(@Nonnull World world, @Nonnull Block block, int def);
 

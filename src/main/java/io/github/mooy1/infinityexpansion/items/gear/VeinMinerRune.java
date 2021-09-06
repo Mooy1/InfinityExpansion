@@ -36,15 +36,16 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.players.CoolDownMap;
+import io.github.mooy1.infinitylib.common.CoolDowns;
+import io.github.mooy1.infinitylib.common.Events;
+import io.github.mooy1.infinitylib.common.Scheduler;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import io.github.thebusybiscuit.slimefun4.implementation.items.magical.runes.SoulboundRune;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 /**
  * A VeinMiner rune, most code from {@link SoulboundRune}
@@ -61,20 +62,20 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     private static final double RANGE = 1.5;
     private static final int MAX = 64;
     private static final String LORE = ChatColor.AQUA + "Veinminer - Crouch to use";
-    private static final NamespacedKey key = InfinityExpansion.inst().getKey("vein_miner");
+    private static final NamespacedKey key = InfinityExpansion.createKey("vein_miner");
 
-    private final CoolDownMap cooldowns = new CoolDownMap(1000);
-    private final Set<Block> processing = new HashSet<>();
+    private final CoolDowns cooldowns = new CoolDowns(1000);
+    private Block processing;
 
     public VeinMinerRune(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
         super(category, item, type, recipe);
-        InfinityExpansion.inst().registerListener(this);
+        Events.registerListener(this);
     }
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
         if (isItem(e.getItemDrop().getItemStack()) && e.getItemDrop().getItemStack().getAmount() == 1) {
-            InfinityExpansion.inst().runSync(() -> activate(e.getPlayer(), e.getItemDrop()), 20L);
+            Scheduler.run(20, () -> activate(e.getPlayer(), e.getItemDrop()));
         }
     }
 
@@ -97,7 +98,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
                 // This lightning is just an effect, it deals no damage.
                 l.getWorld().strikeLightningEffect(l);
 
-                InfinityExpansion.inst().runSync(() -> {
+                Scheduler.run(10, () -> {
                     // Being sure entities are still valid and not picked up or whatsoever.
                     if (rune.isValid() && item.isValid() && rune.getItemStack().getAmount() == 1) {
 
@@ -115,7 +116,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
                     else {
                         p.sendMessage(ChatColor.RED + "Failed to add vein miner!");
                     }
-                }, 10L);
+                });
 
             }
             else {
@@ -156,8 +157,16 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
 
         if (makeVeinMiner && !isVeinMiner) {
             container.set(key, PersistentDataType.BYTE, (byte) 1);
+            List<String> lore;
+            if (meta.hasLore()) {
+                lore = meta.getLore();
+            }
+            else {
+                lore = new ArrayList<>();
+            }
+            lore.add(LORE);
+            meta.setLore(lore);
             item.setItemMeta(meta);
-            StackUtils.addLore(item, LORE);
         }
 
         if (!makeVeinMiner && isVeinMiner) {
@@ -175,7 +184,7 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
     public void onBlockBreak(BlockBreakEvent e) {
         Block b = e.getBlock();
 
-        if (this.processing.contains(b)) {
+        if (this.processing == b) {
             return;
         }
 
@@ -221,13 +230,12 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
         World w = b.getWorld();
 
         for (Block mine : found) {
-            this.processing.add(mine);
+            this.processing = mine;
             BlockBreakEvent event = new BlockBreakEvent(mine, p);
             Bukkit.getPluginManager().callEvent(event);
-            this.processing.remove(mine);
             if (!event.isCancelled()) {
                 mine.setType(Material.AIR);
-                if (event.isDropItems() && !"SMELTERS_PICKAXE".equals(StackUtils.getID(item))) {
+                if (event.isDropItems()) {
                     for (ItemStack drop : mine.getDrops(item)) {
                         w.dropItemNaturally(l, drop);
                     }

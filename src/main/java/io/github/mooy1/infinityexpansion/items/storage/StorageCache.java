@@ -21,14 +21,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.presets.LorePreset;
+import io.github.mooy1.infinitylib.common.Scheduler;
+import io.github.mooy1.infinitylib.machines.MachineLore;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 import static io.github.mooy1.infinityexpansion.items.storage.StorageUnit.DISPLAY_KEY;
 import static io.github.mooy1.infinityexpansion.items.storage.StorageUnit.DISPLAY_SLOT;
@@ -55,7 +56,7 @@ final class StorageCache {
     private static final String VOID_EXCESS = "void_excess"; // void excess true or null key
 
     /* Menu Items */
-    private static final ItemStack EMPTY_ITEM = new CustomItem(Material.BARRIER, meta -> {
+    private static final ItemStack EMPTY_ITEM = new CustomItemStack(Material.BARRIER, meta -> {
         meta.setDisplayName(ChatColor.WHITE + "Empty");
         meta.getPersistentDataContainer().set(EMPTY_KEY, PersistentDataType.BYTE, (byte) 1);
     });
@@ -261,7 +262,7 @@ final class StorageCache {
         String amt = config.getString(STORED_AMOUNT);
         if (amt == null) {
             this.amount = 0;
-            InfinityExpansion.inst().runSync(() -> BlockStorage.addBlockInfo(this.menu.getLocation(), STORED_AMOUNT, "0"));
+            Scheduler.run(() -> BlockStorage.addBlockInfo(this.menu.getLocation(), STORED_AMOUNT, "0"));
         }
         else {
             this.amount = Integer.parseInt(amt);
@@ -278,12 +279,11 @@ final class StorageCache {
         // check if the copy has anything besides the display key
         if (copy.equals(Bukkit.getItemFactory().getItemMeta(stored.getType()))) {
             this.meta = null;
-            setDisplayName(StackUtils.getDisplayName(stored));
         }
         else {
             this.meta = copy;
-            setDisplayName(StackUtils.getDisplayName(stored, copy));
         }
+        setDisplayName(ItemUtils.getItemName(stored));
         this.material = stored.getType();
     }
 
@@ -360,7 +360,7 @@ final class StorageCache {
         }
 
         // sings
-        if ((InfinityExpansion.inst().getGlobalTick() % 20) == 0) {
+        if (InfinityExpansion.slimefunTickCount() % 20 == 0) {
             Block check = block.getRelative(0, 1, 0);
             if (SlimefunTag.SIGNS.isTagged(check.getType())
                     || checkWallSign(check = block.getRelative(1, 0, 0), block)
@@ -379,16 +379,16 @@ final class StorageCache {
     }
 
     private void updateStatus() {
-        this.menu.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.CYAN_STAINED_GLASS_PANE, meta -> {
+        this.menu.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.CYAN_STAINED_GLASS_PANE, meta -> {
             meta.setDisplayName(ChatColor.AQUA + "Status");
             List<String> lore = new ArrayList<>();
             if (this.amount == 0) {
-                lore.add(ChatColors.color("&6Stored: &e0 / " + LorePreset.format(this.storageUnit.max) + " &7(0%)"));
+                lore.add(ChatColors.color("&6Stored: &e0 / " + MachineLore.format(this.storageUnit.max) + " &7(0%)"));
             }
             else {
-                lore.add(ChatColors.color("&6Stored: &e" + LorePreset.format(this.amount)
-                        + " / " + LorePreset.format(this.storageUnit.max)
-                        + " &7(" + LorePreset.format((double) this.amount * 100.D / this.storageUnit.max) + "%)"
+                lore.add(ChatColors.color("&6Stored: &e" + MachineLore.format(this.amount)
+                        + " / " + MachineLore.format(this.storageUnit.max)
+                        + " &7(" + MachineLore.format((double) this.amount * 100.D / this.storageUnit.max) + "%)"
                 ));
             }
             lore.add(this.voidExcess ? VOID_EXCESS_TRUE : VOID_EXCESS_FALSE);
@@ -403,14 +403,8 @@ final class StorageCache {
     }
 
     private void setStored(ItemStack input) {
-        if (input.hasItemMeta()) {
-            this.meta = input.getItemMeta();
-            setDisplayName(StackUtils.getDisplayName(input, this.meta));
-        }
-        else {
-            this.meta = null;
-            setDisplayName(StackUtils.getDisplayName(input));
-        }
+        this.meta = input.hasItemMeta() ? input.getItemMeta() : null;
+        setDisplayName(ItemUtils.getItemName(input));
         this.material = input.getType();
 
         // add the display key to the display input and set amount 1

@@ -5,71 +5,44 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
-import io.github.mooy1.infinityexpansion.items.Machines;
-import io.github.mooy1.infinityexpansion.items.Materials;
-import io.github.mooy1.infinityexpansion.items.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
+import io.github.mooy1.infinitylib.machines.AbstractMachineBlock;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * harvests void bits from... the void
  *
  * @author Mooy1
  */
-public final class VoidHarvester extends AbstractMachine implements RecipeDisplayItem {
+public final class VoidHarvester extends AbstractMachineBlock implements RecipeDisplayItem {
 
-    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.inst().getKey("void_harvester"), Machines.VOID_HARVESTER);
+    public static final RecipeType TYPE = new RecipeType(InfinityExpansion.createKey("void_harvester"), Machines.VOID_HARVESTER);
 
-    private static final int[] OUTPUT_SLOTS = {
-            13
-    };
-    private static final int STATUS_SLOT = 4;
+    private static final int[] OUTPUT_SLOTS = { 13 };
     private static final int TIME = 1024;
 
     private final int speed;
-    private final int energy;
 
-    public VoidHarvester(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed) {
+    public VoidHarvester(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int speed) {
         super(category, item, type, recipe);
         this.speed = speed;
-        this.energy = energy;
     }
 
     @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-        menu.dropItems(l, OUTPUT_SLOTS);
-    }
-
-    @Override
-    protected int getStatusSlot() {
-        return STATUS_SLOT;
-    }
-
-    @Override
-    protected int getEnergyConsumption() {
-        return this.energy;
-    }
-
-    @Override
-    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b) {
+    protected boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         int progress = Integer.parseInt(getProgress(b));
 
         if (progress >= TIME) { //reached full progress
@@ -85,7 +58,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
             }
             else {
                 if (inv.hasViewer()) {
-                    inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
+                    inv.replaceExistingItem(getStatusSlot(), NO_ROOM_ITEM);
                 }
                 return false;
             }
@@ -96,7 +69,7 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
 
         setProgress(b, progress);
         if (inv.hasViewer()) { //update status
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE,
+            inv.replaceExistingItem(getStatusSlot(), new CustomItemStack(Material.LIME_STAINED_GLASS_PANE,
                     "&aHarvesting - " + progress * 100 / TIME + "%",
                     "&7(" + progress + "/" + TIME + ")"
             ));
@@ -105,25 +78,27 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
     }
 
     @Override
-    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        super.setupMenu(blockMenuPreset);
-        for (int i = 0 ; i < 13 ; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i = 14 ; i < 18 ; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
+    protected int getStatusSlot() {
+        return 4;
+    }
+
+    @Override
+    protected void setup(BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(new int[] {
+                0, 1, 2, 3, 5, 6, 7, 8,
+                9, 10, 11, 12, 14, 15, 16, 17
+        });
 
     }
 
-    @Nonnull
     @Override
-    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
-
+    protected int[] getInputSlots() {
         return new int[0];
+    }
+
+    @Override
+    protected int[] getOutputSlots() {
+        return OUTPUT_SLOTS;
     }
 
     @Override
@@ -139,11 +114,6 @@ public final class VoidHarvester extends AbstractMachine implements RecipeDispla
 
     private static String getProgress(Block b) {
         return BlockStorage.getLocationInfo(b.getLocation(), "progress");
-    }
-
-    @Override
-    public int getCapacity() {
-        return this.energy * 2;
     }
 
     @Nonnull

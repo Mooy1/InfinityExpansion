@@ -1,4 +1,4 @@
-package io.github.mooy1.infinityexpansion.items;
+package io.github.mooy1.infinityexpansion.items.gear;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +21,12 @@ import org.bukkit.potion.PotionEffectType;
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
 import io.github.mooy1.infinityexpansion.categories.Groups;
 import io.github.mooy1.infinityexpansion.items.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.items.gear.InfinityArmor;
-import io.github.mooy1.infinityexpansion.items.gear.InfinityMatrix;
-import io.github.mooy1.infinityexpansion.items.gear.InfinityTool;
-import io.github.mooy1.infinityexpansion.items.gear.VeinMinerRune;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
 import io.github.mooy1.infinityexpansion.utils.Util;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 @UtilityClass
 public final class Gear {
@@ -245,7 +242,7 @@ public final class Gear {
         ConfigurationSection typeSection = plugin.getConfig().getConfigurationSection("infinity-enchant-levels");
 
         if (typeSection == null) {
-            InfinityExpansion.inst().log(Level.SEVERE, "Config section \"infinity-enchant-levels\" missing, Check your config and report this!");
+            InfinityExpansion.log(Level.SEVERE, "Config section \"infinity-enchant-levels\" missing, Check your config and report this!");
             return;
         }
 

@@ -5,56 +5,47 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.Location;
+import lombok.Setter;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinityexpansion.items.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.machines.AbstractMachineBlock;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Machines that generate materials at the cost of energy
  *
  * @author Mooy1
  */
-public final class MaterialGenerator extends AbstractMachine implements RecipeDisplayItem {
+public final class MaterialGenerator extends AbstractMachineBlock implements RecipeDisplayItem {
 
     private static final int[] OUTPUT_SLOTS = { 13 };
     private static final int STATUS_SLOT = 4;
 
-    private final int speed;
-    private final int energy;
-    private final Material material;
+    @Setter
+    private int speed;
+    @Setter
+    private Material material;
 
-    public MaterialGenerator(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy, int speed, Material material) {
+    public MaterialGenerator(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe) {
         super(category, item, type, recipe);
-        this.speed = speed;
-        this.material = material;
-        this.energy = energy;
     }
 
     @Override
-    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        super.setupMenu(blockMenuPreset);
-        for (int i = 0 ; i < 13 ; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i = 14 ; i < 18 ; i++) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
+    protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(new int[] {
+                0, 1, 2, 3, 4, 5, 6, 7, 8,
+                9, 10, 11, 12, 14, 15, 16, 17
+        });
     }
 
     @Override
@@ -63,32 +54,18 @@ public final class MaterialGenerator extends AbstractMachine implements RecipeDi
     }
 
     @Override
-    protected int getEnergyConsumption() {
-        return this.energy;
+    protected int[] getInputSlots() {
+        return new int[0];
     }
 
-    @Nonnull
     @Override
-    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
-        if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
-        return new int[0];
+    protected int[] getOutputSlots() {
+        return OUTPUT_SLOTS;
     }
 
     @Override
     public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
-    }
-
-    @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
-        menu.dropItems(l, OUTPUT_SLOTS);
-    }
-
-    @Override
-    public int getCapacity() {
-        return this.energy * 2;
     }
 
     @Nonnull
@@ -107,13 +84,13 @@ public final class MaterialGenerator extends AbstractMachine implements RecipeDi
     }
 
     @Override
-    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b) {
+    protected boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
         ItemStack output = new ItemStack(this.material, this.speed);
 
         if (!inv.fits(output, OUTPUT_SLOTS)) {
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
+                inv.replaceExistingItem(STATUS_SLOT, NO_ROOM_ITEM);
             }
             return false;
 
@@ -122,7 +99,7 @@ public final class MaterialGenerator extends AbstractMachine implements RecipeDi
         inv.pushItem(output, OUTPUT_SLOTS);
 
         if (inv.hasViewer()) {
-            inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aGenerating..."));
+            inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aGenerating..."));
         }
 
         return true;

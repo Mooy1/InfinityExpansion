@@ -10,12 +10,13 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.categories.Groups;
-import io.github.mooy1.infinityexpansion.items.Materials;
-import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinityexpansion.items.materials.Materials;
+import io.github.mooy1.infinitylib.common.StackUtils;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 
 public final class Oscillator extends SlimefunItem {
 
@@ -26,7 +27,7 @@ public final class Oscillator extends SlimefunItem {
         if (item == null) {
             return null;
         }
-        return OSCILLATORS.get(StackUtils.getID(item));
+        return OSCILLATORS.get(StackUtils.getId(item));
     }
 
     @Nonnull
@@ -34,7 +35,7 @@ public final class Oscillator extends SlimefunItem {
         return new SlimefunItemStack(
                 "QUARRY_OSCILLATOR_" + material.name(),
                 material,
-                "&b" + StackUtils.getDisplayName(new ItemStack(material)) + " Oscillator",
+                "&b" + ItemUtils.getItemName(new ItemStack(material)) + " Oscillator",
                 "&7Place in a quarry to give it",
                 "&7a 50% chance of mining this material"
         );

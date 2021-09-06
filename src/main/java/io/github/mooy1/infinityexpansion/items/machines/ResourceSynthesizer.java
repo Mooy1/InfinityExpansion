@@ -5,64 +5,42 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.Location;
+import lombok.Setter;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinityexpansion.items.abstracts.AbstractMachine;
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.presets.MenuPreset;
+import io.github.mooy1.infinitylib.common.StackUtils;
+import io.github.mooy1.infinitylib.machines.AbstractMachineBlock;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.ItemGroup;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Creates special resources from the combination of singularities
  *
  * @author Mooy1
  */
-public final class ResourceSynthesizer extends AbstractMachine implements RecipeDisplayItem {
+public final class ResourceSynthesizer extends AbstractMachineBlock implements RecipeDisplayItem {
 
     private static final int[] OUTPUT_SLOTS = {
-            MenuPreset.STATUS + 27
-    };
-    private static final int[] BACKGROUND = {
-            27, 29, 33, 35,
-            36, 44,
-            45, 46, 47, 51, 52, 53
-    };
-    private static final int[] OUTPUT_BORDER = {
-            28, 34, 37, 38, 42, 43
+            40
     };
     private static final int[] INPUT_SLOTS = {
-            MenuPreset.INPUT, MenuPreset.OUTPUT
+            10, 16
     };
-    private static final int INPUT_SLOT1 = INPUT_SLOTS[0];
-    private static final int INPUT_SLOT2 = INPUT_SLOTS[1];
-    private static final int STATUS_SLOT = MenuPreset.STATUS;
+    private static final int STATUS_SLOT = 13;
 
-    private final int energy;
-    private final SlimefunItemStack[] recipes;
+    @Setter
+    private SlimefunItemStack[] recipes;
 
-    public ResourceSynthesizer(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, SlimefunItemStack[] recipes, int energy) {
+    public ResourceSynthesizer(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
-        this.recipes = recipes;
-        this.energy = energy;
-    }
-
-    @Override
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu inv, @Nonnull Location l) {
-        inv.dropItems(l, OUTPUT_SLOTS);
-        inv.dropItems(l, INPUT_SLOTS);
     }
 
     @Override
@@ -71,50 +49,36 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     }
 
     @Override
-    protected int getEnergyConsumption() {
-        return this.energy;
+    protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
+        blockMenuPreset.drawBackground(new int[] {
+                3, 4, 5,
+                12, 14,
+                21, 22, 23,
+                27, 29, 33, 35,
+                36, 44,
+                45, 46, 47, 51, 52, 53
+        });
+        blockMenuPreset.drawBackground(INPUT_BORDER, new int[] {
+                0, 1, 2, 6, 7, 8,
+                9, 11, 15, 17,
+                18, 19, 20, 24, 25, 26
+        });
+        blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
+                28, 34, 37, 38, 42, 43,
+                30, 31, 32,
+                39, 41,
+                48, 50
+        });
     }
 
     @Override
-    protected void setupMenu(@Nonnull BlockMenuPreset blockMenuPreset) {
-        super.setupMenu(blockMenuPreset);
-        for (int i : BACKGROUND) {
-            blockMenuPreset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.INPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.INPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.INPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : OUTPUT_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.STATUS_BORDER) {
-            blockMenuPreset.addItem(i, MenuPreset.STATUS_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-        for (int i : MenuPreset.STATUS_BORDER) {
-            blockMenuPreset.addItem(i + 27, MenuPreset.OUTPUT_ITEM, ChestMenuUtils.getEmptyClickHandler());
-        }
-    }
-
-    @Nonnull
-    @Override
-    protected int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item) {
-        if (flow == ItemTransportFlow.INSERT) {
-            return INPUT_SLOTS;
-        }
-        else if (flow == ItemTransportFlow.WITHDRAW) {
-            return OUTPUT_SLOTS;
-        }
-        else {
-            return new int[0];
-        }
+    protected int[] getInputSlots() {
+        return INPUT_SLOTS;
     }
 
     @Override
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-
+    protected int[] getOutputSlots() {
+        return OUTPUT_SLOTS;
     }
 
     @Nonnull
@@ -133,27 +97,27 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
     }
 
     @Override
-    protected boolean process(@Nonnull BlockMenu inv, @Nonnull Block b) {
+    protected boolean process(@Nonnull Block b, @Nonnull BlockMenu inv) {
 
-        ItemStack input1 = inv.getItemInSlot(INPUT_SLOT1);
-        ItemStack input2 = inv.getItemInSlot(INPUT_SLOT2);
+        ItemStack input1 = inv.getItemInSlot(INPUT_SLOTS[0]);
+        ItemStack input2 = inv.getItemInSlot(INPUT_SLOTS[1]);
 
         if (input1 == null || input2 == null) { //no input
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.INVALID_INPUT);
+                inv.replaceExistingItem(STATUS_SLOT, IDLE_ITEM);
             }
             return false;
 
         }
 
-        String id1 = StackUtils.getID(input1);
+        String id1 = StackUtils.getId(input1);
 
         if (id1 == null) {
             return false;
         }
 
-        String id2 = StackUtils.getID(input2);
+        String id2 = StackUtils.getId(input2);
 
         if (id2 == null) {
             return false;
@@ -170,7 +134,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
         if (recipe == null) { //invalid recipe
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.INVALID_RECIPE);
+                inv.replaceExistingItem(STATUS_SLOT, IDLE_ITEM);
             }
             return false;
 
@@ -181,11 +145,11 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
         if (inv.fits(recipe, OUTPUT_SLOTS)) { //no item
 
             inv.pushItem(recipe, OUTPUT_SLOTS);
-            inv.consumeItem(INPUT_SLOT1, 1);
-            inv.consumeItem(INPUT_SLOT2, 1);
+            inv.consumeItem(INPUT_SLOTS[0], 1);
+            inv.consumeItem(INPUT_SLOTS[1], 1);
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, new CustomItem(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
+                inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aResource Synthesized!"));
             }
             return true;
 
@@ -193,7 +157,7 @@ public final class ResourceSynthesizer extends AbstractMachine implements Recipe
         else { //not enough room
 
             if (inv.hasViewer()) {
-                inv.replaceExistingItem(STATUS_SLOT, MenuPreset.NO_ROOM);
+                inv.replaceExistingItem(STATUS_SLOT, NO_ROOM_ITEM);
             }
             return false;
 
