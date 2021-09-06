@@ -29,7 +29,7 @@ public final class SetData extends SubCommand {
             return;
         }
 
-        if (strings.length != 3) {
+        if (strings.length != 2) {
             commandSender.sendMessage(ChatColor.RED + "You must specify a key and value to set!");
             return;
         }
@@ -50,18 +50,18 @@ public final class SetData extends SubCommand {
             return;
         }
 
-        if (strings[1].equals("id")) {
+        if (strings[0].equals("id")) {
             p.sendMessage(ChatColor.RED + "You cannot change the id of this block, it could cause internal issues!");
             return;
         }
 
-        if (strings[2].equals("\\remove")) {
-            p.sendMessage(ChatColor.GREEN + "Successfully removed value of key '" + strings[1] + "' in " + id);
-            BlockStorage.addBlockInfo(target, strings[1], null);
+        if (strings[1].equals("\\remove")) {
+            p.sendMessage(ChatColor.GREEN + "Successfully removed value of key '" + strings[0] + "' in " + id);
+            BlockStorage.addBlockInfo(target, strings[0], null);
         }
         else {
-            p.sendMessage(ChatColor.GREEN + "Successfully set key '" + strings[1] + "' to value '" + strings[2] + "' in " + id);
-            BlockStorage.addBlockInfo(target, strings[1], strings[2]);
+            p.sendMessage(ChatColor.GREEN + "Successfully set key '" + strings[0] + "' to value '" + strings[1] + "' in " + id);
+            BlockStorage.addBlockInfo(target, strings[0], strings[1]);
         }
 
         SlimefunItem unit = SlimefunItem.getById(id);
@@ -84,13 +84,13 @@ public final class SetData extends SubCommand {
             return;
         }
 
-        if (strings.length == 2) {
+        if (strings.length == 1) {
             if (BlockStorage.hasBlockInfo(target)) {
                 list.addAll(BlockStorage.getLocationInfo(target.getLocation()).getKeys());
                 list.remove("id");
             }
         }
-        else if (strings.length == 3 && !strings[1].equals("id")) {
+        else if (strings.length == 2 && !strings[1].equals("id")) {
             String current = BlockStorage.getLocationInfo(target.getLocation(), strings[1]);
             if (current != null) {
                 list.add(current);

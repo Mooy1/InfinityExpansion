@@ -107,7 +107,7 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         }
 
         ItemStack item1 = inv.getItemInSlot(INPUT_SLOTS[0]);
-        ItemStack item2 = inv.getItemInSlot(INPUT_SLOTS[0]);
+        ItemStack item2 = inv.getItemInSlot(INPUT_SLOTS[1]);
 
         if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
             p.sendMessage(ChatColor.RED + "Invalid items!");

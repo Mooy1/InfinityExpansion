@@ -143,7 +143,7 @@ public final class StorageUnit extends MenuBlock {
                 0, 1, 2, 9, 11, 18, 19, 20
         });
         blockMenuPreset.drawBackground(BACKGROUND_ITEM, new int[] {
-                3, 5, 12, 14, 21, 24
+                3, 5, 12, 14, 21, 23
         });
         blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
                 6, 7, 8, 15, 17, 24, 25, 26

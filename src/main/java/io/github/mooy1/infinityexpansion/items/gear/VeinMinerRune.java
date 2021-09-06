@@ -234,12 +234,12 @@ public final class VeinMinerRune extends SlimefunItem implements Listener, NotPl
             BlockBreakEvent event = new BlockBreakEvent(mine, p);
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                mine.setType(Material.AIR);
                 if (event.isDropItems()) {
                     for (ItemStack drop : mine.getDrops(item)) {
                         w.dropItemNaturally(l, drop);
                     }
                 }
+                mine.setType(Material.AIR);
             }
         }
 

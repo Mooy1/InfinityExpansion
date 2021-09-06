@@ -134,7 +134,7 @@ public final class Quarry extends AbstractMachineBlock implements RecipeDisplayI
 
     @Override
     protected int getStatusSlot() {
-        return 0;
+        return STATUS_SLOT;
     }
 
     @Nonnull

@@ -22,6 +22,7 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotHopperable;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -51,6 +52,7 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
         blockMenuPreset.drawBackground(PROCESSING, PROCESS_BORDER);
         blockMenuPreset.drawBackground(OUTPUT_BORDER, OUT_BORDER);
         blockMenuPreset.drawBackground(Choice.NONE.item, CHOICE_SLOTS);
+        blockMenuPreset.addItem(STATUS_SLOT, COBBLE_GEN, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -150,17 +152,17 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
 
     @Override
     protected int[] getInputSlots(DirtyChestMenu menu, ItemStack item) {
-        return super.getInputSlots(menu, item);
+        return new int[0];
     }
 
     @Override
     protected int[] getInputSlots() {
-        return new int[0];
+        return PROCESS_SLOTS;
     }
 
     @Override
     protected int[] getOutputSlots() {
-        return new int[0];
+        return OUTPUT_SLOTS;
     }
 
     @Nonnull
@@ -179,9 +181,7 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
 
     @Override
     protected boolean process(Block b, BlockMenu inv) {
-        inv.replaceExistingItem(STATUS_SLOT, COBBLE_GEN);
-
-        int tick = InfinityExpansion.slimefunTickCount() & 3;
+        int tick = InfinityExpansion.slimefunTickCount() % 4;
 
         if (tick == 3) {
             ItemStack cobble = new ItemStack(Material.COBBLESTONE);

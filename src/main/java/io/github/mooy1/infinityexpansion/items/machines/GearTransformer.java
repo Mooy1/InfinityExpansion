@@ -87,12 +87,17 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
     @Override
     protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
         blockMenuPreset.drawBackground(new int[] {
+                3, 4, 5,
+                12, STATUS_SLOT, 14,
+                21, 22 , 23,
                 27, 29, 33, 35,
                 36, 44,
                 45, 46, 47, 51, 52, 53
         });
         blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
-                28, 34, 37, 38, 42, 43
+                28, 30, 31, 32, 34,
+                37, 38, 39, 41, 42, 43,
+                48, 49, 50
         });
         blockMenuPreset.drawBackground(new CustomItemStack(Material.BLUE_STAINED_GLASS_PANE, "&9Tool Input"), new int[] {
                 0, 1, 2,
@@ -102,7 +107,7 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
         blockMenuPreset.drawBackground(new CustomItemStack(Material.BLUE_STAINED_GLASS_PANE, "&9Material Input"), new int[] {
                 6, 7, 8,
                 15, 17,
-                24, 25, 26, STATUS_SLOT
+                24, 25, 26
         });
     }
 

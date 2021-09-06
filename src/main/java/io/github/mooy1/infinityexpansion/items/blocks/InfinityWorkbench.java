@@ -1,9 +1,5 @@
 package io.github.mooy1.infinityexpansion.items.blocks;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -21,9 +17,10 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
 @ParametersAreNonnullByDefault
 public final class InfinityWorkbench extends io.github.mooy1.infinitylib.machines.CraftingBlock implements EnergyNetComponent {
@@ -36,33 +33,20 @@ public final class InfinityWorkbench extends io.github.mooy1.infinitylib.machine
             36, 37, 38, 39, 40, 41,
             45, 46, 47, 48, 49, 50
     };
-    private static final int[] OUTPUT_SLOTS = { 43 };
-    private static final int STATUS_SLOT = 16;
     private static final int RECIPE_SLOT = 7;
-
-    public static final LinkedHashMap<String, Pair<SlimefunItemStack, ItemStack[]>> ITEMS = new LinkedHashMap<>();
-    public static final List<String> IDS = new ArrayList<>();
-
     public static final MachineRecipeType TYPE = new MachineRecipeType("infinity_forge",
             new CustomItemStack(Blocks.INFINITY_FORGE, Blocks.INFINITY_FORGE.getDisplayName(),
                     "", "&cUse the infinity recipes category to see the correct recipe!"));
-
-    static {
-        TYPE.sendRecipesTo((input, output) -> {
-            SlimefunItemStack item = (SlimefunItemStack) output;
-            IDS.add(item.getItemId());
-            ITEMS.put(item.getItemId(), new Pair<>(item, input));
-        });
-    }
 
     private final int energy;
 
     public InfinityWorkbench(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, int energy) {
         super(category, item, type, recipe);
+        addRecipesFrom(TYPE);
         layout(new MachineLayout()
                 .inputSlots(INPUT_SLOTS)
-                .outputSlots(OUTPUT_SLOTS)
-                .statusSlot(STATUS_SLOT)
+                .outputSlots(new int[] { 43 })
+                .statusSlot(16)
                 .inputBorder(new int[0])
                 .outputBorder(new int[] {
                         33, 34, 35,
@@ -76,9 +60,15 @@ public final class InfinityWorkbench extends io.github.mooy1.infinitylib.machine
     }
 
     @Override
+    protected void setup(BlockMenuPreset preset) {
+        super.setup(preset);
+        preset.addItem(RECIPE_SLOT, new CustomItemStack(Material.BOOK, "&6Recipes"), ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Override
     protected void onNewInstance(BlockMenu menu, Block b) {
         super.onNewInstance(menu, b);
-        menu.addItem(RECIPE_SLOT, new CustomItemStack(Material.BOOK, "&6Recipes"), (p, slot, item, action) -> {
+        menu.addMenuClickHandler(RECIPE_SLOT, (p, slot, item, action) -> {
             InfinityGroup.open(p, menu);
             return false;
         });

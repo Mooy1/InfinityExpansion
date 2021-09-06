@@ -48,7 +48,7 @@ public final class GrowingMachine extends AbstractMachineBlock implements Recipe
     @Override
     protected boolean process(@Nonnull Block b, @Nonnull BlockMenu menu) {
         ItemStack input = menu.getItemInSlot(INPUT_SLOTS[0]);
-        if (input != null) {
+        if (input != null && this.recipes.containsKey(input.getType())) {
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(STATUS_SLOT, GROWING);
             }
@@ -78,10 +78,10 @@ public final class GrowingMachine extends AbstractMachineBlock implements Recipe
     @Override
     protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
         blockMenuPreset.drawBackground(new int[] {
-                0, 1, 2, 9, 11, 18, 19, 20
+                0, 1, 2, 9, 10, 11, 18, 19, 20
         });
         blockMenuPreset.drawBackground(INPUT_BORDER, new int[] {
-                0, 1, 2, 9, 11, 18, 19, 20
+                27, 28, 29, 36, 38, 45, 46, 47
         });
         blockMenuPreset.drawBackground(OUTPUT_BORDER, new int[] {
                 3, 4, 5, 6, 7, 8,

@@ -52,7 +52,7 @@ public final class ResourceSynthesizer extends AbstractMachineBlock implements R
     protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
         blockMenuPreset.drawBackground(new int[] {
                 3, 4, 5,
-                12, 14,
+                12, 13, 14,
                 21, 22, 23,
                 27, 29, 33, 35,
                 36, 44,
@@ -67,7 +67,7 @@ public final class ResourceSynthesizer extends AbstractMachineBlock implements R
                 28, 34, 37, 38, 42, 43,
                 30, 31, 32,
                 39, 41,
-                48, 50
+                48, 49, 50
         });
     }
 

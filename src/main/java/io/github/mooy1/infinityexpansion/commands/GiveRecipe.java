@@ -29,12 +29,12 @@ public final class GiveRecipe extends SubCommand {
             return;
         }
 
-        if (args.length != 2) {
+        if (args.length != 1) {
             sender.sendMessage("Usage: /ie giverecipe <ID>");
             return;
         }
 
-        SlimefunItem sfItem = SlimefunItem.getById(args[1].toUpperCase());
+        SlimefunItem sfItem = SlimefunItem.getById(args[0].toUpperCase());
 
         if (sfItem == null || sfItem instanceof MultiBlockMachine || sfItem.getRecipeType() == RecipeType.GEO_MINER) {
             sender.sendMessage(ChatColor.RED + "Invalid Slimefun item!");
@@ -58,12 +58,9 @@ public final class GiveRecipe extends SubCommand {
 
     @Override
     protected void complete(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
-        if (args.length == 2) {
+        if (args.length == 1) {
             for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
                 tabs.add(item.getId());
-                if (tabs.size() > 64) {
-                    break;
-                }
             }
         }
     }

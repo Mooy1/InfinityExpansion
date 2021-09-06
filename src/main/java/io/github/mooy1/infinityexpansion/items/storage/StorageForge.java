@@ -4,6 +4,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.inventory.ItemStack;
 
+import io.github.mooy1.infinitylib.machines.CraftingBlock;
 import io.github.mooy1.infinitylib.machines.MachineRecipeType;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -16,7 +17,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
  * @author Mooy1
  */
 @ParametersAreNonnullByDefault
-public final class StorageForge extends io.github.mooy1.infinitylib.machines.CraftingBlock {
+public final class StorageForge extends CraftingBlock {
 
     public static final MachineRecipeType TYPE = new MachineRecipeType("storage_forge", Storage.STORAGE_FORGE);
 

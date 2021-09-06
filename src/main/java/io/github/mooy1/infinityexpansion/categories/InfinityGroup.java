@@ -1,7 +1,10 @@
 package io.github.mooy1.infinityexpansion.categories;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -87,9 +90,16 @@ public final class InfinityGroup extends FlexItemGroup {
     private static final ItemStack INFO = new CustomItemStack(Material.CYAN_STAINED_GLASS_PANE, "&3Info");
     private static final SlimefunGuideImplementation GUIDE = Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
     private static final Map<UUID, String> HISTORY = new HashMap<>();
+    private static final LinkedHashMap<String, Pair<SlimefunItemStack, ItemStack[]>> ITEMS = new LinkedHashMap<>();
+    private static final List<String> IDS = new ArrayList<>();
 
     InfinityGroup(NamespacedKey key, ItemStack item, int tier) {
         super(key, item, tier);
+        InfinityWorkbench.TYPE.sendRecipesTo((input, output) -> {
+            SlimefunItemStack sfStack = (SlimefunItemStack) output;
+            IDS.add(sfStack.getItemId());
+            ITEMS.put(sfStack.getItemId(), new Pair<>(sfStack, input));
+        });
     }
 
     @Override
@@ -150,7 +160,7 @@ public final class InfinityGroup extends FlexItemGroup {
                 player, "", ChatColor.GRAY + Slimefun.getLocalization().getMessage(player, "guide.back.guide"))));
 
         int i = 9;
-        for (Pair<SlimefunItemStack, ItemStack[]> item : InfinityWorkbench.ITEMS.values()) {
+        for (Pair<SlimefunItemStack, ItemStack[]> item : ITEMS.values()) {
             if (i == 45) {
                 break;
             }
@@ -195,7 +205,7 @@ public final class InfinityGroup extends FlexItemGroup {
 
     @ParametersAreNonnullByDefault
     private static void openInfinityRecipe(Player player, String id, BackEntry entry) {
-        Pair<SlimefunItemStack, ItemStack[]> pair = InfinityWorkbench.ITEMS.get(id);
+        Pair<SlimefunItemStack, ItemStack[]> pair = ITEMS.get(id);
 
         if (pair == null) {
             return;
@@ -247,18 +257,18 @@ public final class InfinityGroup extends FlexItemGroup {
             });
         }
 
-        int page = InfinityWorkbench.IDS.indexOf(id);
+        int page = IDS.indexOf(id);
 
-        menu.addItem(PREV, ChestMenuUtils.getPreviousButton(player, page + 1, InfinityWorkbench.IDS.size()), (player1, i, itemStack, clickAction) -> {
+        menu.addItem(PREV, ChestMenuUtils.getPreviousButton(player, page + 1, IDS.size()), (player1, i, itemStack, clickAction) -> {
             if (page > 0) {
-                openInfinityRecipe(player1, InfinityWorkbench.IDS.get(page - 1), entry);
+                openInfinityRecipe(player1, IDS.get(page - 1), entry);
             }
             return false;
         });
 
-        menu.addItem(NEXT, ChestMenuUtils.getNextButton(player, page + 1, InfinityWorkbench.IDS.size()), (player1, i, itemStack, clickAction) -> {
-            if (page < InfinityWorkbench.IDS.size() - 1) {
-                openInfinityRecipe(player1, InfinityWorkbench.IDS.get(page + 1), entry);
+        menu.addItem(NEXT, ChestMenuUtils.getNextButton(player, page + 1, IDS.size()), (player1, i, itemStack, clickAction) -> {
+            if (page < IDS.size() - 1) {
+                openInfinityRecipe(player1, IDS.get(page + 1), entry);
             }
             return false;
         });
