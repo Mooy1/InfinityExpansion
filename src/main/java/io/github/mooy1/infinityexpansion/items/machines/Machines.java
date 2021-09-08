@@ -574,7 +574,7 @@ public final class Machines {
         @Nonnull
         @Override
         public ItemStack clone() {
-            return this.items[ThreadLocalRandom.current().nextInt(this.items.length)];
+            return this.items[ThreadLocalRandom.current().nextInt(this.items.length)].clone();
         }
 
     }
