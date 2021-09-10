@@ -29,6 +29,7 @@ import io.github.mooy1.infinitylib.common.Scheduler;
 import io.github.mooy1.infinitylib.machines.MenuBlock;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
@@ -85,6 +86,7 @@ public final class StorageUnit extends MenuBlock {
         this.max = max;
 
         addItemHandler(new BlockTicker() {
+
             @Override
             public boolean isSynchronized() {
                 return true;
@@ -97,6 +99,22 @@ public final class StorageUnit extends MenuBlock {
                     cache.tick(b);
                 }
             }
+
+        }, new BlockBreakHandler(false, false) {
+
+            @Override
+            public void onPlayerBreak(BlockBreakEvent e, ItemStack item, List<ItemStack> drops) {
+                BlockMenu menu = BlockStorage.getInventory(e.getBlock());
+                StorageCache cache = StorageUnit.this.caches.remove(menu.getLocation());
+                if (cache != null && !cache.isEmpty()) {
+                    cache.destroy(menu.getLocation(), e, drops);
+                }
+                else {
+                    drops.add(getItem().clone());
+                }
+                menu.dropItems(menu.getLocation(), INPUT_SLOT, OUTPUT_SLOT);
+            }
+
         });
     }
 
@@ -111,18 +129,6 @@ public final class StorageUnit extends MenuBlock {
     @Override
     public Collection<ItemStack> getDrops() {
         return Collections.emptyList();
-    }
-
-    @Override
-    protected void onBreak(BlockBreakEvent e, BlockMenu menu) {
-        StorageCache cache = this.caches.remove(menu.getLocation());
-        if (cache != null) {
-            cache.destroy(menu.getLocation(), e);
-        }
-        else {
-            e.getBlock().getWorld().dropItemNaturally(menu.getLocation(), getItem().clone());
-        }
-        menu.dropItems(menu.getLocation(), INPUT_SLOT, OUTPUT_SLOT);
     }
 
     @Override

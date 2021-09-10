@@ -235,11 +235,7 @@ final class StorageCache {
         this.signDisplay[1] = "";
     }
 
-    void destroy(Location l, BlockBreakEvent e) {
-        if (isEmpty()) {
-            e.getBlock().getWorld().dropItemNaturally(l, this.storageUnit.getItem().clone());
-            return;
-        }
+    void destroy(Location l, BlockBreakEvent e, List<ItemStack> drops) {
 
         // add output slot
         ItemStack output = this.menu.getItemInSlot(OUTPUT_SLOT);
@@ -254,7 +250,7 @@ final class StorageCache {
         ItemStack drop = this.storageUnit.getItem().clone();
         drop.setItemMeta(StorageUnit.saveToStack(drop.getItemMeta(), this.menu.getItemInSlot(DISPLAY_SLOT), this.displayName, this.amount));
         e.getPlayer().sendMessage(ChatColor.GREEN + "Stored items transferred to dropped item");
-        e.getBlock().getWorld().dropItemNaturally(l, drop);
+        drops.add(drop);
     }
 
     void reloadData() {
