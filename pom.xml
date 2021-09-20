@@ -85,9 +85,6 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>*</include>
-                </includes>
             </resource>
             <resource>
                 <directory>${basedir}</directory>
