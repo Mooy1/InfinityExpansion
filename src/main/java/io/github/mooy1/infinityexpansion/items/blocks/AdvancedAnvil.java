@@ -107,10 +107,22 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
         }
 
         ItemStack item1 = inv.getItemInSlot(INPUT_SLOTS[0]);
+        SlimefunItem sfItem1 = SlimefunItem.getByItem(inv.getItemInSlot(INPUT_SLOTS[0]));
         ItemStack item2 = inv.getItemInSlot(INPUT_SLOTS[1]);
+        SlimefunItem sfItem2 = SlimefunItem.getByItem(inv.getItemInSlot(INPUT_SLOTS[1]));
 
         if (item1 == null || item2 == null || (item2.getType() != Material.ENCHANTED_BOOK && item1.getType() != item2.getType())) {
             p.sendMessage(ChatColor.RED + "Invalid items!");
+            return;
+        }
+        
+        if(sfItem2 != null && !sfItem2.isDisenchantable()) {
+            p.sendMessage(ChatColor.RED + "Slimefun item is not disenchantable!");
+            return;
+        }
+
+        if(sfItem1 != null && !sfItem1.isEnchantable()) {
+            p.sendMessage(ChatColor.RED + "Slimefun item is not enchantable!");
             return;
         }
 
