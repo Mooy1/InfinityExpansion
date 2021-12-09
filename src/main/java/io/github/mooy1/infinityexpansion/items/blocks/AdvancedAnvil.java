@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -115,13 +116,13 @@ public final class AdvancedAnvil extends AbstractEnergyCrafter {
             p.sendMessage(ChatColor.RED + "Invalid items!");
             return;
         }
-        
-        if(sfItem2 != null && !sfItem2.isDisenchantable()) {
+
+        if(sfItem2 != null && !sfItem2.isDisenchantable()){
             p.sendMessage(ChatColor.RED + "Slimefun item is not disenchantable!");
             return;
         }
 
-        if(sfItem1 != null && !sfItem1.isEnchantable()) {
+        if(sfItem1 != null && !sfItem1.isEnchantable()){
             p.sendMessage(ChatColor.RED + "Slimefun item is not enchantable!");
             return;
         }
