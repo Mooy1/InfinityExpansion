@@ -186,6 +186,11 @@ public final class StorageUnit extends MenuBlock {
         this.caches.get(b.getLocation()).reloadData();
     }
 
+    @Nullable
+    public StorageCache getCache(Location location) {
+        return this.caches.get(location);
+    }
+
     static void transferToStack(@Nonnull ItemStack source, @Nonnull ItemStack target) {
         Pair<ItemStack, Integer> data = loadFromStack(source);
         if (data != null) {

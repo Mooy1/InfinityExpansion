@@ -44,7 +44,7 @@ import static io.github.mooy1.infinityexpansion.items.storage.StorageUnit.STATUS
  *
  * @author Mooy1
  */
-final class StorageCache {
+public final class StorageCache {
 
     /* Menu strings */
     private static final String EMPTY_DISPLAY_NAME = ChatColor.WHITE + "Empty";
@@ -478,8 +478,12 @@ final class StorageCache {
     }
 
     private void depositAll(Player p) {
+        depositAll(p.getInventory().getStorageContents());
+    }
+
+    public void depositAll(ItemStack[] itemStacks) {
         if (this.amount < this.storageUnit.max) {
-            for (ItemStack item : p.getInventory().getStorageContents()) {
+            for (ItemStack item : itemStacks) {
                 if (item != null && matches(item)) {
                     if (item.getAmount() + this.amount >= this.storageUnit.max) {
                         // last item
