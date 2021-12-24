@@ -107,7 +107,7 @@ public final class StorageUnit extends MenuBlock {
                 BlockMenu menu = BlockStorage.getInventory(e.getBlock());
                 StorageCache cache = StorageUnit.this.caches.remove(menu.getLocation());
                 if (cache != null && !cache.isEmpty()) {
-                    cache.destroy(menu.getLocation(), e, drops);
+                    cache.destroy(e, drops);
                 }
                 else {
                     drops.add(getItem().clone());

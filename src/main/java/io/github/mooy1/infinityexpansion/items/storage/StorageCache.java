@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -235,7 +234,7 @@ public final class StorageCache {
         this.signDisplay[1] = "";
     }
 
-    void destroy(Location l, BlockBreakEvent e, List<ItemStack> drops) {
+    void destroy(BlockBreakEvent e, List<ItemStack> drops) {
 
         // add output slot
         ItemStack output = this.menu.getItemInSlot(OUTPUT_SLOT);
