@@ -485,7 +485,7 @@ public final class StorageCache {
         depositAll(itemStacks, false);
     }
 
-    public void depositAll(ItemStack[] itemStacks, boolean voidExcess) {
+    public void depositAll(ItemStack[] itemStacks, boolean observeVoiding) {
         if (this.amount < this.storageUnit.max) {
             for (ItemStack item : itemStacks) {
                 if (item != null && matches(item)) {
@@ -493,7 +493,7 @@ public final class StorageCache {
                         // last item
                         item.setAmount(item.getAmount() - (this.storageUnit.max - this.amount));
                         this.amount = this.storageUnit.max;
-                        if (voidExcess) {
+                        if (observeVoiding && this.voidExcess) {
                             item.setAmount(0);
                         }
                         else {
