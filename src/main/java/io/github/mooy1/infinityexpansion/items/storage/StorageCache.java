@@ -493,17 +493,18 @@ public final class StorageCache {
                         // last item
                         item.setAmount(item.getAmount() - (this.storageUnit.max - this.amount));
                         this.amount = this.storageUnit.max;
-                        if (observeVoiding && this.voidExcess) {
-                            item.setAmount(0);
-                        }
-                        else {
-                            break;
-                        }
                     }
                     else {
                         this.amount += item.getAmount();
                         item.setAmount(0);
                     }
+                }
+            }
+        }
+        if (observeVoiding && this.voidExcess) {
+            for (ItemStack item : itemStacks) {
+                if (item != null && matches(item)) {
+                    item.setAmount(0);
                 }
             }
         }
