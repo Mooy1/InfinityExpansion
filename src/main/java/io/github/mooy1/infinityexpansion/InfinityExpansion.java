@@ -21,6 +21,7 @@ import io.github.mooy1.infinityexpansion.items.materials.Materials;
 import io.github.mooy1.infinityexpansion.items.mobdata.MobData;
 import io.github.mooy1.infinityexpansion.items.quarries.Quarries;
 import io.github.mooy1.infinityexpansion.items.storage.Storage;
+import io.github.mooy1.infinityexpansion.items.storage.StorageDupeFix;
 import io.github.mooy1.infinitylib.common.Scheduler;
 import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.mooy1.infinitylib.metrics.bukkit.Metrics;
@@ -35,6 +36,7 @@ public final class InfinityExpansion extends AbstractAddon {
 
     public InfinityExpansion() {
         super("Mooy1", "InfinityExpansion", "master", "auto-update");
+        StorageDupeFix.fixDuplicateStorages(getLogger());
     }
 
     @Override
@@ -54,7 +56,10 @@ public final class InfinityExpansion extends AbstractAddon {
             ));
         }
 
-        getAddonCommand().addSub(new GiveRecipe()).addSub(new SetData()).addSub(new PrintItem());
+        getAddonCommand()
+                .addSub(new GiveRecipe())
+                .addSub(new SetData())
+                .addSub(new PrintItem());
 
         Groups.setup(this);
         MobData.setup(this);
