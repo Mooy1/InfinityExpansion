@@ -19,7 +19,7 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 public final class SetData extends SubCommand {
 
     public SetData() {
-        super("setdata", "Set slimefun block data of the block you are looking at", true);
+        super("setdata", "Set slimefun block data of the block you are looking at", "infinityexpansion.setdata");
     }
 
     @Override

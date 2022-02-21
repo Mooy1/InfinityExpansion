@@ -15,7 +15,7 @@ import io.github.mooy1.infinitylib.commands.SubCommand;
 public final class PrintItem extends SubCommand {
 
     public PrintItem() {
-        super("printitem", "Prints the internal data of an item for debugging purposes", true);
+        super("printitem", "Prints the internal data of an item for debugging purposes", "infinityexpansion.printitem");
     }
 
     @Override

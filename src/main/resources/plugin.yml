@@ -10,6 +10,18 @@ api-version: 1.16
 
 commands:
   infinityexpansion:
-    description: Do /infinityexpansion help for a list of commands
+    description: Use /infinityexpansion help for a list of commands
     usage: /infinityexpansion <subcommand>
     aliases: [ie, ix, infinity]
+
+permissions:
+  infinityexpansion.setdata:
+    description: Access to /infinityexpansion setdata
+    default: op
+  infinityexpansion.printitem:
+    description: Access to /infinityexpansion printitem
+    default: op
+  infinityexpansion.giverecipe:
+    description: Access to /infinityexpansion giverecipe
+    default: op
+
