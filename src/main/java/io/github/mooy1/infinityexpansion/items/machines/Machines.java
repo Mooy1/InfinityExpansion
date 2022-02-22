@@ -539,14 +539,14 @@ public final class Machines {
                 .addRecipe(new ItemStack(Material.IRON_INGOT, 9), new ItemStack(Material.IRON_BLOCK))
                 .addRecipe(new ItemStack(Material.NETHERITE_INGOT, 9), new ItemStack(Material.NETHERITE_BLOCK))
                 .addRecipe(new ItemStack(Material.REDSTONE, 9), new ItemStack(Material.REDSTONE_BLOCK))
-                .addRecipe(new ItemStack(Material.QUARTZ, 9), new ItemStack(Material.QUARTZ_BLOCK))
+                .addRecipe(new ItemStack(Material.QUARTZ, 4), new ItemStack(Material.QUARTZ_BLOCK))
                 .addRecipe(new ItemStack(Material.LAPIS_LAZULI, 9), new ItemStack(Material.LAPIS_BLOCK))
                 .addRecipe(new ItemStack(Material.COAL, 9), new ItemStack(Material.COAL_BLOCK))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_4, 9), Materials.COBBLE_5)
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_3, 9), Materials.COBBLE_4)
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_2, 9), Materials.COBBLE_3)
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_1, 9), Materials.COBBLE_2)
-                .addRecipe(new ItemStack(Material.COBBLESTONE, 9), Materials.COBBLE_1)
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_4, 8), Materials.COBBLE_5)
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_3, 8), Materials.COBBLE_4)
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_2, 8), Materials.COBBLE_3)
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_1, 8), Materials.COBBLE_2)
+                .addRecipe(new ItemStack(Material.COBBLESTONE, 8), Materials.COBBLE_1)
                 .ticksPerOutput(1).energyPerTick(60).register(plugin);
 
         new GearTransformer(Groups.ADVANCED_MACHINES, GEAR_TRANSFORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
