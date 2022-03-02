@@ -209,16 +209,16 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
                 new Material[0]
         ),
         FURNACE(new CustomItemStack(Material.FURNACE, "&8Smelting", "", "&7 > Click to cycle"),
-                new Material[] { Material.COBBLESTONE, Material.SAND },
-                new Material[] { Material.STONE, Material.GLASS }
+                new Material[] { Material.COBBLESTONE, Material.STONE, Material.SAND, Material.STONE_BRICKS },
+                new Material[] { Material.STONE, Material.SMOOTH_STONE, Material.GLASS, Material.CRACKED_STONE_BRICKS }
         ),
         CRUSH(new CustomItemStack(Material.DIAMOND_PICKAXE, "&8Crushing", "", "&7 > Click to cycle"),
                 new Material[] { Material.COBBLESTONE, Material.GRAVEL },
                 new Material[] { Material.GRAVEL, Material.SAND }
         ),
         COMPACT(new CustomItemStack(Material.PISTON, "&8Compacting", "", "&7 > Click to cycle"),
-                new Material[] { Material.STONE, Material.GRANITE, Material.DIORITE, Material.ANDESITE },
-                new Material[] { Material.STONE_BRICKS, Material.POLISHED_GRANITE, Material.POLISHED_DIORITE, Material.POLISHED_ANDESITE }
+                new Material[] { Material.STONE, Material.GRANITE, Material.DIORITE, Material.ANDESITE, Material.SAND },
+                new Material[] { Material.STONE_BRICKS, Material.POLISHED_GRANITE, Material.POLISHED_DIORITE, Material.POLISHED_ANDESITE, Material.SANDSTONE }
         ),
         TRANSFORM(new CustomItemStack(Material.ANDESITE, "&8Transforming", "", "&7 > Click to cycle"),
                 new Material[] { Material.COBBLESTONE, Material.ANDESITE, Material.DIORITE },
