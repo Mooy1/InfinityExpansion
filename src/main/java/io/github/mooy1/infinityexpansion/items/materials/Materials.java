@@ -385,7 +385,7 @@ public final class Materials {
         new Singularity(SILVER_SINGULARITY, SlimefunItems.SILVER_INGOT, 3000).register(plugin);
         new Singularity(MAGNESIUM_SINGULARITY, SlimefunItems.MAGNESIUM_INGOT, 3000).register(plugin);
         new Singularity(LEAD_SINGULARITY, SlimefunItems.LEAD_INGOT, 3000).register(plugin);
-        new Singularity(GOLD_SINGULARITY, Material.GOLD_INGOT, 2000).register(plugin);
+        new Singularity(GOLD_SINGULARITY, SlimefunItems.GOLD_24K, 2000).register(plugin);
         new Singularity(IRON_SINGULARITY, Material.IRON_INGOT, 2000).register(plugin);
         new Singularity(DIAMOND_SINGULARITY, Material.DIAMOND, 500).register(plugin);
         new Singularity(EMERALD_SINGULARITY, Material.EMERALD, 500).register(plugin);
