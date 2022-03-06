@@ -8,7 +8,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.AllArgsConstructor;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -41,7 +40,7 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
     private static final int[] CHOICE_SLOTS = { 11, 13, 15 };
     private static final int[] PROCESS_SLOTS = { 10, 12, 14 };
     private static final ItemStack COBBLE_GEN = new CustomItemStack(Material.GRAY_CONCRETE, "&8Cobblegen");
-    private static final ItemStack PROCESSING = new CustomItemStack(Material.GRAY_STAINED_GLASS_PANE, "&7Processing");
+    private static final ItemStack PROCESSING = new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aProcessing");
 
     public StoneworksFactory(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
@@ -49,7 +48,7 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
 
     @Override
     protected void setup(@Nonnull BlockMenuPreset blockMenuPreset) {
-        blockMenuPreset.drawBackground(PROCESSING, PROCESS_BORDER);
+        blockMenuPreset.drawBackground(PROCESS_BORDER);
         blockMenuPreset.drawBackground(OUTPUT_BORDER, OUT_BORDER);
         blockMenuPreset.drawBackground(Choice.NONE.item, CHOICE_SLOTS);
         blockMenuPreset.addItem(STATUS_SLOT, COBBLE_GEN, ChestMenuUtils.getEmptyClickHandler());
@@ -72,24 +71,14 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
         for (int i = 0 ; i < 3 ; i++) {
             int finalI = i;
             menu.addMenuClickHandler(CHOICE_SLOTS[i], (p, slot, item, action) -> {
-                int current = ArrayUtils.indexOf(Choice.values(), getChoice(b.getLocation(), finalI));
-                Choice next;
-                if (action.isRightClicked()) {
-                    if (current > 0) {
-                        next = Choice.values()[current - 1];
-                    }
-                    else {
-                        next = Choice.values()[Choice.values().length - 1];
-                    }
-                }
-                else {
-                    if (current < Choice.values().length - 1) {
-                        next = Choice.values()[current + 1];
-                    }
-                    else {
-                        next = Choice.values()[0];
-                    }
-                }
+                int current = getChoice(b.getLocation(), finalI).ordinal();
+                Choice next = action.isRightClicked()
+                        ? current > 0
+                        ? Choice.values[current - 1]
+                        : Choice.values[Choice.values.length - 1]
+                        : current < Choice.values.length - 1
+                        ? Choice.values[current + 1]
+                        : Choice.values[0];
                 setChoice(l, finalI, next);
                 menu.replaceExistingItem(CHOICE_SLOTS[finalI], next.item);
                 return false;
@@ -120,7 +109,7 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
             return;
         }
 
-        for (int check = 0 ; check < c.inputs.length ; check++) {
+        for (int check = 0; check < c.inputs.length; check++) {
 
             if (item.getType() == c.inputs[check]) {
 
@@ -140,13 +129,12 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
     @Override
     public List<ItemStack> getDisplayRecipes() {
         List<ItemStack> items = new ArrayList<>();
-        for (Choice option : Choice.values()) {
+        for (Choice option : Choice.values) {
             for (int i = 0 ; i < option.inputs.length ; i++) {
                 items.add(new ItemStack(option.inputs[i]));
                 items.add(new ItemStack(option.outputs[i]));
             }
         }
-
         return items;
     }
 
@@ -181,14 +169,13 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
 
     @Override
     protected boolean process(Block b, BlockMenu inv) {
+        if (inv.hasViewer()) {
+            inv.replaceExistingItem(STATUS_SLOT, PROCESSING);
+        }
         int tick = InfinityExpansion.slimefunTickCount() % 4;
 
         if (tick == 3) {
-            ItemStack cobble = new ItemStack(Material.COBBLESTONE);
-
-            if (inv.fits(cobble, PROCESS_SLOTS[0])) {
-                inv.pushItem(cobble, PROCESS_SLOTS[0]);
-            }
+            inv.pushItem(new ItemStack(Material.COBBLESTONE), PROCESS_SLOTS[0]);
         }
         else {
             process(tick, inv, b.getLocation());
@@ -228,6 +215,8 @@ public final class StoneworksFactory extends AbstractMachineBlock implements Rec
         private final ItemStack item;
         private final Material[] inputs;
         private final Material[] outputs;
+
+        private static final Choice[] values = values();
     }
 
 }
