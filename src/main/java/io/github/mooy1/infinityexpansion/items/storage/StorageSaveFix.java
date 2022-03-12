@@ -19,8 +19,13 @@ public final class StorageSaveFix {
 
     public static void fixStuff(Logger logger) {
         long time = System.nanoTime();
-        int fixed = 0;
+
         File folder = new File("data-storage/Slimefun/stored-blocks/");
+        if (!folder.exists()) {
+            return;
+        }
+
+        int fixed = 0;
         String[] ids = new String[] {
                 "INFINITY_STORAGE",
                 "VOID_STORAGE",
