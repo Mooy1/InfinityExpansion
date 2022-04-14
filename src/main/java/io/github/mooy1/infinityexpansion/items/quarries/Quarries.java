@@ -62,11 +62,20 @@ public final class Quarries {
             MachineLore.speed(64),
             MachineLore.energyPerSecond(36000)
     );
-    public static final SlimefunItemStack DIAMOND_OSCILLATOR = Oscillator.create(Material.DIAMOND);
-    public static final SlimefunItemStack REDSTONE_OSCILLATOR = Oscillator.create(Material.REDSTONE);
-    public static final SlimefunItemStack LAPIS_OSCILLATOR = Oscillator.create(Material.LAPIS_LAZULI);
-    public static final SlimefunItemStack QUARTZ_OSCILLATOR = Oscillator.create(Material.QUARTZ);
-    public static final SlimefunItemStack EMERALD_OSCILLATOR = Oscillator.create(Material.EMERALD);
+    public static final double DIAMOND_CHANCE = getOscillatorChance("diamond");
+    public static final double REDSTONE_CHANCE = getOscillatorChance("redstone");
+    public static final double LAPIS_CHANCE = getOscillatorChance("lapis");
+    public static final double EMERALD_CHANCE = getOscillatorChance("emerald");
+    public static final double QUARTZ_CHANCE = getOscillatorChance("quartz");
+    public static final SlimefunItemStack DIAMOND_OSCILLATOR = Oscillator.create(Material.DIAMOND, DIAMOND_CHANCE);
+    public static final SlimefunItemStack REDSTONE_OSCILLATOR = Oscillator.create(Material.REDSTONE, REDSTONE_CHANCE);
+    public static final SlimefunItemStack LAPIS_OSCILLATOR = Oscillator.create(Material.LAPIS_LAZULI, LAPIS_CHANCE);
+    public static final SlimefunItemStack QUARTZ_OSCILLATOR = Oscillator.create(Material.QUARTZ, QUARTZ_CHANCE);
+    public static final SlimefunItemStack EMERALD_OSCILLATOR = Oscillator.create(Material.EMERALD, EMERALD_CHANCE);
+
+    private static double getOscillatorChance(String type) {
+        return InfinityExpansion.config().getDouble("quarry-options.oscillators." + type, 0, 1);
+    }
 
     public static void setup(InfinityExpansion plugin) {
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("quarry-options.resources");
@@ -94,26 +103,22 @@ public final class Quarries {
         }
 
         if (section.getBoolean("redstone")) {
-            new Oscillator(REDSTONE_OSCILLATOR).register(plugin);
-
+            new Oscillator(REDSTONE_OSCILLATOR, REDSTONE_CHANCE).register(plugin);
             outputs.add(Material.REDSTONE);
         }
 
         if (section.getBoolean("lapis")) {
-            new Oscillator(LAPIS_OSCILLATOR).register(plugin);
-
+            new Oscillator(LAPIS_OSCILLATOR, LAPIS_CHANCE).register(plugin);
             outputs.add(Material.LAPIS_LAZULI);
         }
 
         if (section.getBoolean("emerald")) {
-            new Oscillator(EMERALD_OSCILLATOR).register(plugin);
-
+            new Oscillator(EMERALD_OSCILLATOR, EMERALD_CHANCE).register(plugin);
             outputs.add(Material.EMERALD);
         }
 
         if (section.getBoolean("diamond")) {
-            new Oscillator(DIAMOND_OSCILLATOR).register(plugin);
-
+            new Oscillator(DIAMOND_OSCILLATOR, DIAMOND_CHANCE).register(plugin);
             outputs.add(Material.DIAMOND);
         }
 
@@ -124,7 +129,7 @@ public final class Quarries {
         }, 1, 6, outputs.toArray(new Material[0])).energyPerTick(300).register(plugin);
 
         if (section.getBoolean("quartz")) {
-            new Oscillator(QUARTZ_OSCILLATOR).register(plugin);
+            new Oscillator(QUARTZ_OSCILLATOR, QUARTZ_CHANCE).register(plugin);
 
             outputs.add(Material.QUARTZ);
         }

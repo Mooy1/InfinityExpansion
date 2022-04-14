@@ -24,6 +24,14 @@ mob-simulation-options:
   
 quarry-options:
 
+  # The chance (0 to 1) of an oscillator activating each time a material would be produced
+  oscillators:
+    lapis: .5
+    diamond: .5
+    redstone: .5
+    quartz: .5
+    emerald: .5
+
   # The number of slimefun ticks it takes to mine 1 block. 1 slimefun ticks = .6 seconds by default
   ticks-per-output: 10
 
