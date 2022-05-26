@@ -49,8 +49,8 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
                 }
                 else if (b.getType() != Material.BEDROCK) {
                     b.setType(Material.BEDROCK);
-                    removeCharge(l, energy);
                 }
+                removeCharge(l, energy);
             }
         });
     }
