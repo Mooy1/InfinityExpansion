@@ -45,12 +45,13 @@ public final class PoweredBedrock extends SlimefunItem implements EnergyNetCompo
                 if (getCharge(l) < energy) {
                     if (b.getType() != Material.NETHERITE_BLOCK) {
                         b.setType(Material.NETHERITE_BLOCK);
+                        return;
                     }
                 }
                 else if (b.getType() != Material.BEDROCK) {
                     b.setType(Material.BEDROCK);
-                    removeCharge(l, energy);
                 }
+                removeCharge(l, energy);
             }
         });
     }
