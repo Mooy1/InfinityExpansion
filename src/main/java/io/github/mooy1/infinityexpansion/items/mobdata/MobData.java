@@ -3,6 +3,7 @@ package io.github.mooy1.infinityexpansion.items.mobdata;
 import lombok.experimental.UtilityClass;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinityexpansion.InfinityExpansion;
@@ -51,6 +52,7 @@ public final class MobData {
     public static final SlimefunItemStack COW = MobDataCard.create("Cow", MobDataTier.PASSIVE);
     public static final SlimefunItemStack SHEEP = MobDataCard.create("Sheep", MobDataTier.PASSIVE);
     public static final SlimefunItemStack CHICKEN = MobDataCard.create("Chicken", MobDataTier.PASSIVE);
+    public static final SlimefunItemStack PIG = MobDataCard.create("Pig", MobDataTier.PASSIVE);
     public static final SlimefunItemStack VILLAGER = MobDataCard.create("Villager", MobDataTier.NEUTRAL);
 
     public static final SlimefunItemStack BEE = MobDataCard.create("Bee", MobDataTier.NEUTRAL);
@@ -68,6 +70,7 @@ public final class MobData {
     public static final SlimefunItemStack GUARDIAN = MobDataCard.create("Guardian", MobDataTier.HOSTILE);
     public static final SlimefunItemStack IRON_GOLEM = MobDataCard.create("Iron Golem", MobDataTier.ADVANCED);
     public static final SlimefunItemStack BLAZE = MobDataCard.create("Blaze", MobDataTier.ADVANCED);
+    public static final SlimefunItemStack GHAST = MobDataCard.create("Ghast", MobDataTier.ADVANCED);
 
     public static final SlimefunItemStack WITHER = MobDataCard.create("Wither", MobDataTier.MINI_BOSS);
     public static final SlimefunItemStack ENDER_DRAGON = MobDataCard.create("Ender Dragon", MobDataTier.BOSS);
@@ -194,6 +197,16 @@ public final class MobData {
                 new ItemStack(Material.SUGAR, 64), new ItemStack(Material.GLASS, 64), new ItemStack(Material.REDSTONE_BLOCK, 64)
         }).addDrop(Material.SUGAR, 1).addDrop(Material.REDSTONE, 1)
                 .addDrop(Material.GLASS_BOTTLE, 1).addDrop(Material.GLOWSTONE_DUST, 1).register(plugin);
+        new MobDataCard(PIG, MobDataTier.PASSIVE, new ItemStack[]{
+                new ItemStack(Material.PORKCHOP, 64), new ItemStack(Material.CARROT, 64), new ItemStack(Material.COOKED_PORKCHOP, 64),
+                new ItemStack(Material.CARROT, 64), EMPTY_DATA_CARD, new ItemStack(Material.CARROT, 64),
+                new ItemStack(Material.COOKED_PORKCHOP, 64), new ItemStack(Material.CARROT, 64), new ItemStack(Material.PORKCHOP, 64)
+        }).addDrop(Material.PORKCHOP, 2, 1).register(plugin);
+        new MobDataCard(GHAST, MobDataTier.ADVANCED, new ItemStack[]{
+                new ItemStack(Material.GUNPOWDER, 64), new ItemStack(Material.GHAST_TEAR, 32), new ItemStack(Material.GUNPOWDER, 64),
+                new ItemStack(Material.GHAST_TEAR, 32), EMPTY_DATA_CARD, new ItemStack(Material.GHAST_TEAR, 32),
+                new ItemStack(Material.GUNPOWDER, 64), new ItemStack(Material.GHAST_TEAR, 32), new ItemStack(Material.GUNPOWDER, 64)
+        }).addDrop(Material.GUNPOWDER, 1).addDrop(Material.GHAST_TEAR, 1).register(plugin);
     }
 
 }
