@@ -44,6 +44,9 @@ Some stats about the addon including current server count and player count are a
 https://bstats.org/plugin/bukkit/InfinityExpansion/8991
 
 ## Changelog
+### Version 141
+- Changed advanced enchanter recipe from auto enchanter 1 to auto enchanter 2
+- Changed advanced disenchanter recipe from auto disenchanter 1 to auto disenchanter 2
 ### Version 140
 - Fix Powered Bedrock not taking the correct charge and getting stuck in a powered state
 ### Version 123
