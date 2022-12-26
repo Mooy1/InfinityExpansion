@@ -44,6 +44,8 @@ Some stats about the addon including current server count and player count are a
 https://bstats.org/plugin/bukkit/InfinityExpansion/8991
 
 ## Changelog
+### Version 141
+- Fix Zombie Data Card Recipe using 1 iron ingot instead of 64.
 ### Version 140
 - Fix Powered Bedrock not taking the correct charge and getting stuck in a powered state
 ### Version 123
