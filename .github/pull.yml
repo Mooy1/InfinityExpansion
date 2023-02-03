@@ -1,0 +1,9 @@
+version: "1"
+rules:
+  - base: master
+    upstream: Mooy1:master
+    mergeMethod: merge
+    assignees:
+      - PhoenixCodingStuff
+    conflictReviewers:
+      - PhoenixCodingStuff
