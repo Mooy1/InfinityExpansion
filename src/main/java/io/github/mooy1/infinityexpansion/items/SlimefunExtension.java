@@ -186,7 +186,7 @@ public final class SlimefunExtension {
 
         new AutoEnchanter(Groups.ADVANCED_MACHINES, ADVANCED_ENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL, Materials.MAGSTEEL, Materials.MAGSTEEL,
-                Materials.MAGSTEEL_PLATE, SlimefunItems.AUTO_ENCHANTER, Materials.MAGSTEEL_PLATE,
+                Materials.MAGSTEEL_PLATE, SlimefunItems.AUTO_ENCHANTER_2, Materials.MAGSTEEL_PLATE,
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
         }) {
             @Override
@@ -197,7 +197,7 @@ public final class SlimefunExtension {
 
         new AutoDisenchanter(Groups.ADVANCED_MACHINES, ADVANCED_DISENCHANTER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 Materials.MAGSTEEL, Materials.MAGSTEEL, Materials.MAGSTEEL,
-                Materials.MAGSTEEL_PLATE, SlimefunItems.AUTO_DISENCHANTER, Materials.MAGSTEEL_PLATE,
+                Materials.MAGSTEEL_PLATE, SlimefunItems.AUTO_DISENCHANTER_2, Materials.MAGSTEEL_PLATE,
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
         }) {
             @Override
