@@ -29,6 +29,7 @@ import io.github.mooy1.infinitylib.common.Scheduler;
 import io.github.mooy1.infinitylib.machines.MenuBlock;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.core.attributes.DistinctiveItem;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
@@ -49,7 +50,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
  * Thanks to FluffyBear for stuff to learn from
  */
 @ParametersAreNonnullByDefault
-public final class StorageUnit extends MenuBlock {
+public final class StorageUnit extends MenuBlock implements DistinctiveItem {
 
     /* Namespaced keys */
     static final NamespacedKey EMPTY_KEY = InfinityExpansion.createKey("empty"); // key for empty item
@@ -225,4 +226,8 @@ public final class StorageUnit extends MenuBlock {
         return null;
     }
 
+    @Override
+    public boolean canStack(@Nonnull ItemMeta sfItemMeta, @Nonnull ItemMeta itemMeta) {
+        return sfItemMeta.getPersistentDataContainer().equals(itemMeta.getPersistentDataContainer());
+    }
 }
