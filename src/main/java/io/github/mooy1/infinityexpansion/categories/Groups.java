@@ -38,6 +38,7 @@ public final class Groups {
     public static void setup(InfinityExpansion inst) {
         INFINITY.register(inst);
         MAIN_CATEGORY.register(inst);
+        MOB_SIMULATION.setCrossAddonItemGroup(true);
         INFINITY_CHEAT.register(inst);
     }
 
