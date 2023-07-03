@@ -99,7 +99,7 @@ public final class MobData {
 
         new MobDataCard(ZOMBIE, MobDataTier.HOSTILE, new ItemStack[] {
                 new ItemStack(Material.IRON_SWORD, 1), new ItemStack(Material.ROTTEN_FLESH, 16), new ItemStack(Material.IRON_SHOVEL, 1),
-                new ItemStack(Material.IRON_INGOT, 64), EMPTY_DATA_CARD, new ItemStack(Material.IRON_INGOT, 1),
+                new ItemStack(Material.IRON_INGOT, 64), EMPTY_DATA_CARD, new ItemStack(Material.IRON_INGOT, 64),
                 new ItemStack(Material.CARROT, 64), new ItemStack(Material.ROTTEN_FLESH, 16), new ItemStack(Material.POTATO, 64)
         }).addDrop(Material.ROTTEN_FLESH, 1).register(plugin);
         new MobDataCard(SLIME, MobDataTier.NEUTRAL, new ItemStack[] {
