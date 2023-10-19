@@ -398,7 +398,9 @@ public final class Machines {
         trees.put(Material.CRIMSON_FUNGUS, new ItemStack[] {
                 new ItemStack(Material.CRIMSON_HYPHAE, 8), new ItemStack(Material.CRIMSON_STEM, 6), new ItemStack(Material.WEEPING_VINES)
         });
-
+        trees.put(Material.CHERRY_SAPLING, new ItemStack[] {
+                new ItemStack(Material.CHERRY_LEAVES, 8), new ItemStack(Material.CHERRY_LOG, 6), new ItemStack(Material.STICK)
+        });
         new GrowingMachine(Groups.BASIC_MACHINES, BASIC_TREE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
                 Materials.MAGSTEEL, new ItemStack(Material.PODZOL), Materials.MAGSTEEL,
