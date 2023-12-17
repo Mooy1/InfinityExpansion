@@ -398,6 +398,12 @@ public final class Machines {
         trees.put(Material.CRIMSON_FUNGUS, new ItemStack[] {
                 new ItemStack(Material.CRIMSON_HYPHAE, 8), new ItemStack(Material.CRIMSON_STEM, 6), new ItemStack(Material.WEEPING_VINES)
         });
+        trees.put(Material.CHERRY_SAPLING, new ItemStack[] {
+            new ItemStack(Material.CHERRY_LEAVES, 8), new ItemStack(Material.CHERRY_LOG, 6)
+        });
+        trees.put(Material.MANGROVE_PROPAGULE, new ItemStack[] {
+            new ItemStack(Material.MANGROVE_LEAVES, 8), new ItemStack(Material.MANGROVE_LOG, 6), new ItemStack(Material.MANGROVE_ROOTS), new ItemStack(Material.MOSS_CARPET)
+        });
 
         new GrowingMachine(Groups.BASIC_MACHINES, BASIC_TREE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
