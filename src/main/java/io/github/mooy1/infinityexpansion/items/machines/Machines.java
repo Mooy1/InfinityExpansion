@@ -478,11 +478,11 @@ public final class Machines {
                 Materials.MACHINE_PLATE, Materials.COBBLE_3, Materials.MACHINE_PLATE,
                 SlimefunItems.ELECTRIC_PRESS_2, SlimefunItems.ELECTRIC_PRESS_2, SlimefunItems.ELECTRIC_PRESS_2,
                 Materials.MACHINE_PLATE, Materials.COBBLE_3, Materials.MACHINE_PLATE
-        }).addRecipe(new SlimefunItemStack(Materials.COBBLE_1, 8), new ItemStack(Material.COBBLESTONE, 64))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_2, 8), new SlimefunItemStack(Materials.COBBLE_1, 64))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_3, 8), new SlimefunItemStack(Materials.COBBLE_2, 64))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_4, 8), new SlimefunItemStack(Materials.COBBLE_3, 64))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_5, 8), new SlimefunItemStack(Materials.COBBLE_4, 64))
+        }).addRecipe(new SlimefunItemStack(Materials.COBBLE_1, 7), new ItemStack(Material.COBBLESTONE, 63))
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_2, 7), new SlimefunItemStack(Materials.COBBLE_1, 63))
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_3, 7), new SlimefunItemStack(Materials.COBBLE_2, 63))
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_4, 7), new SlimefunItemStack(Materials.COBBLE_3, 63))
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_5, 7), new SlimefunItemStack(Materials.COBBLE_4, 63))
                 .ticksPerOutput(1).energyPerTick(120).register(plugin);
 
         new MachineBlock(Groups.ADVANCED_MACHINES, INGOT_FORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
