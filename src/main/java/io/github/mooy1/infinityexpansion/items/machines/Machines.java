@@ -299,10 +299,10 @@ public final class Machines {
                 Materials.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Materials.MACHINE_PLATE,
                 Materials.MACHINE_PLATE, Materials.MACHINE_CORE, Materials.MACHINE_PLATE
         }).recipes(new SlimefunItemStack[] {
-                Materials.IRON_SINGULARITY, Materials.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
-                Materials.IRON_SINGULARITY, Materials.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
-                Materials.DIAMOND_SINGULARITY, Materials.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.CARBONADO, 16),
-                Materials.GOLD_SINGULARITY, Materials.EMERALD_SINGULARITY, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 16),
+                Materials.IRON_SINGULARITY, Materials.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 64),
+                Materials.IRON_SINGULARITY, Materials.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 64),
+                Materials.DIAMOND_SINGULARITY, Materials.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.CARBONADO, 64),
+                Materials.GOLD_SINGULARITY, Materials.EMERALD_SINGULARITY, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 64),
                 Materials.COPPER_SINGULARITY, Materials.ZINC_SINGULARITY, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
                 Materials.IRON_SINGULARITY, Materials.QUARTZ_SINGULARITY, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
         }).energyPerTick(1_000_000).register(plugin);
@@ -352,6 +352,11 @@ public final class Machines {
         crops.put(Material.BAMBOO, new ItemStack[] { new ItemStack(Material.BAMBOO, 6) });
         crops.put(Material.CHORUS_FLOWER, new ItemStack[] { new ItemStack(Material.CHORUS_FRUIT, 6) });
         crops.put(Material.NETHER_WART, new ItemStack[] { new ItemStack(Material.NETHER_WART, 2) });
+        crops.put(Material.TORCHFLOWER_SEEDS, new ItemStack[] { new ItemStack(Material.TORCHFLOWER, 1) });
+        crops.put(Material.PITCHER_POD, new ItemStack[] { new ItemStack(Material.PITCHER_PLANT, 1) });
+        crops.put(Material.GLOW_BERRIES, new ItemStack[] { new ItemStack(Material.GLOW_BERRIES, 2) });
+        crops.put(Material.LILY_PAD, new ItemStack[] { new ItemStack(Material.LILY_PAD, 2) });
+        crops.put(Material.SPORE_BLOSSOM, new ItemStack[] { new ItemStack(Material.SPORE_BLOSSOM, 2) });
 
         new GrowingMachine(Groups.BASIC_MACHINES, BASIC_GROWER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
@@ -397,6 +402,12 @@ public final class Machines {
         });
         trees.put(Material.CRIMSON_FUNGUS, new ItemStack[] {
                 new ItemStack(Material.CRIMSON_HYPHAE, 8), new ItemStack(Material.CRIMSON_STEM, 6), new ItemStack(Material.WEEPING_VINES)
+        });
+        trees.put(Material.CHERRY_SAPLING, new ItemStack[] {
+            new ItemStack(Material.CHERRY_LEAVES, 8), new ItemStack(Material.CHERRY_LOG, 6)
+        });
+        trees.put(Material.MANGROVE_PROPAGULE, new ItemStack[] {
+            new ItemStack(Material.MANGROVE_LEAVES, 8), new ItemStack(Material.MANGROVE_LOG, 6), new ItemStack(Material.MANGROVE_ROOTS), new ItemStack(Material.MOSS_CARPET)
         });
 
         new GrowingMachine(Groups.BASIC_MACHINES, BASIC_TREE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
