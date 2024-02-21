@@ -40,7 +40,7 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
             new ItemStack(Material.IRON_INGOT, 4),
             new ItemStack(Material.GOLD_INGOT, 4),
             new ItemStack(Material.DIAMOND, 4),
-            new ItemStack(Material.NETHERITE_INGOT, 2)
+            new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1)
     };
     private static final ItemStack[] ARMOR_RECIPE = {
             new ItemStack(Material.LEATHER, 9),
@@ -48,7 +48,7 @@ public final class GearTransformer extends AbstractEnergyCrafter implements Reci
             new ItemStack(Material.IRON_INGOT, 9),
             new ItemStack(Material.GOLD_INGOT, 9),
             new ItemStack(Material.DIAMOND, 9),
-            new ItemStack(Material.NETHERITE_INGOT, 2)
+            new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1)
     };
     private static final String[] ARMOR_TYPES = {
             "_HELMET",
