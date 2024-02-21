@@ -299,10 +299,10 @@ public final class Machines {
                 Materials.MACHINE_PLATE, SlimefunItems.REINFORCED_FURNACE, Materials.MACHINE_PLATE,
                 Materials.MACHINE_PLATE, Materials.MACHINE_CORE, Materials.MACHINE_PLATE
         }).recipes(new SlimefunItemStack[] {
-                Materials.IRON_SINGULARITY, Materials.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 32),
-                Materials.IRON_SINGULARITY, Materials.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 32),
-                Materials.DIAMOND_SINGULARITY, Materials.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.CARBONADO, 16),
-                Materials.GOLD_SINGULARITY, Materials.EMERALD_SINGULARITY, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 16),
+                Materials.IRON_SINGULARITY, Materials.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.REINFORCED_ALLOY_INGOT, 64),
+                Materials.IRON_SINGULARITY, Materials.REDSTONE_SINGULARITY, new SlimefunItemStack(SlimefunItems.REDSTONE_ALLOY, 64),
+                Materials.DIAMOND_SINGULARITY, Materials.COAL_SINGULARITY, new SlimefunItemStack(SlimefunItems.CARBONADO, 64),
+                Materials.GOLD_SINGULARITY, Materials.EMERALD_SINGULARITY, new SlimefunItemStack(SlimefunItems.BLISTERING_INGOT_3, 64),
                 Materials.COPPER_SINGULARITY, Materials.ZINC_SINGULARITY, new SlimefunItemStack(SlimefunItems.ELECTRO_MAGNET, 64),
                 Materials.IRON_SINGULARITY, Materials.QUARTZ_SINGULARITY, new SlimefunItemStack(SlimefunItems.SOLAR_PANEL, 64)
         }).energyPerTick(1_000_000).register(plugin);
@@ -354,6 +354,9 @@ public final class Machines {
         crops.put(Material.NETHER_WART, new ItemStack[] { new ItemStack(Material.NETHER_WART, 2) });
         crops.put(Material.TORCHFLOWER_SEEDS, new ItemStack[] { new ItemStack(Material.TORCHFLOWER, 1) });
         crops.put(Material.PITCHER_POD, new ItemStack[] { new ItemStack(Material.PITCHER_PLANT, 1) });
+        crops.put(Material.GLOW_BERRIES, new ItemStack[] { new ItemStack(Material.GLOW_BERRIES, 2) });
+        crops.put(Material.LILY_PAD, new ItemStack[] { new ItemStack(Material.LILY_PAD, 2) });
+        crops.put(Material.SPORE_BLOSSOM, new ItemStack[] { new ItemStack(Material.SPORE_BLOSSOM, 2) });
 
         new GrowingMachine(Groups.BASIC_MACHINES, BASIC_GROWER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                 new ItemStack(Material.GLASS), new ItemStack(Material.GLASS), new ItemStack(Material.GLASS),
@@ -486,11 +489,11 @@ public final class Machines {
                 Materials.MACHINE_PLATE, Materials.COBBLE_3, Materials.MACHINE_PLATE,
                 SlimefunItems.ELECTRIC_PRESS_2, SlimefunItems.ELECTRIC_PRESS_2, SlimefunItems.ELECTRIC_PRESS_2,
                 Materials.MACHINE_PLATE, Materials.COBBLE_3, Materials.MACHINE_PLATE
-        }).addRecipe(new SlimefunItemStack(Materials.COBBLE_1, 8), new ItemStack(Material.COBBLESTONE, 64))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_2, 8), new SlimefunItemStack(Materials.COBBLE_1, 64))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_3, 8), new SlimefunItemStack(Materials.COBBLE_2, 64))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_4, 8), new SlimefunItemStack(Materials.COBBLE_3, 64))
-                .addRecipe(new SlimefunItemStack(Materials.COBBLE_5, 8), new SlimefunItemStack(Materials.COBBLE_4, 64))
+        }).addRecipe(new SlimefunItemStack(Materials.COBBLE_1, 7), new ItemStack(Material.COBBLESTONE, 63))
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_2, 7), new SlimefunItemStack(Materials.COBBLE_1, 63))
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_3, 7), new SlimefunItemStack(Materials.COBBLE_2, 63))
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_4, 7), new SlimefunItemStack(Materials.COBBLE_3, 63))
+                .addRecipe(new SlimefunItemStack(Materials.COBBLE_5, 7), new SlimefunItemStack(Materials.COBBLE_4, 63))
                 .ticksPerOutput(1).energyPerTick(120).register(plugin);
 
         new MachineBlock(Groups.ADVANCED_MACHINES, INGOT_FORMER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

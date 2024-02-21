@@ -32,7 +32,7 @@ public final class Quarries {
             "&9Basic Quarry",
             "&7Automatically mines overworld ores",
             "",
-            MachineLore.speed(1),
+            MachineLore.speed(2),
             MachineLore.energyPerSecond(300)
     );
     public static final SlimefunItemStack ADVANCED_QUARRY = new SlimefunItemStack(
@@ -41,7 +41,7 @@ public final class Quarries {
             "&cAdvanced Quarry",
             "&7Automatically mines overworld and nether ores",
             "",
-            MachineLore.speed(2),
+            MachineLore.speed(4),
             MachineLore.energyPerSecond(900)
     );
     public static final SlimefunItemStack VOID_QUARRY = new SlimefunItemStack(
@@ -50,7 +50,7 @@ public final class Quarries {
             "&8Void Quarry",
             "&7Automatically mines overworld and nether ores",
             "",
-            MachineLore.speed(6),
+            MachineLore.speed(12),
             MachineLore.energyPerSecond(3600)
     );
     public static final SlimefunItemStack INFINITY_QUARRY = new SlimefunItemStack(
@@ -59,7 +59,7 @@ public final class Quarries {
             "&bInfinity Quarry",
             "&7Automatically mines overworld and nether ores",
             "",
-            MachineLore.speed(64),
+            MachineLore.speed(128),
             MachineLore.energyPerSecond(36000)
     );
     public static final double DIAMOND_CHANCE = getOscillatorChance("diamond");
@@ -126,7 +126,7 @@ public final class Quarries {
                 Materials.MAGSTEEL_PLATE, SlimefunItems.CARBONADO_EDGED_CAPACITOR, Materials.MAGSTEEL_PLATE,
                 new ItemStack(Material.IRON_PICKAXE), SlimefunItems.GEO_MINER, new ItemStack(Material.IRON_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 1, 6, outputs.toArray(new Material[0])).energyPerTick(300).register(plugin);
+        }, 2, 6, outputs.toArray(new Material[0])).energyPerTick(300).register(plugin);
 
         if (section.getBoolean("quartz")) {
             new Oscillator(QUARTZ_OSCILLATOR, QUARTZ_CHANCE).register(plugin);
@@ -147,7 +147,7 @@ public final class Quarries {
                 Materials.MACHINE_PLATE, SlimefunItems.ENERGIZED_CAPACITOR, Materials.MACHINE_PLATE,
                 new ItemStack(Material.DIAMOND_PICKAXE), BASIC_QUARRY, new ItemStack(Material.DIAMOND_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 2, 4, outputs.toArray(new Material[0])).energyPerTick(900).register(plugin);
+        }, 4, 4, outputs.toArray(new Material[0])).energyPerTick(900).register(plugin);
 
         if (coal) {
             outputs.add(Material.COAL);
@@ -157,7 +157,7 @@ public final class Quarries {
                 Materials.VOID_INGOT, SlimefunExtension.VOID_CAPACITOR, Materials.VOID_INGOT,
                 new ItemStack(Material.NETHERITE_PICKAXE), ADVANCED_QUARRY, new ItemStack(Material.NETHERITE_PICKAXE),
                 Materials.MACHINE_CIRCUIT, Materials.MACHINE_CORE, Materials.MACHINE_CIRCUIT
-        }, 6, 2, outputs.toArray(new Material[0])).energyPerTick(3600).register(plugin);
+        }, 12, 2, outputs.toArray(new Material[0])).energyPerTick(3600).register(plugin);
 
         if (coal) {
             outputs.add(Material.COAL);
